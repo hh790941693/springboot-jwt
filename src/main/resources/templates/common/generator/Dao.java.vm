@@ -1,0 +1,13 @@
+package ${package}.dao;
+
+import ${package}.domain.${className}DO;
+import com.ifast.common.base.BaseDao;
+import org.springframework.stereotype.Repository;
+
+/**
+ * ${comments}
+ */
+@Repository
+public interface ${className}Dao extends BaseDao<${className}DO> {
+
+}

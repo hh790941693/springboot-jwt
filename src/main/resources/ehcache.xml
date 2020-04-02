@@ -1,0 +1,38 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config/ehcache.xsd">
+
+    <diskStore path="java.io.tmpdir"/>
+
+    <!--defaultCache:echcache的默认缓存策略  -->
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            maxElementsOnDisk="10000000"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU">
+        <persistence strategy="localTempSwap"/>
+    </defaultCache>
+
+    <!--
+         defaultCache:默认的缓存配置信息,如果不加特殊说明,则所有对象按照此配置项处理
+         maxElementsInMemory:设置了缓存的上限,最多存储多少个记录对象
+         overflowToDisk:当内存中Element数量达到maxElementsInMemory时，Ehcache将会Element写到磁盘中
+         maxElementsInMemory设置成1，overflowToDisk设置成true，只要有一个缓存元素，就直接存到硬盘上去
+         eternal设置成true，代表对象永久有效
+         maxElementsOnDisk设置成0 表示硬盘中最大缓存对象数无限大
+         diskPersistent设置成true表示缓存虚拟机重启期数据
+    -->
+    <cache name="users"
+           maxElementsInMemory="100000"
+           eternal="true"
+           diskPersistent="true"
+           overflowToDisk="true"
+           timeToIdleSeconds="120"
+           timeToLiveSeconds="120"
+           maxElementsOnDisk="10000000"
+           diskExpiryThreadIntervalSeconds="120"
+           memoryStoreEvictionPolicy="LRU">
+        <!--<persistence strategy="localTempSwap"/>-->
+    </cache>
+</ehcache>

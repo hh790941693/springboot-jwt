@@ -1,0 +1,11 @@
+package ${package}.service;
+
+import ${package}.domain.${className}DO;
+import com.ifast.common.base.CoreService;
+
+/**
+ * ${comments}
+ */
+public interface ${className}Service extends CoreService<${className}DO> {
+    
+}

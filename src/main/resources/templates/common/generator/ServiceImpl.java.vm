@@ -1,0 +1,19 @@
+package ${package}.service.impl;
+
+import org.springframework.stereotype.Service;
+
+import ${package}.dao.${className}Dao;
+import ${package}.domain.${className}DO;
+import ${package}.service.${className}Service;
+import com.ifast.common.base.CoreServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * ${comments}
+ */
+@Service
+public class ${className}ServiceImpl extends CoreServiceImpl<${className}Dao, ${className}DO> implements ${className}Service {
+
+    private static Logger logger = LoggerFactory.getLogger(${className}ServiceImpl.class);
+}

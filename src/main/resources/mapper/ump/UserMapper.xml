@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pjb.springbootjwt.ump.dao.UserDao">
+    <select id="findByUsername" resultType="com.pjb.springbootjwt.ump.domain.UserDO">
+      SELECT * FROM t_user t1
+      where
+      t1.username=#{username}
+    </select>
+
+    <select id="findUserById" resultType="com.pjb.springbootjwt.ump.domain.UserDO">
+      SELECT * FROM t_user t1
+      where
+      t1.id=#{userId}
+    </select>
+
+    <select id="selectUserRoles" resultType="com.pjb.springbootjwt.ump.domain.RoleDO">
+        select t3.* from t_user t1
+        right join t_user_role t2 on t2.user_id=t1.id
+        right join t_role t3 on t3.id=t2.role_id
+        where t1.id=#{userId}
+    </select>
+
+    <select id="selectUserPermissions" resultType="com.pjb.springbootjwt.ump.domain.PermissionDO">
+        select t4.* from t_user t1
+        right join t_user_role t2 on t2.user_id=t1.id
+        right join t_role_permission t3 on t3.role_id=t2.role_id
+        right join t_permission t4 on t4.id=t3.permission_id
+        where t1.id=#{userId}
+    </select>
+</mapper>

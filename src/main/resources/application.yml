@@ -1,0 +1,48 @@
+mybatis:
+  config-location: classpath:mybatis.xml
+  mapper-locations: classpath:/mapper/**/*Mapper.xml
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*Mapper.xml
+  typeAliasesPackage: com.pjb.springbootjwt.**.domain
+  global-config:
+    id-type: 0
+    field-strategy: 2
+    db-column-underline: true
+    capital-mode: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+debug: true
+
+server:
+  port: 8888
+  address: localhost
+
+spring:
+  thymeleaf:
+    mode: HTML5
+    cache: false
+  resources:
+    static-locations:
+      - classpath:/templates
+      - classpath:/static
+  profiles:
+    active: com
+
+#alibaba oss
+alioss:
+    endpoint: oss-cn-shanghai.aliyuncs.com
+    accessKey: LTAIORfW2jDDGDxz
+    accessSecret: tNISEmkZNw0lMzvZ7u09MKkWU5FCDL
+    bucketName: hx-dfz
+    rootPath: uploads
+    viewUrl: http://hx-dfz.oss-cn-shanghai.aliyuncs.com/
+
+#local uploader
+upload:
+  config:
+    store-path: D:\\temp\\
+    view-url: http://localhost:8888/
+
+
