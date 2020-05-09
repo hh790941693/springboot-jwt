@@ -80,6 +80,12 @@
 		<img id="qrcodeImg"></img>
 	</div>
 	<div id='mainDiv' style="width:1328px;height:610px;margin:1px auto;">
+		<input type="hidden" id="user" name="user" value="${user}">
+		<input type="hidden" id="pass" name="pass" value="${pass}">
+		<input type="hidden" id="webserverip" name="webserverip" value="${webserverip}">
+		<input type="hidden" id="webserverport" name="webserverport" value="${webserverport}">
+		<input type="hidden" id="selfimg" name="selfimg" value="${selfimg}">
+        <input type="hidden" id="user_agent" name="user_agent" value="${user_agent}">
 		<div id="leftNavi" style="width:180px;height:100%;float:left;border:2px solid green">
 			<ul>
 				<li id="wsclientChat.page" class="mouseleftclick">聊天<span id="unreadCountSpan"></span></li>
@@ -123,7 +129,9 @@
     <script type="text/javascript" src="statusBar.jsp"></script>
 
 	<script type="text/javascript">
-        console.log("xxxxxxxxx:"+s_user);
+
+        var aaaa=$('#user').val();
+        console.log("aaaa:"+aaaa);
         console.log("xxxxxxxxx:"+test);
 		$("#curUser").text(s_user);
 		$("#titleLabel").text("websocket客户端");
