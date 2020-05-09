@@ -111,7 +111,7 @@
 	</div>	
 	
 	<jsp:include page="footer.jsp"/>
-	<jsp:include page="statusBar.jsp"/>
+	<jsp:include page="statusBar.html"/>
 
 	<script type="text/javascript">
 		$("#curUser").text(s_user);

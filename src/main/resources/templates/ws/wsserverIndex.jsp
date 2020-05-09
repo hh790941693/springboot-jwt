@@ -132,7 +132,7 @@
 	<jsp:include  page="sessionKeeper.html"/>
 	<!-- 尾 -->
 	<jsp:include page="footer.jsp"/>
-	<jsp:include page="statusBar.jsp"/>
+	<jsp:include page="statusBar.html"/>
 
 	<script type="text/javascript">
 		var cur_user=s_user;
