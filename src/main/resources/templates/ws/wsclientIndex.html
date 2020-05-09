@@ -63,7 +63,7 @@
     	width:175px;
     	height:100px;
    	 	background: black;
-    	color：white;
+    	color: rgb(255%,255%,255%);
     }
     #musicIframeHeader {
     	background: #ddd;
@@ -118,11 +118,13 @@
 		<div id="adContent" style="background-color:2px solid red;height:auto;text-indent:2em;">
 		</div>
 	</div>
-	
-	<jsp:include page="footer.jsp"/>
-	<jsp:include page="statusBar.jsp"/>
+
+    <script type="text/javascript" src="footer.jsp"></script>
+    <script type="text/javascript" src="statusBar.jsp"></script>
 
 	<script type="text/javascript">
+        console.log("xxxxxxxxx:"+s_user);
+        console.log("xxxxxxxxx:"+test);
 		$("#curUser").text(s_user);
 		$("#titleLabel").text("websocket客户端");
 		
