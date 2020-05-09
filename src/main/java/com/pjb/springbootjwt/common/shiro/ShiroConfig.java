@@ -67,33 +67,34 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilterFactoryBean() {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager());
-        //登录
-        shiroFilterFactoryBean.setLoginUrl("/api/user/login");
-        //首页
-        shiroFilterFactoryBean.setSuccessUrl("/authc/index");
-        //错误页面，认证不通过跳转
-        shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
-
-        // 添加jwt过滤器
-        Map<String, Filter> filterMap = new HashMap<>();
-        filterMap.put("jwt", new ShiroAuthenticationFilter());
-        shiroFilterFactoryBean.setFilters(filterMap);
-
-
-        Map<String, String> map = new LinkedHashMap<>();
-        //登出
-        map.put("/logout", "logout");
-        //所有用户经过jwt校验 检查token是否正确
-        map.put("/authc/*","jwt");  //执行ShiroAuthenticationFilter.isAccessAllowed
-        //不需要认证
-        map.put("/anon/*", "anon");
-        map.put("/api/user/login", "anon");
-        map.put("/ws/**", "anon");
-        map.put("/game/*", "anon");
-        map.put("/canvas/*", "anon");
-
-        //登录
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
+//        //登录
+//        shiroFilterFactoryBean.setLoginUrl("/api/user/login");
+//        //首页
+//        shiroFilterFactoryBean.setSuccessUrl("/authc/index");
+//        //错误页面，认证不通过跳转
+//        shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
+//
+//        // 添加jwt过滤器
+//        Map<String, Filter> filterMap = new HashMap<>();
+//        filterMap.put("jwt", new ShiroAuthenticationFilter());
+//        shiroFilterFactoryBean.setFilters(filterMap);
+//
+//
+//        Map<String, String> map = new LinkedHashMap<>();
+//        //登出
+//        map.put("/logout", "logout");
+//        //所有用户经过jwt校验 检查token是否正确
+//        map.put("/authc/*","jwt");  //执行ShiroAuthenticationFilter.isAccessAllowed
+//        //不需要认证
+//        map.put("/anon/*", "anon");
+//        map.put("/api/user/login", "anon");
+//        map.put("/ws/*", "anon");
+//        map.put("/game/*", "anon");
+//        map.put("/canvas/*", "anon");
+//        map.put("/home/*", "anon");
+//
+//        //登录
+//        shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         return shiroFilterFactoryBean;
     }
 

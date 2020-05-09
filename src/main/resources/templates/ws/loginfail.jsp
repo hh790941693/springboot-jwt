@@ -55,7 +55,7 @@
 		<button onclick="toIndex()" class='btn btn-sm btn-primary'>返回登录</button>
 	</div>
 	
-	<jsp:include  page="sessionKeeper.jsp"/>
+	<jsp:include  page="sessionKeeper.html"/>
 	
 	<script type="text/javascript">
 		var i=5;

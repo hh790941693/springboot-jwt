@@ -85,7 +85,7 @@
 </head>
 <body>
 	<!-- 头 -->
-	<jsp:include page="header.jsp"/>	
+	<jsp:include page="header.html"/>
 	
 	<div id="qrDiv" style="display:none">
 		<img id="qrcodeImg"></img>
@@ -129,7 +129,7 @@
 		<iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
 	</div>
 	
-	<jsp:include  page="sessionKeeper.jsp"/>	
+	<jsp:include  page="sessionKeeper.html"/>
 	<!-- 尾 -->
 	<jsp:include page="footer.jsp"/>
 	<jsp:include page="statusBar.jsp"/>

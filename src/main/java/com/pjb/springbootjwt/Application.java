@@ -13,13 +13,15 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
 @EnableTransactionManagement
 @SpringBootApplication
 @EnableCaching
-@MapperScan({"com.pjb.springbootjwt.**.dao","com.jscxrz.zhddkk.dao"})
+@EnableAspectJAutoProxy
+@MapperScan({"com.pjb.springbootjwt.**.dao"})
 public class Application {
 
     private static Logger log = LoggerFactory.getLogger(Application.class);

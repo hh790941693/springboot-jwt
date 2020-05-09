@@ -28,7 +28,7 @@ spring:
       - classpath:/templates
       - classpath:/static
   profiles:
-    active: com
+    active: home
 
 #alibaba oss
 alioss:

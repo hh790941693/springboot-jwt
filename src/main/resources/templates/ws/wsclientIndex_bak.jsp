@@ -66,9 +66,9 @@
 </style>
 </head>
 <body>
-	<jsp:include  page="sessionKeeper.jsp"/>
+	<jsp:include  page="sessionKeeper.html"/>
 	<!-- 头 -->
-	<jsp:include page="header.jsp"/>
+	<jsp:include page="header.html"/>
 	
 	<div id="qrDiv" style="display:none">
 		<img id="qrcodeImg"></img>

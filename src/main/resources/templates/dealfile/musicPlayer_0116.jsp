@@ -88,7 +88,7 @@
 				</table>
 			</div>
 		</div>
-	<jsp:include page="../ws/sessionKeeper.jsp"/>
+	<jsp:include page="../ws/sessionKeeper.html"/>
 	</body>
 
 	<script type="text/javascript">
