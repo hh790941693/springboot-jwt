@@ -88,8 +88,9 @@ public class ShiroConfig {
         //不需要认证
         map.put("/anon/*", "anon");
         map.put("/api/user/login", "anon");
-        //对所有用户认证(需要@RequiresAuthentication 并且head携带token)
-        //map.put("/**", "authc");
+        map.put("/ws/**", "anon");
+        map.put("/game/*", "anon");
+        map.put("/canvas/*", "anon");
 
         //登录
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);

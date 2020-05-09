@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableTransactionManagement
 @SpringBootApplication
 @EnableCaching
-@MapperScan("com.pjb.springbootjwt.**.dao")
+@MapperScan({"com.pjb.springbootjwt.**.dao","com.jscxrz.zhddkk.dao"})
 public class Application {
 
     private static Logger log = LoggerFactory.getLogger(Application.class);

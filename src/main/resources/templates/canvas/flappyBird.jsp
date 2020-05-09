@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
+<%
+	String basePath = request.getContextPath();
+	String  path= request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+basePath;
+%>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script type="text/javascript" src="<%=path%>/static/js/jquery-1.4.4.min.js"></script>
+		
+		<style type="text/css">
+			body{
+				margin:0;
+			}
+		</style>
+		
+	</head> 
+	<body>
+		<canvas id="canvas" style="background:#000">
+			你的浏览器不支持canvas标签
+		</canvas>
+	</body>
+	<script type="text/javascript">	
+	
+		var canvas = document.getElementById("canvas");
+		canvas.width = 800;
+		canvas.height = 500;
+		var ctx = canvas.getContext("2d");
+		
+		var bird = new Bird(100, canvas.height/2, 15, "yellow");
+		window.addEventListener('click',function(event){
+			bird.up();
+		});
+		
+		$(document).keydown(function(event){
+			var keyCode = event.keyCode;
+			//console.log(keyCode);
+			if (keyCode == 87){
+				bird.up();
+				console.log("xx");
+			}
+		});
+		
+		$(document).keyup(function(event){
+			var keyCode = event.keyCode;
+			//console.log(keyCode);
+			if (keyCode == 87){
+				bird.up();
+				console.log("-----------");
+			}
+		});
+		
+		function Bird(x,y,r,color){
+			this.x = x;
+			this.y = y;
+			this.r =r;
+			this.color = color;
+			
+			this.gravity = 0.1;
+			this.lift = 10;
+			this.opcity = 0;
+			
+			this.draw = function(){
+				ctx.beginPath();
+				ctx.arc(this.x,this.y,this.r,0,Math.PI*2,false);
+				ctx.fillStyle = this.color;
+				ctx.fill();
+				ctx.closePath();
+			};
+			
+			this.update = function(){
+				if (this.y + this.r > canvas.height){
+					this.gravity = 0;
+					this.y = canvas.height - this.r;
+				}
+				
+				if (this.y < this.r){
+					this.y = this.r;
+				}
+				
+				this.opcity += this.gravity;
+				//this.opcity += 0.9;
+				
+				this.y += this.opcity;
+				this.draw();
+			}
+			
+			this.up = function(){
+				this.opcity -= this.gravity*this.lift;
+			}
+		}
+		
+		
+		function Pipe(color){
+			this.x = canvas.width-100;;
+			this.y = 0;
+			this.w = 50;
+			this.top = randomNumber(1,canvas.height/2);
+			this.bottom = randomNumber(1,canvas.height/2);
+			this.color=color;
+			
+			this.hightLight= false;
+
+			this.draw = function(){
+				ctx.beginPath();
+				ctx.rect(this.x,0,this.w,this.top);
+				
+				ctx.rect(this.x,canvas.height-this.bottom,this.w,this.bottom);
+				ctx.fillStyle = this.color;
+				if (this.hightLight){
+					ctx.fillStyle = "red";
+				}
+				ctx.fill();
+				ctx.closePath();
+			}
+			
+			this.update = function(){
+				this.x -=1.5;
+				this.draw();
+			}
+			
+			this.hits = function(bird){
+				if (bird.y < this.top || bird.y > canvas.height-this.bottom){
+					if (bird.x+bird.r > this.x && bird.x-bird.r <this.x+this.w){
+						
+						this.hightLight = true;
+						return true;
+					}
+				}
+				this.hightLight = false;
+				
+				return false;
+			}
+		}
+		
+		var pipeArr = new Array();
+		var t=0;
+		function animate(){
+			requestAnimationFrame(animate);
+			ctx.clearRect(0,0,canvas.width,canvas.height);
+			
+			//for (var i=0;i<circleArray.length;i++){
+			//	circleArray[i].update();
+			//}
+			
+			//for (var i=0;i<zidanArray.length;i++){
+			//	zidanArray[i].update();
+			//}
+			bird.update();
+			
+			if (t%100==0){
+				pipeArr.push(new Pipe("white"));
+			}
+			
+			for (var i=pipeArr.length-1;i>0;i--){
+				pipeArr[i].update();
+				if (pipeArr[i].x <0){
+					pipeArr.splice(i,1);
+				}
+				pipeArr[i].hits(bird);
+			}
+			
+			//console.log(pipeArr.length);
+			
+			t++;
+		}
+		
+		animate();
+		//setInterval(animate,10);
+		
+		function randomNumber(start,end){
+			var range = end-start;
+			var rand = Math.random();
+			var num = start + Math.round(rand*range);
+			
+			return num;
+		}
+	</script>
+</html>

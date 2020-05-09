@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jscxrz.zhddkk.dao.WsDao">
+	<!--表dic字段映射 -->
+	<resultMap id="wsUserResultMap" type="com.jscxrz.zhddkk.entity.WsUser">
+		<result column="ID" jdbcType="INTEGER" property="id" />
+		<result column="NAME" jdbcType="VARCHAR" property="name" />
+		<result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+		<result column="REGISTERTIME" jdbcType="VARCHAR" property="registerTime" />
+		<result column="STATE" jdbcType="VARCHAR" property="state" />
+		<result column="LASTLOGINTIME" jdbcType="VARCHAR" property="lastLoginTime" />
+		<result column="ENABLE" jdbcType="VARCHAR" property="enable" />
+		<result column="SPEAK" jdbcType="VARCHAR" property="speak" />
+		<result column="QUESTION1" jdbcType="VARCHAR" property="question1" />
+		<result column="ANSWER1" jdbcType="VARCHAR" property="answer1" />
+		<result column="QUESTION2" jdbcType="VARCHAR" property="question2" />
+		<result column="ANSWER2" jdbcType="VARCHAR" property="answer2" />
+		<result column="QUESTION3" jdbcType="VARCHAR" property="question3" />
+		<result column="ANSWER3" jdbcType="VARCHAR" property="answer3" />
+		<result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+
+  <!--查询表dic -->	
+  <select id="queryWsUser" resultMap="wsUserResultMap" parameterType="com.jscxrz.zhddkk.entity.WsUser">
+  	select * from ws_users where 1=1
+  	<if test="id != null">
+  		and ID=#{id}
+  	</if>  	
+  	<if test="name != null">
+  		and NAME=#{name}
+  	</if>
+  	<if test="password != null">
+  		and PASSWORD=#{password}
+  	</if>
+  	<if test="state != null">
+  		and STATE=#{state}
+  	</if>
+  	<if test="enable != null">
+  		and ENABLE=#{enable}
+  	</if>
+  	<if test="speak != null">
+  		and SPEAK=#{speak}
+  	</if>
+  	order by LASTLOGINTIME
+  </select>
+  
+  <select id="queryWsUserCount" parameterType="com.jscxrz.zhddkk.entity.WsUser" resultType="java.lang.Integer">
+  	select count(1) from ws_users where 1=1 and name != 'admin'
+  </select>
+  
+  <select id="queryWsUserByPage" resultMap="wsUserResultMap" parameterType="map">
+  	select * from ws_users where 1=1 and name != 'admin' order by lastlogintime desc limit #{start},#{limit}
+  </select>
+  
+  	<resultMap id="wsChatLogResultMap" type="com.jscxrz.zhddkk.entity.WsChatlog">
+		<result column="time" jdbcType="VARCHAR" property="time" />
+		<result column="user" jdbcType="VARCHAR" property="user" />
+		<result column="toUser" jdbcType="VARCHAR" property="toUser" />
+		<result column="msg" jdbcType="VARCHAR" property="msg" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+	</resultMap>
+  
+    <resultMap id="wsDicResultMap" type="com.jscxrz.zhddkk.entity.WsDic">
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="key" jdbcType="VARCHAR" property="key" />
+		<result column="value" jdbcType="VARCHAR" property="value" />
+		<result column="sort" jdbcType="VARCHAR" property="sort" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+	</resultMap>
+  <select id="queryDic" resultMap="wsDicResultMap" parameterType="com.jscxrz.zhddkk.entity.WsDic">
+  	select * from ws_dic where 1=1
+  	<if test="type != null">
+  		and type=#{type}
+  	</if>
+  	<if test="key != null">
+  		and key=#{key}
+  	</if>
+   	<if test="value != null">
+  		and value=#{value}
+  	</if>
+  	order by type
+  </select>
+  
+   <!--批量往表crossing插入记录 -->
+   <insert id="insertWsUser" parameterType="com.jscxrz.zhddkk.entity.WsUser">
+		insert into ws_users(NAME,PASSWORD,REGISTERTIME,LASTLOGINTIME,LastLogoutTime,question1,answer1,question2,answer2,question3,answer3)
+		values (
+				#{name},
+				#{password},
+				#{registerTime},
+				#{lastLoginTime},
+				#{LastLogoutTime},
+				#{question1},
+				#{answer1},
+				#{question2},
+				#{answer2},
+				#{question3},
+				#{answer3}
+				)
+	</insert>
+	
+	<!-- 用户基本信息表 -->
+	<resultMap id="wsUserProfileMap" type="com.jscxrz.zhddkk.entity.WsUserProfile">
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="real_name" jdbcType="VARCHAR" property="realName" />
+		<result column="sign" jdbcType="VARCHAR" property="sign" />
+		<result column="age" jdbcType="INTEGER" property="age" />
+		<result column="sex" jdbcType="INTEGER" property="sex" />
+		<result column="sex_text" jdbcType="VARCHAR" property="sexText" />
+		<result column="tel" jdbcType="VARCHAR" property="tel" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="profession" jdbcType="INTEGER" property="profession" />
+		<result column="profession_text" jdbcType="VARCHAR" property="professionText" />
+		<result column="hobby" jdbcType="INTEGER" property="hobby" />
+		<result column="hobby_text" jdbcType="VARCHAR" property="hobbyText" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>	
+	
+	<insert id="insertUserProfile" parameterType="com.jscxrz.zhddkk.entity.WsUserProfile">
+		insert into ws_user_profile(user_id,user_name,real_name,img,sign,age,sex,sex_text,tel,address,profession,profession_text,hobby,hobby_text)
+		values (
+				#{userId},
+				#{userName},
+				#{realName},
+				#{img},
+				#{sign},
+				#{age},
+				#{sex},
+				#{sexText},
+				#{tel},
+				#{address},
+				#{profession},
+				#{professionText},
+				#{hobby},
+				#{hobbyText}					
+				)
+	</insert>
+	
+	<update id="updateUserProfile" parameterType="com.jscxrz.zhddkk.entity.WsUserProfile">
+		update ws_user_profile
+		<trim prefix="set" suffixOverrides=",">
+			<if test="realName != null">
+				real_name=#{realName},
+			</if>
+			<if test="img != null">
+				img=#{img},
+			</if>			
+			<if test="sign != null">
+				sign=#{sign,jdbcType=VARCHAR},
+			</if>
+			<if test="age != null">
+				age=#{age,jdbcType=INTEGER},
+			</if>
+			<if test="sex != null">
+				sex=#{sex,jdbcType=INTEGER},
+			</if>
+			<if test="sexText != null">
+				sex_text=#{sexText,jdbcType=VARCHAR},
+			</if>
+			<if test="tel != null">
+				tel=#{tel,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address=#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="profession != null">
+				profession=#{profession,jdbcType=INTEGER},
+			</if>
+			<if test="professionText != null">
+				profession_text=#{professionText,jdbcType=VARCHAR},
+			</if>
+			<if test="hobby != null">
+				hobby=#{hobby,jdbcType=INTEGER},
+			</if>
+			<if test="hobbyText != null">
+				hobby_text=#{hobbyText,jdbcType=VARCHAR},
+			</if>												
+		</trim>
+		where 1=1
+		<if test="userId != null">
+			and user_id=#{userId,jdbcType=INTEGER} 
+		</if>
+		<if test="userName != null">
+			and user_name=#{userName,jdbcType=VARCHAR}
+		</if>
+	</update>	
+	
+    <select id="existUserProfile" resultType="java.lang.Integer" parameterType="com.jscxrz.zhddkk.entity.WsUserProfile">
+	  	select count(1) from ws_user_profile where 1=1
+	  	<if test="id != null">
+	  		and id=#{id}
+	  	</if>	  	
+	  	<if test="userId != null">
+	  		and user_id=#{userId}
+	  	</if>
+		<if test="userName != null">
+			and user_name=#{userName,jdbcType=VARCHAR}
+		</if>
+    </select>	
+	
+    <select id="selectOneUserProfile" resultType="com.jscxrz.zhddkk.entity.WsUserProfile" parameterType="com.jscxrz.zhddkk.entity.WsUserProfile">
+	  	select * from ws_user_profile where 1=1
+	  	<if test="id != null">
+	  		and id=#{id}
+	  	</if>	  	
+	  	<if test="userId != null">
+	  		and user_id=#{userId}
+	  	</if>
+		<if test="userName != null">
+			and user_name=#{userName,jdbcType=VARCHAR}
+		</if>
+    </select>	
+	
+	
+	
+	<!-- 聊天记录 -->
+   <insert id="insertChatlog" parameterType="com.jscxrz.zhddkk.entity.WsChatlog">
+		insert into ws_chatlog(time,user,toUser,msg,remark)
+		values (
+				#{time},
+				#{user},
+				#{toUser},
+				#{msg},
+				#{remark}
+				)
+	</insert>
+	
+    <select id="queryHistoryChatlog" resultMap="wsChatLogResultMap" parameterType="map">
+	  	select * from ws_chatlog where 1=1
+	  	<if test="user != null">
+	  		and toUser=#{user}
+	  	</if>
+	  	<if test="lastLogoutTime != null">
+	  		<![CDATA[ and time > #{lastLogoutTime}]]>
+	  	</if>
+	  	order by time
+    </select>
+ 
+    <select id="queryHistoryChatlogByPage" resultMap="wsChatLogResultMap" parameterType="com.jscxrz.zhddkk.entity.WsChatlog">
+	  	select * from ws_chatlog where 1=1 and toUser != ""
+	  	<if test="user != null">
+	  		and user=#{user}
+	  	</if>
+	  	<if test="toUser != null">
+	  		and toUser=#{toUser}
+	  	</if>
+	  	<if test="beginTime != null">
+	  		<![CDATA[and time>=#{beginTime} ]]>
+	  	</if>
+	  	<if test="endTime != null">
+	  		<![CDATA[and time<=#{endTime} ]]>
+	  	</if>
+	  	<if test="keyword != null">
+	  		and msg like CONCAT('%',#{keyword},'%')
+	  	</if>
+	  	order by time limit #{start},#{limit}
+    </select>
+	
+	<select id="queryHistoryChatlogCount" resultType="java.lang.Integer" parameterType="com.jscxrz.zhddkk.entity.WsChatlog">
+		select count(1) from ws_chatlog where 1=1 and toUser != ""
+	  	<if test="user != null">
+	  		and user=#{user}
+	  	</if>
+	  	<if test="toUser != null">
+	  		and toUser=#{toUser}
+	  	</if>
+	  	<if test="beginTime != null">
+	  		<![CDATA[and time>=#{beginTime} ]]>
+	  	</if>
+	  	<if test="endTime != null">
+	  		<![CDATA[and time<=#{endTime} ]]>
+	  	</if>
+	  	<if test="keyword != null">
+	  		and msg like CONCAT('%',#{keyword},'%')
+	  	</if>	  	
+	</select>
+	
+	<update id="updateWsUser" parameterType="com.jscxrz.zhddkk.entity.WsUser">
+		update ws_users
+		<trim prefix="set" suffixOverrides=",">
+			<if test="password != null">
+				PASSWORD=#{password},
+			</if>
+			<if test="registerTime != null">
+				REGISTERTIME=#{registerTime,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				STATE=#{state,jdbcType=VARCHAR},
+			</if>
+			<if test="lastLoginTime != null">
+				LASTLOGINTIME=#{lastLoginTime,jdbcType=VARCHAR},
+			</if>
+			<if test="LastLogoutTime != null">
+				LastLogoutTime=#{LastLogoutTime,jdbcType=VARCHAR},
+			</if>
+			<if test="enable != null">
+				ENABLE=#{enable,jdbcType=VARCHAR},
+			</if>
+			<if test="speak != null">
+				SPEAK=#{speak,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		
+		where 1=1
+		<if test="name != null">
+			and NAME=#{name,jdbcType=VARCHAR} 
+		</if>
+	</update>
+	
+	
+	<!--表ws_common字段映射 -->
+	<resultMap id="wsCommonResultMap" type="com.jscxrz.zhddkk.entity.WsCommon">
+		<result column="id" jdbcType="VARCHAR" property="id" />
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="orderby" jdbcType="INTEGER" property="orderby" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+	</resultMap>
+	
+	<select id="queryCommonByPage" parameterType="com.jscxrz.zhddkk.entity.WsCommon" resultMap="wsCommonResultMap">
+		select * from ws_common where 1=1
+		<if test="type != null">
+			and	type=#{type,jdbcType=VARCHAR}
+		</if>
+		order by id limit #{start},#{limit}
+	</select>
+	
+	
+	<select id="queryCommon" parameterType="com.jscxrz.zhddkk.entity.WsCommon" resultMap="wsCommonResultMap">
+		select * from ws_common where 1=1
+		<if test="type != null">
+			and	type=#{type,jdbcType=VARCHAR}
+		</if>
+		order by type
+	</select>
+	
+	
+	<insert id="insertCommon" parameterType="com.jscxrz.zhddkk.entity.WsCommon">
+		insert into ws_common (type,name,remark) 
+		values
+		(
+			#{type},#{name},#{remark}
+		)
+	</insert>
+	
+	<delete id="deleteCommon" parameterType="com.jscxrz.zhddkk.entity.WsCommon">
+		delete from ws_common where 1=1
+		<if test="id != null">
+			and id=#{id,jdbcType=VARCHAR} 
+		</if>	
+		<if test="type != null">
+			and type=#{type,jdbcType=VARCHAR}
+		</if>		
+	</delete>
+	
+	<update id="updateCommon" parameterType="com.jscxrz.zhddkk.entity.WsCommon">
+		update ws_common
+		<trim prefix="set" suffixOverrides=",">
+			<if test="type != null">
+				type=#{type},
+			</if>
+			<if test="name != null">
+				name=#{name},
+			</if>
+			<if test="remark != null">
+				remark=#{remark},
+			</if>
+		</trim>
+		where 1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+	</update>
+	
+	<select id="queryCommonCount" resultType="java.lang.Integer" parameterType="com.jscxrz.zhddkk.entity.WsCommon">
+		select count(1) from ws_common where 1=1
+			<if test="type != null">
+				and type=#{type}
+			</if>
+	</select>
+	
+	
+	<!-- ws_file -->
+  	<resultMap id="wsFileMap" type="com.jscxrz.zhddkk.entity.WsFile">
+  		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="user" jdbcType="VARCHAR" property="user" />
+		<result column="filename" jdbcType="VARCHAR" property="filename" />
+		<result column="disk_path" jdbcType="VARCHAR" property="diskPath" />
+		<result column="url" jdbcType="VARCHAR" property="url" />
+		<result column="file_size" jdbcType="INTEGER" property="fileSize" />
+		<result column="author" jdbcType="VARCHAR" property="author" />
+		<result column="track_length" jdbcType="VARCHAR" property="trackLength" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+	</resultMap>
+	
+	<insert id="insertMusic" parameterType="com.jscxrz.zhddkk.entity.WsFile">
+		insert into ws_file (user,filename,disk_path,url,file_size,track_length) 
+		values
+		(
+			#{user},#{filename},#{diskPath},#{url},#{fileSize},#{trackLength}
+		)
+	</insert>
+	
+	<update id="deleteMusic" parameterType="Integer">
+		delete from ws_file where 1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>		
+	</update>
+	
+	<select id="queryMusic" resultMap="wsFileMap" parameterType="com.jscxrz.zhddkk.entity.WsFile">
+		select * from ws_file where status=1
+			<if test="id != null and id != 0">
+				and id=#{id}
+			</if>
+			<if test="user != null">
+				and user=#{user}
+			</if>
+	</select>
+	
+	<!--表ws_ads字段映射 -->
+	<resultMap id="wsAdsResultMap" type="com.jscxrz.zhddkk.entity.WsAds">
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="content" jdbcType="VARCHAR" property="content" />
+		<result column="receive_list" jdbcType="VARCHAR" property="receiveList" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+	
+	<insert id="insertAds" parameterType="com.jscxrz.zhddkk.entity.WsAds">
+		insert into ws_ads (title,content,receive_list) 
+		values
+		(
+			#{title},#{content},#{receiveList}
+		)
+	</insert>
+	
+	<select id="queryAdsCount" resultType="java.lang.Integer" parameterType="com.jscxrz.zhddkk.entity.WsAds">
+		select count(1) from ws_ads where 1=1
+			<if test="title != null">
+				and title like CONCAT('%',#{title},'%')
+			</if>
+			<if test="content != null">
+				and content like CONCAT('%',#{content},'%')
+			</if>
+	</select>
+	
+	<select id="queryAdsByPage" resultMap="wsAdsResultMap" parameterType="com.jscxrz.zhddkk.entity.WsAds">
+		select * from ws_ads where 1=1
+			ORDER BY create_time desc limit #{start},#{limit}
+	</select>
+	
+	<!-- 我的好友 -->
+	<resultMap id="wsFriendsMap" type="com.jscxrz.zhddkk.entity.WsFriends">
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="uid" jdbcType="INTEGER" property="uid" />
+		<result column="uname" jdbcType="VARCHAR" property="uname" />
+		<result column="fid" jdbcType="INTEGER" property="fid" />
+		<result column="fname" jdbcType="VARCHAR" property="fname" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+	
+	<select id="queryMyFriendsCount" resultType="java.lang.Integer" parameterType="com.jscxrz.zhddkk.entity.WsFriends">
+		select count(1) from ws_friends where 1=1
+			<if test="uname != null">
+				and uname=#{uname}
+			</if>
+	</select>
+	
+	<select id="existFriend" resultType="java.lang.Integer" parameterType="com.jscxrz.zhddkk.entity.WsFriends">
+		select count(1) from ws_friends where 1=1
+			<if test="uname != null">
+				and uname=#{uname}
+			</if>
+			<if test="fname != null">
+				and fname=#{fname}
+			</if>			
+	</select>	
+	
+	<insert id="insertMyFriend" parameterType="com.jscxrz.zhddkk.entity.WsFriends">
+		insert into ws_friends (uid,uname,fid,fname,remark)
+		values
+		(
+			#{uid},#{uname},#{fid},#{fname},#{remark}
+		)
+	</insert>
+	
+	<delete id="deleteMyFriend" parameterType="com.jscxrz.zhddkk.entity.WsFriends">
+		delete from ws_friends where 1=1
+		<if test="id != null">
+			and id=#{id,jdbcType=INTEGER} 
+		</if>	
+		<if test="uname != null">
+			and uname=#{uname,jdbcType=VARCHAR}
+		</if>	
+		<if test="fname != null">
+			and fname=#{fname,jdbcType=VARCHAR}
+		</if>		
+	</delete>
+	
+	
+	<select id="queryMyFriendsList" resultMap="wsFriendsMap" parameterType="com.jscxrz.zhddkk.entity.WsFriends">
+		select * from ws_friends where 1=1
+			<if test="uname != null">
+				and uname=#{uname}
+			</if>
+			<if test="fname != null">
+				and fname=#{fname}
+			</if>
+			ORDER BY create_time desc limit #{start},#{limit}
+	</select>
+	
+	<!-- 好友申请列表 -->
+	<resultMap id="wsFriendsApplyMap" type="com.jscxrz.zhddkk.entity.WsFriendsApply">
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="from_id" jdbcType="INTEGER" property="fromId" />
+		<result column="from_name" jdbcType="VARCHAR" property="fromName" />
+		<result column="to_id" jdbcType="INTEGER" property="toId" />
+		<result column="to_name" jdbcType="VARCHAR" property="toName" />
+		<result column="process_status" jdbcType="INTEGER" property="processStatus" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+	
+	<select id="queryFriendsApplyCount" resultType="java.lang.Integer" parameterType="com.jscxrz.zhddkk.entity.WsFriendsApply">
+		select count(1) from ws_friends_apply where 1=1
+			<if test="fromName != null">
+				and from_name=#{fromName}
+			</if>
+			<if test="toName != null">
+				and to_name=#{toName}
+			</if>
+			<if test="processStatus != null">
+				and process_status=#{processStatus}
+			</if>			
+	</select>	
+	
+	<update id="updateFrinedsApply" parameterType="com.jscxrz.zhddkk.entity.WsFriendsApply">
+		update ws_friends_apply set process_status=#{processStatus} where 1=1
+			<if test="fromName != null">
+				and from_name=#{fromName}
+			</if>
+			<if test="toName != null">
+				and to_name=#{toName}
+			</if>
+			<if test="id != null">
+				and id=#{id}
+			</if>
+	</update>
+	
+	<delete id="deleteFriendsApply" parameterType="com.jscxrz.zhddkk.entity.WsFriendsApply">
+		delete from ws_friends_apply where 1=1
+		<if test="id != null">
+			and id=#{id,jdbcType=INTEGER} 
+		</if>	
+		<if test="fromName != null">
+			and from_name=#{fromName}
+		</if>
+		<if test="toName != null">
+			and to_name=#{toName}
+		</if>		
+	</delete>
+	
+	<insert id="insertFriendsApply" parameterType="com.jscxrz.zhddkk.entity.WsFriendsApply">
+		insert into ws_friends_apply (from_id,from_name,to_id,to_name,process_status)
+		values
+		(
+			#{fromId},#{fromName},#{toId},#{toName},#{processStatus}
+		)
+	</insert>	
+	
+	<select id="queryFriendsApplyList" resultMap="wsFriendsApplyMap" parameterType="com.jscxrz.zhddkk.entity.WsFriendsApply">
+		select * from ws_friends_apply where 1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>		
+			<if test="fromName != null">
+				and from_name=#{fromName}
+			</if>
+			<if test="toName != null">
+				and to_name=#{toName}
+			</if>
+			<if test="processStatus != null">
+				and process_status=#{processStatus}
+			</if>
+			ORDER BY create_time desc limit #{start},#{limit}
+	</select>
+	
+	<select id="queryMyApplyCount" resultType="java.lang.Integer" parameterType="com.jscxrz.zhddkk.entity.WsFriendsApply">
+		select count(1) from ws_friends_apply where 1=1
+			<if test="fromName != null">
+				and from_name=#{fromName}
+			</if>			
+	</select>
+
+	<select id="queryMyApplyList" resultMap="wsFriendsApplyMap" parameterType="com.jscxrz.zhddkk.entity.WsFriendsApply">
+		select * from ws_friends_apply where 1=1
+			<if test="fromName != null">
+				and from_name=#{fromName}
+			</if>
+			ORDER BY create_time desc limit #{start},#{limit}
+	</select>
+	
+	
+	<!-- 朋友圈表 -->
+	<resultMap id="wsCircleMap" type="com.jscxrz.zhddkk.entity.WsCircle">
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="content" jdbcType="VARCHAR" property="content" />
+		<result column="like_num" jdbcType="INTEGER" property="likeNum" />
+		<result column="pic1" jdbcType="VARCHAR" property="pic1" />
+		<result column="pic2" jdbcType="VARCHAR" property="pic2" />
+		<result column="pic3" jdbcType="VARCHAR" property="pic3" />
+		<result column="pic4" jdbcType="VARCHAR" property="pic4" />
+		<result column="pic5" jdbcType="VARCHAR" property="pic5" />
+		<result column="pic6" jdbcType="VARCHAR" property="pic6" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+	
+	<select id="queryCircleCount" parameterType="com.jscxrz.zhddkk.entity.WsCircle" resultType="java.lang.Integer">
+  		select count(1) from ws_circle where 1=1
+  	</select>
+
+	<select id="queryCircleByPage" resultMap="wsCircleMap" parameterType="com.jscxrz.zhddkk.entity.WsCircle">
+		select * from ws_circle where 1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>		
+			<if test="userName != null">
+				and user_name=#{userName}
+			</if>
+			<if test="userId != null">
+				and user_id=#{userId}
+			</if>
+			ORDER BY create_time desc limit #{start},#{limit}
+	</select>
+	
+	<insert id="insertCircle" parameterType="com.jscxrz.zhddkk.entity.WsCircle">
+		insert into ws_circle (user_name,user_id,content,like_num,pic1,pic2,pic3,pic4,pic5,pic6,create_time)
+		values
+		(
+			#{userName},#{userId},#{content},#{likeNum},#{pic1},#{pic2},#{pic3},#{pic4},#{pic5},#{pic6},#{createTime}
+		)
+	</insert>
+	
+	<update id="updateCircle" parameterType="com.jscxrz.zhddkk.entity.WsCircle">
+		update ws_circle set like_num=#{likeNum} where 1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>
+			<if test="userName != null">
+				and user_name=#{userName}
+			</if>
+			<if test="userId != null">
+				and user_id=#{userId}
+			</if>
+	</update>
+	
+	<delete id="deleteCircle" parameterType="com.jscxrz.zhddkk.entity.WsCommon">
+		delete from ws_circle where 1=1
+		<if test="id != null">
+			and id=#{id,jdbcType=INTEGER} 
+		</if>	
+		<if test="userName != null">
+			and user_name=#{userName,jdbcType=VARCHAR}
+		</if>		
+	</delete>
+	
+	
+	<!-- 朋友圈评论表 -->
+	<resultMap id="wsCircleCommentMap" type="com.jscxrz.zhddkk.entity.WsCircleComment">
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="circle_id" jdbcType="INTEGER" property="circleId" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="comment" jdbcType="VARCHAR" property="comment" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+	
+	<select id="queryCircleCommentList" resultMap="wsCircleCommentMap" parameterType="com.jscxrz.zhddkk.entity.WsCircleComment">
+		select * from ws_circle_comment where 1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>		
+			<if test="circleId != null">
+				and circle_id=#{circleId}
+			</if>
+			<if test="userName != null">
+				and user_name=#{userName}
+			</if>
+			<if test="userId != null">
+				and user_id=#{userId}
+			</if>
+			ORDER BY create_time
+	</select>
+	
+	<insert id="insertCircleComment" parameterType="com.jscxrz.zhddkk.entity.WsCircleComment">
+		insert into ws_circle_comment (circle_id,user_name,user_id,comment,create_time)
+		values
+		(
+			#{circleId},#{userName},#{userId},#{comment},#{createTime}
+		)
+	</insert>
+	
+	<delete id="deleteCircleComment" parameterType="com.jscxrz.zhddkk.entity.WsCircleComment">
+		delete from ws_circle_comment where 1=1
+		<if test="id != null">
+			and id=#{id,jdbcType=INTEGER} 
+		</if>
+		<if test="circleId != null">
+			and circle_id=#{circleId,jdbcType=INTEGER} 
+		</if>		
+		<if test="userName != null">
+			and user_name=#{userName,jdbcType=VARCHAR}
+		</if>		
+	</delete>
+	
+	<!-- 操作日志 -->
+	<resultMap id="wsOperationLogMap" type="com.jscxrz.zhddkk.entity.WsOperationLog">
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="oper_type" jdbcType="VARCHAR" property="operType" />
+		<result column="oper_module" jdbcType="VARCHAR" property="operModule" />
+		<result column="oper_submodule" jdbcType="VARCHAR" property="operSubmodule" />
+		<result column="oper_describe" jdbcType="VARCHAR" property="operDescribe" />
+		<result column="oper_remark" jdbcType="VARCHAR" property="operRemark" />
+		<result column="request_url" jdbcType="VARCHAR" property="requestUrl" />
+		<result column="class_name" jdbcType="VARCHAR" property="className" />
+		<result column="method_name" jdbcType="VARCHAR" property="methodName" />
+		<result column="parameters" jdbcType="VARCHAR" property="parameters" />
+		<result column="cost_time" jdbcType="INTEGER" property="costTime" />
+		<result column="oper_result" jdbcType="VARCHAR" property="operResult" />
+		<result column="error_msg" jdbcType="VARCHAR" property="errorMsg" />
+		<result column="access_time" jdbcType="TIMESTAMP" property="accessTime" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+	
+	<insert id="insertOperationLog" parameterType="com.jscxrz.zhddkk.entity.WsOperationLog">
+		insert into ws_operation_log (user_id,user_name,oper_type,oper_module,oper_submodule,oper_describe,oper_remark,request_url,class_name,method_name,parameters,cost_time,oper_result,error_msg,access_time,create_time)
+		values
+		(
+			#{userId},#{userName},#{operType},#{operModule},#{operSubmodule},#{operDescribe},#{operRemark},#{requestUrl},#{className},#{methodName},#{parameters},#{costTime},#{operResult},#{errorMsg},#{accessTime},#{createTime}
+		)
+	</insert>
+
+	<select id="queryOperationLogList" resultMap="wsOperationLogMap" parameterType="com.jscxrz.zhddkk.entity.WsOperationLog">
+		select * from ws_operation_log where 1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>		
+			<if test="userId != null">
+				and user_id=#{userId}
+			</if>
+			<if test="userName != null">
+				and user_name=#{userName}
+			</if>
+			<if test="operType != null">
+				and oper_type=#{operType}
+			</if>
+			<if test="operModule != null">
+				and oper_module=#{operModule}
+			</if>
+			<if test="operSubmodule != null">
+				and oper_submodule=#{operSubmodule}
+			</if>						
+			ORDER BY create_time
+	</select>
+	
+    <select id="queryOperationLogByPage" resultMap="wsOperationLogMap" parameterType="com.jscxrz.zhddkk.entity.WsOperationLog">
+		select * from ws_operation_log where 1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>		
+			<if test="userId != null">
+				and user_id=#{userId}
+			</if>
+			<if test="userName != null">
+				and user_name=#{userName}
+			</if>
+			<if test="operType != null">
+				and oper_type=#{operType}
+			</if>
+			<if test="operModule != null">
+				and oper_module=#{operModule}
+			</if>
+			<if test="operSubmodule != null">
+				and oper_submodule=#{operSubmodule}
+			</if>
+			<if test="search != null">
+				and user_name like CONCAT('%',#{search},'%')
+			</if>		
+			ORDER BY create_time limit #{start},#{limit}
+    </select>
+	
+	<select id="queryOperationLogCount" resultType="java.lang.Integer" parameterType="com.jscxrz.zhddkk.entity.WsOperationLog">
+		select count(1) from ws_operation_log where 1=1
+			<if test="id != null">
+				and id=#{id}
+			</if>		
+			<if test="userId != null">
+				and user_id=#{userId}
+			</if>
+			<if test="userName != null">
+				and user_name=#{userName}
+			</if>
+			<if test="operType != null">
+				and oper_type=#{operType}
+			</if>
+			<if test="operModule != null">
+				and oper_module=#{operModule}
+			</if>
+			<if test="operSubmodule != null">
+				and oper_submodule=#{operSubmodule}
+			</if>
+			<if test="search != null">
+				and user_name like CONCAT('%',#{search},'%')
+			</if>
+			<if test="sort != null and order != null">
+				ORDER BY #{sort} ${order}
+			</if>
+	</select>	
+</mapper>

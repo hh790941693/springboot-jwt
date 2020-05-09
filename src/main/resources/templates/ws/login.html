@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>登录</title>
+<script type="text/javascript" src="@{/js/jquery/rootPath.js}"></script>
+<script type="text/javascript" src="@{/js/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="@{/js/jquery/jquery.validate.js}"></script>
+<script type="text/javascript" src="@{/js/layer/layer.js}"></script>
+<link rel="stylesheet" type="text/css" href="@{/js/bootstrap/css/bootstrap.css}"/>
+<script type="text/javascript" src="@{/js/bootstrap/js/bootstrap.js}"></script>
+
+<style type="text/css">
+	a{
+		font-size:13px;
+	}
+</style>
+</head>
+<body>
+	<div style="width:400px;height:230px;margin:220px auto;border:3px solid grey;background-color:#53D2FB;position:relative">
+		<div style="margin-top:10px;margin-left:115px;color:blue">
+				欢迎使用webSocket 
+		</div>
+		<button id="phonelogin" class='btn btn-primary btn-sm' style="position:absolute;top:1px;left:315px;">手机登录</button>
+		<form style="margin:20px 5px;" id="loginForm" action="wslogin.do" method="post">
+			<div>
+				<label for="user">用户名:</label><input id="user" name="user" type="text" value="${user}" placeholder="请输入用户名" autocomplete="off" style="width:178px;margin-left:10px;"></input>
+			</div>
+			<br/>
+			<div>
+				<label for="pass">密&nbsp;&nbsp;&nbsp;&nbsp;码:</label><input id="pass" name="pass" value="${pass}" placeholder="请输入密码" autocomplete="off" type="password" style="width:178px;margin-left:11px;"></input>
+				<br/>
+					<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:50px;">忘记密码</a>
+					<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:20px;">注&nbsp;&nbsp;&nbsp;&nbsp;册</a>
+					<a href="javascript:void(0)" onclick="openGame(this)" style="text-decoration:none;margin-left:20px;">开启动画</a>
+					<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;">玩游戏</a>
+			</div>
+			
+			<div align="center" style="margin-top:10px;margin-left:1px;">
+				<button id="btnlogin" class='btn btn-success btn-sm'  type="submit" style="width:100px;" >登&nbsp;&nbsp;&nbsp;录</button>
+			</div>
+		</form>
+		
+		<div style="position:absolute;width:180px;height:180px;left:410px;top:1px;">
+			<img id="qrImg" style="width:160px;height:160px;display:none">
+		</div>
+	</div>
+	
+	<div id='canvasDiv' style='position:fixed;left:1px;top:1px;width:100%;height:100%;z-index:-1;'>
+		<iframe id="iframePage" width="100%" height="100%" ></iframe>
+	</div>
+
+	<script type="text/javascript">
+		var userParam = "${user}";
+		var passParam = "${pass}";
+		$("#user").val(userParam);
+		$("#pass").val(passParam);
+
+		$("#user").blur(function(){
+			var val = $("#user").val();
+			if (val == ""){
+				layer.tips('用户名不能为空!', '#user', {
+					tips: [2, '#78BA32']
+					});
+			}
+		})
+		
+		$("#pass").blur(function(){
+			var val = $("#pass").val();
+			if (val == "")
+			{
+				layer.tips('密码不能为空!', '#pass', {
+					tips: [2, '#78BA32']
+					});
+			}
+		})
+		
+		//提交校验
+		$("#loginForm").validate({
+		    rules: {
+			    user:
+			    {
+			        required: true,
+			        minlength: 2,
+			        maxlength:6
+			    },
+			    pass:
+			    {
+			        required: true,
+			        minlength: 2,
+			        maxlength:6
+			    }
+		    },
+			messages:{
+			     user:
+			     {
+			        required: "请输入用户名",
+			        minlength: "至少包含2个字符",
+			        maxlength:"最多包含6位字符"
+			     },
+			     pass:
+			     {
+			        required: "请输入密码",
+			        minlength: "至少包含2个字符",
+			        maxlength:"最多包含6位字符"
+			     }
+			 }
+		});
+		
+		//注册账号
+		function regist(){
+			layer.open({
+				  type: 2,
+				  title: '注册账号',
+				  shadeClose: true,
+				  shade: 0.6,
+				  area: ['488px', '394px'],
+				  content: 'register.page'
+			});
+		}
+		
+		//忘记密码
+		function forgetPassword(){
+			var user=$("#user").val();
+			layer.open({
+				  type: 2,
+				  title: '忘记密码',
+				  shadeClose: true,
+				  shade: 0.6,
+				  area: ['490px', '398px'],
+				  content: 'forgetPassword.page?user='+user
+			});			
+		}		
+		
+		//登录成功
+		function toSuceess(user,pass){
+			$.ajax({
+		      	type: 'GET',
+		        url: rootUrl+'ws/wslogin.do',
+		        data:{user:user,pass:pass},
+		        dataType: 'json',
+		        async:true,
+		        success: function(result) {
+		        	var a=2;
+		        }
+		    });
+		}
+
+		//手机登录
+		$("#phonelogin").click(function(){
+			var imgSrc = $("#qrImg").attr("src");
+			if (imgSrc == "" || imgSrc == undefined){
+				$.ajax({
+			      	type: 'POST',
+			        url: rootUrl+'ws/showQRCode.do',
+			        dataType: 'json',
+			        async:false,
+			        success: function(result) {
+			        	$("#qrImg").css("display","block");
+			        	$("#qrImg").attr("src",result);
+			        }
+				});
+			}else{
+				$("#qrImg").attr("src","");
+				$("#qrImg").css("display","none");
+			}
+		})
+		
+		//关闭动画
+		function openGame(thisObj){
+			var text=$(thisObj).text();
+			if (text == "开启动画"){
+				text = "隐藏动画";
+				$("#iframePage").attr("src",rootUrl+"canvas/gravityBall.page");
+				$(thisObj).text(text);
+			}else{
+				window.location.href = window.location.href;
+			}
+		}
+		
+		//玩游戏
+		function playGame(){
+			window.location.href = rootUrl + "canvas/canvasIndex.page";
+		}
+		
+	</script>
+</body>
+</html>

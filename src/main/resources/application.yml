@@ -16,7 +16,7 @@ mybatis-plus:
 debug: true
 
 server:
-  port: 8888
+  port: 8100
   address: localhost
 
 spring:

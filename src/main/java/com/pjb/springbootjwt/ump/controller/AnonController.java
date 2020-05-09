@@ -12,8 +12,10 @@ import net.sf.ehcache.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
@@ -27,7 +29,7 @@ import java.util.Set;
 /**
  * 游客可以随意访问的接口
  */
-@RestController
+@Controller
 @RequestMapping("/anon")
 @Api(tags = "游客访问接口")
 public class AnonController {
@@ -37,11 +39,17 @@ public class AnonController {
     @Autowired
     private RedisUtil redisUtil;
 
+    @RequestMapping("/index")
+    public String v_home() {
+        return "ws/login";
+    }
+
     /**
      * 获取ehcache缓存数据
      * @return
      */
     @GetMapping("/queryEhcache")
+    @ResponseBody
     @ApiOperation("获取ehCache缓存数据")
     public Result<String> queryEhcache(){
         Map<String, Object> map = EhcacheUtils.getAllCache(EhcacheUtils.default_cache_name);
@@ -88,6 +96,7 @@ public class AnonController {
      * @return
      */
     @GetMapping("/queryRedis")
+    @ResponseBody
     @ApiOperation("获取redis缓存数据")
     public Result<List<TokenBean>> queryRedis(){
         Set<String> keySet = redisUtil.allKeys(Constant.TOKEN_PREFIX +"*");
