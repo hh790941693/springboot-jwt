@@ -127,9 +127,6 @@
         var s_webserverip = $('#webserverip').val();;
         var s_webserverport = $('#webserverport').val();;
         var s_userAgent = $('#user_agent').val();;
-        // console.log("aaaa:"+aaaa);
-        // $("#curUser").text(user);
-        // $("#titleLabel").text("websocket客户端");
 
         // 显示聊天窗口首页
         var cur_pageid = "wsclientChat.page";
@@ -215,7 +212,9 @@
         {
             if (webSocket == null)
             {
-                webSocket = new WebSocket("ws://"+webserverip+":"+webserverport+"/zhddkk/zhddWebSocket/" + user+"/"+pass+"/"+userAgent);
+                var socketUrl = "ws://"+webserverip+":"+webserverport+"/zhddWebSocket/" + user+"/"+pass+"/"+userAgent;
+                console.log(socketUrl);
+                webSocket = new WebSocket(socketUrl);
                 webSocket.onerror = function(event){
                     onError(event);
                 };

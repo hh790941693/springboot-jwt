@@ -414,9 +414,6 @@
 	
 	<select id="queryMusic" resultMap="wsFileMap" parameterType="com.pjb.springbootjwt.zhddkk.entity.WsFile">
 		select * from ws_file where status=1
-			<if test="id != null and id != 0">
-				and id=#{id}
-			</if>
 			<if test="user != null">
 				and user=#{user}
 			</if>

@@ -2,14 +2,11 @@
 <head th:include="common :: header"></head>
 	<title>WebSocket客户端</title>
 <style type="text/css">
-	body { background: purple url(@{/img/pic2.jpg}); background-repeat:no-repeat;background-size:cover;
-	};
-	
 	.mouseleftclick{
 		background-color:blue;
 		color:white;
 	}
-	
+
 	#mainDiv{
 		width:604px;
 		margin:20px auto;
@@ -108,7 +105,9 @@
 </body>
 
 	<script type="text/javascript">
-		//var webSocket = parent.webSocket;
+        var initPicUrl = rootUrl+"img/pic1.jpg";
+        $("body").css("background-image","url("+initPicUrl+")");
+
 		var user = parent.s_user;
 		var pass = parent.s_pass;
 		var webserverip = parent.s_webserverip;
@@ -245,7 +244,6 @@
 					}
 
 					// 聊天常用语
-					//var cyy = jsonObj.dicMap.cyy;
 					var cyy = jsonObj.commonMap.cyy;
 					$("#selectCyy").empty();
 					for (var x=0;x<cyy.length;x++)
@@ -312,7 +310,8 @@
 			{
 				imgIndex=1;
 			}
-			$("body").css("background-image","url(<%=path%>/img/pic"+imgIndex+".jpg)");
+			var newPicUrl = rootUrl+"img/pic"+imgIndex+".jpg";
+			$("body").css("background-image","url("+newPicUrl+")");
 			imgIndex++;
 		}
 		setInterval(function(){

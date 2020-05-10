@@ -2,6 +2,9 @@ package com.pjb.springbootjwt.common.uploader.service.impl;
 
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.common.uploader.service.UploadService;
+import com.pjb.springbootjwt.zhddkk.entity.WsFile;
+import com.pjb.springbootjwt.zhddkk.service.WsService;
+import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,18 +26,35 @@ public class UploadServiceImpl implements UploadService {
     @Autowired
     private UploadConfig uploadConfig;
 
+    @Autowired
+    private WsService wsService;
+
     @Override
     public String uploadFile(MultipartFile file, String folder, String userId) throws Exception {
         logger.info("进入上传文件业务层,目录名:{} 用户id:{}", folder, userId);
         if (StringUtils.isBlank(folder)){
             folder = TEMP_PATH;
         }
-        String newFileName = renameToUUID(file.getOriginalFilename());
-        logger.info("newFileName:"+newFileName);
+        String originFilename = file.getOriginalFilename();
+        //String newFileName = renameToUUID(file.getOriginalFilename());
+        //logger.info("newFileName:"+newFileName);
         String totalFolder = uploadConfig.getStorePath() + folder + File.separator;
-        File newFile = new File(totalFolder, newFileName);
+        File newFile = new File(totalFolder, originFilename);
         FileUtils.writeByteArrayToFile(newFile, file.getBytes());
-        return uploadConfig.getViewUrl() + folder + File.separator + newFileName;
+        String viewUrl = uploadConfig.getViewUrl() + folder + File.separator + originFilename;
+
+        WsFile wf = new WsFile();
+        wf.setUser(userId);
+        wf.setFilename(file.getOriginalFilename());
+        wf.setDiskPath(uploadConfig.getStorePath() + folder);
+        wf.setUrl(viewUrl);
+        wf.setFileSize(newFile.length());
+
+        String trackLength = MusicParserUtil.getMusicTrackTime(newFile.getAbsolutePath());
+        wf.setTrackLength(trackLength);
+        wsService.insertMusic(wf);
+
+        return viewUrl;
     }
 
     /**

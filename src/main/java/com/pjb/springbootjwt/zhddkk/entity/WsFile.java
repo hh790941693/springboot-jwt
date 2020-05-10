@@ -1,7 +1,10 @@
 package com.pjb.springbootjwt.zhddkk.entity;
 
+import com.baomidou.mybatisplus.annotations.TableName;
+
 import java.util.Date;
 
+@TableName("ws_file")
 public class WsFile {
 
 	private int id;

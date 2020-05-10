@@ -25,8 +25,10 @@ import com.pjb.springbootjwt.zhddkk.entity.WsCommon;
 import com.pjb.springbootjwt.zhddkk.entity.WsUser;
 import com.pjb.springbootjwt.zhddkk.listener.ApplicationContextRegister;
 import com.pjb.springbootjwt.zhddkk.service.WsService;
+import org.springframework.stereotype.Component;
 
 @ServerEndpoint("/zhddWebSocket/{user}/{pass}/{userAgent}")
+@Component
 public class ZhddWebSocket 
 {
 	private static final Log logger = LogFactory.getLog(ZhddWebSocket.class);

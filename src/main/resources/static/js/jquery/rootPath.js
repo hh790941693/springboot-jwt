@@ -1,7 +1,7 @@
 ﻿/**
  * 是否虚拟目录
  */
-var isVirtualRoot = true;
+var isVirtualRoot = false;
 
 /**
  * 网站根目录

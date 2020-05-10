@@ -29,6 +29,10 @@ spring:
       - classpath:/static
   profiles:
     active: home
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size:  120MB
 
 #alibaba oss
 alioss:
@@ -43,6 +47,6 @@ alioss:
 upload:
   config:
     store-path: D:\\temp\\
-    view-url: http://localhost:8888/
+    view-url: http://localhost:8101/
 
 

@@ -67,6 +67,7 @@ public class IpUtil {
 			}
 		}
 
+        wifiIp = "localhost";
 		return wifiIp;
 	}
 }
