@@ -243,11 +243,10 @@
 		// 显示歌曲列表
 		function showMusic(){
 			var fileType = ".mp3";
-			var user = "${user}";
 			$.ajax({
 				type:"POST",
 				url:rootUrl + "file/showFiles.do",
-				data:{user:user, fileType:fileType},
+				data:{user:loginUser, fileType:fileType},
 				dataType:'json',
 				success:function(result){
 					var dataList = result.dataList;

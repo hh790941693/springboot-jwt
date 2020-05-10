@@ -1,19 +1,7 @@
 <!DOCTYPE html>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-	String basePath = request.getContextPath();
-	String  path= request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+basePath;
-%>
-<html>
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
 	<title>朋友圈</title>
-<script type="text/javascript" src="<%=path%>/static/js/rootPath.js"></script>
-<script type="text/javascript" src="<%=path%>/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="<%=path%>/static/layer/layer.js"></script>
-<script type="text/javascript" src="<%=path%>/viewjs/common.js"></script>
-<link rel="stylesheet" type="text/css" href="<%=path%>/static/bootstrap/css/bootstrap.css"/>
-<script type="text/javascript" src="<%=path%>/static/bootstrap/js/bootstrap.js"></script>
 
 <style type="text/css">
 	*{
@@ -149,7 +137,10 @@
 			<button id='nextBtn' onclick='toNextPage()' class='btn btn-sm btn-primary' >后一页</button>
 		</div>		
 	</div>
-	
+
+	<div th:include="common::footer"></div>
+</body>
+
 	<script type="text/javascript">
 		var curUser=parent.s_user;
 		var curPage = 1;
@@ -158,7 +149,7 @@
 		$("#preBtn").hide();
 		$("#nextBtn").hide();
 		queryCirclList(curPage,numPerPage);
-		
+
 		//上一页
 		function toPrePage(){
 			if (curPage>1){
@@ -178,27 +169,27 @@
 		},function(){
 			$("#preBtn,#nextBtn").hide();
 		})
-		
+
 		//查询朋友圈列表
 		function queryCirclList(curPagePara,numPerPagePara){
 			var data = {};
 			data.curPage=curPagePara;  //当前页
 			data.numPerPage=numPerPagePara;  //每页显示条数
 			$("#curPageSpan").text(curPagePara);
-			
+
 			if (curPage <= 1){
 				$("#preBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled",true);
 			}else{
 				$("#preBtn").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled",false);
-			}			
+			}
 			$.ajax({
-		      	type: 'POST',
-		        url: rootUrl+'ws/queryCircleByPage.do',
-		        data:JSON.stringify(data),
-		        contentType:"application/json", 
-		        dataType: 'json',
-		        async:false,
-		        success: function(result) {
+				type: 'POST',
+				url: rootUrl+'ws/queryCircleByPage.do',
+				data:JSON.stringify(data),
+				contentType:"application/json",
+				dataType: 'json',
+				async:false,
+				success: function(result) {
 					var list = result.list;
 					totalPage = result.totalPage;
 					$("#totalPageSpan").text(totalPage);
@@ -226,7 +217,7 @@
 							var pic2 = circle.pic2;
 							var pic3 = circle.pic3;
 							var pic4 = circle.pic4;
-							
+
 							var picArr = new Array();
 							if (pic1 != ""){
 								picArr.push(pic1)
@@ -240,7 +231,7 @@
 							if (pic4 != ""){
 								picArr.push(pic4)
 							}
-							
+
 							htmlData += "<div id='"+circleId+"'>";
 							htmlData += "      <div class='bodyDivClass'>";
 							htmlData += "            <div class='nameDivClass'>";
@@ -268,7 +259,7 @@
 								htmlData += "  </div>";
 							}
 
-							htmlData += "      <div class='commentDivClass'>";							
+							htmlData += "      <div class='commentDivClass'>";
 							if (commentList.length>0){
 								for (var j=0;j<commentList.length;j++){
 									var commentObj = commentList[j];
@@ -280,7 +271,7 @@
 									if (curUser == commentUserName || curUser == userName || curUser == 'admin'){
 										htmlData += "<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>"+commentUserName+":</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>"+commentText+"</span><a href='javascript:void(0)' onclick='deleteComment("+commentId+")'>删除</a><span class='commentTimeSpanClass'>发表于"+commentTimeResult+"</span></p>";
 									}else{
-										htmlData += "<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>"+commentUserName+":</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>"+commentText+"</span><span class='commentTimeSpanClass' style='margin-left:55px;'>发表于"+commentTimeResult+"</span></p>";		
+										htmlData += "<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>"+commentUserName+":</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>"+commentText+"</span><span class='commentTimeSpanClass' style='margin-left:55px;'>发表于"+commentTimeResult+"</span></p>";
 									}
 								}
 							}
@@ -290,30 +281,30 @@
 						}
 						$("#circleDiv").append(htmlData);
 					}
-		        }
-			});	
+				}
+			});
 		}
 		//评论
 		function toComment(circleId){
 			var comment="";
 			layer.prompt({
 				formType: 2,
-			  	value: '',
-			  	title: '请输入评论内容'
+				value: '',
+				title: '请输入评论内容'
 			}, function(value,index){
 				comment = value;
-			  	layer.close(index);
-			  	
+				layer.close(index);
+
 				if (comment != ""){
 					$.ajax({
-				      	type: 'POST',
-				        url: rootUrl+'ws/toComment.do',
-				        dataType: 'json',
-				        data:{user:curUser,circleId:circleId,comment:comment},
-				        async:false,
-				        success: function(result) {
-				        	refresh();
-				        }
+						type: 'POST',
+						url: rootUrl+'ws/toComment.do',
+						dataType: 'json',
+						data:{user:curUser,circleId:circleId,comment:comment},
+						async:false,
+						success: function(result) {
+							refresh();
+						}
 					});
 				}else{
 					alert("评论内容不能为空!");
@@ -323,73 +314,73 @@
 		//点赞
 		function toLike(circleId){
 			$.ajax({
-		      	type: 'POST',
-		        url: rootUrl+'ws/toLike.do',
-		        dataType: 'json',
-		        data:{user:curUser,circleId:circleId},
-		        async:false,
-		        success: function(result) {
-		        	refresh();
-		        }
+				type: 'POST',
+				url: rootUrl+'ws/toLike.do',
+				dataType: 'json',
+				data:{user:curUser,circleId:circleId},
+				async:false,
+				success: function(result) {
+					refresh();
+				}
 			});
 		}
 		//删除朋友圈
 		function deleteCircle(circleId){
-			layer.confirm('确认要删除？', {btn: ['确定','取消']}, 
-					function(){
-						$.ajax({
-					      	type: 'POST',
-					        url: rootUrl+'ws/toDeleteCircle.do',
-					        dataType: 'json',
-					        data:{id:circleId},
-					        async:false,
-					        success: function(result) {
-					        	refresh();
-					        }
-						});
-					}, 
-					function(){layer.close();}
-				);
+			layer.confirm('确认要删除？', {btn: ['确定','取消']},
+				function(){
+					$.ajax({
+						type: 'POST',
+						url: rootUrl+'ws/toDeleteCircle.do',
+						dataType: 'json',
+						data:{id:circleId},
+						async:false,
+						success: function(result) {
+							refresh();
+						}
+					});
+				},
+				function(){layer.close();}
+			);
 		}
-		
+
 		//删除评论
 		function deleteComment(commentId){
 			console.log("删除评论:"+commentId);
-			layer.confirm('确认要删除？', {btn: ['确定','取消']}, 
-					function(){
-						$.ajax({
-					      	type: 'POST',
-					        url: rootUrl+'ws/toDeleteComment.do',
-					        dataType: 'json',
-					        data:{id:commentId},
-					        async:false,
-					        success: function(result) {
-					        	refresh();
-					        }
-						});
-					}, 
-					function(){layer.close();}
-				);
+			layer.confirm('确认要删除？', {btn: ['确定','取消']},
+				function(){
+					$.ajax({
+						type: 'POST',
+						url: rootUrl+'ws/toDeleteComment.do',
+						dataType: 'json',
+						data:{id:commentId},
+						async:false,
+						success: function(result) {
+							refresh();
+						}
+					});
+				},
+				function(){layer.close();}
+			);
 		}
-		
+
 		//新增朋友圈内容
 		function addCircle(){
 			layer.open({
-				  type: 2,
-				  title: '添加朋友圈',
-				  shadeClose: true,
-				  shade: 0.8,
-				  area: ['484px', '530px'],
-				  content: 'wsclientAddCircle.page?user='+curUser
-				}); 
+				type: 2,
+				title: '添加朋友圈',
+				shadeClose: true,
+				shade: 0.8,
+				area: ['484px', '530px'],
+				content: 'wsclientAddCircle.page?user='+curUser
+			});
 		}
-		
+
 		//刷新
 		function refresh()
 		{
 			window.location.href = window.location.href;
 		};
-		
+
 		//对img绑定放大事件
 		$(".picDivClass img").click(function(){
 			// 记录点击坐标
@@ -401,28 +392,28 @@
 			var mouseY = clientY-offtop;
 			showBigImg(this);
 		})
-		
+
 		//显示大图
-      	function showBigImg(imgObj) {
-    	  	$("#bigImg").attr("src",$(imgObj).attr("src"));
-    	  	$("#showBigImageDiv").css("display","block");
-      	}
+		function showBigImg(imgObj) {
+			$("#bigImg").attr("src",$(imgObj).attr("src"));
+			$("#showBigImageDiv").css("display","block");
+		}
 		//关闭大图
-      	function hideBigImg() {
-    	  	$("#showBigImageDiv").css("display","none");
-      	}
-      	//鼠标移走关闭大图
-      	$("#showBigImageDiv").mouseout(hideBigImg);
-      	
+		function hideBigImg() {
+			$("#showBigImageDiv").css("display","none");
+		}
+		//鼠标移走关闭大图
+		$("#showBigImageDiv").mouseout(hideBigImg);
+
 		function refresh(){
 			window.location.href = window.location.href;
 		};
-		
+
 		function imgerror(imgObj){
 			var scrVar = $(imgObj).attr("src");
 			$(imgObj).attr("src",rootUrl+"/img/imgerror_default.jpg");
 		}
-		
+
 		//查看个人信息
 		function queryPersonInfo(thisObj){
 			var username = $(thisObj).text();
@@ -430,14 +421,13 @@
 				username = username.replace(":","");
 			}
 			layer.open({
-				  type: 2,
-				  title: '用户个人信息',
-				  shadeClose: true,
-				  shade: 0.8,
-				  area: ['384px', '370px'],
-				  content: 'showPersonalInfo.page?user='+username
-			}); 
+				type: 2,
+				title: '用户个人信息',
+				shadeClose: true,
+				shade: 0.8,
+				area: ['384px', '370px'],
+				content: 'showPersonalInfo.page?user='+username
+			});
 		}
 	</script>
-</body>
 </html>
