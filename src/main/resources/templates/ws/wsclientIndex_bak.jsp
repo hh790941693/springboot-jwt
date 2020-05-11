@@ -110,7 +110,7 @@
 		</div>
 	</div>	
 	
-	<jsp:include page="footer.jsp"/>
+	<jsp:include page="footer.html"/>
 	<jsp:include page="statusBar.html"/>
 
 	<script type="text/javascript">

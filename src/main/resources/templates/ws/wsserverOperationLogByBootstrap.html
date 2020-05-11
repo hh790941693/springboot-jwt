@@ -1,29 +1,7 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-	String basePath = request.getContextPath();
-	String  path= request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+basePath;
-%>
-<html>
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
 <title>操作日志管理</title>
-<script type="text/javascript" src="<%=path%>/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="<%=path%>/static/timepicker/jquery.datetimepicker.js"></script>
-<link href="<%=path%>/static/timepicker/jquery.datetimepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="<%=path%>/static/js/rootPath.js"></script>
-<script type="text/javascript" src="<%=path%>/static/viewjs/common.js"></script>
-
-<script type="text/javascript" src="<%=path%>/static/bootstrap/js/popper.js"></script>
-
-<link rel="stylesheet" type="text/css" href="<%=path%>/static/bootstrap/css/bootstrap.min.css"/>
-<script type="text/javascript" src="<%=path%>/static/bootstrap/js/bootstrap.min.js"></script>
-
-<link rel="stylesheet" type="text/css" href="<%=path%>/static/bootstraptable/bootstrap-table.min.css"/>
-<script type="text/javascript" src="<%=path%>/static/bootstraptable/bootstrap-table.min.js"></script>
-<script type="text/javascript" src="<%=path%>/static/bootstraptable/locale/bootstrap-table-zh-CN.min.js"></script>
-
 <style type="text/css">
-
 	#userTable tr td{
 		text-align:center;
 	}
@@ -69,24 +47,24 @@
 	
 		 <table id="tb_departments"></table>
 	</div>
-	
-	<script type="text/javascript">
-		
-		var users = ${users};
-		var modules = ${modules};
+    <div th:include="common :: footer"></div>
+</body>
+    <script type="text/javascript">
+        var users = ${users};
+        var modules = ${modules};
 
-		//用户列表
-		for (var k=0;k<users.length;k++){
-			var userName = users[k];
-    		$("#userSelect").append("<option value=" + userName + ">" + userName+ "</option>");
-		}
-		//模块列表
-		for (var k=0;k<modules.length;k++){
-			var moduleName = modules[k];
-    		$("#moduleSelect").append("<option value=" + moduleName + ">" + moduleName+ "</option>");
-		}		
+        //用户列表
+        for (var k=0;k<users.length;k++){
+            var userName = users[k];
+            $("#userSelect").append("<option value=" + userName + ">" + userName+ "</option>");
+        }
+        //模块列表
+        for (var k=0;k<modules.length;k++){
+            var moduleName = modules[k];
+            $("#moduleSelect").append("<option value=" + moduleName + ">" + moduleName+ "</option>");
+        }
 
-		$('#tb_departments').bootstrapTable({
+        $('#tb_departments').bootstrapTable({
             url: rootUrl+'ws/getOperationLogByPageByBootstrap.json',         //请求后台的URL（*）
             method: 'post',                      //请求方式（*）
             toolbar: '#toolbar',                //工具按钮用哪个容器
@@ -96,13 +74,13 @@
             sortable: true,                     //是否启用排序
             sortOrder: "asc",                   //排序方式
             queryParams: function(params){
-            	var curPage = Math.floor(params.offset/params.limit)+1;
+                var curPage = Math.floor(params.offset/params.limit)+1;
                 var temp = {
-                	numPerPage: params.limit,     //每页显示条数
-               		curPage:    curPage,          //当前页码
-               		search:     params.search,     //搜索框中的关键词
-               		sort:       params.sort,       //要排序的字段名称  如果没值则为undefined
-               		order:      params.order      //排序方式 asc  desc
+                    numPerPage: params.limit,     //每页显示条数
+                    curPage:    curPage,          //当前页码
+                    search:     params.search,     //搜索框中的关键词
+                    sort:       params.sort,       //要排序的字段名称  如果没值则为undefined
+                    order:      params.order      //排序方式 asc  desc
                 }
                 return temp;
             },                    //传递参数（*）
@@ -156,29 +134,28 @@
                 }
             }]
         });
-		
 
-		function refresh(){
-			window.location.href = window.location.href;
-		};
-		
-		function delRow(rowId){
-			console.log("delete one row:"+rowId);
-		}
-		
-		$("#btn_add").click(function(params){
-			var a = $('#tb_departments').bootstrapTable('getData');
-			console.log("add item");
-		})
-		
-		$("#btn_delete").click(function(params){
-			var a = $('#tb_departments').bootstrapTable('getData');
-			console.log("delete item");
-		})
-		
-		window.setInterval(function(){
-			refresh();
-		},300000);
-	</script>
-</body>
+
+        function refresh(){
+            window.location.href = window.location.href;
+        };
+
+        function delRow(rowId){
+            console.log("delete one row:"+rowId);
+        }
+
+        $("#btn_add").click(function(params){
+            var a = $('#tb_departments').bootstrapTable('getData');
+            console.log("add item");
+        })
+
+        $("#btn_delete").click(function(params){
+            var a = $('#tb_departments').bootstrapTable('getData');
+            console.log("delete item");
+        })
+
+        window.setInterval(function(){
+            refresh();
+        },300000);
+    </script>
 </html>
