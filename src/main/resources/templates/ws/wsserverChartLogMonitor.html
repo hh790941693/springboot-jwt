@@ -97,7 +97,10 @@
 			{
 				imgIndex=1;
 			}
-			$("body").css("background-image","url(<%=path%>/img/pic"+imgIndex+".jpg)");
+
+			var newPicUrl = rootUrl+"img/pic"+imgIndex+".jpg";
+			$("body").css("background-image","url("+newPicUrl+")");
+
 			imgIndex++;
 		}
 		setInterval(function(){
