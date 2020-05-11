@@ -21,8 +21,10 @@ import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.domain.WsCircleCommentDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsCircleDO;
+import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsCircleCommentService;
 import com.pjb.springbootjwt.zhddkk.service.WsCircleService;
+import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -87,6 +89,9 @@ public class WebSocketClientController
 
     @Autowired
     private WsCircleCommentService wsCircleCommentService;
+
+    @Autowired
+    private WsUsersService wsUsersService;
 	
 	/**
 	 *客户端登录首页
@@ -1142,14 +1147,14 @@ public class WebSocketClientController
 							@RequestParam(value="circleImgFile1",required=false) String circleImgFile1,
 							@RequestParam(value="circleImgFile2",required=false) String circleImgFile2,
 							@RequestParam(value="circleImgFile3",required=false) String circleImgFile3,
-							@RequestParam(value="circleImgFile4",required=false) String circleImgFile4,
-							HttpServletRequest request)
+							@RequestParam(value="circleImgFile4",required=false) String circleImgFile4)
 	{
 		try {
-			WsCircle wc = new WsCircle();
+			WsUsersDO wsUser = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+
+			WsCircleDO wc = new WsCircleDO();
 			wc.setUserName(user);
-			Integer userId = querySpecityUserName(user).getId();
-			wc.setUserId(userId);
+			wc.setUserId(wsUser.getId());
 			wc.setContent(content);
 			wc.setCreateTime(new Date());
 			wc.setLikeNum(0);
@@ -1157,7 +1162,7 @@ public class WebSocketClientController
 			wc.setPic2(circleImgFile2);
 			wc.setPic3(circleImgFile3);
 			wc.setPic4(circleImgFile4);
-			wsService.insertCircle(wc);
+			wsCircleService.insert(wc);
 		}catch (Exception e) {
 			System.out.println("新增朋友失败:"+e.getMessage());
 			return "failed";

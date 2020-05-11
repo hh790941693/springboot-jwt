@@ -7,15 +7,18 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.bean.FileUploadResultBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
+import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.entity.WsFile;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.model.ExtReturn;
+import com.pjb.springbootjwt.zhddkk.service.WsFileService;
 import com.pjb.springbootjwt.zhddkk.service.WsService;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
@@ -42,6 +45,9 @@ public class FileOperationController
 	
 	@Autowired
 	private WsService wsService;
+
+	@Autowired
+	private WsFileService wsFileService;
 	
 	/**
 	 * 音乐播放首页
@@ -172,13 +178,11 @@ public class FileOperationController
 	@RequestMapping("showFiles.do")
 	@ResponseBody
 	public Object showFiles(HttpServletRequest request, @RequestParam(value="user",required=false) String user, @RequestParam("fileType") final String fileType) {
-		WsFile wf = new WsFile();
-		wf.setUser(user);
-		List<WsFile> mlist = wsService.queryMusic(wf);
+		List<WsFileDO> mlist = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", "music"));
 		
 		String webserverip = ServiceUtil.getWebsocketIp(configMap);
-		List<WsFile> finallist = new ArrayList<WsFile>();
-		for (WsFile w : mlist) {
+		List<WsFileDO> finallist = new ArrayList<WsFileDO>();
+		for (WsFileDO w : mlist) {
 			File mf = new File(w.getDiskPath()+File.separator+w.getFilename());
 			if (mf.isFile()) {
 				String musicUrl = w.getUrl();
