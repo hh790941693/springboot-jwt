@@ -15,18 +15,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.redis.RedisUtil;
+import com.pjb.springbootjwt.zhddkk.base.Result;
+import com.pjb.springbootjwt.zhddkk.domain.WsCircleCommentDO;
+import com.pjb.springbootjwt.zhddkk.domain.WsCircleDO;
+import com.pjb.springbootjwt.zhddkk.service.WsCircleCommentService;
+import com.pjb.springbootjwt.zhddkk.service.WsCircleService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
@@ -78,6 +81,12 @@ public class WebSocketClientController
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private WsCircleService wsCircleService;
+
+    @Autowired
+    private WsCircleCommentService wsCircleCommentService;
 	
 	/**
 	 *客户端登录首页
@@ -1034,53 +1043,71 @@ public class WebSocketClientController
 	 * 
 	 */
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.CIRCLE,subModule="",describe="查看朋友圈列表")
-	@RequestMapping(value = "queryCircleByPage.do",method=RequestMethod.POST,produces="application/json")
+	@PostMapping(value = "queryCircleByPage.do")
 	@ResponseBody
-	public Object queryCircleList(Model model,@RequestBody WsCircle params)
+	public Result<Page<WsCircleDO>> queryCircleList(int curPage, int numPerPage)
 	{
-		int totalCount = wsService.queryCircleCount(params);
-		int numPerPage = params.getNumPerPage();
-		int curPage = params.getCurPage();
-		int totalPage = 1;
-		if (totalCount % numPerPage != 0){
-			totalPage = totalCount/numPerPage + 1;
-		}
-		else{
-			totalPage = totalCount / numPerPage;
-		}
-		if (totalPage == 0) {
-			totalPage = 1;
-		}
-		
-		int start = 0;
-		int limit = numPerPage;
-		if (curPage == 1){
-			start = 0;
-		}
-		else{
-			start = (curPage-1) * numPerPage;
-		}
-		params.setStart(start);
-		params.setLimit(limit);
-		List<WsCircle> circleList = wsService.queryCircleByPage(params);
+		Page<WsCircleDO> page = new Page<WsCircleDO>(curPage, numPerPage);
+		List<WsCircleDO> circleList = wsCircleService.selectList(null);
+		page.setRecords(circleList);
 		if (null != circleList && circleList.size()>0) {
-			for (WsCircle wc : circleList) {
+			for (WsCircleDO wc : circleList) {
 				WsCircleComment queryCommentCond = new WsCircleComment();
 				queryCommentCond.setCircleId(wc.getId());
-				List<WsCircleComment> commentList = wsService.queryCircleCommentList(queryCommentCond);
+
+				List<WsCircleCommentDO> commentList = wsCircleCommentService.selectList(new EntityWrapper<WsCircleCommentDO>().eq("circle_id", wc.getId()));
 				if (null == commentList) {
-					wc.setCommentList(new ArrayList<WsCircleComment>());
+					wc.setCommentList(new ArrayList<WsCircleCommentDO>());
 				}else {
 					wc.setCommentList(commentList);
 				}
 			}
 		}
-		
-		PageResponseEntity rqe = new PageResponseEntity();
-		rqe.setTotalCount(circleList.size());
-		rqe.setTotalPage(totalPage);
-		rqe.setList(circleList);
-		return JsonUtil.javaobject2Jsonobject(rqe);
+
+		return Result.ok(page);
+//		int totalCount = wsService.queryCircleCount(new WsCircle());
+//		int totalPage = 1;
+//		if (totalCount % numPerPage != 0){
+//			totalPage = totalCount/numPerPage + 1;
+//		}
+//		else{
+//			totalPage = totalCount/numPerPage;
+//		}
+//		if (totalPage == 0) {
+//			totalPage = 1;
+//		}
+//
+//		int start = 0;
+//		int limit = numPerPage;
+//		if (curPage == 1){
+//			start = 0;
+//		}
+//		else{
+//			start = (curPage-1) * numPerPage;
+//		}
+//		WsCircle queryCircle = new WsCircle();
+//		queryCircle.setStart(start);
+//		queryCircle.setLimit(limit);
+//		List<WsCircle> circleList = wsService.queryCircleByPage(queryCircle);
+//		if (null != circleList && circleList.size()>0) {
+//			for (WsCircle wc : circleList) {
+//				WsCircleComment queryCommentCond = new WsCircleComment();
+//				queryCommentCond.setCircleId(wc.getId());
+//				List<WsCircleComment> commentList = wsService.queryCircleCommentList(queryCommentCond);
+//				if (null == commentList) {
+//					wc.setCommentList(new ArrayList<WsCircleComment>());
+//				}else {
+//					wc.setCommentList(commentList);
+//				}
+//			}
+//		}
+//
+//		PageResponseEntity rqe = new PageResponseEntity();
+//		rqe.setTotalCount(circleList.size());
+//		rqe.setTotalPage(totalPage);
+//		rqe.setList(circleList);
+//		Object object = JsonUtil.javaobject2Jsonobject(rqe);
+//		return object;
 	}
 	
 	/**
@@ -1110,21 +1137,15 @@ public class WebSocketClientController
 	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.CIRCLE,subModule="",describe="新增朋友圈")
 	@RequestMapping(value = "addCircle.do",method=RequestMethod.POST)
 	@ResponseBody
-	public Object addCircle(Model model,@RequestParam("user")String user,
+	public Object addCircle(@RequestParam("user")String user,
 							@RequestParam("content")String content,
-							@RequestParam(value="circleImgFile1",required=false) MultipartFile circleImgFile1,
-							@RequestParam(value="circleImgFile2",required=false) MultipartFile circleImgFile2,
-							@RequestParam(value="circleImgFile3",required=false) MultipartFile circleImgFile3,
-							@RequestParam(value="circleImgFile4",required=false) MultipartFile circleImgFile4,
+							@RequestParam(value="circleImgFile1",required=false) String circleImgFile1,
+							@RequestParam(value="circleImgFile2",required=false) String circleImgFile2,
+							@RequestParam(value="circleImgFile3",required=false) String circleImgFile3,
+							@RequestParam(value="circleImgFile4",required=false) String circleImgFile4,
 							HttpServletRequest request)
 	{
 		try {
-			String savePath = request.getServletContext().getRealPath(CommonConstants.CIRCLE_IMAGES);  //文件保存目录
-			String fileResut1 = ServiceUtil.storeFile(request, savePath, circleImgFile1, circleImgFile1.getOriginalFilename());
-			String fileResut2 = ServiceUtil.storeFile(request, savePath, circleImgFile2, circleImgFile2.getOriginalFilename());
-			String fileResut3 = ServiceUtil.storeFile(request, savePath, circleImgFile3, circleImgFile3.getOriginalFilename());
-			String fileResut4 = ServiceUtil.storeFile(request, savePath, circleImgFile4, circleImgFile4.getOriginalFilename());
-			
 			WsCircle wc = new WsCircle();
 			wc.setUserName(user);
 			Integer userId = querySpecityUserName(user).getId();
@@ -1132,18 +1153,10 @@ public class WebSocketClientController
 			wc.setContent(content);
 			wc.setCreateTime(new Date());
 			wc.setLikeNum(0);
-			if (fileResut1.equals(CommonConstants.SUCCESS)) {
-				wc.setPic1(circleImgFile1.getOriginalFilename());
-			}
-			if (fileResut2.equals(CommonConstants.SUCCESS)) {
-				wc.setPic2(circleImgFile2.getOriginalFilename());
-			}
-			if (fileResut3.equals(CommonConstants.SUCCESS)) {
-				wc.setPic3(circleImgFile3.getOriginalFilename());
-			}
-			if (fileResut4.equals(CommonConstants.SUCCESS)) {
-				wc.setPic4(circleImgFile4.getOriginalFilename());
-			}
+			wc.setPic1(circleImgFile1);
+			wc.setPic2(circleImgFile2);
+			wc.setPic3(circleImgFile3);
+			wc.setPic4(circleImgFile4);
 			wsService.insertCircle(wc);
 		}catch (Exception e) {
 			System.out.println("新增朋友失败:"+e.getMessage());

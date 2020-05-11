@@ -65,9 +65,21 @@
             cursor: move;
             font-size:10px;
         }
-    </style>
 
-    <link rel="import" href="statusBar.html" id="statusBar"/>
+		#statusDiv{
+			width:1320px;
+			height:30px;
+			font-size:15px;
+			font-weight:bold;
+			margin:1px auto;;
+		}
+
+		#statusTips{
+			width: 100%;
+			display: inline-block;
+			margin-top: -10px;
+		}
+    </style>
 </head>
 <body>
 	<div id="qrDiv" style="display:none">
@@ -107,7 +119,7 @@
 		<iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
 	</div>	
 	
-	<%--广告页面 --%>
+	<!--广告页面 -->
 	<div id="adDiv" style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display:none">
 		<div id="adBtn" style="style:1px solid red;background-color:#5082b9;padding-left:290px">
 			<button id="closeAd" class='btn btn-sm btn-primary' onclick="closeAd()">关&nbsp;&nbsp;闭</button>
@@ -118,6 +130,12 @@
 		<div id="adContent" style="border:2px solid red;height:auto;text-indent:2em;">
 		</div>
 	</div>
+
+	<!--底部 -->
+	<div id="statusDiv" align="right">
+		<span id="statusTips"></span>
+	</div>
+
     <div th:include="common::footer"></div>
 </body>
 
@@ -391,5 +409,13 @@
         $(window).resize(function () {
             adjustMusicWindowPosition();
         });
+
+		function showTips(msg,color){
+			if (color ==null || color== undefined){
+				color="black";
+			}
+			$("#statusTips").css("color",color);
+			$("#statusTips").text(msg);
+		}
     </script>
 </html>

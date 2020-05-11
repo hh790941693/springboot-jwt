@@ -1,18 +1,7 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-	String basePath = request.getContextPath();
-	String  path= request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+basePath;
-%>
-<html>
-<head>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
 	<title>添加朋友圈</title>
-<script type="text/javascript" src="<%=path%>/static/js/rootPath.js"></script>
-<script type="text/javascript" src="<%=path%>/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="<%=path%>/static/layer/layer.js"></script>
-<script type="text/javascript" src="<%=path%>/viewjs/common.js"></script>
-<link rel="stylesheet" type="text/css" href="<%=path%>/static/bootstrap/css/bootstrap.css"/>
-<script type="text/javascript" src="<%=path%>/static/bootstrap/js/bootstrap.js"></script>
 
 <style type="text/css">
 	#mainDiv{
@@ -49,9 +38,9 @@
 </head>
 <body>
 	<div id="mainDiv">
-		<form id="form" method="post" action="addCircle.do" enctype="multipart/form-data" onsubmit="return beforeSumbit()" target="hidden_frame">
+		<form id="form" method="post" action="/ws/addCircle.do" enctype="multipart/form-data" onsubmit="return beforeSumbit()" target="hidden_frame">
 			<div>
-				<input id="userNameHidden" name="user" hidden="hidden"></input>
+				<input id="userNameHidden" name="user" th:value="${user}" hidden="hidden">
 			</div>
 			<div>
 				<span>内&nbsp;&nbsp;&nbsp;&nbsp;容:</span><textarea id="contentTa" name="content" rows="3" cols="40" placeholder="请输入内容"></textarea>
@@ -61,32 +50,44 @@
 				<span>图&nbsp;&nbsp;&nbsp;&nbsp;片1:</span>
 			</div>
 			<div class='imgDiv'>
+				<input id="circleImgFile1" name="circleImgFile1" class="inputImgClass" type="hidden">
 				<img id="circleImg1" class="imgClass" alt="" width="60px" height="60px">
-				<input id="circleImgFile1" name="circleImgFile1" class="inputImgClass" type="file" accept="image/png,image/jpeg,image/gif" style="width:208px;margin-left:10px;"></input>
+				<button type="button" id="imageBtn1" class="layui-btn">
+					<i class="layui-icon">&#xe67c;</i>上传图片
+				</button>
 			</div>
 			<hr/>
 			<div>
 				<span>图&nbsp;&nbsp;&nbsp;&nbsp;片2:</span>
 			</div>
 			<div class='imgDiv'>
+				<input id="circleImgFile2" name="circleImgFile2" class="inputImgClass" type="hidden"></input>
 				<img id="circleImg2" class="imgClass" alt="" width="60px" height="60px">
-				<input id="circleImgFile2" name="circleImgFile2" class="inputImgClass" type="file" accept="image/png,image/jpeg,image/gif" style="width:208px;margin-left:10px;"></input>
+				<button type="button" id="imageBtn2" class="layui-btn">
+					<i class="layui-icon">&#xe67c;</i>上传图片
+				</button>
 			</div>
 			<hr/>
 			<div>
 				<span>图&nbsp;&nbsp;&nbsp;&nbsp;片3:</span>
 			</div>
 			<div class='imgDiv'>
+				<input id="circleImgFile3" name="circleImgFile3" class="inputImgClass" type="hidden">
 				<img id="circleImg3" class="imgClass" alt="" width="60px" height="60px">
-				<input id="circleImgFile3" name="circleImgFile3" class="inputImgClass" type="file" accept="image/png,image/jpeg,image/gif" style="width:208px;margin-left:10px;"></input>
+				<button type="button" id="imageBtn3" class="layui-btn">
+					<i class="layui-icon">&#xe67c;</i>上传图片
+				</button>
 			</div>
 			<hr/>
 			<div>
 				<span>图&nbsp;&nbsp;&nbsp;&nbsp;片4:</span>
 			</div>
 			<div class='imgDiv'>
+				<input id="circleImgFile4" name="circleImgFile4" class="inputImgClass" type="hidden">
 				<img id="circleImg4" class="imgClass" alt="" width="60px" height="60px">
-				<input id="circleImgFile4" name="circleImgFile4" class="inputImgClass" type="file" accept="image/png,image/jpeg,image/gif" style="width:208px;margin-left:10px;"></input>
+				<button type="button" id="imageBtn4" class="layui-btn">
+					<i class="layui-icon">&#xe67c;</i>上传图片
+				</button>
 			</div>
 			<hr/>
 			<div align="center" style='margin-top:20px;'>
@@ -95,16 +96,19 @@
 		</form>
 		<iframe name="hidden_frame" id="hidden_frame" style='display: none'></iframe>
 	</div>
-	
+
+	<div th:include="common::footer"></div>
+</body>
+
 	<script type="text/javascript">
-		var curUser="${user}";
-		
+		var curUser=$('#userNameHidden').val();
+		initUpload();
 		$(".inputImgClass").change(function(){
 			//获取对应的img对象
 			var imgObj = $(this).prev();
 			$(imgObj).attr("src",URL.createObjectURL($(this)[0].files[0]));
 		})
-		
+
 		function beforeSumbit(){
 			$("#userNameHidden").val(curUser);
 			var content = $("#contentTa").val();
@@ -115,21 +119,53 @@
 		}
 
 		$("#hidden_frame").load(function(){
-		    var text=$(this).contents().find("body").text();
+			var text=$(this).contents().find("body").text();
 			if (text.indexOf("success") != -1){
 				layer.msg('新增朋友圈成功');
 				var timeout = 0.7;
-				var user=$("#user").val();
 				var index = parent.layer.getFrameIndex(window.name);
 				setTimeout(function(){
 					parent.layer.close(index);
 					parent.refresh();
 				},timeout*1000)
-				
+
 			}else if (text.indexOf("failed") != -1){
 				layer.msg('新增朋友圈失败');
 			}
-		});		
+		});
+
+		function renderImg(btnName, imgName, inputName){
+			layui.upload.render({
+				elem: '#'+btnName,
+				url: 'http://localhost:8100/upload/app',
+				size: 10240,//单位为KB
+				accept: 'images',
+				data: {
+					"user": curUser,
+					"folder": "circle"
+				},
+				before: function () {
+					layer.load();
+				},
+				done: function (r) {
+					layer.closeAll('loading');
+					if (r.code == "1") {
+						$("#"+imgName).attr("src", r.data);
+						$("#"+imgName).show();
+						$("#"+inputName).val(r.data);
+					}
+				},
+				error: function () {
+					layer.closeAll('loading');
+				}
+			});
+		}
+
+		function initUpload() {
+			renderImg("imageBtn1", "circleImg1", "circleImgFile1");
+			renderImg("imageBtn2", "circleImg2", "circleImgFile2");
+			renderImg("imageBtn3", "circleImg3", "circleImgFile3");
+			renderImg("imageBtn4", "circleImg4", "circleImgFile4");
+		}
 	</script>
-</body>
 </html>

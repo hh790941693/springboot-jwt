@@ -2,11 +2,13 @@ package com.pjb.springbootjwt.zhddkk.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.pjb.springbootjwt.zhddkk.entity.WsCircleComment;
 import io.swagger.annotations.ApiModelProperty;
 
 
@@ -57,6 +59,8 @@ public class WsCircleDO implements Serializable {
     @ApiModelProperty(value = "createTime",name = "发表时间")
     private Date createTime;
 
+    @TableField(exist = false)
+    private List<WsCircleCommentDO> commentList;
 
     public void setId(Integer id) {
         this.id = id;
@@ -165,4 +169,11 @@ public class WsCircleDO implements Serializable {
         return createTime;
     }
 
+    public List<WsCircleCommentDO> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<WsCircleCommentDO> commentList) {
+        this.commentList = commentList;
+    }
 }

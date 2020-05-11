@@ -45,9 +45,9 @@
 	<body>
 		<div id="addMusic" align="center">
 			<form action="/upload/app" method="post" enctype="multipart/form-data" onsubmit="return verify()">
-                <input type="text" id="user" name="userId" th:value="${user}" hidden="true">
+                <input type="text" id="user" name="user" th:value="${user}" hidden="true">
 				<input type="hidden" name="folder" value="music">
-				文件:<input id="fileInput" type="file" name="files" multiple="multiple" accept="audio/mpeg">
+				文件:<input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg">
 				<input type="submit" class='btn btn-primary' value="上传歌曲">
 			</form>
 		</div>		

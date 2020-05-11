@@ -19,6 +19,8 @@ public class WsFile {
 		this.user = user;
 	}
 
+	private String folder;
+
 	private String filename;
 	
 	private String diskPath;
@@ -130,5 +132,13 @@ public class WsFile {
 		return "WsFile [user=" + user + ", filename=" + filename + ", diskPath=" + diskPath + ", url=" + url
 				+ ", author=" + author + ", fileSize=" + fileSize + ", trackLength=" + trackLength + ", createTime="
 				+ createTime + ", updateTime=" + updateTime + ", status=" + status + "]";
+	}
+
+	public String getFolder() {
+		return folder;
+	}
+
+	public void setFolder(String folder) {
+		this.folder = folder;
 	}
 }

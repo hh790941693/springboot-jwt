@@ -386,6 +386,7 @@
   	<resultMap id="wsFileMap" type="com.pjb.springbootjwt.zhddkk.entity.WsFile">
   		<result column="id" jdbcType="INTEGER" property="id" />
 		<result column="user" jdbcType="VARCHAR" property="user" />
+		<result column="folder" jdbcType="VARCHAR" property="folder" />
 		<result column="filename" jdbcType="VARCHAR" property="filename" />
 		<result column="disk_path" jdbcType="VARCHAR" property="diskPath" />
 		<result column="url" jdbcType="VARCHAR" property="url" />
@@ -398,10 +399,10 @@
 	</resultMap>
 	
 	<insert id="insertMusic" parameterType="com.pjb.springbootjwt.zhddkk.entity.WsFile">
-		insert into ws_file (user,filename,disk_path,url,file_size,track_length) 
+		insert into ws_file (user,folder, filename,disk_path,url,file_size,track_length)
 		values
 		(
-			#{user},#{filename},#{diskPath},#{url},#{fileSize},#{trackLength}
+			#{user},#{folder}, #{filename},#{diskPath},#{url},#{fileSize},#{trackLength}
 		)
 	</insert>
 	

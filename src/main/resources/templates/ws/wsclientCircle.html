@@ -172,9 +172,6 @@
 
 		//查询朋友圈列表
 		function queryCirclList(curPagePara,numPerPagePara){
-			var data = {};
-			data.curPage=curPagePara;  //当前页
-			data.numPerPage=numPerPagePara;  //每页显示条数
 			$("#curPageSpan").text(curPagePara);
 
 			if (curPage <= 1){
@@ -185,13 +182,16 @@
 			$.ajax({
 				type: 'POST',
 				url: rootUrl+'ws/queryCircleByPage.do',
-				data:JSON.stringify(data),
-				contentType:"application/json",
-				dataType: 'json',
+				data: {'curPage':curPagePara, 'numPerPage':numPerPagePara},
+				//contentType:"application/json",
 				async:false,
 				success: function(result) {
-					var list = result.list;
-					totalPage = result.totalPage;
+					if (result.code == 0){
+						return;
+					}
+					var resultData = result.data;
+					var list = resultData.records;
+					totalPage = resultData.current;
 					$("#totalPageSpan").text(totalPage);
 					if (curPage >= totalPage){
 						$("#nextBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled",true);
@@ -252,9 +252,8 @@
 								htmlData += "  <div class='picDivClass' align='center'>";
 								for (var k=0;k<picArr.length;k++){
 									var picName = picArr[k];
-									var picWebUrl = rootUrl+"img/circleimg/"+picName;
 									var imgId = "circleImg"+i;
-									htmlData += "    <img id='"+imgId+"' src='"+picWebUrl+"' alt='' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>";
+									htmlData += "    <img id='"+imgId+"' src='"+picArr[k]+"' alt='' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>";
 								}
 								htmlData += "  </div>";
 							}

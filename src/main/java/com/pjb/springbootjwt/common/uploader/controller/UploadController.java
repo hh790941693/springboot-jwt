@@ -34,21 +34,21 @@ public class UploadController {
      */
     @PostMapping
     public Map<String, Object> upload(
-            @RequestParam(required = true)MultipartFile[] files,
+            @RequestParam(required = true)MultipartFile[] file,
             @RequestParam(required = false)String folder,
-            @RequestParam(required = false)String userId
+            @RequestParam(required = false)String user
     ) {
-        logger.info("进入上传文件控制层, 目录名:{} 用户ID:{}", folder, userId);
+        logger.info("进入上传文件控制层, 目录名:{} 用户ID:{}", folder, user);
         Map<String, Object> map = new HashMap<>();
         String url = "";
         try {
-            if (null != files && files.length>0){
+            if (null != file && file.length>0){
                 logger.info("开始上传文件");
-                for (int i=0;i<files.length;i++ ){
-                    MultipartFile file = files[i];
-                    if (!file.isEmpty()){
-                        logger.info("开始上传文件:{}", file.getOriginalFilename());
-                        url = uploadService.uploadFile(file, folder, userId);
+                for (int i=0;i<file.length;i++ ){
+                    MultipartFile tempfile = file[i];
+                    if (!tempfile.isEmpty()){
+                        logger.info("开始上传文件:{}", tempfile.getOriginalFilename());
+                        url = uploadService.uploadFile(tempfile, folder, user);
                         logger.info("返回的文件url:{}", url);
 
                         map.put("code", "1");

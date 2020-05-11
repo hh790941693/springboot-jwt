@@ -45,13 +45,18 @@ public class UploadServiceImpl implements UploadService {
 
         WsFile wf = new WsFile();
         wf.setUser(userId);
+        wf.setFolder(folder);
         wf.setFilename(file.getOriginalFilename());
         wf.setDiskPath(uploadConfig.getStorePath() + folder);
         wf.setUrl(viewUrl);
         wf.setFileSize(newFile.length());
 
-        String trackLength = MusicParserUtil.getMusicTrackTime(newFile.getAbsolutePath());
-        wf.setTrackLength(trackLength);
+        if (originFilename.endsWith("mp3")) {
+            String trackLength = MusicParserUtil.getMusicTrackTime(newFile.getAbsolutePath());
+            wf.setTrackLength(trackLength);
+        }else{
+            wf.setTrackLength("");
+        }
         wsService.insertMusic(wf);
 
         return viewUrl;

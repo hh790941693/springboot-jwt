@@ -10,11 +10,11 @@ public class PageResponseEntity
 		
 	private List<?> list;
 
-	private Object parameter1;
+	private Object parameter1 = "";
 	
-	private Object parameter2;
+	private Object parameter2 = "";
 	
-	private Object parameter3;
+	private Object parameter3 = "";
 	
 	public int getTotalPage() {
 		return totalPage;
