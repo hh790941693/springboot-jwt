@@ -34,6 +34,8 @@
 <body>
 	<div  style="width:1095px;">
         <div id="toolbar" class="btn-group">
+            <input type="hidden" th:value="${users}" id="users">
+            <input type="hidden" th:value="${modules}" id="modules">
             <button id="btn_add" type="button" class="btn btn-default">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
             </button>
@@ -50,15 +52,17 @@
     <div th:include="common :: footer"></div>
 </body>
     <script type="text/javascript">
-        var users = ${users};
-        var modules = ${modules};
+        var usersStr = $("#users").val();
+        var modulesStr = $("#modules").val();
 
         //用户列表
+        var users = JSON.parse(usersStr);
         for (var k=0;k<users.length;k++){
             var userName = users[k];
             $("#userSelect").append("<option value=" + userName + ">" + userName+ "</option>");
         }
         //模块列表
+        var modules = JSON.parse(modulesStr);
         for (var k=0;k<modules.length;k++){
             var moduleName = modules[k];
             $("#moduleSelect").append("<option value=" + moduleName + ">" + moduleName+ "</option>");

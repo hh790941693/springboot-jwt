@@ -91,7 +91,9 @@
 
 	<script type="text/javascript">
 		getChatLogByPage(1,10);
-		var users = $('#userHidden').val();
+		var usersStr = $('#userHidden').val();
+		console.log("usersStr:"+usersStr);
+		var users = JSON.parse(usersStr);
 
 		for (var k=0;k<users.length;k++)
 		{

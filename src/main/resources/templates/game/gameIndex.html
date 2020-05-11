@@ -1,14 +1,6 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-	String basePath = request.getContextPath();
-	String  path= request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+basePath;
-%>
-<html>
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
 	<title>游戏首页</title>
-<script type="text/javascript" src="<%=path%>/static/js/rootPath.js"></script>
-<script type="text/javascript" src="<%=path%>/static/js/jquery-1.4.4.min.js"></script>
 
 <style type="text/css">
 	ul li{
@@ -17,7 +9,7 @@
 		width:130px;
 		font-size:20px;
 		font-weight:bold;
-		margin-left:-20px;
+		margin-left:8px;
 		padding-top:15px;
 		cursor:pointer;
 	}
@@ -60,7 +52,8 @@
 			</div>
 		</div>
 	</div>
-	
+    <div th:include="common :: footer"></div>
+</body>
 	<script type="text/javascript">
 		var curPage = "../game/ball.page";
 		$('#iframePage').attr('src',curPage);
@@ -70,26 +63,25 @@
 			$("ul li").removeClass("mouseleftclick");
 			$(this).addClass("mouseleftclick");
 		})
-		
+
 		$('#showNewWindowBtn').click(function(){
 			window.open(curPage);
 		})
-		
+
 		$('#backBtn').click(function(){
 			window.location.href="../ws/wsserverIndex.page?user=admin";
 		})
-		
+
 		$("ul li").hover(function(){
-			$(this).removeClass("mousemoveout");
-			$(this).removeClass("mousemoveon");
-			$(this).addClass("mousemoveon");
-		},
-		function(){
-			//$(this).css({"background-color":"white","color":"black"});
-			$(this).removeClass("mousemoveout");
-			$(this).removeClass("mousemoveon");
-			$(this).addClass("mousemoveout");
-		})
+				$(this).removeClass("mousemoveout");
+				$(this).removeClass("mousemoveon");
+				$(this).addClass("mousemoveon");
+			},
+			function(){
+				//$(this).css({"background-color":"white","color":"black"});
+				$(this).removeClass("mousemoveout");
+				$(this).removeClass("mousemoveon");
+				$(this).addClass("mousemoveout");
+			})
 	</script>
-</body>
 </html>

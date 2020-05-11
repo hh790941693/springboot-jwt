@@ -35,6 +35,8 @@
 <body>
 	<div  style="width:1095px;">
 		<div style="width:100%;">
+			<input type="hidden" th:value="${users}" id="users">
+			<input type="hidden" th:value="${modules}" id="modules">
 			<div style="width:80%;float:left;">
 				操作用户:&nbsp;&nbsp;<select id="userSelect" onchange="getChatLogByPage(parseInt($('#curPage').text()),parseInt($('#numPerPage').val()))">
 					<option value="">--请选择--</option>
@@ -85,15 +87,17 @@
 </body>
 	<script type="text/javascript">
 		getChatLogByPage(1,10);
-		var users = ${users};
-		var modules = ${modules};
+		var usersStr = $("#users").val();
+		var modulesStr = $("#modules").val();
 
+        var users = JSON.parse(usersStr);
 		//用户列表
 		for (var k=0;k<users.length;k++){
 			var userName = users[k];
 			$("#userSelect").append("<option value=" + userName + ">" + userName+ "</option>");
 		}
 		//模块列表
+        var modules = JSON.parse(modulesStr);
 		for (var k=0;k<modules.length;k++){
 			var moduleName = modules[k];
 			$("#moduleSelect").append("<option value=" + moduleName + ">" + moduleName+ "</option>");
