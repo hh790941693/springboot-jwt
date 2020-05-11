@@ -3,6 +3,37 @@
 	<title>WebSocket服务端</title>
 
 <style type="text/css">
+    #headerDiv{
+        width:1320px;
+        height:55px;
+        font-weight:bold;
+        margin:1px auto;
+    }
+
+    #btnDiv button{
+        margin-top: 15px;
+    }
+
+    #curTimeSpan{
+        margin-left:20px;
+        font-size:18px;
+    }
+
+    #footDiv{
+        width:1320px;
+        height:10px;
+        color:black;
+        font-size:15px;
+        font-weight:bold;
+        margin:14px auto 0px auto;
+    }
+
+    #copyrightDiv ul li{
+        float:left;
+        list-style:none;
+        margin-top:-15px;
+    }
+
 	#leftNavi ul{
 		padding-left:30px;
 	}
@@ -73,6 +104,22 @@
 </style>
 </head>
 <body>
+    <!--头部-->
+    <div id="headerDiv" align="center">
+        <div style="float:left;">
+            <img id='myImg' alt=""  width="48" height="48">
+            你好:<label id="curUser" th:text="${user}" style="color:blue;font-size:30px;"></label>
+            <span id="curTimeSpan">0000-00-00 00:00:00</span>
+        </div>
+        <div style="float:left;margin-left:300px;font-size:30px;">
+            <label id="titleLabel" style="color:black;"></label>
+        </div>
+        <div id="btnDiv" style="float:right">
+            <button id="showQRCodeBtn" class='btn btn-sm btn-primary'>查看二维码</button>
+            <button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
+        </div>
+    </div>
+
 	<div id="qrDiv" style="display:none">
 		<img id="qrcodeImg">
 	</div>
@@ -127,289 +174,409 @@
 		<span id="statusTips"></span>
 	</div>
 
-	<div th:include="common::footer"></div>
+    <!--底部-->
+    <div id="footDiv" align="center">
+        <div style="float:left;margin-top:-15px;">
+            <label id="curUser22">邮箱:547495788@qq.com</label>
+        </div>
+        <div style="float:left;margin-left: 350px;margin-top:-15px;">
+            <label id="cliName">所有版权信息归作者所有</label>
+            <label id="versionLabel" style='margin-left:15px;color:blue;font-weight:bold;'></label>
+            <a href='javascript:void(0)' onclick='checkUpdate()' style='margin-left:15px;' >检查更新</a>
+        </div>
+        <div id="copyrightDiv" style="float:right;">
+            <ul>
+                <li>联系作者 | </li>
+                <li>捐赠作者 | </li>
+                <li>提出疑问 | </li>
+                <li>关于我们</li>
+            </ul>
+        </div>
+    </div>
+
+    <div th:include="common::footer"></div>
+</body>
+    <script type="text/javascript">
+        var s_user=$('#user').val();
+        var s_pass=$('#pass').val();
+        var s_webserverip = $('#webserverip').val();
+        var s_webserverport = $('#webserverport').val();
+        var s_userAgent = $('#user_agent').val();
+        var s_selfimg = $('#selfimg').val();
+
+        $("#curUser").text(s_user);
+        $("#titleLabel").text("websocket服务端");
+
+        //头部
+        if (s_user == "admin"){
+            if (s_selfimg == ""){
+                $("#myImg").attr("src",rootUrl+"img/headimg/admin.jpg");
+            }else{
+                $("#myImg").attr("src", s_selfimg);
+            }
+        }else{
+            $("#myImg").attr("src", s_selfimg);
+        }
+
+        var curTimeTemp = getCurrentTime();
+        $("#curTimeSpan").text(curTimeTemp);
+
+        setInterval(function(){
+            var curTime = getCurrentTime();
+            $("#curTimeSpan").text(curTime);
+        },1000)
+
+        function toIndex(){
+            window.location.href = rootUrl+"ws";
+        }
+
+        $("#showQRCodeBtn").click(function(){
+            var imgSrc = $("#qrcodeImg").attr("src");
+            if (imgSrc == "" || imgSrc == undefined){
+                $.ajax({
+                    type: 'POST',
+                    url: rootUrl+'ws/showQRCode.do',
+                    dataType: 'json',
+                    async:false,
+                    success: function(result) {
+                        $("#qrDiv").css("display","block");
+                        $("#qrcodeImg").css("display","block");
+                        $("#qrcodeImg").attr("src",result);
+                    }
+                });
+            }else{
+                $("#qrcodeImg").attr("src","");
+                $("#qrDiv").css("display","none");
+                $("#qrcodeImg").css("display","none");
+            }
+        });
+
+        var curPageid = "wsserverUser.page";
+        showPage(curPageid);
+        function showPage(pageId){
+            if (pageId.indexOf("gameIndex.page") != -1){
+                window.location.href=pageId;
+            }else if (pageId.indexOf("canvasIndex.page") != -1){
+                window.location.href=pageId;
+            }else if (pageId.indexOf("configurationLi") != -1){
+                $("#configurationDiv").slideDown();
+            }else{
+                $("#iframePage").attr("src",pageId);
+            }
+        }
+
+        $("#leftNavi ul li").click(function (){
+            curPageid=this.id;
+            showPage(curPageid);
+            $("#leftNavi ul li").removeClass("mouseleftclick");
+            $(this).addClass("mouseleftclick");
+
+            var parentObj=$(this).parent().parent();
+            var parentDivId=$(parentObj).attr("id");
+            if (curPageid.indexOf("configurationLi") == -1 && parentDivId == "leftNavi"){
+                $("#configurationDiv").slideUp();
+            }
+        })
+
+        $("#leftNavi ul li").hover(function(){
+            $(this).removeClass("mousemoveout");
+            $(this).removeClass("mousemoveon");
+            $(this).addClass("mousemoveon");
+        },function(){
+            $(this).removeClass("mousemoveout");
+            $(this).removeClass("mousemoveon");
+            $(this).addClass("mousemoveout");
+        })
+
+        // ---------------------------------以下是供聊天用的全局变量-----------------------
+        var webSocket = null;
+        var user = s_user;
+        var pass = s_pass;
+        var webserverip = s_webserverip;
+        var webserverport = s_webserverport;
+        var userAgent = s_userAgent;
+
+        // 连接状态
+        var connectStatus = "0"
+        var checkCount = 1;
+        var checkMaxCount = 20;
+        var checkTimer;
+
+        //所有聊天记录
+        var chatRecord="";
+        //未读消息条数
+        var unreadCount=0;
+        function checkConnection()
+        {
+            if (connectStatus == "0")
+            {
+                if (checkCount >= checkMaxCount)
+                {
+                    if (checkTimer != null && checkTimer != "" && checkTimer != undefined)
+                    {
+                        clearInterval(checkTimer);
+                    }
+                }
+                var msgFromServerObj = getIframeElement("msgFromServer");
+                var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 正在连接服务器" +webserverip+":"+webserverport + " [ "+checkCount +" ]"+ "次 请稍等...</p>";
+                $(msgFromServerObj).append(msg);
+                chatRecord = chatRecord + msg;
+                showTips("正在连接服务器" +webserverip+":"+webserverport + " [ "+checkCount +" ]"+ "次 请稍等...","blue");
+                checkCount++;
+            }
+            else
+            {
+                if (checkTimer != null && checkTimer != "" && checkTimer != undefined)
+                {
+                    clearInterval(checkTimer);
+                }
+            }
+        }
+        checkTimer = setInterval(function(){
+            checkConnection();
+        },1000);
 
 
-	<script type="text/javascript">
-		var s_user=$('#user').val();
-		var s_pass=$('#pass').val();
-		var s_webserverip = $('#webserverip').val();
-		var s_webserverport = $('#webserverport').val();
-		var s_userAgent = $('#user_agent').val();
+        checkConnection();
+        loginServer();
 
-		$("#curUser").text(s_user);
-		$("#titleLabel").text("websocket服务端");
+        function loginServer()
+        {
+            if (webSocket == null)
+            {
+                webSocket = new WebSocket("ws://"+webserverip+":"+webserverport+"/zhddWebSocket/" + user+"/"+pass+"/"+userAgent);
+                webSocket.onerror = function(event){
+                    onError(event);
+                };
+                webSocket.onclose = function(event){
+                    OnClose(event);
+                };
+                webSocket.onopen = function(event){
+                    onOpen(event);
+                };
+                webSocket.onmessage = function(event){
+                    onMessage(event);
+                };
+            }
+        }
 
-		var curPageid = "wsserverUser.page";
-		showPage(curPageid);
-		function showPage(pageId){
-			if (pageId.indexOf("gameIndex.page") != -1){
-				window.location.href=pageId;
-			}else if (pageId.indexOf("canvasIndex.page") != -1){
-				window.location.href=pageId;
-			}else if (pageId.indexOf("configurationLi") != -1){
-				$("#configurationDiv").slideDown();
-			}else{
-				$("#iframePage").attr("src",pageId);
-			}
-		}
-		
-		$("#leftNavi ul li").click(function (){
-			curPageid=this.id;
-			showPage(curPageid);
-			$("#leftNavi ul li").removeClass("mouseleftclick");
-			$(this).addClass("mouseleftclick");
-			
-			var parentObj=$(this).parent().parent();
-			var parentDivId=$(parentObj).attr("id");
-			if (curPageid.indexOf("configurationLi") == -1 && parentDivId == "leftNavi"){
-				$("#configurationDiv").slideUp();
-			}
-		})
-		
-		$("#leftNavi ul li").hover(function(){
-			$(this).removeClass("mousemoveout");
-			$(this).removeClass("mousemoveon");
-			$(this).addClass("mousemoveon");
-		},function(){
-			$(this).removeClass("mousemoveout");
-			$(this).removeClass("mousemoveon");
-			$(this).addClass("mousemoveout");
-		})
-		
-		// ---------------------------------以下是供聊天用的全局变量-----------------------
-		var webSocket = null;
-		var user = s_user;
-		var pass = s_pass;
-		var webserverip = s_webserverip;
-		var webserverport = s_webserverport;
-		var userAgent = s_userAgent;
-		
-		// 连接状态
-		var connectStatus = "0"
-		var checkCount = 1;
-		var checkMaxCount = 20;
-		var checkTimer;
+        function onOpen(event){
+            connectStatus = "1";
+            var msgFromServerObj = getIframeElement("msgFromServer");
+            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 已连上服务器!</p>";
+            $(msgFromServerObj).append(msg);
+            showTips("已连上服务器!","green");
+            chatRecord = chatRecord + msg;
+        }
 
-		//所有聊天记录
-		var chatRecord="";
-		//未读消息条数
-		var unreadCount=0;
-		function checkConnection()
-		{
-			if (connectStatus == "0")
-			{
-				if (checkCount >= checkMaxCount)
-				{
-					if (checkTimer != null && checkTimer != "" && checkTimer != undefined)
-					{
-						clearInterval(checkTimer);
-					}
-				}
-				var msgFromServerObj = getIframeElement("msgFromServer");
-				var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 正在连接服务器" +webserverip+":"+webserverport + " [ "+checkCount +" ]"+ "次 请稍等...</p>";
-				$(msgFromServerObj).append(msg);
-				chatRecord = chatRecord + msg;
-				showTips("正在连接服务器" +webserverip+":"+webserverport + " [ "+checkCount +" ]"+ "次 请稍等...","blue");
-				checkCount++;
-			}
-			else
-			{
-				if (checkTimer != null && checkTimer != "" && checkTimer != undefined)
-				{
-					clearInterval(checkTimer);
-				}
-			}
-		}
-		checkTimer = setInterval(function(){
-			checkConnection();
-		},1000);
-		
+        function onError(event){
+            var msgFromServerObj = getIframeElement("msgFromServer");
+            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 连接服务器异常!</p>";
+            $(msgFromServerObj).append(msg);
+            showTips("连接服务器异常!","red");
+            chatRecord = chatRecord + msg;
+            connectStatus = "0";
+            webSocket = null;
+        }
 
-		checkConnection();
-		loginServer();
-		
-		function loginServer()
-		{
-			if (webSocket == null)
-			{
-				webSocket = new WebSocket("ws://"+webserverip+":"+webserverport+"/zhddWebSocket/" + user+"/"+pass+"/"+userAgent);
-				webSocket.onerror = function(event){
-					onError(event);
-				};
-				webSocket.onclose = function(event){
-					OnClose(event);
-				};
-				webSocket.onopen = function(event){
-					onOpen(event);
-				};
-				webSocket.onmessage = function(event){
-					onMessage(event);
-				};
-			}
-		}
-		
-		function onOpen(event){
-			connectStatus = "1";
-			var msgFromServerObj = getIframeElement("msgFromServer");
-			var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 已连上服务器!</p>";
-			$(msgFromServerObj).append(msg);
-			showTips("已连上服务器!","green");
-			chatRecord = chatRecord + msg;
-		}
-		
-		function onError(event){
-			var msgFromServerObj = getIframeElement("msgFromServer");
-			var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 连接服务器异常!</p>";
-			$(msgFromServerObj).append(msg);
-			showTips("连接服务器异常!","red");
-			chatRecord = chatRecord + msg;
-			connectStatus = "0";
-			webSocket = null;
-		}
-		
-		function OnClose(event){
-			var msgFromServerObj = getIframeElement("msgFromServer");
-			var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 客户端已断开!</p>";
-			$(msgFromServerObj).append(msg);
-			showTips("客户端已断开!","red");
-			chatRecord = chatRecord + msg;
-			connectStatus = "0";
-			stop();
-		}
-		
-		function onMessage(event){
-			var data = event.data;
-			var curTime = data.split("curTime:")[1].split(";")[0];
-			var msgFrom = data.split("from:")[1].split(";")[0];
-			var msgTo = data.split("to:")[1].split(";")[0];
-			var typeId = data.split("typeId:")[1].split(";")[0];
-			var typeDesc = data.split("typeDesc:")[1].split(";")[0];
-			var msg = data.split("msg:")[1];
-			
-			var showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+msg;
-			var defaultCss = "color:red;font-size:10px;line-height:10px;"
-			
-			if (typeId == 1)
-			{
-				//系统消息
-				defaultCss = "color:red;font-size:10px;line-height:10px;";
-				showStr="["+curTime+"] ["+typeDesc+"] " +msg;
-			}
-			else if (typeId == 2)
-			{
-				//在线消息
-				defaultCss = "color:green;font-size:10px;line-height:10px;";
-				showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] " +msg;
-			}			
-			else if (typeId == 3)
-			{
-				//离线消息
-				defaultCss = "color:grey;font-size:10px;line-height:10px;";
-				showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] " +msg;
-			}
-			else if (typeId == 4)
-			{
-				//广告消息
-				defaultCss = "color:blue;font-size:10px;line-height:10px;";
-				var title = msg.split("title:")[1].split(";")[0];
-				var content = msg.split("content:")[1];
-				showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+"广告标题:"+title+" 广告内容:"+content;
-			}			
-			else if (msgTo==s_user)
-			{
-				defaultCss = "color:green;font-size:10px;line-height:10px;";
-			}
-			else if (msgFrom==s_user)
-			{
-				defaultCss = "color:blue;font-size:10px;line-height:10px;";
-			}
-			
-			if (curPageid != "wsserverChartLogMonitor.page"){
-				var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
-				chatRecord = chatRecord + htmlData;
-				unreadCount = unreadCount+1;
-				$("#unreadCountSpan").text(unreadCount);
-			}else{
-				var htmlData = "<p style='" + defaultCss + ";display:inline-block;'>"+showStr +"</p>";
-				htmlData += "<button onclick='enableSpeak("+msgFrom+",0)' style='display:inline-block;'>禁言</button>";
-				var msgFromServerObj = getIframeElement("msgFromServer");
-				chatRecord = chatRecord + htmlData;
-				var textArea = $(msgFromServerObj).append(htmlData);
-				textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
-			}
-			
-			if (typeId == 4){
-				var title = msg.split("title:")[1].split(";")[0];
-				var content = msg.split("content:")[1];
-				
-				$("#adTitle").html(title);
-				$("#adContent").html(content);
-				$("#adDiv").slideDown(500);
-			}
-		}
-		
-		//获取iframe中的元素
-		function getIframeElement(eleName){
-			var obj = $("#iframePage").contents().find("#"+eleName);
-			return obj;
-		}
-		
-		function stop(){
-			if (webSocket != null)
-			{
-				webSocket.close();
-				webSocket = null;
-			}
-		}
+        function OnClose(event){
+            var msgFromServerObj = getIframeElement("msgFromServer");
+            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 客户端已断开!</p>";
+            $(msgFromServerObj).append(msg);
+            showTips("客户端已断开!","red");
+            chatRecord = chatRecord + msg;
+            connectStatus = "0";
+            stop();
+        }
 
-		function refrshMusic(){
-			document.getElementById("musicIframePage").contentWindow.showMusic();
-		}
-		
-		$("#resetMusicIframeDivPosBtn").click(adjustMusicWindowPosition);
-		
-		function adjustMusicWindowPosition(){
-			var headDivHeight = $("#headerDiv").height();
-			var mainDivHeight = $("#mainDiv").height();
-			var mainDivLeft = $("#mainDiv").offset().left;
-			var musicIframeDivHeight=$("#musicIframeDiv").height();
-			$("#musicIframeDiv").css("top",headDivHeight+mainDivHeight-musicIframeDivHeight-25);
-			$("#musicIframeDiv").css("left",mainDivLeft+3);
-		}
-		
-		adjustMusicWindowPosition();
-		//音乐播放器可拖动代码
+        function onMessage(event){
+            var data = event.data;
+            var curTime = data.split("curTime:")[1].split(";")[0];
+            var msgFrom = data.split("from:")[1].split(";")[0];
+            var msgTo = data.split("to:")[1].split(";")[0];
+            var typeId = data.split("typeId:")[1].split(";")[0];
+            var typeDesc = data.split("typeDesc:")[1].split(";")[0];
+            var msg = data.split("msg:")[1];
+
+            var showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+msg;
+            var defaultCss = "color:red;font-size:10px;line-height:10px;"
+
+            if (typeId == 1)
+            {
+                //系统消息
+                defaultCss = "color:red;font-size:10px;line-height:10px;";
+                showStr="["+curTime+"] ["+typeDesc+"] " +msg;
+            }
+            else if (typeId == 2)
+            {
+                //在线消息
+                defaultCss = "color:green;font-size:10px;line-height:10px;";
+                showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] " +msg;
+            }
+            else if (typeId == 3)
+            {
+                //离线消息
+                defaultCss = "color:grey;font-size:10px;line-height:10px;";
+                showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] " +msg;
+            }
+            else if (typeId == 4)
+            {
+                //广告消息
+                defaultCss = "color:blue;font-size:10px;line-height:10px;";
+                var title = msg.split("title:")[1].split(";")[0];
+                var content = msg.split("content:")[1];
+                showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+"广告标题:"+title+" 广告内容:"+content;
+            }
+            else if (msgTo==s_user)
+            {
+                defaultCss = "color:green;font-size:10px;line-height:10px;";
+            }
+            else if (msgFrom==s_user)
+            {
+                defaultCss = "color:blue;font-size:10px;line-height:10px;";
+            }
+
+            if (curPageid != "wsserverChartLogMonitor.page"){
+                var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
+                chatRecord = chatRecord + htmlData;
+                unreadCount = unreadCount+1;
+                $("#unreadCountSpan").text(unreadCount);
+            }else{
+                var htmlData = "<p style='" + defaultCss + ";display:inline-block;'>"+showStr +"</p>";
+                htmlData += "<button onclick='enableSpeak("+msgFrom+",0)' style='display:inline-block;'>禁言</button>";
+                var msgFromServerObj = getIframeElement("msgFromServer");
+                chatRecord = chatRecord + htmlData;
+                var textArea = $(msgFromServerObj).append(htmlData);
+                textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
+            }
+
+            if (typeId == 4){
+                var title = msg.split("title:")[1].split(";")[0];
+                var content = msg.split("content:")[1];
+
+                $("#adTitle").html(title);
+                $("#adContent").html(content);
+                $("#adDiv").slideDown(500);
+            }
+        }
+
+        //获取iframe中的元素
+        function getIframeElement(eleName){
+            var obj = $("#iframePage").contents().find("#"+eleName);
+            return obj;
+        }
+
+        function stop(){
+            if (webSocket != null)
+            {
+                webSocket.close();
+                webSocket = null;
+            }
+        }
+
+        function refrshMusic(){
+            document.getElementById("musicIframePage").contentWindow.showMusic();
+        }
+
+        $("#resetMusicIframeDivPosBtn").click(adjustMusicWindowPosition);
+
+        function adjustMusicWindowPosition(){
+            var headDivHeight = $("#headerDiv").height();
+            var mainDivHeight = $("#mainDiv").height();
+            var mainDivLeft = $("#mainDiv").offset().left;
+            var musicIframeDivHeight=$("#musicIframeDiv").height();
+            $("#musicIframeDiv").css("top",headDivHeight+mainDivHeight-musicIframeDivHeight-25);
+            $("#musicIframeDiv").css("left",mainDivLeft+3);
+        }
+
+        adjustMusicWindowPosition();
+        //音乐播放器可拖动代码
         dragPanelMove("#musicIframeHeader","#musicIframeDiv");
         function dragPanelMove(downDiv,moveDiv){
             $(downDiv).mousedown(function (e) {
-                  var isMove = true;
-                  var div_x = e.pageX - $(moveDiv).offset().left;
-                  var div_y = e.pageY - $(moveDiv).offset().top;
-                  $(document).mousemove(function (e) {
-                      if (isMove) {
-                          var obj = $(moveDiv);
-                          obj.css({"left":e.pageX - div_x, "top":e.pageY - div_y});
-                      }
-                  }).mouseup(
-                      function () {
-                      isMove = false;
-                  });
+                var isMove = true;
+                var div_x = e.pageX - $(moveDiv).offset().left;
+                var div_y = e.pageY - $(moveDiv).offset().top;
+                $(document).mousemove(function (e) {
+                    if (isMove) {
+                        var obj = $(moveDiv);
+                        obj.css({"left":e.pageX - div_x, "top":e.pageY - div_y});
+                    }
+                }).mouseup(
+                    function () {
+                        isMove = false;
+                    });
             });
         }
-        
+
         //窗口大小变化事件
         $(window).resize(function () {
-        	adjustMusicWindowPosition();
+            adjustMusicWindowPosition();
         });
 
-		function showTips(msg,color){
-			if (color ==null || color== undefined){
-				color="black";
-			}
-			$("#statusTips").css("color",color);
-			$("#statusTips").text(msg);
-		}
-	</script>
-</body>
+        function showTips(msg,color){
+            if (color ==null || color== undefined){
+                color="black";
+            }
+            $("#statusTips").css("color",color);
+            $("#statusTips").text(msg);
+        }
+
+        //底部
+        var curVersion = "";
+        queryVersion();
+        function queryVersion(){
+            $.ajax({
+                type: 'GET',
+                url: rootUrl+'ws/queryVersion.json',
+                dataType: 'json',
+                async:false,
+                success: function(result) {
+                    curVersion = result;
+                    $("#versionLabel").text(result);
+                }
+            });
+        }
+
+        function checkUpdate(){
+            $.ajax({
+                type: 'GET',
+                url: rootUrl+'ws/checkUpdate.do?version='+curVersion+"&cmd=check",
+                dataType: 'json',
+                async:false,
+                success: function(result) {
+                    console.log("checkUpdate result:"+result);
+                    //needUpdate:false;from:1.0;to:2.0
+                    var needUpdate = result.split("needUpdate:")[1].split(";")[0];
+                    if (needUpdate == "true"){
+                        var toVersion = result.split("to:")[1];
+
+                        layer.confirm('已经发现新版本,是否要升级到'+toVersion+"?", {
+                            btn: ['是','否'] //按钮
+                        }, function(index){
+                            console.log("开始升级到"+toVersion);
+                            toUpdate(curVersion);
+                            layer.close(index);
+                        }, function(index){
+                            layer.close(index);
+                        });
+                    }else{
+                        layer.alert('已经是最新版本!');
+                    }
+                }
+            });
+        }
+
+        function toUpdate(curVersion){
+            $.ajax({
+                type: 'GET',
+                url: rootUrl+'ws/checkUpdate.do?version='+curVersion+"&cmd=update",
+                dataType: 'json',
+                async:false,
+                success: function(result) {
+                    console.log("升级结果:"+result)
+                }
+            });
+        }
+    </script>
 </html>

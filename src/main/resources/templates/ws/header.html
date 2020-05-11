@@ -1,10 +1,6 @@
-<html>
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
 	<title>WebSocket服务端</title>
-<script type="text/javascript" src="@{/js/jquery/jquery.min.js}"></script>
-<script type="text/javascript" src="@{/js/viewjs/common.js}"></script>
-<link rel="stylesheet" type="text/css" href="@{/js/bootstrap/css/bootstrap.css}"/>
-<script type="text/javascript" src="@{/js/bootstrap/js/bootstrap.js}"></script>
 
 <style type="text/css">
 	#headerDiv{
@@ -25,8 +21,6 @@
 </style>
 </head>
 <body>
-    <link rel="import" href="sessionKeeper.html" id="sessionKeeper"/>
-
 	<div id="headerDiv" align="center">
 		<div style="float:left;">
 			<img id='myImg' alt=""  width="48" height="48">
@@ -40,8 +34,9 @@
 			<button id="showQRCodeBtn" class='btn btn-sm btn-primary'>查看二维码</button>		
 			<button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
 		</div>
-	</div>	
-	
+	</div>
+	<div th:include="common::footer"></div>
+</body>
 	<script type="text/javascript">
 		if (s_user == "admin"){
 			if (s_img == ""){
@@ -52,50 +47,38 @@
 		}else{
 			$("#myImg").attr("src",rootUrl+"img/headimg/"+s_img);
 		}
-		
+
 		var curTimeTemp = getCurrentTime();
 		$("#curTimeSpan").text(curTimeTemp);
-		
+
 		setInterval(function(){
 			var curTime = getCurrentTime();
 			$("#curTimeSpan").text(curTime);
 		},1000)
-		
+
 		function toIndex(){
 			window.location.href = rootUrl+"ws/login.page?user="+parent.s_user;
-			//$.ajax({
-		    //  	type: 'POST',
-		    //    url: rootUrl+'ws/logout.do',
-		    //    dataType: 'json',
-		    //    data:{user:parent.s_user},
-		    //    async:false,
-		    //    success: function(result) {
-			//		console.log(result);
-			//		window.location.href = rootUrl+"ws/login.page";
-		    //    }
-			//});
 		}
-		
+
 		$("#showQRCodeBtn").click(function(){
 			var imgSrc = $("#qrcodeImg").attr("src");
 			if (imgSrc == "" || imgSrc == undefined){
 				$.ajax({
-			      	type: 'POST',
-			        url: rootUrl+'ws/showQRCode.do',
-			        dataType: 'json',
-			        async:false,
-			        success: function(result) {
-			        	$("#qrDiv").css("display","block");
-			        	$("#qrcodeImg").css("display","block");
-			        	$("#qrcodeImg").attr("src",result);
-			        }
+					type: 'POST',
+					url: rootUrl+'ws/showQRCode.do',
+					dataType: 'json',
+					async:false,
+					success: function(result) {
+						$("#qrDiv").css("display","block");
+						$("#qrcodeImg").css("display","block");
+						$("#qrcodeImg").attr("src",result);
+					}
 				});
 			}else{
 				$("#qrcodeImg").attr("src","");
 				$("#qrDiv").css("display","none");
 				$("#qrcodeImg").css("display","none");
 			}
-		})		
+		})
 	</script>
-</body>
 </html>
