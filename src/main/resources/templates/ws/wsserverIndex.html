@@ -233,7 +233,7 @@
 		{
 			if (webSocket == null)
 			{
-				webSocket = new WebSocket("ws://"+webserverip+":"+webserverport+"/zhddkk/zhddWebSocket/" + user+"/"+pass+"/"+userAgent);
+				webSocket = new WebSocket("ws://"+webserverip+":"+webserverport+"/zhddWebSocket/" + user+"/"+pass+"/"+userAgent);
 				webSocket.onerror = function(event){
 					onError(event);
 				};
