@@ -32,7 +32,7 @@
 <body>
 	<div id="mainDiv" align="center">
 		<div id="formDiv" align="left">
-			<form method="post" action="ws/setPersonInfo.do" enctype="multipart/form-data" onsubmit="return beforeSumbit()" target="hidden_frame">
+			<form method="post" action="setPersonInfo.do" enctype="multipart/form-data" onsubmit="return beforeSumbit()" target="hidden_frame">
 				<input id="userNameHidden" name="userName" type="hidden">
 				<div>
 					<label id="realNameLabel" for="realName">真实姓名:</label>
@@ -160,6 +160,7 @@
 						$("#hobbySelect").val(result.hobby);
 						$("#hobbyTextHidden").val(result.hobbyText);
 						$("#headImg").attr("src",result.img);
+						$("#headImgInput").val(result.img);
 					}
 				}
 			})

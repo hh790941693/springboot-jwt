@@ -207,7 +207,7 @@
 							var userName = circle.userName;
 							var content = circle.content;
 							var likeNum = circle.likeNum;
-							var createTime = circle.createTimeStr;
+							var createTime = circle.createTime;
 							var commentList = circle.commentList;
 							var headImg = circle.headImg;
 							if (headImg == ""){
@@ -235,8 +235,7 @@
 							htmlData += "<div id='"+circleId+"'>";
 							htmlData += "      <div class='bodyDivClass'>";
 							htmlData += "            <div class='nameDivClass'>";
-							var selfImgUrl = rootUrl+"img/headimg/"+headImg;
-							htmlData += "                 <div style='display:inline-block;height:100%;width:540px;'><img alt='' src='"+selfImgUrl+"' width='30' height='30' onerror='imgerror(this)'>";
+							htmlData += "                 <div style='display:inline-block;height:100%;width:540px;'><img alt='' src='"+headImg+"' width='30' height='30' onerror='imgerror(this)'>";
 							var compareTwotimeResult = compareTwoTime(new Date(createTime).getTime(),new Date().getTime());
 							if (curUser == userName || curUser == 'admin'){
 								htmlData += "             <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>"+userName+"</span></div><span class='likeNumSpanClass'>已有"+likeNum+"人点赞</span><span class='buttonGroupSpan'><button onclick='toComment("+circleId+")' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;<button onclick='toLike("+circleId+")' class='btn btn-sm btn-info'>点赞</button>&nbsp;&nbsp;&nbsp;<button onclick='deleteCircle("+circleId+")' class='btn btn-sm btn-danger'>删除</button></span><span class='timeSpanClass'>发表于"+compareTwotimeResult+"</span>";
@@ -265,7 +264,7 @@
 									var commentId = commentObj.id;
 									var commentUserName = commentObj.userName;
 									var commentText = commentObj.comment;
-									var commentCreateTime = commentObj.createTimeStr;
+									var commentCreateTime = commentObj.createTime;
 									var commentTimeResult = compareTwoTime(new Date(commentCreateTime).getTime(),new Date().getTime());
 									if (curUser == commentUserName || curUser == userName || curUser == 'admin'){
 										htmlData += "<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>"+commentUserName+":</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>"+commentText+"</span><a href='javascript:void(0)' onclick='deleteComment("+commentId+")'>删除</a><span class='commentTimeSpanClass'>发表于"+commentTimeResult+"</span></p>";

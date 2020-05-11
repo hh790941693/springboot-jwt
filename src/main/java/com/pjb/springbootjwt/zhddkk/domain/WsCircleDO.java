@@ -60,6 +60,9 @@ public class WsCircleDO implements Serializable {
     private Date createTime;
 
     @TableField(exist = false)
+    private String headImg;
+
+    @TableField(exist = false)
     private List<WsCircleCommentDO> commentList;
 
     public void setId(Integer id) {
@@ -175,5 +178,13 @@ public class WsCircleDO implements Serializable {
 
     public void setCommentList(List<WsCircleCommentDO> commentList) {
         this.commentList = commentList;
+    }
+
+    public String getHeadImg() {
+        return headImg;
+    }
+
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
     }
 }

@@ -46,9 +46,9 @@
 </body>
 
     <script type="text/javascript">
+		var user = $("#user").val();
         $("#user").blur(function(){
-            var val = $("#user").val();
-            if (val == ""){
+            if (user == ""){
                 layer.tips('用户名不能为空!', '#user', {
                     tips: [2, '#78BA32']
                 });
@@ -105,20 +105,19 @@
                 shadeClose: true,
                 shade: 0.6,
                 area: ['488px', '394px'],
-                content: 'register.page'
+                content: 'ws/register.page'
             });
         }
 
         //忘记密码
         function forgetPassword(){
-            var user=$("#user").val();
             layer.open({
                 type: 2,
                 title: '忘记密码',
                 shadeClose: true,
                 shade: 0.6,
                 area: ['490px', '398px'],
-                content: 'forgetPassword.page?user='+user
+                content: 'ws/forgetPassword.page?user='+user
             });
         }
 

@@ -21,10 +21,9 @@ import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.domain.WsCircleCommentDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsCircleDO;
+import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
-import com.pjb.springbootjwt.zhddkk.service.WsCircleCommentService;
-import com.pjb.springbootjwt.zhddkk.service.WsCircleService;
-import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
+import com.pjb.springbootjwt.zhddkk.service.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,7 +48,6 @@ import com.pjb.springbootjwt.zhddkk.entity.WsUserProfile;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
-import com.pjb.springbootjwt.zhddkk.service.WsService;
 import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
@@ -92,6 +90,9 @@ public class WebSocketClientController
 
     @Autowired
     private WsUsersService wsUsersService;
+
+    @Autowired
+    private WsUserProfileService wsUserProfileService;
 	
 	/**
 	 *客户端登录首页
@@ -406,9 +407,16 @@ public class WebSocketClientController
 	public String toRegister(Model model)
 	{
 		logger.debug("访问register.page");
-		String dicJson = JsonUtil.javaobject2Jsonstr(buildCommonData());
-		model.addAttribute("dicJson", dicJson);
 		return "ws/register";
+	}
+
+	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.REGISTER,subModule="",describe="查询问题列表")
+	@RequestMapping(value = "queryAllCommonData.do")
+	@ResponseBody
+	public Map<String, List<WsCommon>> queryAllCommonData() {
+		logger.debug("访问register.page");
+		Map<String, List<WsCommon>> map = buildCommonData();
+		return map;
 	}
 	
 	/**
@@ -1050,11 +1058,18 @@ public class WebSocketClientController
 		Page<WsCircleDO> page = new Page<WsCircleDO>(curPage, numPerPage);
 		List<WsCircleDO> circleList = wsCircleService.selectList(null);
 		page.setRecords(circleList);
+		Map<Integer, String> headImgMap = new HashMap<>();
 		if (null != circleList && circleList.size()>0) {
 			for (WsCircleDO wc : circleList) {
-				WsCircleComment queryCommentCond = new WsCircleComment();
-				queryCommentCond.setCircleId(wc.getId());
+				if (!headImgMap.containsKey(wc.getUserId())){
+					WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", wc.getUserId()));
+					if (null != wsUserProfileDO) {
+						headImgMap.put(wc.getUserId(), wsUserProfileDO.getImg());
+					}
+				}
 
+				//头像
+				wc.setHeadImg(headImgMap.get(wc.getUserId()));
 				List<WsCircleCommentDO> commentList = wsCircleCommentService.selectList(new EntityWrapper<WsCircleCommentDO>().eq("circle_id", wc.getId()));
 				if (null == commentList) {
 					wc.setCommentList(new ArrayList<WsCircleCommentDO>());
@@ -1290,7 +1305,7 @@ public class WebSocketClientController
 								@RequestParam(value="hobbyText",required=false) String hobbyText
 			)
 	{
-		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("user", userName));
+		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
 		WsUserProfile wup = new WsUserProfile();
 		wup.setUserId(wsUsersDO.getId());
 		try {
@@ -1386,31 +1401,24 @@ public class WebSocketClientController
 	}
 	
 	
-	private Map<String,List<WsCommon>> buildCommonData()
-	{
+	private Map<String,List<WsCommon>> buildCommonData() {
 		Map<String,List<WsCommon>> commonMap = new HashMap<String,List<WsCommon>>();
-		List<WsCommon> ListTmp = wsService.queryCommon(new WsCommon());
+		List<WsCommon> commonList = wsService.queryCommon(new WsCommon());
 
-		for (WsCommon dic : ListTmp)
-		{
-			String type = dic.getType();
-			//String key = dic.getKey();
-			String value = dic.getName();
+		for (WsCommon common : commonList) {
+			String type = common.getType();
+			String name = common.getName();
 			
-			if (CommonUtil.validateEmpty(type) || CommonUtil.validateEmpty(value))
-			{
+			if (CommonUtil.validateEmpty(type) || CommonUtil.validateEmpty(name)) {
 				continue;
 			}
 
-			if (commonMap.containsKey(type))
-			{
-				List<WsCommon> tmpDicList = commonMap.get(type);
-				tmpDicList.add(dic);
-			}
-			else
-			{
+			if (commonMap.containsKey(type)) {
+				List<WsCommon> tmpCommonList = commonMap.get(type);
+				tmpCommonList.add(common);
+			}else {
 				List<WsCommon> tmpDicList = new ArrayList<WsCommon>();
-				tmpDicList.add(dic);
+				tmpDicList.add(common);
 				commonMap.put(type, tmpDicList);
 			}
 		}
