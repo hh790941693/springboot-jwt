@@ -3,7 +3,7 @@
 <head th:include="common :: header"></head>
 		<meta charset="utf-8">
 		<title></title>
-		
+		<script type="text/javascript" th:src="@{/js/jquery/tool.js}"></script>
 		<style type="text/css">
 			body{
 				margin:0;
@@ -2352,7 +2352,7 @@
 				url: rootUrl + "json/"+jsonFileName,
 				type:"GET",
 				async:false,
-				dataType:"json",
+				//dataType:"json",
 				success:function(data){
 					result = data;
 				},

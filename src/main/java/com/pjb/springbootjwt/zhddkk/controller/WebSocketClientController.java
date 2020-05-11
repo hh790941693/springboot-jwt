@@ -543,12 +543,7 @@ public class WebSocketClientController
 	public String showPersonalInfo(Model model,@RequestParam("user")String user)
 	{
 		logger.debug("访问showPersonalInfo.page");
-		WsUserProfile wupCond = new WsUserProfile();
-		wupCond.setUserName(user);
-		WsUserProfile wup = wsService.selectOneUserProfile(wupCond);
-		
-		Object jb = JsonUtil.javaobject2Jsonobject(wup);
-		model.addAttribute("userInfo", jb);
+		model.addAttribute("user", user);
 		return "ws/showPersonalInfo";
 	}
 
@@ -1272,8 +1267,7 @@ public class WebSocketClientController
 		
 		return JsonUtil.javaobject2Jsonobject(rqe);
 	}
-	
-	
+
 	/**
 	 * 设置个人信息
 	 * 
@@ -1283,7 +1277,7 @@ public class WebSocketClientController
 	@ResponseBody
 	public String setPersonInfo(@RequestParam(value="userName",required=true) String userName,
 								@RequestParam(value="realName",required=false) String realName,
-								@RequestParam(value="headImgFile",required=false) MultipartFile headImgFile,
+								@RequestParam(value="headImg",required=false) String headImg,
 								@RequestParam(value="sign",required=false) String sign,
 								@RequestParam(value="age",required=false) Integer age,
 								@RequestParam(value="sex",required=false) Integer sex,
@@ -1293,28 +1287,16 @@ public class WebSocketClientController
 								@RequestParam(value="profession",required=false) Integer profession,
 								@RequestParam(value="professionText",required=false) String professionText,
 								@RequestParam(value="hobby",required=false) Integer hobby,
-								@RequestParam(value="hobbyText",required=false) String hobbyText,
-								HttpServletRequest request
+								@RequestParam(value="hobbyText",required=false) String hobbyText
 			)
 	{
-		String savePath = request.getServletContext().getRealPath(CommonConstants.HEAD_IMAGES);  //头像保存目录
-		
-		String filename = headImgFile.getOriginalFilename();
-		String newFileName = "";
-		if (StringUtils.isNotEmpty(filename)) {
-			newFileName = userName + filename.substring(filename.indexOf("."));
-			ServiceUtil.storeFile(request, savePath, headImgFile, newFileName);
-		}
-		
-		Integer userId = querySpecityUserName(userName).getId();
+		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("user", userName));
 		WsUserProfile wup = new WsUserProfile();
-		wup.setUserId(userId);
+		wup.setUserId(wsUsersDO.getId());
 		try {
 			wup.setUserName(userName);
 			wup.setRealName(realName);
-			if (StringUtils.isNotEmpty(newFileName)) {
-				wup.setImg(newFileName);
-			}
+			wup.setImg(headImg);
 			wup.setSign(sign);
 			wup.setAge(age);
 			wup.setSex(sex);
@@ -1349,8 +1331,7 @@ public class WebSocketClientController
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.SETTING,subModule="",describe="查询个人信息")
 	@RequestMapping(value="queryPersonInfo.json",method=RequestMethod.POST)
 	@ResponseBody
-	public Object queryPersonInfo(@RequestParam("user") String user)
-	{
+	public Object queryPersonInfo(@RequestParam("user") String user) {
 		WsUserProfile wupCond = new WsUserProfile();
 		wupCond.setUserName(user);
 		WsUserProfile wup = wsService.selectOneUserProfile(wupCond);

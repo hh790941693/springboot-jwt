@@ -1,24 +1,14 @@
 <!DOCTYPE html>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%
-	String basePath = request.getContextPath();
-	String  path= request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+basePath;
-%>
-<html>
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
 <meta charset="UTF-8">
-<title>设置个人信息</title>
-<script type="text/javascript" src="<%=path%>/static/js/rootPath.js"></script>
-<script type="text/javascript" src="<%=path%>/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="<%=path%>/static/js/jquery.validate.js"></script>
-<script type="text/javascript" src="<%=path%>/static/layer/layer.js"></script>
+<title>显示个人信息</title>
 
 <style>
 	#mainDiv{
 		width:370px;
-		height:280px;
+		height:298px;
 		margin:2px auto;
 		border:2px solid green;
 	}
@@ -37,11 +27,12 @@
 <body>
 	<div id="mainDiv" align="center">
 		<div id="formDiv" align="left" style='position:relative;'>
+			<input type="hidden" th:value="${user}" id="user">
 			<label for="realName">真实姓名:</label><input id="realName" name="realName" type="text" style="width:208px;margin-left:10px;"></input>
 			<br/>
 			
 			<div>
-				<label id="headImgLabel" for="headImgFile">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
+				<label id="headImgLabel" for="headImg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
 			</div>
 			<div style='padding-left:80px;margin-top:-15px;'>
 				<img id="headImg" alt="" title="点击放大图片" width="60px" height="60px" onclick="showdiv()" onerror="imgerror(this)">
@@ -96,40 +87,51 @@
 		</div>
 	</div>
 	<div id="tipDiv" style="display:none;color:red;" align="center">该用户尚未设置个人信息</div>
-		
+	<div th:include="common :: footer"></div>
+</body>
 	<script>
-		var userInfo = ${userInfo};
+		var user = $('#user').val();
+		console.log("show Person user="+user);
 		$("input,select").attr("disabled","disabled");
-		if (userInfo != null){
-       		$("#realName").val(userInfo.realName);
-       		$("#sign").val(userInfo.sign);
-       		$("#age").val(userInfo.age);
-       		$("#sexSelect").val(userInfo.sex);
-       		$("#tel").val(userInfo.tel);
-       		$("#address").val(userInfo.address);
-       		$("#professionSelect").val(userInfo.profession);
-       		$("#hobbySelect").val(userInfo.hobby);
-       		
-       		var imgFilename = userInfo.img;
-       		var imgUrl = rootUrl+"img/headimg/"+imgFilename;
-       		$("#headImg").attr("src",imgUrl);
-		}else{
-			$("#tipDiv").css("display","block");
+		queryPersonInfo();
+
+		// 查询个人信息
+		function queryPersonInfo(){
+			$.ajax({
+				type: 'POST',
+				url: rootUrl+'ws/queryPersonInfo.json',
+				data:{user:user},
+				dataType: 'json',
+				success: function(result) {
+					if (JSON.stringify(result) == '{}'){
+						console.log("空对象")
+					}else{
+						$("#realName").val(result.realName);
+						$("#sign").val(result.sign);
+						$("#age").val(result.age);
+						$("#sexSelect").val(result.sex);
+						$("#tel").val(result.tel);
+						$("#address").val(result.address);
+						$("#professionSelect").val(result.profession);
+						$("#hobbySelect").val(result.hobby);
+						$("#headImg").attr("src",result.img);
+					}
+				}
+			})
 		}
-		
-	    function showdiv() {
-	    	 $("#bigImg").attr("src",$("#headImg").attr("src"));
-	    	 $("#showBigImageDiv").css("display","block");
-	    }
-	    function hidediv(i) {
-	    	 $("#showBigImageDiv").css("display","none");
-	    }	
-	      
+
+		function showdiv() {
+			$("#bigImg").attr("src",$("#headImg").attr("src"));
+			$("#showBigImageDiv").css("display","block");
+		}
+		function hidediv(i) {
+			$("#showBigImageDiv").css("display","none");
+		}
+
 		// 加载图片失败
 		function imgerror(imgObj){
 			var scrVar = $(imgObj).attr("src");
 			$(imgObj).attr("src",rootUrl+"/img/imgerror_default.jpg");
-		}		      
+		}
 	</script>
-</body>
 </html>

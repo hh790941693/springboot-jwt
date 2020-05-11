@@ -137,7 +137,7 @@
 		function renderImg(btnName, imgName, inputName){
 			layui.upload.render({
 				elem: '#'+btnName,
-				url: 'http://localhost:8100/upload/app',
+				url: uploadUrl,
 				size: 10240,//单位为KB
 				accept: 'images',
 				data: {

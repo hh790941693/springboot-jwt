@@ -1,0 +1,1 @@
+uploadUrl = "http://localhost:8100/upload/app"
