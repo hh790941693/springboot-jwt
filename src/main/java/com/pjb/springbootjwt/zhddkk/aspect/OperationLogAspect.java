@@ -4,12 +4,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
-import com.pjb.springbootjwt.zhddkk.entity.WsOperationLog;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
+import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
 import com.pjb.springbootjwt.zhddkk.entity.WsUser;
+import com.pjb.springbootjwt.zhddkk.service.WsOperationLogService;
 import com.pjb.springbootjwt.zhddkk.service.WsService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,6 +33,9 @@ public class OperationLogAspect {
 	
 	@Autowired
 	private WsService wsService;
+
+	@Autowired
+	private WsOperationLogService wsOperationLogService;
 	
     @Pointcut("@annotation(com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation)")
     public void operationLogPointcut() {
@@ -40,7 +44,7 @@ public class OperationLogAspect {
     
     @Around("operationLogPointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-    	WsOperationLog wol = new WsOperationLog();
+    	WsOperationLogDO wol = new WsOperationLogDO();
     	wol.setAccessTime(new Date());
     	
         //执行方法之前的时间戳
@@ -53,7 +57,7 @@ public class OperationLogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         //String requestUri = request.getRequestURI();
         String requestUrl = request.getRequestURL().toString();
-        String userName = (String)request.getSession().getAttribute("user");
+        String userName = (String)request.getSession().getAttribute(CommonConstants.S_USER);
 
         if (null != userName) {
 			Integer userId = querySpecityUserName(userName).getId();
@@ -113,7 +117,7 @@ public class OperationLogAspect {
                 			continue;
                 		}
                 		String parameterValueStr = parameterValue.toString();
-                		if (paraterName.contains("pass")) {
+                		if (paraterName.contains(CommonConstants.S_PASS)) {
                 			parameterValueStr = "******";
                 		}
                 		if (parameterValueStr.length()>=300) {
@@ -129,7 +133,10 @@ public class OperationLogAspect {
 
         try {
         	wol.setCreateTime(new Date());
-        	wsService.insertOperationLog(wol);
+			boolean insertFlag = wsOperationLogService.insert(wol);
+			if (insertFlag){
+			    logger.info("新增操作日志成功:"+wol.getOperDescribe()+" 操作人:"+userName);
+            }
         }catch (Exception e) {
         	logger.error("记录操作日志失败:"+e.getMessage());
         	e.printStackTrace();

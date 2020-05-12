@@ -1,7 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.swagger;
 
-
 import com.pjb.springbootjwt.common.redis.RedisUtil;
+import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.pjb.springbootjwt.zhddkk.base.Result;
-import com.pjb.springbootjwt.zhddkk.entity.WsOperationLogExt;
 import com.pjb.springbootjwt.zhddkk.service.WsOperationLogService;
 
 import io.swagger.annotations.Api;
@@ -45,7 +44,7 @@ public class WsOperationLogController {
 	@ApiOperation(value = "操作日志查询", notes = "操作日志查询接口")
     @ResponseBody
     @RequestMapping(value = "getOperationLogByPage", method = RequestMethod.GET)
-    public Result<List<WsOperationLogExt>> getOperationLogByPage(
+    public Result<List<WsOperationLogDO>> getOperationLogByPage(
     		@ApiParam(name = "start", value = "当前页码", required = true, defaultValue="1") @RequestParam("start") Integer start,
     		@ApiParam(name = "length", value = "每页长度", required = true, defaultValue="10") @RequestParam("length") Integer length,
     		@ApiParam(name = "user_name", value = "用户名", required = false) @RequestParam(value="user_name",required=false) String userName,
@@ -53,15 +52,15 @@ public class WsOperationLogController {
 		String redisValue = (String)redisUtil.get("myname");
 		System.out.println("redisValue:"+redisValue);
 
-		Page<WsOperationLogExt> page = new Page<WsOperationLogExt>(start,length);
-		Wrapper<WsOperationLogExt> wrapper = new EntityWrapper<WsOperationLogExt>();
+		Page<WsOperationLogDO> page = new Page<WsOperationLogDO>(start,length);
+		Wrapper<WsOperationLogDO> wrapper = new EntityWrapper<WsOperationLogDO>();
 		if (StringUtils.isNotEmpty(userName)) {
 			wrapper.eq("user_name", userName);
 		}
 		if (StringUtils.isNotEmpty(operType)) {
 			wrapper.eq("oper_type", operType);
 		}
-		List<WsOperationLogExt> list = wsOperationLogService.selectPage(page, wrapper).getRecords();
+		List<WsOperationLogDO> list = wsOperationLogService.selectPage(page, wrapper).getRecords();
         return Result.ok(list);
     }
 }

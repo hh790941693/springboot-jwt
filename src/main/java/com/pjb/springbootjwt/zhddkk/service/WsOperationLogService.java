@@ -2,7 +2,7 @@ package com.pjb.springbootjwt.zhddkk.service;
 
 
 import com.baomidou.mybatisplus.service.IService;
-import com.pjb.springbootjwt.zhddkk.entity.WsOperationLogExt;
+import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
 
 /**
  * <p>
@@ -12,6 +12,6 @@ import com.pjb.springbootjwt.zhddkk.entity.WsOperationLogExt;
  * @author huangchaohui
  * @since 2019-02-22
  */
-public interface WsOperationLogService extends IService<WsOperationLogExt> {
+public interface WsOperationLogService extends IService<WsOperationLogDO> {
 
 }

@@ -264,14 +264,14 @@ public class WebSocketClientController
 		response.addCookie(webserveripCookie);
 		response.addCookie(webserverportCookie);
 		
-		// session
-//		request.getSession().setMaxInactiveInterval(SESSION_TIMEOUT); //session不活动失效时间
-//		request.getSession().setAttribute(CommonConstants.S_USER, user);
-//		request.getSession().setAttribute(CommonConstants.S_PASS, dbPass);
-//		request.getSession().setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
-//		request.getSession().setAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
-//		request.getSession().setAttribute(CommonConstants.S_IMG, selfImg);
-//		request.getSession().setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
+		//session
+		request.getSession().setMaxInactiveInterval(SESSION_TIMEOUT); //session不活动失效时间
+		request.getSession().setAttribute(CommonConstants.S_USER, user);
+		request.getSession().setAttribute(CommonConstants.S_PASS, dbPass);
+		request.getSession().setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
+		request.getSession().setAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
+		request.getSession().setAttribute(CommonConstants.S_IMG, selfImg);
+		request.getSession().setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
 		
 		String redisKey = REDIS_KEY_PREFIX+user;
 		try {
