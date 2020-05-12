@@ -101,7 +101,6 @@
 		var playMode = -1; //播放模式   默认为顺序播放
 		//当前用户
 		var loginUser = parent.s_user;
-		console.log(loginUser);
 		//播放器对象
 		var player = $("#player")[0];
 
@@ -152,13 +151,10 @@
 			
 			$("table input").removeAttr("checked");
 			$(inputObj).prop("checked",true);
-			//$(inputObj).attr("checked",true);
 			$("table tr").removeClass("selectRowClass");
 			$(trObj).addClass("selectRowClass");
-			//console.log("start to play:" + url);
 			
 			$("#player").attr("src",url);
-			//var player = $("#player")[0];
 			$("#songName").html(songname);
              
 			player.play();

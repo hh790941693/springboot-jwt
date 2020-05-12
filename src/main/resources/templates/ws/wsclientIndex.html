@@ -343,7 +343,6 @@
             if (webSocket == null)
             {
                 var socketUrl = "ws://"+webserverip+":"+webserverport+"/zhddWebSocket/" + user+"/"+pass+"/"+userAgent;
-                console.log(socketUrl);
                 webSocket = new WebSocket(socketUrl);
                 webSocket.onerror = function(event){
                     onError(event);

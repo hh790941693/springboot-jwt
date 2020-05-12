@@ -58,25 +58,6 @@
 	<iframe name="hidden_frame" id="hidden_frame" style='display: none'></iframe>
 </body>
 	<script type="text/javascript">
-		// var dicJson=$('#dicJson').val();
-		// var questionArr = dicJson.zcwt;
-		// console.log(dicJson);
-		// console.log(questionArr);
-		//
-		// $("#select1").empty();
-		// $("#select2").empty();
-		// $("#select3").empty();
-		// for (var i=0;i<questionArr.length;i++) {
-		// 	var qusTxt = questionArr[i].name;
-		// 	$("#select1").append("<option value=" + qusTxt + ">" + qusTxt+ "</option>");
-		// 	$("#select2").append("<option value=" + qusTxt + ">" + qusTxt+ "</option>");
-		// 	$("#select3").append("<option value=" + qusTxt + ">" + qusTxt+ "</option>");
-		//
-		// 	$("#select1").get(0).selectedIndex=0;
-		// 	$("#select2").get(0).selectedIndex=1;
-		// 	$("#select3").get(0).selectedIndex=2;
-		// }
-		//
 		$("#user").blur(function(){
 			var user = $("#user").val();
 			if (user != '' && user != undefined)
@@ -95,7 +76,6 @@
 				async:true,
 				success: function(result) {
 					var a=2
-					console.log(result);
 
 					$("#select1").empty();
 					$("#select2").empty();
@@ -152,9 +132,6 @@
 				layer.msg('注册成功,'+timeout+"秒后返回登录页面");
 				var user=$("#user").val();
 				var index = parent.layer.getFrameIndex(window.name);
-				//console.log("windowname:"+window.name);
-				//console.log("index:"+index);
-				console.log("user:"+user)
 				setTimeout(function(){
 					parent.layer.close(index);
 					window.location.href = "login.page";

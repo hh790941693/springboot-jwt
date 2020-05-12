@@ -173,7 +173,6 @@
 		function deleteFriend(id){
 			layer.confirm('确认要删除？', {btn: ['确定','取消']},
 					function(){
-						console.log("delete "+id);
 						deleteFriendByAjax(id);
 						setTimeout(refresh,1000);
 					},
