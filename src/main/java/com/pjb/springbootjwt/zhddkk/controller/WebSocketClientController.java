@@ -158,7 +158,7 @@ public class WebSocketClientController
 	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.LOGIN,subModule="",describe="登录")
 	@RequestMapping(value = "wslogin.do", method = RequestMethod.POST)
 	public String wsclient(Model model,@RequestParam("user")String user,@RequestParam("pass")String pass,
-							HttpServletRequest request) {
+							HttpServletRequest request, HttpServletResponse response) {
 		// 检查当前用户是否已经登录过
 		Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
 
@@ -247,31 +247,31 @@ public class WebSocketClientController
 		}
 		
 		//记录cookie
-//		Cookie userCookie = new Cookie(CommonConstants.S_USER,user);
-//		Cookie passCookie = new Cookie(CommonConstants.S_PASS,dbPass);
-//		Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP,webserverip);
-//		Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT,serverPortStr);
-//		userCookie.setPath("/");
-//		userCookie.setMaxAge(COOKIE_TIMEOUT);//用户名30分钟
-//		passCookie.setPath("/");
-//		passCookie.setMaxAge(600);//密码10分钟
-//		webserveripCookie.setPath("/");
-//		webserveripCookie.setMaxAge(COOKIE_TIMEOUT);
-//		webserverportCookie.setPath("/");
-//		webserverportCookie.setMaxAge(COOKIE_TIMEOUT);
-//		response.addCookie(userCookie);
-//		response.addCookie(passCookie);
-//		response.addCookie(webserveripCookie);
-//		response.addCookie(webserverportCookie);
+		Cookie userCookie = new Cookie(CommonConstants.S_USER,user);
+		Cookie passCookie = new Cookie(CommonConstants.S_PASS,dbPass);
+		Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP,webserverip);
+		Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT,serverPortStr);
+		userCookie.setPath("/");
+		userCookie.setMaxAge(COOKIE_TIMEOUT);//用户名30分钟
+		passCookie.setPath("/");
+		passCookie.setMaxAge(600);//密码10分钟
+		webserveripCookie.setPath("/");
+		webserveripCookie.setMaxAge(COOKIE_TIMEOUT);
+		webserverportCookie.setPath("/");
+		webserverportCookie.setMaxAge(COOKIE_TIMEOUT);
+		response.addCookie(userCookie);
+		response.addCookie(passCookie);
+		response.addCookie(webserveripCookie);
+		response.addCookie(webserverportCookie);
 		
 		// session
-		request.getSession().setMaxInactiveInterval(SESSION_TIMEOUT); //session不活动失效时间
-		request.getSession().setAttribute(CommonConstants.S_USER, user);
-		request.getSession().setAttribute(CommonConstants.S_PASS, dbPass);
-		request.getSession().setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
-		request.getSession().setAttribute(CommonConstants.S_WEBSERVERPORT, serverPortStr);
-		request.getSession().setAttribute(CommonConstants.S_IMG, selfImg);
-		request.getSession().setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
+//		request.getSession().setMaxInactiveInterval(SESSION_TIMEOUT); //session不活动失效时间
+//		request.getSession().setAttribute(CommonConstants.S_USER, user);
+//		request.getSession().setAttribute(CommonConstants.S_PASS, dbPass);
+//		request.getSession().setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
+//		request.getSession().setAttribute(CommonConstants.S_WEBSERVERPORT, serverPortStr);
+//		request.getSession().setAttribute(CommonConstants.S_IMG, selfImg);
+//		request.getSession().setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
 		
 		String redisKey = REDIS_KEY_PREFIX+user;
 		try {
