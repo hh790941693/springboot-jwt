@@ -13,14 +13,18 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.bean.JsonResult;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
+import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
 import com.pjb.springbootjwt.zhddkk.entity.*;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
+import com.pjb.springbootjwt.zhddkk.service.WsOperationLogService;
 import com.pjb.springbootjwt.zhddkk.service.WsService;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
@@ -46,7 +50,7 @@ import net.sf.json.JSONArray;
  */
 @Controller
 @RequestMapping("ws")
-public class WebSocketServerController 
+public class WebSocketServerController extends AdminBaseController
 {
 	private static final Log logger = LogFactory.getLog(WebSocketServerController.class);
 	
@@ -54,6 +58,9 @@ public class WebSocketServerController
 	
 	@Autowired
 	private WsService wsService;
+
+	@Autowired
+	private WsOperationLogService wsOperationLogService;
 	
 	/**
 	 * 让某用户下线

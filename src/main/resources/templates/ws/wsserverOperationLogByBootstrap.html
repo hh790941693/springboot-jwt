@@ -84,7 +84,9 @@
                     curPage:    curPage,          //当前页码
                     search:     params.search,     //搜索框中的关键词
                     sort:       params.sort,       //要排序的字段名称  如果没值则为undefined
-                    order:      params.order      //排序方式 asc  desc
+                    order:      params.order,      //排序方式 asc  desc
+                    pageNumber : params.pageNumber,
+                    pageSize : params.pageSize,
                 }
                 return temp;
             },                    //传递参数（*）
