@@ -18,6 +18,8 @@ debug: true
 server:
   port: 8100
   address: localhost
+  servlet:
+    context-path: /
 
 spring:
   thymeleaf:
