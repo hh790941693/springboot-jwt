@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.pjb.springbootjwt.common.base.AdminBaseController;
+import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.bean.JsonResult;
@@ -30,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,7 +61,16 @@ public class WebSocketServerController extends AdminBaseController
 
 	@Autowired
 	private WsOperLogService wsOperLogService;
-	
+
+	@Value("${server.address}")
+	private String serverAddress;
+
+	@Value("${server.port}")
+	private String serverPort;
+
+	@Autowired
+	private UploadConfig uploadConfig;
+
 	/**
 	 * 让某用户下线
 	 * @param user
@@ -544,19 +555,15 @@ public class WebSocketServerController extends AdminBaseController
 	 * @return
 	 */
 	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.OTHER,subModule="",describe="显示二维码")
-	@RequestMapping(value = "showQRCode.do", method = RequestMethod.POST,produces="application/json")
+	@RequestMapping(value = "showQRCode.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String showQRCode(HttpServletRequest request)
 	{
 		ServletContext sc = request.getServletContext();
 		String contextPathx = sc.getContextPath();
 		String scheme = request.getScheme();
-		
-		String serverIp = ServiceUtil.getWebsocketIp(configMap);
-		//String serverPort = configMap.get("webserver.port");
-		int serverPort = request.getServerPort();
-		
-		String savePath = request.getServletContext().getRealPath(CommonConstants.WEBINF_IMGES);
+
+		String savePath = uploadConfig.getStorePath();
 		String qrCodeFilename = "qrcode.png";
 		String savePathAbs = savePath + File.separator + qrCodeFilename;
 		System.out.println("二维码文件路径:"+savePathAbs);
@@ -578,7 +585,7 @@ public class WebSocketServerController extends AdminBaseController
 		}
 		
 		if (isNeedGenerateCode) {
-			String text = scheme + "://" + serverIp + ":" + serverPort + contextPathx+"/ws/login.page";
+			String text = scheme + "://" + serverAddress + ":" + serverPort;
 			System.out.println("登录地址:"+text);
 			String qrCodeFilePath = null;
 			try {
@@ -589,7 +596,7 @@ public class WebSocketServerController extends AdminBaseController
 				e.printStackTrace();
 			}
 		}
-		return scheme + "://" + serverIp + ":" + serverPort + "/"+contextPathx+"/img/"+qrCodeFilename;
+		return uploadConfig.getViewUrl()+"/"+qrCodeFilename;
 	}
 	
 	/**

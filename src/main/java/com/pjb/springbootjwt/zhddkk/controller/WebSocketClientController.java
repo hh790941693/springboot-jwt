@@ -21,11 +21,11 @@ import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.service.*;
+import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -47,7 +47,6 @@ import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
-import com.pjb.springbootjwt.zhddkk.util.ServiceUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 
 /**
@@ -72,8 +71,8 @@ public class WebSocketClientController
 	
 	private static Map<String,String> configMap = WsInterceptor.getConfigMap();
 
-	@Value("${server.port}")
-	private String serverPort;
+	@Autowired
+	private WebSocketConfig webSocketConfig;
 
 	@Autowired
 	private WsService wsService;
@@ -218,14 +217,11 @@ public class WebSocketClientController
 			return "ws/loginfail";
 		}
 
-		String webserverip = ServiceUtil.getWebsocketIp(configMap);
+		String webserverip = webSocketConfig.getAddress();
+		String webserverPort = webSocketConfig.getPort();
 		logger.info("------------------配置信息------------------:"+configMap);
-		logger.info("------------------webserverip------------------:"+webserverip);
-		
-		//int serverPort = request.getServerPort();
-		logger.info("yml serverPort:"+serverPort);
-		//logger.info("serverPort:"+serverPort);
-		//String serverPortStr = String.valueOf(serverPort);
+		logger.info("webserverip:"+webserverip);
+		logger.info("webserverPort:"+webserverPort);
 
 		String userAgent = request.getHeader("User-Agent");
 		logger.info("user:"+user+"  userAgent:"+userAgent);
@@ -239,7 +235,7 @@ public class WebSocketClientController
 		model.addAttribute(CommonConstants.S_USER, user);
 		model.addAttribute(CommonConstants.S_PASS, dbPass);
 		model.addAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
-		model.addAttribute(CommonConstants.S_WEBSERVERPORT, serverPort);
+		model.addAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
 		model.addAttribute(CommonConstants.S_USER_AGENT, shortAgent);
 		
 		//个人头像
@@ -253,8 +249,8 @@ public class WebSocketClientController
 		//记录cookie
 		Cookie userCookie = new Cookie(CommonConstants.S_USER,user);
 		Cookie passCookie = new Cookie(CommonConstants.S_PASS,dbPass);
-		Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP,webserverip);
-		Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT,serverPort);
+		Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP, webserverip);
+		Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT, webserverPort);
 		userCookie.setPath("/");
 		userCookie.setMaxAge(COOKIE_TIMEOUT);//用户名30分钟
 		passCookie.setPath("/");
@@ -273,7 +269,7 @@ public class WebSocketClientController
 //		request.getSession().setAttribute(CommonConstants.S_USER, user);
 //		request.getSession().setAttribute(CommonConstants.S_PASS, dbPass);
 //		request.getSession().setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
-//		request.getSession().setAttribute(CommonConstants.S_WEBSERVERPORT, serverPortStr);
+//		request.getSession().setAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
 //		request.getSession().setAttribute(CommonConstants.S_IMG, selfImg);
 //		request.getSession().setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
 		
