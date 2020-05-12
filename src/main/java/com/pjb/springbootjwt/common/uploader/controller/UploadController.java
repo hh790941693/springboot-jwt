@@ -27,9 +27,9 @@ public class UploadController {
     /**
      * 上传资源文件
      *
-     * @param files   文件
+     * @param file   文件
      * @param folder 要存放的路径，如果为空，则默认存放temp文件夹
-     * @param userId 用戶ID
+     * @param user 用戶ID
      * @return 上传文件的完整访问路径
      */
     @PostMapping

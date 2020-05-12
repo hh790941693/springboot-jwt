@@ -1,6 +1,6 @@
 server:
   port: 8100
-  address: localhost
+  address: 192.168.31.106
   servlet:
     context-path: /
     session:
@@ -9,6 +9,7 @@ server:
     max-threads: 1000
     min-spare-threads: 30
     uri-encoding: utf-8
+    basedir: c:\\tomcatTemp
 
 mybatis:
   config-location: classpath:mybatis.xml
