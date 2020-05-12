@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/zhdd?useSSL=false
+    url: jdbc:mysql://101.132.176.9:3306/zhdd?useSSL=false
     username: root
     password: 123456
   cache:
@@ -33,4 +33,4 @@ upload:
     #    autoindex on;
     #  }
     #}
-    view-url: http://${server.address}:8006/
+    view-url: http://${server.address}:8007/
