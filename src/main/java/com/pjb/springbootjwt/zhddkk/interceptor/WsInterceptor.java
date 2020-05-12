@@ -150,6 +150,7 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
 		try {
 			configPath = this.getClass().getResource("../../../../config.properties").getPath();
 		}catch (Exception e) {
+			logger.info("查找文件config.properties失败! 改从ServiceConstants中加载配置");
 			System.out.println("查找文件config.properties失败! 改从ServiceConstants中加载配置");
 			
 			loadDefaultConfigData();
@@ -173,7 +174,6 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
 		FileReader fr = null;
 		BufferedReader br = null;
 		try {
-
 			fr = new FileReader(f);
 			br = new BufferedReader(fr);
 			String data = null;
