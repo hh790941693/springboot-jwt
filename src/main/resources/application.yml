@@ -67,7 +67,7 @@ upload:
     #    autoindex on;
     #  }
     #}
-    view-url: http://localhost:8101/
+    view-url: http://${server.address}:8101/
 
 #websocket聊天服务器配置
 websocket:
