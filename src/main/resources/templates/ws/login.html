@@ -46,8 +46,9 @@
 </body>
 
     <script type="text/javascript">
-		var user = $("#user").val();
+        var user = "";
         $("#user").blur(function(){
+            user = $("#user").val();
             if (user == ""){
                 layer.tips('用户名不能为空!', '#user', {
                     tips: [2, '#78BA32']
@@ -55,9 +56,10 @@
             }
         })
 
+        var pass = "";
         $("#pass").blur(function(){
-            var val = $("#pass").val();
-            if (val == "")
+            pass = $("#pass").val();
+            if (pass == "")
             {
                 layer.tips('密码不能为空!', '#pass', {
                     tips: [2, '#78BA32']
@@ -121,19 +123,19 @@
             });
         }
 
-        //登录成功
-        function toSuceess(user,pass){
-            $.ajax({
-                type: 'GET',
-                url: rootUrl+'ws/wslogin.do',
-                data:{user:user,pass:pass},
-                //dataType: 'json',
-                async:true,
-                success: function(result) {
-                    var a=2;
-                }
-            });
-        }
+        // //登录成功
+        // function toSuceess(user,pass){
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: rootUrl+'ws/wslogin.do',
+        //         data:{user:user,pass:pass},
+        //         //dataType: 'json',
+        //         async:true,
+        //         success: function(result) {
+        //             console.log("登陆成功");
+        //         }
+        //     });
+        // }
 
         //手机登录
         $("#phonelogin").click(function(){
@@ -160,7 +162,7 @@
             var text=$(thisObj).text();
             if (text == "开启动画"){
                 text = "隐藏动画";
-                $("#iframePage").attr("src",rootUrl+"canvas/gravityBall.page");
+                $("#iframePage").attr("src", rootUrl+"canvas/gravityBall.page");
                 $(thisObj).text(text);
             }else{
                 window.location.href = window.location.href;
@@ -171,6 +173,5 @@
         function playGame(){
             window.location.href = rootUrl + "canvas/canvasIndex.page";
         }
-
     </script>
 </html>
