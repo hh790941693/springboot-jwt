@@ -18,3 +18,19 @@ spring:
         max-idle: 500
         min-idle: 50
         max-active: -1
+
+#本地上传
+upload:
+  config:
+    #本地存储路径
+    store-path: D:\\temp\\
+    #访问url(需要通过nginx来访问)
+    #server {
+    #  listen 8101;
+    #  server_name  localhost;
+    #  location / {
+    #    root D:\\temp;
+    #    autoindex on;
+    #  }
+    #}
+    view-url: http://${server.address}:8101/
