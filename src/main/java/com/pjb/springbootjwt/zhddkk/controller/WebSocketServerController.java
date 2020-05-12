@@ -13,18 +13,16 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.bean.JsonResult;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
-import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
 import com.pjb.springbootjwt.zhddkk.entity.*;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
-import com.pjb.springbootjwt.zhddkk.service.WsOperationLogService;
+import com.pjb.springbootjwt.zhddkk.service.WsOperLogService;
 import com.pjb.springbootjwt.zhddkk.service.WsService;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
@@ -60,7 +58,7 @@ public class WebSocketServerController extends AdminBaseController
 	private WsService wsService;
 
 	@Autowired
-	private WsOperationLogService wsOperationLogService;
+	private WsOperLogService wsOperLogService;
 	
 	/**
 	 * 让某用户下线
@@ -491,9 +489,9 @@ public class WebSocketServerController extends AdminBaseController
 	 * 
 	 * getOperationLogByPage.json
 	 */
-	@RequestMapping(value = "getOperationLogByPageByBootstrap.json", method = RequestMethod.POST,produces="application/json")
+	@RequestMapping(value = "getOperationLogByPageByBootstrap.json", method = RequestMethod.POST)
 	@ResponseBody
-	public Object getOperationLogByPageByBootstrap(@RequestBody WsOperationLog params)
+	public Object getOperationLogByPageByBootstrap(WsOperationLog params)
 	{
 		JsonResult jr = wsService.queryOperationLogByPageByBootStrap(params);
 		return JsonUtil.javaobject2Jsonobject(jr);
