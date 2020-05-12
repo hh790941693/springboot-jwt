@@ -6,9 +6,12 @@ import java.util.Map;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.pjb.springbootjwt.zhddkk.entity.WsUser;
-import com.pjb.springbootjwt.zhddkk.service.WsService;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -18,39 +21,38 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author Administrator
  *
  */
-public class ModifyUserStatusListener implements ServletContextListener
+@Component
+public class ModifyUserStatusListener implements ServletContextListener, CommandLineRunner
 {
-	private WsService wsService;
+	private WsUsersService wsUsersService;
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 	}
 
 	@Override
+	public void run(String... args) throws Exception {
+		System.out.println("run.....");
+		updateUser();
+	}
+
+	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 	     WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(arg0.getServletContext());  
-	     wsService = (WsService) springContext.getBean("wsServiceImpl"); 
-	     updateUser();
+	     wsUsersService = (WsUsersService) springContext.getBean("wsUsersServiceImpl");
+	     //updateUser();
 	}
 	
 	private void updateUser() {
 		Map<String,ZhddWebSocket> clientsMap = ZhddWebSocket.getClients();
-		
-		List<WsUser> dbUserList = wsService.queryWsUser(new WsUser());
-		if (dbUserList != null && dbUserList.size() > 0)
-		{
-			for (WsUser wu: dbUserList)
-			{
-				if (wu.getState().equals("1"))
-				{
-					if (!clientsMap.containsKey(wu.getName()))
-					{
-						wu.setState("0");
-						wsService.updateWsUser(wu);
-					}
+		List<WsUsersDO> dbUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().eq("state","1"));
+		if (dbUserList != null && dbUserList.size() > 0) {
+			for (WsUsersDO wu: dbUserList) {
+				if (!clientsMap.containsKey(wu.getName())) {
+					wu.setState("0");
+					wsUsersService.updateById(wu);
 				}
 			}
 		}
 	}
-
 }
