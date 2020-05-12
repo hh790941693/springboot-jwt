@@ -34,14 +34,12 @@ import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.entity.WsChatlog;
-import com.pjb.springbootjwt.zhddkk.entity.WsCircle;
 import com.pjb.springbootjwt.zhddkk.entity.WsCircleComment;
 import com.pjb.springbootjwt.zhddkk.entity.WsCommon;
 import com.pjb.springbootjwt.zhddkk.entity.WsFriends;
 import com.pjb.springbootjwt.zhddkk.entity.WsFriendsApply;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.entity.WsUser;
-import com.pjb.springbootjwt.zhddkk.entity.WsUserProfile;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
@@ -1212,30 +1210,43 @@ public class WebSocketClientController
 								@RequestParam(value="hobbyText",required=false) String hobbyText
 	) {
 		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
-		WsUserProfileDO wup = new WsUserProfileDO();
-		wup.setUserId(wsUsersDO.getId());
 		try {
-			wup.setUserName(userName);
-			wup.setRealName(realName);
-			wup.setImg(headImg);
-			wup.setSign(sign);
-			wup.setAge(age);
-			wup.setSex(sex);
-			wup.setSexText(sexText);
-			wup.setTel(tel);
-			wup.setAddress(address);
-			wup.setProfession(profession);
-			wup.setProfessionText(professionText);
-			wup.setHobby(hobby);
-			wup.setHobbyText(hobbyText);			
 			// 检查表中是否有个人信息记录
-			int existCount = wsUserProfileService.selectCount(new EntityWrapper<WsUserProfileDO>().eq("user_id", wsUsersDO.getId()));
-			if (existCount<=0) {
+			WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", wsUsersDO.getId()));
+			if (null == wsUserProfileDO) {
 				logger.info("插入个人信息");
+				WsUserProfileDO wup = new WsUserProfileDO();
+				wup.setUserId(wsUsersDO.getId());
+				wup.setUserName(userName);
+				wup.setRealName(realName);
+				wup.setImg(headImg);
+				wup.setSign(sign);
+				wup.setAge(age);
+				wup.setSex(sex);
+				wup.setSexText(sexText);
+				wup.setTel(tel);
+				wup.setAddress(address);
+				wup.setProfession(profession);
+				wup.setProfessionText(professionText);
+				wup.setHobby(hobby);
+				wup.setHobbyText(hobbyText);
 				wsUserProfileService.insert(wup);
 			}else {
 				logger.info("更新个人信息");
-				wsUserProfileService.updateById(wup);
+				wsUserProfileDO.setUserName(userName);
+				wsUserProfileDO.setRealName(realName);
+				wsUserProfileDO.setImg(headImg);
+				wsUserProfileDO.setSign(sign);
+				wsUserProfileDO.setAge(age);
+				wsUserProfileDO.setSex(sex);
+				wsUserProfileDO.setSexText(sexText);
+				wsUserProfileDO.setTel(tel);
+				wsUserProfileDO.setAddress(address);
+				wsUserProfileDO.setProfession(profession);
+				wsUserProfileDO.setProfessionText(professionText);
+				wsUserProfileDO.setHobby(hobby);
+				wsUserProfileDO.setHobbyText(hobbyText);
+				wsUserProfileService.updateById(wsUserProfileDO);
 			}
 		}catch (Exception e) {
 			logger.error("更新个人信息失败!"+e.getMessage());
