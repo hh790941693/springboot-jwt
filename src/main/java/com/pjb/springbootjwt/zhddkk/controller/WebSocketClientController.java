@@ -360,10 +360,14 @@ public class WebSocketClientController
 	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.LOGOUT,subModule="",describe="退出")
 	@RequestMapping(value = "logout.do",method=RequestMethod.POST)
 	@ResponseBody
-	public String logout(@RequestParam("user")String user,HttpServletRequest request,HttpServletResponse response) {
+	public String logout(@RequestParam("user")String user,HttpServletRequest request) {
 		String sessionUser = (String)request.getSession().getAttribute(CommonConstants.S_USER);
 		System.out.println("清理session缓存:"+sessionUser);
-		
+
+		if (StringUtils.isBlank(sessionUser)){
+			return "success";
+		}
+
 		if (user.equals(sessionUser)) {
 			removeSessionAttributes(request);
 			//removeCookies(request,response);

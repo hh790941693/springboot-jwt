@@ -31,6 +31,7 @@
 </head>
 <body>
 	<div id="mainDiv">
+		<input type="hidden" th:value="${user}" id="user">
 		<table>
 			<tr><th style="width:40%">用户名</th><th>登录失败原因</th></tr>
 			<tr style="width:60%">
@@ -51,6 +52,8 @@
 	</div>
 </body>
 	<script type="text/javascript">
+		var user=$('#user').val();
+		console.log(user);
 		var i=5;
 		var timer = setInterval(function(){
 			$("#timeSpan").text(i);
@@ -65,12 +68,10 @@
 			$.ajax({
 				type: 'POST',
 				url: rootUrl+'ws/logout.do',
-				dataType: 'json',
-				data:{user:parent.s_user},
+				data:{user:user},
 				async:false,
 				success: function(result) {
-					console.log(result);
-					window.location.href = rootUrl+"ws/login.page";
+					window.location.href = rootUrl;
 				}
 			});
 		}
