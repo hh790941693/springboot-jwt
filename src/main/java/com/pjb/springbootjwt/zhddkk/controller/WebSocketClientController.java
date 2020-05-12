@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -57,7 +58,7 @@ import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
  */
 @Controller
 @RequestMapping("ws")
-public class WebSocketClientController 
+public class WebSocketClientController
 {
 	private static final int COOKIE_TIMEOUT = 1800; //cookie过期时间 30分钟
 	
@@ -70,6 +71,9 @@ public class WebSocketClientController
 	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMddHHmmss");
 	
 	private static Map<String,String> configMap = WsInterceptor.getConfigMap();
+
+	@Value("${server.port}")
+	private String serverPort;
 
 	@Autowired
 	private WsService wsService;
@@ -218,8 +222,10 @@ public class WebSocketClientController
 		logger.info("------------------配置信息------------------:"+configMap);
 		logger.info("------------------webserverip------------------:"+webserverip);
 		
-		int serverPort = request.getServerPort();
-		String serverPortStr = String.valueOf(serverPort);
+		//int serverPort = request.getServerPort();
+		logger.info("yml serverPort:"+serverPort);
+		//logger.info("serverPort:"+serverPort);
+		//String serverPortStr = String.valueOf(serverPort);
 
 		String userAgent = request.getHeader("User-Agent");
 		logger.info("user:"+user+"  userAgent:"+userAgent);
@@ -233,7 +239,7 @@ public class WebSocketClientController
 		model.addAttribute(CommonConstants.S_USER, user);
 		model.addAttribute(CommonConstants.S_PASS, dbPass);
 		model.addAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
-		model.addAttribute(CommonConstants.S_WEBSERVERPORT, serverPortStr);
+		model.addAttribute(CommonConstants.S_WEBSERVERPORT, serverPort);
 		model.addAttribute(CommonConstants.S_USER_AGENT, shortAgent);
 		
 		//个人头像
@@ -248,7 +254,7 @@ public class WebSocketClientController
 		Cookie userCookie = new Cookie(CommonConstants.S_USER,user);
 		Cookie passCookie = new Cookie(CommonConstants.S_PASS,dbPass);
 		Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP,webserverip);
-		Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT,serverPortStr);
+		Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT,serverPort);
 		userCookie.setPath("/");
 		userCookie.setMaxAge(COOKIE_TIMEOUT);//用户名30分钟
 		passCookie.setPath("/");
