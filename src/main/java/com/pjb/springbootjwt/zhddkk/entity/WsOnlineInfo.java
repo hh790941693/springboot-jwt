@@ -1,5 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.entity;
 
+import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,19 +14,19 @@ public class WsOnlineInfo
 	private int offlineCount;
 	
 	// 当前登录的用户信息
-	private WsUser currentOnlineUserInfo;
+	private WsUsersDO currentOnlineUserInfo;
 	
 	// 所有用户列表
-	private List<WsUser> userInfoList;
+	private List<WsUsersDO> userInfoList;
 	
 	// 在线用户列表
-	private List<WsUser> onlineUserList;
+	private List<WsUsersDO> onlineUserList;
 	
 	// 离线用户列表
-	private List<WsUser> offlineUserList;
+	private List<WsUsersDO> offlineUserList;
 	
 	// 好友列表
-	private List<WsUser> friendsList;
+	private List<WsUsersDO> friendsList;
 	
 	// 字典列表
 	//private List<WsDic> dicList;
@@ -50,31 +52,6 @@ public class WsOnlineInfo
 		this.offlineCount = offlineCount;
 	}
 
-	public List<WsUser> getUserInfoList() {
-		return userInfoList;
-	}
-
-	public void setUserInfoList(List<WsUser> userInfoList) {
-		this.userInfoList = userInfoList;
-	}
-
-	public List<WsUser> getOnlineUserList() {
-		return onlineUserList;
-	}
-
-	public void setOnlineUserList(List<WsUser> onlineUserList) {
-		this.onlineUserList = onlineUserList;
-	}
-
-	public List<WsUser> getOfflineUserList() {
-		return offlineUserList;
-	}
-
-	public void setOfflineUserList(List<WsUser> offlineUserList) {
-		this.offlineUserList = offlineUserList;
-	}
-
-
 	public Map<String, List<WsCommon>> getCommonMap() {
 		return commonMap;
 	}
@@ -83,27 +60,43 @@ public class WsOnlineInfo
 		this.commonMap = commonMap;
 	}
 
-	public WsUser getCurrentOnlineUserInfo() {
+	public WsUsersDO getCurrentOnlineUserInfo() {
 		return currentOnlineUserInfo;
 	}
 
-	public void setCurrentOnlineUserInfo(WsUser currentOnlineUserInfo) {
+	public void setCurrentOnlineUserInfo(WsUsersDO currentOnlineUserInfo) {
 		this.currentOnlineUserInfo = currentOnlineUserInfo;
 	}
 
-	public List<WsUser> getFriendsList() {
+	public List<WsUsersDO> getUserInfoList() {
+		return userInfoList;
+	}
+
+	public void setUserInfoList(List<WsUsersDO> userInfoList) {
+		this.userInfoList = userInfoList;
+	}
+
+	public List<WsUsersDO> getOnlineUserList() {
+		return onlineUserList;
+	}
+
+	public void setOnlineUserList(List<WsUsersDO> onlineUserList) {
+		this.onlineUserList = onlineUserList;
+	}
+
+	public List<WsUsersDO> getOfflineUserList() {
+		return offlineUserList;
+	}
+
+	public void setOfflineUserList(List<WsUsersDO> offlineUserList) {
+		this.offlineUserList = offlineUserList;
+	}
+
+	public List<WsUsersDO> getFriendsList() {
 		return friendsList;
 	}
 
-	public void setFriendsList(List<WsUser> friendsList) {
+	public void setFriendsList(List<WsUsersDO> friendsList) {
 		this.friendsList = friendsList;
-	}
-
-	@Override
-	public String toString() {
-		return "WsOnlineInfo [onlineCount=" + onlineCount + ", offlineCount=" + offlineCount
-				+ ", currentOnlineUserInfo=" + currentOnlineUserInfo + ", userInfoList=" + userInfoList
-				+ ", onlineUserList=" + onlineUserList + ", offlineUserList=" + offlineUserList + ", friendsList="
-				+ friendsList + ", commonMap=" + commonMap + "]";
 	}
 }
