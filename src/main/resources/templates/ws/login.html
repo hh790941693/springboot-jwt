@@ -127,7 +127,7 @@
                 type: 'GET',
                 url: rootUrl+'ws/wslogin.do',
                 data:{user:user,pass:pass},
-                dataType: 'json',
+                //dataType: 'json',
                 async:true,
                 success: function(result) {
                     var a=2;
@@ -142,7 +142,7 @@
                 $.ajax({
                     type: 'POST',
                     url: rootUrl+'ws/showQRCode.do',
-                    dataType: 'json',
+                    //dataType: 'json',
                     async:false,
                     success: function(result) {
                         $("#qrImg").css("display","block");

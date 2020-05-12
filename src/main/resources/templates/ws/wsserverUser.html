@@ -99,7 +99,7 @@
 				url: rootUrl+'ws/getOnlineUsersByPage.json',
 				data:JSON.stringify(data),
 				contentType:"application/json",
-				dataType: 'json',
+				//dataType: 'json',
 				async:false,
 				success: function(result) {
 					var totalPage = result.totalPage;
@@ -213,7 +213,7 @@
 			$.ajax({
 				type: 'GET',
 				url: rootUrl+'ws/getOnlineInfo.json',
-				dataType: 'json',
+				//dataType: 'json',
 				success: function(result) {
 					var jsonObj = result;
 					// 在线人数
@@ -307,7 +307,7 @@
 				type: 'GET',
 				url: rootUrl+'ws/sendText.do',
 				data:{user:user,msg:tmpMsg},
-				dataType: 'json',
+				//dataType: 'json',
 				success: function(result) {
 					var detail = result;
 
@@ -350,7 +350,7 @@
 				type: 'GET',
 				url: rootUrl+'ws/offlineUser.do',
 				data:{user:user},
-				dataType: 'json',
+				//dataType: 'json',
 				success: function(result) {
 					var detail = result;
 					if (detail == "success")
@@ -370,7 +370,7 @@
 				type: 'GET',
 				url: rootUrl+'ws/enableUser.do',
 				data:{user:user,enable:enableVar},
-				dataType: 'json',
+				//dataType: 'json',
 				success: function(result) {
 					var detail = result;
 					if (detail == "success")
@@ -390,7 +390,7 @@
 				type: 'GET',
 				url: rootUrl+'ws/enableSpeak.do',
 				data:{user:user,speak:enableVar},
-				dataType: 'json',
+				//dataType: 'json',
 				success: function(result) {
 					var detail = result;
 					if (detail == "success")

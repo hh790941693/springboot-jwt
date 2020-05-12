@@ -244,7 +244,7 @@
                 $.ajax({
                     type: 'POST',
                     url: rootUrl+'ws/showQRCode.do',
-                    dataType: 'json',
+                    //dataType: 'json',
                     async:false,
                     success: function(result) {
                         $("#qrDiv").css("display","block");
@@ -537,7 +537,7 @@
             $.ajax({
                 type: 'GET',
                 url: rootUrl+'ws/queryVersion.json',
-                dataType: 'json',
+                //dataType: 'json',
                 async:false,
                 success: function(result) {
                     curVersion = result;
@@ -550,7 +550,7 @@
             $.ajax({
                 type: 'GET',
                 url: rootUrl+'ws/checkUpdate.do?version='+curVersion+"&cmd=check",
-                dataType: 'json',
+                //dataType: 'json',
                 async:false,
                 success: function(result) {
                     console.log("checkUpdate result:"+result);
@@ -579,7 +579,7 @@
             $.ajax({
                 type: 'GET',
                 url: rootUrl+'ws/checkUpdate.do?version='+curVersion+"&cmd=update",
-                dataType: 'json',
+                //dataType: 'json',
                 async:false,
                 success: function(result) {
                     console.log("升级结果:"+result)

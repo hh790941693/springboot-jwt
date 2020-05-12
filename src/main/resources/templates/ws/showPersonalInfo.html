@@ -100,7 +100,7 @@
 				type: 'POST',
 				url: rootUrl+'ws/queryPersonInfo.json',
 				data:{user:user},
-				dataType: 'json',
+				//dataType: 'json',
 				success: function(result) {
 					if (JSON.stringify(result) == '{}'){
 						console.log("空对象")

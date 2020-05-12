@@ -297,7 +297,7 @@
 					$.ajax({
 						type: 'POST',
 						url: rootUrl+'ws/toComment.do',
-						dataType: 'json',
+						//dataType: 'json',
 						data:{user:curUser,circleId:circleId,comment:comment},
 						async:false,
 						success: function(result) {
@@ -314,7 +314,7 @@
 			$.ajax({
 				type: 'POST',
 				url: rootUrl+'ws/toLike.do',
-				dataType: 'json',
+				//dataType: 'json',
 				data:{user:curUser,circleId:circleId},
 				async:false,
 				success: function(result) {
@@ -329,7 +329,7 @@
 					$.ajax({
 						type: 'POST',
 						url: rootUrl+'ws/toDeleteCircle.do',
-						dataType: 'json',
+						//dataType: 'json',
 						data:{id:circleId},
 						async:false,
 						success: function(result) {
@@ -348,7 +348,7 @@
 					$.ajax({
 						type: 'POST',
 						url: rootUrl+'ws/toDeleteComment.do',
-						dataType: 'json',
+						//dataType: 'json',
 						data:{id:commentId},
 						async:false,
 						success: function(result) {

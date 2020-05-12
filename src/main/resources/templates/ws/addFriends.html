@@ -96,7 +96,7 @@
 				type: 'POST',
 				url: rootUrl+'ws/showAllUser.json',
 				data:JSON.stringify(data),
-				dataType: 'json',
+				//dataType: 'json',
 				contentType:"application/json",
 				data:JSON.stringify(data),
 				async:false,
@@ -212,11 +212,11 @@
 				type: 'POST',
 				url: rootUrl+'ws/addFriend.do',
 				data:{fromUserName:curUser,toUserId:recordId},
-				dataType: 'json',
+				//dataType: 'json',
 				success: function(result) {
+					console.log("申请成功!!!!!")
 					var detail = result;
-					if (detail == "success")
-					{
+					if (detail == "success") {
 						refresh();
 					}
 				}

@@ -90,7 +90,7 @@
 				type: 'GET',
 				url: rootUrl+'ws/getMyApplyList.json',
 				data:{curUser:curUser,userLike:userLike,curPage:curPage,numPerPage:numPerPage},
-				dataType: 'json',
+				//dataType: 'json',
 				async:false,
 				success: function(result) {
 					var totalPage = result.totalPage;

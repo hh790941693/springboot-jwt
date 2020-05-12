@@ -91,7 +91,7 @@
 				type: 'GET',
 				url: rootUrl+'ws/getMyFriendsList.json',
 				data:{curUser:curUser,curPage:curPage,numPerPage:numPerPage},
-				dataType: 'json',
+				//dataType: 'json',
 				async:false,
 				success: function(result) {
 					var totalPage = result.totalPage;
@@ -185,7 +185,7 @@
 				type: 'POST',
 				url: rootUrl+'ws/deleteFriend.do',
 				data:{id:id},
-				dataType: 'json',
+				//dataType: 'json',
 				async:false,
 				success: function(result) {
 					if (result=='success'){

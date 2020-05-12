@@ -72,7 +72,7 @@
 			$.ajax({
 				type: 'GET',
 				url: rootUrl+'ws/queryAllCommonData.do',
-				dataType: 'json',
+				//dataType: 'json',
 				async:true,
 				success: function(result) {
 					var a=2
@@ -107,7 +107,7 @@
 				type: 'POST',
 				url: rootUrl+'ws/checkUserRegisterStatus.json',
 				data:{user:user},
-				dataType: 'json',
+				//dataType: 'json',
 				async:false,
 				success: function(result) {
 					var isExist = result.result;

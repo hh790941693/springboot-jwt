@@ -90,7 +90,7 @@
 				type: 'GET',
 				url: rootUrl+'ws/getFriendsApplyList.json',
 				data:{curUser:curUser,userLike:userLike,curPage:curPage,numPerPage:numPerPage},
-				dataType: 'json',
+				//dataType: 'json',
 				async:false,
 				success: function(result) {
 					var totalPage = result.totalPage;
@@ -180,7 +180,7 @@
 				type: 'POST',
 				url: rootUrl+'ws/agreeFriend.do',
 				data:{recordId:recordId},
-				dataType: 'json',
+				//dataType: 'json',
 				success: function(result) {
 					var detail = result;
 					if (detail == "success")
@@ -199,7 +199,7 @@
 				type: 'POST',
 				url: rootUrl+'ws/deagreeFriend.do',
 				data:{recordId:recordId},
-				dataType: 'json',
+				//dataType: 'json',
 				success: function(result) {
 					var detail = result;
 					if (detail == "success")

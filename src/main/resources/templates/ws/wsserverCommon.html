@@ -91,7 +91,7 @@
 				url: rootUrl+'ws/getCommonByPage.json',
 				contentType:"application/json",
 				data:JSON.stringify(data),
-				dataType: 'json',
+				//dataType: 'json',
 				async:false,
 				success: function(result) {
 					layer.closeAll('loading');
@@ -178,7 +178,7 @@
 				url: rootUrl+'ws/addCommonItem.do',
 				contentType:"application/json",
 				data:JSON.stringify(data),
-				dataType: 'json',
+				//dataType: 'json',
 				async:false,
 				success: function(result) {
 					if (result=='success'){
@@ -198,7 +198,7 @@
 				url: rootUrl+'ws/deleteCommonItem.do',
 				contentType:"application/json",
 				data:JSON.stringify(data),
-				dataType: 'json',
+				//dataType: 'json',
 				async:false,
 				success: function(result) {
 					if (result=='success'){
@@ -219,7 +219,7 @@
 				url: rootUrl+'ws/updateCommonItem.do',
 				contentType:"application/json",
 				data:JSON.stringify(data),
-				dataType: 'json',
+				//dataType: 'json',
 				async:false,
 				success: function(result) {
 					if (result=='success'){

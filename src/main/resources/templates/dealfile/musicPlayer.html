@@ -259,7 +259,7 @@
 				type:"POST",
 				url:rootUrl + "file/showFiles.do",
 				data:{user:user, fileType:fileType},
-				dataType:'json',
+				//dataType:'json',
 				success:function(result){
 					var dataList = result.dataList;
 					for (var i=0;i<dataList.length;i++){
