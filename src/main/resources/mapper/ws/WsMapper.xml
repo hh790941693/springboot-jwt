@@ -293,7 +293,7 @@
 			<if test="lastLoginTime != null">
 				LAST_LOGIN_TIME=#{lastLoginTime,jdbcType=VARCHAR},
 			</if>
-			<if test="LastLogoutTime != null">
+			<if test="lastLogoutTime != null">
 				last_logout_time=#{lastLogoutTime,jdbcType=VARCHAR},
 			</if>
 			<if test="enable != null">

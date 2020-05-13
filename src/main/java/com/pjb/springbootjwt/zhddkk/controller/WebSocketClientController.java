@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.domain.*;
+import com.pjb.springbootjwt.zhddkk.entity.*;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
@@ -33,14 +34,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
-import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
-import com.pjb.springbootjwt.zhddkk.entity.WsChatlog;
-import com.pjb.springbootjwt.zhddkk.entity.WsCircleComment;
-import com.pjb.springbootjwt.zhddkk.entity.WsCommon;
-import com.pjb.springbootjwt.zhddkk.entity.WsFriends;
-import com.pjb.springbootjwt.zhddkk.entity.WsFriendsApply;
-import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
-import com.pjb.springbootjwt.zhddkk.entity.WsUser;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
@@ -304,6 +297,7 @@ public class WebSocketClientController
 	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.REGISTER,subModule="",describe="注册账号")
 	@RequestMapping(value = "wsregister.do", method = RequestMethod.POST)
 	@ResponseBody
+    @Transactional
 	public String wsregister(Model model,@RequestParam("user")String user,@RequestParam("pass")String pass,
 			@RequestParam("confirmPass")String confirmPass,
 			@RequestParam("select1")String question1,@RequestParam("answer1")String answer1,
@@ -327,8 +321,8 @@ public class WebSocketClientController
 		}
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		// 用户不存在  则插入记录
-		WsUser insrtWu = new WsUser();
+		// 插入用户账号
+		WsUsersDO insrtWu = new WsUsersDO();
 		insrtWu.setName(user);
 		//对密码进行加密
 		String encryptPass = SecurityAESUtil.encryptAES(pass, CommonConstants.AES_PASSWORD);
@@ -341,8 +335,9 @@ public class WebSocketClientController
 		insrtWu.setAnswer2(answer2);
 		insrtWu.setQuestion3(question3);
 		insrtWu.setAnswer3(answer3);
-		wsService.insertWsUser(insrtWu);
+		wsUsersService.insert(insrtWu);
 
+		//插入注册日志
 		SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		WsChatlogDO loginLog = new WsChatlogDO();
 		loginLog.setTime(sdfx.format(new Date()));
@@ -350,6 +345,16 @@ public class WebSocketClientController
 		loginLog.setToUser("");
 		loginLog.setMsg("注册成功");
         wsChatlogService.insert(loginLog);
+
+        //插入用户profile信息
+        int userProfileCnt = wsUserProfileService.selectCount(new EntityWrapper<WsUserProfileDO>().eq("user_id", insrtWu.getId()));
+        if (userProfileCnt == 0){
+            WsUserProfileDO wsUserProfileDO = new WsUserProfileDO();
+            wsUserProfileDO.setUserId(insrtWu.getId());
+            wsUserProfileDO.setUserName(user);
+            wsUserProfileDO.setCreateTime(new Date());
+            wsUserProfileService.insert(wsUserProfileDO);
+        }
 
 		model.addAttribute("user", user);
 		model.addAttribute("pass", pass);
