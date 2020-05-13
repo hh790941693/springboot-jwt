@@ -92,6 +92,7 @@
 			var data = {};
 			data.curPage=curPage;  //当前页
 			data.numPerPage=numPerPage;  //每页显示条数
+			data.name = curUser;
 			$.ajax({
 				type: 'POST',
 				url: rootUrl+'ws/showAllUser.json',
