@@ -710,11 +710,13 @@ public class WebSocketClientController
 				}
 				wu.setIsFriend(0);
 				
-				WsFriends wf = new WsFriends();
-				wf.setUname(curUser);
-				wf.setFname(wu.getName());
-				List<WsFriends> isMyFriend = wsService.queryMyFriendsList(wf);
-				if (null != isMyFriend && isMyFriend.size()>0) {
+				//WsFriends wf = new WsFriends();
+				//wf.setUname(curUser);
+				//wf.setFname(wu.getName());
+				//List<WsFriends> isMyFriend = wsService.queryMyFriendsList(wf);
+				int isMyFriend = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>()
+                    .eq("uname", curUser).eq("fname", wu.getName()));
+				if (isMyFriend>0) {
 					wu.setIsFriend(3);//已是好友
 				}else {
 					// 0:不是  1:申请中 2:被拒绝 3:申请成功
