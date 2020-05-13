@@ -967,7 +967,7 @@ public class WebSocketClientController
 	@ResponseBody
 	public Result<Page<WsCircleDO>> queryCircleList(int curPage, int numPerPage) {
 		Page<WsCircleDO> page = new Page<WsCircleDO>(curPage, numPerPage);
-		List<WsCircleDO> circleList = wsCircleService.selectList(null);
+		List<WsCircleDO> circleList = wsCircleService.selectList(new EntityWrapper<WsCircleDO>().orderBy("create_time",false));
 		page.setRecords(circleList);
 		Map<Integer, String> headImgMap = new HashMap<>();
 		if (null != circleList && circleList.size()>0) {
@@ -981,7 +981,8 @@ public class WebSocketClientController
 
 				//头像
 				wc.setHeadImg(headImgMap.get(wc.getUserId()));
-				List<WsCircleCommentDO> commentList = wsCircleCommentService.selectList(new EntityWrapper<WsCircleCommentDO>().eq("circle_id", wc.getId()));
+				List<WsCircleCommentDO> commentList = wsCircleCommentService.selectList(new EntityWrapper<WsCircleCommentDO>().eq("circle_id", wc.getId())
+						.orderBy("create_time", false));
 				if (null == commentList) {
 					wc.setCommentList(new ArrayList<WsCircleCommentDO>());
 				}else {

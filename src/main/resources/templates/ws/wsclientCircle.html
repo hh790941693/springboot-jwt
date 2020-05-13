@@ -266,7 +266,7 @@
 									var commentText = commentObj.comment;
 									var commentCreateTime = commentObj.createTime;
 									var commentTimeResult = compareTwoTime(new Date(commentCreateTime).getTime(),new Date().getTime());
-									if (curUser == commentUserName || curUser == userName || curUser == 'admin'){
+									if (curUser == commentUserName || curUser == 'admin'){
 										htmlData += "<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>"+commentUserName+":</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>"+commentText+"</span><a href='javascript:void(0)' onclick='deleteComment("+commentId+")'>删除</a><span class='commentTimeSpanClass'>发表于"+commentTimeResult+"</span></p>";
 									}else{
 										htmlData += "<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>"+commentUserName+":</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>"+commentText+"</span><span class='commentTimeSpanClass' style='margin-left:55px;'>发表于"+commentTimeResult+"</span></p>";
