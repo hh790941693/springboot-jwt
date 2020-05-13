@@ -100,6 +100,9 @@ public class WebSocketClientController
 
     @Autowired
     private WsFriendsApplyService wsFriendsApplyService;
+
+    @Autowired
+    private WsChatlogService wsChatlogService;
 	
 	/**
 	 *客户端登录首页
@@ -341,12 +344,12 @@ public class WebSocketClientController
 		wsService.insertWsUser(insrtWu);
 
 		SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		WsChatlog loginLog = new WsChatlog();
+		WsChatlogDO loginLog = new WsChatlogDO();
 		loginLog.setTime(sdfx.format(new Date()));
 		loginLog.setUser(user);
 		loginLog.setToUser("");
 		loginLog.setMsg("注册成功");
-		wsService.insertChatlog(loginLog);
+        wsChatlogService.insert(loginLog);
 
 		model.addAttribute("user", user);
 		model.addAttribute("pass", pass);
