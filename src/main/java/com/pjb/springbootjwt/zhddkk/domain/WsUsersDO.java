@@ -30,17 +30,17 @@ public class WsUsersDO implements Serializable {
     @ApiModelProperty(value = "password",name = "密码")
     private String password;
     //注册时间
-    @ApiModelProperty(value = "registertime",name = "注册时间")
-    private String registertime;
+    @ApiModelProperty(value = "registerTime",name = "注册时间")
+    private String registerTime;
     //是否在线 0:离线 1:在线
     @ApiModelProperty(value = "state",name = "是否在线 0:离线 1:在线")
     private String state;
     //上次登录时间
-    @ApiModelProperty(value = "lastlogintime",name = "上次登录时间")
-    private String lastlogintime;
+    @ApiModelProperty(value = "lastLoginTime",name = "上次登录时间")
+    private String lastLoginTime;
     //上次登出时间
-    @ApiModelProperty(value = "lastlogouttime",name = "上次登出时间")
-    private String lastlogouttime;
+    @ApiModelProperty(value = "lastLogoutTime",name = "上次登出时间")
+    private String lastLogoutTime;
     //是否可用 0:不可用  1:可用
     @ApiModelProperty(value = "enable",name = "是否可用 0:不可用  1:可用")
     private String enable;
@@ -96,16 +96,6 @@ public class WsUsersDO implements Serializable {
         return password;
     }
 
-
-    public void setRegistertime(String registertime) {
-        this.registertime = registertime;
-    }
-
-    public String getRegistertime() {
-        return registertime;
-    }
-
-
     public void setState(String state) {
         this.state = state;
     }
@@ -113,25 +103,6 @@ public class WsUsersDO implements Serializable {
     public String getState() {
         return state;
     }
-
-
-    public void setLastlogintime(String lastlogintime) {
-        this.lastlogintime = lastlogintime;
-    }
-
-    public String getLastlogintime() {
-        return lastlogintime;
-    }
-
-
-    public void setLastlogouttime(String lastlogouttime) {
-        this.lastlogouttime = lastlogouttime;
-    }
-
-    public String getLastlogouttime() {
-        return lastlogouttime;
-    }
-
 
     public void setEnable(String enable) {
         this.enable = enable;
@@ -213,4 +184,27 @@ public class WsUsersDO implements Serializable {
         return createTime;
     }
 
+    public String getRegisterTime() {
+        return registerTime;
+    }
+
+    public void setRegisterTime(String registerTime) {
+        this.registerTime = registerTime;
+    }
+
+    public String getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(String lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public String getLastLogoutTime() {
+        return lastLogoutTime;
+    }
+
+    public void setLastLogoutTime(String lastLogoutTime) {
+        this.lastLogoutTime = lastLogoutTime;
+    }
 }

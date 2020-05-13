@@ -6,9 +6,10 @@
 		<result column="ID" jdbcType="INTEGER" property="id" />
 		<result column="NAME" jdbcType="VARCHAR" property="name" />
 		<result column="PASSWORD" jdbcType="VARCHAR" property="password" />
-		<result column="REGISTERTIME" jdbcType="VARCHAR" property="registerTime" />
+		<result column="REGISTER_TIME" jdbcType="VARCHAR" property="registerTime" />
 		<result column="STATE" jdbcType="VARCHAR" property="state" />
-		<result column="LASTLOGINTIME" jdbcType="VARCHAR" property="lastLoginTime" />
+		<result column="LAST_LOGIN_TIME" jdbcType="VARCHAR" property="lastLoginTime" />
+		<result column="LAST_LOGOUT_TIME" jdbcType="VARCHAR" property="lastLogoutTime" />
 		<result column="ENABLE" jdbcType="VARCHAR" property="enable" />
 		<result column="SPEAK" jdbcType="VARCHAR" property="speak" />
 		<result column="QUESTION1" jdbcType="VARCHAR" property="question1" />
@@ -41,7 +42,7 @@
   	<if test="speak != null">
   		and SPEAK=#{speak}
   	</if>
-  	order by LASTLOGINTIME
+  	order by LAST_LOGIN_TIME
   </select>
   
   <select id="queryWsUserCount" parameterType="com.pjb.springbootjwt.zhddkk.entity.WsUser" resultType="java.lang.Integer">
@@ -49,7 +50,7 @@
   </select>
   
   <select id="queryWsUserByPage" resultMap="wsUserResultMap" parameterType="map">
-  	select * from ws_users where 1=1 and name != 'admin' order by lastlogintime desc limit #{start},#{limit}
+  	select * from ws_users where 1=1 and name != 'admin' order by last_login_time desc limit #{start},#{limit}
   </select>
   
   	<resultMap id="wsChatLogResultMap" type="com.pjb.springbootjwt.zhddkk.entity.WsChatlog">
@@ -83,13 +84,13 @@
   
    <!--批量往表crossing插入记录 -->
    <insert id="insertWsUser" parameterType="com.pjb.springbootjwt.zhddkk.entity.WsUser">
-		insert into ws_users(NAME,PASSWORD,REGISTERTIME,LASTLOGINTIME,LastLogoutTime,question1,answer1,question2,answer2,question3,answer3)
+		insert into ws_users(NAME,PASSWORD,REGISTER_TIME,LAST_LOGIN_TIME,last_logout_time,question1,answer1,question2,answer2,question3,answer3)
 		values (
 				#{name},
 				#{password},
 				#{registerTime},
 				#{lastLoginTime},
-				#{LastLogoutTime},
+				#{lastLogoutTime},
 				#{question1},
 				#{answer1},
 				#{question2},
@@ -284,16 +285,16 @@
 				PASSWORD=#{password},
 			</if>
 			<if test="registerTime != null">
-				REGISTERTIME=#{registerTime,jdbcType=VARCHAR},
+				REGISTER_TIME=#{registerTime,jdbcType=VARCHAR},
 			</if>
 			<if test="state != null">
 				STATE=#{state,jdbcType=VARCHAR},
 			</if>
 			<if test="lastLoginTime != null">
-				LASTLOGINTIME=#{lastLoginTime,jdbcType=VARCHAR},
+				LAST_LOGIN_TIME=#{lastLoginTime,jdbcType=VARCHAR},
 			</if>
 			<if test="LastLogoutTime != null">
-				LastLogoutTime=#{LastLogoutTime,jdbcType=VARCHAR},
+				last_logout_time=#{lastLogoutTime,jdbcType=VARCHAR},
 			</if>
 			<if test="enable != null">
 				ENABLE=#{enable,jdbcType=VARCHAR},

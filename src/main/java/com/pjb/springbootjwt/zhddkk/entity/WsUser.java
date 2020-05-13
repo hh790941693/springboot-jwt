@@ -44,7 +44,7 @@ public class WsUser extends Page
 	private String lastLoginTime;
 	
 	// 最近一次离线时间
-	private String LastLogoutTime;
+	private String lastLogoutTime;
 	
 	// 账号是否被禁用     0:禁用    1:可用
 	@Excel(name = "禁用状态",orderNum = "6",width=10,replace={"禁用_0","正常_1"})
@@ -174,15 +174,7 @@ public class WsUser extends Page
 	public void setAnswer3(String answer3) {
 		this.answer3 = answer3;
 	}
-	
-	public String getLastLogoutTime() {
-		return LastLogoutTime;
-	}
 
-	public void setLastLogoutTime(String lastLogoutTime) {
-		LastLogoutTime = lastLogoutTime;
-	}
-	
 	public String getSpeak() {
 		return speak;
 	}
@@ -231,12 +223,36 @@ public class WsUser extends Page
 		this.passwordDecode = passwordDecode;
 	}
 
+	public String getLastLogoutTime() {
+		return lastLogoutTime;
+	}
+
+	public void setLastLogoutTime(String lastLogoutTime) {
+		this.lastLogoutTime = lastLogoutTime;
+	}
+
 	@Override
 	public String toString() {
-		return "WsUser [id=" + id + ", name=" + name + ", password=" + password + ", registerTime=" + registerTime
-				+ ", state=" + state + ", lastLoginTime=" + lastLoginTime + ", LastLogoutTime=" + LastLogoutTime
-				+ ", enable=" + enable + ", speak=" + speak + ", question1=" + question1 + ", question2=" + question2
-				+ ", question3=" + question3 + ", answer1=" + answer1 + ", answer2=" + answer2 + ", answer3=" + answer3
-				+ ", createTime=" + createTime + ", createTimeStr=" + createTimeStr + ", isFriend=" + isFriend + "]";
+		return "WsUser{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", password='" + password + '\'' +
+				", passwordDecode='" + passwordDecode + '\'' +
+				", registerTime='" + registerTime + '\'' +
+				", state='" + state + '\'' +
+				", lastLoginTime='" + lastLoginTime + '\'' +
+				", lastLogoutTime='" + lastLogoutTime + '\'' +
+				", enable='" + enable + '\'' +
+				", speak='" + speak + '\'' +
+				", question1='" + question1 + '\'' +
+				", question2='" + question2 + '\'' +
+				", question3='" + question3 + '\'' +
+				", answer1='" + answer1 + '\'' +
+				", answer2='" + answer2 + '\'' +
+				", answer3='" + answer3 + '\'' +
+				", createTime=" + createTime +
+				", createTimeStr='" + createTimeStr + '\'' +
+				", isFriend=" + isFriend +
+				'}';
 	}
 }
