@@ -26,27 +26,27 @@
 		<input type="hidden" th:value="${dicJson}" id="dicJson">
 		<form style="margin:10px 5px;" id="registerForm" action="wsregister.do" method="post" target="hidden_frame">
 			<div>
-				<span>用户名:</span><input id="user" name="user" type="text"></input>
+				<span>用户名:</span><input id="user" name="user" type="text" autocomplete="off"></input>
 			</div>
 			<div>
-				<span>密码:</span><input id="pass" name="pass" type="password" ></input>
+				<span>密码:</span><input id="pass" name="pass" type="password" autocomplete="off"></input>
 				<br/>
-				<span>确认密码:</span><input id="confirmPass" name="confirmPass" type="password"></input>
+				<span>确认密码:</span><input id="confirmPass" name="confirmPass" type="password" autocomplete="off"></input>
 				<br/>
 				<span>问题1:</span><select id="select1"  name="select1">
 				</select>
 				<br/>
-				<span>你的答案</span><input id="answer1" name="answer1"></input>
+				<span>你的答案</span><input id="answer1" name="answer1" autocomplete="off"></input>
 				<br/>
 				<span>问题2:</span><select id="select2"  name="select2">
 				</select>
 				<br/>
-				<span>你的答案</span><input id="answer2" name="answer2"></input>
+				<span>你的答案</span><input id="answer2" name="answer2" autocomplete="off"></input>
 				<br/>
 				<span>问题3:</span><select id="select3" name="select3">
 				</select>
 				<br/>
-				<span>你的答案</span><input id="answer3" name="answer3"></input>
+				<span>你的答案</span><input id="answer3" name="answer3" autocomplete="off"></input>
 				
 			</div>
 			<div align="left" style="margin-top:10px;margin-left:130px;">
