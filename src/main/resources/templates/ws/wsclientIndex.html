@@ -3,10 +3,11 @@
 	<title>WebSocket客户端</title>
     <style type="text/css">
         #headerDiv{
-            width:1320px;
+            width:1308px;
             height:55px;
             font-weight:bold;
             margin:1px auto;
+			border: 2px solid green;
         }
 
         #btnDiv button{
@@ -121,10 +122,10 @@
 			你好:<label id="curUser" th:text="${user}" style="color:blue;font-size:30px;"></label>
 			<span id="curTimeSpan">0000-00-00 00:00:00</span>
 		</div>
-		<div style="float:left;margin-left:300px;font-size:30px;">
+		<div style="float:left;font-size:30px;width:62%;">
 			<label id="titleLabel" style="color:black;"></label>
 		</div>
-		<div id="btnDiv" style="float:right">
+		<div id="btnDiv" style="float:left">
 			<button id="showQRCodeBtn" class='btn btn-sm btn-primary'>查看二维码</button>
 			<button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
 		</div>
