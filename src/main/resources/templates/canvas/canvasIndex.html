@@ -6,12 +6,9 @@
 	ul li{
 		list-style: none;
 	    height: 25px;
-	    width: 120px;
-	    font-size: 20px;
+	    width: 100%;
+	    font-size: 17px;
 	    font-weight: bold;
-	    margin-left: 1px;
-	    padding-top: 5px;
-	    padding-bottom: 5px;
 	    cursor: pointer;
 	}
 	ul a{
@@ -34,7 +31,7 @@
 </head>
 <body>
 	<div style="width:1060px;height:650px;margin:2px auto;">
-		<div id="leftNavi" style="width:158px;height:100%;float:left;border:2px solid green;overflow-y: scroll">
+		<div id="leftNavi" style="width:154px;height:100%;float:left;border:2px solid green;overflow-y: scroll;text-align: center">
 			<ul>
 				<li id="../canvas/starts.page" class='mouseleftclick'>太阳系</li>
 				<li id="../canvas/collision.page" >碰撞球</li>
@@ -63,8 +60,8 @@
 			</ul>
 		</div>
 		
-		<div id="diffPage" align="center" style="width:896px;height:100%;float:right;border:2px solid green">
-			<iframe id="iframePage" width="890px" height="95%" ></iframe>
+		<div id="diffPage" align="center" style="width:890px;height:100%;float:right;border:2px solid green">
+			<iframe id="iframePage" width="100%" height="95%" ></iframe>
 			<div>
 				<button id="showNewWindowBtn">全屏显示</button>
 				<button id="backBtn" style='display:none'>返&nbsp;&nbsp;&nbsp;&nbsp;回</button>

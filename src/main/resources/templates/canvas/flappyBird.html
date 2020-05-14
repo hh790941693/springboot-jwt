@@ -8,12 +8,20 @@
 			body{
 				margin:0;
 			}
+
+			#mainDiv{
+				width:804px;
+				height:504px;
+				margin:3px auto;
+			}
 		</style>
 	</head> 
 	<body>
-		<canvas id="canvas" style="background:#000">
-			你的浏览器不支持canvas标签
-		</canvas>
+		<div id="mainDiv">
+			<canvas id="canvas" style="background:#000;">
+				你的浏览器不支持canvas标签
+			</canvas>
+		</div>
 		<div th:include="common::footer"></div>
 	</body>
 	<script type="text/javascript">	

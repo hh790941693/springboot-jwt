@@ -6,11 +6,10 @@
 	ul li{
 		list-style:none;
 		height:40px;
-		width:130px;
+		width:100%;
 		font-size:20px;
 		font-weight:bold;
-		margin-left:8px;
-		padding-top:15px;
+		padding-top: 8px;
 		cursor:pointer;
 	}
 	ul a{
@@ -33,7 +32,7 @@
 </head>
 <body>
 	<div style="width:1054px;height:640px;margin:2px auto;">
-		<div id="leftNavi" style="width:160px;height:100%;float:left;border:2px solid green">
+		<div id="leftNavi" style="width:173px;height:100%;float:left;border:2px solid green;text-align: center">
 			<ul>
 				<li id="../game/snake.page" onclick="$('#iframePage').attr('src',this.id)">贪吃蛇</li>
 				<li id="../game/plane.page" onclick="$('#iframePage').attr('src',this.id)">飞机大战</li>
@@ -44,7 +43,7 @@
 			</ul> 
 		</div>
 		
-		<div id="diffPage" align="center" style="width:880px;height:100%;float:right;border:2px solid green;margin-left:5px;">
+		<div id="diffPage" align="center" style="width:880px;height:100%;float:right;border:2px solid green;">
 			<iframe id="iframePage" width="100%" height="100%" ></iframe>
 			<div>
 				<button id="showNewWindowBtn">全屏显示</button>
