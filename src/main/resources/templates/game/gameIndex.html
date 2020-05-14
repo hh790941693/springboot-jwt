@@ -32,7 +32,7 @@
 </head>
 <body>
 	<div style="width:1054px;height:595px;margin:2px auto;">
-		<div id="leftNavi" style="width:173px;height:100%;float:left;border:2px solid green;text-align: center">
+		<div id="leftNavi" style="width:173px;height:595px;float:left;border:2px solid green;text-align: center;position: relative;">
 			<ul>
 				<li id="../game/snake.page" onclick="$('#iframePage').attr('src',this.id)">贪吃蛇</li>
 				<li id="../game/plane.page" onclick="$('#iframePage').attr('src',this.id)">飞机大战</li>
@@ -40,15 +40,16 @@
 				<li id="../game/trafficSignal.page" onclick="$('#iframePage').attr('src',this.id)">交通信号灯</li>
 				<li id="../game/russia.page" onclick="$('#iframePage').attr('src',this.id)">俄罗斯方块</li>
 				<li id="../game/myrussia.page" onclick="$('#iframePage').attr('src',this.id)">俄罗斯方块2</li>
-			</ul> 
+			</ul>
+
+			<div style="position: absolute;bottom: 10px;left:52px;">
+				<button id="showNewWindowBtn">全屏显示</button>
+				<button id="backBtn" style='display:none'>返&nbsp;&nbsp;&nbsp;&nbsp;回</button>
+			</div>
 		</div>
 		
 		<div id="diffPage" align="center" style="width:880px;height:100%;float:right;border:2px solid green;">
 			<iframe id="iframePage" width="100%" height="100%" ></iframe>
-			<div style="display: none">
-				<button id="showNewWindowBtn">全屏显示</button>
-				<button id="backBtn" style='display:none'>返&nbsp;&nbsp;&nbsp;&nbsp;回</button>
-			</div>
 		</div>
 	</div>
     <div th:include="common :: footer"></div>
