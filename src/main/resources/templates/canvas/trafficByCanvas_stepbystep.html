@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
+	<meta charset="utf-8">
+	<title></title>
+
+	<style type="text/css">
+		.wallClass1,.wallClass2,.wallClass3,.wallClass4{
+		}
+
+		.signal11,.signal12,.signal13,.signal21,.signal22,.signal23,.signal31,.signal32,.signal33,.signal41,.signal42,.signal43{
+			border-radius:50%;
+		}
+		.signalTimer1,.signalTimer2,.signalTimer3,.signalTimer4{
+		}
+
+		.redClass{
+			background-color:rgb(255,0,0);
+		}
+
+		.yellowClass{
+			background-color:rgb(255,255,0);
+		}
+
+		.greenClass{
+			background-color:rgb(0,255,0);
+		}
+
+		.roadBaseClass{
+			background-color:#666665;
+		}
+
+		.bmxClass1,.bmxClass3{
+			background-color:#666665;
+		}
+
+		.bmxClass4,.bmxClass2{
+			background-color:#666665;
+		}
+
+		.carWaitClass4,.carWaitClass2,.carWaitClass1,.carWaitClass3{
+		}
+
+		.manWaitClass4,.manWaitClass2,.manWaitClass1,.manWaitClass3{
+			background-color:yellow;
+		}
+
+		.roadDirectionClass1,.roadDirectionClass3,.roadDirectionClass4,.roadDirectionClass2{
+		}
+
+		.carClass1,.carClass2,.carClass3,.carClass4,.carClass5,.carClass6,.carClass7,.carClass8,.carClass9,.carClass10{
+			background-repeat: no-repeat;
+			background-size:25px 25px;
+			z-index:99;
+		//transform:rotate(270deg);
+		}
+
+		.carClass11,.carClass12,.carClass13,.carClass14,.carClass15,.carClass16,.carClass17,.carClass18,.carClass19,.carClass20{
+			background-repeat: no-repeat;
+			background-size:25px 25px;
+			z-index:99;
+		//transform:rotate(270deg);
+		}
+
+		.manClass1,.manClass2,.manClass3,.manClass4,.manClass5,.manClass6,.manClass7,.manClass8,.manClass9,.manClass10{
+			background-repeat: no-repeat;
+			background-size:25px 25px;
+		}
+		.manClass11,.manClass12,.manClass13,.manClass14,.manClass15,.manClass16,.manClass17,.manClass18,.manClass19,.manClass20{
+			background-repeat: no-repeat;
+			background-size:25px 25px;
+		}
+	</style>
+</head>
+<body>
+<div id="gameMainDiv" style="width:840px;height:554px;border:2px solid green;margin:1px auto;padding:10px;">
+	<div id="borderDiv" style="width:710px;height:550px;float:left;margin-left:1px;">
+	</div>
+	<div id="infoDiv" style="width:125px;height:130px;float:right;border:1px solid green">
+		<span>车辆总数:</span>&nbsp;&nbsp;<span id="totalCar">0</span>
+		<br/>
+		<span>行人总数:</span>&nbsp;&nbsp;<span id="totalMan">0</span>
+	</div>
+	<div th:include="common::footer"></div>
+</div>
+
+</body>
+<script type="text/javascript">
+	$("body[class^='manClass']").css("background-image", rootUrl+"img/man.jpg");
+	$("body[class^='carClass']").css("background-image", rootUrl+"img/car.jpg");
+
+	// 初始化网格
+	var ROW_MAX = 20;
+	var COL_MAX = 26;
+
+	// 每个div的宽高度
+	var DIV_WIDTH = 25
+	var DIV_HEIGHT = 25;
+
+	// 车道朝向位置
+	var NORTH=1,EAST=2,SOUTH=3,WEST=4;
+	// 车道方向位置    直行,左转,右转
+	var LEFT=1,STRAIGHT=2,RIGHT=3;
+
+	var SIGNAL_CLASS_PREFIX = "signal";
+	var SIGNAL_TIMER_PREFIX = "signalTimer";
+
+	var RED = 1;
+	var GREEN = 2;
+	var YELLOW = 3;
+
+	var NS_RED_TIME = 10; //北,南方红灯时间
+	var WE_RED_TIME = 10; //西,东方红灯时间
+
+	var SOUTH_TO_NORTH=1,EAST_TO_WEST=2,NORTH_TO_SOUTH=3,WEST_TO_EAST=4;
+
+	// 最大车辆数
+	var MAX_CAR_NUM=11;
+	// 最大行人数
+	var MAX_MAN_NUM=10;
+
+	// 行人速度  单位:毫秒
+	var MAN_WALK_SPEED = 300;
+	// 汽车行驶速度
+	var CAR_RUN_SPEED = 250;
+	// 面板中是否显示div的id
+	var SHOW_DIVID = false;
+
+	//--------------------------------暂时不用------------------------------------------------
+	// 墙的标识
+	var TOP_WALL=01,RIGHT_WALL=02,BOTTOM_WALL=03,LEFT_WALL=04;
+
+	//道路标识
+	var BASIC_ROAD=05;
+
+	// 信号灯标识
+	var WEST_STRAIGHT_LIGHT=10,  WEST_LEFT_LIGHT=11,  WEST_RIGHT_LIGHT=12,  WEST_LEFT_SHOW=13;
+	var EAST_STRAIGHT_LIGHT=20,  EAST_LEFT_LIGHT=21,  EAST_RIGHT_LIGHT=22,  EAST_LEFT_SHOW=23;
+	var NORTH_STRAIGHT_LIGHT=30, NORTH_LEFT_LIGHT=31, NORTH_RIGHT_LIGHT=32, NORTH_LEFT_SHOW=33;
+	var SOUTH_STRAIGHT_LIGHT=40, SOUTH_LEFT_LIGHT=41, SOUTH_RIGHT_LIGHT=42, SOUTH_LEFT_SHOW=43;
+
+	// 斑马线标识
+	var WEST_ZEBRA=50,EAST_ZEBRA=51,NORTH_ZEBRA=52,SOUTH_ZEBRA=53;
+	// 汽车等待区域标识
+	var WEST_CAR_WAIT=54,EAST_CAR_WAIT=55,NORTH_CAR_WAIT=56,SOUTH_CAR_WAIT=57;
+	// 行人等待区域标识
+	var WEST_MAN_WAIT=66,EAST_MAN_WAIT=67,NORTH_MAN_WAIT=68,SOUTH_MAN_WAIT=69;
+
+
+	// 直行,左转,右转路线
+	var WEST_STRAIGHT_MAP=60,WEST_LEFT_MAP=61,WEST_RIGHT_MAP=62;
+	var WEST_STRAIGHT_MAP=70,WEST_LEFT_MAP=71,WEST_RIGHT_MAP=72;
+	var WEST_STRAIGHT_MAP=80,WEST_LEFT_MAP=81,WEST_RIGHT_MAP=82;
+	var WEST_STRAIGHT_MAP=90,WEST_LEFT_MAP=91,WEST_RIGHT_MAP=92;
+	//--------------------------------暂时不用------------------------------------------------
+
+	//面板				  1		2		3	  4	     5      6      7      8      9      10     11     12     13     14     15      16    17    18      19     20     21     22     23     24    25      26
+	//1	var arrTmp = [[010000,010000,010000,010000,010000,010000,010000,010000,010000,010000,010000,010000,010000,013100,013000,013200,013300,010000,010000,010000,010000,010000,010000,010000,010000,010000],
+	//2               [040000,000000,000000,000000,000000,000000,000000,000000,000000,000000,050000,050000,050000,050000,050000,050000,000000,000000,000000,000000,000000,000000,000000,000000,000000,020000],
+	//3               [040000,000000,000000,000000,000000,000000,000000,000000,000000,000000,050000,050000,050000,050000,050000,050000,000000,000000,000000,000000,000000,000000,000000,000000,000000,020000],
+	//4               [040000,000000,000000,000000,000000,000000,000000,000000,000000,000000,050000,050000,050000,050000,050000,050000,000000,000000,000000,000000,000000,000000,000000,000000,000000,020000],
+	//5               [040000,000000,000000,000000,000000,000000,000000,000000,000000,000000,050000,050000,050000,050000,050000,050000,000000,000000,000000,000000,000000,000000,000000,000000,000000,020000],
+	//6               [041300,000000,000000,000000,000000,000000,000000,000000,000000,000000,050000,050000,050000,050000,050000,050000,000000,000000,000000,000000,000000,000000,000000,000000,000000,020000],
+	//7               [041200,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,020000],
+	//8               [041000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,020000],
+	//9               [041100,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,020000],
+	//10              [040000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,022100],
+	//11              [040000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,022000],
+	//12              [040000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,050000,022200],
+	//13              [040000,000000,000000,000000,000000,000000,000000,000000,000000,000000,050000,050000,050000,050000,050000,050000,000000,000000,000000,000000,000000,000000,000000,000000,000000,022300],
+	//14              [040000,000000,000000,000000,000000,000000,000000,000000,000000,000000,050000,050000,050000,050000,050000,050000,000000,000000,000000,000000,000000,000000,000000,000000,000000,020000],
+	//15              [040000,000000,000000,000000,000000,000000,000000,000000,000000,000000,050000,050000,050000,050000,050000,050000,000000,000000,000000,000000,000000,000000,000000,000000,000000,020000],
+	//16              [040000,000000,000000,000000,000000,000000,000000,000000,000000,000000,050000,050000,050000,050000,050000,050000,000000,000000,000000,000000,000000,000000,000000,000000,000000,020000],
+	//17              [040000,000000,000000,000000,000000,000000,000000,000000,000000,000000,050000,050000,050000,050000,050000,050000,000000,000000,000000,000000,000000,000000,000000,000000,000000,020000],
+	//18              [040000,000000,000000,000000,000000,000000,000000,000000,000000,000000,050000,050000,050000,050000,050000,050000,000000,000000,000000,000000,000000,000000,000000,000000,000000,020000],
+	//19              [030000,030000,030000,030000,030000,030000,030000,030000,030000,034300,034200,034000,034100,030000,030000,030000,030000,030000,030000,030000,030000,030000,030000,030000,030000,030000]
+	//		];
+
+	//-------------------------------------------------------------------
+
+	// 初始化面板
+	initPanel();
+
+	// 初始化道路、信号灯位置
+	initRoad();
+
+	initRoadDirection();
+
+	// 初始化红绿灯位置
+	initLight();
+
+	// 初始化斑马线
+	initBmx();
+
+	//初始化汽车等待区域
+	initCarWaitingZone();
+
+	// 初始化行人等待区域
+	initManWatingZone();
+
+	// 启动红绿黄灯
+	initRGYLamp();
+
+	// 汽车,行人定时任务开启
+	mainInterval();
+
+	setInterval(function(){
+		var carClasses = $("#borderDiv div[class*=carClass]");
+		$("#totalCar").text(carClasses.length);
+
+		var manClasses = $("#borderDiv div[class*=manClass]");
+		$("#totalMan").text(manClasses.length);
+	},300);
+
+	function mainInterval(){
+		var mainTimer = setInterval(function(){
+			var direct = randomNumber(1,4);
+			var roadType = randomNumber(1,3);
+			var manRoadIndex = randomNumber(0,1);
+
+			// 南北方向道路所在列
+			var startCol = parseInt((COL_MAX-6)/2)+1;
+			var endCol = startCol+6-1;
+
+			// 西东方向道路所在列
+			var startRow = parseInt((ROW_MAX-6)/2)+1;
+			var endRow = startRow+6-1;
+
+			var carWaitArr = null;
+			var manWaitArr = null;
+			if (direct == SOUTH_TO_NORTH){
+				// 南-北
+				if (roadType == LEFT){
+					carWaitArr = getPolyRange(endRow+3,ROW_MAX-1,endCol-2,endCol-2);
+				}else if (roadType == STRAIGHT){
+					carWaitArr = getPolyRange(endRow+3,ROW_MAX-1,endCol-1,endCol-1);
+				}else if (roadType == RIGHT){
+					carWaitArr = getPolyRange(endRow+3,ROW_MAX-1,endCol,endCol);
+				}
+				manWaitArr = getPolyRange(ROW_MAX-1,ROW_MAX-1,endCol+1,endCol+2);
+
+
+				var firstDivId = carWaitArr[carWaitArr.length-1];
+				if (hasClassLike(firstDivId,"carClass")){
+					return;
+				}else{
+					carTimerInterval(direct, roadType, firstDivId,null,true);
+
+				}
+
+				// 生成一个人
+				manTimerInterval(direct,manWaitArr[manRoadIndex],true);
+
+			}else if (direct == NORTH_TO_SOUTH){
+				// 北-南
+				if (roadType == LEFT){
+					carWaitArr = getPolyRange(2,startRow-3,startCol+2,startCol+2);
+				}else if (roadType == STRAIGHT){
+					carWaitArr = getPolyRange(2,startRow-3,startCol+1,startCol+1);
+				}else if (roadType == RIGHT){
+					carWaitArr = getPolyRange(2,startRow-3,startCol,startCol);
+				}
+				manWaitArr = getPolyRange(2,2,startCol-2,startCol-1);
+
+				var firstDivId = carWaitArr[0];
+				if (hasClassLike(firstDivId,"carClass")){
+					return;
+				}else{
+					carTimerInterval(direct, roadType, firstDivId,null,true);
+				}
+
+				// 生成一个人
+				manTimerInterval(direct,manWaitArr[manRoadIndex],true);
+			}else if (direct == WEST_TO_EAST){
+				// 西-东
+				if (roadType == LEFT){
+					carWaitArr = getPolyRange(endRow-2,endRow-2,2,startCol-3);
+				}else if (roadType == STRAIGHT){
+					carWaitArr = getPolyRange(endRow-1,endRow-1,2,startCol-3);
+				}else if (roadType == RIGHT){
+					carWaitArr = getPolyRange(endRow,endRow,2,startCol-3);
+				}
+				manWaitArr = getPolyRange(endRow+1,endRow+2,2,2);
+
+				var firstDivId = carWaitArr[0];
+				if (hasClassLike(firstDivId,"carClass")){
+					return;
+				}else{
+					carTimerInterval(direct, roadType, firstDivId,null,true);
+				}
+
+				// 生成一个人
+				manTimerInterval(direct,manWaitArr[manRoadIndex],true);
+			}else if (direct == EAST_TO_WEST){
+				// 东-西
+				if (roadType == LEFT){
+					carWaitArr = getPolyRange(startRow+2,startRow+2,endCol+3,COL_MAX-1);
+				}else if (roadType == STRAIGHT){
+					carWaitArr = getPolyRange(startRow+1,startRow+1,endCol+3,COL_MAX-1);
+				}else if (roadType == RIGHT){
+					carWaitArr = getPolyRange(startRow,startRow,endCol+3,COL_MAX-1);
+				}
+				manWaitArr = getPolyRange(startRow-2,startRow-1,COL_MAX-1,COL_MAX-1);
+
+				var firstDivId = carWaitArr[carWaitArr.length-1];
+				if (hasClassLike(firstDivId,"carClass")){
+					return;
+				}else{
+					carTimerInterval(direct, roadType, firstDivId,null,true);
+				}
+
+				// 生成一个人
+				manTimerInterval(direct,manWaitArr[manRoadIndex],true);
+			}
+
+		},2000);
+	}
+
+	// 新增一辆汽车   direciton道路东南西北朝向      roadType:直行,左转,右转   gps:     carId:汽车编号    isFirstRun是否是第一次运行
+	function carTimerInterval(direciton,roadType,gps,carId,isFirstRun){
+
+		function up(gpsTmp){
+			return gpsTmp-COL_MAX;
+		}
+
+		function down(gpsTmp){
+			return gpsTmp+COL_MAX;
+		}
+
+		function left(gpsTmp){
+			return gpsTmp-1;
+		}
+
+		function right(gpsTmp){
+			return gpsTmp+1;
+		}
+
+		var curGps = gps;
+		var nextGps = null;
+		var preGps = null;
+
+		var totalCarNum = $("#borderDiv div[class*='carClass']");
+
+		if (totalCarNum.length > 11){
+			return;
+		}
+
+		if (carId == null){
+			carId = totalCarNum.length+1;
+		}
+
+		//var nextGps = null;
+		var carTimer = setInterval(function(){
+			if (direciton == SOUTH_TO_NORTH){
+				if (isFirstRun){
+					if (hasClassLike(curGps,"carClass")){
+						console.log(curGps+" 当前位置有车辆,本次定时任务不做什么");
+						return;
+					}
+				}
+
+				nextGps = up(curGps);
+				preGps = down(curGps);
+
+				var jiaodu = "rotate(270deg)";
+				// 南-北
+				if (roadType == LEFT){
+					if ($("#"+curGps).hasClass("roadDirectionClass"+EAST_TO_WEST) && $("#"+curGps).hasClass("roadDirectionClass"+SOUTH_TO_NORTH)){
+						nextGps = left(curGps);
+						preGps = down(curGps);
+						jiaodu = "rotate(180deg)";
+					}else if ($("#"+curGps).hasClass("roadDirectionClass"+EAST_TO_WEST)){
+						nextGps = left(curGps);
+						preGps = right(curGps);
+						jiaodu = "rotate(180deg)";
+					}
+				}else if (roadType == STRAIGHT){
+					//noting to do
+				}else if (roadType == RIGHT){
+					if ($("#"+curGps).hasClass("roadDirectionClass"+WEST_TO_EAST) && $("#"+curGps).hasClass("roadDirectionClass"+SOUTH_TO_NORTH)){
+						nextGps = right(curGps);
+						preGps = down(curGps);
+						jiaodu = "rotate(90deg)";
+					}else if ($("#"+curGps).hasClass("roadDirectionClass"+WEST_TO_EAST)){
+						nextGps = right(curGps);
+						preGps = left(curGps);
+						jiaodu = "rotate(90deg)";
+					}
+				}
+
+				$("#"+preGps).removeClass("carClass"+carId);
+				$("#"+curGps).addClass("carClass"+carId);
+				//$("#"+curGps).css("transform",jiaodu);
+
+				// 判断下一步是否撞墙了
+				if ($("#"+nextGps).hasClass("wallClass"+NORTH) || $("#"+nextGps).hasClass("wallClass"+SOUTH)
+						|| $("#"+nextGps).hasClass("wallClass"+EAST)
+						|| $("#"+nextGps).hasClass("wallClass"+WEST) ){
+					$("#"+curGps).removeClass("carClass"+carId);
+					clearInterval(carTimer);
+					return;
+				}
+
+				// 如果当前位置是候车区  下一个位置是斑马线
+				if ($("#"+nextGps).hasClass("bmxClass"+WEST_TO_EAST) && $("#"+curGps).hasClass("carWaitClass"+SOUTH_TO_NORTH) ){
+					// 判断红绿灯
+					var lightClassName = SIGNAL_CLASS_PREFIX + NORTH + roadType;
+					var rgbColor = $("."+lightClassName).css("background-color");
+					var color = convertRgb(rgbColor);
+					if (color == RED){
+						console.log(curGps+":汽车等候区,"+nextGps+":有斑马线,当前是红灯");
+						return;
+					}
+				}
+
+				// 如果当前位置是斑马线  下一个位置也是斑马线
+				if ($("#"+curGps).hasClass("bmxClass"+WEST_TO_EAST) && $("#"+nextGps).hasClass("bmxClass"+WEST_TO_EAST) ){
+					// noting to do;
+				}
+
+				// 如果当前位置是斑马线  下一个位置不是斑马线
+				if ($("#"+curGps).hasClass("bmxClass"+WEST_TO_EAST) && !$("#"+nextGps).hasClass("bmxClass"+WEST_TO_EAST) ){
+					// noting to do;
+				}
+
+				// 判断下一步是否有人
+				if (hasClassLike(nextGps,"manClass")){
+					return;
+				}
+
+				if (hasClassLike(nextGps,"carClass")){
+					// 判断前面是否有车
+					return;
+				}
+
+				curGps = nextGps;
+			}else if (direciton == NORTH_TO_SOUTH){
+				if (isFirstRun){
+					if (hasClassLike(curGps,"carClass", carId)){
+						console.log(curGps+" 当前位置有车辆,本次定时任务不做什么");
+						return;
+					}
+				}
+
+				nextGps = down(curGps);
+				preGps = up(curGps);
+
+				var jiaodu = "rotate(270deg)";
+				// 南-北
+				if (roadType == LEFT){
+					if ($("#"+curGps).hasClass("roadDirectionClass"+NORTH_TO_SOUTH) && $("#"+curGps).hasClass("roadDirectionClass"+WEST_TO_EAST)){
+						nextGps = right(curGps);
+						preGps = up(curGps);
+					}else if ($("#"+curGps).hasClass("roadDirectionClass"+WEST_TO_EAST)){
+						nextGps = right(curGps);
+						preGps = left(curGps);
+					}
+				}else if (roadType == STRAIGHT){
+					//noting to do
+				}else if (roadType == RIGHT){
+					if ($("#"+curGps).hasClass("roadDirectionClass"+NORTH_TO_SOUTH) && $("#"+curGps).hasClass("roadDirectionClass"+EAST_TO_WEST)){
+						nextGps = left(curGps);
+						preGps = up(curGps);
+					}else if ($("#"+curGps).hasClass("roadDirectionClass"+EAST_TO_WEST)){
+						nextGps = left(curGps);
+						preGps = right(curGps);
+					}
+				}
+
+				$("#"+preGps).removeClass("carClass"+carId);
+				$("#"+curGps).addClass("carClass"+carId);
+				//$("#"+curGps).css("transform",jiaodu);
+
+				// 判断下一步是否撞墙了
+				if ($("#"+nextGps).hasClass("wallClass"+NORTH) || $("#"+nextGps).hasClass("wallClass"+SOUTH)
+						|| $("#"+nextGps).hasClass("wallClass"+EAST)
+						|| $("#"+nextGps).hasClass("wallClass"+WEST) ){
+					$("#"+curGps).removeClass("carClass"+carId);
+					clearInterval(carTimer);
+					return;
+				}
+
+				// 如果当前位置是候车区  下一个位置是斑马线
+				if ($("#"+nextGps).hasClass("bmxClass"+EAST_TO_WEST) && $("#"+curGps).hasClass("carWaitClass"+NORTH_TO_SOUTH) ){
+					// 判断红绿灯
+					var lightClassName = SIGNAL_CLASS_PREFIX + SOUTH + roadType;
+					var rgbColor = $("."+lightClassName).css("background-color");
+					var color = convertRgb(rgbColor);
+					if (color == RED){
+						console.log(curGps+":汽车等候区,"+nextGps+":有斑马线,当前是红灯");
+						return;
+					}
+				}
+
+				// 如果当前位置是斑马线  下一个位置也是斑马线
+				if ($("#"+curGps).hasClass("bmxClass"+EAST_TO_WEST) && $("#"+nextGps).hasClass("bmxClass"+EAST_TO_WEST) ){
+					// noting to do;
+				}
+
+				// 如果当前位置是斑马线  下一个位置不是斑马线
+				if ($("#"+curGps).hasClass("bmxClass"+EAST_TO_WEST) && !$("#"+nextGps).hasClass("bmxClass"+EAST_TO_WEST) ){
+					// noting to do;
+				}
+
+				// 判断下一步是否有人
+				if (hasClassLike(nextGps,"manClass")){
+					return;
+				}
+
+				if (hasClassLike(nextGps,"carClass")){
+					// 判断前面是否有车
+					return;
+				}
+
+				curGps = nextGps;
+			}else if (direciton == WEST_TO_EAST){
+				if (isFirstRun){
+					if (hasClassLike(curGps,"carClass")){
+						console.log(curGps+" 当前位置有车辆,本次定时任务不做什么");
+						return;
+					}
+				}
+
+				nextGps = right(curGps);
+				preGps = left(curGps);
+
+				// 西-东
+				if (roadType == LEFT){
+					if ($("#"+curGps).hasClass("roadDirectionClass"+WEST_TO_EAST) && $("#"+curGps).hasClass("roadDirectionClass"+SOUTH_TO_NORTH)){
+						nextGps = up(curGps);
+						preGps = left(curGps);
+					}else if ($("#"+curGps).hasClass("roadDirectionClass"+SOUTH_TO_NORTH)){
+						nextGps = up(curGps);
+						preGps = down(curGps);
+					}
+				}else if (roadType == STRAIGHT){
+					//noting to do
+				}else if (roadType == RIGHT){
+					if ($("#"+curGps).hasClass("roadDirectionClass"+WEST_TO_EAST) && $("#"+curGps).hasClass("roadDirectionClass"+NORTH_TO_SOUTH)){
+						nextGps = down(curGps);
+						preGps = left(curGps);
+					}else if ($("#"+curGps).hasClass("roadDirectionClass"+NORTH_TO_SOUTH)){
+						nextGps = down(curGps);
+						preGps = up(curGps);
+					}
+				}
+
+				$("#"+preGps).removeClass("carClass"+carId);
+				$("#"+curGps).addClass("carClass"+carId);
+
+				// 判断下一步是否撞墙了
+				if ($("#"+nextGps).hasClass("wallClass"+NORTH) || $("#"+nextGps).hasClass("wallClass"+SOUTH)
+						|| $("#"+nextGps).hasClass("wallClass"+EAST)
+						|| $("#"+nextGps).hasClass("wallClass"+WEST) ){
+					$("#"+curGps).removeClass("carClass"+carId);
+					clearInterval(carTimer);
+					return;
+				}
+
+				// 如果当前位置是候车区  下一个位置是斑马线
+				if ($("#"+nextGps).hasClass("bmxClass"+NORTH_TO_SOUTH) && $("#"+curGps).hasClass("carWaitClass"+WEST_TO_EAST) ){
+					// 判断红绿灯
+					var lightClassName = SIGNAL_CLASS_PREFIX + EAST + roadType;
+					var rgbColor = $("."+lightClassName).css("background-color");
+					var color = convertRgb(rgbColor);
+					if (color == RED){
+						console.log(curGps+":汽车等候区,"+nextGps+":有斑马线,当前是红灯");
+						return;
+					}
+				}
+
+				// 如果当前位置是斑马线  下一个位置也是斑马线
+				if ($("#"+curGps).hasClass("bmxClass"+NORTH_TO_SOUTH) && $("#"+nextGps).hasClass("bmxClass"+NORTH_TO_SOUTH) ){
+					// noting to do;
+				}
+
+				// 如果当前位置是斑马线  下一个位置不是斑马线
+				if ($("#"+curGps).hasClass("bmxClass"+NORTH_TO_SOUTH) && !$("#"+nextGps).hasClass("bmxClass"+NORTH_TO_SOUTH) ){
+					// noting to do;
+				}
+
+				// 判断下一步是否有人
+				if (hasClassLike(nextGps,"manClass")){
+					return;
+				}
+
+				if (hasClassLike(nextGps,"carClass")){
+					// 判断前面是否有车
+					return;
+				}
+
+				curGps = nextGps;
+			}else if (direciton == EAST_TO_WEST){
+				if (isFirstRun){
+					if (hasClassLike(curGps,"carClass")){
+						console.log(curGps+" 当前位置有车辆,本次定时任务不做什么");
+						return;
+					}
+				}
+
+				nextGps = left(curGps);
+				preGps = right(curGps);
+
+				// 东-西
+				if (roadType == LEFT){
+					if ($("#"+curGps).hasClass("roadDirectionClass"+EAST_TO_WEST) && $("#"+curGps).hasClass("roadDirectionClass"+NORTH_TO_SOUTH)){
+						nextGps = down(curGps);
+						preGps = right(curGps);
+					}else if ($("#"+curGps).hasClass("roadDirectionClass"+NORTH_TO_SOUTH)){
+						nextGps = down(curGps);
+						preGps = up(curGps);
+					}
+				}else if (roadType == STRAIGHT){
+					//noting to do
+				}else if (roadType == RIGHT){
+					if ($("#"+curGps).hasClass("roadDirectionClass"+EAST_TO_WEST) && $("#"+curGps).hasClass("roadDirectionClass"+SOUTH_TO_NORTH)){
+						nextGps = up(curGps);
+						preGps = right(curGps);
+					}else if ($("#"+curGps).hasClass("roadDirectionClass"+SOUTH_TO_NORTH)){
+						nextGps = up(curGps);
+						preGps = down(curGps);
+					}
+				}
+
+				$("#"+preGps).removeClass("carClass"+carId);
+				$("#"+curGps).addClass("carClass"+carId);
+
+				// 判断下一步是否撞墙了
+				if ($("#"+nextGps).hasClass("wallClass"+NORTH) || $("#"+nextGps).hasClass("wallClass"+SOUTH)
+						|| $("#"+nextGps).hasClass("wallClass"+EAST)
+						|| $("#"+nextGps).hasClass("wallClass"+WEST) ){
+					$("#"+curGps).removeClass("carClass"+carId);
+					clearInterval(carTimer);
+					return;
+				}
+
+				// 如果当前位置是候车区  下一个位置是斑马线
+				if ($("#"+nextGps).hasClass("bmxClass"+SOUTH_TO_NORTH) && $("#"+curGps).hasClass("carWaitClass"+EAST_TO_WEST) ){
+					// 判断红绿灯
+					var lightClassName = SIGNAL_CLASS_PREFIX + WEST + roadType;
+					var rgbColor = $("."+lightClassName).css("background-color");
+					var color = convertRgb(rgbColor);
+					if (color == RED){
+						console.log(curGps+":汽车等候区,"+nextGps+":有斑马线,当前是红灯");
+						return;
+					}
+				}
+
+				// 如果当前位置是斑马线  下一个位置也是斑马线
+				if ($("#"+curGps).hasClass("bmxClass"+SOUTH_TO_NORTH) && $("#"+nextGps).hasClass("bmxClass"+SOUTH_TO_NORTH) ){
+					// noting to do;
+				}
+
+				// 如果当前位置是斑马线  下一个位置不是斑马线
+				if ($("#"+curGps).hasClass("bmxClass"+SOUTH_TO_NORTH) && !$("#"+nextGps).hasClass("bmxClass"+SOUTH_TO_NORTH) ){
+					// noting to do;
+				}
+
+				// 判断下一步是否有人
+				if (hasClassLike(nextGps,"manClass")){
+					return;
+				}
+
+				if (hasClassLike(nextGps,"carClass")){
+					// 判断前面是否有车
+					return;
+				}
+
+				curGps = nextGps;
+			}
+			isFirstRun = false;
+		},CAR_RUN_SPEED);
+	}
+
+
+	// 新增一个行人   direciton道路东南西北朝向   gps:行人位置  manId:汽车编号    isFirstRun是否是第一次运行
+	function manTimerInterval(direciton,gps,isFirstRun){
+
+		function up(gpsTmp){
+			return gpsTmp-COL_MAX;
+		}
+
+		function down(gpsTmp){
+			return gpsTmp+COL_MAX;
+		}
+
+		function left(gpsTmp){
+			return gpsTmp-1;
+		}
+
+		function right(gpsTmp){
+			return gpsTmp+1;
+		}
+
+		var curGps = gps;
+		var nextGps = null;
+		var preGps = null;
+
+		var totalManNum = $("#borderDiv div[class*='manClass']");
+
+		if (totalManNum.length > 11){
+			return;
+		}
+
+		var manId = totalManNum.length+1;
+
+		var manTimer = setInterval(function(){
+			if (direciton == SOUTH_TO_NORTH){
+				if (isFirstRun){
+					if (hasClassLike(curGps,"manClass")){
+						console.log(curGps+" 当前位置有行人,本次定时任务不做什么");
+						return;
+					}
+				}
+
+				nextGps = up(curGps);
+				preGps = down(curGps);
+
+				$("#"+preGps).removeClass("manClass"+manId);
+				$("#"+curGps).addClass("manClass"+manId);
+
+				// 判断下一步是否撞墙了
+				if ($("#"+nextGps).hasClass("wallClass"+NORTH) || $("#"+nextGps).hasClass("wallClass"+SOUTH)
+						|| $("#"+nextGps).hasClass("wallClass"+EAST)
+						|| $("#"+nextGps).hasClass("wallClass"+WEST) ){
+					$("#"+curGps).removeClass("manClass"+manId);
+					clearInterval(manTimer);
+					return;
+				}
+
+				// 如果当前位置是候车区  下一个位置是斑马线
+				if (!$("#"+nextGps).hasClass("manWaitClass"+SOUTH_TO_NORTH) && $("#"+curGps).hasClass("manWaitClass"+SOUTH_TO_NORTH) ){
+					// 判断红绿灯
+					var lightClassName = SIGNAL_CLASS_PREFIX + NORTH + STRAIGHT;
+					var rgbColor = $("."+lightClassName).css("background-color");
+					var color = convertRgb(rgbColor);
+					if (color == RED){
+						console.log(curGps+":人行等候区,"+nextGps+",当前是红灯");
+						return;
+					}
+				}
+
+				// 判断下一步是否有人
+				if (hasClassLike(nextGps,"manClass")){
+					return;
+				}
+
+				curGps = nextGps;
+			}else if (direciton == NORTH_TO_SOUTH){
+				if (isFirstRun){
+					if (hasClassLike(curGps,"manClass")){
+						console.log(curGps+" 当前位置有行人,本次定时任务不做什么");
+						return;
+					}
+				}
+
+				nextGps = down(curGps);
+				preGps = up(curGps);
+
+				$("#"+preGps).removeClass("manClass"+manId);
+				$("#"+curGps).addClass("manClass"+manId);
+
+				// 判断下一步是否撞墙了
+				if ($("#"+nextGps).hasClass("wallClass"+NORTH) || $("#"+nextGps).hasClass("wallClass"+SOUTH)
+						|| $("#"+nextGps).hasClass("wallClass"+EAST)
+						|| $("#"+nextGps).hasClass("wallClass"+WEST) ){
+					$("#"+curGps).removeClass("manClass"+manId);
+					clearInterval(manTimer);
+					return;
+				}
+
+				// 如果当前位置是候车区  下一个位置是斑马线
+				if (!$("#"+nextGps).hasClass("manWaitClass"+NORTH_TO_SOUTH) && $("#"+curGps).hasClass("manWaitClass"+NORTH_TO_SOUTH) ){
+					// 判断红绿灯
+					var lightClassName = SIGNAL_CLASS_PREFIX + SOUTH + STRAIGHT;
+					var rgbColor = $("."+lightClassName).css("background-color");
+					var color = convertRgb(rgbColor);
+					if (color == RED){
+						console.log(curGps+":人行等候区,"+nextGps+",当前是红灯");
+						return;
+					}
+				}
+
+				// 判断下一步是否有人
+				if (hasClassLike(nextGps,"manClass")){
+					return;
+				}
+
+				curGps = nextGps;
+			}else if (direciton == WEST_TO_EAST){
+				if (isFirstRun){
+					if (hasClassLike(curGps,"manClass")){
+						console.log(curGps+" 当前位置有行人,本次定时任务不做什么");
+						return;
+					}
+				}
+
+				nextGps = right(curGps);
+				preGps = left(curGps);
+
+				$("#"+preGps).removeClass("manClass"+manId);
+				$("#"+curGps).addClass("manClass"+manId);
+
+				// 判断下一步是否撞墙了
+				if ($("#"+nextGps).hasClass("wallClass"+NORTH) || $("#"+nextGps).hasClass("wallClass"+SOUTH)
+						|| $("#"+nextGps).hasClass("wallClass"+EAST)
+						|| $("#"+nextGps).hasClass("wallClass"+WEST) ){
+					$("#"+curGps).removeClass("manClass"+manId);
+					clearInterval(manTimer);
+					return;
+				}
+
+				// 如果当前位置是候车区  下一个位置是斑马线
+				if (!$("#"+nextGps).hasClass("manWaitClass"+WEST_TO_EAST) && $("#"+curGps).hasClass("manWaitClass"+WEST_TO_EAST) ){
+					// 判断红绿灯
+					var lightClassName = SIGNAL_CLASS_PREFIX + EAST + STRAIGHT;
+					var rgbColor = $("."+lightClassName).css("background-color");
+					var color = convertRgb(rgbColor);
+					if (color == RED){
+						console.log(curGps+":人行等候区,"+nextGps+",当前是红灯");
+						return;
+					}
+				}
+
+				// 判断下一步是否有人
+				if (hasClassLike(nextGps,"manClass")){
+					return;
+				}
+
+				curGps = nextGps;
+			}else if (direciton == EAST_TO_WEST){
+				if (isFirstRun){
+					if (hasClassLike(curGps,"manClass")){
+						console.log(curGps+" 当前位置有行人,本次定时任务不做什么");
+						return;
+					}
+				}
+
+				nextGps = left(curGps);
+				preGps = right(curGps);
+
+				$("#"+preGps).removeClass("manClass"+manId);
+				$("#"+curGps).addClass("manClass"+manId);
+
+				// 判断下一步是否撞墙了
+				if ($("#"+nextGps).hasClass("wallClass"+NORTH) || $("#"+nextGps).hasClass("wallClass"+SOUTH)
+						|| $("#"+nextGps).hasClass("wallClass"+EAST)
+						|| $("#"+nextGps).hasClass("wallClass"+WEST) ){
+					$("#"+curGps).removeClass("manClass"+manId);
+					clearInterval(manTimer);
+					return;
+				}
+
+				// 如果当前位置是候车区  下一个位置是斑马线
+				if (!$("#"+nextGps).hasClass("manWaitClass"+EAST_TO_WEST) && $("#"+curGps).hasClass("manWaitClass"+EAST_TO_WEST) ){
+					// 判断红绿灯
+					var lightClassName = SIGNAL_CLASS_PREFIX + WEST + STRAIGHT;
+					var rgbColor = $("."+lightClassName).css("background-color");
+					var color = convertRgb(rgbColor);
+					if (color == RED){
+						console.log(curGps+":人行等候区,"+nextGps+",当前是红灯");
+						return;
+					}
+				}
+
+				// 判断下一步是否有人
+				if (hasClassLike(nextGps,"manClass")){
+					return;
+				}
+
+				curGps = nextGps;
+			}
+			isFirstRun = false;
+		},MAN_WALK_SPEED);
+	}
+
+	function initPanel()
+	{
+		for (var r=1;r<=ROW_MAX;r++){
+			for (var c=1;c<=COL_MAX;c++){
+				var divId = (r-1)*COL_MAX+c;
+				var divObj = "<div id='" +divId+ "' style='font-size:12px;float:left;width:" + DIV_WIDTH + "px;height:" + DIV_HEIGHT + "px;border:1px solid grey;'></div>";
+				$("#borderDiv").append(divObj);
+
+				if (SHOW_DIVID){
+					$("#"+divId).text(divId);
+				}
+
+				if (r == 1){
+					$("#"+divId).addClass("wallClass" + NORTH);
+				}else if (r == ROW_MAX){
+					$("#"+divId).addClass("wallClass" + SOUTH);
+				}
+
+				if (c == 1){
+					$("#"+divId).addClass("wallClass" + WEST);
+				}else if (c == COL_MAX){
+					$("#"+divId).addClass("wallClass" + EAST);
+				}
+			}
+		}
+	}
+
+	// 初始化红绿黄灯
+	function initRGYLamp(){
+		//---第三种方案
+		setWestStraightRed();
+		setWestLeftGreen();
+		setWestRightRed();
+
+		setEastStraightRed();
+		setEastLeftGreen();
+		setEastRightRed();
+
+		setNorthStraightGreen();
+		setNorthLeftRed();
+		setNorthRightGreen();
+
+		setSouthStraightGreen();
+		setSouthLeftRed();
+		setSouthRightGreen();
+	}
+
+	// 初始化道路
+	function initRoad(){
+		// 南北方向道路所在列
+		var startCol = parseInt((COL_MAX-6)/2)+1;
+		var endCol = startCol+6-1;
+
+		// 西东方向道路所在列
+		var startRow = parseInt((ROW_MAX-6)/2)+1;
+		var endRow = startRow+6-1;
+
+		var xdRoadArr = getPolyRange(startRow,endRow,2,COL_MAX-1);
+		for (var a=0;a<=xdRoadArr.length;a++){
+			$("#"+xdRoadArr[a]).addClass("roadBaseClass");
+		}
+
+		var nbRoadArr = getPolyRange(2,ROW_MAX-1,startCol,endCol);
+		for (var a=0;a<=nbRoadArr.length;a++){
+			$("#"+nbRoadArr[a]).addClass("roadBaseClass");
+		}
+
+		// 东西南北中间的分割线
+		var xdRoadLineArr = getPolyRange(startRow+2,startRow+2,2,COL_MAX-1);
+		for (var a=0;a<=xdRoadLineArr.length;a++){
+			$("#"+xdRoadLineArr[a]).css("border-bottom-color","white");
+		}
+
+		var nbRoadLineArr = getPolyRange(2,ROW_MAX-1,startCol+2,startCol+2);
+		for (var a=0;a<=nbRoadLineArr.length;a++){
+			$("#"+nbRoadLineArr[a]).css("border-right-color","white");
+		}
+
+		var centerRoadLineArr = getPolyRange(startRow,endRow,startCol,endCol);
+		for (var a=0;a<=centerRoadLineArr.length;a++){
+			var divId = centerRoadLineArr[a];
+
+			if (divId%COL_MAX==startCol){
+				$("#"+divId).css("border-left-color","white");
+			}
+
+			if (divId%COL_MAX==endCol){
+				$("#"+divId).css("border-right-color","white");
+			}
+			if (divId>(startRow-1)*COL_MAX && divId<startRow*COL_MAX){
+				$("#"+divId).css("border-top-color","white");
+			}
+			if (divId>(endRow-1)*COL_MAX && divId<endRow*COL_MAX){
+				$("#"+divId).css("border-bottom-color","white");
+			}
+
+			if (a==0){
+				$("#"+divId).css("border-color","white grey grey white");
+			}else if (a==2){
+				$("#"+divId).css("border-color","white white grey grey");
+			}else if (a==5){
+				$("#"+divId).css("border-color","white white grey grey");
+			}else if (a==12){
+				$("#"+divId).css("border-color","grey grey white white");
+			}else if (a==14){
+				$("#"+divId).css("border-color","grey white white grey");
+			}else if (a==17){
+				$("#"+divId).css("border-color","grey white white grey");
+			}else if (a==30){
+				$("#"+divId).css("border-color","grey grey white white");
+			}else if (a==32){
+				$("#"+divId).css("border-color","grey white white grey");
+			}else if (a==35){
+				$("#"+divId).css("border-color","grey white white grey");
+			}
+		}
+	}
+
+	function initRoadDirection(){
+		// 南北方向道路所在列
+		var startCol = parseInt((COL_MAX-6)/2)+1;
+		var endCol = startCol+6-1;
+
+		// 西东方向道路所在列
+		var startRow = parseInt((ROW_MAX-6)/2)+1;
+		var endRow = startRow+6-1;
+
+		// 西---东
+		var x2dRoadDirectionArr = getPolyRange(endRow-2,endRow,2,COL_MAX-1);
+		for (var a=0;a<=x2dRoadDirectionArr.length;a++){
+			$("#"+x2dRoadDirectionArr[a]).addClass("roadDirectionClass"+WEST_TO_EAST);
+		}
+
+		// 东---西
+		var d2xRoadDirectionArr = getPolyRange(startRow,startRow+2,2,COL_MAX-1);
+		for (var a=0;a<=d2xRoadDirectionArr.length;a++){
+			$("#"+d2xRoadDirectionArr[a]).addClass("roadDirectionClass"+EAST_TO_WEST);
+		}
+
+		// 南---北
+		var n2bRoadDirectionArr = getPolyRange(2,ROW_MAX-1,endCol-2,endCol);
+		for (var a=0;a<=n2bRoadDirectionArr.length;a++){
+			$("#"+n2bRoadDirectionArr[a]).addClass("roadDirectionClass"+SOUTH_TO_NORTH);
+		}
+
+		// 北---南
+		var b2nRoadDirectionArr = getPolyRange(2,ROW_MAX-1,startCol,startCol+2);
+		for (var a=0;a<=b2nRoadDirectionArr.length;a++){
+			$("#"+b2nRoadDirectionArr[a]).addClass("roadDirectionClass"+NORTH_TO_SOUTH);
+		}
+	}
+
+	function initLight(){
+		// 南北方向道路所在列
+		var startCol = parseInt((COL_MAX-6)/2)+1;
+		var endCol = startCol+6-1;
+
+		// 西东方向道路所在列
+		var startRow = parseInt((ROW_MAX-6)/2)+1;
+		var endRow = startRow+6-1;
+
+		for (var r=1;r<=ROW_MAX;r++){
+			for (var c=1;c<=COL_MAX;c++){
+				var divId = (r-1)*COL_MAX+c;
+
+				if (r == 1){
+					// 第一行   北方红绿灯
+					if (c%COL_MAX==startCol+2){
+						$("#"+divId).text("北");
+						$("#"+divId).css({"color":"blue","font-size":"20px","text-align":"center","font-weight":"bold"});
+					}else if (c%COL_MAX==startCol+3){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+NORTH+LEFT);
+					}else if (c%COL_MAX==startCol+4){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+NORTH+STRAIGHT);
+					}else if (c%COL_MAX==startCol+5){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+NORTH+RIGHT);
+					}else if (c%COL_MAX==startCol+6){
+						$("#"+divId).addClass(SIGNAL_TIMER_PREFIX+NORTH);
+					}
+				}else if (r == ROW_MAX){
+					// 南方红绿灯
+					if (c%COL_MAX==startCol-1){
+						$("#"+divId).addClass(SIGNAL_TIMER_PREFIX+SOUTH);
+					}else if (c%COL_MAX==startCol){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+SOUTH+RIGHT);
+					}else if (c%COL_MAX==startCol+1){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+SOUTH+STRAIGHT);
+					}else if (c%COL_MAX==startCol+2){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+SOUTH+LEFT);
+					}else if (c%COL_MAX==startCol+3){
+						$("#"+divId).text("南");
+						$("#"+divId).css({"color":"blue","font-size":"20px","text-align":"center","font-weight":"bold"});
+					}
+				}
+
+				if (c==1){
+					// 西方红绿灯
+					if (r == startRow-1){
+						$("#"+divId).addClass(SIGNAL_TIMER_PREFIX+WEST);
+					}else if (r == startRow){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+WEST+RIGHT);
+					}else if (r == startRow+1){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+WEST+STRAIGHT);
+					}else if (r == startRow+2){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+WEST+LEFT);
+					}else if (r == startRow+3){
+						$("#"+divId).text("西");
+						$("#"+divId).css({"color":"blue","font-size":"20px","text-align":"center","font-weight":"bold"});
+					}
+				}else if (c==COL_MAX){
+					// 东方红绿灯
+					if (r == startRow+2){
+						$("#"+divId).text("东");
+						$("#"+divId).css({"color":"blue","font-size":"20px","text-align":"center","font-weight":"bold"});
+					}else if (r == startRow+3){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+EAST+LEFT);
+					}else if (r == startRow+4){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+EAST+STRAIGHT);
+					}else if (r == startRow+5){
+						$("#"+divId).addClass(SIGNAL_CLASS_PREFIX+EAST+RIGHT);
+					}else if (r == startRow+6){
+						$("#"+divId).addClass(SIGNAL_TIMER_PREFIX+EAST);
+					}
+				}
+			}
+		}
+	}
+
+	// 初始化行人斑马线
+	function initBmx(){
+		// 南北方向道路所在列
+		var startCol = parseInt((COL_MAX-6)/2)+1;
+		var endCol = startCol+6-1;
+
+		// 西东方向道路所在列
+		var startRow = parseInt((ROW_MAX-6)/2)+1;
+		var endRow = startRow+6-1;
+
+		// 北-南
+		var b2nArr = getPolyRange(startRow,endRow,startCol-2,startCol-1);
+		for (var i=0;i<b2nArr.length;i++){
+			$("#"+b2nArr[i]).addClass("bmxClass"+NORTH_TO_SOUTH);
+			$("#"+b2nArr[i]).css("border-color","white grey white grey");
+		}
+
+		// 南-北
+		var n2bArr = getPolyRange(startRow,endRow,endCol+1,endCol+2);
+		for (var i=0;i<n2bArr.length;i++){
+			$("#"+n2bArr[i]).addClass("bmxClass"+SOUTH_TO_NORTH);
+			$("#"+n2bArr[i]).css("border-color","white grey white grey");
+		}
+
+		// 东-西
+		var d2xArr = getPolyRange(startRow-2,startRow-1,startCol,endCol);
+		for (var i=0;i<d2xArr.length;i++){
+			$("#"+d2xArr[i]).addClass("bmxClass"+EAST_TO_WEST);
+			$("#"+d2xArr[i]).css("border-color","grey white grey white");
+		}
+
+		// 西-东
+		var x2dArr = getPolyRange(endRow+1,endRow+2,startCol,endCol);
+		for (var i=0;i<x2dArr.length;i++){
+			$("#"+x2dArr[i]).addClass("bmxClass"+WEST_TO_EAST);
+			$("#"+x2dArr[i]).css("border-color","grey white grey white");
+		}
+	}
+
+	// 初始化汽车候车区
+	function initCarWaitingZone(){
+		// 南北方向道路所在列
+		var startCol = parseInt((COL_MAX-6)/2)+1;
+		var endCol = startCol+6-1;
+
+		// 西东方向道路所在列
+		var startRow = parseInt((ROW_MAX-6)/2)+1;
+		var endRow = startRow+6-1;
+
+		// 西
+		var xCarWaitArr = getPolyRange(endRow-2,endRow,2,8);
+		for (var i=0;i<xCarWaitArr.length;i++){
+			$("#"+xCarWaitArr[i]).addClass("carWaitClass" + WEST_TO_EAST);
+		}
+
+		// 东
+		var dCarWaitArr = getPolyRange(startRow,startRow+2,COL_MAX-7,COL_MAX-1);
+		for (var i=0;i<dCarWaitArr.length;i++){
+			$("#"+dCarWaitArr[i]).addClass("carWaitClass" + EAST_TO_WEST);
+		}
+
+		// 北
+		var bCarWaitArr = getPolyRange(2,4,startCol,startCol+2);
+		for (var i=0;i<bCarWaitArr.length;i++){
+			$("#"+bCarWaitArr[i]).addClass("carWaitClass" + NORTH_TO_SOUTH);
+		}
+
+		// 南
+		var nCarWaitArr = getPolyRange(ROW_MAX-4,ROW_MAX-1,endCol-2,endCol);
+		for (var i=0;i<nCarWaitArr.length;i++){
+			$("#"+nCarWaitArr[i]).addClass("carWaitClass" + SOUTH_TO_NORTH);
+		}
+	}
+
+	// 初始化行人等候区
+	function initManWatingZone(){
+		// 南北方向道路所在列
+		var startCol = parseInt((COL_MAX-6)/2)+1;
+		var endCol = startCol+6-1;
+
+		// 西东方向道路所在列
+		var startRow = parseInt((ROW_MAX-6)/2)+1;
+		var endRow = startRow+6-1;
+
+		// 南---北
+		var n2bManWaitArr = getPolyRange(endRow+3,ROW_MAX-1,endCol+1,endCol+2);
+		for (var i=0;i<n2bManWaitArr.length;i++){
+			$("#"+n2bManWaitArr[i]).addClass("manWaitClass"+SOUTH_TO_NORTH);
+		}
+
+		// 东---西
+		var d2xManWaitArr = getPolyRange(startRow-2,startRow-1,endCol+3,COL_MAX-1);
+		for (var i=0;i<d2xManWaitArr.length;i++){
+			$("#"+d2xManWaitArr[i]).addClass("manWaitClass"+EAST_TO_WEST);
+		}
+
+		// 北---南
+		var b2nManWaitArr = getPolyRange(2,startRow-3,startCol-2,startCol-1);
+		for (var i=0;i<b2nManWaitArr.length;i++){
+			$("#"+b2nManWaitArr[i]).addClass("manWaitClass"+NORTH_TO_SOUTH);
+		}
+
+		// 西---东
+		var x2dManWaitArr = getPolyRange(endRow+1,endRow+2,2,startCol-3);
+		for (var i=0;i<x2dManWaitArr.length;i++){
+			$("#"+x2dManWaitArr[i]).addClass("manWaitClass"+WEST_TO_EAST);
+		}
+	}
+
+	// 获取指定起始行,起始列的divId集合
+	function getPolyRange(startRow,endRow,startCol,endCol){
+		var arr = new Array();
+
+		for (var r=1;r<=ROW_MAX;r++){
+			for (var c=1;c<=COL_MAX;c++){
+				var divId=(r-1)*COL_MAX+c;
+				if (r>=startRow && r<=endRow && c>=startCol && c<=endCol){
+					arr.push(divId);
+				}
+			}
+		}
+
+		return arr;
+	}
+
+	// 随机获取指定范围内的数字  闭区间
+	function randomNumber(start,end){
+		var range = end-start;
+		var rand = Math.random();
+		var num = start + Math.round(rand*range);
+
+		return num;
+	}
+
+	// 判断一个div里是否包含某个class excludeClass:排除的class
+	function hasClassLike(gps, className,excludeCarid){
+		var res = false;
+		var classes = $("#borderDiv div[class*='"+className+"']");
+		for (i=0;i<classes.length;i++){
+			var divId = classes[i].id;
+			if (excludeCarid != null && excludeCarid != '' && typeof(excludeCarid) != 'undefined'){
+				if ($("#"+divId).hasClass(className+excludeCarid)){
+					continue;
+				}
+			}
+			if (parseInt(divId) == parseInt(gps)){
+				res = true;
+				break;
+			}
+		}
+
+		return res;
+	}
+
+	// 转换颜色  参数格式为 rgb(255,0,0)
+	function convertRgb(rgbColor){
+		var strTmp = rgbColor.replace("rgb(","");
+		strTmp = strTmp.replace(")","");
+		strTmp = strTmp.replace(" ","");
+
+		var colorArr = strTmp.split(",");
+		if (colorArr[0] == "255" && colorArr[1] == "255"){
+			return YELLOW;
+		}else if (colorArr[0] == "255"){
+			return RED;
+		}else if (colorArr[1] == "255"){
+			return GREEN;
+		}
+	}
+
+	// 设置信号灯读秒器
+	function setInputShowTimer(direction,colorType,initTime){
+		var color="";
+		if (colorType == RED){
+			color = "rgb(255,0,0)";
+		}else if (colorType == GREEN){
+			color = "green";
+		}else{
+			color = "yellow";
+		}
+
+		$("#borderDiv ."+SIGNAL_TIMER_PREFIX+direction).text(initTime);
+		$("#borderDiv ."+SIGNAL_TIMER_PREFIX+direction).css({"color":color,"font-size":"20px","text-align":"center"});
+		var num = initTime-1;
+		var inputTimer = setInterval(function(){
+			if (num==1){
+				if (color=="green"){
+					$("#borderDiv ."+SIGNAL_TIMER_PREFIX+direction).css("background-color","white");
+				}
+				clearInterval(inputTimer);
+			}
+
+			if (num==4 && color == "green"){
+				var count = 1;
+				var tmpTimer = setInterval(function(){
+					if (count >= 6){
+						clearInterval(tmpTimer);
+					}
+					if (count %2 == 0){
+						$("#borderDiv ."+SIGNAL_TIMER_PREFIX+direction).css("background-color","white");
+					}else{
+						$("#borderDiv ."+SIGNAL_TIMER_PREFIX+direction).css("background-color","black");
+					}
+					count++;
+				},500);
+			}
+
+			$("#borderDiv ."+SIGNAL_TIMER_PREFIX+direction).text(num);
+			$("#borderDiv ."+SIGNAL_TIMER_PREFIX+direction).css({"color":color,"font-size":"20px","text-align":"center"});
+
+			num--;
+		},1000);
+	}
+
+	// 设置红绿灯的样式   direction:东南西北   roadType:直行,左转,右转     colorType:红绿蓝
+	function setSignalCssStyle(direction, roadType, colorType){
+		var className = null;
+		if (colorType == RED){
+			className = "redClass";
+		}else if (colorType == GREEN){
+			className = "greenClass";
+		}else{
+			className = "yellowClass";
+		}
+
+		$("#borderDiv ."+SIGNAL_CLASS_PREFIX+direction+roadType).removeClass("redClass").removeClass("greenClass").removeClass("yellowClass");
+		$("#borderDiv ."+SIGNAL_CLASS_PREFIX+direction+roadType).addClass(className);
+	}
+
+	// -----------------------------------西边信号灯---------------------------------
+
+	// 西侧-直行信号灯
+	function setWestStraightRed(){
+		setSignalCssStyle(WEST, STRAIGHT, RED);
+
+		setTimeout(setWestStraightGreen, WE_RED_TIME*1000);
+		setInputShowTimer(WEST, RED, WE_RED_TIME);
+	}
+	function setWestStraightGreen(){
+		setSignalCssStyle(WEST, STRAIGHT, GREEN);
+
+		setTimeout(setWestStraightYellow, (WE_RED_TIME-3)*1000);
+		setInputShowTimer(WEST, GREEN, WE_RED_TIME-3);
+	}
+	function setWestStraightYellow(){
+		setSignalCssStyle(WEST, STRAIGHT, YELLOW);
+
+		setTimeout(setWestStraightRed, 3*1000);
+		setInputShowTimer(WEST, YELLOW, 3);
+	}
+
+	// 西侧-左转
+	function setWestLeftRed(){
+		setSignalCssStyle(WEST, LEFT, RED);
+
+		setTimeout(setWestLeftGreen, NS_RED_TIME*1000);
+	}
+	function setWestLeftGreen(){
+		setSignalCssStyle(WEST, LEFT, GREEN);
+
+		setTimeout(setWestLeftYellow, (NS_RED_TIME-3)*1000);
+	}
+	function setWestLeftYellow(){
+		setSignalCssStyle(WEST, LEFT, YELLOW);
+
+		setTimeout(setWestLeftRed, 3*1000);
+	}
+
+	// 西侧-右转
+	function setWestRightRed(){
+		setSignalCssStyle(WEST, RIGHT, RED);
+
+		setTimeout(setWestRightGreen, NS_RED_TIME*1000);
+	}
+	function setWestRightGreen(){
+		setSignalCssStyle(WEST, RIGHT, GREEN);
+
+		setTimeout(setWestRightYellow, (NS_RED_TIME-3)*1000);
+	}
+	function setWestRightYellow(){
+		setSignalCssStyle(WEST, RIGHT, YELLOW);
+
+		setTimeout(setWestRightRed, 3*1000);
+	}
+
+
+	// ----------------------------东边信号灯------------------------------------
+	// 东侧-直行信号灯
+	function setEastStraightRed(){
+		setSignalCssStyle(EAST, STRAIGHT, RED);
+
+		setTimeout(setEastStraightGreen, WE_RED_TIME*1000);
+		setInputShowTimer(EAST, RED, WE_RED_TIME);
+	}
+	function setEastStraightGreen(){
+		setSignalCssStyle(EAST, STRAIGHT, GREEN);
+
+		setTimeout(setEastStraightYellow, (WE_RED_TIME-3)*1000);
+		setInputShowTimer(EAST, GREEN, WE_RED_TIME-3);
+	}
+	function setEastStraightYellow(){
+		setSignalCssStyle(EAST, STRAIGHT, YELLOW);
+
+		setTimeout(setEastStraightRed, 3*1000);
+		setInputShowTimer(EAST, YELLOW, 3);
+	}
+
+	// 东侧-左转
+	function setEastLeftRed(){
+		setSignalCssStyle(EAST, LEFT, RED);
+
+		setTimeout(setEastLeftGreen, NS_RED_TIME*1000);
+	}
+	function setEastLeftGreen(){
+		setSignalCssStyle(EAST, LEFT, GREEN);
+
+		setTimeout(setEastLeftYellow, (NS_RED_TIME-3)*1000);
+	}
+	function setEastLeftYellow(){
+		setSignalCssStyle(EAST, LEFT, YELLOW);
+
+		setTimeout(setEastLeftRed, 3*1000);
+	}
+
+	// 东侧-右转
+	function setEastRightRed(){
+		setSignalCssStyle(EAST, RIGHT, RED);
+
+		setTimeout(setEastRightGreen, NS_RED_TIME*1000);
+	}
+	function setEastRightGreen(){
+		setSignalCssStyle(EAST, RIGHT, GREEN);
+
+		setTimeout(setEastRightYellow, (NS_RED_TIME-3)*1000);
+	}
+	function setEastRightYellow(){
+		setSignalCssStyle(EAST, RIGHT, YELLOW);
+
+		setTimeout(setEastRightRed, 3*1000);
+	}
+
+
+	//-----------------------------------北边信号灯--------------------------------------
+	// 北侧-直行
+	function setNorthStraightRed(){
+		setSignalCssStyle(NORTH, STRAIGHT, RED);
+
+		setTimeout(setNorthStraightGreen, NS_RED_TIME*1000);
+		setInputShowTimer(NORTH, RED, NS_RED_TIME);
+	}
+	function setNorthStraightGreen(){
+		setSignalCssStyle(NORTH, STRAIGHT, GREEN);
+
+		setTimeout(setNorthStraightYellow, (NS_RED_TIME-3)*1000);
+		setInputShowTimer(NORTH, GREEN, NS_RED_TIME-3);
+	}
+	function setNorthStraightYellow(){
+		setSignalCssStyle(NORTH, STRAIGHT, YELLOW);
+
+		setTimeout(setNorthStraightRed, 3*1000);
+		setInputShowTimer(NORTH, YELLOW, 3);
+	}
+
+	// 北侧-左转
+	function setNorthLeftRed(){
+		setSignalCssStyle(NORTH, LEFT, RED);
+
+		setTimeout(setNorthLeftGreen, WE_RED_TIME*1000);
+	}
+	function setNorthLeftGreen(){
+		setSignalCssStyle(NORTH, LEFT, GREEN);
+
+		setTimeout(setNorthLeftYellow, (WE_RED_TIME-3)*1000);
+	}
+	function setNorthLeftYellow(){
+		setSignalCssStyle(NORTH, LEFT, YELLOW);
+
+		setTimeout(setNorthLeftRed, 3*1000);
+	}
+
+	// 北侧-右转
+	function setNorthRightRed(){
+		setSignalCssStyle(NORTH, RIGHT, RED);
+
+		setTimeout(setNorthRightGreen, WE_RED_TIME*1000);
+	}
+	function setNorthRightGreen(){
+		setSignalCssStyle(NORTH, RIGHT, GREEN);
+
+		setTimeout(setNorthRightYellow, (WE_RED_TIME-3)*1000);
+	}
+	function setNorthRightYellow(){
+		setSignalCssStyle(NORTH, RIGHT, YELLOW);
+
+		setTimeout(setNorthRightRed, 3*1000);
+	}
+
+	//---------------------------------南边信号灯-------------------------------------
+	// 南侧-直行
+	function setSouthStraightRed(){
+		setSignalCssStyle(SOUTH, STRAIGHT, RED);
+
+		setTimeout(setSouthStraightGreen, NS_RED_TIME*1000);
+		setInputShowTimer(SOUTH, RED, NS_RED_TIME);
+	}
+	function setSouthStraightGreen(){
+		setSignalCssStyle(SOUTH, STRAIGHT, GREEN);
+
+		setTimeout(setSouthStraightYellow, (NS_RED_TIME-3)*1000);
+		setInputShowTimer(SOUTH, GREEN, NS_RED_TIME-3);
+	}
+	function setSouthStraightYellow(){
+		setSignalCssStyle(SOUTH, STRAIGHT, YELLOW);
+
+		setTimeout(setSouthStraightRed, 3*1000);
+		setInputShowTimer(SOUTH, YELLOW, 3);
+	}
+
+	// 南侧-左转
+	function setSouthLeftRed(){
+		setSignalCssStyle(SOUTH, LEFT, RED);
+
+		setTimeout(setSouthLeftGreen, WE_RED_TIME*1000);
+	}
+	function setSouthLeftGreen(){
+		setSignalCssStyle(SOUTH, LEFT, GREEN);
+
+		setTimeout(setSouthLeftYellow, (WE_RED_TIME-3)*1000);
+	}
+	function setSouthLeftYellow(){
+		setSignalCssStyle(SOUTH, LEFT, YELLOW);
+
+		setTimeout(setSouthLeftRed, 3*1000);
+	}
+
+	// 南侧-右转
+	function setSouthRightRed(){
+		setSignalCssStyle(SOUTH, RIGHT, RED);
+
+		setTimeout(setSouthRightGreen, WE_RED_TIME*1000);
+	}
+	function setSouthRightGreen(){
+		setSignalCssStyle(SOUTH, RIGHT, GREEN);
+
+		setTimeout(setSouthRightYellow, (WE_RED_TIME-3)*1000);
+	}
+	function setSouthRightYellow(){
+		setSignalCssStyle(SOUTH, RIGHT, YELLOW);
+
+		setTimeout(setSouthRightRed, 3*1000);
+	}
+</script>
+</html>

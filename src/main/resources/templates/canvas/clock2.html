@@ -1,21 +1,9 @@
 <!DOCTYPE html>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-    
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
-<%
-	String basePath = request.getContextPath();
-	String  path= request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+basePath;
-%>
-
-<html>
-	<head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
 		<meta charset="utf-8">
 		<title></title>
-		<script type="text/javascript" src="<%=path%>/static/js/jquery-1.4.4.min.js"></script>
-		<script type="text/javascript" src="<%=path%>/static/js/rootPath.js"></script>
 		
 		<style type="text/css">
 			#canvas{
@@ -30,10 +18,10 @@
 		</canvas>
 		
 		<audio id="player" controls="controls" src="" style="width:100%;display:none;"></audio>
+		<div th:include="common::footer"></div>
 	</body>
 	<script type="text/javascript">	
 		var ctx = document.getElementById("canvas").getContext("2d");
-		
 		var X=300,Y=250,R=200;
 		
 		var player =  document.getElementById("player");
@@ -205,39 +193,57 @@
 			}
 		}
 		
-		function drawClock(){
-			var hourShow = 12;
-			for (var i=15;i<75;i++){
+		function ClockBord(type,r,color){
+			this.type = type;
+			this.r = r;
+			this.value = 0;
+
+			this.finalAngel = 0;
+			this.color = color;
+			this.lineWidth=12;
+			this.draw = function(){
 				ctx.save();
-				ctx.translate(X,Y);
 				ctx.beginPath();
-				var jiaodu = i*6*Math.PI/180;
-
-				var xTmp=Math.round(R*Math.cos(jiaodu));
-				var yTmp=Math.round(R*Math.sin(jiaodu));
-				
-				var fontXTmp = Math.round((R-25)*Math.cos(jiaodu));
-				var fontYTmp = Math.round((R-25)*Math.sin(jiaodu));
-				
-				var x=xTmp,y=-yTmp;
-				var fontX=fontXTmp,fontY=-fontYTmp;
-
-				var radius = 5,color="blue";
-				if (i%5==0){
-					radius = 10;
-					color = "red";
-					
-					ctx.font = "bold 15px Arial";
-					ctx.fillStyle="white";
-					ctx.fillText(hourShow,fontX,fontY);
-					hourShow--;
-				}
-				ctx.arc(x,y,radius,0,2*Math.PI,false);
-				//ctx.arc(fontX,fontY,radius,0,2*Math.PI,false);
-				//ctx.closePath();
-				ctx.fillStyle=color;
-				ctx.fill();
+				ctx.translate(X,Y);
+				ctx.rotate(-Math.PI/2);
+			
+				ctx.arc(0,0,this.r,0,this.finalAngle,false);
+				ctx.strokeStyle=this.color;
+				ctx.lineWidth = this.lineWidth;
+				ctx.stroke();
+				ctx.closePath();
 				ctx.restore();
+			}
+			
+			this.update = function(){
+				var date = new Date();
+				var hour = date.getHours();
+				hour = parseInt(hour);
+				if (hour > 12){
+					hour = hour -12;
+				}
+				var minute = date.getMinutes();
+				minute = parseInt(minute);
+				var second = date.getSeconds();
+				second = parseInt(second);
+
+				if (this.type=="hour"){
+					var tmpvar= hour+minute/60+second/3600;
+					this.finalAngle = tmpvar*30 * Math.PI/180;
+					
+				}else if (this.type=="minute"){
+					var tmpvar = minute+second/60;
+					this.finalAngle = tmpvar*6 * Math.PI/180;
+				}else{
+					if (second==0){
+						this.finalAngle = Math.PI*2;
+					}else{
+						var tmpvar = second*6;
+						this.finalAngle = tmpvar*Math.PI/180;
+					}
+				}
+				
+				this.draw();
 			}
 		}
 		
@@ -265,17 +271,23 @@
 		}
 		
 		var hourHand = new drawObject("hour",X,Y,X,0,100,"green",5);
-		var minutesHand = new drawObject("minute",X,Y,X,0,140,"white",3);
+		var minutesHand = new drawObject("minute",X,Y,X,0,140,"blue",3);
 		var secondHand = new drawObject("second",X,Y,X,0,170,"red",1);
 		
+		var hourArc = new ClockBord("hour",R-15,"green");
+		var minuteArc = new ClockBord("minute",R,"blue");
+		var secondArc = new ClockBord("second",R+15,"red");
 		function move(){
 			//requestAnimationFrame(move);
 			ctx.clearRect(0,0,600,600);
-			drawTrack();
-			drawClock();
+			//drawTrack();
 			secondHand.update();
 			minutesHand.update();
 			hourHand.update();
+			
+			hourArc.update();
+			minuteArc.update();
+			secondArc.update();
 			
 			drawTime();
 		}
