@@ -12,6 +12,7 @@
 			}
 			.thClass{
 				background-color:green;
+				height: 28px;
 			}
 			
 			.mouseonClass{
@@ -53,8 +54,8 @@
 		</div>		
 		<div id="playerDiv">
 			<div id="buttons" style="height:110px;">
-				<div align="center" style="background-color:yellow;height:35px;border-bottom:2px solid green;padding-top:7px;">
-					当前正在播放:<label id="songName"></label>
+				<div id="songNameDiv" align="center" style="background-color:yellow;height:35px;border-bottom:2px solid green;padding-top:7px;display: none;">
+					<span id="statusSpan">当前正在播放:</span><label id="songName"></label>
 				</div>
 				<div style="height:75px;">
 					<div style="float:left;width:300px;margin-top:5px">
@@ -155,6 +156,9 @@
 			$(trObj).addClass("selectRowClass");
 			
 			$("#player").attr("src",url);
+			$("#btnPlay").text("暂停");
+			$("#songNameDiv").css("display","block");
+			$("#statusSpan").text("正在播放:");
 			$("#songName").html(songname);
              
 			player.play();
@@ -187,13 +191,17 @@
 			
 			$("#player").attr("src",url);
 			//var player = $("#player")[0];
-			$("#songName").html(songname);	
+
+			$("#songNameDiv").css("display","block");
+			$("#statusSpan").text("正在播放:");
+			$("#songName").html(songname);
 			var btnText = $("#btnPlay").text();
 			if (btnText == "播放"){
 				btnText = "暂停";
 				player.play();
 			}else{
 				btnText = "播放";
+				$("#statusSpan").text("暂停中:");
 				player.pause();
 			}
 			$("#btnPlay").text(btnText);
