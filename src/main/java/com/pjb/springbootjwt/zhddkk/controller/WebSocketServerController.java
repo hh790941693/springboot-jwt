@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
@@ -34,11 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import net.sf.json.JSONArray;
 
@@ -507,8 +504,19 @@ public class WebSocketServerController extends AdminBaseController
 		JsonResult jr = wsService.queryOperationLogByPageByBootStrap(params);
 		return JsonUtil.javaobject2Jsonobject(jr);
 	}
-	
-	
+
+
+	/**
+	 * 清空操作日志
+	 * @return
+	 */
+	@PostMapping("clearOperationLog.do")
+	@ResponseBody
+	public String clearOperationLog(){
+		wsOperLogService.delete(null);
+		return "success";
+	}
+
 	/**
 	 * 敏感词/脏话  分页查询
 	 * 

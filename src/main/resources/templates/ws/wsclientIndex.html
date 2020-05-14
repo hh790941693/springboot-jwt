@@ -34,6 +34,20 @@
             margin-top:-15px;
         }
 
+		#mainDiv{
+			width:1318px;
+			height:610px;
+			margin:1px auto;
+		}
+
+		#leftNavi{
+			width:180px;
+			height:100%;
+			float:left;
+			border:2px solid green;
+			background-image: url("../img/pic3.jpg");
+		}
+
         #leftNavi ul{
             padding-left:30px;
             height:495px;
@@ -59,7 +73,7 @@
             color:white;
         }
         .mousemoveout{
-            background-color:white;
+            background-color:transparent;
             color:black;
         }
         .mouseleftclick{
@@ -126,22 +140,22 @@
 			<label id="titleLabel" style="color:black;"></label>
 		</div>
 		<div id="btnDiv" style="float:left;margin-top:-4px;">
-			<button id="showQRCodeBtn" class='btn btn-sm btn-primary'>查看二维码</button>
+			<button id="showQRCodeBtn" class='btn btn-sm btn-info'>手机登录</button>
 			<button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
 		</div>
 	</div>
 
 	<div id="qrDiv" style="display:none">
-		<img id="qrcodeImg"></img>
+		<img id="qrcodeImg">
 	</div>
-	<div id='mainDiv' style="width:1318px;height:610px;margin:1px auto;">
+	<div id='mainDiv'>
 		<input type="hidden" id="user" name="user" th:value="${user}">
 		<input type="hidden" id="pass" name="pass" th:value="${pass}">
 		<input type="hidden" id="webserverip" name="webserverip" th:value="${webserverip}">
 		<input type="hidden" id="webserverport" name="webserverport" th:value="${webserverport}">
 		<input type="hidden" id="selfimg" name="selfimg" th:value="${selfimg}">
         <input type="hidden" id="user_agent" name="user_agent" th:value="${user_agent}">
-		<div id="leftNavi" style="width:180px;height:100%;float:left;border:2px solid green">
+		<div id="leftNavi">
 			<ul>
 				<li id="wsclientChat.page" class="mouseleftclick">聊天<span id="unreadCountSpan"></span></li>
 				<li id="../file/musicPlayer.page">音乐播放器</li>
@@ -163,7 +177,7 @@
 	
 	<div id='musicIframeDiv'>
 		<div id='musicIframeHeader'>
-			<span style='display:inline-block;width:65%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
+			<span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
 			<button id='resetMusicIframeDivPosBtn' style='display:inline-block;width:30%;'>复位</button>
 		</div>
 		<iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
@@ -217,6 +231,10 @@
         var s_userAgent = $('#user_agent').val();
         var s_selfimg = $('#selfimg').val();
 
+        //左侧导航栏
+		var backimgUrl = "../img/pic3.jpg";
+		$("#leftNavi").css("background-image","url("+backimgUrl+")");
+
         //头部
         if (s_user == "admin"){
             if (s_selfimg == ""){
@@ -264,8 +282,7 @@
         // 显示聊天窗口首页
         var cur_pageid = "wsclientChat.page";
         showPage(cur_pageid);
-        function showPage(pageId)
-        {
+        function showPage(pageId) {
             var url = pageId + "?user="+s_user;
             $("#iframePage").attr("src",url);
         }
@@ -495,7 +512,7 @@
             var mainDivHeight = $("#mainDiv").height();
             var mainDivLeft = $("#mainDiv").offset().left;
             var musicIframeDivHeight=$("#musicIframeDiv").height();
-            $("#musicIframeDiv").css("top",headDivHeight+mainDivHeight-musicIframeDivHeight-25);
+            $("#musicIframeDiv").css("top",headDivHeight+mainDivHeight-musicIframeDivHeight-16);
             $("#musicIframeDiv").css("left",mainDivLeft+3);
         }
 

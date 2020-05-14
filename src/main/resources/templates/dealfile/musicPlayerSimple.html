@@ -62,8 +62,8 @@
 					<button id="btnPlay" onclick="play()">播放</button>
 					<button id="btnNext" onclick="nextMusic()">&gt;&gt;</button>
 				</div>
-				<div id="songNameDiv" style='font-size:8px;margin-top:5px;'>
-					<span>正在播放:</span><span id="songNameSpan" style='color:green;'></span>
+				<div id="songNameDiv" style='font-size:8px;margin-top:5px;display: none;' >
+					<span id="statusSpan">正在播放:</span><br/><span id="songNameSpan" style='color:green;'></span>
 				</div>
 			</div>
 			
@@ -142,7 +142,10 @@
 			
 			$("#player").attr("src",url);
 			//var player = $("#player")[0];
-			$("#songNameSpan").text(songname);			
+			$("#btnPlay").text("暂停");
+			$("#songNameDiv").css("display","block");
+			$("#statusSpan").text("正在播放:");
+			$("#songNameSpan").text(songname);
 			player.play();
 		}
 		
@@ -173,6 +176,8 @@
 			
 			$("#player").attr("src",url);
 			//var player = $("#player")[0];
+			$("#songNameDiv").css("display","block");
+			$("#statusSpan").text("正在播放:");
 			$("#songNameSpan").text(songname);
 			
 			var btnText = $("#btnPlay").text();
@@ -183,6 +188,7 @@
 				$("#totalTimeSpan").text(player.duration);
 			}else{
 				btnText = "播放";
+				$("#statusSpan").text("暂停中:");
 				player.pause();
 			}
 			$("#btnPlay").text(btnText);

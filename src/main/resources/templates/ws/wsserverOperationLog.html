@@ -10,6 +10,9 @@
 	#userTable{
 		border:2px solid green;
 	}
+	#userTable tr:nth-child(odd){
+		background: #ccc;
+	}
 	
 	#userTable th{
 		background-color:green;
@@ -37,7 +40,7 @@
 		<div style="width:100%;">
 			<input type="hidden" th:value="${users}" id="users">
 			<input type="hidden" th:value="${modules}" id="modules">
-			<div style="width:80%;float:left;">
+			<div style="width:70%;float:left;">
 				操作用户:&nbsp;&nbsp;<select id="userSelect" onchange="getChatLogByPage(parseInt($('#curPage').text()),parseInt($('#numPerPage').val()))">
 					<option value="">--请选择--</option>
 				</select>
@@ -46,8 +49,9 @@
 					<option value="">--请选择--</option>
 				</select>
 			</div>
-			<div style="width:12%;float:right;">
+			<div style="width:19%;float:right;">
 				<a id="exportDataBtn" type="button" class='btn btn-sm btn-primary'>导&nbsp;&nbsp;出</a>&nbsp;&nbsp;
+				<button id="clearLogBtn" type="button" class='btn btn-sm btn-primary'>一键清空</button>&nbsp;&nbsp;
 				<button id="refresh" type="button" class='btn btn-sm btn-primary'  onClick="refresh()">刷&nbsp;&nbsp;新</button>
 			</div>
 		</div>
@@ -220,6 +224,22 @@
 			}
 			$(this).attr('href', rootUrl + "ws/exportOperateLog.do?userName="+userName+"&operModule="+operModule);
 		})
+
+		//清空操作日志
+		$("#clearLogBtn").click(function () {
+			$.ajax({
+				type: 'POST',
+				url: rootUrl + 'ws/clearOperationLog.do',
+				contentType: "application/json",
+				data: {},
+				//dataType: 'json',
+				async: false,
+				success: function (result) {
+					console.log("success");
+					refresh();
+				}
+			});
+		});
 
 		window.setInterval(function(){
 			refresh();
