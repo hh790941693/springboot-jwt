@@ -19,6 +19,10 @@
 	label{
 		margin-bottom:0px;
 	}
+
+	#div001 span{
+		margin-top:5px;
+	}
 </style>
 </head>
 <body>
@@ -26,9 +30,21 @@
 		<input type="hidden" th:value="${dicJson}" id="dicJson">
 		<form style="margin:10px 5px;" id="registerForm" action="wsregister.do" method="post" target="hidden_frame">
 			<div>
-				<span>用户名:</span><input id="user" name="user" type="text" autocomplete="off"></input>
+				<span>用户名称:</span><input id="user" name="user" type="text" autocomplete="off"></input>
 			</div>
-			<div>
+
+			<div style="margin-top:5px;margin-bottom: 5px;">
+				<label id="headImgLabel" for="headImg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
+				<input type="hidden" id="headImgInput" name="headImg" style="width:208px;margin-left:10px;">
+				<button type="button" id="imageBtn" class="layui-btn" style="margin-left: 26px;">
+					<i class="layui-icon">&#xe67c;</i>上传图片
+				</button>
+			</div>
+			<div style='padding:5px 0 5px 90px;display:none' id="headImgDiv">
+				<img id="headImg" alt="" width="60px" height="60px" onerror="imgerror(this)">
+			</div>
+
+			<div id="div001">
 				<span>密码:</span><input id="pass" name="pass" type="password" autocomplete="off"></input>
 				<br/>
 				<span>确认密码:</span><input id="confirmPass" name="confirmPass" type="password" autocomplete="off"></input>
@@ -58,13 +74,14 @@
 	<iframe name="hidden_frame" id="hidden_frame" style='display: none'></iframe>
 </body>
 	<script type="text/javascript">
+		var user = "";
 		$("#user").blur(function(){
-			var user = $("#user").val();
-			if (user != '' && user != undefined)
-			{
+			user = $("#user").val();
+			if (user != '' && user != undefined) {
 				checkUserRegisterStatus(user);
 			}
 		});
+		initUpload();
 
 		queryCommonData();
 		//查询注册问题
@@ -218,5 +235,37 @@
 				}
 			}
 		});
+
+		function initUpload(){
+			layui.upload.render({
+				elem: '#imageBtn',
+				url: uploadUrl,
+				size: 10240,//单位为KB
+				accept: 'images',
+				data: {
+					"user": user,
+					"folder": "headImg"
+				},
+				before: function () {
+					layer.load();
+				},
+				done: function (r) {
+					layer.closeAll('loading');
+					if (r.code == "1") {
+						$("#headImg").attr("src", r.data);
+						$("#headImgDiv").show();
+						$("#headImgInput").val(r.data);
+					}
+				},
+				error: function () {
+					layer.closeAll('loading');
+				}
+			});
+		}
+
+		// 加载图片失败
+		function imgerror(imgObj){
+			$(imgObj).attr("src",rootUrl+"/img/imgerror_default.jpg");
+		}
 	</script>
 </html>

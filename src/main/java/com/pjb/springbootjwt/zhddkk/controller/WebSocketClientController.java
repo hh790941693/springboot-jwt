@@ -298,7 +298,9 @@ public class WebSocketClientController
 	@RequestMapping(value = "wsregister.do", method = RequestMethod.POST)
 	@ResponseBody
     @Transactional
-	public String wsregister(Model model,@RequestParam("user")String user,@RequestParam("pass")String pass,
+	public String wsregister(Model model,@RequestParam("user")String user,
+			@RequestParam("pass")String pass,
+			@RequestParam("headImg")String headImg,
 			@RequestParam("confirmPass")String confirmPass,
 			@RequestParam("select1")String question1,@RequestParam("answer1")String answer1,
 			@RequestParam("select2")String question2,@RequestParam("answer2")String answer2,
@@ -353,6 +355,9 @@ public class WebSocketClientController
             wsUserProfileDO.setUserId(insrtWu.getId());
             wsUserProfileDO.setUserName(user);
             wsUserProfileDO.setCreateTime(new Date());
+            if (StringUtils.isNotBlank(headImg)){
+            	wsUserProfileDO.setImg(headImg);
+			}
             wsUserProfileService.insert(wsUserProfileDO);
         }
 
