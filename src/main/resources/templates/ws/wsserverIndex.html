@@ -4,7 +4,7 @@
 
 <style type="text/css">
     #headerDiv{
-        width:1308px;
+        width:1318px;
         height:55px;
         font-weight:bold;
         margin:1px auto;
@@ -123,7 +123,7 @@
         <div style="float:left;width:56%;font-size:30px;">
             <label id="titleLabel" style="color:black;"></label>
         </div>
-        <div id="btnDiv" style="float:left;">
+        <div id="btnDiv" style="float:left;margin-top: -4px;">
             <button id="showQRCodeBtn" class='btn btn-sm btn-primary'>查看二维码</button>
             <button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
         </div>
@@ -132,7 +132,7 @@
 	<div id="qrDiv" style="display:none">
 		<img id="qrcodeImg">
 	</div>
-	<div id='mainDiv' style="width:1328px;height:610px;margin:1px auto;position:relative;">
+	<div id='mainDiv' style="width:1318px;height:610px;margin:1px auto;position:relative;">
 		<input type="hidden" id="user" name="user" th:value="${user}">
 		<input type="hidden" id="pass" name="pass" th:value="${pass}">
 		<input type="hidden" id="webserverip" name="webserverip" th:value="${webserverip}">
