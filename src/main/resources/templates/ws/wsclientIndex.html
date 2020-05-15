@@ -330,6 +330,14 @@
         //未读消息条数
         var unreadCount=0;
 
+        function updateChatMsg(msg,color,fontSize){
+        	var newMsg = "<p style='color:"+color+";font-size:"+fontSize+"px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] "+msg+"</p>";
+			var msgFromServerObj = getIframeElement("msgFromServer");
+        	$(msgFromServerObj).append(newMsg);
+			chatRecord = chatRecord + newMsg;
+			showTips(msg, color);
+        }
+
         //连接服务器
         function checkConnection() {
             if (connectStatus == "0") {
@@ -339,12 +347,8 @@
                         clearInterval(checkTimer);
                     }
                 }
-                //获取子页面iframe中的聊天窗口对象
-                var msgFromServerObj = getIframeElement("msgFromServer");
-                var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等...</p>";
-                $(msgFromServerObj).append(msg);
-                chatRecord = chatRecord + msg;
-                showTips("正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等...","blue");
+                var tempMsg = "正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等...";
+				updateChatMsg(tempMsg, "red", 10);
                 checkCount++;
             }else{
                 if (checkTimer != undefined){
@@ -385,32 +389,20 @@
 
         //连接成功
         function onOpen(event){
-            connectStatus = "1";
-            var msgFromServerObj = getIframeElement("msgFromServer");
-            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 已连上服务器!</p>";
-            $(msgFromServerObj).append(msg);
-            showTips("已连上服务器!","green");
-            chatRecord = chatRecord + msg;
+			updateChatMsg("已连上服务器!", "green", 10);
+			connectStatus = "1";
         }
 
         //连接失败
         function onError(event){
-            var msgFromServerObj = getIframeElement("msgFromServer");
-            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 连接服务器异常!</p>";
-            $(msgFromServerObj).append(msg);
-            showTips("连接服务器异常!","red");
-            chatRecord = chatRecord + msg;
+			updateChatMsg("连接服务器异常!", "red", 10);
             connectStatus = "0";
             webSocket = null;
         }
 
         //连接关闭
         function OnClose(event){
-            var msgFromServerObj = getIframeElement("msgFromServer");
-            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 客户端已断开!</p>";
-            $(msgFromServerObj).append(msg);
-            showTips("客户端已断开!","red");
-            chatRecord = chatRecord + msg;
+			updateChatMsg("客户端已断开!", "red", 10);
             connectStatus = "0";
             stop();
         }
@@ -540,7 +532,7 @@
 				color="black";
 			}
 			$("#statusTips").css("color",color);
-			$("#statusTips").text(msg);
+			$("#statusTips").html(msg);
 		}
 
 		//底部
