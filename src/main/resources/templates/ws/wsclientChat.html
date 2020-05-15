@@ -113,8 +113,6 @@
 	<script type="text/javascript">
 		var user = parent.s_user;
 		var pass = parent.s_pass;
-		//var webserverip = parent.s_webserverip;
-		//var webserverport = parent.s_webserverport;
 		//当前用户的状态信息
 		var currentUserOnlineInfo = undefined;
 		if (null != parent.webSocket){
@@ -138,14 +136,14 @@
 				var enableStatus = currentUserOnlineInfo.enable;
 				if (enableStatus == "0"){
 					//被禁用了
-					updateChatMsg("<span style='color:red;'>你的账号已被禁用了</span>")
+					updateChatMsg("<span style='color:red;'>["+getCurrentTime()+"] [系统消息] 你的账号已被禁用了</span>")
 					return;
 				}
 
 				var speakStatus = currentUserOnlineInfo.speak;
 				if (speakStatus == "0"){
 					//被禁言了
-					updateChatMsg("<span style='color:red;'>你的已被禁言了</span>")
+					updateChatMsg("<span style='color:red;'>["+getCurrentTime()+"] [系统消息] 你的已被禁言了</span>")
 					return;
 				}
 			}
@@ -153,19 +151,19 @@
 			var toUser = $("#selectUser").val();
 			if (parent.webSocket != null) {
 				if (parent.s_user == toUser) {
-					updateChatMsg("<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 自己不能给自己发消息!</p>");
+					updateChatMsg("<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 自己不能给自己发消息!</p>");
 					return false;
 				}
 
 				var msgToServer = $("#msgToServer").val();
 				if (msgToServer == null || msgToServer == "") {
-					var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 不允许发送空消息!</p>";
+					var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 不允许发送空消息!</p>";
 					updateChatMsg(msg);
 					return;
 				}
 
 				if (toUser == null || toUser == "") {
-					var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 你暂时没有好友,快去<a href='javascript:void(0)' onclick='toAddUser()'>添加用户</a>吧!</p>";
+					var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 你暂时没有好友,快去<a href='javascript:void(0)' onclick='toAddUser()'>添加用户</a>吧!</p>";
 					var textArea = $("#msgFromServer").append(msg);
 					parent.chatRecord = parent.chatRecord + msg;
 					textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
@@ -176,7 +174,7 @@
 					$("#msgToServer").val("");
 				}
 			}else{
-				var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
+				var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
 				updateChatMsg(msg);
 			}
 		}
@@ -184,10 +182,15 @@
 		//发送消息
 		function sendMsgToServer(from,to,msg) {
 			if (parent.connectStatus == "1" && parent.webSocket != null){
-				var toSerMsg = "typeId:2;typeDesc:在线消息;from:" + from+";to:"+ to+";msg:"+msg;
-				parent.webSocket.send(toSerMsg);
+				var toServerMsgObj = {};
+				toServerMsgObj.typeId=2;
+				toServerMsgObj.typeDesc="在线消息";
+				toServerMsgObj.from = from;
+				toServerMsgObj.to = to;
+				toServerMsgObj.msg = msg;
+				parent.webSocket.send(toServerMsgObj);
 			}else{
-				var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
+				var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
 				updateChatMsg(msg);
 			}
 		}
@@ -217,7 +220,7 @@
 						layer.tips('该账户已被禁用,10秒后强制退出!', '#msgFromServer', {
 							tips: [2, 'red']
 						});
-						updateChatMsg("<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 该账户已被禁用,10秒后强制退出!</p>");
+						updateChatMsg("<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 该账户已被禁用,10秒后强制退出!</p>");
 						setTimeout(logout,10000);
 						return;
 					}

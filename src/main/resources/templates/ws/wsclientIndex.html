@@ -341,7 +341,7 @@
                 }
                 //获取子页面iframe中的聊天窗口对象
                 var msgFromServerObj = getIframeElement("msgFromServer");
-                var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等...</p>";
+                var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等...</p>";
                 $(msgFromServerObj).append(msg);
                 chatRecord = chatRecord + msg;
                 showTips("正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等...","blue");
