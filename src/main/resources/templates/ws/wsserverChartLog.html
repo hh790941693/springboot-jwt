@@ -38,9 +38,9 @@
 </head>
 <body>
 	<div  style="width:1095px;">
-		<div style="width:100%;">
+		<div style="width:100%;margin:4px;height:30px;">
 			<input type="hidden" th:value="${users}" id="userHidden">
-			<div style="width:95%;float:left;">
+			<div style="width:94%;float:left;">
 				用户:&nbsp;&nbsp;<select id="user" onchange="getChatLogByPage(parseInt($('#curPage').text()),parseInt($('#numPerPage').val()))">
 					<option value="-1">--请选择--</option>
 				</select>
@@ -54,7 +54,7 @@
 				
 				&nbsp;&nbsp;关键词:<input id="keywordInput" style='width:120px;' placeholder="请输入关键词" onblur="getChatLogByPage(parseInt($('#curPage').text()),parseInt($('#numPerPage').val()))">
 			</div>
-			<div style="width:5%;float:left;">
+			<div style="width:5%;float:right;">
 				<button id="refresh" type="button" class='btn btn-sm btn-primary'  onClick="refresh()">刷&nbsp;&nbsp;新</button>
 			</div>
 		</div>

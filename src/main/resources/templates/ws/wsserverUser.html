@@ -52,12 +52,14 @@
 </head>
 <body>
 	<div style="width:1095px;">
-		<div style="float:left;width:20%">
-			<a id="exportDataBtn" type="button" class='btn btn-sm btn-primary'>导&nbsp;&nbsp;出</a>
-		</div>
-		<div style="float:right;width:10%">
-			<label id="onlineCount">在线:0</label>
-			<button id="refresh" type="button" class='btn btn-sm btn-primary'  onClick="refresh()">刷&nbsp;&nbsp;新</button>
+		<div style="margin:2px;height:32px;">
+			<div style="float:left;width:20%">
+				<a id="exportDataBtn" type="button" class='btn btn-sm btn-primary'>导&nbsp;&nbsp;出</a>
+			</div>
+			<div style="float:right;">
+				<label id="onlineCount">在线:0</label>
+				<button id="refresh" type="button" class='btn btn-sm btn-primary'  onClick="refresh()">刷&nbsp;&nbsp;新</button>
+			</div>
 		</div>
 		<table id= "userTable" style="width:100%;border-collapse:separate; border-spacing:1px 4px;" >
 		</table>

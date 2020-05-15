@@ -37,7 +37,7 @@
 </head>
 <body>
 	<div  style="width:1095px;">
-		<div style="width:100%;">
+		<div style="width:100%;margin:3px;height:30px;">
 			<input type="hidden" th:value="${users}" id="users">
 			<input type="hidden" th:value="${modules}" id="modules">
 			<div style="width:70%;float:left;">
@@ -50,7 +50,7 @@
 				</select>
 			</div>
 			<div style="width:19%;float:right;">
-				<a id="exportDataBtn" type="button" class='btn btn-sm btn-primary'>导&nbsp;&nbsp;出</a>&nbsp;&nbsp;
+				<a id="exportDataBtn" style="color:white;" type="button" class='btn btn-sm btn-primary'>导&nbsp;&nbsp;出</a>&nbsp;&nbsp;
 				<button id="clearLogBtn" type="button" class='btn btn-sm btn-primary'>一键清空</button>&nbsp;&nbsp;
 				<button id="refresh" type="button" class='btn btn-sm btn-primary'  onClick="refresh()">刷&nbsp;&nbsp;新</button>
 			</div>
