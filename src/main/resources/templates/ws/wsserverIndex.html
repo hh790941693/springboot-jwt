@@ -131,12 +131,13 @@
 			<label style="font-size: 20px;">你好:</label><label id="curUser" th:text="${user}" style="color:blue;font-size:30px;"></label>
             <span id="curTimeSpan">0000-00-00 00:00:00</span>
         </div>
-        <div style="float:left;width:56%;font-size:30px;">
+        <div style="float:left;width:50%;font-size:30px;">
             <label id="titleLabel" style="color:black;"></label>
         </div>
         <div id="btnDiv" style="float:right;margin-top:-4px;margin-right:5px;">
             <button id="showQRCodeBtn" class='btn btn-sm btn-info'>手机登录</button>
-            <button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
+			<button id="setPersonInfoBtn" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>
+			<button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
         </div>
     </div>
 
@@ -496,6 +497,17 @@
                     });
             });
         }
+
+		$("#setPersonInfoBtn").click(function () {
+			layer.open({
+				type: 2,
+				title: '设置个人信息',
+				shadeClose: true,
+				shade: 0.8,
+				area: ['390px', '600px'],
+				content: 'setPersonalInfo.page?user='+s_user
+			});
+		});
 
         //窗口大小变化事件
         $(window).resize(function () {
