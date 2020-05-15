@@ -182,13 +182,8 @@
 		//发送消息
 		function sendMsgToServer(from,to,msg) {
 			if (parent.connectStatus == "1" && parent.webSocket != null){
-				var toServerMsgObj = {};
-				toServerMsgObj.typeId=2;
-				toServerMsgObj.typeDesc="在线消息";
-				toServerMsgObj.from = from;
-				toServerMsgObj.to = to;
-				toServerMsgObj.msg = msg;
-				parent.webSocket.send(toServerMsgObj);
+				var toSerMsg = "typeId:2;typeDesc:在线消息;from:" + from+";to:"+ to+";msg:"+msg;
+				parent.webSocket.send(toSerMsg);
 			}else{
 				var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
 				updateChatMsg(msg);
