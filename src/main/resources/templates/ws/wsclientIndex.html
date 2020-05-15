@@ -147,12 +147,14 @@
 		<img id="qrcodeImg">
 	</div>
 	<div id='mainDiv'>
+		<!--用户登录相关信息-->
 		<input type="hidden" id="user" name="user" th:value="${user}">
 		<input type="hidden" id="pass" name="pass" th:value="${pass}">
 		<input type="hidden" id="webserverip" name="webserverip" th:value="${webserverip}">
 		<input type="hidden" id="webserverport" name="webserverport" th:value="${webserverport}">
 		<input type="hidden" id="selfimg" name="selfimg" th:value="${selfimg}">
         <input type="hidden" id="user_agent" name="user_agent" th:value="${user_agent}">
+
 		<div id="leftNavi">
 			<ul>
 				<li id="wsclientChat.page" class="mouseleftclick">聊天<span id="unreadCountSpan"></span></li>
@@ -229,11 +231,7 @@
         var s_userAgent = $('#user_agent').val();
         var s_selfimg = $('#selfimg').val();
 
-        //左侧导航栏
-		var backimgUrl = "../img/pic3.jpg";
-		$("#leftNavi").css("background-image","url("+backimgUrl+")");
-
-        //头部
+        //头部头像
         if (s_user == "admin"){
             if (s_selfimg == ""){
                 $("#myImg").attr("src",rootUrl+"img/headimg/admin.jpg");
@@ -244,18 +242,22 @@
             $("#myImg").attr("src", s_selfimg);
         }
 
+        //当前时间
         var curTimeTemp = getCurrentTime();
         $("#curTimeSpan").text(curTimeTemp);
 
+        //定时更新时间
         setInterval(function(){
             var curTime = getCurrentTime();
             $("#curTimeSpan").text(curTime);
         },1000)
 
+		//返回登录页
         function toIndex(){
             window.location.href = rootUrl;
         }
 
+        //手机登录
         $("#showQRCodeBtn").click(function(){
             var imgSrc = $("#qrcodeImg").attr("src");
             if (imgSrc == "" || imgSrc == undefined){
@@ -277,7 +279,7 @@
             }
         });
 
-        // 显示聊天窗口首页
+        // 默认显示页:聊天窗口首页
         var cur_pageid = "wsclientChat.page";
         showPage(cur_pageid);
         function showPage(pageId) {
@@ -285,6 +287,7 @@
             $("#iframePage").attr("src",url);
         }
 
+        //左侧导航栏点击事件
         $("#leftNavi ul li").click(function (){
             cur_pageid = this.id;
             showPage(cur_pageid);
@@ -292,6 +295,7 @@
             $(this).addClass("mouseleftclick");
         })
 
+		//左侧导航栏鼠标滑过事件
         $("#leftNavi ul li").hover(function(){
             $(this).removeClass("mousemoveout");
             $(this).removeClass("mousemoveon");
@@ -306,61 +310,63 @@
 
         // ---------------------------------以下是供聊天用的全局变量-----------------------
         var webSocket = null;
-        var user = s_user;
-        var pass = s_pass;
-        var webserverip = s_webserverip;
-        var webserverport = s_webserverport;
-        var userAgent = s_userAgent;
+        // var user = s_user;
+        // var pass = s_pass;
+        // var webserverip = s_webserverip;
+        // var webserverport = s_webserverport;
+        //var userAgent = s_userAgent;
 
-        // 连接状态
+        // 连接状态 0:未连接 1:已连接
         var connectStatus = "0"
+		//重试连接服务器次数
         var checkCount = 1;
+        //最大连接次数
         var checkMaxCount = 20;
-        var checkTimer;
+        //连接服务器定时器
+        var checkTimer = undefined;
 
         //所有聊天记录
         var chatRecord="";
         //未读消息条数
         var unreadCount=0;
-        function checkConnection()
-        {
-            if (connectStatus == "0")
-            {
-                if (checkCount >= checkMaxCount)
-                {
-                    if (checkTimer != null && checkTimer != "" && checkTimer != undefined)
-                    {
+
+        //连接服务器
+        function checkConnection() {
+            if (connectStatus == "0") {
+                if (checkCount >= checkMaxCount) {
+                    if (checkTimer != null && checkTimer != "" && checkTimer != undefined) {
+                    	//达到最大连接数后关闭定时器
                         clearInterval(checkTimer);
                     }
                 }
+                //获取子页面iframe中的聊天窗口对象
                 var msgFromServerObj = getIframeElement("msgFromServer");
-                var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 正在连接服务器" +webserverip+":"+webserverport + " [ "+checkCount +" ]"+ "次 请稍等...</p>";
+                var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等...</p>";
                 $(msgFromServerObj).append(msg);
                 chatRecord = chatRecord + msg;
-                showTips("正在连接服务器" +webserverip+":"+webserverport + " [ "+checkCount +" ]"+ "次 请稍等...","blue");
+                showTips("正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等...","blue");
                 checkCount++;
-            }
-            else
-            {
-                if (checkTimer != null && checkTimer != "" && checkTimer != undefined)
-                {
+            }else{
+                if (checkTimer != undefined){
+                	//如果已连上服务器,则清除定时器
                     clearInterval(checkTimer);
                 }
             }
         }
+
+        //定时检查连接
         checkTimer = setInterval(function(){
             checkConnection();
         },1000);
 
-
+        //检查连接
         checkConnection();
+        //登录服务器
         loginServer();
 
-        function loginServer()
-        {
-            if (webSocket == null)
-            {
-                var socketUrl = "ws://"+webserverip+":"+webserverport+"/zhddWebSocket/" + user+"/"+pass+"/"+userAgent;
+        function loginServer() {
+            if (webSocket == null) {
+                var socketUrl = "ws://"+s_webserverip+":"+s_webserverport+"/zhddWebSocket/" + s_user+"/"+s_pass+"/"+s_userAgent;
                 webSocket = new WebSocket(socketUrl);
                 webSocket.onerror = function(event){
                     onError(event);
@@ -377,18 +383,20 @@
             }
         }
 
+        //连接成功
         function onOpen(event){
             connectStatus = "1";
             var msgFromServerObj = getIframeElement("msgFromServer");
-            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 已连上服务器!</p>";
+            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 已连上服务器!</p>";
             $(msgFromServerObj).append(msg);
             showTips("已连上服务器!","green");
             chatRecord = chatRecord + msg;
         }
 
+        //连接失败
         function onError(event){
             var msgFromServerObj = getIframeElement("msgFromServer");
-            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 连接服务器异常!</p>";
+            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 连接服务器异常!</p>";
             $(msgFromServerObj).append(msg);
             showTips("连接服务器异常!","red");
             chatRecord = chatRecord + msg;
@@ -396,17 +404,18 @@
             webSocket = null;
         }
 
+        //连接关闭
         function OnClose(event){
             var msgFromServerObj = getIframeElement("msgFromServer");
-            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 客户端已断开!</p>";
+            var msg = "<p style='color:red;font-size:10px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] 客户端已断开!</p>";
             $(msgFromServerObj).append(msg);
             showTips("客户端已断开!","red");
             chatRecord = chatRecord + msg;
             connectStatus = "0";
             stop();
-            //loginServer();
         }
 
+        //发送消息
         function onMessage(event){
             var data = event.data;
             var curTime = data.split("curTime:")[1].split(";")[0];
@@ -419,45 +428,31 @@
             var showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+msg;
             var defaultCss = "color:red;font-size:10px;line-height:10px;"
 
-            if (typeId == 1)
-            {
+            if (typeId == 1) {
                 //系统消息
                 defaultCss = "color:red;font-size:10px;line-height:10px;";
                 showStr="["+curTime+"] ["+typeDesc+"] " +msg;
-            }
-            else if (typeId == 2)
-            {
+            }else if (typeId == 2){
                 //在线消息
                 defaultCss = "color:green;font-size:10px;line-height:10px;";
                 showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->我] " +msg;
-            }
-            else if (typeId == 3)
-            {
+            }else if (typeId == 3){
                 //离线消息
                 defaultCss = "color:grey;font-size:10px;line-height:10px;";
                 showStr="["+curTime+"] ["+typeDesc+"] [我-->"+msgTo+"] " +msg;
-            }
-            else if (typeId == 4)
-            {
+            }else if (typeId == 4){
                 //广告消息
                 defaultCss = "color:blue;font-size:10px;line-height:10px;";
                 var title = msg.split("title:")[1].split(";")[0];
                 var content = msg.split("content:")[1];
                 showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+"广告标题:"+title+" 广告内容:"+content;
-            }
-            else if (msgTo==s_user)
-            {
+            }else if (msgTo==s_user){
                 defaultCss = "color:green;font-size:10px;line-height:10px;";
-            }
-            else if (msgFrom==s_user)
-            {
+            }else if (msgFrom==s_user){
                 defaultCss = "color:blue;font-size:10px;line-height:10px;";
             }
 
             if (cur_pageid != "wsclientChat.page"){
-                //$("#adTitle").html("来自"+msgFrom+"的消息");
-                //$("#adContent").html(msg);
-                //$("#adDiv").slideDown(500);
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 chatRecord = chatRecord + htmlData;
                 unreadCount = unreadCount+1;
@@ -480,15 +475,16 @@
             }
         }
 
-        function stop()
-        {
-            if (webSocket != null)
-            {
+        //断开连接
+        function stop() {
+            if (webSocket != null) {
                 webSocket.close();
                 webSocket = null;
+                connectStatus = "0";
             }
         }
 
+        //关闭广告窗
         function closeAd(){
             $("#adDiv").slideUp(500);
         }

@@ -152,7 +152,7 @@
 
 			var toUser = $("#selectUser").val();
 			if (parent.webSocket != null) {
-				if (parent.user == toUser) {
+				if (parent.s_user == toUser) {
 					updateChatMsg("<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 自己不能给自己发消息!</p>");
 					return false;
 				}
@@ -172,7 +172,7 @@
 				}else{
 					var htmlData = "<p style='color:blue;font-size:10px;line-height:10px;'>["+getCurrentTime() + "] [在线消息]  [我 -->" + toUser +"] "+ msgToServer +"</p>";
 					updateChatMsg(htmlData);
-					sendMsgToServer(parent.user, toUser, msgToServer);
+					sendMsgToServer(parent.s_user, toUser, msgToServer);
 					$("#msgToServer").val("");
 				}
 			}else{
@@ -181,6 +181,7 @@
 			}
 		}
 
+		//发送消息
 		function sendMsgToServer(from,to,msg) {
 			if (parent.connectStatus == "1" && parent.webSocket != null){
 				var toSerMsg = "typeId:2;typeDesc:在线消息;from:" + from+";to:"+ to+";msg:"+msg;
@@ -205,7 +206,7 @@
 			$.ajax({
 				type: 'GET',
 				url: 'getOnlineInfo.json',
-				data:{user:parent.user},
+				data:{user:parent.s_user},
 				//dataType: 'json',
 				success: function(result) {
 					var jsonObj = result;
@@ -244,19 +245,18 @@
 					var usersList = jsonObj.friendsList;
 
 					$("#onlineCount").html("在线"+count+"名");
-					var selectId = $("#selectUser");
-					var selectUser = selectId.val();
-					selectId.empty();
+					var selectUser = $("#selectUser").val();
+					$("#selectUser").empty();
 					if (usersList != "") {
 						if (selectUser == null || selectUser == undefined) {
 							for (var i=0;i<usersList.length;i++) {
 								if (usersList[i].name == user) {
 									continue;
 								}
-								selectId.append("<option value=" + usersList[i].name + ">" + usersList[i].name+ "</option>");
+								$("#selectUser").append("<option value=" + usersList[i].name + ">" + usersList[i].name+ "</option>");
 							}
 						}else{
-							selectId.append("<option value=" + selectUser + ">" + selectUser+ "</option>")
+							$("#selectUser").append("<option value=" + selectUser + ">" + selectUser+ "</option>")
 							for (var i=0;i<usersList.length;i++){
 								var nameTmp = usersList[i].name;
 								var enableTmp = usersList[i].enable;
@@ -265,9 +265,9 @@
 								}
 								var state = usersList[i].state;
 								if (state == "0"){
-									selectId.append("<option style='color:grey;' value=" + nameTmp + ">" + nameTmp+ "</option>");
+									$("#selectUser").append("<option style='color:grey;' value=" + nameTmp + ">" + nameTmp+ "</option>");
 								}else{
-									selectId.append("<option style='color:#FF0000;' value=" + nameTmp + ">" + nameTmp+ "</option>");
+									$("#selectUser").append("<option style='color:#FF0000;' value=" + nameTmp + ">" + nameTmp+ "</option>");
 								}
 							}
 						}
