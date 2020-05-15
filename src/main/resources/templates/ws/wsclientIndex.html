@@ -407,9 +407,10 @@
             stop();
         }
 
-        //发送消息
+        //接收消息
         function onMessage(event){
             var data = event.data;
+
             var curTime = data.split("curTime:")[1].split(";")[0];
             var msgFrom = data.split("from:")[1].split(";")[0];
             var msgTo = data.split("to:")[1].split(";")[0];

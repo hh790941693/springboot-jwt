@@ -15,13 +15,17 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
+import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
+import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
+import net.sf.json.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.entity.WsChatlog;
-import com.pjb.springbootjwt.zhddkk.entity.WsCommon;
 import com.pjb.springbootjwt.zhddkk.entity.WsUser;
 import com.pjb.springbootjwt.zhddkk.listener.ApplicationContextRegister;
 import com.pjb.springbootjwt.zhddkk.service.WsService;
@@ -46,89 +50,84 @@ public class ZhddWebSocket
 	private long loginTimes;
 	
 	private static int onLineCount = 0;
+
+	private static WsService wsService;
+
+	private static WsCommonService wsCommonService;
+
+	static {
+		ApplicationContext act = ApplicationContextRegister.getApplicationContext();
+		wsService = act.getBean(WsService.class);
+		wsCommonService = act.getBean(WsCommonService.class);
+	}
 	
 	@OnMessage
-	public void onMessage(String message, Session session) throws IOException, InterruptedException
-	{
+	public void onMessage(String message, Session session) throws IOException, InterruptedException {
 		if (this.user == null || this.session==null) {
 			return;
 		}
-		
+
+		JSONObject jsonObject = JsonUtil.jsonstr2Jsonobject(message);
 		//time:2019-01-03 16:00:05;typeId:1;typeDesc:系统消息;from:admin;to:无名1;msg:hello
 		//1:系统消息  2:在线消息 3:离线消息  4:广告消息
 		SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		if (message.contains("msg:"))
-		{
-			String msgFrom = message.split("from:")[1].split(";")[0].trim();
-			String msgTo = message.split("to:")[1].split(";")[0].trim();
-			String typeId = message.split("typeId:")[1].split(";")[0].trim();
-			//String typeDesc = message.split("typeDesc:")[1].split(";")[0].trim();
-			
+		if (message.contains("msg")) {
+			String msgFrom = jsonObject.getString("from");
+			String msgTo = jsonObject.getString("to");
+			String typeId = jsonObject.getString("typeId");
+			String typeDesc = jsonObject.getString("typeDesc");
+
 			String msgStr = null;
-			try
-			{
-				msgStr = message.split("msg:")[1].trim();
-			}
-			catch (Exception e)
-			{
+			try {
+				msgStr = jsonObject.getString("msg");
+			} catch (Exception e) {
 				// 如果消息为空 直接退出
 				return;
 			}
-			
-			WsService wsService = getService();
-			
+
 			//对消息进行敏感字、脏话进行处理
 			String msg = msgStr;
-			WsCommon wsMgc = new WsCommon();
-			wsMgc.setType("mgc");
-			List<WsCommon> mgcList = wsService.queryCommon(wsMgc);
-			WsCommon wsZh = new WsCommon();
-			wsZh.setType("zh");
-			List<WsCommon> zhList = wsService.queryCommon(wsZh);
-			List<WsCommon> allList = new ArrayList<WsCommon>();
+			List<WsCommonDO> mgcList = wsCommonService.selectList(new EntityWrapper<WsCommonDO>()
+				.eq("type", "mgc"));
+
+			List<WsCommonDO> zhList = wsCommonService.selectList(new EntityWrapper<WsCommonDO>()
+					.eq("type", "zh"));
+			List<WsCommonDO> allList = new ArrayList<WsCommonDO>();
 			allList.addAll(mgcList);
 			allList.addAll(zhList);
-			
-			for (WsCommon wc : allList)
-			{
+
+			for (WsCommonDO wc : allList) {
 				msg = msg.replaceAll(wc.getName(), "***");
 			}
-			
+
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String curTime = sdf.format(new Date());
-			
-			if (typeId.equals("1"))
-			{
+
+			if (typeId.equals("1")) {
 				// 如果是系统消息
-				ChatMessageBean chatBean = new ChatMessageBean(curTime,"1","系统消息",msgFrom,msgTo, msg);
+				ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息", msgFrom, msgTo, msg);
 				Session fromSession = querySession(msgFrom);
 				fromSession.getBasicRemote().sendText(chatBean.toString());
-			}
-			else
-			{
+			} else {
 				// 如果用户不在线
 				Session toSession = querySession(msgTo);
-				if (null == toSession)
-				{
+				if (null == toSession) {
 					Session fromSession = querySession(msgFrom);
-					ChatMessageBean chatBean = new ChatMessageBean(curTime,"3","离线消息",msgFrom,msgTo,msg);
+					ChatMessageBean chatBean = new ChatMessageBean(curTime, "3", "离线消息", msgFrom, msgTo, msg);
 					fromSession.getBasicRemote().sendText(chatBean.toString());
-				}
-				else
-				{
-					ChatMessageBean chatBean = new ChatMessageBean(curTime,"2","在线消息",msgFrom,msgTo,msg);
+				} else {
+					ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg);
 					toSession.getBasicRemote().sendText(chatBean.toString());
 				}
-				
+
 				// 给admin发消息
 				Session adminSession = querySession("admin");
-				if (null != adminSession)
-				{
-					ChatMessageBean chatBean = new ChatMessageBean(curTime,"2","在线消息",msgFrom,msgTo,msg);
+				if (null != adminSession) {
+					ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg);
 					adminSession.getBasicRemote().sendText(chatBean.toString());
 				}
-				
+
 				WsChatlog wcl_1 = new WsChatlog();
 				wcl_1.setTime(sdfx.format(new Date()));
 				wcl_1.setUser(msgFrom);
@@ -145,7 +144,7 @@ public class ZhddWebSocket
 		WsUser wu = new WsUser();
 		wu.setName(user);
 		wu.setPassword(pass);
-		WsService wsService = getService();
+		//WsService wsService = getService();
 		List<WsUser> userList = wsService.queryWsUser(wu);
 		if (null == userList || userList.size()==0) {
 			System.out.println("用户:"+user+"登录失败!");
@@ -179,8 +178,7 @@ public class ZhddWebSocket
 		loginLog.setToUser("");
 		loginLog.setMsg("登录成功");
 		loginLog.setRemark(this.userAgent);
-		WsService ser = getService();
-		ser.insertChatlog(loginLog);
+		wsService.insertChatlog(loginLog);
 		
 		String curTime = sdfx.format(new Date());
 		String msg = user + "已上线";
@@ -203,10 +201,10 @@ public class ZhddWebSocket
 		updateWu.setName(this.user);
 		updateWu.setLastLoginTime(sdfx.format(new Date()));
 		updateWu.setState("1"); 
-		ser.updateWsUser(updateWu);
+		wsService.updateWsUser(updateWu);
 		
 		//获取离线日志
-		List<WsChatlog> historyLogs = ser.queryHistoryChatlog(user);
+		List<WsChatlog> historyLogs = wsService.queryHistoryChatlog(user);
 		if (null != historyLogs && historyLogs.size() > 0)
 		{
 			for (WsChatlog wcl : historyLogs)
@@ -230,8 +228,6 @@ public class ZhddWebSocket
 	{
 		subOnLineCount();
 		clients.remove(this.user);
-		//System.out.println("用户" + user + "中断连接!");
-
 		SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = sdfx.format(new Date());
 		String msg =  user + "已下线!";
@@ -250,12 +246,11 @@ public class ZhddWebSocket
 		}
 		
 		// 修改在线状态为离线
-		WsService ser = getService();  
 		WsUser wu = new WsUser();
 		wu.setName(this.user);
 		wu.setState("0");
 		wu.setLastLogoutTime(sdfx.format(new Date()));
-		ser.updateWsUser(wu);
+		wsService.updateWsUser(wu);
 		
 		// 记录登出日志
 		WsChatlog loginLog = new WsChatlog();
@@ -263,7 +258,7 @@ public class ZhddWebSocket
 		loginLog.setUser(this.user);
 		loginLog.setToUser("");
 		loginLog.setMsg("退出服务器");
-		ser.insertChatlog(loginLog);
+		wsService.insertChatlog(loginLog);
 	}
 	
 	@OnError
@@ -315,12 +310,5 @@ public class ZhddWebSocket
 		}
 
 		return session;
-	}
-	
-	private static WsService getService()
-	{
-		ApplicationContext act = ApplicationContextRegister.getApplicationContext();  
-		WsService ser =act.getBean(WsService.class);
-		return ser;
 	}
 }
