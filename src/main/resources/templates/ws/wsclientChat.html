@@ -232,6 +232,7 @@
 						layer.tips('该账户已被禁用,10秒后强制退出!', '#msgFromServer', {
 							tips: [2, 'red']
 						});
+						document.getElementById("msgFromServer").innerHTML +="<p style='color:red;font-size:10px;line-height:10px;'>[系统信息] 该账户已被禁用,10秒后强制退出!</p>";
 						setTimeout(logout,10000);
 						return;
 					}
@@ -240,7 +241,7 @@
 					var speakStatus = currentUserOnlineInfo.speak;
 					if (speakStatus == "0"){
 						$("#send").attr("disabled",true);
-						$("#send").html("你已被禁言");
+						$("#send").html("<span style='color:red;font-weight: bold;'>你已被禁言</span>");
 					}
 					else
 					{
