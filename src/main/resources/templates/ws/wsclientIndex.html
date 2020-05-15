@@ -329,7 +329,6 @@
         	var newMsg = "<p style='color:"+color+";font-size:"+fontSize+"px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] "+msg+"</p>";
 			var msgFromServerObj = getIframeElement("msgFromServer");
 			var textArea = $(msgFromServerObj).append(newMsg);
-			textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
 			chatRecord = chatRecord + newMsg;
 			showTips(msg, color);
         }
