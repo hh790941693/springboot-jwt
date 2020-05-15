@@ -607,7 +607,10 @@ public class WebSocketClientController
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.CHAT,subModule="",describe="获取在线人数信息")
 	@RequestMapping(value = "getOnlineInfo.json")
 	@ResponseBody
-	public Object getOnlineInfo(@RequestParam(value="user",required=false)String user) {
+	public Object getOnlineInfo(@RequestParam(value="user",required=true)String user) {
+		if (StringUtils.isBlank(user)){
+			return "failed";
+		}
 		Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
 		//List<WsUser> allUserListTmp = wsService.queryWsUser(new WsUser());
 		List<WsUsersDO> allUserListTmp = wsUsersService.selectList(null);
@@ -617,11 +620,12 @@ public class WebSocketClientController
 		List<WsUsersDO> friendsUserList = new ArrayList<WsUsersDO>();//好友列表
 		WsUsersDO currentOnlineUserInfo = new WsUsersDO();
 		for (WsUsersDO wu : allUserListTmp) {
+			if (wu.getName().equals(user)) {
+				currentOnlineUserInfo = wu;
+			}
+
 			if (wu.getName().equals("admin")) {
 				continue;
-			}
-			if (StringUtils.isNotBlank(user) && wu.getName().equals(user)) {
-				currentOnlineUserInfo = wu;
 			}
 
 			if (socketMap.containsKey(wu.getName())) {
