@@ -108,24 +108,24 @@ public class ZhddWebSocket
 				// 如果是系统消息
 				ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息", msgFrom, msgTo, msg);
 				Session fromSession = querySession(msgFrom);
-				fromSession.getBasicRemote().sendText(chatBean.toString());
+				fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 			} else {
 				// 如果用户不在线
 				Session toSession = querySession(msgTo);
 				if (null == toSession) {
 					Session fromSession = querySession(msgFrom);
 					ChatMessageBean chatBean = new ChatMessageBean(curTime, "3", "离线消息", msgFrom, msgTo, msg);
-					fromSession.getBasicRemote().sendText(chatBean.toString());
+					fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 				} else {
 					ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg);
-					toSession.getBasicRemote().sendText(chatBean.toString());
+					toSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 				}
 
 				// 给admin发消息
 				Session adminSession = querySession("admin");
 				if (null != adminSession) {
 					ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg);
-					adminSession.getBasicRemote().sendText(chatBean.toString());
+					adminSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 				}
 
 				WsChatlog wcl_1 = new WsChatlog();
@@ -189,7 +189,7 @@ public class ZhddWebSocket
 			{
 				try {
 					ChatMessageBean chatBean = new ChatMessageBean(curTime,"1","系统消息","admin",entry.getKey(),msg);
-					entry.getValue().getSession().getBasicRemote().sendText(chatBean.toString());
+					entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -214,7 +214,7 @@ public class ZhddWebSocket
 				ChatMessageBean chatBean = new ChatMessageBean(time,"1","系统消息","admin",user,sendmsg);
 				try 
 				{
-					this.session.getBasicRemote().sendText(chatBean.toString());
+					this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 					Thread.sleep(50);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -238,7 +238,7 @@ public class ZhddWebSocket
 			{
 				try {
 					ChatMessageBean chatBean = new ChatMessageBean(curTime,"1","系统消息","admin",entry.getKey(),msg);
-					entry.getValue().getSession().getBasicRemote().sendText(chatBean.toString());
+					entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

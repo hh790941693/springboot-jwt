@@ -310,12 +310,6 @@
 
         // ---------------------------------以下是供聊天用的全局变量-----------------------
         var webSocket = null;
-        // var user = s_user;
-        // var pass = s_pass;
-        // var webserverip = s_webserverip;
-        // var webserverport = s_webserverport;
-        //var userAgent = s_userAgent;
-
         // 连接状态 0:未连接 1:已连接
         var connectStatus = "0"
 		//重试连接服务器次数
@@ -409,18 +403,17 @@
 
         //接收消息
         function onMessage(event){
-            var data = event.data;
+			var jsonObj = JSON.parse(event.data);
 
-            var curTime = data.split("curTime:")[1].split(";")[0];
-            var msgFrom = data.split("from:")[1].split(";")[0];
-            var msgTo = data.split("to:")[1].split(";")[0];
-            var typeId = data.split("typeId:")[1].split(";")[0];
-            var typeDesc = data.split("typeDesc:")[1].split(";")[0];
-            var msg = data.split("msg:")[1];
+			var curTime = jsonObj.curTime;
+			var msgFrom = jsonObj.from;
+			var msgTo = jsonObj.to;
+			var typeId = jsonObj.typeId;
+			var typeDesc = jsonObj.typeDesc;
+			var msg = jsonObj.msg;
 
             var showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+msg;
             var defaultCss = "color:red;font-size:10px;line-height:14px;"
-
             if (typeId == 1) {
                 //系统消息
                 defaultCss = "color:red;font-size:10px;line-height:14px;";
