@@ -129,7 +129,7 @@
 <body>
     <!--头部-->
 	<div id="headerDiv" align="center">
-		<div style="float:left;">
+		<div style="float:left;margin-left: 3px;margin-top: 2px;">
 			<img id='myImg' alt=""  width="48" height="48">
 			<label style="font-size: 20px;">你好:</label><label id="curUser" th:text="${user}" style="color:blue;font-size:30px;"></label>
 			<span id="curTimeSpan">0000-00-00 00:00:00</span>
@@ -137,7 +137,7 @@
 		<div style="float:left;font-size:30px;width:62%;">
 			<label id="titleLabel" style="color:black;"></label>
 		</div>
-		<div id="btnDiv" style="float:left;margin-top:-4px;">
+		<div id="btnDiv" style="float:right;margin-top:-4px;margin-right:5px;">
 			<button id="showQRCodeBtn" class='btn btn-sm btn-info'>手机登录</button>
 			<button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
 		</div>
