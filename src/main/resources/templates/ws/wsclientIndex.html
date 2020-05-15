@@ -331,7 +331,7 @@
         var unreadCount=0;
 
         function updateChatMsg(msg,color,fontSize){
-        	var newMsg = "<p style='color:"+color+";font-size:"+fontSize+"px;line-height:10px;'>["+getCurrentTime()+"] [系统信息] "+msg+"</p>";
+        	var newMsg = "<p style='color:"+color+";font-size:"+fontSize+"px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] "+msg+"</p>";
 			var msgFromServerObj = getIframeElement("msgFromServer");
         	$(msgFromServerObj).append(newMsg);
 			chatRecord = chatRecord + newMsg;
@@ -418,30 +418,30 @@
             var msg = data.split("msg:")[1];
 
             var showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+msg;
-            var defaultCss = "color:red;font-size:10px;line-height:10px;"
+            var defaultCss = "color:red;font-size:10px;line-height:14px;"
 
             if (typeId == 1) {
                 //系统消息
-                defaultCss = "color:red;font-size:10px;line-height:10px;";
+                defaultCss = "color:red;font-size:10px;line-height:14px;";
                 showStr="["+curTime+"] ["+typeDesc+"] " +msg;
             }else if (typeId == 2){
                 //在线消息
-                defaultCss = "color:green;font-size:10px;line-height:10px;";
+                defaultCss = "color:green;font-size:10px;line-height:14px;";
                 showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->我] " +msg;
             }else if (typeId == 3){
                 //离线消息
-                defaultCss = "color:grey;font-size:10px;line-height:10px;";
+                defaultCss = "color:grey;font-size:10px;line-height:14px;";
                 showStr="["+curTime+"] ["+typeDesc+"] [我-->"+msgTo+"] " +msg;
             }else if (typeId == 4){
                 //广告消息
-                defaultCss = "color:blue;font-size:10px;line-height:10px;";
+                defaultCss = "color:blue;font-size:10px;line-height:14px;";
                 var title = msg.split("title:")[1].split(";")[0];
                 var content = msg.split("content:")[1];
                 showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+"广告标题:"+title+" 广告内容:"+content;
             }else if (msgTo==s_user){
-                defaultCss = "color:green;font-size:10px;line-height:10px;";
+                defaultCss = "color:green;font-size:10px;line-height:14px;";
             }else if (msgFrom==s_user){
-                defaultCss = "color:blue;font-size:10px;line-height:10px;";
+                defaultCss = "color:blue;font-size:10px;line-height:14px;";
             }
 
             if (cur_pageid != "wsclientChat.page"){
