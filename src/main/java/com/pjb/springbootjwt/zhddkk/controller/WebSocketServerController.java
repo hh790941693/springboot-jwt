@@ -354,15 +354,14 @@ public class WebSocketServerController extends AdminBaseController
 			String curTime = sdf.format(new Date());
 			
 			Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-			for (Entry<String,ZhddWebSocket> entry : socketMap.entrySet())
-			{
+			for (Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
 				if (entry.getKey().equals("admin")) {
 					continue;
 				}
 	
 				try {
 					ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息","admin",entry.getKey(), "title:"+adTitle+";content:"+adContent);
-					entry.getValue().getSession().getBasicRemote().sendText(chatBean.toString());
+					entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 					receiveList.add(entry.getKey());
 				} catch (IOException e) {
 					res = false;
@@ -396,23 +395,17 @@ public class WebSocketServerController extends AdminBaseController
 	{
 		int totalCount = wsService.queryAdsCount(new WsAds());
 		int totalPage = 0;
-		if (totalCount % numPerPage != 0)
-		{
+		if (totalCount % numPerPage != 0) {
 			totalPage = totalCount/numPerPage + 1;
-		}
-		else
-		{
+		}else{
 			totalPage = totalCount / numPerPage;
 		}
 		
 		int start = 0;
 		int limit = numPerPage;
-		if (curPage == 1)
-		{
+		if (curPage == 1){
 			start = 0;
-		}
-		else
-		{
+		}else{
 			start = (curPage-1) * numPerPage;
 		}
 		List<WsAds> adslist = wsService.queryAdsByPage(start, limit);
@@ -433,16 +426,14 @@ public class WebSocketServerController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.USER_MANAGE,subModule="",describe="查询用户列表")
 	@RequestMapping(value="getOnlineUsersByPage.json",method=RequestMethod.POST,produces="application/json")
 	@ResponseBody
-	public Object getOnlineUsersByPage(@RequestBody WsUser params)
-	{
+	public Object getOnlineUsersByPage(@RequestBody WsUser params) {
 		int totalCount = wsService.queryWsUserCount(params);
 		int totalPage = 0;
 		int numPerPage = params.getNumPerPage();
 		int curPage = params.getCurPage();
 		if (totalCount % numPerPage != 0){
 			totalPage = totalCount/numPerPage + 1;
-		}
-		else{
+		}else{
 			totalPage = totalCount / numPerPage;
 		}
 		
@@ -450,8 +441,7 @@ public class WebSocketServerController extends AdminBaseController
 		int limit = numPerPage;
 		if (curPage == 1){
 			start = 0;
-		}
-		else{
+		}else{
 			start = (curPage-1) * numPerPage;
 		}
 		params.setStart(start);
