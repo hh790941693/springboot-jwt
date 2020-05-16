@@ -18,16 +18,19 @@ public class WsChatlogDO implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
-    
+
     //
     @TableId(type = IdType.AUTO)
+    @ApiModelProperty(value = "id",name = "")
+    private Long id;
+
     @ApiModelProperty(value = "time",name = "")
     private String time;
     //
     @ApiModelProperty(value = "user",name = "")
     private String user;
     //
-    @ApiModelProperty(value = "toUser",name = "")
+    @ApiModelProperty(value = "to_user",name = "")
     private String toUser;
     //
     @ApiModelProperty(value = "msg",name = "")
@@ -81,4 +84,11 @@ public class WsChatlogDO implements Serializable {
         return remark;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

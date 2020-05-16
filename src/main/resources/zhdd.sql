@@ -211,7 +211,7 @@ INSERT INTO `ws_ads` (`id`, `title`, `content`, `receive_list`, `create_time`) V
 CREATE TABLE IF NOT EXISTS `ws_chatlog` (
   `time` varchar(50) DEFAULT NULL,
   `user` varchar(50) DEFAULT '',
-  `toUser` varchar(50) DEFAULT '',
+  `to_user` varchar(50) DEFAULT '',
   `msg` varchar(4000) DEFAULT '',
   `remark` varchar(400) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='聊天记录表';
