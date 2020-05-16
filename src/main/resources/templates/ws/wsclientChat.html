@@ -137,14 +137,14 @@
 				var enableStatus = currentUserOnlineInfo.enable;
 				if (enableStatus == "0"){
 					//被禁用了
-					updateChatMsg("<span style='color:red;'>["+getCurrentTime()+"] [系统消息] 你的账号已被禁用了</span>")
+					updateChatMsg("<span style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统消息] 你的账号已被禁用了</span>")
 					return;
 				}
 
 				var speakStatus = currentUserOnlineInfo.speak;
 				if (speakStatus == "0"){
 					//被禁言了
-					updateChatMsg("<span style='color:red;'>["+getCurrentTime()+"] [系统消息] 你的已被禁言了</span>")
+					updateChatMsg("<span style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统消息] 你的已被禁言了</span>")
 					return;
 				}
 			}
