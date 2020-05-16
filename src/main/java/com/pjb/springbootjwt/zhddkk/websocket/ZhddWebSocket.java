@@ -29,10 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
-import com.pjb.springbootjwt.zhddkk.entity.WsChatlog;
-import com.pjb.springbootjwt.zhddkk.entity.WsUser;
 import com.pjb.springbootjwt.zhddkk.listener.ApplicationContextRegister;
-import com.pjb.springbootjwt.zhddkk.service.WsService;
 import org.springframework.stereotype.Component;
 
 @ServerEndpoint("/zhddWebSocket/{user}/{pass}/{userAgent}")
@@ -55,8 +52,6 @@ public class ZhddWebSocket
 	
 	private static int onLineCount = 0;
 
-	private static WsService wsService;
-
 	private static WsUsersService wsUsersService;
 
 	private static WsChatlogService wsChatlogService;
@@ -65,7 +60,6 @@ public class ZhddWebSocket
 
 	static {
 		ApplicationContext act = ApplicationContextRegister.getApplicationContext();
-		wsService = act.getBean(WsService.class);
         wsUsersService = act.getBean(WsUsersService.class);
         wsChatlogService = act.getBean(WsChatlogService.class);
 		wsCommonService = act.getBean(WsCommonService.class);
@@ -149,8 +143,7 @@ public class ZhddWebSocket
 	}
 	
 	@javax.websocket.OnOpen
-	public void OnOpen(@PathParam("user") String user,@PathParam("pass") String pass,@PathParam("userAgent") String userAgent,Session session)
-	{
+	public void OnOpen(@PathParam("user") String user,@PathParam("pass") String pass,@PathParam("userAgent") String userAgent,Session session) {
         logger.info("用户连接 user:{}", user);
 		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user).eq("password", pass));
 		if (null == wsUsersDO) {
@@ -219,8 +212,7 @@ public class ZhddWebSocket
 	}
 	
 	@javax.websocket.OnClose
-	public void OnClose()
-	{
+	public void OnClose() {
 		subOnLineCount();
 		clients.remove(this.user);
 		SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -239,29 +231,30 @@ public class ZhddWebSocket
 		}
 		
 		// 修改在线状态为离线
-		WsUser wu = new WsUser();
-		wu.setName(this.user);
-		wu.setState("0");
-		wu.setLastLogoutTime(sdfx.format(new Date()));
-		wsService.updateWsUser(wu);
-		
-		// 记录登出日志
-		WsChatlog loginLog = new WsChatlog();
-		loginLog.setTime(sdfx.format(new Date()));
-		loginLog.setUser(this.user);
-		loginLog.setToUser("");
-		loginLog.setMsg("退出服务器");
-		wsService.insertChatlog(loginLog);
+		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", this.user));
+		if (null != wsUsersDO) {
+            wsUsersDO.setState("0");
+            wsUsersDO.setLastLogoutTime(sdfx.format(new Date()));
+            wsUsersService.updateById(wsUsersDO);
+
+            // 记录登出日志
+            WsChatlogDO logoutLog = new WsChatlogDO();
+            logoutLog.setTime(sdfx.format(new Date()));
+            logoutLog.setUser(this.user);
+            logoutLog.setToUser("");
+            logoutLog.setMsg("退出服务器");
+            wsChatlogService.insert(logoutLog);
+        }
 	}
 	
 	@OnError
 	public void onError(Throwable throwable) {
 		System.out.println(this.user+"连接异常:" + throwable.getMessage());
+		logger.info("用户{}连接异常",this.user);
 		clients.remove(this.user);
 	}
 	
-	public static synchronized void addOnLineCount()
-	{
+	public static synchronized void addOnLineCount() {
 		ZhddWebSocket.onLineCount++;
 	}
 	
@@ -269,23 +262,19 @@ public class ZhddWebSocket
 		ZhddWebSocket.onLineCount--;
 	}
 	
-	public synchronized Session getSession()
-	{
+	public synchronized Session getSession() {
 		return this.session;
 	}
 	
-	public synchronized long getLoginTimes()
-	{
+	public synchronized long getLoginTimes() {
 		return this.loginTimes;
 	}
 	
-	public static synchronized int getOnLineCount()
-	{
+	public static synchronized int getOnLineCount() {
 		return ZhddWebSocket.onLineCount;
 	}
 	
-	public static synchronized Map<String, ZhddWebSocket> getClients()
-	{
+	public static synchronized Map<String, ZhddWebSocket> getClients() {
 		return ZhddWebSocket.clients;
 	}
 	
