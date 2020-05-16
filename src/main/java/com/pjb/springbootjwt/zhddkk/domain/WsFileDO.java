@@ -26,6 +26,9 @@ public class WsFileDO implements Serializable {
     //用户名
     @ApiModelProperty(value = "user",name = "用户名")
     private String user;
+    //文件类型
+    @ApiModelProperty(value = "folder",name = "文件类型")
+    private String folder;
     //文件名
     @ApiModelProperty(value = "filename",name = "文件名")
     private String filename;
@@ -37,7 +40,7 @@ public class WsFileDO implements Serializable {
     private String url;
     //文件大小
     @ApiModelProperty(value = "fileSize",name = "文件大小")
-    private Integer fileSize;
+    private Long fileSize;
     //未知
     @ApiModelProperty(value = "author",name = "未知")
     private String author;
@@ -100,11 +103,11 @@ public class WsFileDO implements Serializable {
     }
 
 
-    public void setFileSize(Integer fileSize) {
+    public void setFileSize(Long fileSize) {
         this.fileSize = fileSize;
     }
 
-    public Integer getFileSize() {
+    public Long getFileSize() {
         return fileSize;
     }
 
@@ -153,4 +156,11 @@ public class WsFileDO implements Serializable {
         return status;
     }
 
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
 }

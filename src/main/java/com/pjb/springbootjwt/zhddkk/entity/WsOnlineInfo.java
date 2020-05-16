@@ -1,5 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.entity;
 
+import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class WsOnlineInfo
 	//private Map<String, List<WsDic>> dicMap;
 	
 	// 敏感词、脏话、常用语、注册问题
-	private Map<String, List<WsCommon>> commonMap;
+	private Map<String, List<WsCommonDO>> commonMap;
 
 	public int getOnlineCount() {
 		return onlineCount;
@@ -52,11 +53,11 @@ public class WsOnlineInfo
 		this.offlineCount = offlineCount;
 	}
 
-	public Map<String, List<WsCommon>> getCommonMap() {
+	public Map<String, List<WsCommonDO>> getCommonMap() {
 		return commonMap;
 	}
 
-	public void setCommonMap(Map<String, List<WsCommon>> commonMap) {
+	public void setCommonMap(Map<String, List<WsCommonDO>> commonMap) {
 		this.commonMap = commonMap;
 	}
 

@@ -56,7 +56,7 @@
   	<resultMap id="wsChatLogResultMap" type="com.pjb.springbootjwt.zhddkk.entity.WsChatlog">
 		<result column="time" jdbcType="VARCHAR" property="time" />
 		<result column="user" jdbcType="VARCHAR" property="user" />
-		<result column="toUser" jdbcType="VARCHAR" property="toUser" />
+		<result column="to_user" jdbcType="VARCHAR" property="toUser" />
 		<result column="msg" jdbcType="VARCHAR" property="msg" />
 		<result column="remark" jdbcType="VARCHAR" property="remark" />
 	</resultMap>
@@ -218,7 +218,7 @@
 	
 	<!-- 聊天记录 -->
    <insert id="insertChatlog" parameterType="com.pjb.springbootjwt.zhddkk.entity.WsChatlog">
-		insert into ws_chatlog(time,user,toUser,msg,remark)
+		insert into ws_chatlog(time,user,to_user,msg,remark)
 		values (
 				#{time},
 				#{user},
@@ -231,7 +231,7 @@
     <select id="queryHistoryChatlog" resultMap="wsChatLogResultMap" parameterType="map">
 	  	select * from ws_chatlog where 1=1
 	  	<if test="user != null">
-	  		and toUser=#{user}
+	  		and to_user=#{user}
 	  	</if>
 	  	<if test="lastLogoutTime != null">
 	  		<![CDATA[ and time > #{lastLogoutTime}]]>
@@ -240,12 +240,12 @@
     </select>
  
     <select id="queryHistoryChatlogByPage" resultMap="wsChatLogResultMap" parameterType="com.pjb.springbootjwt.zhddkk.entity.WsChatlog">
-	  	select * from ws_chatlog where 1=1 and toUser != ""
+	  	select * from ws_chatlog where 1=1 and to_user != ""
 	  	<if test="user != null">
 	  		and user=#{user}
 	  	</if>
 	  	<if test="toUser != null">
-	  		and toUser=#{toUser}
+	  		and to_user=#{toUser}
 	  	</if>
 	  	<if test="beginTime != null">
 	  		<![CDATA[and time>=#{beginTime} ]]>
@@ -260,12 +260,12 @@
     </select>
 	
 	<select id="queryHistoryChatlogCount" resultType="java.lang.Integer" parameterType="com.pjb.springbootjwt.zhddkk.entity.WsChatlog">
-		select count(1) from ws_chatlog where 1=1 and toUser != ""
+		select count(1) from ws_chatlog where 1=1 and to_user != ""
 	  	<if test="user != null">
 	  		and user=#{user}
 	  	</if>
 	  	<if test="toUser != null">
-	  		and toUser=#{toUser}
+	  		and to_user=#{toUser}
 	  	</if>
 	  	<if test="beginTime != null">
 	  		<![CDATA[and time>=#{beginTime} ]]>

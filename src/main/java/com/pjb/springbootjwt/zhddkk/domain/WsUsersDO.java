@@ -70,6 +70,10 @@ public class WsUsersDO implements Serializable {
     private Date createTime;
 
 
+    @TableField(exist = false)
+    // 非表字段  是否是好友 0:不是  1:申请中 2:被拒绝 3:申请成功
+    private Integer isFriend;
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -206,5 +210,13 @@ public class WsUsersDO implements Serializable {
 
     public void setLastLogoutTime(String lastLogoutTime) {
         this.lastLogoutTime = lastLogoutTime;
+    }
+
+    public Integer getIsFriend() {
+        return isFriend;
+    }
+
+    public void setIsFriend(Integer isFriend) {
+        this.isFriend = isFriend;
     }
 }

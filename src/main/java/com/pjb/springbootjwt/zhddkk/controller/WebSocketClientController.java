@@ -67,9 +67,6 @@ public class WebSocketClientController
 	@Autowired
 	private WebSocketConfig webSocketConfig;
 
-	@Autowired
-	private WsService wsService;
-
     @Autowired
     private RedisUtil redisUtil;
 
@@ -96,6 +93,9 @@ public class WebSocketClientController
 
     @Autowired
     private WsChatlogService wsChatlogService;
+
+    @Autowired
+    private WsCommonService wsCommonService;
 	
 	/**
 	 *客户端登录首页
@@ -413,9 +413,9 @@ public class WebSocketClientController
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.REGISTER,subModule="",describe="查询问题列表")
 	@RequestMapping(value = "queryAllCommonData.do")
 	@ResponseBody
-	public Map<String, List<WsCommon>> queryAllCommonData() {
+	public Map<String, List<WsCommonDO>> queryAllCommonData() {
 		logger.debug("访问queryAllCommonData.do");
-		Map<String, List<WsCommon>> map = buildCommonData();
+		Map<String, List<WsCommonDO>> map = buildCommonData();
 		return map;
 	}
 	
@@ -612,7 +612,6 @@ public class WebSocketClientController
 			return "failed";
 		}
 		Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-		//List<WsUser> allUserListTmp = wsService.queryWsUser(new WsUser());
 		List<WsUsersDO> allUserListTmp = wsUsersService.selectList(null);
 		List<WsUsersDO> allUserList = new ArrayList<WsUsersDO>();
 		List<WsUsersDO> onlineUserList = new ArrayList<WsUsersDO>();
@@ -688,7 +687,7 @@ public class WebSocketClientController
 	@RequestMapping(value="showAllUser.json",method=RequestMethod.POST,produces="application/json")
 	@ResponseBody
 	public Object getOnlineUsersByPage(@RequestBody WsUser params) {
-		int totalCount = wsService.queryWsUserCount(params);
+        int totalCount = wsUsersService.selectCount(new EntityWrapper<WsUsersDO>().ne("name", "admin"));
 		int numPerPage = params.getNumPerPage();
 		int curPage = params.getCurPage();
 		String curUser = params.getName();
@@ -711,18 +710,22 @@ public class WebSocketClientController
 		}
 		params.setStart(start);
 		params.setLimit(limit);
-		List<WsUser> userlist = wsService.queryWsUserByPage(params);
+
+        List<WsUsersDO> userlist = new ArrayList<>();
+		Page<WsUsersDO> userPage = wsUsersService.selectPage(new Page<>(curPage, numPerPage),
+                    new EntityWrapper<WsUsersDO>().ne("name", "admin")
+        .orderBy("last_login_time", false));
+		if (null != userPage){
+            userlist = userPage.getRecords();
+        }
+		//List<WsUser> userlist = wsService.queryWsUserByPage(params);
 		if (null != userlist && userlist.size()>0) {
-			for (WsUser wu : userlist) {
+			for (WsUsersDO wu : userlist) {
 				if (wu.getName().equals(curUser)) {
 					continue;
 				}
 				wu.setIsFriend(0);
-				
-				//WsFriends wf = new WsFriends();
-				//wf.setUname(curUser);
-				//wf.setFname(wu.getName());
-				//List<WsFriends> isMyFriend = wsService.queryMyFriendsList(wf);
+
 				int isMyFriend = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>()
                     .eq("uname", curUser).eq("fname", wu.getName()));
 				if (isMyFriend>0) {
@@ -734,8 +737,15 @@ public class WebSocketClientController
 					wfa.setToName(wu.getName());
 					wfa.setStart(0);
 					wfa.setLimit(10);
-	
-					List<WsFriendsApply> applyList = wsService.queryFriendsApplyList(wfa);
+
+					List<WsFriendsApplyDO> applyList = new ArrayList<>();
+					Page<WsFriendsApplyDO> wsFriendsApplyDOPage = wsFriendsApplyService.selectPage(new Page<>(curPage, numPerPage),
+                        new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUser)
+                        .eq("to_name", wu.getName()));
+					if (null != wsFriendsApplyDOPage){
+                        applyList = wsFriendsApplyDOPage.getRecords();
+                    }
+					//List<WsFriendsApply> applyList = wsService.queryFriendsApplyList(wfa);
 					if (null == applyList || applyList.size() == 0) {
 						wu.setIsFriend(0);//去申请
 					}else if (applyList.size() == 1) {
@@ -743,7 +753,7 @@ public class WebSocketClientController
 						wu.setIsFriend(processStatus);// 1:申请中 2:被拒绝 3:申请成功
 					}else if (applyList.size() > 1) {
 						// 过滤掉被驳回的记录
-						for (WsFriendsApply temp :  applyList) {
+						for (WsFriendsApplyDO temp :  applyList) {
 							if (temp.getProcessStatus() == 2) {
 								continue;
 							}
@@ -789,11 +799,19 @@ public class WebSocketClientController
 			start = (curPage-1) * numPerPage;
 		}
 
-		WsFriendsApply wfa = new WsFriendsApply();
-		wfa.setToName(curUser);
-		wfa.setStart(start);
-		wfa.setLimit(limit);
-		List<WsFriendsApply> userlist = wsService.queryFriendsApplyList(wfa);
+//		WsFriendsApply wfa = new WsFriendsApply();
+//		wfa.setToName(curUser);
+//		wfa.setStart(start);
+//		wfa.setLimit(limit);
+//		List<WsFriendsApply> userlist = wsService.queryFriendsApplyList(wfa);
+
+        List<WsFriendsApplyDO> userlist = new ArrayList<>();
+        Page<WsFriendsApplyDO> wsFriendsApplyDOPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
+                new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
+        if (null != wsFriendsApplyDOPage){
+            userlist = wsFriendsApplyDOPage.getRecords();
+        }
+
 		PageResponseEntity rqe = new PageResponseEntity();
 		rqe.setTotalCount(totalCount);
 		rqe.setTotalPage(totalPage);
@@ -831,11 +849,20 @@ public class WebSocketClientController
 			start = (curPage-1) * numPerPage;
 		}
 
-		WsFriendsApply wfa = new WsFriendsApply();
-		wfa.setFromName(curUser);
-		wfa.setStart(start);
-		wfa.setLimit(limit);
-		List<WsFriendsApply> userlist = wsService.queryMyApplyList(wfa);
+//		WsFriendsApply wfa = new WsFriendsApply();
+//		wfa.setFromName(curUser);
+//		wfa.setStart(start);
+//		wfa.setLimit(limit);
+//		List<WsFriendsApply> userlist = wsService.queryMyApplyList(wfa);
+
+
+        List<WsFriendsApplyDO> userlist = new ArrayList<>();
+        Page<WsFriendsApplyDO> wsFriendsApplyDOPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
+                new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUser));
+        if (null != wsFriendsApplyDOPage){
+            userlist = wsFriendsApplyDOPage.getRecords();
+        }
+
 		PageResponseEntity rqe = new PageResponseEntity();
 		rqe.setTotalCount(totalCount);
 		rqe.setTotalPage(totalPage);
@@ -864,13 +891,13 @@ public class WebSocketClientController
 		int existCount = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", fromUserName)
 				.eq("fname", toUserName));
 		if (existCount<=0) {
-			WsFriendsApply wfa = new WsFriendsApply();
+			WsFriendsApplyDO wfa = new WsFriendsApplyDO();
 			wfa.setFromId(fromUserId);
 			wfa.setFromName(fromUserName);
 			wfa.setToId(toUserId);
 			wfa.setToName(toUserName);
 			wfa.setProcessStatus(1);
-			wsService.insertFriendsApply(wfa);
+			wsFriendsApplyService.insert(wfa);
 		}else{
 			logger.info(toUserName+"已是你的好友了,无需再次申请");
 		}
@@ -897,7 +924,7 @@ public class WebSocketClientController
 		wfa.setProcessStatus(3);
 		boolean updateWfaFlag = wsFriendsApplyService.updateById(wfa);
 		if (updateWfaFlag) {
-			WsFriends wf1 = new WsFriends();
+			WsFriendsDO wf1 = new WsFriendsDO();
 			wf1.setUid(wfa.getFromId());
 			wf1.setUname(wfa.getFromName());
 			wf1.setFid(wfa.getToId());
@@ -905,10 +932,10 @@ public class WebSocketClientController
 			int isExist1 = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>()
 				.eq("uname", wfa.getFromName()).eq("fname", wfa.getToName()));
 			if (isExist1<=0) {
-				wsService.insertMyFriend(wf1);
+			    wsFriendsService.insert(wf1);
 			}
 
-			WsFriends wf2 = new WsFriends();
+            WsFriendsDO wf2 = new WsFriendsDO();
 			wf2.setUid(wfa.getToId());
 			wf2.setUname(wfa.getToName());
 			wf2.setFid(wfa.getFromId());
@@ -916,7 +943,7 @@ public class WebSocketClientController
 			int isExist2 = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>()
 					.eq("uname", wfa.getToName()).eq("fname", wfa.getFromName()));
 			if (isExist2<=0) {
-				wsService.insertMyFriend(wf2);
+                wsFriendsService.insert(wf2);
 			}
 		}
 		return "success";
@@ -1069,14 +1096,14 @@ public class WebSocketClientController
 			return "failed";
 		}
 
-		WsCircleComment wcc = new WsCircleComment();
+		WsCircleCommentDO wcc = new WsCircleCommentDO();
 		wcc.setCircleId(circleId);
 		Integer userId = querySpecityUserName(user).getId();
 		wcc.setUserId(userId);
 		wcc.setUserName(user);
 		wcc.setComment(comment);
 		wcc.setCreateTime(new Date());
-		wsService.insertCircleComment(wcc);
+		wsCircleCommentService.insert(wcc);
 		return "success";
 	}
 	
@@ -1200,7 +1227,14 @@ public class WebSocketClientController
 		wf.setUname(curUser);
 		wf.setStart(start);
 		wf.setLimit(limit);
-		List<WsFriends> userlist = wsService.queryMyFriendsList(wf);
+
+        List<WsFriendsDO> userlist = new ArrayList<>();
+		Page<WsFriendsDO> friendsPage = wsFriendsService.selectPage(new Page<>(curPage, numPerPage),
+                    new EntityWrapper<WsFriendsDO>().eq("uname", curUser).orderBy("create_time",false));
+		if (null != friendsPage){
+            userlist = friendsPage.getRecords();
+        }
+		//List<WsFriends> userlist = wsService.queryMyFriendsList(wf);
 		PageResponseEntity rqe = new PageResponseEntity();
 		rqe.setTotalCount(totalCount);
 		rqe.setTotalPage(totalPage);
@@ -1339,11 +1373,11 @@ public class WebSocketClientController
 	}
 	
 	
-	private Map<String,List<WsCommon>> buildCommonData() {
-		Map<String,List<WsCommon>> commonMap = new HashMap<String,List<WsCommon>>();
-		List<WsCommon> commonList = wsService.queryCommon(new WsCommon());
+	private Map<String,List<WsCommonDO>> buildCommonData() {
+		Map<String,List<WsCommonDO>> commonMap = new HashMap<String,List<WsCommonDO>>();
+		List<WsCommonDO> commonList = wsCommonService.selectList(null);
 
-		for (WsCommon common : commonList) {
+		for (WsCommonDO common : commonList) {
 			String type = common.getType();
 			String name = common.getName();
 			
@@ -1352,10 +1386,10 @@ public class WebSocketClientController
 			}
 
 			if (commonMap.containsKey(type)) {
-				List<WsCommon> tmpCommonList = commonMap.get(type);
+				List<WsCommonDO> tmpCommonList = commonMap.get(type);
 				tmpCommonList.add(common);
 			}else {
-				List<WsCommon> tmpDicList = new ArrayList<WsCommon>();
+				List<WsCommonDO> tmpDicList = new ArrayList<WsCommonDO>();
 				tmpDicList.add(common);
 				commonMap.put(type, tmpDicList);
 			}
@@ -1370,14 +1404,8 @@ public class WebSocketClientController
 	 * @param name
 	 * @return
 	 */
-	private WsUser querySpecityUserName(String name) {
-		WsUser wu = new WsUser();
-		wu.setName(name);
-		List<WsUser> wuList = wsService.queryWsUser(wu);
-		if (wuList.size() > 0) {
-			return wuList.get(0);
-		}
-		return null;
+	private WsUsersDO querySpecityUserName(String name) {
+	    return wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", "name"));
 	}
 	
 	/**
@@ -1385,14 +1413,8 @@ public class WebSocketClientController
 	 *
 	 * @return
 	 */
-	private WsUser querySpecityUserId(Integer id) {
-		WsUser wu = new WsUser();
-		wu.setId(id);
-		List<WsUser> wuList = wsService.queryWsUser(wu);
-		if (wuList.size() > 0) {
-			return wuList.get(0);
-		}
-		return null;
+	private WsUsersDO querySpecityUserId(Integer id) {
+	    return wsUsersService.selectById(id);
 	}
 	
 	/**

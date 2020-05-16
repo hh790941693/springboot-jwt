@@ -13,13 +13,11 @@ import com.pjb.springbootjwt.zhddkk.bean.FileUploadResultBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
-import com.pjb.springbootjwt.zhddkk.entity.WsFile;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.model.ExtReturn;
 import com.pjb.springbootjwt.zhddkk.service.WsFileService;
-import com.pjb.springbootjwt.zhddkk.service.WsService;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
 import com.pjb.springbootjwt.zhddkk.util.ServiceUtil;
@@ -42,9 +40,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileOperationController 
 {
 	private static Map<String,String> configMap = WsInterceptor.getConfigMap();
-	
-	@Autowired
-	private WsService wsService;
 
 	@Autowired
 	private WsFileService wsFileService;
@@ -105,12 +100,16 @@ public class FileOperationController
 	@RequestMapping("delFile.do")
 	@ResponseBody
 	public Object delFile(HttpServletRequest request, @RequestParam(value="id",required=true) int id) {
-		wsService.deleteMusic(id);
-		return "success";
+        boolean delFlag = wsFileService.deleteById(id);
+        if (delFlag){
+            return "success";
+        }
+        return "failed";
 	}
 	
 	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.MUSIC,subModule="",describe="上传文件")
 	@RequestMapping("uploadFiles.do")
+    @Deprecated
 	public Object uploadFiles(@RequestParam MultipartFile[] files,@RequestParam("user")String user,@RequestParam("fileType")String fileType,HttpServletRequest request,Model model) {
         List<FileUploadResultBean> uploadResultList = new ArrayList<FileUploadResultBean>();
 		
@@ -142,8 +141,9 @@ public class FileOperationController
 	        String storeResult = ServiceUtil.storeFile(request, finalSavaPath, file, filename);
 	        if (storeResult.equals(CommonConstants.SUCCESS)) {
 				if (user != null) {
-					WsFile wf = new WsFile();
+					WsFileDO wf = new WsFileDO();
 					wf.setUser(user);
+					wf.setFolder("music");
 					wf.setFilename(filename);
 					wf.setDiskPath(finalSavaPath);
 					String url = request.getScheme() + "://" + request.getServerName() + ":"+request.getServerPort()+request.getContextPath()+"/upload/"+user+"/"+filename;
@@ -154,7 +154,7 @@ public class FileOperationController
 					
 					String trackLength = MusicParserUtil.getMusicTrackTime(f.getAbsolutePath());
 					wf.setTrackLength(trackLength);
-					wsService.insertMusic(wf);
+					wsFileService.insert(wf);
 				}
 				fileBean.setUploadFlag(true);
 				fileBean.setUploadResult("上传成功");
@@ -193,7 +193,7 @@ public class FileOperationController
 				}
 				finallist.add(w);
 			}else {
-				wsService.deleteMusic(w.getId());
+			    wsFileService.deleteById(w.getId());
 			}
 		}
 		
