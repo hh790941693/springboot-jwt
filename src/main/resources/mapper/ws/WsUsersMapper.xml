@@ -2,5 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pjb.springbootjwt.zhddkk.dao.WsUsersDao">
-
+    <select id="queryUserPage" resultType="com.pjb.springbootjwt.zhddkk.domain.WsUsersDO">
+        select * from ws_users
+        <if test="ew.sqlSegment != null and ew.sqlSegment != ''">
+            <where>
+                ${ew.sqlSegment}
+            </where>
+        </if>
+    </select>
 </mapper>

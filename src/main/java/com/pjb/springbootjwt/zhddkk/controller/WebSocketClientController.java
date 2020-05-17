@@ -700,25 +700,15 @@ public class WebSocketClientController
 		if (totalPage == 0) {
 			totalPage = 1;
 		}
-		
-		int start = 0;
-		int limit = numPerPage;
-		if (curPage == 1){
-			start = 0;
-		}else{
-			start = (curPage-1)*numPerPage;
-		}
-		params.setStart(start);
-		params.setLimit(limit);
 
-        List<WsUsersDO> userlist = new ArrayList<>();
-		Page<WsUsersDO> userPage = wsUsersService.selectPage(new Page<>(curPage, numPerPage),
-                    new EntityWrapper<WsUsersDO>().ne("name", "admin")
-        .orderBy("last_login_time", false));
+        Page<WsUsersDO> queryPage = new Page<WsUsersDO>(curPage, numPerPage);
+		List<WsUsersDO> userlist = new ArrayList<>();
+		Page<WsUsersDO> userPage = wsUsersService.selectPage(queryPage,
+                    new EntityWrapper<WsUsersDO>().ne("name", "admin").orderBy("last_login_time", false));
+
 		if (null != userPage){
             userlist = userPage.getRecords();
         }
-		//List<WsUser> userlist = wsService.queryWsUserByPage(params);
 		if (null != userlist && userlist.size()>0) {
 			for (WsUsersDO wu : userlist) {
 				if (wu.getName().equals(curUser)) {
