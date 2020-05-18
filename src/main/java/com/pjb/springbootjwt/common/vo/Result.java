@@ -8,37 +8,37 @@ package com.pjb.springbootjwt.common.vo;
 public class Result<T> {
 
     public final static Integer CODE_SUCCESS = 0;
-
     public final static Integer CODE_FAIL = 1;
-
     public final static String MSG_SUCCESS = "操作成功";
-
     public final static String MSG_FAIL = "操作失败";
 
+    // 响应业务状态 0 成功， 1失败
     private Integer code;
 
+    // 响应消息
     private String msg;
 
+    // 响应中的数据
     private T data;
 
     public static <T> Result<T> build(Integer status, String msg, T data) {
         return new Result<T>(status, msg, data);
     }
 
-    public static <T> Result<T> ok() {
-        return new Result<T>(CODE_SUCCESS, MSG_SUCCESS, (T)new Object());
-    }
-
     public static <T> Result<T> ok(T data) {
         return new Result<T>(data);
     }
 
-    public static <T> Result<T> fail() {
-        return new Result<T>(CODE_FAIL, MSG_FAIL, (T)new Object());
+    public static <T> Result<T> ok() {
+        return new Result<T>(CODE_SUCCESS, MSG_SUCCESS, null);
     }
 
-    public static <T> Result<T> fail(String msg) {
-        return new Result<T>(CODE_FAIL, msg, (T)new Object());
+    public static <T> Result<T> fail() {
+        return new Result<T>(CODE_FAIL, MSG_FAIL, null);
+    }
+
+    public static <T> Result<T> fail(T data) {
+        return new Result<T>(CODE_FAIL, MSG_FAIL, data);
     }
 
     public Result() {
@@ -46,7 +46,7 @@ public class Result<T> {
     }
 
     public static <T> Result<T> build(Integer status, String msg) {
-        return new Result<T>(status, msg, (T)new Object());
+        return new Result<T>(status, msg, null);
     }
 
     public static <T> Result<T> getResult(T t) {
@@ -61,7 +61,7 @@ public class Result<T> {
     }
 
     public Result(T data) {
-        this.code = 1;
+        this.code = 0;
         this.msg = MSG_SUCCESS;
         this.data = data;
     }
@@ -88,14 +88,5 @@ public class Result<T> {
 
     public void setData(T data) {
         this.data = data;
-    }
-
-    @Override
-    public String toString() {
-        return "Result{" +
-                "code=" + code +
-                ", msg='" + msg + '\'' +
-                ", data=" + data +
-                '}';
     }
 }

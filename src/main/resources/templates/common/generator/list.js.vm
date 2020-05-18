@@ -68,9 +68,6 @@ function load() {
 					var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
 							+ row.${pk.attrname}
 							+ '\')"><i class="fa fa-remove"></i></a> ';
-					var f = '<a class="btn btn-success btn-sm" href="#" title="备用"  mce_href="#" onclick="resetPwd(\''
-							+ row.${pk.attrname}
-							+ '\')"><i class="fa fa-key"></i></a> ';
 					return e + d ;
 				}
 			}
@@ -124,9 +121,6 @@ function remove(id) {
 			}
 		});
 	})
-}
-
-function resetPwd(id) {
 }
 
 function batchRemove() {

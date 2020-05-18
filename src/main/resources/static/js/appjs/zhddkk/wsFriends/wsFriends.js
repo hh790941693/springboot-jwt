@@ -30,7 +30,8 @@ function load() {
 			return {
 				//传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
 				pageNumber : params.pageNumber,
-				pageSize : params.pageSize
+				pageSize : params.pageSize,
+				fname : $('#nameSearchInput').val()
 				//name:$('#searchName').val(),
 				//username:$('#searchName').val()
 			};
@@ -49,16 +50,14 @@ function load() {
 			 };
 		},
 		columns : [
-			{
-				checkbox : true
-			},
 						{
 				field : 'id',
 				title : '主键'
 			},
 						{
 				field : 'uid',
-				title : '用户id'
+				title : '用户id',
+				visible : false
 			},
 						{
 				field : 'uname',
@@ -78,7 +77,8 @@ function load() {
 			},
 						{
 				field : 'remark',
-				title : '备注'
+				title : '备注',
+				visible : false
 			},
 						{
 				title : '操作',
@@ -132,18 +132,22 @@ function remove(id) {
 				'id' : id
 			},
 			success : function(r) {
-				if (r.code==0) {
+				console.log(r);
+				if (r.code == "0") {
 					layer.msg(r.msg);
 					reLoad();
 				}else{
 					layer.msg(r.msg);
 				}
+			},
+			fail : function (r) {
+				console.log("failed to remove");
+			},
+			error : function (r) {
+				console.log("error to remove");
 			}
 		});
 	})
-}
-
-function resetPwd(id) {
 }
 
 function batchRemove() {

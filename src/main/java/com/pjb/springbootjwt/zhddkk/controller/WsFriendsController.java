@@ -6,10 +6,13 @@ import java.util.Date;
 
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.vo.Result;
+import com.pjb.springbootjwt.zhddkk.domain.WsFriendsApplyDO;
+import com.pjb.springbootjwt.zhddkk.service.WsFriendsApplyService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +44,8 @@ public class WsFriendsController extends AdminBaseController {
     @Autowired
 	private WsFriendsService wsFriendsService;
 
+    @Autowired
+    private WsFriendsApplyService wsFriendsApplyService;
 
     /**
     * 跳转到好友列表页面
@@ -61,6 +66,10 @@ public class WsFriendsController extends AdminBaseController {
 		if (StringUtils.isNotBlank(wsFriendsDTO.getUname())){
 			wrapper.eq("uname", wsFriendsDTO.getUname());
 		}
+		if (StringUtils.isNotBlank(wsFriendsDTO.getFname())){
+			wrapper.like("fname", wsFriendsDTO.getFname());
+		}
+		wrapper.orderBy("create_time", false);
 		Page<WsFriendsDO> qryPage = getPage(WsFriendsDO.class);
 		Page<WsFriendsDO> page = wsFriendsService.selectPage(qryPage, wrapper);
 		return Result.ok(page);
@@ -71,8 +80,26 @@ public class WsFriendsController extends AdminBaseController {
 	 */
 	@PostMapping("/remove")
 	@ResponseBody
+	@Transactional
 	public Result<String> remove( Integer id){
-		wsFriendsService.deleteById(id);
+		WsFriendsDO wsFriendsDO = wsFriendsService.selectById(id);
+		if (null == wsFriendsDO){
+			return Result.fail();
+		}
+
+		String uname = wsFriendsDO.getUname();
+		String fname = wsFriendsDO.getFname();
+
+		logger.info("uname:"+uname+"   fname:"+fname);
+		if (StringUtils.isNotEmpty(uname) && StringUtils.isNotEmpty(fname)) {
+			wsFriendsService.delete(new EntityWrapper<WsFriendsDO>().eq("uname", uname).eq("fname", fname));
+			wsFriendsService.delete(new EntityWrapper<WsFriendsDO>().eq("uname", fname).eq("fname", uname));
+			wsFriendsApplyService.delete(new EntityWrapper<WsFriendsApplyDO>().eq("from_name", fname)
+					.eq("to_name", uname));
+			wsFriendsApplyService.delete(new EntityWrapper<WsFriendsApplyDO>().eq("from_name", uname)
+					.eq("to_name", fname));
+		}
+
         return Result.ok();
 	}
 	
