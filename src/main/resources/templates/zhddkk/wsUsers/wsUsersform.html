@@ -1,0 +1,119 @@
+<!-- TODO 这里描述页面功能 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="common :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+                        <form class="form-horizontal m-t" id="form">
+							<!-- 主键 -->
+                            <input type="hidden" id="id" name="id" th:value="${wsUsers.id}">
+																													<div class="form-group">
+								<label class="col-sm-3 control-label" for="name"><span style="color:red">*</span>&nbsp;姓名：</label>
+								<div class="col-sm-8">
+									<input type="text" id="name" name="name" th:value="${wsUsers.name}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="password"><span style="color:red">*</span>&nbsp;密码：</label>
+								<div class="col-sm-8">
+									<input type="text" id="password" name="password" th:value="${wsUsers.password}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="registerTime"><span style="color:red">*</span>&nbsp;注册时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="registerTime" name="registerTime" th:value="${wsUsers.registerTime}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="state"><span style="color:red">*</span>&nbsp;是否在线 0:离线 1:在线：</label>
+								<div class="col-sm-8">
+									<input type="text" id="state" name="state" th:value="${wsUsers.state}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="lastLoginTime"><span style="color:red">*</span>&nbsp;上次登录时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="lastLoginTime" name="lastLoginTime" th:value="${wsUsers.lastLoginTime}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="lastLogoutTime"><span style="color:red">*</span>&nbsp;上次登出时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="lastLogoutTime" name="lastLogoutTime" th:value="${wsUsers.lastLogoutTime}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="enable"><span style="color:red">*</span>&nbsp;是否可用 0:不可用  1:可用：</label>
+								<div class="col-sm-8">
+									<input type="text" id="enable" name="enable" th:value="${wsUsers.enable}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="speak"><span style="color:red">*</span>&nbsp;是否禁言  0:禁言 1：没有禁言：</label>
+								<div class="col-sm-8">
+									<input type="text" id="speak" name="speak" th:value="${wsUsers.speak}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="question1"><span style="color:red">*</span>&nbsp;问题1：</label>
+								<div class="col-sm-8">
+									<input type="text" id="question1" name="question1" th:value="${wsUsers.question1}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="answer1"><span style="color:red">*</span>&nbsp;答案1：</label>
+								<div class="col-sm-8">
+									<input type="text" id="answer1" name="answer1" th:value="${wsUsers.answer1}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="question2"><span style="color:red">*</span>&nbsp;问题2：</label>
+								<div class="col-sm-8">
+									<input type="text" id="question2" name="question2" th:value="${wsUsers.question2}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="answer2"><span style="color:red">*</span>&nbsp;答案2：</label>
+								<div class="col-sm-8">
+									<input type="text" id="answer2" name="answer2" th:value="${wsUsers.answer2}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="question3"><span style="color:red">*</span>&nbsp;问题3：</label>
+								<div class="col-sm-8">
+									<input type="text" id="question3" name="question3" th:value="${wsUsers.question3}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="answer3"><span style="color:red">*</span>&nbsp;答案3：</label>
+								<div class="col-sm-8">
+									<input type="text" id="answer3" name="answer3" th:value="${wsUsers.answer3}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="createTime"><span style="color:red">*</span>&nbsp;创建时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="createTime" name="createTime" th:value="${wsUsers.createTime}" class="form-control" />
+								</div>
+							</div>
+											                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button type="submit" class="btn btn-primary">保存</button>
+                                </div>
+                            </div>
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="common::footer"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/appjs/zhddkk/wsUsers/wsUsersForm.js}"></script>
+</html>

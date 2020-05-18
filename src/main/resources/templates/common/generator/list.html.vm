@@ -38,7 +38,7 @@
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
                         <div class="fixed-table-toolbar">
-                            <div class="columns pull-left">
+                            <div class="columns pull-left" style="display: none;">
                                 <button shiro:hasPermission="${pathName}:${classname}:add" type="button" class="btn  btn-primary" onclick="add()">
                                     <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;添加
                                 </button>

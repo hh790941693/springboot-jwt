@@ -89,7 +89,6 @@ public class WsFriendsController extends AdminBaseController {
 
 		String uname = wsFriendsDO.getUname();
 		String fname = wsFriendsDO.getFname();
-
 		logger.info("uname:"+uname+"   fname:"+fname);
 		if (StringUtils.isNotEmpty(uname) && StringUtils.isNotEmpty(fname)) {
 			wsFriendsService.delete(new EntityWrapper<WsFriendsDO>().eq("uname", uname).eq("fname", fname));
