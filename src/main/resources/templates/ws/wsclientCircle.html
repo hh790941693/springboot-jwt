@@ -121,7 +121,7 @@
 <body>
 	<div id="mainDiv">
 		<div id='addCircleDiv' align='right' style='margin-bottom: 5px;'>
-			<span>当前第</span><span id='curPageSpan'></span><span>页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共</span><span id='totalPageSpan'></span><span>页</span>
+			<span>总条数:</span><span id="totalCountSpan"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span>当前第</span><span id='curPageSpan'></span><span>页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共</span><span id='totalPageSpan'></span><span>页</span>
 			<button onclick='toPrePage()' class='btn btn-sm btn-primary' >&lt;&lt;</button>&nbsp;&nbsp;
 			<button onclick='toNextPage()' class='btn btn-sm btn-primary' >&gt;&gt;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<button onclick='addCircle()' class='btn btn-sm btn-primary'>&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;布&nbsp;&nbsp;</button>
@@ -145,7 +145,7 @@
 	<script type="text/javascript">
 		var curUser=parent.s_user;
 		var curPage = 1;
-		var numPerPage = 10;
+		var numPerPage = 5;
 		var totalPage = 0;
 		$("#preBtn").hide();
 		$("#nextBtn").hide();
@@ -192,8 +192,10 @@
 					}
 					var resultData = result.data;
 					var list = resultData.records;
-					totalPage = resultData.current;
+					totalPage = resultData.pages;
+					var totalCount = resultData.total;
 					$("#totalPageSpan").text(totalPage);
+					$("#totalCountSpan").text(totalCount);
 					if (curPage >= totalPage){
 						$("#nextBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled",true);
 					}else{

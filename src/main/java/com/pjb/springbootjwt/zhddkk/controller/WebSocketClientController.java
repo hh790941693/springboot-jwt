@@ -1005,9 +1005,12 @@ public class WebSocketClientController extends AdminBaseController
 	@PostMapping(value = "queryCircleByPage.do")
 	@ResponseBody
 	public Result<Page<WsCircleDO>> queryCircleList(int curPage, int numPerPage) {
-		Page<WsCircleDO> page = new Page<WsCircleDO>(curPage, numPerPage);
-		List<WsCircleDO> circleList = wsCircleService.selectList(new EntityWrapper<WsCircleDO>().orderBy("create_time",false));
-		page.setRecords(circleList);
+		Page<WsCircleDO> qryPage = new Page<WsCircleDO>(curPage, numPerPage);
+		//List<WsCircleDO> circleList = wsCircleService.selectList(new EntityWrapper<WsCircleDO>().orderBy("create_time",false));
+		//page.setRecords(circleList);
+
+		Page<WsCircleDO> page = wsCircleService.selectPage(qryPage, new EntityWrapper<WsCircleDO>().orderBy("create_time",false));
+        List<WsCircleDO> circleList = page.getRecords();
 		Map<Integer, String> headImgMap = new HashMap<>();
 		if (null != circleList && circleList.size()>0) {
 			for (WsCircleDO wc : circleList) {

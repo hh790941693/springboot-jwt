@@ -75,6 +75,7 @@ function load() {
 			{
 				field : "isFriend",
 				title : "是否是好友",
+				align : "center",
 				formatter : function (value) {
 					var res = "";
 					if (value == 0) {
