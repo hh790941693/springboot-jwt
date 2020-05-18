@@ -1398,7 +1398,7 @@ public class WebSocketClientController extends AdminBaseController
 	 * @return
 	 */
 	private WsUsersDO querySpecityUserName(String name) {
-	    return wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", "name"));
+	    return wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", name));
 	}
 	
 	/**
