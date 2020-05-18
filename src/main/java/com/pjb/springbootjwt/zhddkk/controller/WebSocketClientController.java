@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.domain.*;
@@ -26,6 +28,7 @@ import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +53,7 @@ import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
  */
 @Controller
 @RequestMapping("ws")
-public class WebSocketClientController
+public class WebSocketClientController extends AdminBaseController
 {
 	private static final int COOKIE_TIMEOUT = 1800; //cookie过期时间 30分钟
 	
@@ -1436,5 +1439,31 @@ public class WebSocketClientController
 				}		
 			}
 		}
+	}
+
+
+
+	/**
+	 * 跳转到好友列表页面
+	 */
+	@GetMapping("myFriends.page")
+	String wsFriends(Model model, String user){
+		model.addAttribute("user", user);
+		return "ws/myFriends";
+	}
+
+	/**
+	 * 获取好友列表列表数据
+	 */
+	@ResponseBody
+	@GetMapping("/myFriendsList")
+	public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDTO){
+		Wrapper<WsFriendsDO> wrapper = new EntityWrapper<WsFriendsDO>();
+		if (StringUtils.isNotBlank(wsFriendsDTO.getUname())){
+			wrapper.eq("uname", wsFriendsDTO.getUname());
+		}
+		Page<WsFriendsDO> qryPage = getPage(WsFriendsDO.class);
+		Page<WsFriendsDO> page = wsFriendsService.selectPage(qryPage, wrapper);
+		return Result.ok(page);
 	}
 }
