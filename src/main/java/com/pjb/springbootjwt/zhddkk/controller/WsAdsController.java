@@ -1,14 +1,18 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 
 import com.baomidou.mybatisplus.enums.SqlLike;
+import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
+import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
+import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +45,6 @@ public class WsAdsController extends AdminBaseController {
 
     @Autowired
 	private WsAdsService wsAdsService;
-
 
     /**
     * 跳转到广告表页面
@@ -96,9 +99,43 @@ public class WsAdsController extends AdminBaseController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
+	@Transactional
 	public Result<String> save( WsAdsDO wsAds){
-		wsAdsService.insert(wsAds);
-        return Result.ok();
+		// 接收人列表
+		List<String> receiveList = new ArrayList<String>();
+		String title = wsAds.getTitle();
+		String content = wsAds.getContent();
+		if (StringUtils.isBlank(title) || StringUtils.isBlank(content)){
+			return Result.fail("参数不能为空");
+		}
+
+		// 插入广告记录
+		WsAdsDO wsAdsDO = new WsAdsDO();
+		wsAdsDO.setTitle(title);
+		wsAdsDO.setContent(content);
+		boolean insertFlag = wsAdsService.insert(wsAdsDO);
+		if (insertFlag){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String curTime = sdf.format(new Date());
+			Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
+			for (Map.Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
+				if (entry.getKey().equals("admin")) {
+					continue;
+				}
+
+				try {
+					ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息","admin",entry.getKey(), "title:"+title+";content:"+content);
+					entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+					receiveList.add(entry.getKey());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			wsAdsDO.setReceiveList(receiveList.toString());
+			wsAdsService.updateById(wsAdsDO);
+			return Result.ok();
+		}
+		return Result.fail();
 	}
 
 	/**

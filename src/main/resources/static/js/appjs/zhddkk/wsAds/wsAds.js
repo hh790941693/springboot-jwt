@@ -49,9 +49,6 @@ function load() {
 			 };
 		},
 		columns : [
-			{
-				checkbox : true
-			},
 						{
 				field : 'id',
 				title : '主键'
@@ -94,10 +91,10 @@ function reLoad() {
 function add() {
 	layer.open({
 		type : 2,
-		title : '增加',
+		title : '发布公告',
 		maxmin : true,
 		shadeClose : false,//点击遮罩关闭层
-		area : [ '1000px', '520px' ],
+		area : [ '650px', '380px' ],
 		content : prefix + '/add'
 	});
 }
