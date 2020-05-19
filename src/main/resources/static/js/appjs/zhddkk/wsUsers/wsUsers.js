@@ -283,6 +283,6 @@ function queryPersonInfo(thisObj){
         shadeClose: true,
         shade: 0.8,
         area: ['384px', '370px'],
-        content: rootUrl+'ws/showPersonalInfo.page?user='+user
+        content: prefix+'/showPersonalInfo.page?user='+user
     });
 }

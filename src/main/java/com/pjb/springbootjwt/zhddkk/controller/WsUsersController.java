@@ -11,12 +11,13 @@ import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsApplyDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsDO;
+import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
 import com.pjb.springbootjwt.zhddkk.entity.WsFriendsApply;
-import com.pjb.springbootjwt.zhddkk.entity.WsUser;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsApplyService;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsService;
+import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
 import com.pjb.springbootjwt.zhddkk.util.ExcelUtil;
 import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
@@ -65,6 +66,9 @@ public class WsUsersController extends AdminBaseController {
 
     @Autowired
     private WsFriendsApplyService wsFriendsApplyService;
+
+    @Autowired
+    private WsUserProfileService wsUserProfileService;
 
     /**
     * 跳转到用户账号表页面
@@ -363,4 +367,37 @@ public class WsUsersController extends AdminBaseController {
 			ExcelUtil.exportExcel(list, "用户信息", "用户", WsUsersDO.class, fileName, response);
 		}
 	}
+
+	/**
+	 * 显示用户信息
+	 *
+	 * @param model
+	 * @param user
+	 * @return
+	 */
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.SETTING,subModule="",describe="显示个用户信息首页")
+	@RequestMapping(value = "showPersonalInfo.page")
+	public String showPersonalInfo(Model model,@RequestParam("user")String user) {
+		logger.debug("访问showPersonalInfo.page");
+		model.addAttribute("user", user);
+		return "zhddkk/wsUsers/showPersonalInfo";
+	}
+
+    /**
+     * 查询个人信息
+     *
+     * @return
+     */
+    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.SETTING,subModule="",describe="查询个人信息")
+    @RequestMapping(value="queryPersonInfo.json",method=RequestMethod.POST)
+    @ResponseBody
+    public Result<WsUserProfileDO> queryPersonInfo(@RequestParam("user") String user) {
+        WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>()
+                .eq("user_name", user));
+        if (null == wsUserProfileDO) {
+            return Result.fail();
+        }
+
+        return Result.ok(wsUserProfileDO);
+    }
 }
