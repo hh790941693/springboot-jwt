@@ -9,7 +9,6 @@ import java.util.List;
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
-import com.pjb.springbootjwt.zhddkk.entity.WsOperationLog;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;

@@ -41,7 +41,6 @@ public class ${className}Controller extends AdminBaseController {
     @Autowired
 	private ${className}Service ${classname}Service;
 
-
     /**
     * 跳转到${comments}页面
 	*/
