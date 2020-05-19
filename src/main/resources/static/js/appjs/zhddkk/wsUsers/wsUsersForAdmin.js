@@ -1,6 +1,7 @@
 var prefix = "/zhddkk/wsUsers";
 $(function() {
 	load();
+	$('#exportDataBtn').attr('href', prefix + "/exportUser.do");
 });
 
 function load() {

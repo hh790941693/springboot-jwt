@@ -68,13 +68,8 @@
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
                         <div class="fixed-table-toolbar">
-                            <div class="columns pull-left" style="display: none;">
-                                <button shiro:hasPermission="zhddkk:wsUsers:add" type="button" class="btn  btn-primary" onclick="add()">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;添加
-                                </button>
-                                <button shiro:hasPermission="zhddkk:wsUsers:batchRemove" type="button" class="btn  btn-danger" onclick="batchRemove()">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>&nbsp;删除
-                                </button>
+                            <div class="columns pull-left">
+                                <a id="exportDataBtn" type="button" class='btn btn-sm btn-primary'><i class="fa fa-download" aria-hidden="true"></i>&nbsp;导&nbsp;&nbsp;出</a>
                             </div>
                         </div>
                         <table id="exampleTable" data-mobile-responsive="true">

@@ -8,13 +8,17 @@ import java.util.Map;
 
 import com.baomidou.mybatisplus.enums.SqlLike;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsApplyDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsDO;
 import com.pjb.springbootjwt.zhddkk.entity.WsFriendsApply;
+import com.pjb.springbootjwt.zhddkk.entity.WsUser;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsApplyService;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsService;
+import com.pjb.springbootjwt.zhddkk.util.ExcelUtil;
+import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -34,6 +38,8 @@ import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import com.pjb.springbootjwt.common.vo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用户账号表
@@ -331,5 +337,30 @@ public class WsUsersController extends AdminBaseController {
 			return Result.ok();
 		}
 		return Result.fail();
+	}
+
+	/**
+	 * 导出用户信息
+	 *
+	 * @param response
+	 */
+	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.USER_MANAGE,subModule="",describe="导出用户信息")
+	@RequestMapping(value = "exportUser.do", method = RequestMethod.GET)
+	public void exportUser(HttpServletResponse response){
+		logger.debug("开始导出用户信息");
+		List<WsUsersDO> list = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", "admin"));
+		if (null != list && list.size()>0) {
+			for (WsUsersDO wu : list) {
+				String password = wu.getPassword();
+				if (StringUtils.isNotEmpty(password)) {
+					String passwordDecode = SecurityAESUtil.decryptAES(password, CommonConstants.AES_PASSWORD);
+					wu.setPasswordDecode(passwordDecode);
+				}
+			}
+
+			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+			String fileName = "wsUser".concat("_").concat(time).concat(".xls");
+			ExcelUtil.exportExcel(list, "用户信息", "用户", WsUsersDO.class, fileName, response);
+		}
 	}
 }
