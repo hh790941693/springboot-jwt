@@ -68,7 +68,7 @@ function load() {
                     var result = "";
                     if (value != "" && value != null) {
                         result += "<div style='text-align: center;'>";
-                        result += "<img  onclick=\"gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
+                        result += "<img  onclick=\"$.ws.gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
                         result += "</div>";
                     }
                     return result;

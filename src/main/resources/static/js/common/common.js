@@ -5,8 +5,11 @@ host = window.location.host;
 uploadUrl = protocol+"//"+host+"/upload/app";
 
 //显示图片
-function gShowImg(imgUrl) {
-    $.fancybox.open('<img src = "'+imgUrl+'" />');
+$.ws = {
+    gShowImg : function(imgUrl) {
+        console.log("xxxxxxxx imgUrl:" + imgUrl);
+        $.fancybox.open('<img src = "' + imgUrl + '" />');
+    }
 }
 
 function getCurrentTime() {
@@ -18,24 +21,19 @@ function getCurrentTime() {
 	var m = date.getMinutes();
 	var s = date.getSeconds();
 	
-	if (month<10)
-	{
+	if (month<10){
 		month = "0"+month;
 	}
-	if (day<10)
-	{
+	if (day<10) {
 		day = "0"+day;
 	}	
-	if (h<10)
-	{
+	if (h<10) {
 		h = "0"+h;
 	}
-	if (m<10)
-	{
+	if (m<10) {
 		m = "0"+m;
 	}
-	if (s<10)
-	{
+	if (s<10) {
 		s = "0" + s;
 	}
 	
