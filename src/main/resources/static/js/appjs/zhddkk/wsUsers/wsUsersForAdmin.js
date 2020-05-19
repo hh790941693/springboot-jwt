@@ -172,17 +172,11 @@ function load() {
 							+ '\')">禁用</a> ';
 						btns += disableBtn;
 					}
-
-					// var contentInput = '<input type="text">  ';
-					// btns += contentInput;
-
 					var sendBtn = '<a class="btn btn-primary btn-sm" href="#" title="发送"  mce_href="#" onclick="sendMsg(\''
 						+ row.id
 						+ '\',\''
 						+ row.name
 						+ '\')">发送</a> ';
-
-					//var sendBtn = '<a class="btn btn-primary btn-sm" href="#" title="发送"  mce_href="#" onclick="sendMsg(row.id, this)">发送</a> ';
 					btns += sendBtn;
 					return btns;
 				}
