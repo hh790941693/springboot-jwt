@@ -30,7 +30,9 @@ function load() {
 				pageNumber : params.pageNumber,
 				pageSize : params.pageSize,
 				name:$('#nameSearchInput').val(),
-				//username:$('#searchName').val()
+				state:$('#stateSelect').val(),
+				enable:$('#enableSelect').val(),
+				speak:$('#speakSelect').val()
 			};
 		},
 		// //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果

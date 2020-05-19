@@ -18,13 +18,43 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="input-group">
                                     <div class="input-group-addon">用户名称</div>
                                     <input type="text" class="form-control" id="nameSearchInput" placeholder="请输入">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">在线状态</div>
+                                    <select class="form-control" id="stateSelect">
+                                        <option value="">--请选择--</option>
+                                        <option value="1">在线</option>
+                                        <option value="0">离线</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">启用状态</div>
+                                    <select class="form-control" id="enableSelect">
+                                        <option value="">--请选择--</option>
+                                        <option value="1">启用</option>
+                                        <option value="0">禁用</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">禁言状态</div>
+                                    <select class="form-control" id="speakSelect">
+                                        <option value="">--请选择--</option>
+                                        <option value="1">开言</option>
+                                        <option value="0">禁言</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
                                 <button class="btn btn-success" onclick="reLoad()">查询</button>
                             </div>
                         </div>

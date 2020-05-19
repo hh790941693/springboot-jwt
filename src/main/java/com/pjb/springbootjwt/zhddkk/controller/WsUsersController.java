@@ -239,7 +239,17 @@ public class WsUsersController extends AdminBaseController {
 		if (StringUtils.isNotBlank(wsUsersDTO.getName())) {
 			wrapper.like("name", wsUsersDTO.getName(), SqlLike.DEFAULT);
 		}
-		wrapper.ne("name", "admin");
+		if (StringUtils.isNotBlank(wsUsersDTO.getState())) {
+			wrapper.eq("state", wsUsersDTO.getState());
+		}
+		if (StringUtils.isNotBlank(wsUsersDTO.getEnable())) {
+			wrapper.eq("enable", wsUsersDTO.getEnable());
+		}
+		if (StringUtils.isNotBlank(wsUsersDTO.getSpeak())) {
+			wrapper.eq("speak", wsUsersDTO.getSpeak());
+		}
+
+		wrapper.ne("name", "admin").orderBy("state", false);
 		Page<WsUsersDO> page = wsUsersService.selectPage(getPage(WsUsersDO.class), wrapper);
 		return Result.ok(page);
 	}
