@@ -60,12 +60,13 @@ function load() {
 						{
 				field : 'state',
 				title : '是否在线',
+				align: 'center',
 				formatter : function (value, row) {
 					var res = "";
 					if (value == "0"){
-						res = "离线";
+						res = '<span class="label label-info">离线</span>';
 					}else{
-						res = "在线";
+						res = '<span class="label label-danger">在线</span>';
 					}
 					return res;
 				}
@@ -116,6 +117,14 @@ function load() {
 				title : '创建时间',
 				visible : false
 			},
+			{
+				field : 'sendMsg',
+				title : '聊天内容',
+				formatter : function (value, row, index) {
+					var inputId = "msgId"+row.id;
+					return "<input type='text' name='sendMsg' id='"+inputId+"'>";
+				}
+			},
 						{
 				title : '操作',
 				field : 'id',
@@ -128,23 +137,6 @@ function load() {
 							+ row.id
 							+ '\')">下线</a> ';
 						btns += offLineBtn;
-					}
-
-					//是否可用 0:不可用  1:可用
-					if (row.enable == "0"){
-						var enableBtn = '<a class="btn btn-primary btn-sm" href="#" title="启用"  mce_href="#" onclick="operEnableUser(\''
-							+ row.id
-							+ '\',\''
-							+ '1'
-							+ '\')">启用</a> ';
-						btns += enableBtn;
-					}else{
-						var disableBtn = '<a class="btn btn-danger btn-sm" href="#" title="禁用"  mce_href="#" onclick="operEnableUser(\''
-							+ row.id
-							+ '\',\''
-							+ '0'
-							+ '\')">禁用</a> ';
-						btns += disableBtn;
 					}
 
 					//是是否禁言  0:禁言 1：没有禁言
@@ -164,6 +156,34 @@ function load() {
 						btns += disableSpeakBtn;
 					}
 
+					//是否可用 0:不可用  1:可用
+					if (row.enable == "0"){
+						var enableBtn = '<a class="btn btn-primary btn-sm" href="#" title="启用"  mce_href="#" onclick="operEnableUser(\''
+							+ row.id
+							+ '\',\''
+							+ '1'
+							+ '\')">启用</a> ';
+						btns += enableBtn;
+					}else{
+						var disableBtn = '<a class="btn btn-danger btn-sm" href="#" title="禁用"  mce_href="#" onclick="operEnableUser(\''
+							+ row.id
+							+ '\',\''
+							+ '0'
+							+ '\')">禁用</a> ';
+						btns += disableBtn;
+					}
+
+					// var contentInput = '<input type="text">  ';
+					// btns += contentInput;
+
+					var sendBtn = '<a class="btn btn-primary btn-sm" href="#" title="发送"  mce_href="#" onclick="sendMsg(\''
+						+ row.id
+						+ '\',\''
+						+ row.name
+						+ '\')">发送</a> ';
+
+					//var sendBtn = '<a class="btn btn-primary btn-sm" href="#" title="发送"  mce_href="#" onclick="sendMsg(row.id, this)">发送</a> ';
+					btns += sendBtn;
 					return btns;
 				}
 			}
@@ -318,4 +338,34 @@ function operSpeakUser(id, status){
 			}
 		}
 	});
+}
+
+function sendMsg(id, user){
+	console.log("发送消息 id:"+id);
+	var inputId = "msgId"+id;
+	var msg = $("#"+inputId).val();
+
+	if (msg == null || msg == ""){
+		layer.tips('消息不能为空!', "#"+inputId, {
+			tips: [1, '#0FA6D8'],
+			tipsMore: false,
+			time:2000
+		});
+		return;
+	}
+
+	var toServerMsgObj = {};
+	toServerMsgObj.typeId = 2;
+	toServerMsgObj.typeDesc = "在线消息";
+	toServerMsgObj.from = "admin";
+	toServerMsgObj.to = user;
+	toServerMsgObj.msg = msg;
+	var jsonObj = JSON.stringify(toServerMsgObj);
+	parent.webSocket.send(jsonObj);
+	layer.tips('发送成功!', "#"+inputId, {
+		tips: [1, '#0FA6D8'],
+		tipsMore: false,
+		time:1000
+	});
+	$("#"+inputId).val("");
 }

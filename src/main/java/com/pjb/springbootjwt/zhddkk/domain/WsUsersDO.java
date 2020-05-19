@@ -92,6 +92,9 @@ public class WsUsersDO implements Serializable {
     @Excel(name = "密码",orderNum = "2",width=10)
     private String passwordDecode;
 
+    @TableField(exist = false)
+    private String sendMsg;
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -244,5 +247,13 @@ public class WsUsersDO implements Serializable {
 
     public void setPasswordDecode(String passwordDecode) {
         this.passwordDecode = passwordDecode;
+    }
+
+    public String getSendMsg() {
+        return sendMsg;
+    }
+
+    public void setSendMsg(String sendMsg) {
+        this.sendMsg = sendMsg;
     }
 }
