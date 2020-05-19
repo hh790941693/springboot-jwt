@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pjb.springbootjwt.zhddkk.entity.Page;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -67,9 +68,11 @@ public class WsOperationLogDO implements Serializable {
     @ApiModelProperty(value = "errorMsg",name = "错误信息")
     private String errorMsg;
     //访问时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @ApiModelProperty(value = "accessTime",name = "访问时间")
     private Date accessTime;
     //创建时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @ApiModelProperty(value = "createTime",name = "创建时间")
     private Date createTime;
 

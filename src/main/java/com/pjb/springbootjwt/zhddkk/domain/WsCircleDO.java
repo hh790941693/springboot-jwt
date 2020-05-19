@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pjb.springbootjwt.zhddkk.entity.WsCircleComment;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -56,6 +57,7 @@ public class WsCircleDO implements Serializable {
     @ApiModelProperty(value = "pic6",name = "图片6")
     private String pic6;
     //发表时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @ApiModelProperty(value = "createTime",name = "发表时间")
     private Date createTime;
 

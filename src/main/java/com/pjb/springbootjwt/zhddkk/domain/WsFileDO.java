@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 
@@ -47,10 +48,12 @@ public class WsFileDO implements Serializable {
     //文件时长
     @ApiModelProperty(value = "trackLength",name = "文件时长")
     private String trackLength;
-    //
+    //创建时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @ApiModelProperty(value = "createTime",name = "")
     private Date createTime;
-    //
+    //更新时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @ApiModelProperty(value = "updateTime",name = "")
     private Date updateTime;
     //0:无效 1:有效
