@@ -87,13 +87,17 @@ public class WsUsersController extends AdminBaseController {
 	public Result<Page<WsUsersDO>> list(WsUsersDO wsUsersDTO, String curUser){
         Wrapper<WsUsersDO> wrapper = new EntityWrapper<WsUsersDO>();
         if (StringUtils.isNotBlank(wsUsersDTO.getName())){
-        	wrapper.like("name", wsUsersDTO.getName(), SqlLike.DEFAULT);
+        	wrapper.like("t1.name", wsUsersDTO.getName(), SqlLike.DEFAULT);
 		}
-        Page<WsUsersDO> page = wsUsersService.selectPage(getPage(WsUsersDO.class), wrapper);
-		List<WsUsersDO> userlist = page.getRecords();
+        //Page<WsUsersDO> page = wsUsersService.selectPage(getPage(WsUsersDO.class), wrapper);
+		//List<WsUsersDO> userList = page.getRecords();
 
-		if (null != userlist && userlist.size()>0) {
-			for (WsUsersDO wu : userlist) {
+        Page<WsUsersDO> page = getPage(WsUsersDO.class);
+        List<WsUsersDO> userList = wsUsersService.queryUserPage(page, wrapper);
+        page.setRecords(userList);
+
+		if (null != userList && userList.size()>0) {
+			for (WsUsersDO wu : userList) {
 				if (wu.getName().equals(curUser)) {
 					wu.setIsFriend(3);
 					continue;
@@ -247,20 +251,25 @@ public class WsUsersController extends AdminBaseController {
 	public Result<Page<WsUsersDO>> wsUsersListForAdmin(WsUsersDO wsUsersDTO) {
 		Wrapper<WsUsersDO> wrapper = new EntityWrapper<WsUsersDO>();
 		if (StringUtils.isNotBlank(wsUsersDTO.getName())) {
-			wrapper.like("name", wsUsersDTO.getName(), SqlLike.DEFAULT);
+			wrapper.like("t1.name", wsUsersDTO.getName(), SqlLike.DEFAULT);
 		}
 		if (StringUtils.isNotBlank(wsUsersDTO.getState())) {
-			wrapper.eq("state", wsUsersDTO.getState());
+			wrapper.eq("t1.state", wsUsersDTO.getState());
 		}
 		if (StringUtils.isNotBlank(wsUsersDTO.getEnable())) {
-			wrapper.eq("enable", wsUsersDTO.getEnable());
+			wrapper.eq("t1.enable", wsUsersDTO.getEnable());
 		}
 		if (StringUtils.isNotBlank(wsUsersDTO.getSpeak())) {
-			wrapper.eq("speak", wsUsersDTO.getSpeak());
+			wrapper.eq("t1.speak", wsUsersDTO.getSpeak());
 		}
 
-		wrapper.ne("name", "admin").orderBy("state", false);
-		Page<WsUsersDO> page = wsUsersService.selectPage(getPage(WsUsersDO.class), wrapper);
+		wrapper.ne("t1.name", "admin").orderBy("t1.state", false);
+		//Page<WsUsersDO> page = wsUsersService.selectPage(getPage(WsUsersDO.class), wrapper);
+
+        Page<WsUsersDO> page = getPage(WsUsersDO.class);
+        List<WsUsersDO> userList = wsUsersService.queryUserPage(page, wrapper);
+        page.setRecords(userList);
+
 		return Result.ok(page);
 	}
 

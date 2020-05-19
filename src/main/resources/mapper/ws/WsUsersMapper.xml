@@ -3,7 +3,8 @@
 
 <mapper namespace="com.pjb.springbootjwt.zhddkk.dao.WsUsersDao">
     <select id="queryUserPage" resultType="com.pjb.springbootjwt.zhddkk.domain.WsUsersDO">
-        select * from ws_users
+        select t1.*,t2.img as head_image from ws_users t1
+        left join ws_user_profile t2 on t1.id = t2.user_id
         <if test="ew.sqlSegment != null and ew.sqlSegment != ''">
             <where>
                 ${ew.sqlSegment}

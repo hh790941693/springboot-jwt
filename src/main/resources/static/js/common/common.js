@@ -1,11 +1,15 @@
-let protocol = window.location.protocol;
-let host = window.location.host;
+protocol = window.location.protocol;
+host = window.location.host;
 
 //上传文件接口地址
 uploadUrl = protocol+"//"+host+"/upload/app";
 
-function getCurrentTime()
-{
+//显示图片
+function gShowImg(imgUrl) {
+    $.fancybox.open('<img src = "'+imgUrl+'" />');
+}
+
+function getCurrentTime() {
 	var date = new Date();
 	var year = date.getFullYear();
 	var month = date.getMonth()+1;

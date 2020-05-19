@@ -95,6 +95,9 @@ public class WsUsersDO implements Serializable {
     @TableField(exist = false)
     private String sendMsg;
 
+    @TableField(exist = false)
+    private String headImage;
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -255,5 +258,13 @@ public class WsUsersDO implements Serializable {
 
     public void setSendMsg(String sendMsg) {
         this.sendMsg = sendMsg;
+    }
+
+    public String getHeadImage() {
+        return headImage;
+    }
+
+    public void setHeadImage(String headImage) {
+        this.headImage = headImage;
     }
 }
