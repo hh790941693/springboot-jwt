@@ -2,7 +2,19 @@ var prefix = "/zhddkk/wsChatlog";
 
 $(function() {
 	load();
+	initTimePicker();
 });
+
+function initTimePicker() {
+	layui.laydate.render({
+		elem: '#beginTime',
+		type: 'datetime'
+	});
+	layui.laydate.render({
+		elem: '#endTime',
+		type: 'datetime'
+	});
+}
 
 function load() {
 	$('#exampleTable').bootstrapTable({
@@ -31,7 +43,9 @@ function load() {
 				pageNumber : params.pageNumber,
 				pageSize : params.pageSize,
 				user : $('#fromUser').val(),
-				toUser : $('#toUser').val()
+				toUser : $('#toUser').val(),
+				beginTime : $('#beginTime').val(),
+				endTime : $('#endTime').val()
 			};
 		},
 		// //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -65,7 +79,8 @@ function load() {
 			},
 						{
 				field : 'remark',
-				title : '备注'
+				title : '备注',
+				visible : false
 			},
 			{
 				field : 'time',

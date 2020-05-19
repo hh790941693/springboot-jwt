@@ -39,6 +39,10 @@ public class WsChatlogDO implements Serializable {
     @ApiModelProperty(value = "remark",name = "")
     private String remark;
 
+    @TableField(exist = false)
+    private String beginTime;
+    @TableField(exist = false)
+    private String endTime;
 
     public void setTime(String time) {
         this.time = time;
@@ -90,5 +94,21 @@ public class WsChatlogDO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(String beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
