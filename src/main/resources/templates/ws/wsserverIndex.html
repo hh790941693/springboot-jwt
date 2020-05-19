@@ -506,16 +506,16 @@
             });
         }
 
-		$("#setPersonInfoBtn").click(function () {
-			layer.open({
-				type: 2,
-				title: '设置个人信息',
-				shadeClose: true,
-				shade: 0.8,
-				area: ['390px', '600px'],
-				content: 'setPersonalInfo.page?user='+s_user
-			});
-		});
+        $("#setPersonInfoBtn").click(function () {
+            layer.open({
+                type: 2,
+                title: '设置个人信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['390px', '600px'],
+                content: '/zhddkk/wsUsers/setPersonalInfo.page?user='+s_user
+            });
+        });
 
         //窗口大小变化事件
         $(window).resize(function () {
