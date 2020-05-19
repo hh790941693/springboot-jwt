@@ -130,14 +130,18 @@ function load() {
 				field : 'id',
 				align : 'center',
 				formatter : function(value, row, index) {
-					var btns = ""
-					//是否在线 0:离线 1:在线
-					if (row.state == "1"){
-						var offLineBtn = '<a class="btn btn-default btn-sm" href="#" title="下线"  mce_href="#" onclick="offlineUser(\''
-							+ row.id
-							+ '\')">下线</a> ';
-						btns += offLineBtn;
-					}
+					var btns = "";
+
+                    //是否在线 0:离线 1:在线
+                    if (row.state == "1"){
+                        var offLineBtn = '<a class="btn btn-danger btn-sm" href="#" title="下线"  mce_href="#" onclick="offlineUser(\''
+                            + row.id
+                            + '\')">下线</a> ';
+                        btns += offLineBtn;
+                    }else{
+                        var offLineDisableBtn = '<a disabled="disabled" readonly="readonly" class="btn btn-default btn-sm" href="#" title="下线"  mce_href="#" onclick="javascript:void(0);">下线</a> ';
+                        btns += offLineDisableBtn;
+                    }
 
 					//是是否禁言  0:禁言 1：没有禁言
 					if (row.speak == "0"){
@@ -172,12 +176,13 @@ function load() {
 							+ '\')">禁用</a> ';
 						btns += disableBtn;
 					}
+
 					var sendBtn = '<a class="btn btn-primary btn-sm" href="#" title="发送"  mce_href="#" onclick="sendMsg(\''
 						+ row.id
 						+ '\',\''
 						+ row.name
 						+ '\')">发送</a> ';
-					btns += sendBtn;
+                    btns += sendBtn;
 					return btns;
 				}
 			}
