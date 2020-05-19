@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="common :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${wsChatlog.id}"  type="hidden">
+																																			<div class="form-group">
+								<label class="col-sm-3 control-label">时间：</label>
+								<div class="col-sm-8">
+									<input id="time" name="time" th:value="${wsChatlog.time}" class="form-control" type="text">
+								</div>
+							</div>
+																												<div class="form-group">
+								<label class="col-sm-3 control-label">发起人：</label>
+								<div class="col-sm-8">
+									<input id="user" name="user" th:value="${wsChatlog.user}" class="form-control" type="text">
+								</div>
+							</div>
+																												<div class="form-group">
+								<label class="col-sm-3 control-label">被聊人：</label>
+								<div class="col-sm-8">
+									<input id="toUser" name="toUser" th:value="${wsChatlog.toUser}" class="form-control" type="text">
+								</div>
+							</div>
+																												<div class="form-group">
+								<label class="col-sm-3 control-label">消息内容：</label>
+								<div class="col-sm-8">
+									<input id="msg" name="msg" th:value="${wsChatlog.msg}" class="form-control" type="text">
+								</div>
+							</div>
+																												<div class="form-group">
+								<label class="col-sm-3 control-label">备注：</label>
+								<div class="col-sm-8">
+									<input id="remark" name="remark" th:value="${wsChatlog.remark}" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="common::footer"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/appjs/zhddkk/wsChatlog/wsChatlogEdit.js}"></script>
+</html>
