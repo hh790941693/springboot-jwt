@@ -7363,3 +7363,7 @@ body.skin-3 {
     border-color: #cccccc!important;
 }
 
+table{
+    border: 1px solid grey;
+}
+
