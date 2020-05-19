@@ -41,7 +41,7 @@ public class UploadServiceImpl implements UploadService {
         String totalFolder = uploadConfig.getStorePath() + folder + File.separator;
         File newFile = new File(totalFolder, originFilename);
         FileUtils.writeByteArrayToFile(newFile, file.getBytes());
-        String viewUrl = uploadConfig.getViewUrl() + folder + File.separator + originFilename;
+        String viewUrl = uploadConfig.getViewUrl() + folder + "/" + originFilename;
 
         WsFile wf = new WsFile();
         wf.setUser(userId);
