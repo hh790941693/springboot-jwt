@@ -53,7 +53,11 @@ function load() {
 			},
 						{
 				field : 'name',
-				title : '姓名'
+				title : '姓名',
+                formatter : function (value) {
+                    var res = "<a href='javascript:void(0);' style='text-decoration: none;font-size:17px;color:blue;' onclick='queryPersonInfo(this)'>" + value + "</a>";
+                    return res;
+                }
 			},
 						{
 				field : 'registerTime',
@@ -63,13 +67,13 @@ function load() {
 				field : 'state',
 				title : '是否在线',
 				formatter : function (value, row) {
-					var res = "";
-					if (value == "0"){
-						res = "离线";
-					}else{
-						res = "在线";
-					}
-					return res;
+                    var res = "";
+                    if (value == "0"){
+                        res = '<span class="label label-info">离线</span>';
+                    }else{
+                        res = '<span class="label label-danger">在线</span>';
+                    }
+                    return res;
 				}
 			},
 			{
@@ -266,4 +270,19 @@ function addAsFriends(id){
 			}
 		}
 	});
+}
+
+//查看个人信息
+function queryPersonInfo(thisObj){
+    console.log(thisObj);
+    var user=$(thisObj).text();
+    console.log(user);
+    layer.open({
+        type: 2,
+        title: '用户个人信息',
+        shadeClose: true,
+        shade: 0.8,
+        area: ['384px', '370px'],
+        content: rootUrl+'ws/showPersonalInfo.page?user='+user
+    });
 }

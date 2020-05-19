@@ -55,7 +55,11 @@ function load() {
 			},
 						{
 				field : 'name',
-				title : '姓名'
+				title : '姓名',
+                formatter : function (value) {
+                    var res = "<a href='javascript:void(0);' style='text-decoration: none;font-size:17px;color:blue;' onclick='queryPersonInfo(this)'>" + value + "</a>";
+                    return res;
+				}
 			},
 						{
 				field : 'state',
@@ -367,4 +371,19 @@ function sendMsg(id, user){
 		time:1000
 	});
 	$("#"+inputId).val("");
+}
+
+//查看个人信息
+function queryPersonInfo(thisObj){
+    console.log(thisObj);
+    var user=$(thisObj).text();
+    console.log(user);
+    layer.open({
+        type: 2,
+        title: '用户个人信息',
+        shadeClose: true,
+        shade: 0.8,
+        area: ['384px', '370px'],
+        content: rootUrl+'ws/showPersonalInfo.page?user='+user
+    });
 }
