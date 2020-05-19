@@ -177,7 +177,7 @@ function load() {
 						btns += disableBtn;
 					}
 
-					var sendBtn = '<a class="btn btn-primary btn-sm" href="#" title="发送"  mce_href="#" onclick="sendMsg(\''
+					var sendBtn = '<a class="btn btn-success btn-sm" href="#" title="发送"  mce_href="#" onclick="sendMsg(\''
 						+ row.id
 						+ '\',\''
 						+ row.name

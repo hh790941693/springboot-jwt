@@ -183,13 +183,9 @@
 			
 			$("table input").removeAttr("checked");
 			$(inputObj).prop("checked",true);
-			//$(inputObj).attr("checked",true);
 			$("table tr").removeClass("selectRowClass");
 			$(trObj).addClass("selectRowClass");
-			//console.log("start to play:" + url);
-			
 			$("#player").attr("src",url);
-			//var player = $("#player")[0];
 
 			$("#statusSpan").text("正在播放:");
 			$("#songName").html(songname);
@@ -260,7 +256,6 @@
 		function showMusic(){
 			var fileType = ".mp3";
 			var user = $('#user').val();
-			console.log("user:"+user);
 			$.ajax({
 				type:"POST",
 				url:rootUrl + "file/showFiles.do",
@@ -295,7 +290,6 @@
 						if (className == "thClass"){
 							continue;
 						}
-						//console.log(rootUrl); 
 						$(trList[i]).dblclick(function(){
 							playByIndex(this);
 						})
