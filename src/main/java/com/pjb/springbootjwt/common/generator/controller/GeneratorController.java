@@ -42,6 +42,11 @@ public class GeneratorController {
         return prefix + "/list";
     }
 
+    @PostMapping("/index")
+    public String index(){
+        return "common/generator/list.html";
+    }
+
     @ResponseBody
     @GetMapping("/list")
     List<TableDO> list() {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
 <meta charset="utf-8">
-<head th:include="include :: header"></head>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="row">
@@ -67,7 +67,7 @@
 			</div>
 		</div>
 	</div>
-	<div th:include="include::footer"></div>
+	<div th:include="common::footer"></div>
 	<script type="text/javascript" src="/js/appjs/common/generator/edit.js">
 	</script>
 </body>
