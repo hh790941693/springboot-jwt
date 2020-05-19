@@ -62,11 +62,13 @@ function load() {
 			},
 						{
 				field : 'uname',
-				title : '用户姓名'
+				title : '用户姓名',
+				visible : false
 			},
 						{
 				field : 'fid',
-				title : '好友id'
+				title : '好友id',
+				visible : false
 			},
 						{
 				field : 'fname',

@@ -57,7 +57,8 @@ function load() {
 			},
 						{
 				field : 'fromName',
-				title : '申请人姓名'
+				title : '申请人姓名',
+				visible : false
 			},
 						{
 				field : 'toId',
@@ -92,7 +93,7 @@ function load() {
 				field : 'id',
 				align : 'center',
 				formatter : function(value, row, index) {
-					return;
+					return "";
 				}
 			}
 		]
