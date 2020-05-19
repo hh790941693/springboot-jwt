@@ -1,4 +1,4 @@
-var prefix = "/${pathName}/${classname}";
+var prefix = "/zhddkk/wsAds";
 
 $(function() {
 	load();
@@ -18,7 +18,7 @@ function load() {
 		pagination : true,//设置为true会在底部显示分页条
 		singleSelect : false,//设置为true将禁止多选
 		//contentType : "application/x-www-form-urlencoded",//发送到服务器的数据编码类型
-		pageSize : 10,//如果设置了分页，每页数据条数
+		pageSize : 5,//如果设置了分页，每页数据条数
 		pageNumber : 1,//如果设置了分布，首页页码
 		//search : true,// 是否显示搜索框
 		showColumns : false,// 是否显示内容下拉框（选择显示的列）
@@ -29,7 +29,11 @@ function load() {
 			return {
 				//传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
 				pageNumber : params.pageNumber,
-				pageSize : params.pageSize
+				pageSize : params.pageSize,
+				title : $('#titleSearchInput').val(),
+				content : $('#contentSearchInput').val()
+				//name:$('#searchName').val(),
+				//username:$('#searchName').val()
 			};
 		},
 		// //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -48,24 +52,35 @@ function load() {
 			{
 				checkbox : true
 			},
-			#foreach($column in $columns)
-			{
-				field : '${column.attrname}',
-				title : '${column.comments}'
+						{
+				field : 'id',
+				title : '主键'
 			},
-			#end
-			{
+						{
+				field : 'title',
+				title : '标题'
+			},
+						{
+				field : 'content',
+				title : '内容'
+			},
+						{
+				field : 'receiveList',
+				title : '接收人列表'
+			},
+						{
+				field : 'createTime',
+				title : '创建时间'
+			},
+						{
 				title : '操作',
 				field : 'id',
 				align : 'center',
 				formatter : function(value, row, index) {
-					var e = '<a class="btn btn-warning btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
-							+ row.${pk.attrname}
-							+ '\')"><i class="fa fa-edit"></i></a> ';
 					var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
-							+ row.${pk.attrname}
+							+ row.id
 							+ '\')"><i class="fa fa-remove"></i></a> ';
-					return "";
+					return d ;
 				}
 			}
 		]
@@ -106,7 +121,7 @@ function remove(id) {
 			url : prefix+"/remove",
 			type : "post",
 			data : {
-				'${pk.attrname}' : id
+				'id' : id
 			},
 			success : function(r) {
 				if (r.code==0) {
@@ -132,7 +147,7 @@ function batchRemove() {
 	}, function() {
 		var ids = new Array();
 		$.each(rows, function(i, row) {
-			ids[i] = row['${pk.attrname}'];
+			ids[i] = row['id'];
 		});
 		$.ajax({
 			type : 'POST',

@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+//import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -46,7 +46,7 @@ public class ${className}Controller extends AdminBaseController {
     * 跳转到${comments}页面
 	*/
 	@GetMapping()
-	@RequiresPermissions("${pathName}:${classname}:${classname}")
+	//@RequiresPermissions("${pathName}:${classname}:${classname}")
 	String ${classname}(){
 	    return "${pathName}/${classname}/${classname}";
 	}
@@ -56,7 +56,7 @@ public class ${className}Controller extends AdminBaseController {
      */
 	@ResponseBody
 	@GetMapping("/list")
-	@RequiresPermissions("${pathName}:${classname}:${classname}")
+	//@RequiresPermissions("${pathName}:${classname}:${classname}")
 	public Result<Page<${className}DO>> list(${className}DO ${classname}DTO){
         Wrapper<${className}DO> wrapper = new EntityWrapper<${className}DO>(${classname}DTO);
         Page<${className}DO> page = ${classname}Service.selectPage(getPage(${className}DO.class), wrapper);
@@ -67,7 +67,7 @@ public class ${className}Controller extends AdminBaseController {
      * 跳转到${comments}添加页面
      */
 	@GetMapping("/add")
-	@RequiresPermissions("${pathName}:${classname}:add")
+	//@RequiresPermissions("${pathName}:${classname}:add")
 	String add(Model model){
 		${className}DO ${classname} = new ${className}DO();
         model.addAttribute("${classname}", ${classname});
@@ -80,7 +80,7 @@ public class ${className}Controller extends AdminBaseController {
      * @param model ${comments}实体
      */
 	@GetMapping("/edit/{${pk.attrname}}")
-	@RequiresPermissions("${pathName}:${classname}:edit")
+	//@RequiresPermissions("${pathName}:${classname}:edit")
 	String edit(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname},Model model){
 		${className}DO ${classname} = ${classname}Service.selectById(${pk.attrname});
 		model.addAttribute("${classname}", ${classname});
@@ -92,7 +92,7 @@ public class ${className}Controller extends AdminBaseController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
-	@RequiresPermissions("${pathName}:${classname}:add")
+	//@RequiresPermissions("${pathName}:${classname}:add")
 	public Result<String> save( ${className}DO ${classname}){
 		${classname}Service.insert(${classname});
         return Result.ok();
@@ -103,7 +103,7 @@ public class ${className}Controller extends AdminBaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("/update")
-	@RequiresPermissions("${pathName}:${classname}:edit")
+	//@RequiresPermissions("${pathName}:${classname}:edit")
 	public Result<String> update( ${className}DO ${classname}){
 		${classname}Service.updateById(${classname});
 		return Result.ok();
@@ -114,7 +114,7 @@ public class ${className}Controller extends AdminBaseController {
 	 */
 	@PostMapping("/remove")
 	@ResponseBody
-	@RequiresPermissions("${pathName}:${classname}:remove")
+	//@RequiresPermissions("${pathName}:${classname}:remove")
 	public Result<String> remove( ${pk.attrType} ${pk.attrname}){
 		${classname}Service.deleteById(${pk.attrname});
         return Result.ok();
@@ -125,7 +125,7 @@ public class ${className}Controller extends AdminBaseController {
 	 */
 	@PostMapping("/batchRemove")
 	@ResponseBody
-	@RequiresPermissions("${pathName}:${classname}:batchRemove")
+	//@RequiresPermissions("${pathName}:${classname}:batchRemove")
 	public Result<String> remove(@RequestParam("ids[]") ${pk.attrType}[] ${pk.attrname}s){
 		${classname}Service.deleteBatchIds(Arrays.asList(${pk.attrname}s));
 		return Result.ok();
