@@ -1,5 +1,4 @@
 var prefix = "/zhddkk/wsUsers";
-var user=$("#user").val();
 $(function() {
 	load();
 });
@@ -7,7 +6,7 @@ $(function() {
 function load() {
 	$('#exampleTable').bootstrapTable({
 		method : 'get',
-		url : prefix + "/wsUsersList?curUser="+user,
+		url : prefix + "/wsUsersListForAdmin",
 		//showRefresh : true,
 		//showToggle : true,
 		//showColumns : true,
@@ -56,10 +55,6 @@ function load() {
 				title : '姓名'
 			},
 						{
-				field : 'registerTime',
-				title : '注册时间'
-			},
-						{
 				field : 'state',
 				title : '是否在线',
 				formatter : function (value, row) {
@@ -73,27 +68,12 @@ function load() {
 				}
 			},
 			{
-				field : "isFriend",
-				title : "是否是好友",
-				align : "center",
-				formatter : function (value) {
-					var res = "";
-					if (value == 0) {
-						res = '<span class="label label-success">不是好友</span>';
-					}else if (value == 1){
-						res = '<span class="label label-primary">申请中</span>';
-					}else if (value == 2){
-						res = '<span class="label label-danger">已被拒绝</span>';
-					}else if (value == 3){
-						res = '<span class="label label-info">已是好友</span>';
-					}
-					return res;
-				}
+				field : 'registerTime',
+				title : '注册时间'
 			},
 						{
 				field : 'lastLoginTime',
 				title : '上次登录时间',
-				visible :false
 			},
 						{
 				field : 'lastLogoutTime',
@@ -138,29 +118,50 @@ function load() {
 				field : 'id',
 				align : 'center',
 				formatter : function(value, row, index) {
-					var e = '<a class="btn btn-warning btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
+					var btns = ""
+					//是否在线 0:离线 1:在线
+					if (row.state == "1"){
+						var offLineBtn = '<a class="btn btn-default btn-sm" href="#" title="下线"  mce_href="#" onclick="offlineUser(\''
 							+ row.id
-							+ '\')"><i class="fa fa-edit"></i></a> ';
-					var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
-							+ row.id
-							+ '\')"><i class="fa fa-remove"></i></a> ';
-
-					var btnTitle = "";
-					if (row.isFriend == 0){
-						var addFriendsBtn = '<a class="btn btn-success btn-sm" href="#" title="添加好友"  mce_href="#" onclick="addAsFriends(\''
-							+ row.id
-							+ '\')"><i class="fa fa-plus"></i>添加好友</a> ';
-						return addFriendsBtn;
-					}else if (row.isFriend == 1){
-						return;
-					}else if (row.isFriend == 2){
-						var addFriendsBtn = '<a class="btn btn-success btn-sm" href="#" title="添加好友"  mce_href="#" onclick="addAsFriends(\''
-							+ row.id
-							+ '\')"><i class="fa fa-plus"></i>重新申请</a> ';
-						return addFriendsBtn;
-					}else if (row.isFriend == 3){
-						return;
+							+ '\')">下线</a> ';
+						btns += offLineBtn;
 					}
+
+					//是否可用 0:不可用  1:可用
+					if (row.enable == "0"){
+						var enableBtn = '<a class="btn btn-primary btn-sm" href="#" title="启用"  mce_href="#" onclick="operEnableUser(\''
+							+ row.id
+							+ '\',\''
+							+ '1'
+							+ '\')">启用</a> ';
+						btns += enableBtn;
+					}else{
+						var disableBtn = '<a class="btn btn-danger btn-sm" href="#" title="禁用"  mce_href="#" onclick="operEnableUser(\''
+							+ row.id
+							+ '\',\''
+							+ '0'
+							+ '\')">禁用</a> ';
+						btns += disableBtn;
+					}
+
+					//是是否禁言  0:禁言 1：没有禁言
+					if (row.speak == "0"){
+						var enableSpeakBtn = '<a class="btn btn-info btn-sm" href="#" title="开言"  mce_href="#" onclick="operSpeakUser(\''
+							+ row.id
+							+ '\',\''
+							+ '1'
+							+ '\')">开言</a> ';
+						btns += enableSpeakBtn;
+					}else{
+						var disableSpeakBtn = '<a class="btn btn-warning btn-sm" href="#" title="禁言"  mce_href="#" onclick="operSpeakUser(\''
+							+ row.id
+							+ '\',\''
+							+ '0'
+							+ '\')">禁言</a> ';
+						btns += disableSpeakBtn;
+					}
+
+					return btns;
 				}
 			}
 		]
@@ -263,6 +264,54 @@ function addAsFriends(id){
 				reLoad();
 			}else{
 				layer.msg(r.msg);
+			}
+		}
+	});
+}
+
+function offlineUser(id){
+	$.ajax({
+		type: 'POST',
+		url: prefix+'/offlineUser.do',
+		data:{'id':id},
+		success: function(result) {
+			if (result.code == 0){
+				layer.msg(result.msg);
+				reLoad();
+			}else{
+				layer.msg(result.msg);
+			}
+		}
+	});
+}
+
+function operEnableUser(id, status){
+	$.ajax({
+		type: 'POST',
+		url: prefix+'/operEnableUser.do',
+		data:{'id':id,'status':status},
+		success: function(result) {
+			if (result.code == 0){
+				layer.msg(result.msg);
+				reLoad();
+			}else{
+				layer.msg(result.msg);
+			}
+		}
+	});
+}
+
+function operSpeakUser(id, status){
+	$.ajax({
+		type: 'POST',
+		url: prefix+'/operSpeakUser.do',
+		data:{'id':id,'status':status},
+		success: function(result) {
+			if (result.code == 0){
+				layer.msg(result.msg);
+				reLoad();
+			}else{
+				layer.msg(result.msg);
 			}
 		}
 	});

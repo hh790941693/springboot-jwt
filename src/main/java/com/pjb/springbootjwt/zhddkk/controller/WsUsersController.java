@@ -1,17 +1,21 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.enums.SqlLike;
+import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsApplyDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsDO;
 import com.pjb.springbootjwt.zhddkk.entity.WsFriendsApply;
+import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsApplyService;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsService;
+import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +63,7 @@ public class WsUsersController extends AdminBaseController {
     /**
     * 跳转到用户账号表页面
 	*/
-	@GetMapping()
+	@GetMapping("/wsUsers")
 	String wsUsers(Model model, String user){
 		model.addAttribute("user", user);
 	    return "zhddkk/wsUsers/wsUsers";
@@ -69,7 +73,7 @@ public class WsUsersController extends AdminBaseController {
      * 获取用户账号表列表数据
      */
 	@ResponseBody
-	@GetMapping("/list")
+	@GetMapping("/wsUsersList")
 	public Result<Page<WsUsersDO>> list(WsUsersDO wsUsersDTO, String curUser){
         Wrapper<WsUsersDO> wrapper = new EntityWrapper<WsUsersDO>();
         if (StringUtils.isNotBlank(wsUsersDTO.getName())){
@@ -214,6 +218,108 @@ public class WsUsersController extends AdminBaseController {
 			logger.info(toUserName+"已是你的好友了,无需再次申请");
 		}
 
+		return Result.fail();
+	}
+
+	/**
+	 * 跳转到管理员用户列表
+	 */
+	@GetMapping("/wsUsersForAdmin")
+	String wsUsersForAdmin(Model model, String user){
+		return "zhddkk/wsUsers/wsUsersForAdmin";
+	}
+
+	/**
+	 * 获取管理员用户列表
+	 */
+	@ResponseBody
+	@GetMapping("/wsUsersListForAdmin")
+	public Result<Page<WsUsersDO>> wsUsersListForAdmin(WsUsersDO wsUsersDTO) {
+		Wrapper<WsUsersDO> wrapper = new EntityWrapper<WsUsersDO>();
+		if (StringUtils.isNotBlank(wsUsersDTO.getName())) {
+			wrapper.like("name", wsUsersDTO.getName(), SqlLike.DEFAULT);
+		}
+		wrapper.ne("name", "admin");
+		Page<WsUsersDO> page = wsUsersService.selectPage(getPage(WsUsersDO.class), wrapper);
+		return Result.ok(page);
+	}
+
+	/**
+	 * 让某用户下线
+	 * @param id
+	 * @return
+	 */
+	@OperationLogAnnotation(type= OperationEnum.UPDATE,module= ModuleEnum.USER_MANAGE,subModule="",describe="使用户下线")
+	@RequestMapping(value = "offlineUser.do")
+	@ResponseBody
+	public Result<String> offlineUser(@RequestParam("id") String id) {
+		WsUsersDO wsUsersDO = wsUsersService.selectById(id);
+		if (null == wsUsersDO){
+			return Result.fail("用户不存在");
+		}
+		String userName = wsUsersDO.getName();
+		Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
+		for (Map.Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
+			if (entry.getKey().equals(userName)) {
+				try {
+					entry.getValue().getSession().close();
+					ZhddWebSocket.getClients().remove(userName);
+					break;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		wsUsersDO.setState("0");
+		boolean updateFlag = wsUsersService.updateById(wsUsersDO);
+		if (updateFlag){
+			return Result.ok();
+		}
+		return Result.fail();
+	}
+
+	/**
+	 * 让某用户禁用/启用
+	 * @param id
+	 * @param status
+	 * @return
+	 */
+	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户的禁用/启用")
+	@RequestMapping(value = "operEnableUser.do")
+	@ResponseBody
+	public Result<String> operEnableUser(@RequestParam("id") String id,@RequestParam("status") String status) {
+		WsUsersDO wsUsersDO = wsUsersService.selectById(id);
+		if (null == wsUsersDO){
+			return Result.fail("用户不存在");
+		}
+		wsUsersDO.setEnable(status);
+		boolean updateFlag = wsUsersService.updateById(wsUsersDO);
+		if (updateFlag){
+			return Result.ok();
+		}
+		return Result.fail();
+	}
+
+	/**
+	 * 让某用户禁言/开言
+	 * @param id
+	 * @param status
+	 * @return
+	 */
+	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户的禁言/开言")
+	@RequestMapping(value = "operSpeakUser.do")
+	@ResponseBody
+	public Result<String> operSpeakUser(@RequestParam("id") String id,@RequestParam("status") String status) {
+		WsUsersDO wsUsersDO = wsUsersService.selectById(id);
+		if (null == wsUsersDO){
+			return Result.fail("用户不存在");
+		}
+		wsUsersDO.setSpeak(status);
+		boolean updateFlag = wsUsersService.updateById(wsUsersDO);
+		if (updateFlag){
+			return Result.ok();
+		}
 		return Result.fail();
 	}
 }

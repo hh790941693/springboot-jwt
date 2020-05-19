@@ -1,0 +1,125 @@
+<!-- TODO 这里描述页面功能 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="common :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+                        <form class="form-horizontal m-t" id="form">
+							<!-- 主键 -->
+                            <input type="hidden" id="id" name="id" th:value="${wsOperationLog.id}">
+																													<div class="form-group">
+								<label class="col-sm-3 control-label" for="userId"><span style="color:red">*</span>&nbsp;操作人ID：</label>
+								<div class="col-sm-8">
+									<input type="text" id="userId" name="userId" th:value="${wsOperationLog.userId}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="userName"><span style="color:red">*</span>&nbsp;操作人姓名：</label>
+								<div class="col-sm-8">
+									<input type="text" id="userName" name="userName" th:value="${wsOperationLog.userName}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="operType"><span style="color:red">*</span>&nbsp;操作类型(增|删|改)：</label>
+								<div class="col-sm-8">
+									<input type="text" id="operType" name="operType" th:value="${wsOperationLog.operType}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="operModule"><span style="color:red">*</span>&nbsp;操作模块：</label>
+								<div class="col-sm-8">
+									<input type="text" id="operModule" name="operModule" th:value="${wsOperationLog.operModule}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="operSubmodule"><span style="color:red">*</span>&nbsp;操作子模块：</label>
+								<div class="col-sm-8">
+									<input type="text" id="operSubmodule" name="operSubmodule" th:value="${wsOperationLog.operSubmodule}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="operDescribe"><span style="color:red">*</span>&nbsp;操作描述：</label>
+								<div class="col-sm-8">
+									<input type="text" id="operDescribe" name="operDescribe" th:value="${wsOperationLog.operDescribe}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="operRemark"><span style="color:red">*</span>&nbsp;操作描述：</label>
+								<div class="col-sm-8">
+									<input type="text" id="operRemark" name="operRemark" th:value="${wsOperationLog.operRemark}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="requestUrl"><span style="color:red">*</span>&nbsp;请求路径：</label>
+								<div class="col-sm-8">
+									<input type="text" id="requestUrl" name="requestUrl" th:value="${wsOperationLog.requestUrl}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="costTime"><span style="color:red">*</span>&nbsp;耗时(毫秒)：</label>
+								<div class="col-sm-8">
+									<input type="text" id="costTime" name="costTime" th:value="${wsOperationLog.costTime}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="className"><span style="color:red">*</span>&nbsp;类名：</label>
+								<div class="col-sm-8">
+									<input type="text" id="className" name="className" th:value="${wsOperationLog.className}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="methodName"><span style="color:red">*</span>&nbsp;方法名：</label>
+								<div class="col-sm-8">
+									<input type="text" id="methodName" name="methodName" th:value="${wsOperationLog.methodName}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="parameters"><span style="color:red">*</span>&nbsp;参数列表：</label>
+								<div class="col-sm-8">
+									<input type="text" id="parameters" name="parameters" th:value="${wsOperationLog.parameters}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="operResult"><span style="color:red">*</span>&nbsp;操作结果：</label>
+								<div class="col-sm-8">
+									<input type="text" id="operResult" name="operResult" th:value="${wsOperationLog.operResult}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="errorMsg"><span style="color:red">*</span>&nbsp;错误信息：</label>
+								<div class="col-sm-8">
+									<input type="text" id="errorMsg" name="errorMsg" th:value="${wsOperationLog.errorMsg}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="accessTime"><span style="color:red">*</span>&nbsp;访问时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="accessTime" name="accessTime" th:value="${wsOperationLog.accessTime}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="createTime"><span style="color:red">*</span>&nbsp;创建时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="createTime" name="createTime" th:value="${wsOperationLog.createTime}" class="form-control" />
+								</div>
+							</div>
+											                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button type="submit" class="btn btn-primary">保存</button>
+                                </div>
+                            </div>
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="common::footer"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/appjs/zhddkk/wsOperationLog/wsOperationLogForm.js}"></script>
+</html>

@@ -1,5 +1,5 @@
-var prefix = "/zhddkk/wsUsers";
-var user=$("#user").val();
+var prefix = "/zhddkk/wsOperationLog";
+
 $(function() {
 	load();
 });
@@ -7,7 +7,7 @@ $(function() {
 function load() {
 	$('#exampleTable').bootstrapTable({
 		method : 'get',
-		url : prefix + "/wsUsersList?curUser="+user,
+		url : prefix + "/list",
 		//showRefresh : true,
 		//showToggle : true,
 		//showColumns : true,
@@ -21,7 +21,7 @@ function load() {
 		pageSize : 5,//如果设置了分页，每页数据条数
 		pageNumber : 1,//如果设置了分布，首页页码
 		//search : true,// 是否显示搜索框
-		showColumns : false,// 是否显示内容下拉框（选择显示的列）
+		showColumns : true,// 是否显示内容下拉框（选择显示的列）
 		sidePagination : "server",//设置在哪里进行分页，可选值为"client" 或者 "server"
 		queryParamsType : "",
 		//设置为limit则会发送符合RESTFull格式的参数
@@ -30,8 +30,8 @@ function load() {
 				//传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
 				pageNumber : params.pageNumber,
 				pageSize : params.pageSize,
-				name:$('#nameSearchInput').val(),
-				//username:$('#searchName').val()
+				userId : $('#operUserSelect').val(),
+				operModule : $('#moduleNameSelect').val()
 			};
 		},
 		// //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -52,86 +52,72 @@ function load() {
 				title : '主键'
 			},
 						{
-				field : 'name',
-				title : '姓名'
-			},
-						{
-				field : 'registerTime',
-				title : '注册时间'
-			},
-						{
-				field : 'state',
-				title : '是否在线',
-				formatter : function (value, row) {
-					var res = "";
-					if (value == "0"){
-						res = "离线";
-					}else{
-						res = "在线";
-					}
-					return res;
-				}
-			},
-			{
-				field : "isFriend",
-				title : "是否是好友",
-				align : "center",
-				formatter : function (value) {
-					var res = "";
-					if (value == 0) {
-						res = '<span class="label label-success">不是好友</span>';
-					}else if (value == 1){
-						res = '<span class="label label-primary">申请中</span>';
-					}else if (value == 2){
-						res = '<span class="label label-danger">已被拒绝</span>';
-					}else if (value == 3){
-						res = '<span class="label label-info">已是好友</span>';
-					}
-					return res;
-				}
-			},
-						{
-				field : 'lastLoginTime',
-				title : '上次登录时间',
-				visible :false
-			},
-						{
-				field : 'lastLogoutTime',
-				title : '上次登出时间',
-				visible :false
-			},
-						{
-				field : 'enable',
-				title : '是否可用',
-				formatter : function(value){
-					var res = "";
-					if (value == "0"){
-						res = '<span class="label label-danger">不可用</span>';
-					}else{
-						res = '<span class="label label-primary">可用</span>';
-					}
-					return res;
-				},
+				field : 'userId',
+				title : '操作人ID',
 				visible : false
 			},
 						{
-				field : 'speak',
-				title : '是否禁言',
-				formatter : function(value){
-					var res = "";
-					if (value == "0"){
-						res = '<span class="label label-danger">禁言中</span>';
-					}else{
-						res = '<span class="label label-primary">没有禁言</span>';
-					}
-					return res;
-				},
+				field : 'userName',
+				title : '操作人'
+			},
+						{
+				field : 'operType',
+				title : '操作类型'
+			},
+						{
+				field : 'operModule',
+				title : '操作模块'
+			},
+						{
+				field : 'operSubmodule',
+				title : '操作子模块',
+				visible : false
+			},
+						{
+				field : 'operDescribe',
+				title : '操作描述'
+			},
+						{
+				field : 'requestUrl',
+				title : '请求路径'
+			},
+						{
+				field : 'costTime',
+				title : '耗时(毫秒)'
+			},
+						{
+				field : 'className',
+				title : '类名',
+				visible : false
+			},
+						{
+				field : 'methodName',
+				title : '方法名',
+				visible : false
+			},
+						{
+				field : 'parameters',
+				title : '参数列表',
+				visible : false
+			},
+						{
+				field : 'operResult',
+				title : '操作结果',
+				visible : false
+			},
+						{
+				field : 'errorMsg',
+				title : '错误信息',
+				visible : false
+			},
+						{
+				field : 'accessTime',
+				title : '访问时间',
 				visible : false
 			},
 						{
 				field : 'createTime',
-				title : '创建时间',
-				visible : false
+				title : '创建时间'
 			},
 						{
 				title : '操作',
@@ -144,23 +130,7 @@ function load() {
 					var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
 							+ row.id
 							+ '\')"><i class="fa fa-remove"></i></a> ';
-
-					var btnTitle = "";
-					if (row.isFriend == 0){
-						var addFriendsBtn = '<a class="btn btn-success btn-sm" href="#" title="添加好友"  mce_href="#" onclick="addAsFriends(\''
-							+ row.id
-							+ '\')"><i class="fa fa-plus"></i>添加好友</a> ';
-						return addFriendsBtn;
-					}else if (row.isFriend == 1){
-						return;
-					}else if (row.isFriend == 2){
-						var addFriendsBtn = '<a class="btn btn-success btn-sm" href="#" title="添加好友"  mce_href="#" onclick="addAsFriends(\''
-							+ row.id
-							+ '\')"><i class="fa fa-plus"></i>重新申请</a> ';
-						return addFriendsBtn;
-					}else if (row.isFriend == 3){
-						return;
-					}
+					return "";
 				}
 			}
 		]
@@ -249,21 +219,33 @@ function batchRemove() {
 	});
 }
 
-function addAsFriends(id){
+function clearOperationLog(){
 	$.ajax({
-		url : prefix+"/addAsFriends",
-		type : "post",
-		data : {
-			'curUser' : user,
-			'toUserId' : id
-		},
-		success : function(r) {
-			if (r.code==0) {
-				layer.msg(r.msg);
+		type: 'POST',
+		url: prefix + '/clearOperationLog.do',
+		contentType: "application/json",
+		data: {},
+		async: false,
+		success: function (result) {
+			if (result.code == 0){
+				layer.msg(result.msg);
 				reLoad();
-			}else{
-				layer.msg(r.msg);
 			}
 		}
 	});
 }
+
+//导出操作日志信息
+$('#exportDataBtn').click(function(){
+	var userId="";
+	var operModule="";
+	if ($("#operUserSelect").val() != "" && $("#operUserSelect").val() != 'undefined'){
+		userId=$("#operUserSelect").val();
+	}
+	if ($("#moduleNameSelect").val() != "" && $("#moduleNameSelect").val() != 'undefined'){
+		operModule=$("#moduleNameSelect").val();
+	}
+	console.log("userId:"+userId);
+	console.log("operModule:"+operModule);
+	$(this).attr('href', prefix + "/exportOperateLog.do?userId="+userId+"&operModule="+operModule);
+})

@@ -3,12 +3,12 @@ package com.pjb.springbootjwt.zhddkk.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pjb.springbootjwt.zhddkk.entity.Page;
 import io.swagger.annotations.ApiModelProperty;
 
 
@@ -29,39 +29,49 @@ public class WsOperationLogDO implements Serializable {
     @ApiModelProperty(value = "userId",name = "操作人ID")
     private Integer userId;
     //操作人姓名
+    @Excel(name = "用户名称",orderNum = "1",width=10,fixedIndex=1)
     @ApiModelProperty(value = "userName",name = "操作人姓名")
     private String userName;
     //操作类型(增|删|改)
+    @Excel(name = "操作类型",orderNum = "2",width=10,fixedIndex=2)
     @ApiModelProperty(value = "operType",name = "操作类型(增|删|改)")
     private String operType;
     //操作模块
+    @Excel(name = "操作模块",orderNum = "3",width=10,fixedIndex=3)
     @ApiModelProperty(value = "operModule",name = "操作模块")
     private String operModule;
     //操作子模块
     @ApiModelProperty(value = "operSubmodule",name = "操作子模块")
     private String operSubmodule;
     //操作描述
+    @Excel(name = "操作描述",orderNum = "4",width=25)
     @ApiModelProperty(value = "operDescribe",name = "操作描述")
     private String operDescribe;
     //操作描述
     @ApiModelProperty(value = "operRemark",name = "操作描述")
     private String operRemark;
     //请求路径
+    @Excel(name = "请求地址",orderNum = "5",width=30)
     @ApiModelProperty(value = "requestUrl",name = "请求路径")
     private String requestUrl;
     //耗时(毫秒)
+    @Excel(name = "耗时(ms)",orderNum = "6",width=10,type=10)
     @ApiModelProperty(value = "costTime",name = "耗时(毫秒)")
     private Integer costTime;
     //类名
+    @Excel(name = "类名",orderNum = "7",width=30)
     @ApiModelProperty(value = "className",name = "类名")
     private String className;
     //方法名
+    @Excel(name = "方法名",orderNum = "8",width=20)
     @ApiModelProperty(value = "methodName",name = "方法名")
     private String methodName;
     //参数列表
+    @Excel(name = "参数列表",orderNum = "9",width=20)
     @ApiModelProperty(value = "parameters",name = "参数列表")
     private String parameters;
     //操作结果
+    @Excel(name = "操作结果",orderNum = "11",width=100)
     @ApiModelProperty(value = "operResult",name = "操作结果")
     private String operResult;
     //错误信息
@@ -72,6 +82,7 @@ public class WsOperationLogDO implements Serializable {
     @ApiModelProperty(value = "accessTime",name = "访问时间")
     private Date accessTime;
     //创建时间
+    @Excel(name = "操作时间",orderNum = "10",format = "yyyy-MM-dd HH:mm:ss", width=23)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @ApiModelProperty(value = "createTime",name = "创建时间")
     private Date createTime;
