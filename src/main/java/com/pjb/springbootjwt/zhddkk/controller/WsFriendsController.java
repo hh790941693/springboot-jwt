@@ -3,6 +3,7 @@ package com.pjb.springbootjwt.zhddkk.controller;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.vo.Result;
@@ -64,15 +65,17 @@ public class WsFriendsController extends AdminBaseController {
 	public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDTO){
 		Wrapper<WsFriendsDO> wrapper = new EntityWrapper<WsFriendsDO>();
 		if (StringUtils.isNotBlank(wsFriendsDTO.getUname())){
-			wrapper.eq("uname", wsFriendsDTO.getUname());
+			wrapper.eq("t1.uname", wsFriendsDTO.getUname());
 		}
 		if (StringUtils.isNotBlank(wsFriendsDTO.getFname())){
-			wrapper.like("fname", wsFriendsDTO.getFname());
+			wrapper.like("t1.fname", wsFriendsDTO.getFname());
 		}
-		wrapper.orderBy("create_time", false);
+		wrapper.orderBy("t1.create_time", false);
 		Page<WsFriendsDO> qryPage = getPage(WsFriendsDO.class);
-		Page<WsFriendsDO> page = wsFriendsService.selectPage(qryPage, wrapper);
-		return Result.ok(page);
+		List<WsFriendsDO> list = wsFriendsService.queryFriendsPage(qryPage, wrapper);
+		//Page<WsFriendsDO> page = wsFriendsService.selectPage(qryPage, wrapper);
+		qryPage.setRecords(list);
+		return Result.ok(qryPage);
 	}
 
 	/**

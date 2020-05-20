@@ -44,6 +44,13 @@ public class WsFriendsDO implements Serializable {
     @ApiModelProperty(value = "remark",name = "备注")
     private String remark;
 
+    //在线状态
+    @TableField(exist = false)
+    private String state;
+
+    //头像
+    @TableField(exist = false)
+    private String headImage;
 
     public void setId(Integer id) {
         this.id = id;
@@ -107,4 +114,19 @@ public class WsFriendsDO implements Serializable {
         return remark;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getHeadImage() {
+        return headImage;
+    }
+
+    public void setHeadImage(String headImage) {
+        this.headImage = headImage;
+    }
 }

@@ -74,6 +74,32 @@ function load() {
 				field : 'fname',
 				title : '好友姓名'
 			},
+			{
+				field : 'state',
+				title : '是否在线',
+				formatter : function (value, row) {
+					var res = "";
+					if (value == "0"){
+						res = '<span class="label label-default">离线</span>';
+					}else{
+						res = '<span class="label label-primary">在线</span>';
+					}
+					return res;
+				}
+			},
+			{
+				field : 'headImage',
+				title : '头像',
+				formatter : function (value) {
+					var result = "";
+					if (value != "" && value != null) {
+						result += "<div style='text-align: center;'>";
+						result += "<img  onclick=\"$.ws.gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
+						result += "</div>";
+					}
+					return result;
+				}
+			},
 						{
 				field : 'createTime',
 				title : '添加时间'
