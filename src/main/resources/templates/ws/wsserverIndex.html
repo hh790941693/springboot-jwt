@@ -9,9 +9,7 @@
         font-weight:bold;
         margin:1px auto;
 		border: 2px solid green;
-		background-image: url("../img/headerx.jpg");
 		background-repeat: no-repeat;
-		background-size: 100% 771px;
 		background-position: 0px -230px;
     }
 
@@ -50,9 +48,7 @@
 		height:100%;
 		float:left;
 		border:2px solid green;
-		background-image: url("../img/headerX.jpg");
 		background-repeat: no-repeat;
-		background-size: 1024px 147%;
 		background-position: -10px -222px;
 	}
 
@@ -132,6 +128,8 @@
 <body>
     <!--头部-->
     <div id="headerDiv" align="center">
+		<img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
+		<img id="leftNavBackgroundImg" src="../img/headerY.jpg" hidden>
         <div style="float:left;margin-left: 3px;margin-top: 2px;">
             <img id='myImg' alt=""  width="48" height="48">
 			<label style="font-size: 20px;">你好:</label><label id="curUser" th:text="${user}" style="color:blue;font-size:30px;"></label>
@@ -634,42 +632,10 @@
 			}
 		},8000);
 
-		//定时滚动header背景图片
-		var backgroundPosY = 0;  //max -690
-		var downFlag = true;
-		setInterval(function () {
-			if (downFlag) {
-				backgroundPosY -= 1;
-			}
-			if (!downFlag){
-				backgroundPosY += 1;
-			}
-			if (backgroundPosY <= -690){
-				downFlag = false;
-			}
-			if (backgroundPosY >=0 ){
-				downFlag = true;
-			}
-			$("#headerDiv").css("background-position","0px "+backgroundPosY+"px");
-		},10);
+        //定时滚动header背景图片
+        $.ws .backgroundImgAnimation("headBackgroundImg","headerDiv", 1);
 
-		//定时滚动左侧导航栏背景图片
-		var backgroundPosX = 0; //max -848
-		var leftFlag = true;
-		setInterval(function () {
-			if (leftFlag) {
-				backgroundPosX -= 1;
-			}
-			if (!leftFlag){
-				backgroundPosX += 1;
-			}
-			if (backgroundPosX <= -848){
-				leftFlag = false;
-			}
-			if (backgroundPosX >=0 ){
-				leftFlag = true;
-			}
-			$("#leftNavi").css("background-position",backgroundPosX+"px -222px");
-		},10);
+        //定时滚动左侧导航栏背景图片
+        $.ws .backgroundImgAnimation("leftNavBackgroundImg","leftNavi", 2);
     </script>
 </html>

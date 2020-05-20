@@ -43,7 +43,6 @@
 			float:left;
 			border:2px solid green;
 			background-repeat: no-repeat;
-			background-size: 1024px 147%;
 			background-position: -10px -222px;
 		}
 
@@ -652,62 +651,11 @@
 			}
 		},8000);
 
-		//定时滚动header背景图片
-        var headerBackgroundImgWidth = $("#headBackgroundImg").width();
-        var headerBackgroundImgHeight = $("#headBackgroundImg").height();
-        var headerBackgroundImgUrl = $('#headBackgroundImg').attr("src");
-        var headerWidth = $("#headerDiv").width();
-        var headerHeight = $("#headerDiv").height();
-        if (headerBackgroundImgWidth<headerWidth) {
-            $("#headerDiv").css("background-size", headerWidth + "px " + headerBackgroundImgHeight + "px");
-        }else{
-            $("#headerDiv").css("background-size", headerBackgroundImgWidth + "px " + headerBackgroundImgHeight + "px");
-        }
-        $("#headerDiv").css("background-image", "url('"+headerBackgroundImgUrl+"')");
-        var headerMaxPosY = headerBackgroundImgHeight-headerHeight;
-		var headerBackgroundPosY = 0;  //max -690
-		var downFlag = true;
-		setInterval(function () {
-			if (downFlag) {
-                headerBackgroundPosY -= 1;
-			}
-			if (!downFlag){
-                headerBackgroundPosY += 1;
-			}
-			if (headerBackgroundPosY <= -headerMaxPosY){
-				downFlag = false;
-			}
-			if (headerBackgroundPosY >=0 ){
-				downFlag = true;
-			}
-			$("#headerDiv").css("background-position","0px "+headerBackgroundPosY+"px");
-		},10);
 
-		//定时滚动左侧导航栏背景图片
-        var leftNavBackgroundImgWidth = $("#leftNavBackgroundImg").width();
-        var leftNavBackgroundImgHeight = $("#leftNavBackgroundImg").height();
-        var leftNavBackgroundImgUrl = $('#leftNavBackgroundImg').attr("src");
-        var leftNavWidth = $("#leftNavi").width();
-        //var leftNavHeight = $("#leftNavi").height();
-        $("#leftNavi").css("background-size", leftNavBackgroundImgWidth+"px "+leftNavBackgroundImgHeight+"px");
-        $("#leftNavi").css("background-image", "url('"+leftNavBackgroundImgUrl+"')");
-        var leftNavMaxPosX = leftNavBackgroundImgWidth-leftNavWidth;
-		var leftNavBackgroundPosX = 0; //max -848
-		var leftFlag = true;
-		setInterval(function () {
-			if (leftFlag) {
-                leftNavBackgroundPosX -= 1;
-			}
-			if (!leftFlag){
-                leftNavBackgroundPosX += 1;
-			}
-			if (leftNavBackgroundPosX <= -leftNavMaxPosX){
-				leftFlag = false;
-			}
-			if (leftNavBackgroundPosX >=0 ){
-				leftFlag = true;
-			}
-			$("#leftNavi").css("background-position",leftNavBackgroundPosX+"px -222px");
-		},10);
+		//定时滚动header背景图片
+        $.ws .backgroundImgAnimation("headBackgroundImg","headerDiv", 1);
+
+        //定时滚动左侧导航栏背景图片
+        $.ws .backgroundImgAnimation("leftNavBackgroundImg","leftNavi", 2);
     </script>
 </html>
