@@ -45,10 +45,10 @@
 			height:100%;
 			float:left;
 			border:2px solid green;
-			background-image: url("../img/headerY.jpg");
+			background-image: url("../img/headerX.jpg");
 			background-repeat: no-repeat;
-			background-size: 600px 800px;
-			background-position: -315px 0px;
+			background-size: 1024px 123%;
+			background-position: -10px -222px;
 		}
 
         #leftNavi ul{
@@ -154,9 +154,11 @@
 		</div>
 	</div>
 
+	<!--二维码-->
 	<div id="qrDiv" style="display:none">
 		<img id="qrcodeImg">
 	</div>
+	<!--中间部分-->
 	<div id='mainDiv'>
 		<!--用户登录相关信息-->
 		<input type="hidden" id="user" name="user" th:value="${user}">
@@ -188,7 +190,8 @@
 			<iframe id="iframePage" width="1130px" height="605px;"></iframe>
 		</div>
 	</div>
-	
+
+	<!--迷你音乐播放器-->
 	<div id='musicIframeDiv'>
 		<div id='musicIframeHeader'>
 			<span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
@@ -197,7 +200,7 @@
 		<iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
 	</div>	
 	
-	<!--广告页面 -->
+	<!--右下角广告页面 -->
 	<div id="adDiv" style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display:none">
 		<div id="adBtn" style="style:1px solid red;background-color:#5082b9;padding-left:290px">
 			<button id="closeAd" class='btn btn-sm btn-primary' onclick="closeAd()">关&nbsp;&nbsp;闭</button>
