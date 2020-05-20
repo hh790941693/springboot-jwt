@@ -131,7 +131,12 @@
 			<label style="font-size: 20px;">你好:</label><label id="curUser" th:text="${user}" style="color:blue;font-size:30px;"></label>
             <span id="curTimeSpan">0000-00-00 00:00:00</span>
         </div>
-		<div id="weatherDiv" style="float:left;font-size:20px;width:44%;padding-top:13px;">
+
+		<div id="headerTitleDiv" style="float:left;font-size:30px;width:44%;display: none;">
+			<label id="titleLabel" style="color:black;">websocket服务端</label>
+		</div>
+
+		<div id="weatherDiv" style="float:left;font-size:20px;width:44%;padding-top:13px;display: block;">
 			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="location" style="color:black;"></label>
@@ -610,5 +615,16 @@
 				}
 			});
 		}
+
+		setInterval(function () {
+			var titleStatus = $("#headerTitleDiv").css("display");
+			if (titleStatus == "none"){
+				$("#headerTitleDiv").css("display", "block");
+				$("#weatherDiv").css("display", "none");
+			}else{
+				$("#headerTitleDiv").css("display", "none");
+				$("#weatherDiv").css("display", "block");
+			}
+		},8000);
     </script>
 </html>
