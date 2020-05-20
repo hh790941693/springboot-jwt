@@ -12,9 +12,7 @@
 	}
 
 	#mainDiv{
-		background-image: url("../img/pic3.jpg");
 		background-repeat: no-repeat;
-		background-size: 3024px 1852px;
 		background-position: 0px 0px;
 	}
 
@@ -30,6 +28,7 @@
 				欢迎使用webSocket 
 		</div>
 		<button id="phonelogin" class='btn btn-success btn-sm' style="position:absolute;top:1px;left:315px;">扫码登录</button>
+		<img id="backgroundImg" src="../img/pic3.jpg" hidden>
 		<form id="loginForm" action="ws/wslogin.do" method="post">
 			<div style="height:25px;">
 				<label for="user">用户名:</label><input id="user" name="user" type="text" th:value="${user}" placeholder="请输入用户名" autocomplete="off" style="width:178px;margin-left:10px;"></input>
@@ -194,7 +193,16 @@
 
 		//x -2626   //y -1200
 		//定时滚动左侧导航栏背景图片
-		var backgroundPosX = 0; //max -848
+        var backgroundImgWidth = $("#backgroundImg").width();
+        var backgroundImgHeight = $("#backgroundImg").height();
+        var backgroundImgUrl = $('#backgroundImg').attr("src");
+        var mainDivWidth = $("#mainDiv").width();
+        var mainDivHeight = $("#mainDiv").height();
+        $("#mainDiv").css("background-size", backgroundImgWidth+"px "+backgroundImgHeight+"px");
+        $("#mainDiv").css("background-image", "url('"+backgroundImgUrl+"')");
+        var maxPosX = backgroundImgWidth-mainDivWidth;
+        var mxPosY = backgroundImgHeight-mainDivHeight;
+		var backgroundPosX = 0;
 		var backgroundPosY = 0;
 		// 1 右  2下 3 左  4上
 		var direction = 1;
@@ -208,10 +216,10 @@
 			}else if (direction == 4){
 				backgroundPosY += 1;
 			}
-			if (backgroundPosX <= -2626 && direction == 1){
+			if (backgroundPosX <= -maxPosX && direction == 1){
 				direction = 2;
 			}
-			if (backgroundPosY <= -1200 && direction == 2){
+			if (backgroundPosY <= -mxPosY && direction == 2){
 				direction = 3;
 			}
 			if (backgroundPosX >=0 && direction == 3){
