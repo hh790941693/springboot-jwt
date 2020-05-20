@@ -47,7 +47,7 @@
 					</button>
 				</div>
 				<div style='padding-left:80px;'>
-					<img id="headImg" alt="" width="60px" height="60px" onerror="imgerror(this)">
+					<img id="headImg" onclick="showImg()" alt="" width="60px" height="60px" onerror="imgerror(this)">
 				</div>
 
 				<div>
@@ -196,6 +196,10 @@
 				layer.msg('更新个人信息失败');
 			}
 		});
+
+		function showImg() {
+			$.ws.gShowImg($("#headImg").attr("src"));
+		}
 
 		function initUpload(){
 			layui.upload.render({

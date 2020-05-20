@@ -37,10 +37,6 @@
 			<div style='padding-left:70px;margin-top:-15px;margin-bottom: 10px;'>
 				<img id="headImg" alt="" title="点击放大图片" width="60px" height="60px" onclick="showdiv()" onerror="imgerror(this)">
 			</div>
-			
-			<div id="showBigImageDiv" style="width:200px;height:200px;display:none;position:absolute;top:8px;left:80px;">
-				<br><img id="bigImg" width="99%" height="99%"  onclick="hidediv();" title="点击关闭图片" style="cursor: pointer;" border="0">
-			</div>
 
 			<label for="sign">个性签名:</label><input id="sign" name="sign" type="text" style="width:208px;margin-left:10px;"></input>
 			<br/>				
@@ -118,11 +114,7 @@
 		}
 
 		function showdiv() {
-			$("#bigImg").attr("src",$("#headImg").attr("src"));
-			$("#showBigImageDiv").css("display","block");
-		}
-		function hidediv(i) {
-			$("#showBigImageDiv").css("display","none");
+			$.ws.gShowImg($("#headImg").attr("src"));
 		}
 
 		// 加载图片失败
