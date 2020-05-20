@@ -89,9 +89,6 @@ public class WsUsersController extends AdminBaseController {
         if (StringUtils.isNotBlank(wsUsersDTO.getName())){
         	wrapper.like("t1.name", wsUsersDTO.getName(), SqlLike.DEFAULT);
 		}
-        //Page<WsUsersDO> page = wsUsersService.selectPage(getPage(WsUsersDO.class), wrapper);
-		//List<WsUsersDO> userList = page.getRecords();
-
         Page<WsUsersDO> page = getPage(WsUsersDO.class);
         List<WsUsersDO> userList = wsUsersService.queryUserPage(page, wrapper);
         page.setRecords(userList);

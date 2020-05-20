@@ -10,5 +10,6 @@
                 ${ew.sqlSegment}
             </where>
         </if>
+        order by t1.state desc,t1.name asc
     </select>
 </mapper>

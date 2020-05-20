@@ -75,11 +75,11 @@ function load() {
 				formatter : function (value) {
 					var res = "";
 					if (value == 1){
-						res = '<span class="label label-primary">申请中</span>';
+						res = '<span class="label label-success">申请中</span>';
 					}else if (value == 2){
 						res = '<span class="label label-danger">已被拒绝</span>';
 					}else if (value == 3){
-						res = '<span class="label label-info">申请成功</span>';
+						res = '<span class="label label-primary">申请成功</span>';
 					}
 					return res;
 				}

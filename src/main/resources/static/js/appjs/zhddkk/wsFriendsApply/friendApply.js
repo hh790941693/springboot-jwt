@@ -75,11 +75,11 @@ function load() {
                 formatter : function (value) {
                     var res = "";
                     if (value == 1){
-                        res = '<span class="label label-primary">申请中</span>';
+                        res = '<span class="label label-success">申请中</span>';
                     }else if (value == 2){
                         res = '<span class="label label-danger">已拒绝</span>';
                     }else if (value == 3){
-                        res = '<span class="label label-info">已同意</span>';
+                        res = '<span class="label label-primary">已同意</span>';
                     }
                     return res;
                 }
@@ -94,7 +94,7 @@ function load() {
                 align : 'center',
                 formatter : function(value, row, index) {
                     if (row.processStatus == 1){
-                        var agreeFriendBtn = '<a class="btn btn-info btn-sm '+s_remove_h+'" href="#" title="同意"  mce_href="#" onclick="operateFriendApply(\''
+                        var agreeFriendBtn = '<a class="btn btn-primary btn-sm '+s_remove_h+'" href="#" title="同意"  mce_href="#" onclick="operateFriendApply(\''
                             + row.id
                             + '\',\''
                             + '3'
