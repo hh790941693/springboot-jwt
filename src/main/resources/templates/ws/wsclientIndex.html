@@ -8,10 +8,8 @@
             font-weight:bold;
             margin:1px auto;
 			border: 2px solid green;
-			background-image: url("../img/headerX.jpg");
 			background-repeat: no-repeat;
-			background-size: 100% 771px;
-			background-position: 0px -230px;
+            background-position: 0px -230px;
         }
 
         #curTimeSpan{
@@ -44,7 +42,6 @@
 			height:100%;
 			float:left;
 			border:2px solid green;
-			background-image: url("../img/headerX.jpg");
 			background-repeat: no-repeat;
 			background-size: 1024px 147%;
 			background-position: -10px -222px;
@@ -131,6 +128,8 @@
 <body>
     <!--头部-->
 	<div id="headerDiv" align="center">
+        <img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
+        <img id="leftNavBackgroundImg" src="../img/headerY.jpg" hidden>
 		<div style="float:left;margin-left: 3px;margin-top: 2px;">
 			<img id='myImg' alt=""  width="48" height="48">
 			<label style="font-size: 20px;">你好:</label><label id="curUser" th:text="${user}" style="color:blue;font-size:28px;"></label>
@@ -654,41 +653,61 @@
 		},8000);
 
 		//定时滚动header背景图片
-		var backgroundPosY = 0;  //max -690
+        var headerBackgroundImgWidth = $("#headBackgroundImg").width();
+        var headerBackgroundImgHeight = $("#headBackgroundImg").height();
+        var headerBackgroundImgUrl = $('#headBackgroundImg').attr("src");
+        var headerWidth = $("#headerDiv").width();
+        var headerHeight = $("#headerDiv").height();
+        if (headerBackgroundImgWidth<headerWidth) {
+            $("#headerDiv").css("background-size", headerWidth + "px " + headerBackgroundImgHeight + "px");
+        }else{
+            $("#headerDiv").css("background-size", headerBackgroundImgWidth + "px " + headerBackgroundImgHeight + "px");
+        }
+        $("#headerDiv").css("background-image", "url('"+headerBackgroundImgUrl+"')");
+        var headerMaxPosY = headerBackgroundImgHeight-headerHeight;
+		var headerBackgroundPosY = 0;  //max -690
 		var downFlag = true;
 		setInterval(function () {
 			if (downFlag) {
-				backgroundPosY -= 1;
+                headerBackgroundPosY -= 1;
 			}
 			if (!downFlag){
-				backgroundPosY += 1;
+                headerBackgroundPosY += 1;
 			}
-			if (backgroundPosY <= -690){
+			if (headerBackgroundPosY <= -headerMaxPosY){
 				downFlag = false;
 			}
-			if (backgroundPosY >=0 ){
+			if (headerBackgroundPosY >=0 ){
 				downFlag = true;
 			}
-			$("#headerDiv").css("background-position","0px "+backgroundPosY+"px");
+			$("#headerDiv").css("background-position","0px "+headerBackgroundPosY+"px");
 		},10);
 
 		//定时滚动左侧导航栏背景图片
-		var backgroundPosX = 0; //max -848
+        var leftNavBackgroundImgWidth = $("#leftNavBackgroundImg").width();
+        var leftNavBackgroundImgHeight = $("#leftNavBackgroundImg").height();
+        var leftNavBackgroundImgUrl = $('#leftNavBackgroundImg').attr("src");
+        var leftNavWidth = $("#leftNavi").width();
+        //var leftNavHeight = $("#leftNavi").height();
+        $("#leftNavi").css("background-size", leftNavBackgroundImgWidth+"px "+leftNavBackgroundImgHeight+"px");
+        $("#leftNavi").css("background-image", "url('"+leftNavBackgroundImgUrl+"')");
+        var leftNavMaxPosX = leftNavBackgroundImgWidth-leftNavWidth;
+		var leftNavBackgroundPosX = 0; //max -848
 		var leftFlag = true;
 		setInterval(function () {
 			if (leftFlag) {
-				backgroundPosX -= 1;
+                leftNavBackgroundPosX -= 1;
 			}
 			if (!leftFlag){
-				backgroundPosX += 1;
+                leftNavBackgroundPosX += 1;
 			}
-			if (backgroundPosX <= -848){
+			if (leftNavBackgroundPosX <= -leftNavMaxPosX){
 				leftFlag = false;
 			}
-			if (backgroundPosX >=0 ){
+			if (leftNavBackgroundPosX >=0 ){
 				leftFlag = true;
 			}
-			$("#leftNavi").css("background-position",backgroundPosX+"px -222px");
+			$("#leftNavi").css("background-position",leftNavBackgroundPosX+"px -222px");
 		},10);
     </script>
 </html>
