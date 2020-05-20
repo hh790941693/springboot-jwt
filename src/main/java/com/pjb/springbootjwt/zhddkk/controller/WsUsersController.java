@@ -131,7 +131,6 @@ public class WsUsersController extends AdminBaseController {
 				}
 			}
 		}
-
         return Result.ok(page);
 	}
 
@@ -260,9 +259,7 @@ public class WsUsersController extends AdminBaseController {
 			wrapper.eq("t1.speak", wsUsersDTO.getSpeak());
 		}
 
-		wrapper.ne("t1.name", "admin").orderBy("t1.state", false);
-		//Page<WsUsersDO> page = wsUsersService.selectPage(getPage(WsUsersDO.class), wrapper);
-
+		wrapper.ne("t1.name", "admin");
         Page<WsUsersDO> page = getPage(WsUsersDO.class);
         List<WsUsersDO> userList = wsUsersService.queryUserPage(page, wrapper);
         page.setRecords(userList);

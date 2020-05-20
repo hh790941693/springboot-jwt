@@ -81,9 +81,9 @@ function load() {
 				formatter : function (value, row) {
 					var res = "";
 					if (value == "0"){
-						res = '<span class="label label-info">离线</span>';
+						res = '<span class="label label-default">离线</span>';
 					}else{
-						res = '<span class="label label-danger">在线</span>';
+						res = '<span class="label label-primary">在线</span>';
 					}
 					return res;
 				}
