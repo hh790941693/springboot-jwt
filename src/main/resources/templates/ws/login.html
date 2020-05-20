@@ -14,6 +14,11 @@
 	#mainDiv{
 		background-image: url("../img/pic3.jpg");
 	}
+
+	#loginForm{
+		padding-left: 40px;
+		padding-top: 30px;
+	}
 </style>
 </head>
 <body>
@@ -22,21 +27,22 @@
 				欢迎使用webSocket 
 		</div>
 		<button id="phonelogin" class='btn btn-success btn-sm' style="position:absolute;top:1px;left:315px;">扫码登录</button>
-		<form style="margin:20px 5px;" id="loginForm" action="ws/wslogin.do" method="post">
-			<div>
+		<form id="loginForm" action="ws/wslogin.do" method="post">
+			<div style="height:25px;">
 				<label for="user">用户名:</label><input id="user" name="user" type="text" th:value="${user}" placeholder="请输入用户名" autocomplete="off" style="width:178px;margin-left:10px;"></input>
 			</div>
-			<br/>
-			<div>
-				<label for="pass">密&nbsp;&nbsp;&nbsp;&nbsp;码:</label><input id="pass" name="pass" th:value="${pass}" placeholder="请输入密码" autocomplete="off" type="password" style="width:178px;margin-left:11px;"></input>
-				<br/>
-					<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:50px;">忘记密码</a>
-					<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:20px;">注&nbsp;&nbsp;&nbsp;&nbsp;册</a>
-					<a href="javascript:void(0)" onclick="openGame(this)" style="text-decoration:none;margin-left:20px;">开启动画</a>
-					<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;">玩游戏</a>
+			<div style="height:25px;margin-top:10px;">
+				<label for="pass">密&nbsp;&nbsp;码:</label>
+				<input id="pass" name="pass" th:value="${pass}" placeholder="请输入密码" autocomplete="off" type="password" style="width:178px;margin-left:11px;"></input>
+			</div>
+			<div style="height:25px;margin-top:10px;">
+				<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:50px;">忘记密码</a>
+				<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:20px;">注&nbsp;&nbsp;&nbsp;&nbsp;册</a>
+				<a href="javascript:void(0)" onclick="openGame(this)" style="text-decoration:none;margin-left:20px;">开启动画</a>
+				<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;">玩游戏</a>
 			</div>
 			
-			<div align="center" style="margin-top:35px;margin-left:1px;">
+			<div align="center" style="margin-top:20px;margin-left:-30px;">
 				<button id="btnlogin" class='btn btn-success btn-sm'  type="submit" style="width:100px;" >登&nbsp;&nbsp;&nbsp;录</button>
 			</div>
 		</form>
