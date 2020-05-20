@@ -9,6 +9,9 @@
         font-weight:bold;
         margin:1px auto;
 		border: 2px solid green;
+		background-image: url("../img/weatherBg.jpg");
+		background-repeat: no-repeat;
+		background-size: 100% 130%;
     }
 
     #btnDiv button{
@@ -136,7 +139,7 @@
 			<label id="titleLabel" style="color:black;">websocket服务端</label>
 		</div>
 
-		<div id="weatherDiv" style="float:left;font-size:20px;width:44%;padding-top:13px;display: block;">
+		<div id="weatherDiv" style="float:left;font-size:20px;width:53%;padding-top:13px;display: block;">
 			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="location" style="color:black;"></label>
@@ -601,7 +604,6 @@
 			grapWeatherInfo();
 		},10000);
 		function grapWeatherInfo(){
-			console.log("查询天气");
 			$.ajax({
 				type: 'GET',
 				url: rootUrl+'index/grapWetherInfo',
