@@ -301,8 +301,14 @@
         var cur_pageid = "wsclientChat.page";
         showPage(cur_pageid);
         function showPage(pageId) {
-            var url = pageId + "?user="+s_user;
-            $("#iframePage").attr("src",url);
+			var url = pageId + "?user="+s_user;
+			if (pageId.indexOf("gameIndex.page") != -1){
+				window.location.href=pageId;
+			}else if (pageId.indexOf("canvasIndex.page") != -1) {
+				window.location.href = pageId;
+			}else{
+				$("#iframePage").attr("src", url);
+			}
         }
 
         //左侧导航栏点击事件
