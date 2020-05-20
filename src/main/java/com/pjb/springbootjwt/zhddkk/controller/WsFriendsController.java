@@ -70,7 +70,7 @@ public class WsFriendsController extends AdminBaseController {
 		if (StringUtils.isNotBlank(wsFriendsDTO.getFname())){
 			wrapper.like("t1.fname", wsFriendsDTO.getFname());
 		}
-		wrapper.orderBy("t1.create_time", false);
+		wrapper.orderBy("t2.state", false).orderBy("t1.create_time", false);
 		Page<WsFriendsDO> qryPage = getPage(WsFriendsDO.class);
 		List<WsFriendsDO> list = wsFriendsService.queryFriendsPage(qryPage, wrapper);
 		qryPage.setRecords(list);
