@@ -130,10 +130,12 @@
 			<label style="font-size: 20px;">你好:</label><label id="curUser" th:text="${user}" style="color:blue;font-size:28px;"></label>
 			<span id="curTimeSpan">0000-00-00 00:00:00</span>
 		</div>
-		<div style="float:left;font-size:30px;width:62%;">
-			<label id="titleLabel" style="color:black;"></label>
+		<div id="weatherDiv" style="float:left;font-size:20px;width:44%;padding-top:13px;">
+			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
+			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
+			<label id="location" style="color:black;"></label>
 		</div>
-		<div id="btnDiv" style="float:right;margin-top:1px;margin-right:5px;">
+		<div id="btnDiv" style="float:right;margin-right:5px;padding-top:13px;">
 			<button id="showQRCodeBtn" class='btn btn-sm btn-info'>手机登录</button>
 			<button id="setPersonInfoBtn" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>
 			<button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
@@ -596,5 +598,26 @@
                 }
             });
         }
+
+        //定时获取天气
+		grapWeatherInfo();
+		setInterval(function(){
+			grapWeatherInfo();
+		},10000);
+		function grapWeatherInfo(){
+			console.log("查询天气");
+			$.ajax({
+				type: 'GET',
+				url: rootUrl+'index/grapWetherInfo',
+				async:false,
+				success: function(result) {
+					if (result.code == 0){
+						$("#weatherInfo").text(result.data.remark);
+						$("#lastUpdateTime").text(result.data.lastUpdateTime);
+						$("#location").text(result.data.location);
+					}
+				}
+			});
+		}
     </script>
 </html>
