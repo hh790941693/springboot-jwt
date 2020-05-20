@@ -38,7 +38,7 @@
 			<div style="height:25px;margin-top:10px;">
 				<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:50px;">忘记密码</a>
 				<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:20px;">注&nbsp;&nbsp;&nbsp;&nbsp;册</a>
-				<a href="javascript:void(0)" onclick="openGame(this)" style="text-decoration:none;margin-left:20px;">开启动画</a>
+				<a href="javascript:void(0)" onclick="openGame(this)" style="text-decoration:none;margin-left:20px;">隐藏动画</a>
 				<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;">玩游戏</a>
 			</div>
 			
@@ -53,7 +53,7 @@
 	</div>
 	
 	<div id='canvasDiv' style='position:fixed;left:1px;top:1px;width:100%;height:100%;z-index:-1;'>
-		<iframe id="iframePage" width="100%" height="100%" ></iframe>
+		<iframe id="iframePage" width="100%" height="100%" src="/canvas/snow.page"></iframe>
 	</div>
 
     <div th:include="common::footer"></div>
@@ -171,15 +171,15 @@
             }
         })
 
-        //关闭动画
+        //关闭/开启动画
         function openGame(thisObj){
             var text=$(thisObj).text();
             if (text == "开启动画"){
-                text = "隐藏动画";
                 $("#iframePage").attr("src", rootUrl+"canvas/snow.page");
-                $(thisObj).text(text);
+                $(thisObj).text("隐藏动画");
             }else{
-                window.location.href = window.location.href;
+				$("#iframePage").attr("src", "");
+				$(thisObj).text("开启动画");
             }
         }
 
