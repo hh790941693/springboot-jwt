@@ -8,14 +8,19 @@
 <style>
 	#mainDiv{
 		width:370px;
-		height:305px;
+		height:auto;
 		margin:2px auto;
 		border:2px solid green;
 	}
-	
+
 	#formDiv{
 		width:360px;
-		height:240px;
+		height:100%;
+	}
+
+	#formDiv div{
+		margin-top: 10px;
+		margin-left: 5px;
 	}
 	
 	select{
@@ -28,8 +33,10 @@
 	<div id="mainDiv" align="center">
 		<div id="formDiv" align="left" style='position:relative;'>
 			<input type="hidden" th:value="${user}" id="user">
-			<label for="realName">真实姓名:</label><input id="realName" name="realName" type="text" style="width:208px;margin-left:10px;"></input>
-			<br/>
+			<div>
+				<label for="realName">真实姓名:</label>
+				<input id="realName" name="realName" type="text" style="width:208px;margin-left:10px;"></input>
+			</div>
 			
 			<div>
 				<label id="headImgLabel" for="headImg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
@@ -38,48 +45,58 @@
 				<img id="headImg" alt="" title="点击放大图片" width="60px" height="60px" onclick="showdiv()" onerror="imgerror(this)">
 			</div>
 
-			<label for="sign">个性签名:</label><input id="sign" name="sign" type="text" style="width:208px;margin-left:10px;"></input>
-			<br/>				
-			
-			<label for="age">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</label><input id="age" name="age" type="text" style="width:208px;margin-left:10px;"></input>
-			<br/>
-			
-			<label for="sexSelect">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</label>
-			<select id="sexSelect">
-				<option value="1" selected="selected">男</option>
-				<option value="2">女</option>
-				<option value="3">未知</option>
-			</select>
-			<br/>				
-			
-			<label for="tel">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话:</label><input id="tel" name="tel" type="text" style="width:208px;margin-left:10px;"></input>
-			<br/>
-			
-			<label for="address">住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址:</label><input id="address" name="address" type="text" style="width:208px;margin-left:10px;"></input>
-			<br/>				
+			<div>
+				<label for="sign">个性签名:</label>
+				<input id="sign" name="sign" type="text" style="width:208px;margin-left:10px;"></input>
+			</div>
 
-			<label for="professionSelect">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业:</label>
-			<select id="professionSelect">
-				<option value="1">IT</option>
-				<option value="2">建筑</option>
-				<option value="3">金融</option>
-				<option value="4">个体商户</option>
-				<option value="5">旅游</option>
-				<option value="6" selected="selected">其他</option>
-			</select>
-			<br/>
-			
-			<label for="hobbySelect">爱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;好:</label>
-			<select id="hobbySelect">
-				<option value="1">篮球</option>
-				<option value="2">足球</option>
-				<option value="3">爬山</option>
-				<option value="4">旅游</option>
-				<option value="5">网游</option>
-				<option value="6" selected="selected">其他</option>
-			</select>
-			<br/>
-			
+			<div>
+				<label for="age">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</label>
+				<input id="age" name="age" type="text" style="width:208px;margin-left:10px;"></input>
+			</div>
+
+			<div>
+				<label for="sexSelect">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</label>
+				<select id="sexSelect">
+					<option value="1" selected="selected">男</option>
+					<option value="2">女</option>
+					<option value="3">未知</option>
+				</select>
+			</div>
+
+			<div>
+				<label for="tel">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话:</label>
+				<input id="tel" name="tel" type="text" style="width:208px;margin-left:10px;"></input>
+			</div>
+
+			<div>
+				<label for="address">住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址:</label>
+				<input id="address" name="address" type="text" style="width:208px;margin-left:10px;"></input>
+			</div>
+
+			<div>
+				<label for="professionSelect">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业:</label>
+				<select id="professionSelect">
+					<option value="1">IT</option>
+					<option value="2">建筑</option>
+					<option value="3">金融</option>
+					<option value="4">个体商户</option>
+					<option value="5">旅游</option>
+					<option value="6" selected="selected">其他</option>
+				</select>
+			</div>
+
+			<div>
+				<label for="hobbySelect">爱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;好:</label>
+				<select id="hobbySelect">
+					<option value="1">篮球</option>
+					<option value="2">足球</option>
+					<option value="3">爬山</option>
+					<option value="4">旅游</option>
+					<option value="5">网游</option>
+					<option value="6" selected="selected">其他</option>
+				</select>
+			</div>
 		</div>
 	</div>
 	<div id="tipDiv" style="display:none;color:red;" align="center">该用户尚未设置个人信息</div>
