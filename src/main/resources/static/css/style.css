@@ -7367,3 +7367,7 @@ table{
     border: 1px solid grey;
 }
 
+body{
+    overflow: hidden;
+}
+
