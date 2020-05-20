@@ -21,17 +21,16 @@
 
         #footDiv{
             width:1320px;
-            height:10px;
+            height:45px;
             color:black;
             font-size:15px;
             font-weight:bold;
-            margin:14px auto 0 auto;
+            margin:1px auto 0 auto;
         }
 
         #copyrightDiv ul li{
             float:left;
             list-style:none;
-            margin-top:-15px;
         }
 
 		#mainDiv{
@@ -116,10 +115,10 @@
 
 		#statusDiv{
 			width:1320px;
-			height:15px;
+			height:20px;
 			font-size:15px;
 			font-weight:bold;
-			margin:8px auto;;
+			margin-top:2px;
 		}
 
 		#statusTips{
@@ -214,28 +213,30 @@
 
     <!--底部-->
     <div id="footDiv" align="center">
-        <div style="float:left;margin-top:-15px;">
-            <label id="curUser22">邮箱:547495788@qq.com</label>
-        </div>
-        <div style="float:left;margin-left: 350px;margin-top:-15px;">
-            <label id="cliName">所有版权信息归作者所有</label>
-            <label id="versionLabel" style='margin-left:15px;color:blue;font-weight:bold;'></label>
-            <a href='javascript:void(0)' onclick='checkUpdate()' style='margin-left:15px;' >检查更新</a>
-        </div>
-        <div id="copyrightDiv" style="float:right;">
-            <ul>
-                <li>联系作者 | </li>
-                <li>捐赠作者 | </li>
-                <li>提出疑问 | </li>
-                <li>关于我们</li>
-            </ul>
-        </div>
-    </div>
+		<div style="height:20px;">
+			<div style="float:left;">
+				<label id="curUser22">邮箱:547495788@qq.com</label>
+			</div>
+			<div style="float:left;margin-left: 350px;">
+				<label id="cliName">所有版权信息归作者所有</label>
+				<label id="versionLabel" style='margin-left:15px;color:blue;font-weight:bold;'></label>
+				<a href='javascript:void(0)' onclick='checkUpdate()' style='margin-left:15px;'>检查更新</a>
+			</div>
+			<div id="copyrightDiv" style="float:right;">
+				<ul>
+					<li>联系作者 | </li>
+					<li>捐赠作者 | </li>
+					<li>提出疑问 | </li>
+					<li>关于我们</li>
+				</ul>
+			</div>
+		</div>
 
-	<!--提示栏 -->
-	<div id="statusDiv" align="right">
-		<span id="statusTips"></span>
-	</div>
+		<!--提示栏 -->
+		<div id="statusDiv" align="right">
+			<span id="statusTips"></span>
+		</div>
+    </div>
 
     <div th:include="common::footer"></div>
 </body>
