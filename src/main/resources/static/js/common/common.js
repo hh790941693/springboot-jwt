@@ -4,13 +4,15 @@ host = window.location.host;
 //上传文件接口地址
 uploadUrl = protocol+"//"+host+"/upload/app";
 
-//显示图片
+//公共api
 $.ws = {
+    //显示图片
     gShowImg : function(imgUrl) {
         $.fancybox.open('<img src = "' + imgUrl + '" />');
     },
 
-    backgroundImgAnimation : function(imgId, divId, direction) {
+    //背景图片动画
+    backgroundImgAnimation : function(imgId, divId, direction, frequency) {
         var imgWidth = $("#" + imgId).width();
         var imgHeight = $("#" + imgId).height();
         var imgUrl = $("#" + imgId).attr("src");
@@ -18,14 +20,19 @@ $.ws = {
         var divWidth = $("#" + divId).width();
         var divHeight = $("#" + divId).height();
 
-        var divBackSizeX, divBackSizeY = 0;
-        if (imgWidth < divWidth) {
+        if (frequency == null || frequency == "" || frequency == undefined){
+            frequency = 5;
+        }
+
+        var divBackSizeX = 0;
+        var  divBackSizeY = 0;
+        if (imgWidth <= divWidth) {
             divBackSizeX = divWidth;
         } else {
             divBackSizeX = imgWidth;
         }
 
-        if (imgHeight < divHeight) {
+        if (imgHeight <= divHeight) {
             divBackSizeY = divHeight;
         } else {
             divBackSizeY = imgHeight;
@@ -33,8 +40,8 @@ $.ws = {
         $("#" + divId).css("background-size", divBackSizeX + "px " + divBackSizeY + "px");
         $("#" + divId).css("background-image", "url('" + imgUrl + "')");
 
-        var maxPosX = imgWidth - divWidth;
-        var maxPosY = imgHeight - divHeight;
+        var maxPosX = Math.abs(imgWidth - divWidth);
+        var maxPosY = Math.abs(imgHeight - divHeight);
         if (direction == 1) {
             //上下滚动
             var posY = 0;  //max -690
@@ -53,7 +60,7 @@ $.ws = {
                     downFlag = true;
                 }
                 $("#" + divId).css("background-position", "0px " + posY + "px");
-            }, 10);
+            }, frequency);
         } else if (direction == 2) {
             //左右滚动
             var posX = 0;
@@ -72,7 +79,7 @@ $.ws = {
                     leftFlag = true;
                 }
                 $("#" + divId).css("background-position", posX + "px 0px");
-            }, 10);
+            }, frequency);
         } else if (direction == 3) {
             //圆圈运动
             var posX = 0;
@@ -102,7 +109,7 @@ $.ws = {
                     direct = 1;
                 }
                 $("#" + divId).css("background-position", posX + "px " + posY + "px");
-            }, 5);
+            }, frequency);
         }
     }
 }
