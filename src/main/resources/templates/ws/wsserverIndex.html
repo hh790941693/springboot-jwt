@@ -622,6 +622,7 @@
 			});
 		}
 
+		//定时切换header标题
 		setInterval(function () {
 			var titleStatus = $("#headerTitleDiv").css("display");
 			if (titleStatus == "none"){
@@ -632,5 +633,43 @@
 				$("#weatherDiv").css("display", "block");
 			}
 		},8000);
+
+		//定时滚动header背景图片
+		var backgroundPosY = 0;  //max -690
+		var downFlag = true;
+		setInterval(function () {
+			if (downFlag) {
+				backgroundPosY -= 1;
+			}
+			if (!downFlag){
+				backgroundPosY += 1;
+			}
+			if (backgroundPosY <= -690){
+				downFlag = false;
+			}
+			if (backgroundPosY >=0 ){
+				downFlag = true;
+			}
+			$("#headerDiv").css("background-position","0px "+backgroundPosY+"px");
+		},10);
+
+		//定时滚动左侧导航栏背景图片
+		var backgroundPosX = 0; //max -848
+		var leftFlag = true;
+		setInterval(function () {
+			if (leftFlag) {
+				backgroundPosX -= 1;
+			}
+			if (!leftFlag){
+				backgroundPosX += 1;
+			}
+			if (backgroundPosX <= -848){
+				leftFlag = false;
+			}
+			if (backgroundPosX >=0 ){
+				leftFlag = true;
+			}
+			$("#leftNavi").css("background-position",backgroundPosX+"px -222px");
+		},10);
     </script>
 </html>
