@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.http.HttpSession;
+import javax.websocket.EndpointConfig;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.Session;
@@ -16,6 +18,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsChatlogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
@@ -32,7 +35,7 @@ import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.listener.ApplicationContextRegister;
 import org.springframework.stereotype.Component;
 
-@ServerEndpoint("/zhddWebSocket/{user}/{pass}/{userAgent}")
+@ServerEndpoint(value = "/zhddWebSocket/{user}/{pass}/{userAgent}", configurator = HttpSessionConfigurator.class)
 @Component
 public class ZhddWebSocket 
 {
@@ -143,8 +146,12 @@ public class ZhddWebSocket
 	}
 	
 	@javax.websocket.OnOpen
-	public void OnOpen(@PathParam("user") String user,@PathParam("pass") String pass,@PathParam("userAgent") String userAgent,Session session) {
+	public void OnOpen(@PathParam("user") String user, @PathParam("pass") String pass, @PathParam("userAgent") String userAgent, Session session, EndpointConfig endpointConfig) {
         logger.info("用户连接 user:{}", user);
+
+		HttpSession httpSession = (HttpSession)endpointConfig.getUserProperties().get(HttpSession.class.getName());
+		String sessionUser = (String)httpSession.getAttribute(CommonConstants.S_USER);
+
 		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user).eq("password", pass));
 		if (null == wsUsersDO) {
 			System.out.println("用户:"+user+"登录失败!");
