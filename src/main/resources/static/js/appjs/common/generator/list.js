@@ -78,12 +78,13 @@ function batchCode() {
 		layer.msg("请选择要生成代码的表");
 		return;
 	}
-	var tables = new Array();
+	var tables = "";
 	// 遍历所有选择的行数据，取每条数据对应的ID
 	$.each(rows, function(i, row) {
-		tables[i] = row['tableName'];
+		tables += row['tableName']+",";
 	});
-	location.href = prefix + "/batchCode?tables=" + JSON.stringify(tables);
+	tables = tables.substring(0, tables.length-1);
+	window.location.href = rootUrl+"common/generator/batchCode?tables="+tables;
 }
 
 function edit(){

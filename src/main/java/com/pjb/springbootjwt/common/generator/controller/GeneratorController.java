@@ -69,8 +69,7 @@ public class GeneratorController {
 
     @RequestMapping("/batchCode")
     public void batchCode(HttpServletRequest request, HttpServletResponse response, String tables) throws IOException {
-        String[] tableNames = new String[] {};
-        tableNames = JSON.parseArray(tables).toArray(tableNames);
+        String[] tableNames = tables.split(",");
         byte[] data = generatorService.generatorCode(tableNames);
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"code.zip\"");
