@@ -25,6 +25,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+@Deprecated
 public class UploadFileServlet extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;

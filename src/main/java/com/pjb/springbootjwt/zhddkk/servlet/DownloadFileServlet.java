@@ -1,6 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.servlet;
 
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
+import net.bytebuddy.asm.Advice;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Deprecated
 public class DownloadFileServlet extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
