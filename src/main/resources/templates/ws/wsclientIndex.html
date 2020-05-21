@@ -163,7 +163,7 @@
 		<input type="hidden" id="webserverip" name="webserverip" th:value="${webserverip}">
 		<input type="hidden" id="webserverport" name="webserverport" th:value="${webserverport}">
 		<input type="hidden" id="selfimg" name="selfimg" th:value="${selfimg}">
-        <input type="hidden" id="userAgent" name="user_agent" th:value="${user_agent}">
+        <input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
 
 		<div id="leftNavi">
 			<ul>
@@ -244,7 +244,7 @@
         var s_pass=$('#pass').val();
         var s_webserverip = $('#webserverip').val();
         var s_webserverport = $('#webserverport').val();
-        var s_userAgent = $('#userAgent').val();
+        var s_userAgent = $('#useragent').val();
         var s_selfimg = $('#selfimg').val();
 
         //头部头像
@@ -270,7 +270,19 @@
 
 		//返回登录页
         function toIndex(){
-            window.location.href = rootUrl;
+			//window.location.href = rootUrl;
+			$.ajax({
+				type: 'POST',
+				url: rootUrl+'ws/logout.do',
+				data:{"user":s_user},
+				async:false,
+				success: function(result) {
+					if (result == "success"){
+						console.log("退出成功");
+						window.location.href = rootUrl;
+					}
+				}
+			});
         }
 
         //手机登录

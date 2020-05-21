@@ -11,8 +11,10 @@ public class CommonConstants
 	public static final String S_WEBSERVERIP = "webserverip";
 	public static final String S_WEBSERVERPORT = "webserverport";
 	public static final String S_IMG = "selfimg";           //个人头像
-	public static final String S_USER_AGENT = "user_agent"; //设备信息
-	
+	public static final String S_USER_AGENT = "useragent"; //设备信息
+
+	public static final int SESSION_TIMEOUT = 60; //session不活动时的超时时间  10分钟
+
 	public static final String SUCCESS = "success";
 	public static final String FAIL = "fail";
 	

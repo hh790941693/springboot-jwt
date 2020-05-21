@@ -162,7 +162,7 @@
 		<input type="hidden" id="webserverip" name="webserverip" th:value="${webserverip}">
 		<input type="hidden" id="webserverport" name="webserverport" th:value="${webserverport}">
 		<input type="hidden" id="selfimg" name="selfimg" th:value="${selfimg}">
-		<input type="hidden" id="user_agent" name="user_agent" th:value="${user_agent}">
+		<input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
 
 		<div id="leftNavi">
 			<ul>
@@ -244,7 +244,7 @@
         var s_pass=$('#pass').val();
         var s_webserverip = $('#webserverip').val();
         var s_webserverport = $('#webserverport').val();
-        var s_userAgent = $('#user_agent').val();
+        var s_userAgent = $('#useragent').val();
         var s_selfimg = $('#selfimg').val();
 
         $("#curUser").text(s_user);
@@ -269,7 +269,19 @@
         },1000)
 
         function toIndex(){
-            window.location.href = rootUrl+"ws";
+            //window.location.href = rootUrl+"ws";
+			$.ajax({
+				type: 'POST',
+				url: rootUrl+'ws/logout.do',
+				data:{"user":s_user},
+				async:false,
+				success: function(result) {
+					if (result == "success"){
+						console.log("退出成功");
+						window.location.href = rootUrl;
+					}
+				}
+			});
         }
 
         $("#showQRCodeBtn").click(function(){

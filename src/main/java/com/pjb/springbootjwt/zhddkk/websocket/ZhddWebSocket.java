@@ -27,6 +27,7 @@ import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -150,7 +151,12 @@ public class ZhddWebSocket
         logger.info("用户连接 user:{}", user);
 
 		HttpSession httpSession = (HttpSession)endpointConfig.getUserProperties().get(HttpSession.class.getName());
-		String sessionUser = (String)httpSession.getAttribute(CommonConstants.S_USER);
+		String sessionUser = (String)httpSession.getAttribute(CommonConstants.S_USER+"_"+user);
+		if (StringUtils.isBlank(sessionUser)){
+			httpSession.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT);
+			httpSession.setAttribute(CommonConstants.S_USER+"_"+user, user);
+			httpSession.setAttribute(CommonConstants.S_PASS+"_"+user, pass);
+		}
 
 		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user).eq("password", pass));
 		if (null == wsUsersDO) {
