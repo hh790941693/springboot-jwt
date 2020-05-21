@@ -3,15 +3,15 @@ package com.pjb.springbootjwt.zhddkk.aspect;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Date;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
-import com.pjb.springbootjwt.zhddkk.entity.WsUser;
+import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsOperationLogService;
-import com.pjb.springbootjwt.zhddkk.service.WsService;
+import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -30,9 +30,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class OperationLogAspect {
 
 	private static final Log logger = LogFactory.getLog(OperationLogAspect.class);
-	
+
 	@Autowired
-	private WsService wsService;
+	private WsUsersService wsUsersService;
 
 	@Autowired
 	private WsOperationLogService wsOperationLogService;
@@ -55,14 +55,13 @@ public class OperationLogAspect {
         Long costTime = System.currentTimeMillis() - beginTime;
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        //String requestUri = request.getRequestURI();
         String requestUrl = request.getRequestURL().toString();
         String userName = (String)request.getSession().getAttribute(CommonConstants.S_USER);
 
         if (null != userName) {
-			Integer userId = querySpecityUserName(userName).getId();
+			WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
 			wol.setUserName(userName);
-			wol.setUserId(userId);
+			wol.setUserId(wsUsersDO.getId());
         }
         //获得类名
         String className = joinPoint.getTarget().getClass().getName();
@@ -144,20 +143,4 @@ public class OperationLogAspect {
         
         return result;
     }
-    
-	/**
-	 * 根据用户名称查询用户信息
-	 * 
-	 * @param name
-	 * @return
-	 */
-	private WsUser querySpecityUserName(String name) {
-		WsUser wu = new WsUser();
-		wu.setName(name);
-		List<WsUser> wuList = wsService.queryWsUser(wu);
-		if (wuList.size() > 0) {
-			return wuList.get(0);
-		}
-		return null;
-	}
 }
