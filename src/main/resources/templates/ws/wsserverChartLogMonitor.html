@@ -9,7 +9,7 @@
 	}
 
 	body{
-		background-image: url("../img/pic1.jpg");
+		background-image: url("../img/fengjing/fj1.jpg");
 		background-repeat: no-repeat;
 		background-size:100% 100%;
 	}
@@ -171,7 +171,6 @@
 				textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
 			}else{
 				var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;'>["+getCurrentTime() + "] [在线消息]  [我 -->" + toUser +"] "+ msgToServer +"</p>";
-				//updateChatMsg(htmlData);
 				sendMsgToServer(parent.s_user, toUser, msgToServer);
 				$("#msgToServer").val("");
 			}
@@ -288,12 +287,13 @@
 		getOnlineInfo();
 	},10000);
 
-	var imgIndex=1;
+	var imgIndex = 1;
+	var imgMaxIndex = 10;
 	function changeBackgroundImage(){
-		if (imgIndex>5) {
-			imgIndex=1;
+		if (imgIndex>imgMaxIndex) {
+			imgIndex = 1;
 		}
-		var newPicUrl = "../img/pic"+imgIndex+".jpg";
+		var newPicUrl = "../img/fengjing/fj"+imgIndex+".jpg";
 		$("body").css("background-image","url("+newPicUrl+")");
 		imgIndex++;
 	}
