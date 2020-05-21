@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.MultipartConfigElement;
 import java.io.File;
+import java.net.InetAddress;
 import java.util.Properties;
 
 @EnableTransactionManagement
@@ -43,7 +44,6 @@ public class Application {
         sa.addListeners(new ClosedListener());
         sa.run(args);
         //SpringApplication.run(Application.class, args);
-
         printProjectConfigs();
     }
 
@@ -51,8 +51,10 @@ public class Application {
         ServerProperties serverProperties = SpringContextHolder.getApplicationContext().getBean(ServerProperties.class);
         DataSourceProperties dataSourceProperties = SpringContextHolder.getApplicationContext().getBean(DataSourceProperties.class);
         log.info("数据库：" + dataSourceProperties.getUrl());
+        InetAddress inetAddress = serverProperties.getAddress();
+        String hostAddress = inetAddress.getHostAddress();
         String contextPath = (serverProperties.getServlet().getContextPath() == null ? "" : serverProperties.getServlet().getContextPath());
-        log.info("==================> run at http://localhost:" + serverProperties.getPort() + contextPath + "  <==================");
+        log.info("==================> run at http://"+hostAddress+":" + serverProperties.getPort() + contextPath + "  <==================");
     }
 
     @Bean
