@@ -3187,7 +3187,7 @@ video {
 }
 
 .wrapper-content {
-    padding: 20px;
+    padding: 8px;
 }
 
 #page-wrapper {
@@ -7367,7 +7367,4 @@ table{
     border: 1px solid grey;
 }
 
-body{
-    overflow: hidden;
-}
 
