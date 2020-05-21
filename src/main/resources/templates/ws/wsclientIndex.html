@@ -701,7 +701,8 @@
 		setInterval(Marquee, 100);
 
 		//定时获取最新广告
-		setInterval(function () {
+		queryRecentAdsList();
+		function queryRecentAdsList(){
 			$.ajax({
 				type: 'GET',
 				url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
@@ -717,6 +718,9 @@
 					}
 				}
 			});
-		}, 60000);
+		}
+
+		//定时获取最新广告
+		setInterval(queryRecentAdsList, 60000);
     </script>
 </html>

@@ -74,7 +74,10 @@ public class WsAdsController extends AdminBaseController {
 
 	@ResponseBody
 	@GetMapping("/queryRecentAdsList")
-	public Result<List<WsAdsDO>> queryRecentAdsList(int count){
+	public Result<List<WsAdsDO>> queryRecentAdsList(Integer count){
+		if (null == count || count.intValue() <= 0){
+			count = 4;
+		}
 		Page<WsAdsDO> page = wsAdsService.selectPage(new Page<>(1,count), new EntityWrapper<WsAdsDO>()
 			.orderBy("create_time", false));
 		List<WsAdsDO> list = page.getRecords();
