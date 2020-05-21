@@ -7,7 +7,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +17,10 @@ public class WeatherUtil {
     //江都天气
     private static String weatherUrl = "http://www.weather.com.cn/weather1d/101190605.shtml";
 
+    private static Logger logger = LoggerFactory.getLogger(WeatherUtil.class);
+
     public static WeatherBean grapWeatherInfo() throws Exception{
+        logger.info("调用查询天气接口");
         String weatherInfo = "";
         String lastUpdateTime = "";
         String location = "";
@@ -82,10 +87,7 @@ public class WeatherUtil {
             weatherBean.setLowTemperature(temperatureArr[1]);
             weatherBean.setRemark(weatherInfo);
         }
-        System.out.println(weatherInfo);
-        System.out.println(lastUpdateTime);
-        System.out.println(location);
-
+        logger.info(weatherInfo);
         return weatherBean;
     }
 }
