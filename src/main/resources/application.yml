@@ -1,6 +1,6 @@
 server:
   port: 8100
-  address: localhost
+  address: 192.168.31.106
   servlet:
     context-path: /
     session:
@@ -36,6 +36,7 @@ spring:
     static-locations:
       - classpath:/templates
       - classpath:/static
+      - classpath:/static/css
   profiles:
     active: home
   servlet:
