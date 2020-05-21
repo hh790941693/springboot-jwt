@@ -72,6 +72,19 @@ public class WsAdsController extends AdminBaseController {
         return Result.ok(page);
 	}
 
+	@ResponseBody
+	@GetMapping("/queryRecentAdsList")
+	public Result<List<WsAdsDO>> queryRecentAdsList(int count){
+		Page<WsAdsDO> page = wsAdsService.selectPage(new Page<>(1,count), new EntityWrapper<WsAdsDO>()
+			.orderBy("create_time", false));
+		List<WsAdsDO> list = page.getRecords();
+		if (null != list && list.size()>0){
+			return Result.ok(list);
+		}
+
+		return Result.fail();
+	}
+
     /**
      * 跳转到广告表添加页面
      */

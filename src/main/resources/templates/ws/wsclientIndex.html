@@ -132,22 +132,37 @@
 		<div style="float:left;margin-left: 3px;margin-top: 2px;">
 			<img id='myImg' alt=""  width="48" height="48">
 			<label style="font-size: 20px;">你好:</label><label id="curUser" th:text="${user}" style="color:blue;font-size:28px;"></label>
-			<span id="curTimeSpan">0000-00-00 00:00:00</span>
 		</div>
 
-		<div id="headerTitleDiv" style="float:left;font-size:30px;width:44%;display: none;">
-			<label id="titleLabel" style="color:black;">websocket客户端</label>
+		<div id="headerTitleDiv" style="float:left;font-size:20px;width:36%;padding-top:13px;display: none;">
+			<label id="titleLabel" style="color:black;">websocket服务端</label>
 		</div>
 
-		<div id="weatherDiv" style="float:left;font-size:20px;width:53%;padding-top:13px;display: block;">
+		<!--天气-->
+		<div id="weatherDiv" style="float:left;font-size:18px;width:36%;padding-top:13px;display: block;">
 			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="location" style="color:black;"></label>
 		</div>
-		<div id="btnDiv" style="float:right;margin-right:5px;padding-top:13px;">
-			<button id="showQRCodeBtn" class='btn btn-sm btn-success'>扫码登录</button>
-			<button id="setPersonInfoBtn" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>
-			<button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
+
+		<!--滚动新闻-->
+		<div id="scrollAdDiv" style="float:left;height:30px;overflow:hidden;width:30%;margin-top:15px;">
+			<div id="adContentOutDiv" style="height:200%;">
+				<div id="adContentDiv"></div>
+				<div id="adNoContentDiv"></div>
+			</div>
+		</div>
+
+		<div id="btnDiv" style="float:right;margin-right:5px;">
+			<!--当前时间-->
+			<div style="text-align:right;">
+				<span id="curTimeSpan">0000-00-00 00:00:00</span>
+			</div>
+			<div>
+				<button id="showQRCodeBtn" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
+				<button id="setPersonInfoBtn" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>&nbsp;&nbsp;
+				<button id="exitBtn" class='btn btn-sm btn-danger' onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
+			</div>
 		</div>
 	</div>
 
@@ -635,7 +650,7 @@
 		grapWeatherInfo();
 		setInterval(function(){
 			grapWeatherInfo();
-		},60000);
+		},600000);
 		function grapWeatherInfo(){
 			$.ajax({
 				type: 'GET',
@@ -669,5 +684,39 @@
 
         //定时滚动左侧导航栏背景图片
         $.ws .backgroundImgAnimation("leftNavBackgroundImg","leftNavi", 2, 10);
+
+		//头部滚动广告
+		var scrollAdDiv = document.getElementById("scrollAdDiv");
+		var adContentDiv = document.getElementById("adContentDiv");
+		var adNoContentDiv = document.getElementById("adNoContentDiv");
+		scrollAdDiv.scrollTop = adContentDiv.offsetHeight;
+		function Marquee(){
+			adNoContentDiv.innerHTML = adContentDiv.innerHTML;
+			if (scrollAdDiv.scrollTop >= adContentDiv.offsetHeight) {
+				scrollAdDiv.scrollTop -= adNoContentDiv.offsetHeight;
+			}else{
+				scrollAdDiv.scrollTop += 1;
+			}
+		}
+		setInterval(Marquee, 100);
+
+		//定时获取最新广告
+		setInterval(function () {
+			$.ajax({
+				type: 'GET',
+				url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
+				async:false,
+				success: function(result) {
+					if (result.code == 0){
+						var data = result.data;
+						var totalAds = "";
+						$.each(data,function(i,val){
+							totalAds += val.content+"&nbsp;&nbsp;&nbsp;"+val.createTime+"<br/>";
+						});
+						$("#adContentDiv").html(totalAds);
+					}
+				}
+			});
+		}, 60000);
     </script>
 </html>

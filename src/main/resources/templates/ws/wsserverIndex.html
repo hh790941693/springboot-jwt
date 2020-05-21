@@ -13,13 +13,9 @@
 		background-position: 0px -230px;
     }
 
-    #btnDiv button{
-        margin-top: 15px;
-    }
-
     #curTimeSpan{
         margin-left:20px;
-        font-size:18px;
+        font-size:16px;
     }
 
     #footDiv{
@@ -130,29 +126,47 @@
     <div id="headerDiv" align="center">
 		<img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
 		<img id="leftNavBackgroundImg" src="../img/headerY.jpg" hidden>
+
+		<!--登录用户头像和名称-->
         <div style="float:left;margin-left: 3px;margin-top: 2px;">
             <img id='myImg' alt=""  width="48" height="48">
 			<label style="font-size: 20px;">你好:</label><label id="curUser" th:text="${user}" style="color:blue;font-size:30px;"></label>
-            <span id="curTimeSpan">0000-00-00 00:00:00</span>
         </div>
 
-		<div id="headerTitleDiv" style="float:left;font-size:30px;width:44%;display: none;">
+		<div id="headerTitleDiv" style="float:left;font-size:20px;width:36%;padding-top:13px;display: none;">
 			<label id="titleLabel" style="color:black;">websocket服务端</label>
 		</div>
 
-		<div id="weatherDiv" style="float:left;font-size:20px;width:53%;padding-top:13px;display: block;">
+		<!--天气-->
+		<div id="weatherDiv" style="float:left;font-size:18px;width:36%;padding-top:13px;display: block;">
 			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="location" style="color:black;"></label>
 		</div>
 
-        <div id="btnDiv" style="float:right;margin-top:-4px;margin-right:5px;">
-            <button id="showQRCodeBtn" class='btn btn-sm btn-success'>扫码登录</button>
-			<button id="setPersonInfoBtn" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>
-			<button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
-        </div>
+		<!--滚动新闻-->
+		<div id="scrollAdDiv" style="float:left;height:30px;overflow:hidden;width:30%;margin-top:15px;">
+			<div id="adContentOutDiv" style="height:200%;">
+				<div id="adContentDiv"></div>
+				<div id="adNoContentDiv"></div>
+			</div>
+		</div>
+
+		<!--最右侧按钮组-->
+        <div id="btnDiv" style="float:right;margin-right:5px;">
+			<!--当前时间-->
+			<div style="text-align:right;">
+				<span id="curTimeSpan">0000-00-00 00:00:00</span>
+			</div>
+			<div>
+				<button id="showQRCodeBtn" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
+				<button id="setPersonInfoBtn" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>&nbsp;&nbsp;
+				<button id="exitBtn" class='btn btn-sm btn-danger' onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
+			</div>
+		</div>
     </div>
 
+	<!--二维码登录(隐藏)-->
 	<div id="qrDiv" style="display:none">
 		<img id="qrcodeImg">
 	</div>
@@ -164,6 +178,7 @@
 		<input type="hidden" id="selfimg" name="selfimg" th:value="${selfimg}">
 		<input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
 
+		<!--左侧导航栏-->
 		<div id="leftNavi">
 			<ul>
 				<!--<li id="wsserverUser.page" class="mouseleftclick">用户管理</li>-->
@@ -197,12 +212,14 @@
 				</ul>
 			</div>
 		</div>
-		
+
+		<!--右侧子页面窗口-->
 		<div id="diffPage" align="center" style="width:1136px;height:100%;float:left;border:2px solid green;margin-left:2px;">
 			<iframe id="iframePage" width="1130px" height="605px"></iframe>
 		</div>
 	</div>
-	
+
+	<!--简易音乐播放器-->
 	<div id='musicIframeDiv'>
 		<div id='musicIframeHeader'>
 			<span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
@@ -616,7 +633,7 @@
 		grapWeatherInfo();
 		setInterval(function(){
 			grapWeatherInfo();
-		},60000);
+		},600000);
 		function grapWeatherInfo(){
 			$.ajax({
 				type: 'GET',
@@ -649,5 +666,40 @@
 
         //定时滚动左侧导航栏背景图片
         $.ws .backgroundImgAnimation("leftNavBackgroundImg","leftNavi", 2, 10);
+
+        //头部滚动广告
+		var scrollSpeed = 100; //数字越大滚得越慢
+		var scrollAdDiv = document.getElementById("scrollAdDiv");
+		var adContentDiv = document.getElementById("adContentDiv");
+		var adNoContentDiv = document.getElementById("adNoContentDiv");
+		scrollAdDiv.scrollTop = adContentDiv.offsetHeight;
+		function Marquee(){
+			adNoContentDiv.innerHTML = adContentDiv.innerHTML;
+			if (scrollAdDiv.scrollTop >= adContentDiv.offsetHeight) {
+				scrollAdDiv.scrollTop -= adNoContentDiv.offsetHeight;
+			}else{
+				scrollAdDiv.scrollTop += 1;
+			}
+		}
+		setInterval(Marquee, scrollSpeed);
+
+		//定时获取最新广告
+		setInterval(function () {
+			$.ajax({
+				type: 'GET',
+				url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
+				async:false,
+				success: function(result) {
+					if (result.code == 0){
+						var data = result.data;
+						var totalAds = "";
+						$.each(data,function(i,val){
+							totalAds += val.content+"&nbsp;&nbsp;&nbsp;"+val.createTime+"<br/>";
+						});
+						$("#adContentDiv").html(totalAds);
+					}
+				}
+			});
+		}, 60000);
     </script>
 </html>
