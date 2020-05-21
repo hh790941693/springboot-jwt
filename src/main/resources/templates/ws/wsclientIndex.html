@@ -249,7 +249,7 @@
 	</div>
 
 	<!--右下角 广告页面(隐藏) -->
-	<div id="adDiv" style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display:none">
+	<div id="adDiv" style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display: none;">
 		<div id="adBtn" style="style:1px solid red;background-color:#5082b9;padding-left:290px">
 			<button id="closeAd" class='btn btn-sm btn-primary' onclick="closeAd()">关&nbsp;&nbsp;闭</button>
 		</div>
@@ -257,6 +257,9 @@
 		</div>
 
 		<div id="adContent" style="height:auto;text-indent:2em;">
+		</div>
+
+		<div id="adTime" style="height:15px;font-size: 16px;font-weight: bold;position: absolute;right:2px;bottom: 3px;">
 		</div>
 	</div>
 
@@ -515,6 +518,7 @@
 
                 $("#adTitle").html(title);
                 $("#adContent").html(content);
+                $("#adTime").html(curTime);
                 $("#adDiv").slideDown(500);
             }
         }
