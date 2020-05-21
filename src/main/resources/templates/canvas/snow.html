@@ -18,14 +18,17 @@
 			position:absolute;
 			top:0;
 			left:0;
-		}	
+		}
+        #bgSnow{
+            background-repeat: no-repeat;
+        }
 	</style>
 </head>
 
 <body>
     <canvas id="canvas"></canvas>
-    <img id="imgSnow" width="0" height="0" src="../img/20180608224803406.png" title="雪花" alt="">
-    <img id="bgSnow" width="100%" height="100%" src="../img/snow.jpg" title="雪花" alt="">
+    <img id="imgSnow" width="0" height="0" src="../img/snowflake.png" title="雪花" alt="">
+    <img id="bgSnow" width="100%" height="100%" src="../img/snowBackground.jpg" title="背景图片" alt="">
     <div th:include="common::footer"></div>
 </body>
 
