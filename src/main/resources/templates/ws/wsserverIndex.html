@@ -133,6 +133,7 @@
 			<label style="font-size: 20px;">你好:</label><label id="curUser" th:text="${user}" style="color:blue;font-size:30px;"></label>
         </div>
 
+		<!--头部标题-->
 		<div id="headerTitleDiv" style="float:left;font-size:20px;width:36%;padding-top:13px;display: none;">
 			<label id="titleLabel" style="color:black;">websocket服务端</label>
 		</div>
@@ -166,10 +167,7 @@
 		</div>
     </div>
 
-	<!--二维码登录(隐藏)-->
-	<div id="qrDiv" style="display:none">
-		<img id="qrcodeImg">
-	</div>
+	<!--中间部分-->
 	<div id='mainDiv'>
 		<input type="hidden" id="user" name="user" th:value="${user}">
 		<input type="hidden" id="pass" name="pass" th:value="${pass}">
@@ -219,15 +217,6 @@
 		</div>
 	</div>
 
-	<!--简易音乐播放器-->
-	<div id='musicIframeDiv'>
-		<div id='musicIframeHeader'>
-			<span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
-			<button id='resetMusicIframeDivPosBtn' style='display:inline-block;width:30%;color:black;'>复位</button>
-		</div>
-		<iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
-	</div>
-
     <!--底部-->
     <div id="footDiv" align="center">
 		<div style="height:20px;">
@@ -254,6 +243,25 @@
 		</div>
     </div>
 
+	<!--右侧音乐播放器图标(隐藏)-->
+	<div id="musicPicDiv" style="position: fixed;top:84px;right:280px;width:40px;height:40px;">
+		<img id="musicPicImg" src="../img/others/musicplayer.jpg" style="width:100%;height:100%;">
+	</div>
+
+	<!--二维码登录(隐藏)-->
+	<div id="qrDiv" style="display:none">
+		<img id="qrcodeImg">
+	</div>
+
+	<!--简易音乐播放器(隐藏)-->
+	<div id='musicIframeDiv'>
+		<div id='musicIframeHeader'>
+			<span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
+			<button id='resetMusicIframeDivPosBtn' style='display:inline-block;width:30%;color:black;'>复位</button>
+		</div>
+		<iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
+	</div>
+
     <div th:include="common::footer"></div>
 </body>
     <script type="text/javascript">
@@ -263,8 +271,6 @@
         var s_webserverport = $('#webserverport').val();
         var s_userAgent = $('#useragent').val();
         var s_selfimg = $('#selfimg').val();
-
-        $("#curUser").text(s_user);
 
         //头部
         if (s_user == "admin"){
@@ -705,5 +711,15 @@
 
 		//定时获取最新广告
 		setInterval(queryRecentAdsList, 60000);
+
+		//点击音乐播放器图标显示/隐藏简易音乐播放器
+		$("#musicPicImg").click(function () {
+			var displayStatus = $("#musicIframeDiv").css("display");
+			if (displayStatus == "none"){
+				$("#musicIframeDiv").css("display", "block");
+			}else{
+				$("#musicIframeDiv").css("display", "none");
+			}
+		});
     </script>
 </html>

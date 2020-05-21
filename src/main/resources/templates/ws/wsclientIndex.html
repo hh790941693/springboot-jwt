@@ -102,6 +102,7 @@
             height:100px;
             background: black;
             color: rgb(255%,255%,255%);
+			display: none;
         }
         #musicIframeHeader {
             background: #ddd;
@@ -134,6 +135,7 @@
 			<label style="font-size: 20px;">你好:</label><label id="curUser" th:text="${user}" style="color:blue;font-size:28px;"></label>
 		</div>
 
+		<!--头部标题-->
 		<div id="headerTitleDiv" style="float:left;font-size:20px;width:36%;padding-top:13px;display: none;">
 			<label id="titleLabel" style="color:black;">websocket客户端</label>
 		</div>
@@ -153,6 +155,7 @@
 			</div>
 		</div>
 
+		<!--右侧按钮组-->
 		<div id="btnDiv" style="float:right;margin-right:5px;">
 			<!--当前时间-->
 			<div style="text-align:right;">
@@ -166,10 +169,6 @@
 		</div>
 	</div>
 
-	<!--二维码-->
-	<div id="qrDiv" style="display:none">
-		<img id="qrcodeImg">
-	</div>
 	<!--中间部分-->
 	<div id='mainDiv'>
 		<!--用户登录相关信息-->
@@ -203,27 +202,6 @@
 		</div>
 	</div>
 
-	<!--迷你音乐播放器-->
-	<div id='musicIframeDiv'>
-		<div id='musicIframeHeader'>
-			<span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
-			<button id='resetMusicIframeDivPosBtn' style='display:inline-block;width:30%;color:black;'>复位</button>
-		</div>
-		<iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
-	</div>	
-	
-	<!--右下角广告页面 -->
-	<div id="adDiv" style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display:none">
-		<div id="adBtn" style="style:1px solid red;background-color:#5082b9;padding-left:290px">
-			<button id="closeAd" class='btn btn-sm btn-primary' onclick="closeAd()">关&nbsp;&nbsp;闭</button>
-		</div>
-		<div id="adTitle" style="height:30px;text-align:center;font-size:20px;">
-		</div>
-		
-		<div id="adContent" style="height:auto;text-indent:2em;">
-		</div>
-	</div>
-
     <!--底部-->
     <div id="footDiv" align="center">
 		<div style="height:20px;">
@@ -250,6 +228,37 @@
 			<span id="statusTips"></span>
 		</div>
     </div>
+
+	<!--右侧音乐播放器图标(隐藏)-->
+	<div id="musicPicDiv" style="position: fixed;top:84px;right:280px;width:40px;height:40px;">
+		<img id="musicPicImg" src="../img/others/musicplayer.jpg" style="width:100%;height:100%;">
+	</div>
+
+	<!--右上角 二维码-->
+	<div id="qrDiv" style="display:none">
+		<img id="qrcodeImg">
+	</div>
+
+	<!--左下角 迷你音乐播放器-->
+	<div id='musicIframeDiv'>
+		<div id='musicIframeHeader'>
+			<span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
+			<button id='resetMusicIframeDivPosBtn' style='display:inline-block;width:30%;color:black;'>复位</button>
+		</div>
+		<iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
+	</div>
+
+	<!--右下角 广告页面(隐藏) -->
+	<div id="adDiv" style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display:none">
+		<div id="adBtn" style="style:1px solid red;background-color:#5082b9;padding-left:290px">
+			<button id="closeAd" class='btn btn-sm btn-primary' onclick="closeAd()">关&nbsp;&nbsp;闭</button>
+		</div>
+		<div id="adTitle" style="height:30px;text-align:center;font-size:20px;">
+		</div>
+
+		<div id="adContent" style="height:auto;text-indent:2em;">
+		</div>
+	</div>
 
     <div th:include="common::footer"></div>
 </body>
@@ -722,5 +731,15 @@
 
 		//定时获取最新广告
 		setInterval(queryRecentAdsList, 60000);
+
+		//点击音乐播放器图标显示/隐藏简易音乐播放器
+		$("#musicPicImg").click(function () {
+			var displayStatus = $("#musicIframeDiv").css("display");
+			if (displayStatus == "none"){
+				$("#musicIframeDiv").css("display", "block");
+			}else{
+				$("#musicIframeDiv").css("display", "none");
+			}
+		});
     </script>
 </html>
