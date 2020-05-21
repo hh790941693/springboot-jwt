@@ -9,7 +9,7 @@
 	}
 
     body{
-		background-image: url("../img/pic1.jpg");
+		background-image: url("../img/fengjing/fj1.jpg");
         background-repeat: no-repeat;
         background-size:100% 100%;
 		padding-top: 60px;
@@ -289,11 +289,12 @@
 		},10000);
 
 		var imgIndex=1;
+		var imgMaxIndex = 10;
 		function changeBackgroundImage(){
-			if (imgIndex>5) {
-				imgIndex=1;
+			if (imgIndex>imgMaxIndex) {
+				imgIndex = 1;
 			}
-			var newPicUrl = "../img/pic"+imgIndex+".jpg";
+			var newPicUrl = "../img/fengjing/fj"+imgIndex+".jpg";
 			$("body").css("background-image","url("+newPicUrl+")");
 			imgIndex++;
 		}
