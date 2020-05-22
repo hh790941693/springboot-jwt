@@ -474,6 +474,28 @@ public class WebSocketClientController extends AdminBaseController
 		logger.debug("访问footer.page");
 		return "ws/footer";
 	}
+
+	/**
+	 * 客户端左侧导航栏页面
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "clientLeftNavi.page")
+	public String clientLeftNavi() {
+		logger.debug("访问clientLeftNavi.page");
+		return "ws/clientLeftNavi";
+	}
+
+	/**
+	 * 服务端左侧导航栏页面
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "serverLeftNavi.page")
+	public String serverLeftNavi() {
+		logger.debug("访问serverLeftNavi.page");
+		return "ws/serverLeftNavi";
+	}
 	
 	/**
 	 * 好友列表

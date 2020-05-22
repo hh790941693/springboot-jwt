@@ -173,6 +173,7 @@
 			}else{
 				var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;'>["+getCurrentTime() + "] [在线消息]  [我 -->" + toUser +"] "+ msgToServer +"</p>";
 				sendMsgToServer(parent.s_user, toUser, msgToServer);
+				updateChatMsg(htmlData);
 				$("#msgToServer").val("");
 			}
 		}else{
