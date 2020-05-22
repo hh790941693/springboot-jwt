@@ -226,7 +226,7 @@ public class FileOperationController
 				String filename = url.substring(url.lastIndexOf("/")+1);
 				File file = new File(diskPath+File.separator+filename);
 				if (file.exists() && file.isFile()) {
-					logger.info("删除文件:{}"+filename);
+					logger.info("删除文件:{}",filename);
 					file.delete();
 				}
 				wsFileService.deleteById(wsFileDO.getId());
