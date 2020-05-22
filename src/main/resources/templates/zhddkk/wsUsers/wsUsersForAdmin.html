@@ -18,12 +18,6 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-md-2">
-                                <div class="input-group">
-                                    <div class="input-group-addon">用户名称</div>
-                                    <input type="text" class="form-control" id="nameSearchInput" placeholder="请输入">
-                                </div>
-                            </div>
                             <div class="col-md-3">
                                 <div class="input-group">
                                     <div class="input-group-addon">在线状态</div>
@@ -54,8 +48,18 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-1">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">姓名</div>
+                                    <input type="text" class="form-control" id="nameSearchInput" placeholder="请输入">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
                                 <button class="btn btn-success" onclick="reLoad()">查询</button>
+                                <button type="button" class="btn btn-default" onclick="cleanForm()">重置</button>
                             </div>
                         </div>
                     </div>

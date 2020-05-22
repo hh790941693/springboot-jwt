@@ -211,6 +211,14 @@ function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
 }
 
+function cleanForm(){
+	$("#nameSearchInput").val("");
+	$("#stateSelect").val("");
+	$("#enableSelect").val("");
+	$("#speakSelect").val("");
+	reLoad();
+}
+
 function add() {
 	layer.open({
 		type : 2,
