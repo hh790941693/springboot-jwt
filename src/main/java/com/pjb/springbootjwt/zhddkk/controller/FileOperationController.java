@@ -200,7 +200,7 @@ public class FileOperationController
 	@ResponseBody
 	public Object showFiles(HttpServletRequest request, @RequestParam(value="user",required=false) String user, @RequestParam("fileType") final String fileType) {
 		List<WsFileDO> fileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", "music"));
-		List<WsFileDO> finallist = new ArrayList<WsFileDO>();
+		List<WsFileDO> finalList = new ArrayList<WsFileDO>();
 		String webserverip = webSocketConfig.getAddress();
 
 		List<WsFileDO> needBatchUpdateList = new ArrayList<>();
@@ -220,15 +220,22 @@ public class FileOperationController
 		for (WsFileDO wsFileDO : fileList) {
 			String url = wsFileDO.getUrl();
 			if (testUrl(url)) {
-				finallist.add(wsFileDO);
+				finalList.add(wsFileDO);
 			}else{
+				String diskPath = wsFileDO.getDiskPath();
+				String filename = url.substring(url.lastIndexOf("/")+1);
+				File file = new File(diskPath+File.separator+filename);
+				if (file.exists() && file.isFile()) {
+					logger.info("删除文件:{}"+filename);
+					file.delete();
+				}
 				wsFileService.deleteById(wsFileDO.getId());
 			}
 		}
 		
 		ExtReturn er = new ExtReturn();
-		er.setDataList(finallist);
-		er.setTotal(finallist.size());
+		er.setDataList(finalList);
+		er.setTotal(finalList.size());
 		er.setSuccess(true);
 		return JsonUtil.javaobject2Jsonobject(er);
 	}
