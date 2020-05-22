@@ -1,6 +1,10 @@
 package com.pjb.springbootjwt.zhddkk.util;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,8 +25,7 @@ public class CommonUtil
 	{
 		String result = null;
 		
-		if (xmlStr.contains(name))
-		{
+		if (xmlStr.contains(name)) {
 			String leftStr = "<" + name + ">";
 			String rightStr = "</" + name + ">";
 			result = xmlStr.split(leftStr)[1].split(rightStr)[0].trim();
@@ -40,8 +43,7 @@ public class CommonUtil
 	 */
 	public static boolean validateEmpty(String str)
 	{
-		if (null == str || str.equals(""))
-		{
+		if (StringUtils.isBlank(str)) {
 			return true;
 		}
 		
@@ -61,13 +63,11 @@ public class CommonUtil
 		map.put("&gt;", ">");
 		map.put("&amp;", "&");
 		
-		for (Entry<String, String> entry : map.entrySet())
-		{
+		for (Entry<String, String> entry : map.entrySet()) {
 			str = str.replaceAll(entry.getKey(), entry.getValue());
 		}
 		
-		if (str.contains("&amp;"))
-		{
+		if (str.contains("&amp;")) {
 			str = str.replaceAll("&amp;", map.get("&amp;"));
 		}
 		
@@ -101,8 +101,7 @@ public class CommonUtil
 	 * @param minutes 前几分钟
 	 * @return
 	 */
-	public static Date queryPreMinutes(Date curDate, int minutes)
-	{
+	public static Date queryPreMinutes(Date curDate, int minutes) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(curDate);
 		
@@ -121,8 +120,7 @@ public class CommonUtil
 	 * @param date2
 	 * @return
 	 */
-	public static long getTwoDateInterval(Date date1, Date date2)
-	{
+	public static long getTwoDateInterval(Date date1, Date date2) {
 		long misec = date1.getTime()-date2.getTime();
 		long sec = misec/1000/60;
 
@@ -137,11 +135,9 @@ public class CommonUtil
 	 * @param end  结束数字
 	 * @return
 	 */
-	public static int randomNumber(int start,int end)
-	{
+	public static int randomNumber(int start,int end) {
 		int result = 0;
-		if (end > start)
-		{
+		if (end > start) {
 			int interval = end-start;
 			Random rand = new Random();
 		
@@ -155,15 +151,14 @@ public class CommonUtil
 	 * 随机获取两个double数字之间的数
 	 * 起始数字要大于结束数字
 	 * 
-	 * @param start 起始数字
-	 * @param end  结束数字
+	 * @param d1 起始数字
+	 * @param d2  结束数字
 	 * @return
 	 */
 	public static double randomDouble(double d1,double d2)
 	{
 		double result = 0d;
-		if (d2 > d1)
-		{
+		if (d2 > d1) {
 			result = Math.random()*(d2-d1) + d1;
 		}
 		
@@ -197,18 +192,33 @@ public class CommonUtil
 	public static boolean compareToObj(String s1, String s2)
 	{
 		boolean res = false;
-		if (s1 == null && s2 == null)
-		{
+		if (s1 == null && s2 == null) {
 			res = true;
-		}
-		else if (s1 != null && s2 != null)
-		{
-			if (s1.equals(s2))
-			{
+		}else if (s1 != null && s2 != null) {
+			if (s1.equals(s2)){
 				res = true;
 			}
 		}
-		
 		return res;
+	}
+
+	//检查url是否可访问
+	public static boolean testUrl(String urlString){
+		InputStream inputStream = null;
+		try {
+			URL url = new URL(urlString);
+			inputStream = url.openStream();
+			return true;
+		} catch (Exception e1) {
+		} finally {
+			if (null != inputStream){
+				try {
+					inputStream.close();
+				}catch (Exception e){
+
+				}
+			}
+		}
+		return false;
 	}
 }

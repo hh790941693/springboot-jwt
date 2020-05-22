@@ -1,12 +1,8 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -17,16 +13,19 @@ import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
-import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.model.ExtReturn;
 import com.pjb.springbootjwt.zhddkk.service.WsFileService;
+import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
 import com.pjb.springbootjwt.zhddkk.util.ServiceUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,14 +41,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("file")
 public class FileOperationController 
 {
-	private static Map<String,String> configMap = WsInterceptor.getConfigMap();
+	private Logger logger = LoggerFactory.getLogger(FileOperationController.class);
 
 	@Autowired
 	private WsFileService wsFileService;
 
 	@Autowired
 	private WebSocketConfig webSocketConfig;
-	
+
 	/**
 	 * 音乐播放首页
 	 * @return
@@ -105,11 +104,24 @@ public class FileOperationController
 	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.MUSIC,subModule="",describe="删除文件")
 	@RequestMapping("delFile.do")
 	@ResponseBody
+	@Transactional
 	public Object delFile(HttpServletRequest request, @RequestParam(value="id",required=true) int id) {
-        boolean delFlag = wsFileService.deleteById(id);
-        if (delFlag){
-            return "success";
-        }
+		WsFileDO wsFileDO = wsFileService.selectById(id);
+		if (null != wsFileDO) {
+			boolean delFlag = wsFileService.deleteById(id);
+			if (delFlag) {
+				//删除原文件
+				String diskPath = wsFileDO.getDiskPath();
+				String url = wsFileDO.getUrl();
+				String filename = url.substring(url.lastIndexOf("/")+1);
+				File file = new File(diskPath+File.separator+filename);
+				if (file.exists() && file.isFile()) {
+					logger.info("删除文件:{}"+filename);
+					file.delete();
+				}
+				return "success";
+			}
+		}
         return "failed";
 	}
 	
@@ -185,7 +197,7 @@ public class FileOperationController
 	@ResponseBody
 	public Object showFiles(HttpServletRequest request, @RequestParam(value="user",required=false) String user, @RequestParam("fileType") final String fileType) {
 		List<WsFileDO> fileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", "music"));
-		List<WsFileDO> finallist = new ArrayList<WsFileDO>();
+		List<WsFileDO> finalList = new ArrayList<WsFileDO>();
 		String webserverip = webSocketConfig.getAddress();
 
 		List<WsFileDO> needBatchUpdateList = new ArrayList<>();
@@ -204,30 +216,28 @@ public class FileOperationController
 
 		for (WsFileDO wsFileDO : fileList) {
 			String url = wsFileDO.getUrl();
-			if (testUrl(url)) {
-				finallist.add(wsFileDO);
+			if (CommonUtil.testUrl(url)) {
+				wsFileDO.setAccessStatus("1");
 			}else{
-				wsFileService.deleteById(wsFileDO.getId());
+				wsFileDO.setAccessStatus("0");
 			}
+			finalList.add(wsFileDO);
+//			}else{
+//				String diskPath = wsFileDO.getDiskPath();
+//				String filename = url.substring(url.lastIndexOf("/")+1);
+//				File file = new File(diskPath+File.separator+filename);
+//				if (file.exists() && file.isFile()) {
+//					logger.info("删除文件:{}",filename);
+//					file.delete();
+//				}
+//				wsFileService.deleteById(wsFileDO.getId());
+//			}
 		}
 		
 		ExtReturn er = new ExtReturn();
-		er.setDataList(finallist);
-		er.setTotal(finallist.size());
+		er.setDataList(finalList);
+		er.setTotal(finalList.size());
 		er.setSuccess(true);
 		return JsonUtil.javaobject2Jsonobject(er);
-	}
-
-	//检查url是否可访问
-	public static boolean testUrl(String urlString){
-		long lo = System.currentTimeMillis();
-		try {
-			URL url = new URL(urlString);
-			InputStream in = url.openStream();
-			return true;
-		} catch (Exception e1) {
-		}
-
-		return false;
 	}
 }
