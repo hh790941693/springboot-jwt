@@ -458,11 +458,21 @@ public class WebSocketClientController extends AdminBaseController
 	 *
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FRIENDS,subModule="",describe="添加好友首页")
 	@RequestMapping(value = "header.page")
 	public String headerPage() {
 		logger.debug("访问header.page");
 		return "ws/header";
+	}
+
+	/**
+	 * 底部页面
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "footer.page")
+	public String footerPage() {
+		logger.debug("访问footer.page");
+		return "ws/footer";
 	}
 	
 	/**
