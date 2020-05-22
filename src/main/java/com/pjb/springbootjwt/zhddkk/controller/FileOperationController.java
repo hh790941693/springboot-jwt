@@ -1,6 +1,8 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import com.pjb.springbootjwt.zhddkk.service.WsFileService;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
 import com.pjb.springbootjwt.zhddkk.util.ServiceUtil;
+import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +46,9 @@ public class FileOperationController
 
 	@Autowired
 	private WsFileService wsFileService;
+
+	@Autowired
+	private WebSocketConfig webSocketConfig;
 	
 	/**
 	 * 音乐播放首页
@@ -178,22 +184,30 @@ public class FileOperationController
 	@RequestMapping("showFiles.do")
 	@ResponseBody
 	public Object showFiles(HttpServletRequest request, @RequestParam(value="user",required=false) String user, @RequestParam("fileType") final String fileType) {
-		List<WsFileDO> mlist = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", "music"));
-		
-		String webserverip = ServiceUtil.getWebsocketIp(configMap);
+		List<WsFileDO> fileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", "music"));
 		List<WsFileDO> finallist = new ArrayList<WsFileDO>();
-		for (WsFileDO w : mlist) {
-			File mf = new File(w.getDiskPath()+File.separator+w.getFilename());
-			if (mf.isFile()) {
-				String musicUrl = w.getUrl();
-				String oldIp = musicUrl.substring(musicUrl.indexOf("//")+2, musicUrl.lastIndexOf(":"));
-				if (!oldIp.equals(webserverip)) {
-					String newMusicUrl = musicUrl.replace(oldIp, webserverip);
-					w.setUrl(newMusicUrl);
-				}
-				finallist.add(w);
-			}else {
-			    wsFileService.deleteById(w.getId());
+		String webserverip = webSocketConfig.getAddress();
+
+		List<WsFileDO> needBatchUpdateList = new ArrayList<>();
+		for (WsFileDO wsFileDO : fileList) {
+			String url = wsFileDO.getUrl();
+			String oldIp = url.substring(url.indexOf("//")+2, url.lastIndexOf(":"));
+			if (!oldIp.equals(webserverip)) {
+				String newUrl = url.replace(oldIp, webserverip);
+				wsFileDO.setUrl(newUrl);
+				needBatchUpdateList.add(wsFileDO);
+			}
+		}
+		if (needBatchUpdateList.size()>0){
+			wsFileService.updateBatchById(needBatchUpdateList, needBatchUpdateList.size());
+		}
+
+		for (WsFileDO wsFileDO : fileList) {
+			String url = wsFileDO.getUrl();
+			if (testUrl(url)) {
+				finallist.add(wsFileDO);
+			}else{
+				wsFileService.deleteById(wsFileDO.getId());
 			}
 		}
 		
@@ -202,5 +216,18 @@ public class FileOperationController
 		er.setTotal(finallist.size());
 		er.setSuccess(true);
 		return JsonUtil.javaobject2Jsonobject(er);
+	}
+
+	//检查url是否可访问
+	public static boolean testUrl(String urlString){
+		long lo = System.currentTimeMillis();
+		try {
+			URL url = new URL(urlString);
+			InputStream in = url.openStream();
+			return true;
+		} catch (Exception e1) {
+		}
+
+		return false;
 	}
 }
