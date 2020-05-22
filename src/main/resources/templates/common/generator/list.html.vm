@@ -61,7 +61,6 @@
 			<script type="text/javascript">
 				var s_edit_h = 'hidden';
 				var s_remove_h = 'hidden';
-				var s_resetPwd_h = 'hidden';
 			</script>
 		</div>
 		<div shiro:hasPermission="${pathName}:${classname}:edit">
@@ -72,11 +71,6 @@
 		<div shiro:hasPermission="${pathName}:${classname}:remove">
 			<script type="text/javascript">
 				var s_remove_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="${pathName}:${classname}:resetPwd">
-			<script type="text/javascript">
-				var s_resetPwd_h = '';
 			</script>
 		</div>
 	</div>
