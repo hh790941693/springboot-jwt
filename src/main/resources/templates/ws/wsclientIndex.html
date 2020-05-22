@@ -133,6 +133,7 @@
         var cur_pageid = "wsclientChat.page";
         showPage(cur_pageid);
         function showPage(pageId) {
+			cur_pageid = pageId;
 			var url = pageId + "?user="+s_user;
 			if (pageId.indexOf("gameIndex.page") != -1){
 				window.location.href=pageId;
@@ -277,7 +278,8 @@
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 chatRecord = chatRecord + htmlData;
                 unreadCount = unreadCount+1;
-                $("#unreadCountSpan").text(unreadCount);
+                //$("#unreadCountSpan").text(unreadCount);
+				$("#leftNaviIframePage").contents().find("#unreadCountSpan").text(unreadCount);
             }else{
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 var msgFromServerObj = getIframeElement("msgFromServer");

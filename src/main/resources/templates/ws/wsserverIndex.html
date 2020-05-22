@@ -117,6 +117,7 @@
         var curPageid = "/zhddkk/wsUsers/wsUsersForAdmin";
         showPage(curPageid);
         function showPage(pageId){
+			curPageid = pageId;
             if (pageId.indexOf("gameIndex.page") != -1){
                 window.location.href=pageId;
             }else if (pageId.indexOf("canvasIndex.page") != -1){
@@ -248,7 +249,8 @@
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 chatRecord = chatRecord + htmlData;
                 unreadCount = unreadCount+1;
-                $("#unreadCountSpan").text(unreadCount);
+                //$("#unreadCountSpan").text(unreadCount);
+				$("#leftNaviIframePage").contents().find("#unreadCountSpan").text(unreadCount);
             }else{
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 //htmlData += "<button onclick='enableSpeak("+msgFrom+",0)' style='display:inline-block;'>禁言</button>";
