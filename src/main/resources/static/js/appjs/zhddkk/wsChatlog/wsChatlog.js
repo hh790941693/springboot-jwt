@@ -108,6 +108,14 @@ function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
 }
 
+function cleanForm(){
+	$("#fromUser").val("");
+	$("#toUser").val("");
+	$("#beginTime").val("");
+	$("#endTime").val("");
+	reLoad();
+}
+
 function add() {
 	layer.open({
 		type : 2,

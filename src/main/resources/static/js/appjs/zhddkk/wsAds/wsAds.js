@@ -88,6 +88,12 @@ function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
 }
 
+function cleanForm(){
+	$("#titleSearchInput").val("");
+	$("#contentSearchInput").val("");
+	reLoad();
+}
+
 function add() {
 	layer.open({
 		type : 2,
