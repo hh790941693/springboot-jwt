@@ -76,6 +76,10 @@ function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
 }
 
+function cleanForm(){
+	reLoad();
+}
+
 function add() {
 	layer.open({
 		type : 2,
