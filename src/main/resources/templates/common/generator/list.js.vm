@@ -4,6 +4,7 @@ $(function() {
 	load();
 });
 
+//加载表格
 function load() {
 	$('#exampleTable').bootstrapTable({
 		method : 'get',
@@ -21,7 +22,7 @@ function load() {
 		pageSize : 10,//如果设置了分页，每页数据条数
 		pageNumber : 1,//如果设置了分布，首页页码
 		//search : true,// 是否显示搜索框
-		showColumns : false,// 是否显示内容下拉框（选择显示的列）
+		showColumns : true,// 是否显示内容下拉框（选择显示的列）
 		sidePagination : "server",//设置在哪里进行分页，可选值为"client" 或者 "server"
 		queryParamsType : "",
 		//设置为limit则会发送符合RESTFull格式的参数
@@ -65,17 +66,24 @@ function load() {
 					var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
 							+ row.${pk.attrname}
 							+ '\')"><i class="fa fa-remove"></i></a> ';
-					return "";
+					return e+d;
 				}
 			}
 		]
 	});
 }
 
+//重新加载表格
 function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
 }
 
+//重置
+function cleanForm(){
+	reLoad();
+}
+
+//添加
 function add() {
 	layer.open({
 		type : 2,
@@ -87,6 +95,7 @@ function add() {
 	});
 }
 
+//编辑
 function edit(id) {
 	layer.open({
 		type : 2,
@@ -98,6 +107,7 @@ function edit(id) {
 	});
 }
 
+//删除一条记录
 function remove(id) {
 	layer.confirm('确定要删除选中的记录？', {
 		btn : [ '确定', '取消' ]
@@ -120,6 +130,7 @@ function remove(id) {
 	})
 }
 
+//批量删除记录
 function batchRemove() {
     //返回所有选择的行，当没有选择的记录时，返回一个空数组
 	var rows = $('#exampleTable').bootstrapTable('getSelections');

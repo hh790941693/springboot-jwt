@@ -26,6 +26,7 @@
                             </div>
                             <div class="col-md-4">
                                 <button class="btn btn-success" onclick="reLoad()">查询</button>
+                                <button type="button" class="btn btn-default" onclick="cleanForm()">重置</button>
                             </div>
                         </div>
                     </div>
@@ -60,7 +61,6 @@
 			<script type="text/javascript">
 				var s_edit_h = 'hidden';
 				var s_remove_h = 'hidden';
-				var s_resetPwd_h = 'hidden';
 			</script>
 		</div>
 		<div shiro:hasPermission="${pathName}:${classname}:edit">
@@ -71,11 +71,6 @@
 		<div shiro:hasPermission="${pathName}:${classname}:remove">
 			<script type="text/javascript">
 				var s_remove_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="${pathName}:${classname}:resetPwd">
-			<script type="text/javascript">
-				var s_resetPwd_h = '';
 			</script>
 		</div>
 	</div>
