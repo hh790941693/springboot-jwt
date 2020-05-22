@@ -452,6 +452,18 @@ public class WebSocketClientController extends AdminBaseController
 		logger.debug("访问addFriends.page");
 		return "ws/addFriends";
 	}
+
+	/**
+	 * 头部页面
+	 *
+	 * @return
+	 */
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FRIENDS,subModule="",describe="添加好友首页")
+	@RequestMapping(value = "header.page")
+	public String headerPage() {
+		logger.debug("访问header.page");
+		return "ws/header";
+	}
 	
 	/**
 	 * 好友列表

@@ -1,84 +1,175 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="common :: header"></head>
-	<title>WebSocket服务端</title>
+	<title>头部</title>
 
 <style type="text/css">
 	#headerDiv{
-		width:1320px;
-		height:55px;
+		width:100%;
+		height:100%;
 		font-weight:bold;
-		margin:1px auto;
+		background-repeat: no-repeat;
+		background-position: 0px -230px;
 	}
 
-	#btnDiv button{
-		margin-top: 15px;
-	}
-	
 	#curTimeSpan{
 		margin-left:20px;
-		font-size:18px;
+		font-size:15px;
 	}
 </style>
 </head>
 <body>
+	<!--头部-->
 	<div id="headerDiv" align="center">
-		<div style="float:left;">
+		<img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
+		<div style="float:left;margin-left: 3px;margin-top: 2px;">
 			<img id='myImg' alt=""  width="48" height="48">
-			你好:<label id="curUser" style="color:blue;font-size:30px;"></label>
-			<span id="curTimeSpan">0000-00-00 00:00:00</span>
+			<label style="font-size: 20px;">你好:</label><label id="curUser" style="color:blue;font-size:28px;"></label>
 		</div>
-		<div style="float:left;margin-left:300px;font-size:30px;">
-			<label id="titleLabel" style="color:black;"></label>
-		</div>		
-		<div id="btnDiv" style="float:right">
-			<button id="showQRCodeBtn" class='btn btn-sm btn-primary'>查看二维码</button>		
-			<button id="exitBtn" class='btn btn-sm btn-danger' style="margin-left:10px;" onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
+
+		<!--头部标题-->
+		<div id="headerTitleDiv" style="float:left;font-size:20px;width:36%;padding-top:13px;display: none;">
+			<label id="titleLabel" style="color:black;">websocket客户端</label>
+		</div>
+
+		<!--天气-->
+		<div id="weatherDiv" style="float:left;font-size:18px;width:36%;padding-top:13px;display: block;">
+			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
+			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
+			<label id="location" style="color:black;"></label>
+		</div>
+
+		<!--滚动新闻-->
+		<div id="scrollAdDiv" style="float:left;height:30px;overflow:hidden;width:30%;margin-top:15px;">
+			<div id="adContentOutDiv" style="height:200%;">
+				<div id="adContentDiv"></div>
+				<div id="adNoContentDiv"></div>
+			</div>
+		</div>
+
+		<!--右侧按钮组-->
+		<div id="btnDiv" style="float:right;margin-right:5px;">
+			<!--当前时间-->
+			<div style="text-align:right;">
+				<span id="curTimeSpan">0000-00-00 00:00:00</span>
+			</div>
+			<div>
+				<button id="showQRCodeBtn" onclick="showQRCode()" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
+				<button id="setPersonInfoBtn" onclick="setPersonInfoBtn()" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>&nbsp;&nbsp;
+				<button id="exitBtn" class='btn btn-sm btn-danger' onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
+			</div>
 		</div>
 	</div>
 	<div th:include="common::footer"></div>
 </body>
 	<script type="text/javascript">
-		if (s_user == "admin"){
-			if (s_img == ""){
+		//头部头像
+		if (parent.s_user == "admin"){
+			if (parent.s_selfimg == ""){
 				$("#myImg").attr("src",rootUrl+"img/headimg/admin.jpg");
 			}else{
-				$("#myImg").attr("src",rootUrl+"img/headimg/"+s_img);
+				$("#myImg").attr("src", parent.s_selfimg);
 			}
 		}else{
-			$("#myImg").attr("src",rootUrl+"img/headimg/"+s_img);
+			$("#myImg").attr("src", parent.s_selfimg);
 		}
+		$("#curUser").text(parent.s_user);
 
+		//当前时间
 		var curTimeTemp = getCurrentTime();
 		$("#curTimeSpan").text(curTimeTemp);
 
+		//定时更新时间
 		setInterval(function(){
 			var curTime = getCurrentTime();
 			$("#curTimeSpan").text(curTime);
 		},1000)
 
-		function toIndex(){
-			window.location.href = rootUrl+"ws/login.page?user="+parent.s_user;
+		//定时获取天气
+		grapWeatherInfo();
+		setInterval(function(){
+			grapWeatherInfo();
+		},600000);
+		function grapWeatherInfo(){
+			$.ajax({
+				type: 'GET',
+				url: rootUrl+'index/grapWetherInfo',
+				async:false,
+				success: function(result) {
+					if (result.code == 0){
+						$("#weatherInfo").text(result.data.remark);
+						$("#lastUpdateTime").text(result.data.lastUpdateTime);
+						$("#location").text(result.data.location);
+					}
+				}
+			});
 		}
 
-		$("#showQRCodeBtn").click(function(){
-			var imgSrc = $("#qrcodeImg").attr("src");
-			if (imgSrc == "" || imgSrc == undefined){
-				$.ajax({
-					type: 'POST',
-					url: rootUrl+'ws/showQRCode.do',
-					//dataType: 'json',
-					async:false,
-					success: function(result) {
-						$("#qrDiv").css("display","block");
-						$("#qrcodeImg").css("display","block");
-						$("#qrcodeImg").attr("src",result);
-					}
-				});
+		//定时切换header标题
+		setInterval(function () {
+			var titleStatus = $("#headerTitleDiv").css("display");
+			if (titleStatus == "none"){
+				$("#headerTitleDiv").css("display", "block");
+				$("#weatherDiv").css("display", "none");
 			}else{
-				$("#qrcodeImg").attr("src","");
-				$("#qrDiv").css("display","none");
-				$("#qrcodeImg").css("display","none");
+				$("#headerTitleDiv").css("display", "none");
+				$("#weatherDiv").css("display", "block");
 			}
-		})
+		},8000);
+
+		//定时滚动header背景图片
+		$.ws.backgroundImgAnimation("headBackgroundImg","headerDiv", 1, 10);
+
+		//头部滚动广告
+		var scrollAdDiv = document.getElementById("scrollAdDiv");
+		var adContentDiv = document.getElementById("adContentDiv");
+		var adNoContentDiv = document.getElementById("adNoContentDiv");
+		scrollAdDiv.scrollTop = adContentDiv.offsetHeight;
+		function Marquee(){
+			adNoContentDiv.innerHTML = adContentDiv.innerHTML;
+			if (scrollAdDiv.scrollTop >= adContentDiv.offsetHeight) {
+				scrollAdDiv.scrollTop -= adNoContentDiv.offsetHeight;
+			}else{
+				scrollAdDiv.scrollTop += 1;
+			}
+		}
+		setInterval(Marquee, 100);
+
+		//获取最新广告
+		queryRecentAdsList();
+		function queryRecentAdsList(){
+			$.ajax({
+				type: 'GET',
+				url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
+				async:false,
+				success: function(result) {
+					if (result.code == 0){
+						var data = result.data;
+						var totalAds = "";
+						$.each(data,function(i,val){
+							totalAds += val.content+"&nbsp;&nbsp;&nbsp;"+val.createTime+"<br/>";
+						});
+						$("#adContentDiv").html(totalAds);
+					}
+				}
+			});
+		}
+
+		//定时获取最新广告
+		setInterval(queryRecentAdsList, 60000);
+
+		//扫码登录
+		function showQRCode(){
+			return parent.showQRCode();
+		}
+
+		//设置个人信息
+		function setPersonInfoBtn(){
+			parent.setPersonInfoBtn();
+		}
+
+		//退出
+		function toIndex(){
+			parent.toIndex();
+		}
 	</script>
 </html>
