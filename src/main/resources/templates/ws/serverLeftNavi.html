@@ -89,6 +89,10 @@
         }else {
             parent.showPage(curPageid);
         }
+        if (curPageid == "wsserverChartLogMonitor.page"){
+            parent.unreadCount = "";
+            $("#unreadCountSpan").text("");
+        }
         $("#leftNavi ul li").removeClass("mouseleftclick");
         $(this).addClass("mouseleftclick");
 

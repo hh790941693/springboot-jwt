@@ -69,6 +69,10 @@
         $("#leftNavi ul li").click(function (){
             var cur_pageid = this.id;
             parent.showPage(cur_pageid);
+            if (curPageid == "wsclientChat.page"){
+                parent.unreadCount = "";
+                $("#unreadCountSpan").text("");
+            }
             $("#leftNavi ul li").removeClass("mouseleftclick");
             $(this).addClass("mouseleftclick");
         })
