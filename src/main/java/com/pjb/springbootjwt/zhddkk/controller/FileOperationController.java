@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,8 +24,11 @@ import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
 import com.pjb.springbootjwt.zhddkk.util.ServiceUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,14 +44,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("file")
 public class FileOperationController 
 {
-	private static Map<String,String> configMap = WsInterceptor.getConfigMap();
+	private Logger logger = LoggerFactory.getLogger(FileOperationController.class);
 
 	@Autowired
 	private WsFileService wsFileService;
 
 	@Autowired
 	private WebSocketConfig webSocketConfig;
-	
+
 	/**
 	 * 音乐播放首页
 	 * @return
@@ -105,11 +107,24 @@ public class FileOperationController
 	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.MUSIC,subModule="",describe="删除文件")
 	@RequestMapping("delFile.do")
 	@ResponseBody
+	@Transactional
 	public Object delFile(HttpServletRequest request, @RequestParam(value="id",required=true) int id) {
-        boolean delFlag = wsFileService.deleteById(id);
-        if (delFlag){
-            return "success";
-        }
+		WsFileDO wsFileDO = wsFileService.selectById(id);
+		if (null != wsFileDO) {
+			boolean delFlag = wsFileService.deleteById(id);
+			if (delFlag) {
+				//删除原文件
+				String diskPath = wsFileDO.getDiskPath();
+				String url = wsFileDO.getUrl();
+				String filename = url.substring(url.lastIndexOf("/")+1);
+				File file = new File(diskPath+File.separator+filename);
+				if (file.exists() && file.isFile()) {
+					logger.info("删除文件:{}"+filename);
+					file.delete();
+				}
+				return "success";
+			}
+		}
         return "failed";
 	}
 	

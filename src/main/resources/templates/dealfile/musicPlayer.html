@@ -328,9 +328,12 @@
 				type:"POST",
 				url:rootUrl + "file/delFile.do",
 				data:{id:id},
-				dataType:'json',
+				//dataType:'json',
 				success:function(result){
-					refreash();
+					if (result == "success"){
+						layer.msg("操作成功");
+						refreash();
+					}
 				}
 			});
 		}
