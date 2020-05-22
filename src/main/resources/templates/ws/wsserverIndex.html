@@ -3,35 +3,6 @@
 	<title>WebSocket服务端</title>
 
 <style type="text/css">
-    #headerDiv{
-        width:1318px;
-        height:55px;
-        font-weight:bold;
-        margin:1px auto;
-		border: 2px solid green;
-		background-repeat: no-repeat;
-		background-position: 0px -230px;
-    }
-
-    #curTimeSpan{
-        margin-left:20px;
-        font-size:15px;
-    }
-
-    #footDiv{
-        width:1320px;
-        height:44px;
-        color:black;
-        font-size:15px;
-        font-weight:bold;
-        margin:1px auto 0 auto;
-    }
-
-    #copyrightDiv ul li{
-        float:left;
-        list-style:none;
-    }
-
 	#mainDiv{
 		width:1318px;
 		height:610px;
@@ -39,46 +10,6 @@
 		position:relative;
 	}
 
-	#leftNavi{
-		width:180px;
-		height:100%;
-		float:left;
-		border:2px solid green;
-		background-repeat: no-repeat;
-		background-position: -10px -222px;
-	}
-
-	#leftNavi>ul{
-		height:490px;
-		margin-top: 10px;
-	}
-
-	#leftNavi ul li{
-		list-style: none;
-	    height: 40px;
-	    width: 100%;
-	    font-size: 20px;
-	    font-weight: bold;
-	    padding: 4px;
-	    cursor: pointer;
-	}
-	#leftNavi ul a{
-		text-decoration:none;
-	}
-	
-	.mousemoveon{
-		background-color:grey;
-		color:white;
-	}
-	.mousemoveout{
-		background-color:transparent;
-		color:black;
-	}
-	.mouseleftclick{
-		background-color:blue;
-		color:white;
-	}
-	
 	#qrDiv{
 		position: fixed;
 		right: 5px;
@@ -90,15 +21,7 @@
 		width: 160px;
 	    height: 160px;
 	}
-	
-	#unreadCountSpan{
-    	color: red;
-   	 	font-weight: bold;
-    	margin-left: 10px;
-    	font-size: 18px;
-    	margin-left: 5px;	
-	}
-	
+
     #musicIframeDiv {
     	position: absolute;
     	width:175px;
@@ -112,61 +35,13 @@
     	cursor: move;
     	font-size:10px;
     }
-
-	#statusDiv{
-		width:1320px;
-		height:20px;
-		font-size:15px;
-		font-weight:bold;
-		margin-top:2px;
-	}
 </style>
 </head>
 <body>
     <!--头部-->
-    <div id="headerDiv" align="center">
-		<img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
-		<img id="leftNavBackgroundImg" src="../img/headerY.jpg" hidden>
-
-		<!--登录用户头像和名称-->
-        <div style="float:left;margin-left: 3px;margin-top: 2px;">
-            <img id='myImg' alt=""  width="48" height="48">
-			<label style="font-size: 20px;">你好:</label><label id="curUser" th:text="${user}" style="color:blue;font-size:30px;"></label>
-        </div>
-
-		<!--头部标题-->
-		<div id="headerTitleDiv" style="float:left;font-size:20px;width:36%;padding-top:13px;display: none;">
-			<label id="titleLabel" style="color:black;">websocket服务端</label>
-		</div>
-
-		<!--天气-->
-		<div id="weatherDiv" style="float:left;font-size:18px;width:36%;padding-top:13px;display: block;">
-			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
-			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
-			<label id="location" style="color:black;"></label>
-		</div>
-
-		<!--滚动新闻-->
-		<div id="scrollAdDiv" style="float:left;height:30px;overflow:hidden;width:30%;margin-top:15px;">
-			<div id="adContentOutDiv" style="height:200%;">
-				<div id="adContentDiv"></div>
-				<div id="adNoContentDiv"></div>
-			</div>
-		</div>
-
-		<!--最右侧按钮组-->
-        <div id="btnDiv" style="float:right;margin-right:5px;">
-			<!--当前时间-->
-			<div style="text-align:right;">
-				<span id="curTimeSpan">0000-00-00 00:00:00</span>
-			</div>
-			<div>
-				<button id="showQRCodeBtn" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
-				<button id="setPersonInfoBtn" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>&nbsp;&nbsp;
-				<button id="exitBtn" class='btn btn-sm btn-danger' onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
-			</div>
-		</div>
-    </div>
+	<div id="headerPage" align="center" style="width:1318px;height:58px;border:2px solid green;margin: 0 auto;">
+		<iframe id="headerIframePage" src="header.page" width="100%" height="100%;"></iframe>
+	</div>
 
 	<!--中间部分-->
 	<div id='mainDiv'>
@@ -178,71 +53,20 @@
 		<input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
 
 		<!--左侧导航栏-->
-		<div id="leftNavi">
-			<ul>
-				<!--<li id="wsserverUser.page" class="mouseleftclick">用户管理</li>-->
-				<li id="/zhddkk/wsUsers/wsUsersForAdmin" class="mouseleftclick">用户管理</li>
-				<!--<li id="wsserverChartLog.page">聊天记录管理</li>-->
-				<li id="/zhddkk/wsChatlog">聊天记录管理</li>
-				<!--<li id="wsserverOperationLog.page">操作日志管理</li>-->
-				<li id="/zhddkk/wsOperationLog">操作日志管理</li>
-				<li id="wsserverChartLogMonitor.page">聊天监控<span id="unreadCountSpan"></span></li>
-				<li id="configurationLi">配置</li>
-				<li id="../file/musicPlayer.page?user=admin">音乐播放</li>
-				<li id="wsclientCircle.page?user=admin">朋友圈</li>
-				<!--<li id="ad.page">广告发布</li>-->
-				<li id="/zhddkk/wsAds">广告发布</li>
-				<li id="../game/gameIndex.page">游戏娱乐</li>
-				<li id="../canvas/canvasIndex.page">2D画图</li>
-				<li id="/common/generator">生成代码</li>
-			</ul>
-			
-			<div id='configurationDiv' style='display:none;position:absolute;left:-165px;top:100px;border:2px solid green;'>
-				<ul>
-					<!--<li id="wsserverCommon.page?type=mgc">敏感词配置</li>
-					<li id="wsserverCommon.page?type=zh" >脏话配置</li>
-					<li id="wsserverCommon.page?type=cyy">常用语配置</li>
-					<li id="wsserverCommon.page?type=zcwt">注册问题配置</li>
-					-->
-					<li id="/zhddkk/wsCommon/mgc">敏感词配置</li>
-					<li id="/zhddkk/wsCommon/zh" >脏话配置</li>
-					<li id="/zhddkk/wsCommon/cyy">常用语配置</li>
-					<li id="/zhddkk/wsCommon/zcwt">注册问题配置</li>
-				</ul>
-			</div>
+		<div id="leftNaviDiv" style="width:178px;height:100%;float:left;">
+			<iframe id="leftNaviIframePage" src="serverLeftNavi.page" width="100%" height="100%;"></iframe>
 		</div>
 
 		<!--右侧子页面窗口-->
-		<div id="diffPage" align="center" style="width:1136px;height:100%;float:left;border:2px solid green;margin-left:2px;">
+		<div id="rightIframeDiv" align="center" style="width:1136px;height:100%;float:left;border:2px solid green;margin-left:2px;">
 			<iframe id="iframePage" width="1130px" height="605px"></iframe>
 		</div>
 	</div>
 
-    <!--底部-->
-    <div id="footDiv" align="center">
-		<div style="height:20px;">
-			<div style="float:left;">
-				<label id="curUser22">邮箱:547495788@qq.com</label>
-			</div>
-			<div style="float:left;margin-left: 350px;">
-				<label id="cliName">所有版权信息归作者所有</label>
-				<label id="versionLabel" style='margin-left:15px;color:blue;font-weight:bold;'></label>
-				<a href='javascript:void(0)' onclick='checkUpdate()' style='margin-left:15px;' >检查更新</a>
-			</div>
-			<div id="copyrightDiv" style="float:right;">
-				<ul>
-					<li>联系作者 | </li>
-					<li>捐赠作者 | </li>
-					<li>提出疑问 | </li>
-					<li>关于我们</li>
-				</ul>
-			</div>
-		</div>
-		<!--状态栏-->
-		<div id="statusDiv" align="right">
-			<span id="statusTips"></span>
-		</div>
-    </div>
+	<!--底部-->
+	<div id="footerPage" align="center" style="width:1318px;height:52px;border:2px solid green;margin: 0 auto;">
+		<iframe id="footerIframePage" src="footer.page" width="100%" height="100%;"></iframe>
+	</div>
 
 	<!--右侧音乐播放器图标(隐藏)-->
 	<div id="musicPicDiv" style="position: fixed;top:84px;width:30px;height:30px;">
@@ -273,25 +97,7 @@
         var s_userAgent = $('#useragent').val();
         var s_selfimg = $('#selfimg').val();
 
-        //头部
-        if (s_user == "admin"){
-            if (s_selfimg == ""){
-                $("#myImg").attr("src",rootUrl+"img/headimg/admin.jpg");
-            }else{
-                $("#myImg").attr("src", s_selfimg);
-            }
-        }else{
-            $("#myImg").attr("src", s_selfimg);
-        }
-
-        var curTimeTemp = getCurrentTime();
-        $("#curTimeSpan").text(curTimeTemp);
-
-        setInterval(function(){
-            var curTime = getCurrentTime();
-            $("#curTimeSpan").text(curTime);
-        },1000)
-
+        //退出(返回登录页)
         function toIndex(){
             //window.location.href = rootUrl+"ws";
 			$.ajax({
@@ -308,30 +114,10 @@
 			});
         }
 
-        $("#showQRCodeBtn").click(function(){
-            var imgSrc = $("#qrcodeImg").attr("src");
-            if (imgSrc == "" || imgSrc == undefined){
-                $.ajax({
-                    type: 'POST',
-                    url: rootUrl+'ws/showQRCode.do',
-                    //dataType: 'json',
-                    async:false,
-                    success: function(result) {
-                        $("#qrDiv").css("display","block");
-                        $("#qrcodeImg").css("display","block");
-                        $("#qrcodeImg").attr("src",result);
-                    }
-                });
-            }else{
-                $("#qrcodeImg").attr("src","");
-                $("#qrDiv").css("display","none");
-                $("#qrcodeImg").css("display","none");
-            }
-        });
-
         var curPageid = "/zhddkk/wsUsers/wsUsersForAdmin";
         showPage(curPageid);
         function showPage(pageId){
+			curPageid = pageId;
             if (pageId.indexOf("gameIndex.page") != -1){
                 window.location.href=pageId;
             }else if (pageId.indexOf("canvasIndex.page") != -1){
@@ -342,29 +128,6 @@
                 $("#iframePage").attr("src",pageId);
             }
         }
-
-        $("#leftNavi ul li").click(function (){
-            curPageid=this.id;
-            showPage(curPageid);
-            $("#leftNavi ul li").removeClass("mouseleftclick");
-            $(this).addClass("mouseleftclick");
-
-            var parentObj=$(this).parent().parent();
-            var parentDivId=$(parentObj).attr("id");
-            if (curPageid.indexOf("configurationLi") == -1 && parentDivId == "leftNavi"){
-                $("#configurationDiv").slideUp();
-            }
-        })
-
-        $("#leftNavi ul li").hover(function(){
-            $(this).removeClass("mousemoveout");
-            $(this).removeClass("mousemoveon");
-            $(this).addClass("mousemoveon");
-        },function(){
-            $(this).removeClass("mousemoveout");
-            $(this).removeClass("mousemoveon");
-            $(this).addClass("mousemoveout");
-        })
 
         // ---------------------------------以下是供聊天用的全局变量-----------------------
         var webSocket = null;
@@ -486,7 +249,8 @@
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 chatRecord = chatRecord + htmlData;
                 unreadCount = unreadCount+1;
-                $("#unreadCountSpan").text(unreadCount);
+                //$("#unreadCountSpan").text(unreadCount);
+				$("#leftNaviIframePage").contents().find("#unreadCountSpan").text(unreadCount);
             }else{
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 //htmlData += "<button onclick='enableSpeak("+msgFrom+",0)' style='display:inline-block;'>禁言</button>";
@@ -527,7 +291,7 @@
         $("#resetMusicIframeDivPosBtn").click(adjustMusicWindowPosition);
 
         function adjustMusicWindowPosition(){
-            var headDivHeight = $("#headerDiv").height();
+            var headDivHeight = $("#headerPage").height();
             var mainDivHeight = $("#mainDiv").height();
             var mainDivLeft = $("#mainDiv").offset().left;
             var musicIframeDivHeight=$("#musicIframeDiv").height();
@@ -555,163 +319,50 @@
             });
         }
 
-        $("#setPersonInfoBtn").click(function () {
-            layer.open({
-                type: 2,
-                title: '设置个人信息',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['390px', '500px'],
-                content: '/zhddkk/wsUsers/setPersonalInfo.page?user='+s_user
-            });
-        });
+		//扫码登录
+		function showQRCode(){
+			var imgSrc = $("#qrcodeImg").attr("src");
+			if (imgSrc == "" || imgSrc == undefined){
+				$.ajax({
+					type: 'POST',
+					url: rootUrl+'ws/showQRCode.do',
+					//dataType: 'json',
+					async:false,
+					success: function(result) {
+						$("#qrDiv").css("display","block");
+						$("#qrcodeImg").css("display","block");
+						$("#qrcodeImg").attr("src",result);
+					}
+				});
+			}else{
+				$("#qrcodeImg").attr("src","");
+				$("#qrDiv").css("display","none");
+				$("#qrcodeImg").css("display","none");
+			}
+		};
+
+		//设置个人信息
+		function setPersonInfoBtn(){
+			layer.open({
+				type: 2,
+				title: '设置个人信息',
+				shadeClose: true,
+				shade: 0.8,
+				area: ['390px', '500px'],
+				content: '/zhddkk/wsUsers/setPersonalInfo.page?user='+s_user
+			});
+		};
 
         //窗口大小变化事件
         $(window).resize(function () {
             adjustMusicWindowPosition();
         });
 
-        function showTips(msg,color){
-            if (color ==null || color== undefined){
-                color="black";
-            }
-            $("#statusTips").css("color",color);
-            $("#statusTips").text(msg);
-        }
-
-        //底部
-        var curVersion = "";
-        queryVersion();
-        function queryVersion(){
-            $.ajax({
-                type: 'GET',
-                url: rootUrl+'ws/queryVersion.json',
-                //dataType: 'json',
-                async:false,
-                success: function(result) {
-                    curVersion = result;
-                    $("#versionLabel").text(result);
-                }
-            });
-        }
-
-        function checkUpdate(){
-            $.ajax({
-                type: 'GET',
-                url: rootUrl+'ws/checkUpdate.do?version='+curVersion+"&cmd=check",
-                //dataType: 'json',
-                async:false,
-                success: function(result) {
-                    console.log("checkUpdate result:"+result);
-                    //needUpdate:false;from:1.0;to:2.0
-                    var needUpdate = result.split("needUpdate:")[1].split(";")[0];
-                    if (needUpdate == "true"){
-                        var toVersion = result.split("to:")[1];
-
-                        layer.confirm('已经发现新版本,是否要升级到'+toVersion+"?", {
-                            btn: ['是','否'] //按钮
-                        }, function(index){
-                            console.log("开始升级到"+toVersion);
-                            toUpdate(curVersion);
-                            layer.close(index);
-                        }, function(index){
-                            layer.close(index);
-                        });
-                    }else{
-                        layer.alert('已经是最新版本!');
-                    }
-                }
-            });
-        }
-
-        function toUpdate(curVersion){
-            $.ajax({
-                type: 'GET',
-                url: rootUrl+'ws/checkUpdate.do?version='+curVersion+"&cmd=update",
-                //dataType: 'json',
-                async:false,
-                success: function(result) {
-                    console.log("升级结果:"+result)
-                }
-            });
-        }
-
-		//定时获取天气
-		grapWeatherInfo();
-		setInterval(function(){
-			grapWeatherInfo();
-		},600000);
-		function grapWeatherInfo(){
-			$.ajax({
-				type: 'GET',
-				url: rootUrl+'index/grapWetherInfo',
-				async:false,
-				success: function(result) {
-					if (result.code == 0){
-						$("#weatherInfo").text(result.data.remark);
-						$("#lastUpdateTime").text(result.data.lastUpdateTime);
-						$("#location").text(result.data.location);
-					}
-				}
-			});
+        //footer内的提示语
+		function showTips(msg,color){
+			$("#footerIframePage").contents().find("#statusTips").css("color",color);
+			$("#footerIframePage").contents().find("#statusTips").html(msg);
 		}
-
-		//定时切换header标题
-		setInterval(function () {
-			var titleStatus = $("#headerTitleDiv").css("display");
-			if (titleStatus == "none"){
-				$("#headerTitleDiv").css("display", "block");
-				$("#weatherDiv").css("display", "none");
-			}else{
-				$("#headerTitleDiv").css("display", "none");
-				$("#weatherDiv").css("display", "block");
-			}
-		},8000);
-
-        //定时滚动header背景图片
-        $.ws .backgroundImgAnimation("headBackgroundImg","headerDiv", 1, 10);
-
-        //定时滚动左侧导航栏背景图片
-        $.ws .backgroundImgAnimation("leftNavBackgroundImg","leftNavi", 2, 10);
-
-        //头部滚动广告
-		var scrollSpeed = 100; //数字越大滚得越慢
-		var scrollAdDiv = document.getElementById("scrollAdDiv");
-		var adContentDiv = document.getElementById("adContentDiv");
-		var adNoContentDiv = document.getElementById("adNoContentDiv");
-		scrollAdDiv.scrollTop = adContentDiv.offsetHeight;
-		function Marquee(){
-			adNoContentDiv.innerHTML = adContentDiv.innerHTML;
-			if (scrollAdDiv.scrollTop >= adContentDiv.offsetHeight) {
-				scrollAdDiv.scrollTop -= adNoContentDiv.offsetHeight;
-			}else{
-				scrollAdDiv.scrollTop += 1;
-			}
-		}
-		setInterval(Marquee, scrollSpeed);
-
-		//定时获取最新广告
-		queryRecentAdsList();
-		function queryRecentAdsList(){
-			$.ajax({
-				type: 'GET',
-				url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
-				async:false,
-				success: function(result) {
-					if (result.code == 0){
-						var data = result.data;
-						var totalAds = "";
-						$.each(data,function(i,val){
-							totalAds += val.content+"&nbsp;&nbsp;&nbsp;"+val.createTime+"<br/>";
-						});
-						$("#adContentDiv").html(totalAds);
-					}
-				}
-			});
-		}
-
-		//定时获取最新广告
-		setInterval(queryRecentAdsList, 60000);
 
 		//点击音乐播放器图标显示/隐藏简易音乐播放器
         var musicPicRightPos = (window.innerWidth-$("#mainDiv").width())/2;

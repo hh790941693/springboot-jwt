@@ -452,6 +452,50 @@ public class WebSocketClientController extends AdminBaseController
 		logger.debug("访问addFriends.page");
 		return "ws/addFriends";
 	}
+
+	/**
+	 * 头部页面
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "header.page")
+	public String headerPage() {
+		logger.debug("访问header.page");
+		return "ws/header";
+	}
+
+	/**
+	 * 底部页面
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "footer.page")
+	public String footerPage() {
+		logger.debug("访问footer.page");
+		return "ws/footer";
+	}
+
+	/**
+	 * 客户端左侧导航栏页面
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "clientLeftNavi.page")
+	public String clientLeftNavi() {
+		logger.debug("访问clientLeftNavi.page");
+		return "ws/clientLeftNavi";
+	}
+
+	/**
+	 * 服务端左侧导航栏页面
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "serverLeftNavi.page")
+	public String serverLeftNavi() {
+		logger.debug("访问serverLeftNavi.page");
+		return "ws/serverLeftNavi";
+	}
 	
 	/**
 	 * 好友列表
