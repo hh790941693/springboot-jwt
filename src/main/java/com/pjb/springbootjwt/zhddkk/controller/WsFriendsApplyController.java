@@ -64,6 +64,9 @@ public class WsFriendsApplyController extends AdminBaseController {
         if (StringUtils.isNotBlank(wsFriendsApplyDTO.getFromName())){
         	wrapper.eq("from_name", wsFriendsApplyDTO.getFromName());
 		}
+		if (null != wsFriendsApplyDTO.getProcessStatus()){
+			wrapper.eq("process_status", wsFriendsApplyDTO.getProcessStatus());
+		}
         wrapper.orderBy("create_time", false).orderBy("process_status", true);
         Page<WsFriendsApplyDO> page = wsFriendsApplyService.selectPage(getPage(WsFriendsApplyDO.class), wrapper);
         return Result.ok(page);
@@ -87,6 +90,9 @@ public class WsFriendsApplyController extends AdminBaseController {
 		Wrapper<WsFriendsApplyDO> wrapper = new EntityWrapper<WsFriendsApplyDO>();
 		if (StringUtils.isNotBlank(wsFriendsApplyDTO.getToName())){
 			wrapper.eq("to_name", wsFriendsApplyDTO.getToName());
+		}
+		if (null != wsFriendsApplyDTO.getProcessStatus()){
+			wrapper.eq("process_status", wsFriendsApplyDTO.getProcessStatus());
 		}
 		wrapper.orderBy("create_time", false).orderBy("process_status", true);
 		Page<WsFriendsApplyDO> page = wsFriendsApplyService.selectPage(getPage(WsFriendsApplyDO.class), wrapper);

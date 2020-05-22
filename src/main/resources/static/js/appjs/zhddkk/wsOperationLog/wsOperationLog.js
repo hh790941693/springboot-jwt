@@ -141,6 +141,12 @@ function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
 }
 
+function cleanForm(){
+	$("#operUserSelect").val("");
+	$("#moduleNameSelect").val("");
+	reLoad();
+}
+
 function add() {
 	layer.open({
 		type : 2,

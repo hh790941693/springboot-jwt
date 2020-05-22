@@ -2,8 +2,8 @@ package com.pjb.springbootjwt.common.uploader.service.impl;
 
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.common.uploader.service.UploadService;
-import com.pjb.springbootjwt.zhddkk.entity.WsFile;
-import com.pjb.springbootjwt.zhddkk.service.WsService;
+import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
+import com.pjb.springbootjwt.zhddkk.service.WsFileService;
 import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +27,7 @@ public class UploadServiceImpl implements UploadService {
     private UploadConfig uploadConfig;
 
     @Autowired
-    private WsService wsService;
+    private WsFileService wsFileService;
 
     @Override
     public String uploadFile(MultipartFile file, String folder, String userId) throws Exception {
@@ -36,28 +36,31 @@ public class UploadServiceImpl implements UploadService {
             folder = TEMP_PATH;
         }
         String originFilename = file.getOriginalFilename();
-        //String newFileName = renameToUUID(file.getOriginalFilename());
-        //logger.info("newFileName:"+newFileName);
+        String newFileName = renameToUUID(file.getOriginalFilename());
+        logger.info("newFileName:"+newFileName);
         String totalFolder = uploadConfig.getStorePath() + folder + File.separator;
-        File newFile = new File(totalFolder, originFilename);
+        File newFile = new File(totalFolder, newFileName);
         FileUtils.writeByteArrayToFile(newFile, file.getBytes());
-        String viewUrl = uploadConfig.getViewUrl() + folder + "/" + originFilename;
+        String viewUrl = uploadConfig.getViewUrl() + folder + "/" + newFileName;
 
-        WsFile wf = new WsFile();
-        wf.setUser(userId);
-        wf.setFolder(folder);
-        wf.setFilename(file.getOriginalFilename());
-        wf.setDiskPath(uploadConfig.getStorePath() + folder);
-        wf.setUrl(viewUrl);
-        wf.setFileSize(newFile.length());
+        WsFileDO wsFileDO = new WsFileDO();
+        wsFileDO.setUser(userId);
+        wsFileDO.setFolder(folder);
+        wsFileDO.setFilename(file.getOriginalFilename());
+        wsFileDO.setDiskPath(uploadConfig.getStorePath() + folder);
+        wsFileDO.setUrl(viewUrl);
+        wsFileDO.setFileSize(newFile.length());
 
+        String trackLength = "";
         if (originFilename.endsWith("mp3")) {
-            String trackLength = MusicParserUtil.getMusicTrackTime(newFile.getAbsolutePath());
-            wf.setTrackLength(trackLength);
-        }else{
-            wf.setTrackLength("");
+            try {
+                trackLength = MusicParserUtil.getMusicTrackTime(newFile.getAbsolutePath());
+            }catch (Exception e){
+                logger.info("获取音乐文件时长异常:"+e.getMessage());
+            }
         }
-        wsService.insertMusic(wf);
+        wsFileDO.setTrackLength(trackLength);
+        wsFileService.insert(wsFileDO);
 
         return viewUrl;
     }

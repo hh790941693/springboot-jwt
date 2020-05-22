@@ -47,6 +47,28 @@ $.ws = {
             var posY = 0;  //max -690
             var downFlag = true;
             setInterval(function () {
+                if (imgHeight == 0 || imgWidth ==0 || divWidth ==0 || divHeight == 0){
+                    imgWidth = $("#" + imgId).width();
+                    imgHeight = $("#" + imgId).height();
+
+                    divWidth = $("#" + divId).width();
+                    divHeight = $("#" + divId).height();
+
+                    if (imgWidth <= divWidth) {
+                        divBackSizeX = divWidth;
+                    } else {
+                        divBackSizeX = imgWidth;
+                    }
+
+                    if (imgHeight <= divHeight) {
+                        divBackSizeY = divHeight;
+                    } else {
+                        divBackSizeY = imgHeight;
+                    }
+                    $("#" + divId).css("background-size", divBackSizeX + "px " + divBackSizeY + "px");
+                    maxPosX = Math.abs(imgWidth - divWidth);
+                    maxPosY = Math.abs(imgHeight - divHeight);
+                }
                 if (downFlag) {
                     posY -= 1;
                 }
@@ -66,6 +88,28 @@ $.ws = {
             var posX = 0;
             var leftFlag = true;
             setInterval(function () {
+                if (imgHeight == 0 || imgWidth ==0 || divWidth ==0 || divHeight == 0){
+                    imgWidth = $("#" + imgId).width();
+                    imgHeight = $("#" + imgId).height();
+
+                    divWidth = $("#" + divId).width();
+                    divHeight = $("#" + divId).height();
+
+                    if (imgWidth <= divWidth) {
+                        divBackSizeX = divWidth;
+                    } else {
+                        divBackSizeX = imgWidth;
+                    }
+
+                    if (imgHeight <= divHeight) {
+                        divBackSizeY = divHeight;
+                    } else {
+                        divBackSizeY = imgHeight;
+                    }
+                    $("#" + divId).css("background-size", divBackSizeX + "px " + divBackSizeY + "px");
+                    maxPosX = Math.abs(imgWidth - divWidth);
+                    maxPosY = Math.abs(imgHeight - divHeight);
+                }
                 if (leftFlag) {
                     posX -= 1;
                 }
@@ -87,6 +131,28 @@ $.ws = {
             // 1 右  2下 3 左  4上
             var direct = 1;
             setInterval(function () {
+                if (imgHeight == 0 || imgWidth ==0 || divWidth ==0 || divHeight == 0){
+                    imgWidth = $("#" + imgId).width();
+                    imgHeight = $("#" + imgId).height();
+
+                    divWidth = $("#" + divId).width();
+                    divHeight = $("#" + divId).height();
+
+                    if (imgWidth <= divWidth) {
+                        divBackSizeX = divWidth;
+                    } else {
+                        divBackSizeX = imgWidth;
+                    }
+
+                    if (imgHeight <= divHeight) {
+                        divBackSizeY = divHeight;
+                    } else {
+                        divBackSizeY = imgHeight;
+                    }
+                    $("#" + divId).css("background-size", divBackSizeX + "px " + divBackSizeY + "px");
+                    maxPosX = Math.abs(imgWidth - divWidth);
+                    maxPosY = Math.abs(imgHeight - divHeight);
+                }
                 if (direct == 1) {
                     posX -= 1;
                 } else if (direct == 2) {

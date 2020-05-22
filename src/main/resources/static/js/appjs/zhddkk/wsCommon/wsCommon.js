@@ -83,6 +83,11 @@ function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
 }
 
+function cleanForm(){
+	$("#nameSearchInput").val("");
+	reLoad();
+}
+
 function add() {
 	layer.open({
 		type : 2,
