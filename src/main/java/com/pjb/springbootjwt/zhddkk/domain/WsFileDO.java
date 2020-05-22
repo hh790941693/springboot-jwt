@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -60,6 +61,9 @@ public class WsFileDO implements Serializable {
     @ApiModelProperty(value = "status",name = "0:无效 1:有效")
     private Integer status;
 
+    @TableField(exist = false)
+    @ApiModelProperty(value = "accessStatus",name = "访问性 0:不可访问 1:可访问")
+    private String accessStatus;
 
     public void setId(Integer id) {
         this.id = id;
@@ -165,5 +169,13 @@ public class WsFileDO implements Serializable {
 
     public void setFolder(String folder) {
         this.folder = folder;
+    }
+
+    public String getAccessStatus() {
+        return accessStatus;
+    }
+
+    public void setAccessStatus(String accessStatus) {
+        this.accessStatus = accessStatus;
     }
 }

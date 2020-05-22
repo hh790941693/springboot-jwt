@@ -1,11 +1,8 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -16,9 +13,9 @@ import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
-import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.model.ExtReturn;
 import com.pjb.springbootjwt.zhddkk.service.WsFileService;
+import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
 import com.pjb.springbootjwt.zhddkk.util.ServiceUtil;
@@ -219,18 +216,22 @@ public class FileOperationController
 
 		for (WsFileDO wsFileDO : fileList) {
 			String url = wsFileDO.getUrl();
-			if (testUrl(url)) {
-				finalList.add(wsFileDO);
+			if (CommonUtil.testUrl(url)) {
+				wsFileDO.setAccessStatus("1");
 			}else{
-				String diskPath = wsFileDO.getDiskPath();
-				String filename = url.substring(url.lastIndexOf("/")+1);
-				File file = new File(diskPath+File.separator+filename);
-				if (file.exists() && file.isFile()) {
-					logger.info("删除文件:{}",filename);
-					file.delete();
-				}
-				wsFileService.deleteById(wsFileDO.getId());
+				wsFileDO.setAccessStatus("0");
 			}
+			finalList.add(wsFileDO);
+//			}else{
+//				String diskPath = wsFileDO.getDiskPath();
+//				String filename = url.substring(url.lastIndexOf("/")+1);
+//				File file = new File(diskPath+File.separator+filename);
+//				if (file.exists() && file.isFile()) {
+//					logger.info("删除文件:{}",filename);
+//					file.delete();
+//				}
+//				wsFileService.deleteById(wsFileDO.getId());
+//			}
 		}
 		
 		ExtReturn er = new ExtReturn();
@@ -238,18 +239,5 @@ public class FileOperationController
 		er.setTotal(finalList.size());
 		er.setSuccess(true);
 		return JsonUtil.javaobject2Jsonobject(er);
-	}
-
-	//检查url是否可访问
-	public static boolean testUrl(String urlString){
-		long lo = System.currentTimeMillis();
-		try {
-			URL url = new URL(urlString);
-			InputStream in = url.openStream();
-			return true;
-		} catch (Exception e1) {
-		}
-
-		return false;
 	}
 }

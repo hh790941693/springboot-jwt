@@ -1,6 +1,8 @@
 package com.pjb.springbootjwt.zhddkk.util;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -155,8 +157,8 @@ public class CommonUtil
 	 * 随机获取两个double数字之间的数
 	 * 起始数字要大于结束数字
 	 * 
-	 * @param start 起始数字
-	 * @param end  结束数字
+	 * @param d1 起始数字
+	 * @param d2  结束数字
 	 * @return
 	 */
 	public static double randomDouble(double d1,double d2)
@@ -210,5 +212,17 @@ public class CommonUtil
 		}
 		
 		return res;
+	}
+
+	//检查url是否可访问
+	public static boolean testUrl(String urlString){
+		long lo = System.currentTimeMillis();
+		try {
+			URL url = new URL(urlString);
+			InputStream in = url.openStream();
+			return true;
+		} catch (Exception e1) {
+		}
+		return false;
 	}
 }
