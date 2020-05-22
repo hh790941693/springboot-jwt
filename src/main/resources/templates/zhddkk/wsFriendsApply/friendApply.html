@@ -16,17 +16,23 @@
                             </a>
                         </div>
                     </div>
-                    <div class="ibox-content" style="display: none;">
+                    <div class="ibox-content">
                         <input type="hidden" th:value="${user}" id="user">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="input-group">
-                                    <div class="input-group-addon">名称</div>
-                                    <input type="text" class="form-control" id="nameSearchInput" placeholder="请输入">
+                                    <div class="input-group-addon">申请状态</div>
+                                    <select class="form-control" id="applyStatusSelect">
+                                        <option value="">--请选择--</option>
+                                        <option value="1">申请中</option>
+                                        <option value="2">已拒绝</option>
+                                        <option value="3">已同意</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <button class="btn btn-success" onclick="reLoad()">查询</button>
+                                <button type="button" class="btn btn-default" onclick="cleanForm()">重置</button>
                             </div>
                         </div>
                     </div>
