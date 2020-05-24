@@ -18,6 +18,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.pjb.springbootjwt.common.utils.SpringContextHolder;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsChatlogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
@@ -30,10 +31,8 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
-import com.pjb.springbootjwt.zhddkk.listener.ApplicationContextRegister;
 import org.springframework.stereotype.Component;
 
 @ServerEndpoint(value = "/zhddWebSocket/{user}/{pass}/{userAgent}", configurator = HttpSessionConfigurator.class)
@@ -56,19 +55,12 @@ public class ZhddWebSocket
 	
 	private static int onLineCount = 0;
 
-	private static WsUsersService wsUsersService;
+	private static WsUsersService wsUsersService = SpringContextHolder.getBean(WsUsersService.class);
 
-	private static WsChatlogService wsChatlogService;
+	private static WsChatlogService wsChatlogService = SpringContextHolder.getBean(WsChatlogService.class);;
 
-	private static WsCommonService wsCommonService;
+	private static WsCommonService wsCommonService = SpringContextHolder.getBean(WsCommonService.class);
 
-	static {
-		ApplicationContext act = ApplicationContextRegister.getApplicationContext();
-        wsUsersService = act.getBean(WsUsersService.class);
-        wsChatlogService = act.getBean(WsChatlogService.class);
-		wsCommonService = act.getBean(WsCommonService.class);
-	}
-	
 	@OnMessage
 	public void onMessage(String message, Session session) throws IOException, InterruptedException {
 		if (this.user == null || this.session==null) {
