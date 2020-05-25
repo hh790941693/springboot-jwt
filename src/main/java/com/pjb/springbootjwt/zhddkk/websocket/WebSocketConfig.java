@@ -1,5 +1,9 @@
 package com.pjb.springbootjwt.zhddkk.websocket;
 
+import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
+import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
+import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,4 +42,18 @@ public class WebSocketConfig {
         return new ServerEndpointExporter();
     }
 
+    @Autowired
+    public void setWsUsersService(WsUsersService wsUsersService){
+        ZhddWebSocket.wsUsersService = wsUsersService;
+    }
+
+    @Autowired
+    public void setWsChatlogService(WsChatlogService wsChatlogService){
+        ZhddWebSocket.wsChatlogService = wsChatlogService;
+    }
+
+    @Autowired
+    public void setWsCommonService(WsCommonService wsCommonService){
+        ZhddWebSocket.wsCommonService = wsCommonService;
+    }
 }
