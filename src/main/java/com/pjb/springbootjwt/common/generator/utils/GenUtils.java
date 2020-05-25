@@ -235,7 +235,7 @@ public class GenUtils {
                     + File.separator + classname + File.separator + classname + "edit.html";
         }else if (template.contains("form.html.vm")) {
             return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
-                    + File.separator + classname + File.separator + classname + "form.html";
+                    + File.separator + classname + File.separator + classname + "Form.html";
         }else if (template.contains("list.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
@@ -251,7 +251,7 @@ public class GenUtils {
         }else if (template.contains("form.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
-                    + File.separator + classname +"form.js";
+                    + File.separator + classname +"Form.js";
         }else if (template.contains("menu.sql.vm")) {
             return className.toLowerCase() + "_menu.sql";
         }
