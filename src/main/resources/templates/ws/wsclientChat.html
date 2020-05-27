@@ -291,12 +291,12 @@
 		var imgIndex=1;
 		var imgMaxIndex = 10;
 		function changeBackgroundImage(){
+			imgIndex++;
 			if (imgIndex>imgMaxIndex) {
 				imgIndex = 1;
 			}
 			var newPicUrl = "../img/fengjing/fj"+imgIndex+".jpg";
 			$("body").css("background-image","url("+newPicUrl+")");
-			imgIndex++;
 		}
 
 		//定时切换聊天背景图片
