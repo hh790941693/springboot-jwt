@@ -141,12 +141,14 @@ public class ZhddWebSocket
 	public void OnOpen(@PathParam("user") String user, @PathParam("pass") String pass, @PathParam("userAgent") String userAgent, Session session, EndpointConfig endpointConfig) {
         logger.info("用户连接 user:{}", user);
 
-		HttpSession httpSession = (HttpSession)endpointConfig.getUserProperties().get(HttpSession.class.getName());
-		String sessionUser = (String)httpSession.getAttribute(CommonConstants.S_USER+"_"+user);
-		if (StringUtils.isBlank(sessionUser)){
-			httpSession.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT);
-			httpSession.setAttribute(CommonConstants.S_USER+"_"+user, user);
-			httpSession.setAttribute(CommonConstants.S_PASS+"_"+user, pass);
+        if (endpointConfig.getUserProperties().containsKey(HttpSession.class.getName())) {
+			HttpSession httpSession = (HttpSession) endpointConfig.getUserProperties().get(HttpSession.class.getName());
+			String sessionUser = (String) httpSession.getAttribute(CommonConstants.S_USER + "_" + user);
+			if (StringUtils.isBlank(sessionUser)) {
+				httpSession.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT);
+				httpSession.setAttribute(CommonConstants.S_USER + "_" + user, user);
+				httpSession.setAttribute(CommonConstants.S_PASS + "_" + user, pass);
+			}
 		}
 
 		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user).eq("password", pass));
