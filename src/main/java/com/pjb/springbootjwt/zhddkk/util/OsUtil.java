@@ -12,6 +12,8 @@ public class OsUtil {
         System.out.println("java家目录:"+System.getProperty("java.home"));
         System.out.println("jdk版本:"+System.getProperty("java.version"));
         System.out.println("mysql版本:"+queryMysqlVersion());
+        boolean nginxPs = findProcess("nginx");
+        System.out.println("nginx进程:"+nginxPs);
     }
 
     public static String queryMysqlVersion(){
@@ -41,7 +43,7 @@ public class OsUtil {
     public static boolean findProcess(String processName) {
         BufferedReader bufferedReader = null;
         try {
-            Process proc = Runtime.getRuntime().exec("tasklist /FI /" + processName + "/");
+            Process proc = Runtime.getRuntime().exec("tasklist -fi " + '"'+ "imagename eq " + processName +'"');
             bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {

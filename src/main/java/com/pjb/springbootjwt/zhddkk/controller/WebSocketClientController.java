@@ -1,6 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,10 +21,13 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.redis.RedisUtil;
+import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.base.Result;
+import com.pjb.springbootjwt.zhddkk.bean.SystemInfoBean;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.entity.*;
 import com.pjb.springbootjwt.zhddkk.service.*;
+import com.pjb.springbootjwt.zhddkk.util.OsUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -93,6 +97,9 @@ public class WebSocketClientController extends AdminBaseController
 
     @Autowired
     private WsCommonService wsCommonService;
+
+    @Autowired
+    private UploadConfig uploadConfig;
 	
 	/**
 	 *客户端登录首页
@@ -1527,5 +1534,28 @@ public class WebSocketClientController extends AdminBaseController
 		logger.info("sessionPass:"+sessionPass);
 
 		return sessionUser+":"+sessionPass;
+	}
+
+	//查询系统信息
+	@ResponseBody
+	@GetMapping("/querySystemInfo")
+	public Result<SystemInfoBean> querySystemInfo(){
+        SystemInfoBean systemInfoBean = new SystemInfoBean();
+        systemInfoBean.setOsName(System.getProperty("os.name"));
+        systemInfoBean.setJavaHome(System.getProperty("java.home"));
+        systemInfoBean.setJavaVersion(System.getProperty("java.version"));
+        systemInfoBean.setDbVersion(OsUtil.queryMysqlVersion());
+        boolean nginxPs = OsUtil.findProcess("nginx.exe");
+        systemInfoBean.setNginxFlag(nginxPs);
+
+        String storePath = uploadConfig.getStorePath();
+        File sf = new File(storePath);
+        if (sf.isDirectory()){
+            systemInfoBean.setShareDir(storePath+":共享目录正常");
+        }else{
+            systemInfoBean.setShareDir(storePath+":共享目录不存在");
+        }
+
+        return Result.ok(systemInfoBean);
 	}
 }

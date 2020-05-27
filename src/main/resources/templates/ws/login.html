@@ -67,7 +67,7 @@
 		</div>
 	</div>
 
-	<div id="checkDiv" style="width:200px;height:330px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
+	<div id="checkDiv" style="width:200px;height:360px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
 		<div id="checkContentDiv" style="width:100%;height:auto;border:1px solid grey;background-color: #0C0C0C;padding: 5px 0 5px 10px;">
 
 		</div>
@@ -215,18 +215,37 @@
 		//模拟登录前的检查操作
 		var checkEnvTimer = null;
 		var isCheckFinish = false;
+        var textArr = new Array();
 		function checkEnvironment(){
         	console.log("触发登录前的点击事件");
-			var textArr = new Array("正在检查系统版本.....","window 10",
-									"正在检查java版本.....","jdk 1.8",
-									"正在检查数据库版本.....","mysql 5.8",
-									"正在检查nginx进程状态.....", "nginx正常",
-									"正在检查共享目录权限.....","共享目录正常",
-									"正在检查其他事项....","检查完毕",
-									"登录中.........");
+
+            $.ajax({
+                type: 'GET',
+                url: rootUrl+'ws/querySystemInfo',
+                async:false,
+                success: function(result) {
+                    if (result.code == 1){
+                        var data = result.data;
+                        var osName = data.osName;
+                        var javaHome = data.javaHome;
+                        var javaVersion = data.javaVersion;
+                        var dbVersion = data.dbVersion;
+                        var nginxFlag = data.nginxFlag;
+                        var shareDir = data.shareDir;
+                        textArr = new Array("正在检查系统版本.....",osName,
+                            "正在检查java版本.....",javaVersion,
+                            "正在检查java家目录.....",javaHome,
+                            "正在检查数据库版本.....",dbVersion,
+                            "正在检查nginx进程状态.....", nginxFlag,
+                            "正在检查共享目录权限.....",shareDir,
+                            "正在检查其他事项....","检查完毕",
+                            "登录中.........","","");
+                    }
+                }
+            });
         	var text = "";
         	var i = 0;
-        	if (null == checkEnvTimer && !isCheckFinish) {
+        	if (null == checkEnvTimer && !isCheckFinish && textArr.length>0) {
 				$("#checkDiv").css("display", "block");
 				checkEnvTimer = setInterval(function () {
 					if (i >= textArr.length) {
