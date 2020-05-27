@@ -35,16 +35,20 @@
     	cursor: move;
     	font-size:10px;
     }
+
+	.divShadow{
+		box-shadow: grey 0 0 10px;
+	}
 </style>
 </head>
 <body>
     <!--头部-->
-	<div id="headerPage" align="center" style="width:1318px;height:58px;border:2px solid green;margin: 0 auto;">
+	<div id="headerPage" class="divShadow" align="center" style="width:1318px;height:58px;border:2px solid green;margin: 0 auto;">
 		<iframe id="headerIframePage" src="header.page" width="100%" height="100%;"></iframe>
 	</div>
 
 	<!--中间部分-->
-	<div id='mainDiv'>
+	<div id='mainDiv' class="divShadow">
 		<input type="hidden" id="user" name="user" th:value="${user}">
 		<input type="hidden" id="pass" name="pass" th:value="${pass}">
 		<input type="hidden" id="webserverip" name="webserverip" th:value="${webserverip}">
@@ -64,7 +68,7 @@
 	</div>
 
 	<!--底部-->
-	<div id="footerPage" align="center" style="width:1318px;height:52px;border:2px solid green;margin: 0 auto;">
+	<div id="footerPage" class="divShadow" align="center" style="width:1318px;height:52px;border:2px solid green;margin: 0 auto;">
 		<iframe id="footerIframePage" src="footer.page" width="100%" height="100%;"></iframe>
 	</div>
 
@@ -375,5 +379,38 @@
 				$("#musicIframeDiv").css("display", "none");
 			}
 		});
+
+		//首页窗口阴影调整
+		var clock = 0;
+		var hPos = 0;
+		var vPos = 0;
+		var setpIntevel = 15;
+		setInterval(function () {
+			if (clock>=0 && clock<setpIntevel){
+				//右
+				hPos++;
+				$(".divShadow").css("box-shadow","grey "+hPos+"px 0 10px");
+			}else if (clock>=setpIntevel && clock<setpIntevel*2){
+				//下
+				hPos--;
+				vPos++;
+				$(".divShadow").css("box-shadow","grey "+hPos+"px "+vPos+"px 10px");
+			}else if (clock>=setpIntevel*2 && clock<setpIntevel*3){
+				//左
+				hPos--;
+				vPos--;
+				$(".divShadow").css("box-shadow","grey "+hPos+"px "+vPos+"px 10px");
+			}else if (clock>=setpIntevel*3 && clock<setpIntevel*4){
+				//上
+				hPos++;
+				vPos--;
+				$(".divShadow").css("box-shadow","grey "+hPos+"px "+vPos+"px 10px");
+			}else if (clock>=setpIntevel*4){
+				clock=0;
+				hPos=0;
+				vPos=0;
+			}
+			clock++;
+		},100);
     </script>
 </html>
