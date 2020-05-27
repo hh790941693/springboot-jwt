@@ -402,7 +402,7 @@ function queryPersonInfo(thisObj){
         title: '用户个人信息',
         shadeClose: true,
         shade: 0.8,
-        area: ['390px', '500px'],
+        area: ['390px', '420px'],
         content: prefix+'/showPersonalInfo.page?user='+user
     });
 }
