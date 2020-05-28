@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head th:include="common :: gameHeader">
         <title>俄罗斯方块</title>    
         <style>    
             #board tr td{    
@@ -273,7 +273,6 @@
 	        <br/>
 	        <input id="control" style="width:85px;">点击我进行控制 
         </div>
-		<div th:include="common :: footer"></div>
     </body>
 	<script>
 		/************************************************************

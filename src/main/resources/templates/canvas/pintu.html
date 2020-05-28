@@ -1,5 +1,5 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head th:include="common :: gameHeader">
 		<meta charset="utf-8">
 		<title>拼图游戏</title>
 		
@@ -16,7 +16,6 @@
 				width:80px;
 			}
 		</style>
-		
 	</head> 
 	<body>
 		<div id="mainDiv" style="width:985px;height:504px;margin:5px auto;overflow:hidden;border:2px solid green;">
@@ -59,7 +58,6 @@
                     </div>
                 </div>
         </div>
-        <div th:include="common::footer"></div>
 	</body>
 	
 	<script type="text/javascript">

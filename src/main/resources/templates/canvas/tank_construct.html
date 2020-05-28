@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head th:include="common :: gameHeader">
 		<meta charset="utf-8">
 		<title></title>
-		<script type="text/javascript" th:src="@{/js/jquery/newTool.js}"></script>
 		<style type="text/css">
 			body{
 				margin:0;
@@ -110,8 +109,6 @@
 				</div>
 			</div>
 		</div>
-
-		<div th:include="common :: footer"></div>
 	</body>
 	<script type="text/javascript">	
 		// 游戏主画布

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head th:include="common :: gameHeader">
 	<meta charset="utf-8">
 	<title></title>
 
@@ -86,13 +86,12 @@
 		<br/>
 		<span>行人总数:</span>&nbsp;&nbsp;<span id="totalMan">0</span>
 	</div>
-	<div th:include="common::footer"></div>
 </div>
 
 </body>
 <script type="text/javascript">
-	$("body[class^='manClass']").css("background-image", rootUrl+"img/man.jpg");
-	$("body[class^='carClass']").css("background-image", rootUrl+"img/car.jpg");
+	// $("body[class^='manClass']").css("background-image", rootUrl+"img/man.jpg");
+	// $("body[class^='carClass']").css("background-image", rootUrl+"img/car.jpg");
 
 	// 初始化网格
 	var ROW_MAX = 20;
