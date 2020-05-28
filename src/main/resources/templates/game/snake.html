@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: gameHeader">
+<head>
 		<meta charset="utf-8">
 		<title></title>
-		
+		<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js?v=2.1.4}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery/tool.js}"></script>
+		<script type="text/javascript" th:src="@{/js/common/ball.js}"></script>
+
 		<style type="text/css">
 			.snakeBodyClass{
 				background-color:green;
