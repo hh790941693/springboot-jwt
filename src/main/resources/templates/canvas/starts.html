@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head th:include="common :: gameHeader">
 		<meta charset="utf-8">
 		<title></title>
 			
@@ -29,8 +29,6 @@
 			星星闪烁频率:<input id="starFrequency" type="range" value=0.01  min=0.01 max=1 step=0.05 onchange="changeStarFrequency()">
 			<span id="freVar">0.05</span>
 		</div>
-
-		<div th:include="common::footer"></div>
 	</body>
 	<script type="text/javascript">	
 		var canvas = document.getElementById("canvas");

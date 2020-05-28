@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head th:include="common :: gameHeader"></head>
 	<meta charset="utf-8">
 	<title></title>
 
@@ -78,7 +78,7 @@
 </head>
 <body>
 	<div id="gameMainDiv" style="width:840px;height:554px;border:2px solid green;margin:1px auto;padding:10px;">
-		<div id="borderDiv" style="width:650px;height:550px;float:left;margin-left:1px;">
+		<div id="borderDiv" style="width:702px;height:550px;float:left;margin-left:1px;">
 		</div>
 		<div id="infoDiv" style="width:125px;height:130px;float:right;border:1px solid green">
 			<span>车辆总数:</span>&nbsp;&nbsp;<span id="totalCar">0</span>
@@ -86,7 +86,6 @@
 			<span>行人总数:</span>&nbsp;&nbsp;<span id="totalMan">0</span>
 		</div>
 	</div>
-	<div th:include="common :: footer"></div>
 </body>
 <script type="text/javascript">
 

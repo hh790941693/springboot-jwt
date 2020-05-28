@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
-        <title>俄罗斯方块</title>    
+<head>
+        <title>俄罗斯方块</title>
+		<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js?v=2.1.4}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery/tool.js}"></script>
+		<script type="text/javascript" th:src="@{/js/common/ball.js}"></script>
         <style>    
             #board tr td{    
                 width: 20px;    
@@ -273,7 +277,6 @@
 	        <br/>
 	        <input id="control" style="width:85px;">点击我进行控制 
         </div>
-		<div th:include="common :: footer"></div>
     </body>
 	<script>
 		/************************************************************

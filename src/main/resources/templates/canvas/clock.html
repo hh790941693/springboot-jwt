@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head th:include="common :: gameHeader">
 		<meta charset="utf-8">
 		<title></title>
 		
@@ -17,7 +17,6 @@
 		</canvas>
 		
 		<audio id="player" controls="controls" src="" style="width:100%;display:none;"></audio>
-		<div th:include="common::footer"></div>
 	</body>
 	<script type="text/javascript">	
 		var ctx = document.getElementById("canvas").getContext("2d");

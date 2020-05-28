@@ -1,12 +1,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title></title>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js?v=2.1.4}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/tool.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common/ball.js}"></script>
 <style>
 	#mainDiv td{
 		width:30px;
 		height:30px;
 	}
+
 </style>
 </head>
 <body>
@@ -40,7 +45,6 @@
 			</div>
 		</div>
 	</div>
-	<div th:include="common :: footer"></div>
 </body>
 	<script type="text/javascript">
 		var ROW = 16;
