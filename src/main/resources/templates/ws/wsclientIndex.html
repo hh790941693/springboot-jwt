@@ -1,12 +1,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="common :: header"></head>
 	<title>WebSocket客户端</title>
-    <style type="text/css">
-		#mainDiv{
-			width:1318px;
-			height:610px;
-			margin:1px auto;
-		}
+
+<style type="text/css">
+	#mainDiv{
+		width:1318px;
+		height:610px;
+		margin:1px auto;
+		position:relative;
+	}
 
         #qrDiv{
             position: fixed;
@@ -118,7 +120,7 @@
 
 		//退出(返回登录页)
         function toIndex(){
-			//window.location.href = rootUrl;
+            //window.location.href = rootUrl+"ws";
 			$.ajax({
 				type: 'POST',
 				url: rootUrl+'ws/logout.do',
@@ -134,10 +136,10 @@
         }
 
         // 默认显示页:聊天窗口首页
-        var cur_pageid = "wsclientChat.page";
-        showPage(cur_pageid);
+        var curPageid = "wsclientChat.page";
+        showPage(curPageid);
         function showPage(pageId) {
-			cur_pageid = pageId;
+			curPageid = pageId;
 			var url = pageId + "?user="+s_user;
 			if (pageId.indexOf("gameIndex.page") != -1){
 				window.location.href=pageId;
@@ -150,7 +152,8 @@
 
         // ---------------------------------以下是供聊天用的全局变量-----------------------
         var webSocket = null;
-        // 连接状态 0:未连接 1:已连接
+
+        // 连接状态
         var connectStatus = "0"
 		//重试连接服务器次数
         var checkCount = 1;
@@ -181,12 +184,10 @@
                         clearInterval(checkTimer);
                     }
                 }
-                var tempMsg = "正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等...";
-				updateChatMsg(tempMsg, "red", 10);
+				updateChatMsg("正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等..., ", "red", 10);
                 checkCount++;
             }else{
-                if (checkTimer != undefined){
-                	//如果已连上服务器,则清除定时器
+                if (checkTimer != null && checkTimer != "" && checkTimer != undefined) {
                     clearInterval(checkTimer);
                 }
             }
@@ -223,8 +224,8 @@
 
         //连接成功
         function onOpen(event){
+            connectStatus = "1";
 			updateChatMsg("已连上服务器!", "green", 10);
-			connectStatus = "1";
         }
 
         //连接失败
@@ -244,7 +245,6 @@
         //接收消息
         function onMessage(event){
 			var jsonObj = JSON.parse(event.data);
-
 			var curTime = jsonObj.curTime;
 			var msgFrom = jsonObj.from;
 			var msgTo = jsonObj.to;
@@ -278,7 +278,7 @@
                 defaultCss = "color:blue;font-size:10px;line-height:14px;";
             }
 
-            if (cur_pageid != "wsclientChat.page"){
+            if (curPageid != "wsclientChat.page"){
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 chatRecord = chatRecord + htmlData;
                 unreadCount = unreadCount+1;
@@ -303,9 +303,14 @@
             }
         }
 
-        //断开连接
-        function stop() {
-            if (webSocket != null) {
+        //获取iframe中的元素
+        function getIframeElement(eleName){
+            var obj = $("#iframePage").contents().find("#"+eleName);
+            return obj;
+        }
+
+        function stop(){
+            if (webSocket != null){
                 webSocket.close();
                 webSocket = null;
                 connectStatus = "0";
@@ -319,12 +324,6 @@
 
         function refrshMusic(){
             document.getElementById("musicIframePage").contentWindow.showMusic();
-        }
-
-        //获取iframe中的元素
-        function getIframeElement(eleName){
-            var obj = $("#iframePage").contents().find("#"+eleName);
-            return obj;
         }
 
         $("#resetMusicIframeDivPosBtn").click(adjustMusicWindowPosition);
