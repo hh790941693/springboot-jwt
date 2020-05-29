@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pjb.springbootjwt.zhddkk.entity.WsCircleComment;
 import io.swagger.annotations.ApiModelProperty;
 
 
