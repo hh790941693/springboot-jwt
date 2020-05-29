@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: gameHeader">
+<head th:include="common :: gameHeader"></head>
 		<meta charset="utf-8">
 		<title></title>
 		<style type="text/css">
 			body{
 				margin:0;
+                padding:0;
 			}
 
 			canvas{
@@ -18,10 +19,14 @@
 				margin-left:285px;
 				width:25px;
 			}
+			span{
+				width:60px;
+				font-size:13px;
+			}
 			.spanClass{
 				display:inline-block;
 				margin-left:5px;
-				font-size:12px;
+				font-size:13px;
 				width:60px;
 			}
 			.wheelInputClass{
@@ -41,8 +46,8 @@
 						你的浏览器不支持canvas标签
 					</canvas>
 				</div>
-				<div>
-					<input id="mobileControllerInput" value="手机用户点此处进行控制" style="width:160px;">
+				<div style="height:22px;">
+					<input id="mobileControllerInput" autocomplete="off" placeholder="手机用户点此处进行控制" style="width:160px;">
 				</div>
 				<div id="controllerDiv" style="width:auto;height:80px;display:none;padding-left:5px;">
 					<button id="startBtn" onclick="startGame()">开始</button>
@@ -75,7 +80,7 @@
 						&nbsp;&nbsp;&nbsp;p:&nbsp;暂停游戏<br/>
                         &nbsp;&nbsp;&nbsp;建造者模式:鼠标左键切换障碍物,鼠标右键粘贴已选择的障碍物
 				</div>
-				<div id="fingerDiv" style="width:auto;height:345px;display:none;border-top:2px solid green;">
+				<div id="fingerDiv" style="width:auto;height:407px;display:none;border-top:2px solid green;">
 					<span class="spanClass">选择关卡:</span><input id="chooseMissionInput" class="wheelInputClass" type="range" value=1 min=1 step=1 onchange="chooseMission()">
 					<span id="curMission" >1</span>
 					<span class="spanClass">生命条数:</span><input id="playerTotalLifeInput" class="wheelInputClass" type="range" value=3 min=1 max=999 step=1 onchange="changePlayerTotalLife()">
@@ -95,17 +100,17 @@
 					<span class="spanClass">炮弹数量:</span><input id="playerTotalTrackBombInput" class="wheelInputClass" type="range" value=3 min=1 max=90000 step=10 onchange="changePlayerTotalTrackBomb()">
 					<span id="playerTotalTrackBomb" >3</span>
 					<hr>
-					<span class="spanClass">鸟巢加固:</span><input id="homeStrongerInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自杀1:</span><input id="selfKillInput1" style="width:15px;" type="checkbox">
+					<span>鸟巢加固:</span><input id="homeStrongerInput" style="width:15px;" type="checkbox"><span>自杀1:</span><input id="selfKillInput1" style="width:15px;" type="checkbox">
 					<br/>
-					<span class="spanClass">冻结敌人:</span><input id="freezeEnermyInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自杀2:</span><input id="selfKillInput2" style="width:15px;" type="checkbox">
+					<span>冻结敌人:</span><input id="freezeEnermyInput" style="width:15px;" type="checkbox"><span>自杀2:</span><input id="selfKillInput2" style="width:15px;" type="checkbox">
 					<br/>
-					<span class="spanClass">生成道具:</span><input id="createBonusInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自动攻击:</span><input id="autoSendTrackBombInput" style="width:15px;" type="checkbox">
+					<span>生成道具:</span><input id="createBonusInput" style="width:15px;" type="checkbox"><span>自动攻击:</span><input id="autoSendTrackBombInput" style="width:15px;" type="checkbox">
 					<hr>
 					
-					<span style="width:120px;font-size:12px;margin-left:5px;">敌人总数:</span><input id="totalEnermyNumInput" class="wheelInputClass" type="range" value=21 min=1 max=1000 step=1 onchange="changeTotalEnermyNum()">
+					<span>敌人总数:</span><input id="totalEnermyNumInput" class="wheelInputClass" type="range" value=21 min=1 max=1000 step=1 onchange="changeTotalEnermyNum()">
 					<span id="totalEnermyNum" >21</span>
 					<br/>
-					<span style="width:120px;font-size:12px;margin-left:5px;">活动敌人数:</span><input id="maxLiveEnermyInput" style="width:40px;" type="range" value=6 min=1 max=100 step=1 onchange="changeMaxLiveEnermyNum()">
+					<span>活动敌人数:</span><input id="maxLiveEnermyInput" style="width:40px;" type="range" value=6 min=1 max=100 step=1 onchange="changeMaxLiveEnermyNum()">
 					<span id="maxLiveEnermyNum">6</span>
 				</div>
 			</div>
@@ -172,8 +177,12 @@
 		
 		// 当前关卡
 		var MISSION = 1;
+        
+        // 计时器
+        var H = M = S = MS = 0;
+        var CLOCK_TIMER = undefined;
 
-		// 道路方向:左转、直行、右转
+		// 敌军坦克出生位置
 		var LEFT="LEFT", CENTER="CENTER", RIGHT="RIGHT";
 
 		// 坦克运动方向:左右上下
@@ -3248,7 +3257,6 @@
             CLOCK_TIMER=setInterval(clockTimer,10);
             
 			IS_SHOW_GRID = false;
-        
             IS_GAME_START = true;
             IS_GAME_PAUSE = false;
             $("#startBtn").attr("disabled",true);
@@ -3732,44 +3740,40 @@
 			document.getElementById("maxLiveEnermyNum").innerHTML=curNum;
 			MAX_ENERY_LIVE_NUM = curNum;
 		}
-		
-		// 判断一个数组中是否包含另外一个子数组
-		function isHasArr(mainArr,paraArr){
-			var isInArr = false;
-			for (var i=0;i<mainArr.length;i++){
-				var cnt = 0;
-				for (j=0;j<mainArr[i].length;j++){
-					if (mainArr[i][j] == paraArr[0][j]){
-						cnt++;
-					}
-				}
-				if (cnt == paraArr[0].length){
-					break;
-				}
+
+		// 计时器
+		function clockTimer(){   //定义计时函数
+			MS=MS+10;         //毫秒
+			if(MS>=1000){
+				MS=0;
+				S=S+1;         //秒
 			}
-			if (cnt == paraArr[0].length){
-				isInArr = true;
+			if(S>=60){
+				S=0;
+				M=M+1;        //分钟
 			}
-			
-			return isInArr;
+			if(M>=60){
+				M=0;
+				H=H+1;        //小时
+			}
 		}
-		
-		function getExistArrIndx(mainArr,paraArr){
-			var index = undefined;
-			for (var i=0;i<mainArr.length;i++){
-				var cnt = 0;
-				for (j=0;j<mainArr[i].length;j++){
-					if (mainArr[i][j] == paraArr[0][j]){
-						cnt++;
-					}
-				}
-				if (cnt == paraArr[0].length){
-					index = i;
-					break;
-				}
+		function toDub(n){  //补0操作
+			if(n<10){
+				return "0"+n;
 			}
-			
-			return index;
+			else {
+				return ""+n;
+			}
+		}
+
+		function toDubms(n){  //给毫秒补0操作
+			if(n<10){
+				return "00"+n;
+			}else if (n>=10&n<=99){
+				return "0"+n;
+			}else{
+				return n;
+			}
 		}
 	</script>
 </html>

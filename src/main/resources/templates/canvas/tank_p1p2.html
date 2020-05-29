@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head th:include="common :: gameHeader">
+<head th:include="common :: gameHeader"></head>
 		<meta charset="utf-8">
 		<title></title>
 		<style type="text/css">
@@ -18,10 +18,14 @@
 				margin-left:285px;
 				width:25px;
 			}
+			span{
+				width:60px;
+				font-size:13px;
+			}
 			.spanClass{
 				display:inline-block;
 				margin-left:5px;
-				font-size:10px;
+				font-size:13px;
 				width:60px;
 			}
 			.wheelInputClass{
@@ -73,7 +77,7 @@
 						&nbsp;&nbsp;&nbsp;↑或↓:&nbsp;选择游戏模式<br/>
 						&nbsp;&nbsp;&nbsp;p:&nbsp;暂停游戏<br/>
 				</div>
-				<div id="fingerDiv" style="width:auto;height:520px;display:none">
+				<div id="fingerDiv" style="width:auto;height:407px;display:none">
 					<span class="spanClass">选择关卡:</span><input id="chooseMissionInput" class="wheelInputClass" type="range" value=1 min=1 step=1 onchange="chooseMission()">
 					<span id="curMission" >1</span>
 					<span class="spanClass">生命条数:</span><input id="playerTotalLifeInput" class="wheelInputClass" type="range" value=3 min=1 max=999 step=1 onchange="changePlayerTotalLife()">
@@ -93,17 +97,17 @@
 					<span class="spanClass">炮弹数量:</span><input id="playerTotalTrackBombInput" class="wheelInputClass" type="range" value=3 min=1 max=90000 step=10 onchange="changePlayerTotalTrackBomb()">
 					<span id="playerTotalTrackBomb" >3</span>
 					<hr>
-					<span class="spanClass">鸟巢加固:</span><input id="homeStrongerInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自杀1:</span><input id="selfKillInput1" style="width:15px;" type="checkbox">
+					<span class="spanClass">鸟巢加固:</span><input id="homeStrongerInput" style="width:15px;" type="checkbox"><span>自杀1:</span><input id="selfKillInput1" style="width:15px;" type="checkbox">
 					<br/>
-					<span class="spanClass">冻结敌人:</span><input id="freezeEnermyInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自杀2:</span><input id="selfKillInput2" style="width:15px;" type="checkbox">
+					<span class="spanClass">冻结敌人:</span><input id="freezeEnermyInput" style="width:15px;" type="checkbox"><span>自杀2:</span><input id="selfKillInput2" style="width:15px;" type="checkbox">
 					<br/>
-					<span class="spanClass">生成道具:</span><input id="createBonusInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自动攻击:</span><input id="autoSendTrackBombInput" style="width:15px;" type="checkbox">
+					<span class="spanClass">生成道具:</span><input id="createBonusInput" style="width:15px;" type="checkbox"><span>自动攻击:</span><input id="autoSendTrackBombInput" style="width:15px;" type="checkbox">
 					<hr>
 					
-					<span style="width:120px;font-size:12px;margin-left:5px;">敌人总数:</span><input id="totalEnermyNumInput" class="wheelInputClass" type="range" value=21 min=1 max=1000 step=1 onchange="changeTotalEnermyNum()">
+					<span>敌人总数:</span><input id="totalEnermyNumInput" class="wheelInputClass" type="range" value=21 min=1 max=1000 step=1 onchange="changeTotalEnermyNum()">
 					<span id="totalEnermyNum" >21</span>
 					<br/>
-					<span style="width:120px;font-size:12px;margin-left:5px;">活动敌人数:</span><input id="maxLiveEnermyInput" style="width:40px;" type="range" value=6 min=1 max=100 step=1 onchange="changeMaxLiveEnermyNum()">
+					<span>活动敌人数:</span><input id="maxLiveEnermyInput" style="width:40px;" type="range" value=6 min=1 max=100 step=1 onchange="changeMaxLiveEnermyNum()">
 					<span id="maxLiveEnermyNum">6</span>
 				</div>
 			</div>
