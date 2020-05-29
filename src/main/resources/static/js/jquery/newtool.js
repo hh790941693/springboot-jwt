@@ -65,6 +65,14 @@ Array.prototype.removeArrElement = function(obj){
 	}
 }
 
+Array.prototype.getKeyIndex = function(obj){
+    for (var i=0;i<this.length;i++){
+        if (obj === this[i]){
+            return i;
+        }
+    }
+}
+
 // 判断数组中是否包含某元素
 Array.prototype.isInArray = function(ele){
     for (var i=0;i<this.length;i++){

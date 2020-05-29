@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="common :: gameHeader">
 		<meta charset="utf-8">
-		<title>拼图游戏</title>
+		<title>象棋游戏</title>
 		<script type="text/javascript" th:src="@{/js/jquery/newtool.js}"></script>
 		<style type="text/css">
 			body{
@@ -1938,6 +1938,7 @@
             }
         }
 
+		writeKillLog("tips:鼠标左键:选中象棋;鼠标右键:移动象棋.");
         // 主函数
 		function animate(){
 			ctx.clearRect(0,0,canvas.width,canvas.height);
