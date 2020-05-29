@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head th:include="common :: gameHeader">
+<head th:include="common :: gameHeader"></head>
 		<meta charset="utf-8">
 		<title></title>
 		<style type="text/css">
@@ -18,10 +18,14 @@
 				margin-left:285px;
 				width:25px;
 			}
+			span{
+				width:60px;
+				font-size:13px;
+			}
 			.spanClass{
 				display:inline-block;
 				margin-left:5px;
-				font-size:12px;
+				font-size:13px;
 				width:60px;
 			}
 			.wheelInputClass{
@@ -40,13 +44,13 @@
 						你的浏览器不支持canvas标签
 					</canvas>
 				</div>
-				<div>
-					<input id="mobileControllerInput" value="手机用户点此处进行控制" style="width:160px;">
+				<div style="height:22px;">
+					<input id="mobileControllerInput" autocomplete="off" placeholder="手机用户点此处进行控制" style="width:160px;">
 				</div>
 				<div id="controllerDiv" style="width:auto;height:80px;display:none;padding-left:5px;">
 					<button id="startBtn" onclick="startGame()">开始</button>
-					<button id="pauseBtn" disabled onclick="pauseGame()">暂停</button>
-					<button id="showHideBtn">收起</button><br/>
+					<button id="pauseBtn" disabled="true" onclick="pauseGame()">暂停</button>
+					<button id="showHideBtn">收起</button></br>
 
 					<button id="selectPlayerBtn">玩家1</button>
 					<button id="restartBtn" onclick="restartGame()">重启</button>
@@ -73,7 +77,7 @@
 						&nbsp;&nbsp;&nbsp;↑或↓:&nbsp;选择游戏模式<br/>
 						&nbsp;&nbsp;&nbsp;p:&nbsp;暂停游戏<br/>
 				</div>
-				<div id="fingerDiv" style="width:auto;height:345px;display:none">
+				<div id="fingerDiv" style="width:auto;height:407px;display:none">
 					<span class="spanClass">选择关卡:</span><input id="chooseMissionInput" class="wheelInputClass" type="range" value=1 min=1 step=1 onchange="chooseMission()">
 					<span id="curMission" >1</span>
 					<span class="spanClass">生命条数:</span><input id="playerTotalLifeInput" class="wheelInputClass" type="range" value=3 min=1 max=999 step=1 onchange="changePlayerTotalLife()">
@@ -93,17 +97,17 @@
 					<span class="spanClass">炮弹数量:</span><input id="playerTotalTrackBombInput" class="wheelInputClass" type="range" value=3 min=1 max=90000 step=10 onchange="changePlayerTotalTrackBomb()">
 					<span id="playerTotalTrackBomb" >3</span>
 					<hr>
-					<span class="spanClass">鸟巢加固:</span><input id="homeStrongerInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自杀1:</span><input id="selfKillInput1" style="width:15px;" type="checkbox">
+					<span class="spanClass">鸟巢加固:</span><input id="homeStrongerInput" style="width:15px;" type="checkbox"><span>自杀1:</span><input id="selfKillInput1" style="width:15px;" type="checkbox">
 					<br/>
-					<span class="spanClass">冻结敌人:</span><input id="freezeEnermyInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自杀2:</span><input id="selfKillInput2" style="width:15px;" type="checkbox">
+					<span class="spanClass">冻结敌人:</span><input id="freezeEnermyInput" style="width:15px;" type="checkbox"><span>自杀2:</span><input id="selfKillInput2" style="width:15px;" type="checkbox">
 					<br/>
-					<span class="spanClass">生成道具:</span><input id="createBonusInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自动攻击:</span><input id="autoSendTrackBombInput" style="width:15px;" type="checkbox">
+					<span class="spanClass">生成道具:</span><input id="createBonusInput" style="width:15px;" type="checkbox"><span>自动攻击:</span><input id="autoSendTrackBombInput" style="width:15px;" type="checkbox">
 					<hr>
 					
-					<span style="width:120px;font-size:12px;margin-left:5px;">敌人总数:</span><input id="totalEnermyNumInput" class="wheelInputClass" type="range" value=21 min=1 max=1000 step=1 onchange="changeTotalEnermyNum()">
+					<span>敌人总数:</span><input id="totalEnermyNumInput" class="wheelInputClass" type="range" value=21 min=1 max=1000 step=1 onchange="changeTotalEnermyNum()">
 					<span id="totalEnermyNum" >21</span>
 					<br/>
-					<span style="width:120px;font-size:12px;margin-left:5px;">活动敌人数:</span><input id="maxLiveEnermyInput" style="width:40px;" type="range" value=6 min=1 max=100 step=1 onchange="changeMaxLiveEnermyNum()">
+					<span>活动敌人数:</span><input id="maxLiveEnermyInput" style="width:40px;" type="range" value=6 min=1 max=100 step=1 onchange="changeMaxLiveEnermyNum()">
 					<span id="maxLiveEnermyNum">6</span>
 				</div>
 			</div>
@@ -119,10 +123,6 @@
 		// 大地图每一个网格的宽高 单位:像素
 		var DIV_WIDTH  = 30;
 		var DIV_HEIGHT = 30;
-		
-		// 资源文件
-		var SPRITE_IMAGE = new Image();
-		SPRITE_IMAGE.src = rootUrl+"img/tank.PNG";
 		
 		// 右侧画布
 		var smallCanvas = document.getElementById("smallCanvas");
@@ -404,6 +404,11 @@
 
 		// 障碍物数组
 		var STICK_ARR = new Array();
+
+		// 资源文件
+		var SPRITE_IMAGE = new Image();
+		SPRITE_IMAGE.src=rootUrl+"img/tank.PNG";
+
 		//-------------------------------------------------障碍物------------------------------------------------
 		var BLOCK_SOIL = "block_soil",BLOCK_GOLD = "block_gold",BLOCK_RIVER="block_river",BLOCK_ICE = "block_ice";
 		var BLOCK_GRASS = "block_grass",BLOCK_HOME = "block_home",BLOCK_EXPLODE1 = "block_explode1",BLOCK_EXPLODE2="block_explode2",BLOCK_GAMEOVER = "block_gameover";
@@ -3137,13 +3142,13 @@
 				if (i%2 == 0){
 					x = START_X+SPEED_X1;
 					if (x > smallCanvas.width-30){
-						SPEED_X1 = -SPEED_X1;
+						TO_RIGHT=false;
 					}
+                    else if (x<0){
+                        TO_RIGHT=true;
+                    }
 				}else{
-					x = START_X-SPEED_X2;
-					if (x < 0){
-						SPEED_X2 = -SPEED_X2;
-					}
+					x = START_X+SPEED_X2;
 				}
 				var y = START_Y + i*INCREMENT;
 				smallCtx.drawImage(SPRITE_IMAGE,posArr[i][0],posArr[i][1],posArr[i][2],posArr[i][3],x,y,30,30);
@@ -3286,6 +3291,7 @@
 		var INCREMENT = 60;
 		var SPEED_X1 = 0;
 		var SPEED_X2 = 0;
+        var TO_RIGHT = true;
 		
 		// 主函数
 		function ainimate(){
@@ -3307,8 +3313,13 @@
 				// 绘制游戏首页文字及动画
 				drawGameIndexPage();
 				gameTipsTextExt.blink(1);
-				SPEED_X1++;
-				SPEED_X2++;
+                if (TO_RIGHT){
+                	SPEED_X1+=1;
+                    SPEED_X2-=1;
+                }else{
+                    SPEED_X1-=1;
+                    SPEED_X2+=1;
+                }
 			}
 
 			// 点击启动按钮时触发
@@ -3486,10 +3497,9 @@
 					$("#showHideBtn").text("展开");
 				});
 			}else{
+                $("#fingerDiv").slideUp();
 				$("#helpInfoDiv").slideToggle();
 			}
-			
-			$("#fingerDiv").hide();
 		});
 		
 		// 金手指--作弊器
@@ -3505,7 +3515,7 @@
 			}
 			$("#fingerDiv").slideToggle();
 		});
-        
+
 		// 选择显示指定玩家信息
 		$("#selectPlayerBtn").click(function(){
 			var text = $(this).text();

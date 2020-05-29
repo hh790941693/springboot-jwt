@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: gameHeader">
+<head th:include="common :: gameHeader"></head>
 		<meta charset="utf-8">
 		<title></title>
 		<style type="text/css">
 			body{
 				margin:0;
+                padding:0;
 			}
 
 			canvas{
@@ -18,10 +19,14 @@
 				margin-left:285px;
 				width:25px;
 			}
+			span{
+				width:60px;
+				font-size:13px;
+			}
 			.spanClass{
 				display:inline-block;
 				margin-left:5px;
-				font-size:12px;
+				font-size:13px;
 				width:60px;
 			}
 			.wheelInputClass{
@@ -41,13 +46,13 @@
 						你的浏览器不支持canvas标签
 					</canvas>
 				</div>
-				<div>
-					<input id="mobileControllerInput" value="手机用户点此处进行控制" style="width:160px;">
+				<div style="height:22px;">
+					<input id="mobileControllerInput" autocomplete="off" placeholder="手机用户点此处进行控制" style="width:160px;">
 				</div>
 				<div id="controllerDiv" style="width:auto;height:80px;display:none;padding-left:5px;">
 					<button id="startBtn" onclick="startGame()">开始</button>
-					<button id="pauseBtn" disabled onclick="pauseGame()">暂停</button>
-					<button id="showHideBtn">收起</button><br/>
+					<button id="pauseBtn" disabled="true" onclick="pauseGame()">暂停</button>
+					<button id="showHideBtn">收起</button></br>
 
 					<button id="selectPlayerBtn">玩家1</button>
 					<button id="restartBtn" onclick="restartGame()">重启</button>
@@ -73,8 +78,9 @@
 						&nbsp;&nbsp;&nbsp;鼠标滚轮:&nbsp;选择关卡<br/>
 						&nbsp;&nbsp;&nbsp;↑或↓:&nbsp;选择游戏模式<br/>
 						&nbsp;&nbsp;&nbsp;p:&nbsp;暂停游戏<br/>
+                        &nbsp;&nbsp;&nbsp;建造者模式:鼠标左键切换障碍物,鼠标右键粘贴已选择的障碍物
 				</div>
-				<div id="fingerDiv" style="width:auto;height:345px;display:none">
+				<div id="fingerDiv" style="width:auto;height:407px;display:none;border-top:2px solid green;">
 					<span class="spanClass">选择关卡:</span><input id="chooseMissionInput" class="wheelInputClass" type="range" value=1 min=1 step=1 onchange="chooseMission()">
 					<span id="curMission" >1</span>
 					<span class="spanClass">生命条数:</span><input id="playerTotalLifeInput" class="wheelInputClass" type="range" value=3 min=1 max=999 step=1 onchange="changePlayerTotalLife()">
@@ -94,17 +100,17 @@
 					<span class="spanClass">炮弹数量:</span><input id="playerTotalTrackBombInput" class="wheelInputClass" type="range" value=3 min=1 max=90000 step=10 onchange="changePlayerTotalTrackBomb()">
 					<span id="playerTotalTrackBomb" >3</span>
 					<hr>
-					<span class="spanClass">鸟巢加固:</span><input id="homeStrongerInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自杀1:</span><input id="selfKillInput1" style="width:15px;" type="checkbox">
+					<span>鸟巢加固:</span><input id="homeStrongerInput" style="width:15px;" type="checkbox"><span>自杀1:</span><input id="selfKillInput1" style="width:15px;" type="checkbox">
 					<br/>
-					<span class="spanClass">冻结敌人:</span><input id="freezeEnermyInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自杀2:</span><input id="selfKillInput2" style="width:15px;" type="checkbox">
+					<span>冻结敌人:</span><input id="freezeEnermyInput" style="width:15px;" type="checkbox"><span>自杀2:</span><input id="selfKillInput2" style="width:15px;" type="checkbox">
 					<br/>
-					<span class="spanClass">生成道具:</span><input id="createBonusInput" style="width:15px;" type="checkbox"><span style="width:40px;font-size:12px;">自动攻击:</span><input id="autoSendTrackBombInput" style="width:15px;" type="checkbox">
+					<span>生成道具:</span><input id="createBonusInput" style="width:15px;" type="checkbox"><span>自动攻击:</span><input id="autoSendTrackBombInput" style="width:15px;" type="checkbox">
 					<hr>
 					
-					<span style="width:120px;font-size:12px;margin-left:5px;">敌人总数:</span><input id="totalEnermyNumInput" class="wheelInputClass" type="range" value=21 min=1 max=1000 step=1 onchange="changeTotalEnermyNum()">
+					<span>敌人总数:</span><input id="totalEnermyNumInput" class="wheelInputClass" type="range" value=21 min=1 max=1000 step=1 onchange="changeTotalEnermyNum()">
 					<span id="totalEnermyNum" >21</span>
 					<br/>
-					<span style="width:120px;font-size:12px;margin-left:5px;">活动敌人数:</span><input id="maxLiveEnermyInput" style="width:40px;" type="range" value=6 min=1 max=100 step=1 onchange="changeMaxLiveEnermyNum()">
+					<span>活动敌人数:</span><input id="maxLiveEnermyInput" style="width:40px;" type="range" value=6 min=1 max=100 step=1 onchange="changeMaxLiveEnermyNum()">
 					<span id="maxLiveEnermyNum">6</span>
 				</div>
 			</div>
@@ -120,10 +126,6 @@
 		// 大地图每一个网格的宽高 单位:像素
 		var DIV_WIDTH  = 30;
 		var DIV_HEIGHT = 30;
-		
-		// 资源文件
-		var SPRITE_IMAGE = new Image();
-		SPRITE_IMAGE.src = rootUrl+"img/tank.PNG";
 		
 		// 右侧画布
 		var smallCanvas = document.getElementById("smallCanvas");
@@ -175,20 +177,24 @@
 		
 		// 当前关卡
 		var MISSION = 1;
+        
+        // 计时器
+        var H = M = S = MS = 0;
+        var CLOCK_TIMER = undefined;
 
-		// 道路方向:左转、直行、右转
+		// 敌军坦克出生位置
 		var LEFT="LEFT", CENTER="CENTER", RIGHT="RIGHT";
 
-		// 左右上下方向
+		// 坦克运动方向:左右上下
 		var D_LEFT="D_LEFT",D_RIGHT="D_RIGHT",D_UP="D_UP",D_DOWN="D_DOWN";
 		
-		// 游戏模式
+		// 游戏模式:单人、双人、建造模式
 		var SINGLE_PLAYER = 1,MULTI_PLAYER = 2, CONSTRUCTION = 3;
 		
-		// 玩家模式 1:单人模式  2:双人模式
+		// 玩家模式 1:单人模式  2:双人模式  3:建造模式
 		var GAME_MODE = SINGLE_PLAYER;
 		
-		// 鼠标左键单击次数
+		// 鼠标左键单击次数(在建造者模式中用来控制绘制不同的block)
 		var LEFT_MOUSE_CLICK_COUNT = -1;
 
 		//---------------------------------------------敌方坦克-----------------------------------------------------------
@@ -412,6 +418,10 @@
 		// 障碍物数组
 		var STICK_ARR = new Array();
 
+		// 资源文件
+		var SPRITE_IMAGE = new Image();
+		SPRITE_IMAGE.src = rootUrl+"img/tank.PNG";
+
 		//-------------------------------------------------障碍物------------------------------------------------
 		var BLOCK_SOIL = "block_soil",BLOCK_GOLD = "block_gold",BLOCK_RIVER="block_river",BLOCK_ICE = "block_ice";
 		var BLOCK_GRASS = "block_grass",BLOCK_HOME = "block_home",BLOCK_EXPLODE1 = "block_explode1",BLOCK_EXPLODE2="block_explode2",BLOCK_GAMEOVER = "block_gameover";
@@ -547,6 +557,10 @@
         
         // 鼠标左键单击事件
         function leftMousedownListener(event){
+			if (IS_GAME_START || IS_GAME_OVER || IS_GAME_PAUSE){
+				//如果游戏已开始 忽略左键点击事件
+				return;
+			}
             var key_state = (event.type == "mousedown" && event.button==0) ? true:false;
             if (key_state){
 				LEFT_MOUSE_CLICK_COUNT++;
@@ -562,7 +576,6 @@
 				var col = parseInt(mouseX/DIV_HEIGHT)+1;
 				
 				if (LEFT_MOUSE_CLICK_COUNT == 5){
-					var temp = MISSION_CFG["construct"].getObjKeysAsArr();
 					for (var i=0;i<MISSION_CFG["construct"].getObjKeysAsArr().length;i++){
 						var blockName = MISSION_CFG["construct"].getObjKeysAsArr()[i];
 						if (isHasArr(MISSION_CFG["construct"][blockName], new Array([row,row,col,col]))){
@@ -575,7 +588,6 @@
 				}else{
 					var block_name = BLOCK_OBJ.getObjKeysAsArr()[LEFT_MOUSE_CLICK_COUNT];
 					// 绘图前,先清除该位置的障碍物
-					var temp = MISSION_CFG["construct"].getObjKeysAsArr();
 					for (var i=0;i<MISSION_CFG["construct"].getObjKeysAsArr().length;i++){
 						var blockName = MISSION_CFG["construct"].getObjKeysAsArr()[i];
 						if (isHasArr(MISSION_CFG["construct"][blockName], new Array([row,row,col,col]))){
@@ -598,6 +610,11 @@
 		
         // 鼠标右键单击事件
         function rightMousedownListener(event){
+			if (IS_GAME_START || IS_GAME_OVER || IS_GAME_PAUSE){
+				//如果游戏已开始 忽略左键点击事件
+				return;
+			}
+           
             var key_state = (event.type == "mousedown" && event.button==2) ? true:false;
             if (key_state){
 				event.cancelBubble = false;
@@ -605,15 +622,20 @@
 				if (LEFT_MOUSE_CLICK_COUNT == -1){
 					return;
 				}
-				var box = canvas.getBoundingClientRect();
-				var mouseX = parseInt(event.clientX-box.left);
-				var mouseY = parseInt(event.clientY-box.top);
+                var canvasObj = document.getElementById("canvas");
+                var offleft = canvasObj.offsetLeft;
+                var offtop = canvasObj.offsetTop;
+                
+                var clientX = event.clientX;
+                var clientY = event.clientY;
+                
+                var mouseX = clientX-offleft;
+                var mouseY = clientY-offtop;
 
 				var row = parseInt(mouseY/DIV_WIDTH)+1;
 				var col = parseInt(mouseX/DIV_HEIGHT)+1;
 				
 				if (LEFT_MOUSE_CLICK_COUNT == 5){
-					var temp = MISSION_CFG["construct"].getObjKeysAsArr();
 					for (var i=0;i<MISSION_CFG["construct"].getObjKeysAsArr().length;i++){
 						var blockName = MISSION_CFG["construct"].getObjKeysAsArr()[i];
 						if (isHasArr(MISSION_CFG["construct"][blockName], new Array([row,row,col,col]))){
@@ -627,7 +649,6 @@
 					var block_name = BLOCK_OBJ.getObjKeysAsArr()[LEFT_MOUSE_CLICK_COUNT];
 
 					// 绘图前,先清除该位置的障碍物
-					var temp = MISSION_CFG["construct"].getObjKeysAsArr();
 					for (var i=0;i<MISSION_CFG["construct"].getObjKeysAsArr().length;i++){
 						var blockName = MISSION_CFG["construct"].getObjKeysAsArr()[i];
 						if (isHasArr(MISSION_CFG["construct"][blockName], new Array([row,row,col,col]))){
@@ -2964,8 +2985,8 @@
 			// 剩余坦克数
 			var remainEnermyTankNum = TOTAL_ENERY_NUM-ENERY_DEAD_NUM;
 			var i = 0;
-			for (var y=SMALL_DIV_HEIGHT-15;y<SMALL_DIV_HEIGHT+SMALL_DIV_HEIGHT*7;y+=SMALL_DIV_HEIGHT+4){
-				for (var x=SMALL_DIV_WIDTH-2;x<SMALL_DIV_WIDTH+SMALL_DIV_WIDTH*3;x+=SMALL_DIV_WIDTH+4){
+			for (var y=SMALL_DIV_HEIGHT-15;y<SMALL_DIV_HEIGHT+SMALL_DIV_HEIGHT*6;y+=SMALL_DIV_HEIGHT+3){
+				for (var x=SMALL_DIV_WIDTH-2;x<SMALL_DIV_WIDTH+SMALL_DIV_WIDTH*3;x+=SMALL_DIV_WIDTH+3){
 					if (i < remainEnermyTankNum){
 						//smallCtx.drawImage(SPRITE_IMAGE,110,227,15,15,x,y,SMALL_DIV_WIDTH,SMALL_DIV_HEIGHT);
 						smallCtx.drawImage(SPRITE_IMAGE,232,237,9,8,x,y,SMALL_DIV_WIDTH,SMALL_DIV_HEIGHT);
@@ -2975,12 +2996,15 @@
 			}
 			
 			// 玩家生命
-			smallCtx.drawImage(SPRITE_IMAGE,232,348,18,9,10,263,30,20);	
-			new Text(smallCtx,44,280,PLAYER1_TOTAL_LIFE,0,0,"rgb(0,255,0)",18).noMove();
+			smallCtx.drawImage(SPRITE_IMAGE,232,348,18,9,20,223,30,20);	
+			new Text(smallCtx,54,240,PLAYER1_TOTAL_LIFE,0,0,"rgb(0,255,0)",18).noMove();
 			
-			smallCtx.drawImage(SPRITE_IMAGE,232,372,18,9,85,263,30,20);
-			new Text(smallCtx,117,280,PLAYER2_TOTAL_LIFE,0,0,"rgb(0,255,0)",18).noMove();
+			smallCtx.drawImage(SPRITE_IMAGE,232,372,18,9,85,223,35,20);
+			new Text(smallCtx,123,240,PLAYER2_TOTAL_LIFE,0,0,"rgb(0,255,0)",18).noMove();
 			
+            //计时器
+            new Text(smallCtx,10,280,toDub(H)+":"+toDub(M)+":"+toDub(S)+"."+toDubms(MS),0,0,"rgb(255,255,255)",23).noMove();
+            
 			// 关卡数
 			new Text(smallCtx,40,320,"第"+MISSION+"关",0,0,"rgb(255,255,0)",23).noMove();
 			
@@ -3045,11 +3069,12 @@
 						nearestEnermy = tempDis;
 					}
 				}
-				new Text(smallCtx,startX, startY+dy*7, "最近敌人:"+parseInt(nearestEnermy), 0, 0, fontColor, fontSize).noMove();
-				new Text(smallCtx,startX, startY+dy*8, "最远敌人:"+parseInt(farthestEnermy),0, 0, fontColor, fontSize).noMove();
+                new Text(smallCtx,startX, startY+dy*7, "剩余敌人:"+remainEnermyTankNum,0, 0, fontColor, fontSize).noMove();
+				new Text(smallCtx,startX, startY+dy*8, "最近敌人:"+parseInt(nearestEnermy), 0, 0, fontColor, fontSize).noMove();
+				new Text(smallCtx,startX, startY+dy*9, "最远敌人:"+parseInt(farthestEnermy),0, 0, fontColor, fontSize).noMove();
 
 				// 游戏状态
-				new Text(smallCtx,startX, startY+dy*9, "游戏状态:",     0, 0, fontColor, fontSize).noMove();
+				new Text(smallCtx,startX, startY+dy*10, "游戏状态:",     0, 0, fontColor, fontSize).noMove();
 				smallCtx.beginPath();
 				var fillColor;
 				if (IS_GAME_START){
@@ -3060,7 +3085,7 @@
 					fillColor = "rgb(255,0,0)";
 				}
 				smallCtx.fillStyle = fillColor;
-				smallCtx.fillRect(85,startY+dy*9-14,14,14);
+				smallCtx.fillRect(85,startY+dy*10-14,14,14);
 				smallCtx.fill();
 				smallCtx.closePath();
 				
@@ -3134,13 +3159,13 @@
 				if (i%2 == 0){
 					x = START_X+SPEED_X1;
 					if (x > smallCanvas.width-30){
-						SPEED_X1 = -SPEED_X1;
+						TO_RIGHT=false;
 					}
+                    else if (x<0){
+                        TO_RIGHT=true;
+                    }
 				}else{
-					x = START_X-SPEED_X2;
-					if (x < 0){
-						SPEED_X2 = -SPEED_X2;
-					}
+					x = START_X+SPEED_X2;
 				}
 				var y = START_Y + i*INCREMENT;
 				smallCtx.drawImage(SPRITE_IMAGE,posArr[i][0],posArr[i][1],posArr[i][2],posArr[i][3],x,y,30,30);
@@ -3179,7 +3204,7 @@
 			}
 			
 			if (canPush){
-				TIPS_ARR.push(new Tips(smallCtx, 3, 570, text, level, 180, color, size));
+				TIPS_ARR.push(new Tips(smallCtx, 3, 575, text, level, 180, color, size));
 			}
 		}
 		
@@ -3229,8 +3254,9 @@
                 STARTBTN_PRESSED_CYCLE = G_CYCLE;
             }
 			
+            CLOCK_TIMER=setInterval(clockTimer,10);
+            
 			IS_SHOW_GRID = false;
-        
             IS_GAME_START = true;
             IS_GAME_PAUSE = false;
             $("#startBtn").attr("disabled",true);
@@ -3281,10 +3307,11 @@
         
 		// 给游戏首页用的变量
 		var START_X = smallCanvas.width/2-15;
-		var START_Y = 0;
+		var START_Y = 10;
 		var INCREMENT = 60;
 		var SPEED_X1 = 0;
 		var SPEED_X2 = 0;
+        var TO_RIGHT = true;
 		
 		// 主函数
 		function ainimate(){
@@ -3306,8 +3333,13 @@
 				// 绘制游戏首页文字及动画
 				drawGameIndexPage();
 				gameTipsTextExt.blink(1);
-				SPEED_X1++;
-				SPEED_X2++;
+                if (TO_RIGHT){
+                	SPEED_X1+=1;
+                    SPEED_X2-=1;
+                }else{
+                    SPEED_X1-=1;
+                    SPEED_X2+=1;
+                }
 			}
 
             if (IS_CONSTRUCT){
@@ -3327,6 +3359,7 @@
 					if (G_CYCLE - STARTBTN_PRESSED_CYCLE <= 80){
 						// 游戏开始动画
 						drawMissionLoading();
+                        drawRightCanvas();
 						return;
 					}else{
 						// 首次开始游戏时,加载关卡
@@ -3506,10 +3539,9 @@
 					$("#showHideBtn").text("展开");
 				});
 			}else{
+                $("#fingerDiv").slideUp();
 				$("#helpInfoDiv").slideToggle();
 			}
-			
-			$("#fingerDiv").hide();
 		});
 		
 		// 金手指--作弊器
@@ -3708,44 +3740,40 @@
 			document.getElementById("maxLiveEnermyNum").innerHTML=curNum;
 			MAX_ENERY_LIVE_NUM = curNum;
 		}
-		
-		// 判断一个数组中是否包含另外一个子数组
-		function isHasArr(mainArr,paraArr){
-			var isInArr = false;
-			for (var i=0;i<mainArr.length;i++){
-				var cnt = 0;
-				for (j=0;j<mainArr[i].length;j++){
-					if (mainArr[i][j] == paraArr[0][j]){
-						cnt++;
-					}
-				}
-				if (cnt == paraArr[0].length){
-					break;
-				}
+
+		// 计时器
+		function clockTimer(){   //定义计时函数
+			MS=MS+10;         //毫秒
+			if(MS>=1000){
+				MS=0;
+				S=S+1;         //秒
 			}
-			if (cnt == paraArr[0].length){
-				isInArr = true;
+			if(S>=60){
+				S=0;
+				M=M+1;        //分钟
 			}
-			
-			return isInArr;
+			if(M>=60){
+				M=0;
+				H=H+1;        //小时
+			}
 		}
-		
-		function getExistArrIndx(mainArr,paraArr){
-			var index = undefined;
-			for (var i=0;i<mainArr.length;i++){
-				var cnt = 0;
-				for (j=0;j<mainArr[i].length;j++){
-					if (mainArr[i][j] == paraArr[0][j]){
-						cnt++;
-					}
-				}
-				if (cnt == paraArr[0].length){
-					index = i;
-					break;
-				}
+		function toDub(n){  //补0操作
+			if(n<10){
+				return "0"+n;
 			}
-			
-			return index;
+			else {
+				return ""+n;
+			}
+		}
+
+		function toDubms(n){  //给毫秒补0操作
+			if(n<10){
+				return "00"+n;
+			}else if (n>=10&n<=99){
+				return "0"+n;
+			}else{
+				return n;
+			}
 		}
 	</script>
 </html>
