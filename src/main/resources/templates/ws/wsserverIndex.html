@@ -2,44 +2,43 @@
 <head th:include="common :: header"></head>
 	<title>WebSocket服务端</title>
 
-<style type="text/css">
-	#mainDiv{
-		width:1318px;
-		height:610px;
-		margin:1px auto;
-		position:relative;
-	}
+	<style type="text/css">
+		#mainDiv{
+			width:1318px;
+			height:610px;
+			margin:1px auto;
+		}
 
-	#qrDiv{
-		position: fixed;
-		right: 5px;
-	    top: 40px;
-	    width: 180px;
-	    height: 180px;
-	}
-	#qrcodeImg{
-		width: 160px;
-	    height: 160px;
-	}
+		#qrDiv{
+			position: fixed;
+			right: 5px;
+			top: 40px;
+			width: 180px;
+			height: 180px;
+		}
+		#qrcodeImg{
+			width: 160px;
+			height: 160px;
+		}
 
-        #musicIframeDiv {
-            position: absolute;
-            width:175px;
-            height:100px;
-            background: black;
-            color: rgb(255%,255%,255%);
+		#musicIframeDiv {
+			position: absolute;
+			width:175px;
+			height:100px;
+			background: black;
+			color: rgb(255%,255%,255%);
 			display: none;
-        }
-        #musicIframeHeader {
-            background: #ddd;
-            cursor: move;
-            font-size:10px;
-        }
+		}
+		#musicIframeHeader {
+			background: #ddd;
+			cursor: move;
+			font-size:10px;
+		}
 
-	.divShadow{
-		box-shadow: grey 0 0 10px;
-	}
-</style>
+		.divShadow{
+			box-shadow: grey 0 0 10px;
+		}
+	</style>
 </head>
 <body>
     <!--头部-->
