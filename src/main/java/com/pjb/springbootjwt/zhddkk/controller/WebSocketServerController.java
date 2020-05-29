@@ -14,18 +14,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.bean.JsonResult;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
-import com.pjb.springbootjwt.zhddkk.entity.*;
+
+import com.pjb.springbootjwt.zhddkk.domain.*;
+import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
-import com.pjb.springbootjwt.zhddkk.service.WsOperLogService;
-import com.pjb.springbootjwt.zhddkk.service.WsService;
+import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import org.apache.commons.lang3.StringUtils;
@@ -52,9 +55,6 @@ public class WebSocketServerController extends AdminBaseController
 	private static final Log logger = LogFactory.getLog(WebSocketServerController.class);
 	
 	private static Map<String,String> configMap = WsInterceptor.getConfigMap();
-	
-	@Autowired
-	private WsService wsService;
 
 	@Autowired
 	private WsOperLogService wsOperLogService;
@@ -68,6 +68,21 @@ public class WebSocketServerController extends AdminBaseController
 	@Autowired
 	private UploadConfig uploadConfig;
 
+	@Autowired
+	private WsUsersService wsUsersService;
+
+	@Autowired
+	private WsAdsService wsAdsService;
+
+	@Autowired
+	private WsCommonService wsCommonService;
+
+	@Autowired
+	private WsOperationLogService wsOperationLogService;
+
+	@Autowired
+	private WsChatlogService wsChatlogService;
+
 	/**
 	 * 让某用户下线
 	 * @param user
@@ -79,10 +94,8 @@ public class WebSocketServerController extends AdminBaseController
 	public String offlineUser(@RequestParam("user") String user)
 	{
 		Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-		for (Entry<String,ZhddWebSocket> entry : socketMap.entrySet())
-		{
-			if (entry.getKey().equals(user))
-			{
+		for (Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
+			if (entry.getKey().equals(user)) {
 				try {
 					entry.getValue().getSession().close();
 					ZhddWebSocket.getClients().remove(user);
@@ -94,12 +107,13 @@ public class WebSocketServerController extends AdminBaseController
 			}
 		}
 		
-		WsUser updateWu2 = new WsUser();
-		updateWu2.setName(user);
-		updateWu2.setState("0");
-		wsService.updateWsUser(updateWu2);
-
-		return "success";
+		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+		if (null != wsUsersDO) {
+			wsUsersDO.setState("0");
+			wsUsersService.updateById(wsUsersDO);
+			return "success";
+		}
+		return "failed";
 	}
 	
 	/**
@@ -112,11 +126,13 @@ public class WebSocketServerController extends AdminBaseController
 	@ResponseBody
 	public String enableUser(@RequestParam("user") String user,@RequestParam("enable") String enable)
 	{
-		WsUser wu = new WsUser();
-		wu.setName(user);
-		wu.setEnable(enable);
-		wsService.updateWsUser(wu);
-		return "success";
+		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+		if (null != wsUsersDO) {
+			wsUsersDO.setEnable(enable);
+			wsUsersService.updateById(wsUsersDO);
+			return "success";
+		}
+		return "failed";
 	}
 	
 	/**
@@ -129,11 +145,13 @@ public class WebSocketServerController extends AdminBaseController
 	@ResponseBody
 	public String enableSpeak(@RequestParam("user") String user,@RequestParam("speak") String speak)
 	{
-		WsUser wu = new WsUser();
-		wu.setName(user);
-		wu.setSpeak(speak);
-		wsService.updateWsUser(wu);
-		return "success";
+		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+		if (null != wsUsersDO) {
+			wsUsersDO.setSpeak(speak);
+			wsUsersService.updateById(wsUsersDO);
+			return "success";
+		}
+		return "failed";
 	}
 	
 	/**
@@ -194,13 +212,12 @@ public class WebSocketServerController extends AdminBaseController
 	public String chatLogManage(Model model)
 	{
 		logger.debug("访问wsserverChartLog.page");
-		List<WsUser> userInfoList = wsService.queryWsUser(new WsUser());
-		List<String> userList = new ArrayList<String>();
-		for (WsUser wu : userInfoList)
-		{
-			userList.add(wu.getName());
+		List<WsUsersDO> userList = wsUsersService.selectList(null);
+		List<String> list = new ArrayList<String>();
+		for (WsUsersDO wu : userList) {
+			list.add(wu.getName());
 		}
-		model.addAttribute("users", JSONArray.fromObject(userList));
+		model.addAttribute("users", JSONArray.fromObject(list));
 		return "ws/wsserverChartLog";
 	}
 	
@@ -222,12 +239,12 @@ public class WebSocketServerController extends AdminBaseController
 		}
 		model.addAttribute("modules", JSONArray.fromObject(moduleList));
 		
-		List<WsUser> userInfoList = wsService.queryWsUser(new WsUser());
-		List<String> userList = new ArrayList<String>();
-		for (WsUser wu : userInfoList){
-			userList.add(wu.getName());
+		List<WsUsersDO> userList = wsUsersService.selectList(null);
+		List<String> list = new ArrayList<String>();
+		for (WsUsersDO wu : userList){
+			list.add(wu.getName());
 		}
-		model.addAttribute("users", JSONArray.fromObject(userList));
+		model.addAttribute("users", JSONArray.fromObject(list));
 		return "ws/wsserverOperationLog";
 	}
 	
@@ -248,13 +265,13 @@ public class WebSocketServerController extends AdminBaseController
 			moduleList.add(me.getValue());
 		}
 		model.addAttribute("modules", JSONArray.fromObject(moduleList));
-		
-		List<WsUser> userInfoList = wsService.queryWsUser(new WsUser());
-		List<String> userList = new ArrayList<String>();
-		for (WsUser wu : userInfoList){
-			userList.add(wu.getName());
+
+		List<WsUsersDO> userList = wsUsersService.selectList(null);
+		List<String> list = new ArrayList<String>();
+		for (WsUsersDO wu : userList){
+			list.add(wu.getName());
 		}
-		model.addAttribute("users", JSONArray.fromObject(userList));
+		model.addAttribute("users", JSONArray.fromObject(list));
 		return "ws/wsserverOperationLogByBootstrap";
 	}
 	
@@ -268,7 +285,6 @@ public class WebSocketServerController extends AdminBaseController
 	{
 		logger.debug("访问wsserverChartLogMonitor.page");
 		model.addAttribute("webserverip", configMap.get("webserver.ip"));
-		//model.addAttribute("webserverport", configMap.get("webserver.port"));
 		int serverPort = request.getServerPort();
 		model.addAttribute("webserverport", serverPort);
 		return "ws/wsserverChartLogMonitor";
@@ -286,20 +302,13 @@ public class WebSocketServerController extends AdminBaseController
 		logger.debug("访问wsserverCommon.page,type="+type);
 		model.addAttribute("type", type);
 		String title="";
-		if (type.equals("mgc"))
-		{
+		if (type.equals("mgc")) {
 			title="敏感词";
-		}
-		else if (type.equals("zh"))
-		{
+		}else if (type.equals("zh")){
 			title="脏话";
-		}
-		else if (type.equals("cyy"))
-		{
+		}else if (type.equals("cyy")){
 			title="常用语";
-		}
-		else if (type.equals("zcwt"))
-		{
+		}else if (type.equals("zcwt")){
 			title="注册问题";
 		}
 		model.addAttribute("title", title);
@@ -370,11 +379,11 @@ public class WebSocketServerController extends AdminBaseController
 			}
 			
 			// 插入广告记录
-			WsAds wa = new WsAds();
-			wa.setTitle(adTitle);
-			wa.setContent(adContent);
-			wa.setReceiveList(receiveList.toString());
-			wsService.insertAds(wa);
+			WsAdsDO wsAdsDO = new WsAdsDO();
+			wsAdsDO.setTitle(adTitle);
+			wsAdsDO.setContent(adContent);
+			wsAdsDO.setReceiveList(receiveList.toString());
+			res = wsAdsService.insert(wsAdsDO);
 		}
 		if (res) {
 			return "success";
@@ -393,7 +402,7 @@ public class WebSocketServerController extends AdminBaseController
 	@ResponseBody
 	public Object getAdsListByPage(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage)
 	{
-		int totalCount = wsService.queryAdsCount(new WsAds());
+		int totalCount = wsAdsService.selectCount(null);
 		int totalPage = 0;
 		if (totalCount % numPerPage != 0) {
 			totalPage = totalCount/numPerPage + 1;
@@ -408,8 +417,7 @@ public class WebSocketServerController extends AdminBaseController
 		}else{
 			start = (curPage-1) * numPerPage;
 		}
-		List<WsAds> adslist = wsService.queryAdsByPage(start, limit);
-		
+		List<WsAdsDO> adslist = wsAdsService.selectPage(new Page<>(start, limit)).getRecords();
 		PageResponseEntity rqe = new PageResponseEntity();
 		rqe.setTotalCount(totalCount);
 		rqe.setTotalPage(totalPage);
@@ -426,11 +434,11 @@ public class WebSocketServerController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.USER_MANAGE,subModule="",describe="查询用户列表")
 	@RequestMapping(value="getOnlineUsersByPage.json",method=RequestMethod.POST,produces="application/json")
 	@ResponseBody
-	public Object getOnlineUsersByPage(@RequestBody WsUser params) {
-		int totalCount = wsService.queryWsUserCount(params);
+	public Object getOnlineUsersByPage(@RequestBody WsUsersDO params) {
+		int totalCount = wsUsersService.selectCount(null);
 		int totalPage = 0;
-		int numPerPage = params.getNumPerPage();
-		int curPage = params.getCurPage();
+		int numPerPage = 15;
+		int curPage = 1;
 		if (totalCount % numPerPage != 0){
 			totalPage = totalCount/numPerPage + 1;
 		}else{
@@ -444,14 +452,11 @@ public class WebSocketServerController extends AdminBaseController
 		}else{
 			start = (curPage-1) * numPerPage;
 		}
-		params.setStart(start);
-		params.setLimit(limit);
-		List<WsUser> userlist = wsService.queryWsUserByPage(params);
-		
+		List<WsUsersDO> userList = wsUsersService.selectPage(new Page<>(start, limit)).getRecords();
 		PageResponseEntity rqe = new PageResponseEntity();
 		rqe.setTotalCount(totalCount);
 		rqe.setTotalPage(totalPage);
-		rqe.setList(userlist);
+		rqe.setList(userList);
 		rqe.setParameter1(ZhddWebSocket.getClients().size());
 		
 		return JsonUtil.javaobject2Jsonobject(rqe);
@@ -465,9 +470,16 @@ public class WebSocketServerController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.CHAT_HISTORY_MANAGE,subModule="",describe="用户聊天记录列表")
 	@RequestMapping(value = "getChatLogByPage.json", method = RequestMethod.POST,produces="application/json")
 	@ResponseBody
-	public Object getChatLogByPage(@RequestBody WsChatlog params)
+	public Object getChatLogByPage(@RequestBody WsChatlogDO params)
 	{
-		return wsService.queryHistoryChatlogByPage(params);
+		Page<WsChatlogDO> page = wsChatlogService.selectPage(new Page<>(1,15), null);
+		int totalCount = wsChatlogService.selectCount(null);
+		PageResponseEntity rqe = new PageResponseEntity();
+		rqe.setTotalCount(totalCount);
+		rqe.setTotalPage(10);
+		rqe.setList(page.getRecords());
+
+		return rqe;
 	}
 	
 	/**
@@ -477,9 +489,16 @@ public class WebSocketServerController extends AdminBaseController
 	 */
 	@RequestMapping(value = "getOperationLogByPage.json", method = RequestMethod.POST,produces="application/json")
 	@ResponseBody
-	public Object getOperationLogByPage(@RequestBody WsOperationLog params)
+	public Object getOperationLogByPage(@RequestBody WsOperationLogDO params)
 	{
-		return wsService.queryOperationLogByPage(params);
+		Page<WsOperationLogDO> page = wsOperationLogService.selectPage(new Page<>(1, 15), null);
+		int totalCount = wsOperationLogService.selectCount(null);
+		PageResponseEntity rqe = new PageResponseEntity();
+		rqe.setTotalCount(totalCount);
+		rqe.setTotalPage(10);
+		rqe.setList(page.getRecords());
+
+		return rqe;
 	}
 	
 	/**
@@ -489,9 +508,13 @@ public class WebSocketServerController extends AdminBaseController
 	 */
 	@RequestMapping(value = "getOperationLogByPageByBootstrap.json", method = RequestMethod.POST)
 	@ResponseBody
-	public Object getOperationLogByPageByBootstrap(WsOperationLog params)
+	public Object getOperationLogByPageByBootstrap(WsOperationLogDO params)
 	{
-		JsonResult jr = wsService.queryOperationLogByPageByBootStrap(params);
+		Page<WsOperationLogDO> page = wsOperationLogService.selectPage(new Page<>(1, 15), null);
+		int totalCount = wsOperationLogService.selectCount(null);
+		JsonResult jr = new JsonResult();
+		jr.setTotal(totalCount);
+		jr.setRows(page.getRecords());
 		return JsonUtil.javaobject2Jsonobject(jr);
 	}
 
@@ -515,35 +538,40 @@ public class WebSocketServerController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.CONFIGURATION,subModule="",describe="常用配置列表")
 	@RequestMapping(value = "getCommonByPage.json", method = RequestMethod.POST,produces="application/json")
 	@ResponseBody
-	public Object getCommonByPage(@RequestBody WsCommon params)
+	public Object getCommonByPage(@RequestBody WsCommonDO params)
 	{
-		return wsService.queryCommonByPage(params);
+		Page<WsCommonDO> page = wsCommonService.selectPage(new Page<WsCommonDO>(1,15), new EntityWrapper<WsCommonDO>().eq("type", params.getType()));
+		List<WsCommonDO> wsCommonList = new ArrayList<>();
+		if (null != page){
+			wsCommonList = page.getRecords();
+		}
+		return wsCommonList;
 	}
 	
 	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.CONFIGURATION,subModule="",describe="添加配置")
 	@RequestMapping(value = "addCommonItem.do", method = RequestMethod.POST,produces="application/json")
 	@ResponseBody
-	public String addCommonItem(@RequestBody WsCommon params)
+	public String addCommonItem(@RequestBody WsCommonDO params)
 	{
-		wsService.insertCommon(params);
+		wsCommonService.insert(params);
 		return "success";
 	}
 	
 	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.CONFIGURATION,subModule="",describe="删除配置")
 	@RequestMapping(value = "deleteCommonItem.do", method = RequestMethod.POST,produces="application/json")
 	@ResponseBody
-	public String deleteCommonItem(@RequestBody WsCommon params)
+	public String deleteCommonItem(@RequestBody WsCommonDO params)
 	{
-		wsService.deleteCommon(params);
+		wsCommonService.deleteById(params.getId());
 		return "success";
 	}
 	
 	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.CONFIGURATION,subModule="",describe="更新配置")
 	@RequestMapping(value = "updateCommonItem.do", method = RequestMethod.POST,produces="application/json")
 	@ResponseBody
-	public String updateCommonItem(@RequestBody WsCommon params)
+	public String updateCommonItem(@RequestBody WsCommonDO params)
 	{
-		wsService.updateCommon(params);
+		wsCommonService.updateById(params);
 		return "success";
 	}
 	
@@ -606,9 +634,9 @@ public class WebSocketServerController extends AdminBaseController
 	@RequestMapping(value = "exportUser.do", method = RequestMethod.GET)
 	public void exportUser(HttpServletResponse response){
 		logger.debug("开始导出用户信息");
-		List<WsUser> list = wsService.queryWsUser(new WsUser());
+		List<WsUsersDO> list = wsUsersService.selectList(null);
 		if (null != list && list.size()>0) {
-			for (WsUser wu : list) {
+			for (WsUsersDO wu : list) {
 				String password = wu.getPassword();
 				if (StringUtils.isNotEmpty(password)) {
 					String passwordDecode = SecurityAESUtil.decryptAES(password, CommonConstants.AES_PASSWORD);
@@ -618,7 +646,7 @@ public class WebSocketServerController extends AdminBaseController
 			
 			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 			String fileName = "wsUser".concat("_").concat(time).concat(".xls");
-			ExcelUtil.exportExcel(list, "用户信息", "用户", WsUser.class, fileName, response);
+			ExcelUtil.exportExcel(list, "用户信息", "用户", WsUsersDO.class, fileName, response);
 		}else {
 			logger.debug("无需导出用户信息");
 		}
@@ -634,17 +662,17 @@ public class WebSocketServerController extends AdminBaseController
 	@RequestMapping(value = "exportOperateLog.do", method = RequestMethod.GET)
 	public void exportOperateLog(String userName, String operModule, HttpServletResponse response){
 		logger.debug("开始导出操作日志");
-		WsOperationLog wol = new WsOperationLog();
+		Wrapper<WsOperationLogDO> wrapper = new EntityWrapper<>();
 		if (StringUtils.isNotEmpty(userName)) {
-			wol.setUserName(userName);
+			wrapper.eq("user_name", userName);
 		}
 		if (StringUtils.isNotEmpty(operModule)) {
-			wol.setOperModule(operModule);
+			wrapper.eq("oper_module", operModule);
 		}
-		
-		List<WsOperationLog> list = wsService.queryOperationLogList(wol);
+
+		List<WsOperationLogDO> list = wsOperationLogService.selectList(wrapper);
 		if (null != list && list.size()>0) {
-			for (WsOperationLog woltmp : list) {
+			for (WsOperationLogDO woltmp : list) {
 				if (woltmp.getOperResult().length()>32000) {
 					woltmp.setOperResult(woltmp.getOperResult().substring(0, 32000));
 				}
@@ -652,7 +680,7 @@ public class WebSocketServerController extends AdminBaseController
 			
 			String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 			String fileName = "wsOperationLog".concat("_").concat(time).concat(".xls");
-			ExcelUtil.exportExcel(list, "操作日志", "操作日志", WsOperationLog.class, fileName, response);
+			ExcelUtil.exportExcel(list, "操作日志", "操作日志", WsOperationLogDO.class, fileName, response);
 		}else {
 			logger.debug("无需导出操作日志");
 		}

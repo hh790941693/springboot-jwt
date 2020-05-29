@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Deprecated
 public class WsServiceImpl implements WsService {
 	
 	private static final Log logger = LogFactory.getLog(WsServiceImpl.class);

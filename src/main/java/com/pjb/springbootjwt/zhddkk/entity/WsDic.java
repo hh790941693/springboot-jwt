@@ -1,5 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.entity;
 
+@Deprecated
 public class WsDic 
 {
 	private String type;

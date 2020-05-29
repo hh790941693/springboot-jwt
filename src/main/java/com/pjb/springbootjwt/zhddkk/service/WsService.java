@@ -7,6 +7,7 @@ import com.pjb.springbootjwt.zhddkk.entity.*;
 import java.util.List;
 
 
+@Deprecated
 public interface WsService 
 {
 	public List<WsUser> queryWsUser(WsUser param);

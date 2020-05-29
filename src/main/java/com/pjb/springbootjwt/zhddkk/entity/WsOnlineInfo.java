@@ -6,6 +6,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class WsOnlineInfo 
 {
 	// 在线人数

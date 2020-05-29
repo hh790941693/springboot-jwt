@@ -1,6 +1,5 @@
 package com.pjb.springbootjwt.zhddkk.entity;
 
-
 import java.util.Date;
 
 /**
@@ -9,6 +8,7 @@ import java.util.Date;
  * @author Administrator
  *
  */
+@Deprecated
 public class WsFriendsApply extends Page {
 
 	private Integer id;

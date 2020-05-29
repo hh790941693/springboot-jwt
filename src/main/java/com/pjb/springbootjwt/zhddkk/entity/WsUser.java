@@ -10,6 +10,7 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
  * @author Administrator
  *
  */
+@Deprecated
 public class WsUser extends Page
 {
 	public WsUser() {}

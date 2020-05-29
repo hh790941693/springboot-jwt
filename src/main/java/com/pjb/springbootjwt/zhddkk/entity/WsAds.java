@@ -8,6 +8,7 @@ import java.util.Date;
  * @author hch
  *
  */
+@Deprecated
 public class WsAds {
 	private Integer id;
 	private String title;

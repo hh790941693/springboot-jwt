@@ -1,6 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.entity;
 
-
+@Deprecated
 public class WsCommon extends Page
 {
 	private String id;

@@ -8,6 +8,7 @@ import java.util.Date;
  * @author Administrator
  *
  */
+@Deprecated
 public class WsUserProfile {
 	
 	//主键

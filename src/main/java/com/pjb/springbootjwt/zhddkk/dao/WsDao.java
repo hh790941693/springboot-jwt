@@ -9,6 +9,7 @@ import java.util.List;
 
 
 @Repository
+@Deprecated
 public interface WsDao
 {
 	public List<WsUser> queryWsUser(WsUser param);

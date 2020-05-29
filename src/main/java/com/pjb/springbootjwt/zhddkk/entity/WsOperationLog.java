@@ -10,6 +10,7 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
  * @author Administrator
  *
  */
+@Deprecated
 public class WsOperationLog extends Page {
 	private Integer id;
 	private Integer userId;            //用户id

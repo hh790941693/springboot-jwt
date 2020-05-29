@@ -1,9 +1,9 @@
 package com.pjb.springbootjwt.zhddkk.entity;
 
-
 import java.util.Date;
 import java.util.List;
 
+@Deprecated
 public class WsCircle extends Page {
 	private Integer id;
 	private String userName;

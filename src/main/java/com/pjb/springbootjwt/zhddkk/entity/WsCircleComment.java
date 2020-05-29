@@ -2,8 +2,8 @@ package com.pjb.springbootjwt.zhddkk.entity;
 
 import java.util.Date;
 
+@Deprecated
 public class WsCircleComment {
-
 	private Integer id;
 	private Integer circleId;
 	private String userName;

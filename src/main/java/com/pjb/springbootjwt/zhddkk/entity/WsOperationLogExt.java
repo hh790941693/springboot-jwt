@@ -17,7 +17,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
  * @author huangchaohui
  * @since 2019-02-22
  */
-@TableName("ws_operation_log")
+@Deprecated
 public class WsOperationLogExt extends Model<WsOperationLogExt> {
 
     private static final long serialVersionUID = 1L;
