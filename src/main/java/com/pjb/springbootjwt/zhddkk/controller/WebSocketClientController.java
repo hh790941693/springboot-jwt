@@ -655,7 +655,6 @@ public class WebSocketClientController extends AdminBaseController
 	 * 
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.CHAT,subModule="",describe="获取在线人数信息")
 	@RequestMapping(value = "getOnlineInfo.json")
 	@ResponseBody
 	public Object getOnlineInfo(@RequestParam(value="user",required=true)String user) {
