@@ -1,5 +1,6 @@
 $(function(){
     validateRule();
+    initUpload();
 });
 
 //保存数据
@@ -37,6 +38,33 @@ $.validator.setDefaults({
         save();
     }
 });
+
+function initUpload() {
+    //上传文件url
+    layui.upload.render({
+        elem: '#imageBtn',
+        url: uploadUrl,
+        size: 10240,//单位为KB
+        accept: 'images',
+        data: {
+            "folder": "feedback"
+        },
+        before: function () {
+            layer.load();
+        },
+        done: function (r) {
+            layer.closeAll('loading');
+            if (r.code === "1") {
+                $("#picUrl").val(r.data);
+                $("#imageImg").attr("src", r.data);
+                $("#imageDiv").show();
+            }
+        },
+        error: function () {
+            layer.closeAll('loading');
+        }
+    });
+}
 
 //表单验证
 function validateRule() {

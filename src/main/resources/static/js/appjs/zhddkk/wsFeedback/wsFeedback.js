@@ -67,9 +67,9 @@ function load() {
                 formatter:function (value) {
                     var res = "";
                     if (value == "1"){
-                        res = "建议";
+                        res = "<span class='label label-primary'>建议</span>";
                     }else if (value == "2"){
-                        res = "问题";
+                        res = "<span class='label label-warning'>问题</span>";
                     }
 
                     return res;
@@ -85,7 +85,16 @@ function load() {
 			},
 						{
 				field : 'picUrl',
-				title : '图片url'
+				title : '图片url',
+                formatter : function (value) {
+                    var result = "";
+                    if (value != "" && value != null) {
+                        result += "<div style='text-align: center;'>";
+                        result += "<img  onclick=\"$.ws.gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
+                        result += "</div>";
+                    }
+                    return result;
+                }
 			},
 						{
 				field : 'replyContent',
@@ -110,9 +119,9 @@ function load() {
                 formatter :function (value) {
                     var res = "";
                     if (value == "1"){
-                        res = "待答复";
+                        res = "<span class='label label-success'>待答复</span>";
                     }else if (value == "2"){
-                        res = "已答复";
+                        res = "<span class='label label-primary'>已答复</span>";
                     }
 
                     return res;
