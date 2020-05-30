@@ -55,6 +55,10 @@ public class WsUsersDO implements Serializable {
     @Excel(name = "禁言状态",orderNum = "7",width=10,replace={"禁言_0","正常_1"})
     @ApiModelProperty(value = "speak",name = "是否禁言  0:禁言 1：没有禁言")
     private String speak;
+
+    //积分数量
+    @ApiModelProperty(value = "coinNum",name = "积分数量")
+    private Integer coinNum;
     //问题1
     @Excel(name = "问题1",orderNum = "8",width=25)
     @ApiModelProperty(value = "question1",name = "问题1")
@@ -266,5 +270,13 @@ public class WsUsersDO implements Serializable {
 
     public void setHeadImage(String headImage) {
         this.headImage = headImage;
+    }
+
+    public Integer getCoinNum() {
+        return coinNum;
+    }
+
+    public void setCoinNum(Integer coinNum) {
+        this.coinNum = coinNum;
     }
 }

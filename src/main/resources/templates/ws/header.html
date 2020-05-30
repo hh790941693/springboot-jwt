@@ -15,6 +15,11 @@
 		margin-left:20px;
 		font-size:15px;
 	}
+
+    label{
+        margin:0;
+        padding:0;
+    }
 </style>
 </head>
 <body>
@@ -22,8 +27,18 @@
 	<div id="headerDiv" align="center">
 		<img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
 		<div style="float:left;">
-			<img id='myImg' alt=""  width="50" height="50">
-			<label style="font-size: 20px;">你好:</label><label id="curUser" style="color:blue;font-size:28px;"></label>
+            <div style="float:left;">
+			    <img id='myImg' alt=""  width="50" height="50">
+            </div>
+            <div style="float:left;">
+                <div style="height:65%;">
+			         <label style="font-size: 19px;">你好:</label><label id="curUser" style="color:blue;font-size:23px;"></label>
+                </div>
+                <div style="height:34%;">
+                    <label>积分:</label><label id="coinNum">0</label>&nbsp;
+                    <label>在线:</label><label id="onlineNum">0</label>
+                </div>
+            </div>
 		</div>
 
 		<!--头部标题-->
@@ -106,6 +121,27 @@
 				}
 			});
 		}
+
+		//定时刷新在线人数和积分数量
+        getOnlineInfo();
+		setInterval(getOnlineInfo, 15000);
+        function getOnlineInfo() {
+            $.ajax({
+                type: 'GET',
+                url: 'getOnlineInfo.json',
+                data: {"user": parent.s_user},
+                //dataType: 'json',
+                success: function (result) {
+                    var jsonObj = result;
+                    var currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
+                    var coinNum = currentUserOnlineInfo.coinNum;
+                    var onlineNum = jsonObj.onlineUserList.length;
+
+                    $("#coinNum").text(coinNum);
+                    $("#onlineNum").text(onlineNum);
+                }
+            });
+        }
 
 		//定时切换header标题
 		setInterval(function () {
