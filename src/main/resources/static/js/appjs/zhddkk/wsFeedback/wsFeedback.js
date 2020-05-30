@@ -58,7 +58,8 @@ function load() {
 			},
 						{
 				field : 'userName',
-				title : '用户名称'
+				title : '用户名称',
+                visible :false
 			},
 						{
 				field : 'type',
