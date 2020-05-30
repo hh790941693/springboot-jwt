@@ -1,3 +1,5 @@
+var user=$('#user').val();
+console.log("user:"+user);
 $(function(){
     validateRule();
     initUpload();
@@ -47,7 +49,8 @@ function initUpload() {
         size: 10240,//单位为KB
         accept: 'images',
         data: {
-            "folder": "feedback"
+            "folder": "feedback",
+            "user":user
         },
         before: function () {
             layer.load();

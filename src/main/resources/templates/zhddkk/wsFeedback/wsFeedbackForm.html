@@ -10,6 +10,7 @@
 					<div class="ibox-content">
                         <form class="form-horizontal m-t" id="form">
 							<!-- 主键 -->
+                            <input type="hidden" id="user" th:value="${wsFeedback.userName}">
                             <input type="hidden" id="id" name="id" th:value="${wsFeedback.id}">
 																													<div class="form-group">
 								<label class="col-sm-3 control-label" for="userId"><span style="color:red">*</span>&nbsp;用户id：</label>
