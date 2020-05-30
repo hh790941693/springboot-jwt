@@ -25,7 +25,9 @@ import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.SystemInfoBean;
 import com.pjb.springbootjwt.zhddkk.domain.*;
-import com.pjb.springbootjwt.zhddkk.entity.*;
+
+import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
+import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.OsUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
@@ -735,10 +737,11 @@ public class WebSocketClientController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.FRIENDS,subModule="",describe="显示所有用户信息")
 	@RequestMapping(value="showAllUser.json",method=RequestMethod.POST,produces="application/json")
 	@ResponseBody
-	public Object getOnlineUsersByPage(@RequestBody WsUser params) {
+	@Deprecated
+	public Object getOnlineUsersByPage(@RequestBody WsUsersDO params) {
         int totalCount = wsUsersService.selectCount(new EntityWrapper<WsUsersDO>().ne("name", "admin"));
-		int numPerPage = params.getNumPerPage();
-		int curPage = params.getCurPage();
+		int numPerPage = 15;
+		int curPage = 1;
 		String curUser = params.getName();
 		int totalPage = 1;
 		if (totalCount % numPerPage != 0){
@@ -771,12 +774,9 @@ public class WebSocketClientController extends AdminBaseController
 					wu.setIsFriend(3);//已是好友
 				}else {
 					// 0:不是  1:申请中 2:被拒绝 3:申请成功
-					WsFriendsApply wfa = new WsFriendsApply();
+					WsFriendsApplyDO wfa = new WsFriendsApplyDO();
 					wfa.setFromName(curUser);
 					wfa.setToName(wu.getName());
-					wfa.setStart(0);
-					wfa.setLimit(10);
-
 					List<WsFriendsApplyDO> applyList = new ArrayList<>();
 					Page<WsFriendsApplyDO> wsFriendsApplyDOPage = wsFriendsApplyService.selectPage(new Page<>(curPage, numPerPage),
                         new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUser)
@@ -924,9 +924,6 @@ public class WebSocketClientController extends AdminBaseController
 		String toUserName = querySpecityUserId(toUserId).getName();
 		
 		logger.info(fromUserName+"申请添加"+toUserName+"为好友");
-		WsFriends wf = new WsFriends();
-		wf.setUname(fromUserName);
-		wf.setFname(toUserName);
 		int existCount = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", fromUserName)
 				.eq("fname", toUserName));
 		if (existCount<=0) {
@@ -1265,18 +1262,12 @@ public class WebSocketClientController extends AdminBaseController
 			start = (curPage-1) * numPerPage;
 		}
 
-		WsFriends wf = new WsFriends();
-		wf.setUname(curUser);
-		wf.setStart(start);
-		wf.setLimit(limit);
-
         List<WsFriendsDO> userlist = new ArrayList<>();
 		Page<WsFriendsDO> friendsPage = wsFriendsService.selectPage(new Page<>(curPage, numPerPage),
                     new EntityWrapper<WsFriendsDO>().eq("uname", curUser).orderBy("create_time",false));
 		if (null != friendsPage){
             userlist = friendsPage.getRecords();
         }
-		//List<WsFriends> userlist = wsService.queryMyFriendsList(wf);
 		PageResponseEntity rqe = new PageResponseEntity();
 		rqe.setTotalCount(totalCount);
 		rqe.setTotalPage(totalPage);
@@ -1497,7 +1488,7 @@ public class WebSocketClientController extends AdminBaseController
 	 * 跳转到好友列表页面
 	 */
 	@GetMapping("myFriends.page")
-	String wsFriends(Model model, String user){
+	String myFriendsPage(Model model, String user){
 		model.addAttribute("user", user);
 		return "ws/myFriends";
 	}

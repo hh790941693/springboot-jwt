@@ -2,44 +2,43 @@
 <head th:include="common :: header"></head>
 	<title>WebSocket服务端</title>
 
-<style type="text/css">
-	#mainDiv{
-		width:1318px;
-		height:610px;
-		margin:1px auto;
-		position:relative;
-	}
+	<style type="text/css">
+		#mainDiv{
+			width:1318px;
+			height:610px;
+			margin:1px auto;
+		}
 
-	#qrDiv{
-		position: fixed;
-		right: 5px;
-	    top: 40px;
-	    width: 180px;
-	    height: 180px;
-	}
-	#qrcodeImg{
-		width: 160px;
-	    height: 160px;
-	}
+		#qrDiv{
+			position: fixed;
+			right: 5px;
+			top: 40px;
+			width: 180px;
+			height: 180px;
+		}
+		#qrcodeImg{
+			width: 160px;
+			height: 160px;
+		}
 
-    #musicIframeDiv {
-    	position: absolute;
-    	width:175px;
-    	height:100px;
-   	 	background: black;
-    	color: white;
-		display: none;
-    }
-    #musicIframeHeader {
-    	background: #ddd;
-    	cursor: move;
-    	font-size:10px;
-    }
+		#musicIframeDiv {
+			position: absolute;
+			width:178px;
+			height:97px;
+			background: black;
+			color: rgb(255%,255%,255%);
+			display: none;
+		}
+		#musicIframeHeader {
+			background: #ddd;
+			cursor: move;
+			font-size:10px;
+		}
 
-	.divShadow{
-		box-shadow: grey 0 0 10px;
-	}
-</style>
+		.divShadow{
+			box-shadow: grey 0 0 10px;
+		}
+	</style>
 </head>
 <body>
     <!--头部-->
@@ -57,18 +56,18 @@
 		<input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
 
 		<!--左侧导航栏-->
-		<div id="leftNaviDiv" style="width:178px;height:100%;float:left;border:2px solid green;">
+		<div id="leftNaviDiv" style="width:14%;height:100%;float:left;border:2px solid green;">
 			<iframe id="leftNaviIframePage" src="serverLeftNavi.page" width="100%" height="100%"></iframe>
 		</div>
 
-		<!--右侧子页面窗口-->
-		<div id="rightIframeDiv" align="center" style="width:1138px;height:100%;float:left;border:2px solid green;margin-left:2px;">
+		<!--右侧子页面-->
+		<div id="rightIframeDiv" align="center" style="width:86%;height:100%;float:left;border:2px solid green;">
 			<iframe id="iframePage" width="100%" height="100%"></iframe>
 		</div>
 	</div>
 
 	<!--底部-->
-	<div id="footerPage" class="divShadow" align="center" style="width:1318px;height:52px;border:2px solid green;margin: 0 auto;">
+	<div id="footerDiv" class="divShadow" align="center" style="width:1318px;height:52px;border:2px solid green;margin: 0 auto;">
 		<iframe id="footerIframePage" src="footer.page" width="100%" height="100%"></iframe>
 	</div>
 
@@ -89,6 +88,21 @@
 			<button id='resetMusicIframeDivPosBtn' style='display:inline-block;width:30%;color:black;'>复位</button>
 		</div>
 		<iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
+	</div>
+
+	<!--右下角 广告页面(隐藏) -->
+	<div id="adDiv" style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display: none;">
+		<div id="adBtn" style="style:1px solid red;background-color:#5082b9;padding-left:290px">
+			<button id="closeAd" class='btn btn-sm btn-primary' onclick="closeAd()">关&nbsp;&nbsp;闭</button>
+		</div>
+		<div id="adTitle" style="height:30px;text-align:center;font-size:20px;">
+		</div>
+
+		<div id="adContent" style="height:auto;text-indent:2em;">
+		</div>
+
+		<div id="adTime" style="height:15px;font-size: 16px;font-weight: bold;position: absolute;right:2px;bottom: 3px;">
+		</div>
 	</div>
 
     <div th:include="common::footer"></div>
@@ -119,9 +133,10 @@
         }
 
         var curPageid = "/zhddkk/wsUsers/wsUsersForAdmin";
-        showPage(curPageid);
+		showPage(curPageid);
         function showPage(pageId){
 			curPageid = pageId;
+			var url = pageId + "?user="+s_user;
             if (pageId.indexOf("gameIndex.page") != -1){
                 window.location.href=pageId;
             }else if (pageId.indexOf("canvasIndex.page") != -1){
@@ -129,7 +144,7 @@
             }else if (pageId.indexOf("configurationLi") != -1){
                 $("#configurationDiv").slideDown();
             }else{
-                $("#iframePage").attr("src",pageId);
+                $("#iframePage").attr("src",url);
             }
         }
 
@@ -138,28 +153,32 @@
 
         // 连接状态
         var connectStatus = "0"
+		//重试连接服务器次数
         var checkCount = 1;
+        //最大连接次数
         var checkMaxCount = 20;
-        var checkTimer;
+        //连接服务器定时器
+        var checkTimer = undefined;
 
         //所有聊天记录
         var chatRecord="";
         //未读消息条数
         var unreadCount=0;
 
-		function updateChatMsg(msg,color,fontSize){
-			var newMsg = "<p style='color:"+color+";font-size:"+fontSize+"px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] "+msg+"</p>";
+        function updateChatMsg(msg,color,fontSize){
+        	var newMsg = "<p style='color:"+color+";font-size:"+fontSize+"px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] "+msg+"</p>";
 			var msgFromServerObj = getIframeElement("msgFromServer");
 			var textArea = $(msgFromServerObj).append(newMsg);
 			chatRecord = chatRecord + newMsg;
 			showTips(msg, color);
-		}
+        }
 
-
+        //连接服务器
         function checkConnection() {
             if (connectStatus == "0") {
                 if (checkCount >= checkMaxCount) {
                     if (checkTimer != null && checkTimer != "" && checkTimer != undefined) {
+                    	//达到最大连接数后关闭定时器
                         clearInterval(checkTimer);
                     }
                 }
@@ -171,17 +190,21 @@
                 }
             }
         }
+
+        //定时检查连接
         checkTimer = setInterval(function(){
             checkConnection();
         },1000);
 
-
+        //检查连接
         checkConnection();
+        //登录服务器
         loginServer();
 
-        function loginServer(){
-            if (webSocket == null){
-                webSocket = new WebSocket("ws://"+s_webserverip+":"+s_webserverport+"/zhddWebSocket/" + s_user+"/"+s_pass+"/"+s_userAgent);
+        function loginServer() {
+            if (webSocket == null) {
+                var socketUrl = "ws://"+s_webserverip+":"+s_webserverport+"/zhddWebSocket/" + s_user+"/"+s_pass+"/"+s_userAgent;
+                webSocket = new WebSocket(socketUrl);
                 webSocket.onerror = function(event){
                     onError(event);
                 };
@@ -197,23 +220,27 @@
             }
         }
 
+        //连接成功
         function onOpen(event){
             connectStatus = "1";
 			updateChatMsg("已连上服务器!", "green", 10);
         }
 
+        //连接失败
         function onError(event){
 			updateChatMsg("连接服务器异常!", "red", 10);
             connectStatus = "0";
             webSocket = null;
         }
 
+        //连接关闭
         function OnClose(event){
 			updateChatMsg("客户端已断开!", "red", 10);
             connectStatus = "0";
             stop();
         }
 
+        //接收消息
         function onMessage(event){
 			var jsonObj = JSON.parse(event.data);
 			var curTime = jsonObj.curTime;
@@ -224,29 +251,29 @@
 			var msg = jsonObj.msg;
 
             var showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+msg;
-            var defaultCss = "color:red;font-size:10px;line-height:10px;"
-            if (typeId == 1){
+            var defaultCss = "color:red;font-size:10px;line-height:14px;"
+            if (typeId == 1) {
                 //系统消息
-                defaultCss = "color:red;font-size:10px;line-height:10px;";
+                defaultCss = "color:red;font-size:10px;line-height:14px;";
                 showStr="["+curTime+"] ["+typeDesc+"] " +msg;
             }else if (typeId == 2){
                 //在线消息
-                defaultCss = "color:green;font-size:10px;line-height:10px;";
+                defaultCss = "color:green;font-size:10px;line-height:14px;";
                 showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] " +msg;
             }else if (typeId == 3){
                 //离线消息
-                defaultCss = "color:grey;font-size:10px;line-height:10px;";
+                defaultCss = "color:grey;font-size:10px;line-height:14px;";
                 showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] " +msg;
             }else if (typeId == 4){
                 //广告消息
-                defaultCss = "color:blue;font-size:10px;line-height:10px;";
+                defaultCss = "color:blue;font-size:10px;line-height:14px;";
                 var title = msg.split("title:")[1].split(";")[0];
                 var content = msg.split("content:")[1];
                 showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+"广告标题:"+title+" 广告内容:"+content;
             }else if (msgTo==s_user){
-                defaultCss = "color:green;font-size:10px;line-height:10px;";
+                defaultCss = "color:green;font-size:10px;line-height:14px;";
             }else if (msgFrom==s_user){
-                defaultCss = "color:blue;font-size:10px;line-height:10px;";
+                defaultCss = "color:blue;font-size:10px;line-height:14px;";
             }
 
             if (curPageid != "wsserverChartLogMonitor.page"){
@@ -257,7 +284,6 @@
 				$("#leftNaviIframePage").contents().find("#unreadCountSpan").text(unreadCount);
             }else{
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
-                //htmlData += "<button onclick='enableSpeak("+msgFrom+",0)' style='display:inline-block;'>禁言</button>";
                 var msgFromServerObj = getIframeElement("msgFromServer");
                 chatRecord = chatRecord + htmlData;
                 var textArea = $(msgFromServerObj).append(htmlData);
@@ -270,6 +296,7 @@
 
                 $("#adTitle").html(title);
                 $("#adContent").html(content);
+                $("#adTime").html(curTime);
                 $("#adDiv").slideDown(500);
             }
         }
@@ -286,6 +313,11 @@
                 webSocket = null;
                 connectStatus = "0";
             }
+        }
+
+        //关闭广告窗
+        function closeAd(){
+            $("#adDiv").slideUp(500);
         }
 
         function refrshMusic(){
@@ -323,6 +355,17 @@
             });
         }
 
+        //窗口大小变化事件
+        $(window).resize(function () {
+            adjustMusicWindowPosition();
+        });
+
+        //footer内的提示语
+		function showTips(msg,color){
+			$("#footerIframePage").contents().find("#statusTips").css("color",color);
+			$("#footerIframePage").contents().find("#statusTips").html(msg);
+		}
+
 		//扫码登录
 		function showQRCode(){
 			var imgSrc = $("#qrcodeImg").attr("src");
@@ -356,17 +399,6 @@
 				content: '/zhddkk/wsUsers/setPersonalInfo.page?user='+s_user
 			});
 		};
-
-        //窗口大小变化事件
-        $(window).resize(function () {
-            adjustMusicWindowPosition();
-        });
-
-        //footer内的提示语
-		function showTips(msg,color){
-			$("#footerIframePage").contents().find("#statusTips").css("color",color);
-			$("#footerIframePage").contents().find("#statusTips").html(msg);
-		}
 
 		//点击音乐播放器图标显示/隐藏简易音乐播放器
         var musicPicRightPos = (window.innerWidth-$("#mainDiv").width())/2;

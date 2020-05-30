@@ -69,7 +69,6 @@
 
 	<div id="checkDiv" style="width:200px;height:360px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
 		<div id="checkContentDiv" style="width:100%;height:auto;border:1px solid grey;background-color: #0C0C0C;padding: 5px 0 5px 10px;">
-
 		</div>
 	</div>
 
@@ -158,20 +157,6 @@
             });
         }
 
-        // //登录成功
-        // function toSuceess(user,pass){
-        //     $.ajax({
-        //         type: 'GET',
-        //         url: rootUrl+'ws/wslogin.do',
-        //         data:{user:user,pass:pass},
-        //         //dataType: 'json',
-        //         async:true,
-        //         success: function(result) {
-        //             console.log("登陆成功");
-        //         }
-        //     });
-        // }
-
         //手机登录
         $("#phonelogin").click(function(){
             var imgSrc = $("#qrImg").attr("src");
@@ -218,7 +203,6 @@
         var textArr = new Array();
 		function checkEnvironment(){
         	console.log("触发登录前的点击事件");
-
             $.ajax({
                 type: 'GET',
                 url: rootUrl+'ws/querySystemInfo',
@@ -239,7 +223,7 @@
                             "正在检查nginx进程状态.....", nginxFlag,
                             "正在检查共享目录权限.....",shareDir,
                             "正在检查其他事项....","检查完毕",
-                            "登录中.........","");
+                            "登录中.........","","","");
                     }
                 }
             });
@@ -260,10 +244,9 @@
 					}else{
 						text += "<span style='height:20px;color:white;display:inline-block;margin-bottom: 5px;'>" + textArr[i] + "</span><br/>";
 						$("#checkContentDiv").html(text);
-
 					}
 					i++;
-				}, 500);
+				}, 200);
 			}
         	return isCheckFinish;
 		}

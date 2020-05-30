@@ -30,7 +30,7 @@ public class WsFileAccessCheckJob {
     @Autowired
     private WebSocketConfig webSocketConfig;
 
-    @Scheduled(cron="*/59 * * * * ?")
+    @Scheduled(cron="0 */1 * * * ?")
     public void cronJob(){
         logger.info("定时检查ws_file文件的访问性");
         List<WsFileDO> wsFileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().isNotNull("url"));

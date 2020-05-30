@@ -12,7 +12,6 @@ import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsApplyDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
-import com.pjb.springbootjwt.zhddkk.entity.WsFriendsApply;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsApplyService;
@@ -106,12 +105,6 @@ public class WsUsersController extends AdminBaseController {
 					wu.setIsFriend(3);//已是好友
 				} else {
 					// 0:不是  1:申请中 2:被拒绝 3:申请成功
-					WsFriendsApply wfa = new WsFriendsApply();
-					wfa.setFromName(curUser);
-					wfa.setToName(wu.getName());
-					wfa.setStart(0);
-					wfa.setLimit(10);
-
 					List<WsFriendsApplyDO> applyList = wsFriendsApplyService.selectList(new EntityWrapper<WsFriendsApplyDO>()
 							.eq("from_name", curUser).eq("to_name", wu.getName()));
 					if (null == applyList || applyList.size() == 0) {

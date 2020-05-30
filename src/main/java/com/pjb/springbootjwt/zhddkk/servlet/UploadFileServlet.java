@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
-import com.pjb.springbootjwt.zhddkk.dao.WsDao;
-import com.pjb.springbootjwt.zhddkk.entity.WsFile;
+import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
+import com.pjb.springbootjwt.zhddkk.service.WsFileService;
 import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -30,15 +30,14 @@ public class UploadFileServlet extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
 	
-	private WsDao wsDao;
+	private WsFileService wsFileService;
 	
 	public void init(ServletConfig config) throws ServletException {
 
 		super.init(config);
 
 		WebApplicationContext  applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
-
-		wsDao = (WsDao)applicationContext.getBean(WsDao.class);
+			wsFileService = (WsFileService)applicationContext.getBean(WsFileService.class);
 		}
 	
 	@Override
@@ -149,7 +148,7 @@ public class UploadFileServlet extends HttpServlet{
 						message = filename + "上传成功";
 						
 						if (user != null && finalSavaPath != null) {
-							WsFile wf = new WsFile();
+							WsFileDO wf = new WsFileDO();
 							wf.setUser(user);
 							wf.setFilename(filename);
 							wf.setDiskPath(finalSavaPath);
@@ -161,7 +160,7 @@ public class UploadFileServlet extends HttpServlet{
 							
 							String trackLength = MusicParserUtil.getMusicTrackTime(f.getAbsolutePath());
 							wf.setTrackLength(trackLength);
-							wsDao.insertMusic(wf);
+							wsFileService.insert(wf);
 						}
 					}
 				}catch (Exception e){
