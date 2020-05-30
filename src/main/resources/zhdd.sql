@@ -570,6 +570,30 @@ INSERT INTO `ws_user_profile` (`id`, `user_id`, `user_name`, `real_name`, `img`,
 	(16, 37, 'shabi', '我是傻逼', 'http://192.168.31.106:8101/headImg/fj2.jpg', 'fuck', 25, 2, '女', '17777777777', '韩国江原道', 3, '金融', 4, '旅游', '2020-05-21 15:06:23');
 /*!40000 ALTER TABLE `ws_user_profile` ENABLE KEYS */;
 
+
+
+CREATE TABLE `ws_feedback` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) NULL DEFAULT NULL COMMENT '用户id',
+	`user_name` VARCHAR(50) NULL DEFAULT '' COMMENT '用户名称',
+	`type` VARCHAR(2) NULL DEFAULT '1' COMMENT '反馈类型 1:建议 2:问题',
+	`title` VARCHAR(100) NULL DEFAULT '' COMMENT '标题',
+	`content` VARCHAR(200) NULL DEFAULT NULL COMMENT '问题描述',
+	`pic_url` VARCHAR(300) NULL DEFAULT '' COMMENT '图片url',
+	`reply_content` VARCHAR(200) NULL DEFAULT '' COMMENT '答复内容',
+	`reply_time` DATETIME NULL DEFAULT NULL COMMENT '答复时间',
+	`create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	`status` TINYINT(2) NOT NULL DEFAULT '1' COMMENT '状态 0:已删除 1:待答复 2:已答复',
+	PRIMARY KEY (`id`)
+)
+COMMENT='问题反馈'
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=1
+;
+
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
