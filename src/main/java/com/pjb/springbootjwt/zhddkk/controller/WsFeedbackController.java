@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import org.apache.commons.lang.StringUtils;
@@ -77,6 +78,9 @@ public class WsFeedbackController extends AdminBaseController {
         if (StringUtils.isNotBlank(wsFeedbackDTO.getUserName())){
             wrapper.eq("user_name", wsFeedbackDTO.getUserName());
         }
+        if (null != wsFeedbackDTO.getStatus()){
+            wrapper.eq("status", wsFeedbackDTO.getStatus());
+        }
         wrapper.ne("status", "0").orderBy("create_time",false);
         Page<WsFeedbackDO> page = wsFeedbackService.selectPage(getPage(WsFeedbackDO.class), wrapper);
         return Result.ok(page);
@@ -90,6 +94,12 @@ public class WsFeedbackController extends AdminBaseController {
     //@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
     public Result<Page<WsFeedbackDO>> adminFeedbackList(WsFeedbackDO wsFeedbackDTO){
         Wrapper<WsFeedbackDO> wrapper = new EntityWrapper<WsFeedbackDO>();
+        if (StringUtils.isNotBlank(wsFeedbackDTO.getUserName())){
+            wrapper.like("user_name", wsFeedbackDTO.getUserName(), SqlLike.DEFAULT);
+        }
+        if (null != wsFeedbackDTO.getStatus()){
+            wrapper.eq("status", wsFeedbackDTO.getStatus());
+        }
         wrapper.ne("status", "0").orderBy("status").orderBy("create_time",false);
         Page<WsFeedbackDO> page = wsFeedbackService.selectPage(getPage(WsFeedbackDO.class), wrapper);
         return Result.ok(page);
