@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 
@@ -45,12 +46,15 @@ public class WsFeedbackDO implements Serializable {
     @ApiModelProperty(value = "replyContent",name = "答复内容")
     private String replyContent;
     //答复时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @ApiModelProperty(value = "replyTime",name = "答复时间")
     private Date replyTime;
     //创建时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @ApiModelProperty(value = "createTime",name = "创建时间")
     private Date createTime;
     //更新时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @ApiModelProperty(value = "updateTime",name = "更新时间")
     private Date updateTime;
     //状态 0:已删除 1:待答复 2:已答复

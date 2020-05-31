@@ -401,6 +401,19 @@
 			});
 		};
 
+		//签到
+        function sign(){
+            $.ajax({
+                type: 'POST',
+                url: '/zhddkk/wsSign/sign',
+                data:{"user":s_user},
+                async:false,
+                success: function(result) {
+                    layer.msg(result.msg);
+                }
+            });
+        }
+
 		//点击音乐播放器图标显示/隐藏简易音乐播放器
         var musicPicRightPos = (window.innerWidth-$("#mainDiv").width())/2;
         $("#musicPicDiv").css("right", (musicPicRightPos-15)+"px");

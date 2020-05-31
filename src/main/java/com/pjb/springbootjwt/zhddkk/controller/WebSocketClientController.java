@@ -29,7 +29,7 @@ import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.service.*;
-import com.pjb.springbootjwt.zhddkk.util.OsUtil;
+import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -45,9 +45,6 @@ import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
-import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
-import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
-import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 
 /**
@@ -1152,6 +1149,7 @@ public class WebSocketClientController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.CIRCLE,subModule="",describe="新增朋友圈")
 	@RequestMapping(value = "addCircle.do",method=RequestMethod.POST)
 	@ResponseBody
+    @Transactional
 	public Object addCircle(@RequestParam("user")String user,
 							@RequestParam("content")String content,
 							@RequestParam(value="circleImgFile1",required=false) String circleImgFile1,
@@ -1159,13 +1157,23 @@ public class WebSocketClientController extends AdminBaseController
 							@RequestParam(value="circleImgFile3",required=false) String circleImgFile3,
 							@RequestParam(value="circleImgFile4",required=false) String circleImgFile4) {
 		try {
-			WsUsersDO wsUser = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-			if (null == wsUser){
+			WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+			if (null == wsUsersDO){
 				return "failed";
 			}
+            //增加积分
+            Date dayStart = TimeUtil.getDayStart(new Date());
+            Date dayEnd = TimeUtil.getDayEnd(new Date());
+            int circleCnt = wsCircleService.selectCount(new EntityWrapper<WsCircleDO>().eq("user_id", wsUsersDO.getId())
+                    .ge("create_time", dayStart).le("create_time", dayEnd));
+            if (circleCnt == 0){
+                wsUsersDO.setCoinNum(wsUsersDO.getCoinNum()+15);
+                wsUsersService.updateById(wsUsersDO);
+            }
+
 			WsCircleDO wc = new WsCircleDO();
-			wc.setUserName(user);
-			wc.setUserId(wsUser.getId());
+			wc.setUserName(wsUsersDO.getName());
+			wc.setUserId(wsUsersDO.getId());
 			wc.setContent(content);
 			wc.setCreateTime(new Date());
 			wc.setLikeNum(0);
