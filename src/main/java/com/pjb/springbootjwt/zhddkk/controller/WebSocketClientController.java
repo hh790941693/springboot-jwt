@@ -617,34 +617,31 @@ public class WebSocketClientController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.FORGET_PASSWORD,subModule="",describe="更新密码")
 	@RequestMapping(value = "updatePassword.do",method=RequestMethod.POST)
 	@ResponseBody
-	public String updatePassword(Model model,@RequestParam("user")String user,
+	public Result<String> updatePassword(Model model,@RequestParam("user")String user,
 			@RequestParam("pass")String newPass,
 			@RequestParam("confirmPass")String confirmPass,
 			@RequestParam("select1")String question1,@RequestParam("answer1")String answer1,
 			@RequestParam("select2")String question2,@RequestParam("answer2")String answer2,
 			@RequestParam("select3")String question3,@RequestParam("answer3")String answer3) {
-		String title="更新密码";
-		String result = "failed";
-
 		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-		if (null != wsUsersDO) {
-			if (wsUsersDO.getQuestion1().equals(question1) && wsUsersDO.getAnswer1().equals(answer1)
-					&& wsUsersDO.getQuestion2().equals(question2) && wsUsersDO.getAnswer2().equals(answer2)
-					&& wsUsersDO.getQuestion3().equals(question3) && wsUsersDO.getAnswer3().equals(answer3)
-					&& newPass.equals(confirmPass)) {
-				//对新密码进行加密
-				String newPassEncrypt = SecurityAESUtil.encryptAES(newPass, CommonConstants.AES_PASSWORD);
-				wsUsersDO.setPassword(newPassEncrypt);
-				boolean updateFlag = wsUsersService.updateById(wsUsersDO);
-				if (updateFlag) {
-					result = "success";
-				}
+		if (null == wsUsersDO){
+			return Result.fail();
+		}
+
+		if (wsUsersDO.getQuestion1().equals(question1) && wsUsersDO.getAnswer1().equals(answer1)
+				&& wsUsersDO.getQuestion2().equals(question2) && wsUsersDO.getAnswer2().equals(answer2)
+				&& wsUsersDO.getQuestion3().equals(question3) && wsUsersDO.getAnswer3().equals(answer3)
+				&& newPass.equals(confirmPass)) {
+			//对新密码进行加密
+			String newPassEncrypt = SecurityAESUtil.encryptAES(newPass, CommonConstants.AES_PASSWORD);
+			wsUsersDO.setPassword(newPassEncrypt);
+			boolean updateFlag = wsUsersService.updateById(wsUsersDO);
+			if (updateFlag) {
+				return Result.ok();
 			}
 		}
-		
-		model.addAttribute("title",title);
-		model.addAttribute("result",result);
-		return result;
+
+		return Result.fail();
 	}
 	
 	/**
@@ -822,12 +819,6 @@ public class WebSocketClientController extends AdminBaseController
 			start = (curPage-1) * numPerPage;
 		}
 
-//		WsFriendsApply wfa = new WsFriendsApply();
-//		wfa.setToName(curUser);
-//		wfa.setStart(start);
-//		wfa.setLimit(limit);
-//		List<WsFriendsApply> userlist = wsService.queryFriendsApplyList(wfa);
-
         List<WsFriendsApplyDO> userlist = new ArrayList<>();
         Page<WsFriendsApplyDO> wsFriendsApplyDOPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
                 new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
@@ -871,13 +862,6 @@ public class WebSocketClientController extends AdminBaseController
 		} else {
 			start = (curPage-1) * numPerPage;
 		}
-
-//		WsFriendsApply wfa = new WsFriendsApply();
-//		wfa.setFromName(curUser);
-//		wfa.setStart(start);
-//		wfa.setLimit(limit);
-//		List<WsFriendsApply> userlist = wsService.queryMyApplyList(wfa);
-
 
         List<WsFriendsApplyDO> userlist = new ArrayList<>();
         Page<WsFriendsApplyDO> wsFriendsApplyDOPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
@@ -1033,8 +1017,6 @@ public class WebSocketClientController extends AdminBaseController
 	@ResponseBody
 	public Result<Page<WsCircleDO>> queryCircleList(int curPage, int numPerPage) {
 		Page<WsCircleDO> qryPage = new Page<WsCircleDO>(curPage, numPerPage);
-		//List<WsCircleDO> circleList = wsCircleService.selectList(new EntityWrapper<WsCircleDO>().orderBy("create_time",false));
-		//page.setRecords(circleList);
 
 		Page<WsCircleDO> page = wsCircleService.selectPage(qryPage, new EntityWrapper<WsCircleDO>().orderBy("create_time",false));
         List<WsCircleDO> circleList = page.getRecords();
@@ -1061,49 +1043,6 @@ public class WebSocketClientController extends AdminBaseController
 		}
 
 		return Result.ok(page);
-//		int totalCount = wsService.queryCircleCount(new WsCircle());
-//		int totalPage = 1;
-//		if (totalCount % numPerPage != 0){
-//			totalPage = totalCount/numPerPage + 1;
-//		}
-//		else{
-//			totalPage = totalCount/numPerPage;
-//		}
-//		if (totalPage == 0) {
-//			totalPage = 1;
-//		}
-//
-//		int start = 0;
-//		int limit = numPerPage;
-//		if (curPage == 1){
-//			start = 0;
-//		}
-//		else{
-//			start = (curPage-1) * numPerPage;
-//		}
-//		WsCircle queryCircle = new WsCircle();
-//		queryCircle.setStart(start);
-//		queryCircle.setLimit(limit);
-//		List<WsCircle> circleList = wsService.queryCircleByPage(queryCircle);
-//		if (null != circleList && circleList.size()>0) {
-//			for (WsCircle wc : circleList) {
-//				WsCircleComment queryCommentCond = new WsCircleComment();
-//				queryCommentCond.setCircleId(wc.getId());
-//				List<WsCircleComment> commentList = wsService.queryCircleCommentList(queryCommentCond);
-//				if (null == commentList) {
-//					wc.setCommentList(new ArrayList<WsCircleComment>());
-//				}else {
-//					wc.setCommentList(commentList);
-//				}
-//			}
-//		}
-//
-//		PageResponseEntity rqe = new PageResponseEntity();
-//		rqe.setTotalCount(circleList.size());
-//		rqe.setTotalPage(totalPage);
-//		rqe.setList(circleList);
-//		Object object = JsonUtil.javaobject2Jsonobject(rqe);
-//		return object;
 	}
 	
 	/**
