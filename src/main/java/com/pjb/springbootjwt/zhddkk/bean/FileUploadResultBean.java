@@ -2,36 +2,45 @@ package com.pjb.springbootjwt.zhddkk.bean;
 
 public class FileUploadResultBean {
 	private String filename;
-	private String uploadResult;
-	private boolean uploadFlag;  //true:success  //false:failed
-	private String failedReason;
+	private boolean uploadFlag;
+	private String url;
+
+	public FileUploadResultBean(String filename, boolean uploadFlag, String viewUrl){
+		this.filename = filename;
+		this.uploadFlag = uploadFlag;
+		this.url = url;
+	}
+
 	public String getFilename() {
 		return filename;
 	}
+
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-	public String getUploadResult() {
-		return uploadResult;
-	}
-	public void setUploadResult(String uploadResult) {
-		this.uploadResult = uploadResult;
-	}
+
 	public boolean isUploadFlag() {
 		return uploadFlag;
 	}
+
 	public void setUploadFlag(boolean uploadFlag) {
 		this.uploadFlag = uploadFlag;
 	}
-	public String getFailedReason() {
-		return failedReason;
+
+	public String getUrl() {
+		return url;
 	}
-	public void setFailedReason(String failedReason) {
-		this.failedReason = failedReason;
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
+
 	@Override
 	public String toString() {
-		return "FileUploadResultBean [filename=" + filename + ", uploadResult=" + uploadResult + ", uploadFlag="
-				+ uploadFlag + ", failedReason=" + failedReason + "]";
+		return "FileUploadResultBean{" +
+				"filename='" + filename + '\'' +
+				", uploadFlag=" + uploadFlag +
+				", url='" + url + '\'' +
+				'}';
 	}
 }

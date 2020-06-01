@@ -1,6 +1,7 @@
 package com.pjb.springbootjwt.common.uploader.controller;
 
 import com.pjb.springbootjwt.common.uploader.service.UploadService;
+import com.pjb.springbootjwt.zhddkk.bean.FileUploadResultBean;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,6 @@ public class UploadController {
                         logger.info("开始上传文件:{}", tempfile.getOriginalFilename());
                         url = uploadService.uploadFile(tempfile, folder, user);
                         logger.info("返回的文件url:{}", url);
-
                         map.put("code", "1");
                         map.put("msg", "操作成功");
                         map.put("data", url);
@@ -63,6 +63,51 @@ public class UploadController {
             map.put("code", "0");
             map.put("msg", "操作失败");
             map.put("data", "");
+        }
+        return map;
+    }
+
+    /**
+     * 上传音乐文件
+     *
+     * @param file   文件
+     * @param folder 要存放的路径，如果为空，则默认存放temp文件夹
+     * @param user 用戶ID
+     * @return 上传文件的完整访问路径
+     */
+    @PostMapping("/uploadMusic")
+    public Map<String, FileUploadResultBean> uploadMusic(
+            @RequestParam(required = true)MultipartFile[] file,
+            @RequestParam(required = false)String folder,
+            @RequestParam(required = false)String user
+    ) {
+        logger.info("进入上传文件控制层, 目录名:{} 用户ID:{}", folder, user);
+        Map<String, FileUploadResultBean> map = new HashMap<>();
+        String url = "";
+        try {
+            if (null != file && file.length>0){
+                logger.info("开始上传文件");
+                for (int i=0;i<file.length;i++ ){
+                    MultipartFile tempfile = file[i];
+                    if (!tempfile.isEmpty()) {
+                        String originFilename = tempfile.getOriginalFilename();
+                        try {
+                            logger.info("开始上传文件:{}", originFilename);
+                            url = uploadService.uploadFile(tempfile, folder, user);
+                            logger.info("返回的文件url:{}", url);
+                            FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, true, url);
+                            map.put(originFilename, fileUploadResultBean);
+                        }catch (Exception e){
+                            logger.info("上传文件异常:{}",originFilename);
+                            FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, false, "");
+                            map.put(originFilename, fileUploadResultBean);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.info("上传出现异常:{}",e.getMessage());
+            e.printStackTrace();
         }
         return map;
     }
