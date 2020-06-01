@@ -25,4 +25,9 @@ public class WsUsersServiceImpl extends CoreServiceImpl<WsUsersDao, WsUsersDO> i
     public List<WsUsersDO> queryUserPage(Page<WsUsersDO> page, Wrapper<WsUsersDO> wrapper) {
         return this.baseMapper.queryUserPage(page, wrapper);
     }
+
+    @Override
+    public List<WsUsersDO> queryMyFriendList(Integer userId) {
+        return this.baseMapper.queryMyFriendList(userId);
+    }
 }

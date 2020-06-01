@@ -137,9 +137,11 @@
                     var currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
                     var coinNum = currentUserOnlineInfo.coinNum;
                     var onlineNum = jsonObj.onlineUserList.length;
+                    var headImage = currentUserOnlineInfo.headImage;
 
                     $("#coinNum").text(coinNum);
                     $("#onlineNum").text(onlineNum);
+                    $("#myImg").attr("src", headImage);
                 }
             });
         }
