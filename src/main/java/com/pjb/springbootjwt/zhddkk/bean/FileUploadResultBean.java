@@ -5,6 +5,10 @@ public class FileUploadResultBean {
 	private boolean uploadFlag;
 	private String url;
 
+	public FileUploadResultBean(){
+
+	}
+
 	public FileUploadResultBean(String filename, boolean uploadFlag, String viewUrl){
 		this.filename = filename;
 		this.uploadFlag = uploadFlag;

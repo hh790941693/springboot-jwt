@@ -149,8 +149,6 @@ public class FileOperationController
 			if (!fileTypeTmp.equals(fileType)) {
 				System.out.println(filename+"文件类型不是"+fileType);
 				fileBean.setUploadFlag(false);
-				fileBean.setUploadResult("上传失败");
-				fileBean.setFailedReason("文件类型不是mp3");
 				uploadResultList.add(fileBean);
 				continue;
 			}
@@ -175,10 +173,8 @@ public class FileOperationController
 					wsFileService.insert(wf);
 				}
 				fileBean.setUploadFlag(true);
-				fileBean.setUploadResult("上传成功");
 	        }else {
 				fileBean.setUploadFlag(false);
-				fileBean.setUploadResult("上传失败");
 	        }
 	        uploadResultList.add(fileBean);
          }
