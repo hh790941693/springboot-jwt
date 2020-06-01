@@ -252,7 +252,7 @@ function remove(id) {
 				'id' : id
 			},
 			success : function(r) {
-				if (r.code==0) {
+				if (r.code==1) {
 					layer.msg(r.msg);
 					reLoad();
 				}else{
@@ -284,7 +284,7 @@ function batchRemove() {
 			},
 			url : prefix + '/batchRemove',
 			success : function(r) {
-				if (r.code == 0) {
+				if (r.code == 1) {
 					layer.msg(r.msg);
 					reLoad();
 				} else {
@@ -306,7 +306,7 @@ function addAsFriends(id){
 			'toUserId' : id
 		},
 		success : function(r) {
-			if (r.code==0) {
+			if (r.code==1) {
 				layer.msg(r.msg);
 				reLoad();
 			}else{
