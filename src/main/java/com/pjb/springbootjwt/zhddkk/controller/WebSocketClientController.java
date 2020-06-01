@@ -654,14 +654,13 @@ public class WebSocketClientController extends AdminBaseController
 	 */
 	@RequestMapping(value = "getOnlineInfo.json")
 	@ResponseBody
-	public Object getOnlineInfo(@RequestParam(value="user",required=true)String user) {
+	public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value="user",required=true)String user) {
 		if (StringUtils.isBlank(user)){
-			return "failed";
+			return Result.fail(new WsOnlineInfo());
 		}
 		Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
 		//所有用户
-		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>()
-				.ne("name", "admin"));
+		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", "admin"));
 		//在线用户
 		List<WsUsersDO> onlineUserList = new ArrayList<WsUsersDO>();
 		//离线用户
@@ -694,7 +693,7 @@ public class WebSocketClientController extends AdminBaseController
 		woi.setCommonMap(buildCommonData());
 		woi.setCurrentOnlineUserInfo(currentOnlineUserInfo);
 
-		return JsonUtil.javaobject2Jsonobject(woi);
+		return Result.ok(woi);
 	}
 	
 	/**

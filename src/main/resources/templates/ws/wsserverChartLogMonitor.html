@@ -221,7 +221,10 @@
 			data:{"user":parent.s_user},
 			//dataType: 'json',
 			success: function(result) {
-				var jsonObj = result;
+				if (result.code == 0){
+					return;
+				}
+				var jsonObj = result.data;
 				currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
 				// 是否被禁用
 				var enableStatus = currentUserOnlineInfo.enable;

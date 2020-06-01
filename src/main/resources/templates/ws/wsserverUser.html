@@ -213,7 +213,10 @@
 				url: rootUrl+'ws/getOnlineInfo.json',
 				//dataType: 'json',
 				success: function(result) {
-					var jsonObj = result;
+					if (result.code == 0){
+						return;
+					}
+					var jsonObj = result.data;
 					// 在线人数
 					var count = jsonObj.onlineCount;
 					var usersInfoList = jsonObj.userInfoList;
