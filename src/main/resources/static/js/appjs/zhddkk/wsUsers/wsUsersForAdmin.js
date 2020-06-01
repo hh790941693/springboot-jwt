@@ -322,7 +322,7 @@ function offlineUser(id){
 		url: prefix+'/offlineUser.do',
 		data:{'id':id},
 		success: function(result) {
-			if (result.code == 0){
+			if (result.code == 1){
 				layer.msg(result.msg);
 				reLoad();
 			}else{
@@ -338,7 +338,7 @@ function operEnableUser(id, status){
 		url: prefix+'/operEnableUser.do',
 		data:{'id':id,'status':status},
 		success: function(result) {
-			if (result.code == 0){
+			if (result.code == 1){
 				layer.msg(result.msg);
 				reLoad();
 			}else{
@@ -354,7 +354,7 @@ function operSpeakUser(id, status){
 		url: prefix+'/operSpeakUser.do',
 		data:{'id':id,'status':status},
 		success: function(result) {
-			if (result.code == 0){
+			if (result.code == 1){
 				layer.msg(result.msg);
 				reLoad();
 			}else{
