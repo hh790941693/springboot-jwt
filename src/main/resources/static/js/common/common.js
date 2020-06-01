@@ -177,6 +177,32 @@ $.ws = {
                 $("#" + divId).css("background-position", posX + "px " + posY + "px");
             }, frequency);
         }
+    },
+
+    //拖动窗口  downDiv:子div  moveDiv:父div
+    dragPanelMove: function(downDiv,moveDiv){
+        $(downDiv).mousedown(function (e) {
+            var isMove = true;
+            var div_x = e.pageX - $(moveDiv).offset().left;
+            var div_y = e.pageY - $(moveDiv).offset().top;
+            $(document).mousemove(function (e) {
+                if (isMove) {
+                    var obj = $(moveDiv)
+                    var left = e.pageX-div_x;
+                    var top = e.pageY-div_y;
+                    if (left<0){
+                        left = 0;
+                    }
+                    if (top<0){
+                        top = 0;
+                    }
+                    obj.css({"left":left, "top":top});
+                }
+            }).mouseup(
+                function () {
+                    isMove = false;
+                });
+        });
     }
 }
 

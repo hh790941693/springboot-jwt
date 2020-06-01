@@ -62,7 +62,7 @@
 		</div>
 
 		<!--右侧子页面-->
-		<div id="rightIframeDiv" align="center" style="width:86%;height:100%;float:left;border:2px solid green;">
+		<div id="rightIframeDiv" align="center" style="width:86%;height:100%;float:left;border:2px solid green;overflow: hidden;">
 			<iframe id="iframePage" width="100%" height="100%"></iframe>
 		</div>
 	</div>
@@ -338,23 +338,7 @@
 
         adjustMusicWindowPosition();
         //音乐播放器可拖动代码
-        dragPanelMove("#musicIframeHeader","#musicIframeDiv");
-        function dragPanelMove(downDiv,moveDiv){
-            $(downDiv).mousedown(function (e) {
-                var isMove = true;
-                var div_x = e.pageX - $(moveDiv).offset().left;
-                var div_y = e.pageY - $(moveDiv).offset().top;
-                $(document).mousemove(function (e) {
-                    if (isMove) {
-                        var obj = $(moveDiv);
-                        obj.css({"left":e.pageX - div_x, "top":e.pageY - div_y});
-                    }
-                }).mouseup(
-                    function () {
-                        isMove = false;
-                    });
-            });
-        }
+		$.ws.dragPanelMove("#musicIframeHeader","#musicIframeDiv");
 
         //窗口大小变化事件
         $(window).resize(function () {

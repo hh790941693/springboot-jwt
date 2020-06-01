@@ -13,11 +13,13 @@
         background-repeat: no-repeat;
         background-size:100% 100%;
 		padding-top: 60px;
+		overflow: hidden;
     }
 
 	#mainDiv{
 		width:604px;
 		margin:0 auto;
+		position: absolute;
 	}
 	
 	#header{
@@ -25,6 +27,7 @@
 		height:40px;
 		padding-top:5px;
 		padding-left:5px;
+		cursor: move;
 		background-color:#365e71;
 	}
 	
@@ -209,6 +212,7 @@
 			textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
 		}
 
+		//获取在线相关信息
 		function getOnlineInfo() {
 			$.ajax({
 				type: 'GET',
@@ -288,6 +292,10 @@
 			getOnlineInfo();
 		},10000);
 
+		//音乐播放器可拖动代码
+		$.ws.dragPanelMove("#header","#mainDiv");
+
+		//定时切换背景图片
 		var imgIndex=1;
 		var imgMaxIndex = 10;
 		function changeBackgroundImage(){
