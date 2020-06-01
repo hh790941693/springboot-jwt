@@ -208,8 +208,8 @@
 							var createTime = circle.createTime;
 							var commentList = circle.commentList;
 							var headImg = circle.headImg;
-							if (headImg == ""){
-								headImg = "imgerror_default.jpg";
+							if (headImg == "" || headImg == null){
+								headImg = "../img/imgerror_default.jpg";
 							}
 							var pic1 = circle.pic1;
 							var pic2 = circle.pic2;
@@ -248,7 +248,6 @@
 							if (picArr.length>0){
 								htmlData += "  <div class='picDivClass' align='center'>";
 								for (var k=0;k<picArr.length;k++){
-									var picName = picArr[k];
 									var imgId = "circleImg"+i;
 									htmlData += "    <img id='"+imgId+"' src='"+picArr[k]+"' alt='' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>";
 								}
@@ -405,8 +404,9 @@
 		};
 
 		function imgerror(imgObj){
-			var scrVar = $(imgObj).attr("src");
-			$(imgObj).attr("src",rootUrl+"/img/imgerror_default.jpg");
+		    var errorImgUrl = rootUrl+"img/imgerror_default.jpg";
+            console.log("errorImgUrl:"+errorImgUrl);
+			$(imgObj).attr("src",errorImgUrl);
 		}
 
 		//查看个人信息
