@@ -184,8 +184,8 @@ $.ws = {
     dragPanelMove: function(downDiv,moveDiv){
         var position = $(moveDiv).css("position");
         var cursor = $(downDiv).css("cursor");
-        if (position != "absolute"){
-            $(moveDiv).css("position", "absolute");
+        if (position != "fixed"){
+            $(moveDiv).css("position", "fixed");
         }
         if (cursor != "move"){
             $(downDiv).css("cursor","move");
