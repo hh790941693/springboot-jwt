@@ -9,7 +9,7 @@ public class FileUploadResultBean {
 
 	}
 
-	public FileUploadResultBean(String filename, boolean uploadFlag, String viewUrl){
+	public FileUploadResultBean(String filename, boolean uploadFlag, String url){
 		this.filename = filename;
 		this.uploadFlag = uploadFlag;
 		this.url = url;

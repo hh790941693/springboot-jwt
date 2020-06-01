@@ -46,15 +46,12 @@
 	</head> 
 	<body>
 		<div id="addMusic" align="center">
-			<form style="display: none;" action="/upload/app" method="post" enctype="multipart/form-data" onsubmit="return verify()">
+			<form action="/upload/app/uploadMusic" method="post" enctype="multipart/form-data" onsubmit="return verify()" target="hidden_frame">
 				<input type="text" id="user" name="user" th:value="${user}" hidden="true">
 				<input type="hidden" name="folder" value="music">
 				文件:<input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg" style="display: inline-block;">
 				<input type="submit" class='btn btn-primary' value="上传歌曲">
 			</form>
-			<input type="text" id="user" name="user" th:value="${user}" hidden="true">
-			文件:<input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg" style="display: inline-block;">
-			<button class="btn btn-sm btn-primary" onclick="uploadMusic()">上传歌曲</button>
 		</div>		
 		<div id="playerDiv">
 			<div id="buttons" style="height:110px;">
@@ -99,6 +96,7 @@
 				</table>
 			</div>
 		</div>
+		<iframe name="hidden_frame" id="hidden_frame" style='display: none'></iframe>
 		<div th:include="common::footer"></div>
 	</body>
 
@@ -123,36 +121,27 @@
 			if (uploadFiles == ""){
 				return false;
 			}
-			console.log("待上传的文件:"+uploadFiles);
-			setInterval(function(){
-				layer.closeAll();
-				layer.msg('上传中', {
-				  icon: 16,
-				  shade: 0.2
-				});
-			},1000);
+			layer.msg("上传中....");
 			return true;
 		}
 
-		function uploadMusic(){
-			var user=$("#user").val();
-			var folder= "music";
-			var file=$('input[type="file"]');
-
-			console.log("user:"+user);
-			console.log("folder:"+folder);
-			console.log("file:"+file);
-
-			$.ajax({
-				type: "POST",
-				url: rootUrl + "upload/app/uploadMusic",
-				data: {"user": user, "folder":folder, file: file},
-				//dataType:'json',
-				success: function (result) {
-					console.log(result);
-				}
-			});
-		}
+        $("#hidden_frame").load(function(){
+            var bodyText=$(this).contents().find("body").text();
+            var uploadRes = JSON.parse(bodyText);
+            var showText = "";
+            $.each(uploadRes,function(i,val) {
+                var filename = val.filename;
+                var uploadFlag = val.uploadFlag;
+                if (uploadFlag){
+                    showText += filename+":"+"<span style='color:blue;font-weight: bold;'>上传成功</span><br/>";
+                }else{
+                    showText += filename+":"+"<span style='color:red;font-weight: bold;'>上传失败</span><br/>";
+                }
+             });
+            layer.closeAll();
+            layer.alert(showText);
+            setTimeout(refreash,3000);
+        });
 
 		//显示/隐藏音乐列表
 		function showList(obj){
