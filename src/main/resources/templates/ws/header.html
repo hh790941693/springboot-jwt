@@ -114,7 +114,7 @@
 				url: rootUrl+'index/grapWetherInfo',
 				async:false,
 				success: function(result) {
-					if (result.code == 0){
+					if (result.code == 1){
 						$("#weatherInfo").text(result.data.remark);
 						$("#lastUpdateTime").text(result.data.lastUpdateTime);
 						$("#location").text(result.data.location);
@@ -188,7 +188,7 @@
 				url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
 				async:false,
 				success: function(result) {
-					if (result.code == 0){
+					if (result.code == 1){
 						var data = result.data;
 						var totalAds = "";
 						$.each(data,function(i,val){

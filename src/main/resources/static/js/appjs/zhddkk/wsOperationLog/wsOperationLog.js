@@ -233,7 +233,7 @@ function clearOperationLog(){
 		data: {},
 		async: false,
 		success: function (result) {
-			if (result.code == 0){
+			if (result.code == 1){
 				layer.msg(result.msg);
 				reLoad();
 			}
