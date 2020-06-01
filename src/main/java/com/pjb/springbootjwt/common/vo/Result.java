@@ -61,7 +61,7 @@ public class Result<T> {
     }
 
     public Result(T data) {
-        this.code = 0;
+        this.code = CODE_SUCCESS;
         this.msg = MSG_SUCCESS;
         this.data = data;
     }
