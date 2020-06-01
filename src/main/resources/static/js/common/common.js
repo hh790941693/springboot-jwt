@@ -1,11 +1,12 @@
 protocol = window.location.protocol;
 host = window.location.host;
 
-//上传文件接口地址
-uploadUrl = protocol+"//"+host+"/upload/app";
-
 //公共api
 $.ws = {
+
+    //上传文件接口地址
+    uploadUrl:protocol+"//"+host+"/upload/app",
+
     //显示图片
     gShowImg : function(imgUrl) {
         $.fancybox.open('<img src = "' + imgUrl + '" />');
@@ -181,6 +182,14 @@ $.ws = {
 
     //拖动窗口  downDiv:子div  moveDiv:父div
     dragPanelMove: function(downDiv,moveDiv){
+        var position = $(moveDiv).css("position");
+        var cursor = $(downDiv).css("cursor");
+        if (position != "absolute"){
+            $(moveDiv).css("position", "absolute");
+        }
+        if (cursor != "move"){
+            $(downDiv).css("cursor","move");
+        }
         $(downDiv).mousedown(function (e) {
             var isMove = true;
             var div_x = e.pageX - $(moveDiv).offset().left;
@@ -196,6 +205,7 @@ $.ws = {
                     if (top<0){
                         top = 0;
                     }
+                    //console.log("left:"+left+",top:"+top);
                     obj.css({"left":left, "top":top});
                 }
             }).mouseup(
