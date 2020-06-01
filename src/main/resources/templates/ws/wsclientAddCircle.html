@@ -120,7 +120,8 @@
 
 		$("#hidden_frame").load(function(){
 			var text=$(this).contents().find("body").text();
-			if (text.indexOf("success") != -1){
+			console.log("----------------:"+text);
+			if (text.indexOf("操作成功") != -1){
 				layer.msg('新增朋友圈成功');
 				var timeout = 0.7;
 				var index = parent.layer.getFrameIndex(window.name);
@@ -129,7 +130,7 @@
 					parent.refresh();
 				},timeout*1000)
 
-			}else if (text.indexOf("failed") != -1){
+			}else{
 				layer.msg('新增朋友圈失败');
 			}
 		});

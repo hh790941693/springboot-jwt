@@ -114,18 +114,20 @@
 				url: '/zhddkk/wsUsers/queryPersonInfo.json',
 				data:{user:user},
 				success: function(result) {
-				    if (result.code == 0){
-				        var data = result.data;
-						$("#realName").val(data.realName);
-						$("#sign").val(data.sign);
-						$("#age").val(data.age);
-						$("#sexSelect").val(data.sex);
-						$("#tel").val(data.tel);
-						$("#address").val(data.address);
-						$("#professionSelect").val(data.profession);
-						$("#hobbySelect").val(data.hobby);
-						$("#headImg").attr("src",data.img);
+					if (result.code == 0){
+						layer.msg("查询个人详情页失败");
+						return;
 					}
+					var data = result.data;
+					$("#realName").val(data.realName);
+					$("#sign").val(data.sign);
+					$("#age").val(data.age);
+					$("#sexSelect").val(data.sex);
+					$("#tel").val(data.tel);
+					$("#address").val(data.address);
+					$("#professionSelect").val(data.profession);
+					$("#hobbySelect").val(data.hobby);
+					$("#headImg").attr("src",data.img);
 				}
 			})
 		}
