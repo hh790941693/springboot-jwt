@@ -617,34 +617,31 @@ public class WebSocketClientController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.FORGET_PASSWORD,subModule="",describe="更新密码")
 	@RequestMapping(value = "updatePassword.do",method=RequestMethod.POST)
 	@ResponseBody
-	public String updatePassword(Model model,@RequestParam("user")String user,
+	public Result<String> updatePassword(Model model,@RequestParam("user")String user,
 			@RequestParam("pass")String newPass,
 			@RequestParam("confirmPass")String confirmPass,
 			@RequestParam("select1")String question1,@RequestParam("answer1")String answer1,
 			@RequestParam("select2")String question2,@RequestParam("answer2")String answer2,
 			@RequestParam("select3")String question3,@RequestParam("answer3")String answer3) {
-		String title="更新密码";
-		String result = "failed";
-
 		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-		if (null != wsUsersDO) {
-			if (wsUsersDO.getQuestion1().equals(question1) && wsUsersDO.getAnswer1().equals(answer1)
-					&& wsUsersDO.getQuestion2().equals(question2) && wsUsersDO.getAnswer2().equals(answer2)
-					&& wsUsersDO.getQuestion3().equals(question3) && wsUsersDO.getAnswer3().equals(answer3)
-					&& newPass.equals(confirmPass)) {
-				//对新密码进行加密
-				String newPassEncrypt = SecurityAESUtil.encryptAES(newPass, CommonConstants.AES_PASSWORD);
-				wsUsersDO.setPassword(newPassEncrypt);
-				boolean updateFlag = wsUsersService.updateById(wsUsersDO);
-				if (updateFlag) {
-					result = "success";
-				}
+		if (null == wsUsersDO){
+			return Result.fail();
+		}
+
+		if (wsUsersDO.getQuestion1().equals(question1) && wsUsersDO.getAnswer1().equals(answer1)
+				&& wsUsersDO.getQuestion2().equals(question2) && wsUsersDO.getAnswer2().equals(answer2)
+				&& wsUsersDO.getQuestion3().equals(question3) && wsUsersDO.getAnswer3().equals(answer3)
+				&& newPass.equals(confirmPass)) {
+			//对新密码进行加密
+			String newPassEncrypt = SecurityAESUtil.encryptAES(newPass, CommonConstants.AES_PASSWORD);
+			wsUsersDO.setPassword(newPassEncrypt);
+			boolean updateFlag = wsUsersService.updateById(wsUsersDO);
+			if (updateFlag) {
+				return Result.ok();
 			}
 		}
-		
-		model.addAttribute("title",title);
-		model.addAttribute("result",result);
-		return result;
+
+		return Result.fail();
 	}
 	
 	/**
@@ -654,14 +651,13 @@ public class WebSocketClientController extends AdminBaseController
 	 */
 	@RequestMapping(value = "getOnlineInfo.json")
 	@ResponseBody
-	public Object getOnlineInfo(@RequestParam(value="user",required=true)String user) {
+	public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value="user",required=true)String user) {
 		if (StringUtils.isBlank(user)){
-			return "failed";
+			return Result.fail(new WsOnlineInfo());
 		}
 		Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
 		//所有用户
-		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>()
-				.ne("name", "admin"));
+		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", "admin"));
 		//在线用户
 		List<WsUsersDO> onlineUserList = new ArrayList<WsUsersDO>();
 		//离线用户
@@ -694,25 +690,24 @@ public class WebSocketClientController extends AdminBaseController
 		woi.setCommonMap(buildCommonData());
 		woi.setCurrentOnlineUserInfo(currentOnlineUserInfo);
 
-		return JsonUtil.javaobject2Jsonobject(woi);
+		return Result.ok(woi);
 	}
 	
 	/**
 	 * 检查某用户是否已经注册过
 	 * 
-	 * true:存在  false:不存在
+	 * 0:存在  1:不存在
 	 */
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.REGISTER,subModule="",describe="检查用户是否已经注册")
 	@RequestMapping(value="checkUserRegisterStatus.json",method=RequestMethod.POST)
 	@ResponseBody
-	public Object checkUserRegisterStatus(@RequestParam("user") String user) {
-		String result = "{\"result\":\"false\"}";
+	public Result<String> checkUserRegisterStatus(@RequestParam("user") String user) {
 		int userCount = wsUsersService.selectCount(new EntityWrapper<WsUsersDO>().eq("name", user));
 		if (userCount>0){
-			result = "{\"result\":\"true\"}";
+			return Result.fail();
 		}
 
-		return JsonUtil.jsonstr2Jsonobject(result);
+		return Result.ok();
 	}
 	
 	/**
@@ -824,12 +819,6 @@ public class WebSocketClientController extends AdminBaseController
 			start = (curPage-1) * numPerPage;
 		}
 
-//		WsFriendsApply wfa = new WsFriendsApply();
-//		wfa.setToName(curUser);
-//		wfa.setStart(start);
-//		wfa.setLimit(limit);
-//		List<WsFriendsApply> userlist = wsService.queryFriendsApplyList(wfa);
-
         List<WsFriendsApplyDO> userlist = new ArrayList<>();
         Page<WsFriendsApplyDO> wsFriendsApplyDOPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
                 new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
@@ -873,13 +862,6 @@ public class WebSocketClientController extends AdminBaseController
 		} else {
 			start = (curPage-1) * numPerPage;
 		}
-
-//		WsFriendsApply wfa = new WsFriendsApply();
-//		wfa.setFromName(curUser);
-//		wfa.setStart(start);
-//		wfa.setLimit(limit);
-//		List<WsFriendsApply> userlist = wsService.queryMyApplyList(wfa);
-
 
         List<WsFriendsApplyDO> userlist = new ArrayList<>();
         Page<WsFriendsApplyDO> wsFriendsApplyDOPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
@@ -1035,8 +1017,6 @@ public class WebSocketClientController extends AdminBaseController
 	@ResponseBody
 	public Result<Page<WsCircleDO>> queryCircleList(int curPage, int numPerPage) {
 		Page<WsCircleDO> qryPage = new Page<WsCircleDO>(curPage, numPerPage);
-		//List<WsCircleDO> circleList = wsCircleService.selectList(new EntityWrapper<WsCircleDO>().orderBy("create_time",false));
-		//page.setRecords(circleList);
 
 		Page<WsCircleDO> page = wsCircleService.selectPage(qryPage, new EntityWrapper<WsCircleDO>().orderBy("create_time",false));
         List<WsCircleDO> circleList = page.getRecords();
@@ -1063,49 +1043,6 @@ public class WebSocketClientController extends AdminBaseController
 		}
 
 		return Result.ok(page);
-//		int totalCount = wsService.queryCircleCount(new WsCircle());
-//		int totalPage = 1;
-//		if (totalCount % numPerPage != 0){
-//			totalPage = totalCount/numPerPage + 1;
-//		}
-//		else{
-//			totalPage = totalCount/numPerPage;
-//		}
-//		if (totalPage == 0) {
-//			totalPage = 1;
-//		}
-//
-//		int start = 0;
-//		int limit = numPerPage;
-//		if (curPage == 1){
-//			start = 0;
-//		}
-//		else{
-//			start = (curPage-1) * numPerPage;
-//		}
-//		WsCircle queryCircle = new WsCircle();
-//		queryCircle.setStart(start);
-//		queryCircle.setLimit(limit);
-//		List<WsCircle> circleList = wsService.queryCircleByPage(queryCircle);
-//		if (null != circleList && circleList.size()>0) {
-//			for (WsCircle wc : circleList) {
-//				WsCircleComment queryCommentCond = new WsCircleComment();
-//				queryCommentCond.setCircleId(wc.getId());
-//				List<WsCircleComment> commentList = wsService.queryCircleCommentList(queryCommentCond);
-//				if (null == commentList) {
-//					wc.setCommentList(new ArrayList<WsCircleComment>());
-//				}else {
-//					wc.setCommentList(commentList);
-//				}
-//			}
-//		}
-//
-//		PageResponseEntity rqe = new PageResponseEntity();
-//		rqe.setTotalCount(circleList.size());
-//		rqe.setTotalPage(totalPage);
-//		rqe.setList(circleList);
-//		Object object = JsonUtil.javaobject2Jsonobject(rqe);
-//		return object;
 	}
 	
 	/**
@@ -1115,21 +1052,28 @@ public class WebSocketClientController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.CIRCLE,subModule="",describe="评论朋友圈")
 	@RequestMapping(value = "toComment.do",method=RequestMethod.POST)
 	@ResponseBody
-	public Object toComment(@RequestParam("user")String user,@RequestParam("circleId")Integer circleId,@RequestParam("comment")String comment) {
+	public Result<String> toComment(@RequestParam("user")String user,@RequestParam("circleId")Integer circleId,@RequestParam("comment")String comment) {
 		WsCircleDO wsCircleDO = wsCircleService.selectById(circleId);
 		if (null == wsCircleDO){
-			return "failed";
+			return Result.fail();
+		}
+
+		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+		if (null == wsUsersDO){
+			return Result.fail();
 		}
 
 		WsCircleCommentDO wcc = new WsCircleCommentDO();
 		wcc.setCircleId(circleId);
-		Integer userId = querySpecityUserName(user).getId();
-		wcc.setUserId(userId);
-		wcc.setUserName(user);
+		wcc.setUserId(wsUsersDO.getId());
+		wcc.setUserName(wsUsersDO.getName());
 		wcc.setComment(comment);
 		wcc.setCreateTime(new Date());
-		wsCircleCommentService.insert(wcc);
-		return "success";
+		boolean insertFlag = wsCircleCommentService.insert(wcc);
+		if (insertFlag){
+			return Result.ok();
+		}
+		return Result.fail();
 	}
 	
 	/**
@@ -1140,44 +1084,41 @@ public class WebSocketClientController extends AdminBaseController
 	@RequestMapping(value = "addCircle.do",method=RequestMethod.POST)
 	@ResponseBody
     @Transactional
-	public Object addCircle(@RequestParam("user")String user,
+	public Result<String> addCircle(@RequestParam("user")String user,
 							@RequestParam("content")String content,
 							@RequestParam(value="circleImgFile1",required=false) String circleImgFile1,
 							@RequestParam(value="circleImgFile2",required=false) String circleImgFile2,
 							@RequestParam(value="circleImgFile3",required=false) String circleImgFile3,
 							@RequestParam(value="circleImgFile4",required=false) String circleImgFile4) {
-		try {
-			WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-			if (null == wsUsersDO){
-				return "failed";
-			}
-            //增加积分
-            Date dayStart = TimeUtil.getDayStart(new Date());
-            Date dayEnd = TimeUtil.getDayEnd(new Date());
-            int circleCnt = wsCircleService.selectCount(new EntityWrapper<WsCircleDO>().eq("user_id", wsUsersDO.getId())
-                    .ge("create_time", dayStart).le("create_time", dayEnd));
-            if (circleCnt == 0){
-                wsUsersDO.setCoinNum(wsUsersDO.getCoinNum()+15);
-                wsUsersService.updateById(wsUsersDO);
-            }
-
-			WsCircleDO wc = new WsCircleDO();
-			wc.setUserName(wsUsersDO.getName());
-			wc.setUserId(wsUsersDO.getId());
-			wc.setContent(content);
-			wc.setCreateTime(new Date());
-			wc.setLikeNum(0);
-			wc.setPic1(circleImgFile1);
-			wc.setPic2(circleImgFile2);
-			wc.setPic3(circleImgFile3);
-			wc.setPic4(circleImgFile4);
-			wsCircleService.insert(wc);
-		}catch (Exception e) {
-			System.out.println("新增朋友失败:"+e.getMessage());
-			return "failed";
+		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+		if (null == wsUsersDO){
+			return Result.fail();
 		}
-		
-		return "success";
+		//增加积分
+		Date dayStart = TimeUtil.getDayStart(new Date());
+		Date dayEnd = TimeUtil.getDayEnd(new Date());
+		int circleCnt = wsCircleService.selectCount(new EntityWrapper<WsCircleDO>().eq("user_id", wsUsersDO.getId())
+				.ge("create_time", dayStart).le("create_time", dayEnd));
+		if (circleCnt == 0){
+			wsUsersDO.setCoinNum(wsUsersDO.getCoinNum()+15);
+			wsUsersService.updateById(wsUsersDO);
+		}
+
+		WsCircleDO wc = new WsCircleDO();
+		wc.setUserName(wsUsersDO.getName());
+		wc.setUserId(wsUsersDO.getId());
+		wc.setContent(content);
+		wc.setCreateTime(new Date());
+		wc.setLikeNum(0);
+		wc.setPic1(circleImgFile1);
+		wc.setPic2(circleImgFile2);
+		wc.setPic3(circleImgFile3);
+		wc.setPic4(circleImgFile4);
+		boolean insertFlag = wsCircleService.insert(wc);
+		if (insertFlag){
+			return Result.ok();
+		}
+		return Result.fail();
 	}
 	
 	
@@ -1188,15 +1129,22 @@ public class WebSocketClientController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.CIRCLE,subModule="",describe="点赞朋友圈")
 	@RequestMapping(value = "toLike.do",method=RequestMethod.POST)
 	@ResponseBody
-	public Object toLike(@RequestParam("user")String user,@RequestParam("circleId")Integer circleId) {
+	public Result<String> toLike(@RequestParam("user")String user,@RequestParam("circleId")Integer circleId) {
 		WsCircleDO wsCircleDO = wsCircleService.selectById(circleId);
 		if (null == wsCircleDO){
-			return "failed";
+			return Result.fail();
+		}
+		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+		if (null == wsUsersDO){
+			return Result.fail();
 		}
 		int likeNum = wsCircleDO.getLikeNum();
 		wsCircleDO.setLikeNum(likeNum+1);
-		wsCircleService.updateById(wsCircleDO);
-		return "success";
+		boolean updateFlag = wsCircleService.updateById(wsCircleDO);
+		if (updateFlag){
+			return Result.ok();
+		}
+		return Result.fail();
 	}
 	
 	/**
@@ -1206,13 +1154,16 @@ public class WebSocketClientController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.CIRCLE,subModule="",describe="删除朋友圈")
 	@RequestMapping(value = "toDeleteCircle.do",method=RequestMethod.POST)
 	@ResponseBody
-	public Object toDeleteCircle(@RequestParam("id")Integer id) {
+	public Result<String> toDeleteCircle(@RequestParam("id")Integer id) {
 		WsCircleDO wsCircleDO = wsCircleService.selectById(id);
 		if (null == wsCircleDO){
-			return "failed";
+			return Result.fail();
 		}
-		wsCircleService.deleteById(id);
-		return "success";
+		boolean deleteFlag = wsCircleService.deleteById(id);
+		if (deleteFlag){
+			return Result.ok();
+		}
+		return Result.fail();
 	}
 	
 	/**
@@ -1222,13 +1173,16 @@ public class WebSocketClientController extends AdminBaseController
 	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.CIRCLE,subModule="",describe="删除朋友圈评论")
 	@RequestMapping(value = "toDeleteComment.do",method=RequestMethod.POST)
 	@ResponseBody
-	public Object toDeleteComment(@RequestParam("id")Integer id) {
+	public Result<String> toDeleteComment(@RequestParam("id")Integer id) {
 		WsCircleCommentDO wsCircleCommentDO = wsCircleCommentService.selectById(id);
 		if (null == wsCircleCommentDO){
-			return "failed";
+			return Result.fail();
 		}
-		wsCircleCommentService.deleteById(id);
-		return "success";
+		boolean deleteFlag = wsCircleCommentService.deleteById(id);
+		if (deleteFlag){
+			return Result.ok();
+		}
+		return Result.fail();
 	}	
 	
 	/**

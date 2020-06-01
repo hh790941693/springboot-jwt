@@ -125,7 +125,6 @@
 				async:false,
 				success: function(result) {
 					if (result == "success"){
-						console.log("退出成功");
 						window.location.href = rootUrl;
 					}
 				}
@@ -276,7 +275,7 @@
                 defaultCss = "color:blue;font-size:10px;line-height:14px;";
             }
 
-            if (curPageid != "wsserverChartLogMonitor.page"){
+            if (curPageid != "wsserverChartMonitor.page"){
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 chatRecord = chatRecord + htmlData;
                 unreadCount = unreadCount+1;
@@ -337,23 +336,7 @@
 
         adjustMusicWindowPosition();
         //音乐播放器可拖动代码
-        dragPanelMove("#musicIframeHeader","#musicIframeDiv");
-        function dragPanelMove(downDiv,moveDiv){
-            $(downDiv).mousedown(function (e) {
-                var isMove = true;
-                var div_x = e.pageX - $(moveDiv).offset().left;
-                var div_y = e.pageY - $(moveDiv).offset().top;
-                $(document).mousemove(function (e) {
-                    if (isMove) {
-                        var obj = $(moveDiv);
-                        obj.css({"left":e.pageX - div_x, "top":e.pageY - div_y});
-                    }
-                }).mouseup(
-                    function () {
-                        isMove = false;
-                    });
-            });
-        }
+        $.ws.dragPanelMove("#musicIframeHeader","#musicIframeDiv");
 
         //窗口大小变化事件
         $(window).resize(function () {

@@ -12,13 +12,16 @@
 		background-image: url("../img/fengjing/fj1.jpg");
 		background-repeat: no-repeat;
 		background-size:100% 100%;
+		overflow: hidden;
 	}
 
 	#mainDiv{
 		width:800px;
 		height:540px;
-		margin: 0 auto;
-		padding-top:40px;
+		margin:0 auto;
+		position: fixed;
+		left:160px;
+		top:50px;
 	}
 
 	#header{
@@ -27,6 +30,7 @@
 		padding-top:5px;
 		padding-left:5px;
 		background-color:#365e71;
+		cursor: move;
 	}
 
 	#msgFromServer{
@@ -217,7 +221,10 @@
 			data:{"user":parent.s_user},
 			//dataType: 'json',
 			success: function(result) {
-				var jsonObj = result;
+				if (result.code == 0){
+					return;
+				}
+				var jsonObj = result.data;
 				currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
 				// 是否被禁用
 				var enableStatus = currentUserOnlineInfo.enable;
@@ -289,6 +296,10 @@
 		getOnlineInfo();
 	},10000);
 
+	//聊天窗口可拖动
+	$.ws.dragPanelMove("#header","#mainDiv");
+
+	//改变聊天背景图片
 	var imgIndex = 1;
 	var imgMaxIndex = 10;
 	function changeBackgroundImage(){

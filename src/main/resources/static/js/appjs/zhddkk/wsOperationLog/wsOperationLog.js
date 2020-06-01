@@ -180,7 +180,7 @@ function remove(id) {
 				'id' : id
 			},
 			success : function(r) {
-				if (r.code==0) {
+				if (r.code==1) {
 					layer.msg(r.msg);
 					reLoad();
 				}else{
@@ -212,7 +212,7 @@ function batchRemove() {
 			},
 			url : prefix + '/batchRemove',
 			success : function(r) {
-				if (r.code == 0) {
+				if (r.code == 1) {
 					layer.msg(r.msg);
 					reLoad();
 				} else {
@@ -251,7 +251,5 @@ $('#exportDataBtn').click(function(){
 	if ($("#moduleNameSelect").val() != "" && $("#moduleNameSelect").val() != 'undefined'){
 		operModule=$("#moduleNameSelect").val();
 	}
-	console.log("userId:"+userId);
-	console.log("operModule:"+operModule);
 	$(this).attr('href', prefix + "/exportOperateLog.do?userId="+userId+"&operModule="+operModule);
 })

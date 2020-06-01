@@ -133,7 +133,10 @@
                 data: {"user": parent.s_user},
                 //dataType: 'json',
                 success: function (result) {
-                    var jsonObj = result;
+					if (result.code == 0){
+						return;
+					}
+                    var jsonObj = result.data;
                     var currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
                     var coinNum = currentUserOnlineInfo.coinNum;
                     var onlineNum = jsonObj.onlineUserList.length;

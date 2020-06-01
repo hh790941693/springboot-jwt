@@ -1,5 +1,4 @@
 var user=$('#user').val();
-console.log("user:"+user);
 $(function(){
     validateRule();
     initUpload();
@@ -21,7 +20,7 @@ function save() {
             parent.layer.alert("保存失败，请稍后再试");
         },
         success : function(data) {
-            if (data.code === 0) {
+            if (data.code == 1) {
                 parent.layer.msg("保存成功");
                 parent.reLoad();
                 var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
@@ -45,7 +44,7 @@ function initUpload() {
     //上传文件url
     layui.upload.render({
         elem: '#imageBtn',
-        url: uploadUrl,
+        url: $.ws.uploadUrl,
         size: 10240,//单位为KB
         accept: 'images',
         data: {

@@ -126,16 +126,12 @@
 				data:{user:user},
 				//dataType: 'json',
 				async:false,
-				success: function(result) {
-					var isExist = result.result;
-					if (isExist == "true")
-					{
+				success: function(result){
+					if (result.code == 0){
 						$("#btnregist").attr("disabled",true);
 						layer.msg('该用户已经注册过了,请直接登录!');
 						$("#user").val("");
-					}
-					else
-					{
+					}else{
 						$("#btnregist").attr("disabled",false);
 					}
 				}
@@ -239,7 +235,7 @@
 		function initUpload(){
 			layui.upload.render({
 				elem: '#imageBtn',
-				url: uploadUrl,
+				url: $.ws.uploadUrl,
 				size: 10240,//单位为KB
 				accept: 'images',
 				data: {

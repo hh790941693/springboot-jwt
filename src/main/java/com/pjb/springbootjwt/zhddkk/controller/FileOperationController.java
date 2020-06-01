@@ -58,7 +58,7 @@ public class FileOperationController
 	public String musicPlayer(Model model,@RequestParam(value="user",required=false) String user)
 	{
 		model.addAttribute("user", user);
-		return "dealfile/musicPlayer";
+		return "music/musicPlayer";
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class FileOperationController
 	public String musicPlayerSimple(Model model,@RequestParam(value="user",required=false) String user)
 	{
 		model.addAttribute("user", user);
-		return "dealfile/musicPlayerSimple";
+		return "music/musicPlayerSimple";
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class FileOperationController
 	{
 		model.addAttribute("user", user);
 		model.addAttribute("fileType", fileType);
-		return "dealfile/upload";
+		return "music/upload";
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public class FileOperationController
 	@RequestMapping("uploadResult.page")
 	public String uploadFile(Model model)
 	{
-		return "dealfile/uploadResult";
+		return "music/uploadResult";
 	}	
 	
 	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.MUSIC,subModule="",describe="删除文件")
@@ -149,8 +149,6 @@ public class FileOperationController
 			if (!fileTypeTmp.equals(fileType)) {
 				System.out.println(filename+"文件类型不是"+fileType);
 				fileBean.setUploadFlag(false);
-				fileBean.setUploadResult("上传失败");
-				fileBean.setFailedReason("文件类型不是mp3");
 				uploadResultList.add(fileBean);
 				continue;
 			}
@@ -175,10 +173,8 @@ public class FileOperationController
 					wsFileService.insert(wf);
 				}
 				fileBean.setUploadFlag(true);
-				fileBean.setUploadResult("上传成功");
 	        }else {
 				fileBean.setUploadFlag(false);
-				fileBean.setUploadResult("上传失败");
 	        }
 	        uploadResultList.add(fileBean);
          }
@@ -189,7 +185,7 @@ public class FileOperationController
 	    Object object = JsonUtil.javaobject2Jsonobject(rqe);
 		
 	    model.addAttribute("result",object);
-		return "dealfile/uploadResult";
+		return "music/uploadResult";
 	}
 	
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.MUSIC,subModule="",describe="显示音乐列表")

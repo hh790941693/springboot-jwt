@@ -129,5 +129,4 @@ public class ${className}Controller extends AdminBaseController {
 		${classname}Service.deleteBatchIds(Arrays.asList(${pk.attrname}s));
 		return Result.ok();
 	}
-	
 }

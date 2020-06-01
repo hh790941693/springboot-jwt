@@ -299,7 +299,10 @@
 						data:{user:curUser,circleId:circleId,comment:comment},
 						async:false,
 						success: function(result) {
-							refresh();
+							if (result.code == 1) {
+								layer.msg("评论成功");
+								setTimeout(refresh, 1500);
+							}
 						}
 					});
 				}else{
@@ -316,7 +319,10 @@
 				data:{user:curUser,circleId:circleId},
 				async:false,
 				success: function(result) {
-					refresh();
+					if (result.code == 1) {
+						layer.msg("点赞成功");
+						setTimeout(refresh, 1000);
+					}
 				}
 			});
 		}
@@ -331,7 +337,10 @@
 						data:{id:circleId},
 						async:false,
 						success: function(result) {
-							refresh();
+							if (result.code == 1) {
+								layer.msg("删除成功");
+								setTimeout(refresh, 1000);
+							}
 						}
 					});
 				},
@@ -350,7 +359,10 @@
 						data:{id:commentId},
 						async:false,
 						success: function(result) {
-							refresh();
+							if (result.code == 1) {
+								layer.msg("删除成功");
+								setTimeout(refresh, 1000);
+							}
 						}
 					});
 				},

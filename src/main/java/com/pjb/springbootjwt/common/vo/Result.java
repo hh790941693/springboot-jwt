@@ -7,8 +7,8 @@ package com.pjb.springbootjwt.common.vo;
  */
 public class Result<T> {
 
-    public final static Integer CODE_SUCCESS = 0;
-    public final static Integer CODE_FAIL = 1;
+    public final static Integer CODE_SUCCESS = 1;
+    public final static Integer CODE_FAIL = 0;
     public final static String MSG_SUCCESS = "操作成功";
     public final static String MSG_FAIL = "操作失败";
 

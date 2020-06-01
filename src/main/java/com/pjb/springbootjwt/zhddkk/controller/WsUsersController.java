@@ -35,7 +35,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
-import com.pjb.springbootjwt.common.vo.Result;
+import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -417,7 +417,7 @@ public class WsUsersController extends AdminBaseController {
     @OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.SETTING,subModule="",describe="设置个人信息")
     @RequestMapping(value = "setPersonInfo.do",method=RequestMethod.POST)
     @ResponseBody
-    public String setPersonInfo(@RequestParam(value="userName",required=true) String userName,
+    public Result<String> setPersonInfo(@RequestParam(value="userName",required=true) String userName,
                                 @RequestParam(value="realName",required=false) String realName,
                                 @RequestParam(value="headImg",required=false) String headImg,
                                 @RequestParam(value="sign",required=false) String sign,
@@ -432,48 +432,54 @@ public class WsUsersController extends AdminBaseController {
                                 @RequestParam(value="hobbyText",required=false) String hobbyText
     ) {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
-        try {
-            // 检查表中是否有个人信息记录
-            WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", wsUsersDO.getId()));
-            if (null == wsUserProfileDO) {
-                logger.info("插入个人信息");
-                WsUserProfileDO wup = new WsUserProfileDO();
-                wup.setUserId(wsUsersDO.getId());
-                wup.setUserName(userName);
-                wup.setRealName(realName);
-                wup.setImg(headImg);
-                wup.setSign(sign);
-                wup.setAge(age);
-                wup.setSex(sex);
-                wup.setSexText(sexText);
-                wup.setTel(tel);
-                wup.setAddress(address);
-                wup.setProfession(profession);
-                wup.setProfessionText(professionText);
-                wup.setHobby(hobby);
-                wup.setHobbyText(hobbyText);
-                wsUserProfileService.insert(wup);
-            }else {
-                logger.info("更新个人信息");
-                wsUserProfileDO.setUserName(userName);
-                wsUserProfileDO.setRealName(realName);
-                wsUserProfileDO.setImg(headImg);
-                wsUserProfileDO.setSign(sign);
-                wsUserProfileDO.setAge(age);
-                wsUserProfileDO.setSex(sex);
-                wsUserProfileDO.setSexText(sexText);
-                wsUserProfileDO.setTel(tel);
-                wsUserProfileDO.setAddress(address);
-                wsUserProfileDO.setProfession(profession);
-                wsUserProfileDO.setProfessionText(professionText);
-                wsUserProfileDO.setHobby(hobby);
-                wsUserProfileDO.setHobbyText(hobbyText);
-                wsUserProfileService.updateById(wsUserProfileDO);
-            }
-        }catch (Exception e) {
-            logger.error("更新个人信息失败!"+e.getMessage());
-            return "failed";
-        }
-        return "success";
+        if (null == wsUsersDO){
+        	return Result.fail();
+		}
+
+		// 检查表中是否有个人信息记录
+		WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", wsUsersDO.getId()));
+		if (null == wsUserProfileDO) {
+			logger.info("插入个人信息");
+			WsUserProfileDO wup = new WsUserProfileDO();
+			wup.setUserId(wsUsersDO.getId());
+			wup.setUserName(userName);
+			wup.setRealName(realName);
+			wup.setImg(headImg);
+			wup.setSign(sign);
+			wup.setAge(age);
+			wup.setSex(sex);
+			wup.setSexText(sexText);
+			wup.setTel(tel);
+			wup.setAddress(address);
+			wup.setProfession(profession);
+			wup.setProfessionText(professionText);
+			wup.setHobby(hobby);
+			wup.setHobbyText(hobbyText);
+			boolean insertFlag = wsUserProfileService.insert(wup);
+			if (insertFlag){
+				return Result.ok();
+			}
+		}else {
+			logger.info("更新个人信息");
+			wsUserProfileDO.setUserName(userName);
+			wsUserProfileDO.setRealName(realName);
+			wsUserProfileDO.setImg(headImg);
+			wsUserProfileDO.setSign(sign);
+			wsUserProfileDO.setAge(age);
+			wsUserProfileDO.setSex(sex);
+			wsUserProfileDO.setSexText(sexText);
+			wsUserProfileDO.setTel(tel);
+			wsUserProfileDO.setAddress(address);
+			wsUserProfileDO.setProfession(profession);
+			wsUserProfileDO.setProfessionText(professionText);
+			wsUserProfileDO.setHobby(hobby);
+			wsUserProfileDO.setHobbyText(hobbyText);
+			boolean updateFlag = wsUserProfileService.updateById(wsUserProfileDO);
+			if (updateFlag){
+				return Result.ok();
+			}
+		}
+
+		return Result.fail();
     }
 }

@@ -184,7 +184,7 @@
 
 		$("#hidden_frame").load(function(){
 			var text=$(this).contents().find("body").text();
-			if (text.indexOf("success") != -1){
+			if (text.indexOf("操作成功") != -1){
 				layer.msg('更新个人信息成功');
 				var index = parent.layer.getFrameIndex(window.name);
 				setTimeout(function(){
@@ -192,7 +192,7 @@
 					refresh();
 				},2000)
 
-			}else if (text.indexOf("failed") != -1){
+			}else{
 				layer.msg('更新个人信息失败');
 			}
 		});
@@ -204,7 +204,7 @@
 		function initUpload(){
 			layui.upload.render({
 				elem: '#imageBtn',
-				url: uploadUrl,
+				url: $.ws.uploadUrl,
 				size: 10240,//单位为KB
 				accept: 'images',
 				data: {

@@ -44,7 +44,6 @@ function load() {
 						// sortOrder.
 						// 返回false将会终止请求
 						responseHandler : function(res){
-                            console.log(res);
                             return {
                                 "total": res.data.total,//总数
                                 "rows": res.data.records   //数据
@@ -127,7 +126,7 @@ function remove(id) {
 				'id' : id
 			},
 			success : function(r) {
-				if (r.code==0) {
+				if (r.code==1) {
 					layer.msg(r.msg);
 					reLoad();
 				}else{
@@ -162,7 +161,7 @@ function batchRemove() {
 			},
 			url : prefix + '/batchRemove',
 			success : function(r) {
-				if (r.code == 0) {
+				if (r.code == 1) {
 					layer.msg(r.msg);
 					reLoad();
 				} else {

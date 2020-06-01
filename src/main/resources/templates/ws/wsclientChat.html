@@ -13,23 +13,28 @@
         background-repeat: no-repeat;
         background-size:100% 100%;
 		padding-top: 60px;
+		overflow: hidden;
     }
 
 	#mainDiv{
 		width:604px;
 		margin:0 auto;
+		position: fixed;
+		left:250px;
+		top:80px;
 	}
 	
 	#header{
-		width:604px;
+		width:100%;
 		height:40px;
 		padding-top:5px;
 		padding-left:5px;
+		cursor: move;
 		background-color:#365e71;
 	}
 	
 	#msgFromServer{
-		width:604px;
+		width:100%;
 		height:350px;
 		overflow:auto;
 		border:2px solid green;
@@ -66,10 +71,6 @@
 		<div id="header">
 			<div align="left" style="width:20%;height:100%;float:left">
 				<span style="color:yellow;font-weight:bold;font-size: 30px;height:100%;display:inline-block;" id="loginUser"></span>
-			</div>
-			
-			<div align="left" style="width:15%;height:78%;color:white;float:left;margin-top: 8px;">
-				<span id="onlineCount" style='height:100%;display:inline-block;'>在线0名</span>
 			</div>
 
 			<div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
@@ -209,6 +210,7 @@
 			textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
 		}
 
+		//获取在线相关信息
 		function getOnlineInfo() {
 			$.ajax({
 				type: 'GET',
@@ -216,7 +218,10 @@
 				data:{"user":parent.s_user},
 				//dataType: 'json',
 				success: function(result) {
-					var jsonObj = result;
+					if (result.code == 0){
+						return;
+					}
+					var jsonObj = result.data;
 					currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
 					// 是否被禁用
 					var enableStatus = currentUserOnlineInfo.enable;
@@ -245,13 +250,8 @@
 					for (var x=0;x<cyy.length;x++){
 						$("#selectCyy").append("<option value=" + cyy[x].name + ">" + cyy[x].name+ "</option>")
 					}
-
-					// 在线人数
-					var count = jsonObj.onlineCount;
 					// 好友列表
 					var usersList = jsonObj.friendsList;
-
-					$("#onlineCount").html("在线"+count+"名");
 					var selectUser = $("#selectUser").val();
 					$("#selectUser").empty();
 					if (usersList != "") {
@@ -288,6 +288,10 @@
 			getOnlineInfo();
 		},10000);
 
+		//聊天窗口可拖动
+		$.ws.dragPanelMove("#header","#mainDiv");
+
+		//定时切换背景图片
 		var imgIndex=1;
 		var imgMaxIndex = 10;
 		function changeBackgroundImage(){

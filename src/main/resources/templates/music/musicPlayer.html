@@ -1,26 +1,10 @@
 <!DOCTYPE html>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-    
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
-<%
-	String basePath = request.getContextPath();
-	String  path= request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+basePath;
-%>
-
-<html>
-	<head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
 		<meta charset="utf-8">
 		<title>音乐播放器</title>
-		<script type="text/javascript" src="<%=path%>/static/js/jquery.min.js"></script>
-		<script type="text/javascript" src="<%=path%>/static/layer/layer.js"></script>
-		<script type="text/javascript" src="<%=path%>/static/js/rootPath.js"></script>
-		<script type="text/javascript" src="<%=path%>/static/viewjs/common.js"></script>
-		<link rel="stylesheet" type="text/css" href="<%=path%>/static/bootstrap/css/bootstrap.css"/>
-		<script type="text/javascript" src="<%=path%>/static/bootstrap/js/bootstrap.js"></script>
-		
+
 		<style type="text/css">
 			.selectRowClass{
 				background-color:grey;
@@ -28,6 +12,7 @@
 			}
 			.thClass{
 				background-color:green;
+				height: 28px;
 			}
 			
 			.mouseonClass{
@@ -46,8 +31,9 @@
 			#addMusic{
 				width:100%;
 				height:40px;
-				margin:5px auto;
+				margin:0 auto;
 				border-bottom:1px solid grey;
+				padding-top: 2px;
 			}
 			
 			#playerDiv{
@@ -60,27 +46,27 @@
 	</head> 
 	<body>
 		<div id="addMusic" align="center">
-			<form action="uploadFiles.do" method="post" enctype="multipart/form-data" onsubmit="return verify()">
-				<input type="text" name="user" value="${user}" hidden="true">
-				<input type="text" name="fileType" value="mp3" hidden="true">
-				文件:<input id="fileInput" type="file" name="files" multiple="multiple" accept="audio/mpeg">
+			<form action="/upload/app/uploadMusic" method="post" enctype="multipart/form-data" onsubmit="return verify()" target="hidden_frame">
+				<input type="text" id="user" name="user" th:value="${user}" hidden="true">
+				<input type="hidden" name="folder" value="music">
+				文件:<input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg" style="display: inline-block;">
 				<input type="submit" class='btn btn-primary' value="上传歌曲">
 			</form>
 		</div>		
 		<div id="playerDiv">
 			<div id="buttons" style="height:110px;">
-				<div align="center" style="background-color:yellow;height:35px;border-bottom:2px solid green;padding-top:7px;">
-					当前正在播放:<label id="songName"></label>
+				<div id="songNameDiv" align="center" style="background-color:yellow;height:35px;border-bottom:2px solid green;padding-top:7px;">
+					<span id="statusSpan">初始化:</span><label id="songName"></label>
 				</div>
 				<div style="height:75px;">
 					<div style="float:left;width:300px;margin-top:5px">
 						<audio id="player" controls="controls" src="" style="width:100%;"></audio>
 					</div>
 
-					<div style="float:right;border:1px solid bulue;margin-top:12px;width:740px;">
+					<div style="float:right;margin-top:12px;width:740px;">
 						<div style="float:left;margin-left:10px;height:40px;">
 							<button id="btnPre" style='height:40px;' class='btn btn-primary' onclick="preMusic()">上一首</button>
-							<button id="btnPlay" style='height:40px;width:74px;' class='btn btn-success' onclick="playMusic()">播放</button>
+							<button id="btnPlay" style='height:40px;width:74px;' class='btn btn-success' onclick="play()">播放</button>
 							<button id="btnNext" style='height:40px;' class='btn btn-primary' onclick="nextMusic()">下一首</button>
 							<button id="btnShowList" style='height:40px;' class='btn btn-warning' onclick="showList(this)">关闭列表</button>
 							<button id="btnRefresh" style='height:40px;' class='btn btn-info' onclick="refreash()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>
@@ -91,33 +77,34 @@
 							<input type="radio" name="playmode" value="1" >顺序播放
 							<input type="radio" name="playmode" value="2">随机播放
 						</div>
-
 					</div>
 				</div>
 			</div>
 			
-			<div id="musicList" style="display:none">
-				<table id="musicTable" style="width:100%;">
+			<div id="musicList" style="display:block">
+				<table id="musicTable" style="width:100%;border-collapse:separate; border-spacing:1px 4px;">
 					<tr class="thClass">
 						<th style="width:60px;">选择</th>
 						<th style="width:200px;">歌曲名称</th>
 						<th style="width:60px;">时长</th>
 						<th style="width:60px;">大小</th>
 						<th style="width:90px;">发行时间</th>
-						<th style="width:40px;">操作</th>
+						<th style="width:40px;">访问性</th>
 						<th style="display:none;">url</th>
+						<th style="width:40px;">操作</th>
 					</tr>
 				</table>
 			</div>
 		</div>
-	<jsp:include page="../ws/sessionKeeper.html"/>
+		<iframe name="hidden_frame" id="hidden_frame" style='display: none'></iframe>
+		<div th:include="common::footer"></div>
 	</body>
 
 	<script type="text/javascript">
 		// 全局变量
 		var playMode = -1; //播放模式   默认为顺序播放
 		//当前用户
-		var loginUser = s_user;
+		var loginUser = parent.s_user;
 		//播放器对象
 		var player = $("#player")[0];
 
@@ -134,17 +121,29 @@
 			if (uploadFiles == ""){
 				return false;
 			}
-			console.log("待上传的文件:"+uploadFiles);
-			setInterval(function(){
-				layer.closeAll();
-				layer.msg('上传中', {
-				  icon: 16,
-				  shade: 0.2
-				});
-			},1000);
+			layer.msg("上传中....");
 			return true;
 		}
 
+        $("#hidden_frame").load(function(){
+            var bodyText=$(this).contents().find("body").text();
+            var uploadRes = JSON.parse(bodyText);
+            var showText = "";
+            $.each(uploadRes,function(i,val) {
+                var filename = val.filename;
+                var uploadFlag = val.uploadFlag;
+                if (uploadFlag){
+                    showText += filename+":"+"<span style='color:blue;font-weight: bold;'>上传成功</span><br/>";
+                }else{
+                    showText += filename+":"+"<span style='color:red;font-weight: bold;'>上传失败</span><br/>";
+                }
+             });
+            layer.closeAll();
+            layer.alert(showText);
+            setTimeout(refreash,3000);
+        });
+
+		//显示/隐藏音乐列表
 		function showList(obj){
 			if ($(obj).text() == "关闭列表"){
 				$("#musicList").slideUp(500);
@@ -168,26 +167,22 @@
 			
 			$("table input").removeAttr("checked");
 			$(inputObj).prop("checked",true);
-			//$(inputObj).attr("checked",true);
 			$("table tr").removeClass("selectRowClass");
 			$(trObj).addClass("selectRowClass");
-			//console.log("start to play:" + url);
 			
 			$("#player").attr("src",url);
-			//var player = $("#player")[0];
+			$("#btnPlay").text("暂停");
+			$("#statusSpan").text("正在播放:");
 			$("#songName").html(songname);
              
 			player.play();
 		}
 		
 		// 点击播放按钮
-		function playMusic(){
+		function play(){
 			console.log("start to playing......");
-			//var inputArr = $("table td input");
-			//var trObj =  $("table tr").eq(1);
-			var inputArr = $(parent.inputObjArr);
-			var allTrArr= $(parent.trObjArr);
-			var trObj = $(parent.trObjArr).eq(1);
+			var inputArr = $("table td input");
+			var trObj =  $("table tr").eq(1);
 			for (var i=0;i<inputArr.length;i++){
 				var isChecked = inputArr[i].checked;
 				if (isChecked == true){
@@ -201,36 +196,28 @@
 			var firstTd = $(trObj).children().get(0);
 			var inputObj = $(firstTd).children().get(0);
 			
-			
-			//$("table input").removeAttr("checked");
-			$(inputArr).removeAttr("checked");
+			$("table input").removeAttr("checked");
 			$(inputObj).prop("checked",true);
-			//$("table tr").removeClass("selectRowClass");
-			$(allTrArr).removeClass("selectRowClass");
+			$("table tr").removeClass("selectRowClass");
 			$(trObj).addClass("selectRowClass");
-			//console.log("start to play:" + url);
-			
-			//$("#player").attr("src",url);
-			$(parent.playerObj).attr("src",url);
+			$("#player").attr("src",url);
 
-			//$("#songName").html(songname);
-			$(parent.songNameObj).html(songname);
-			var btnText = $(parent.palyBtnObj).text();
+			$("#statusSpan").text("正在播放:");
+			$("#songName").html(songname);
+			var btnText = $("#btnPlay").text();
 			if (btnText == "播放"){
 				btnText = "暂停";
-				//player.play();
-				$(parent.playerObj)[0].play();
+				player.play();
 			}else{
 				btnText = "播放";
-				$(parent.playerObj)[0].pause();
-				//player.pause();
+				$("#statusSpan").text("暂停中:");
+				player.pause();
 			}
-			$(parent.palyBtnObj).text(btnText);
+			$("#btnPlay").text(btnText);
 		}
 
 		// 下一首
 		function nextMusic(){
-			console.log("start to play next music......");
 			var inputArr = $("table td input");
 			var selectTrObj =  $("table tr").eq(1);
 			
@@ -250,7 +237,6 @@
 		
 		// 上一首
 		function preMusic(){
-			console.log("start to play pre music......");
 			var inputArr = $("table td input");
 			var selectTrObj =  $("table").find("tr").last();
 
@@ -284,12 +270,12 @@
 		// 显示歌曲列表
 		function showMusic(){
 			var fileType = ".mp3";
-			var user = "${user}";
+			var user = $('#user').val();
 			$.ajax({
 				type:"POST",
 				url:rootUrl + "file/showFiles.do",
 				data:{user:user, fileType:fileType},
-				dataType:'json',
+				//dataType:'json',
 				success:function(result){
 					var dataList = result.dataList;
 					for (var i=0;i<dataList.length;i++){
@@ -303,11 +289,15 @@
 						var modifyTime = updateTime.month+"-"+month+" " + updateTime.hours+":"+updateTime.minutes+":"+updateTime.seconds;
 						var trackLength = dataList[i].trackLength;
 						var url = dataList[i].url;
+						var accessStatusTxt = "不可用";
+						if (dataList[i].accessStatus == "1"){
+							accessStatusTxt = "可用";
+						}
 						url = url.replace(url.substring(url.indexOf("//")+2,url.lastIndexOf(":")),parent.s_webserverip);
 						if (i==0){
-							var trStr = "<tr id='"+id+"'><td><input type='radio' name='selectMusic' checked='checked'/></td><td>"+fileName+"</td><td>"+trackLength+"</td><td>"+fileSize+" M</td><td>"+modifyTime+"</td><td><button class='delBtn btn btn-sm btn-danger'>删除</button></td><td style='display:none'>"+url+"</td></tr>";
+							var trStr = "<tr id='"+id+"'><td><input type='radio' name='selectMusic' checked='checked'/></td><td>"+fileName+"</td><td>"+trackLength+"</td><td>"+fileSize+" M</td><td>"+modifyTime+"</td><td>"+accessStatusTxt+"</td><td><button class='delBtn btn btn-sm btn-danger'>删除</button></td><td style='display:none'>"+url+"</td></tr>";
 						}else{
-							var trStr = "<tr id='"+id+"'><td><input type='radio' name='selectMusic'/></td><td>"+fileName+"</td><td>"+trackLength+"</td><td>"+fileSize+" M</td><td>"+modifyTime+"</td><td><button class='delBtn btn btn-sm btn-danger'>删除</button></td><td style='display:none'>"+url+"</td></tr>";
+							var trStr = "<tr id='"+id+"'><td><input type='radio' name='selectMusic'/></td><td>"+fileName+"</td><td>"+trackLength+"</td><td>"+fileSize+" M</td><td>"+modifyTime+"</td><td>"+accessStatusTxt+"</td><td><button class='delBtn btn btn-sm btn-danger'>删除</button></td><td style='display:none'>"+url+"</td></tr>";
 						}
 						$("#musicTable").append(trStr);
 					}
@@ -319,7 +309,6 @@
 						if (className == "thClass"){
 							continue;
 						}
-						//console.log(rootUrl); 
 						$(trList[i]).dblclick(function(){
 							playByIndex(this);
 						})
@@ -343,8 +332,7 @@
 						$(this).removeClass("mouseonClass");
 					})
 					
-					//初始化首页
-					parent.initMusicPlayer();
+					parent.refrshMusic();
 				},
 				failed:function(result){
 					console.log("showFiles.do call failed!");	
@@ -358,9 +346,12 @@
 				type:"POST",
 				url:rootUrl + "file/delFile.do",
 				data:{id:id},
-				dataType:'json',
+				//dataType:'json',
 				success:function(result){
-					refreash();
+					if (result == "success"){
+						layer.msg("操作成功");
+						refreash();
+					}
 				}
 			});
 		}
@@ -375,13 +366,14 @@
 			setTimeout(refreash,sec*1000);
 		}
 		
-		var mediaTmp = $("#player")[0];
+		// 绑定事件
+		Media = document.getElementById("player");
 		var eventTester = function(e){
-			mediaTmp.addEventListener(e,function(){
+	        Media.addEventListener(e,function(){
 	            if (e == "ended"){
 	            	if (playMode == 0){
 	            		// 单曲循环
-	            		playMusic();
+	            		play();
 	            	}else if (playMode == 1){
 	            		//顺序播放
 	            		nextMusic();

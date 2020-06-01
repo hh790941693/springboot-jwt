@@ -229,10 +229,10 @@ public class GenUtils {
                     + File.separator + classname + File.separator + classname + ".html";
         }else if (template.contains("add.html.vm")) {
             return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
-                    + File.separator + classname + File.separator + "add.html";
+                    + File.separator + classname + File.separator + "Add.html";
         }else if (template.contains("edit.html.vm")) {
             return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
-                    + File.separator + classname + File.separator + classname + "edit.html";
+                    + File.separator + classname + File.separator + classname + "Edit.html";
         }else if (template.contains("form.html.vm")) {
             return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
                     + File.separator + classname + File.separator + classname + "Form.html";
@@ -243,11 +243,11 @@ public class GenUtils {
         }else if (template.contains("add.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
-                    + File.separator + "add.js";
+                    + File.separator + "Add.js";
         }else if (template.contains("edit.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
-                    + File.separator + "edit.js";
+                    + File.separator + "Edit.js";
         }else if (template.contains("form.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
