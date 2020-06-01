@@ -659,38 +659,28 @@ public class WebSocketClientController extends AdminBaseController
 			return "failed";
 		}
 		Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-		List<WsUsersDO> allUserListTmp = wsUsersService.selectList(null);
-		List<WsUsersDO> allUserList = new ArrayList<WsUsersDO>();
+		//所有用户
+		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>()
+				.ne("name", "admin"));
+		//在线用户
 		List<WsUsersDO> onlineUserList = new ArrayList<WsUsersDO>();
+		//离线用户
 		List<WsUsersDO> offlineUserList = new ArrayList<WsUsersDO>();
-		List<WsUsersDO> friendsUserList = new ArrayList<WsUsersDO>();//好友列表
-		WsUsersDO currentOnlineUserInfo = new WsUsersDO();
-		for (WsUsersDO wu : allUserListTmp) {
-			if (wu.getName().equals(user)) {
-				currentOnlineUserInfo = wu;
-			}
+		//当前用户信息
+		WsUsersDO currentOnlineUserInfo = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+		WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", currentOnlineUserInfo.getId()));
+		currentOnlineUserInfo.setHeadImage(wsUserProfileDO.getImg());
+		//我的好友列表
+		List<WsUsersDO> friendsUserList = wsUsersService.queryMyFriendList(currentOnlineUserInfo.getId());
 
-			if (wu.getName().equals("admin")) {
-				continue;
-			}
-
+		for (WsUsersDO wu : allUserList) {
 			if (socketMap.containsKey(wu.getName())) {
+				wu.setState("1");
 				onlineUserList.add(wu);
 			}else {
 				wu.setState("0");
 				offlineUserList.add(wu);
 			}
-			
-			if (!user.equals(wu.getName())) {
-				//检查wu.getName()是否是user的好友
-				List<WsFriendsDO> friendsList = wsFriendsService.selectList(new EntityWrapper<WsFriendsDO>()
-						.eq("uname", user).eq("fname", wu.getName()));
-				if (friendsList.size()>0) {
-					friendsUserList.add(wu);
-				}
-			}
-			
-			allUserList.add(wu);
 		}
 		
 		WsOnlineInfo woi = new WsOnlineInfo();

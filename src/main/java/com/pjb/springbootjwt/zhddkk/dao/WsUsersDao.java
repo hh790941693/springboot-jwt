@@ -16,4 +16,6 @@ import java.util.List;
 public interface WsUsersDao extends BaseDao<WsUsersDO> {
 
     List<WsUsersDO> queryUserPage(RowBounds rowBounds, @Param("ew") Wrapper<WsUsersDO> wrapper);
+
+    List<WsUsersDO> queryMyFriendList(@Param("userId") Integer userId);
 }

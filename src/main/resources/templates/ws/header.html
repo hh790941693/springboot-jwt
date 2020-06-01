@@ -26,11 +26,11 @@
 	<!--头部-->
 	<div id="headerDiv" align="center">
 		<img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
-		<div style="float:left;">
+		<div style="float:left;border-right: 1px solid grey;">
             <div style="float:left;">
 			    <img id='myImg' alt=""  width="50" height="50">
             </div>
-            <div style="float:left;margin-left:3px;">
+            <div style="float:left;margin-left:3px;margin-right: 3px;">
                 <div style="height:65%;text-align: left;">
 			         <label style="font-size: 19px;">你好:</label><label id="curUser" style="color:blue;font-size:23px;"></label>
                 </div>
@@ -42,19 +42,19 @@
 		</div>
 
 		<!--头部标题-->
-		<div id="headerTitleDiv" style="float:left;font-size:20px;width:35%;padding-top:13px;display: none;">
+		<div id="headerTitleDiv" style="float:left;font-size:20px;width:35%;height:100%;padding-top:13px;display: none;border-right: 1px solid grey;">
 			<label id="titleLabel" style="color:black;">websocket客户端</label>
 		</div>
 
 		<!--天气-->
-		<div id="weatherDiv" style="float:left;font-size:18px;width:35%;padding-top:13px;display: block;">
+		<div id="weatherDiv" style="float:left;font-size:18px;width:35%;height:100%;padding-top:13px;display: block;border-right: 1px solid grey;">
 			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="location" style="color:black;"></label>
 		</div>
 
 		<!--滚动新闻-->
-		<div id="scrollAdDiv" style="float:left;height:30px;overflow:hidden;width:29%;margin-top:15px;">
+		<div id="scrollAdDiv" style="float:left;height:100%;overflow:hidden;width:29%;border-right: 1px solid grey;margin-left: 3px;">
 			<div id="adContentOutDiv" style="height:200%;text-align: left;">
 				<div id="adContentDiv"></div>
 				<div id="adNoContentDiv"></div>
@@ -137,9 +137,11 @@
                     var currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
                     var coinNum = currentUserOnlineInfo.coinNum;
                     var onlineNum = jsonObj.onlineUserList.length;
+                    var headImage = currentUserOnlineInfo.headImage;
 
                     $("#coinNum").text(coinNum);
                     $("#onlineNum").text(onlineNum);
+                    $("#myImg").attr("src", headImage);
                 }
             });
         }

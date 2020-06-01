@@ -13,4 +13,7 @@ import java.util.List;
 public interface WsUsersService extends CoreService<WsUsersDO> {
 
     List<WsUsersDO> queryUserPage(Page<WsUsersDO> page, Wrapper<WsUsersDO> wrapper);
+
+    //我的好友列表
+    List<WsUsersDO> queryMyFriendList(Integer userId);
 }

@@ -12,4 +12,19 @@
         </if>
         order by t1.state desc,t1.name asc
     </select>
+
+    <select id="queryMyFriendList" resultType="com.pjb.springbootjwt.zhddkk.domain.WsUsersDO">
+        SELECT
+            t2.*,t3.img as head_image
+        FROM ws_friends t1
+        LEFT JOIN
+            ws_users t2 ON t2.id = t1.fid
+        LEFT JOIN
+            ws_user_profile t3 ON t3.user_id=t2.id
+        <where>
+            <if test="userId != null and userId != ''">
+                t1.uid=${userId}
+            </if>
+        </where>
+    </select>
 </mapper>
