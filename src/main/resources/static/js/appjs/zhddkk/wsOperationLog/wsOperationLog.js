@@ -251,7 +251,5 @@ $('#exportDataBtn').click(function(){
 	if ($("#moduleNameSelect").val() != "" && $("#moduleNameSelect").val() != 'undefined'){
 		operModule=$("#moduleNameSelect").val();
 	}
-	console.log("userId:"+userId);
-	console.log("operModule:"+operModule);
 	$(this).attr('href', prefix + "/exportOperateLog.do?userId="+userId+"&operModule="+operModule);
 })

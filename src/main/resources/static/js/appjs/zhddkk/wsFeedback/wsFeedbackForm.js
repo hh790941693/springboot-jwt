@@ -1,5 +1,4 @@
 var user=$('#user').val();
-console.log("user:"+user);
 $(function(){
     validateRule();
     initUpload();

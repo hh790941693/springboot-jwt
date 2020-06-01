@@ -88,7 +88,6 @@ function batchCode() {
 }
 
 function edit(){
-	console.log('打开配置页面');
 	layer.open({
 		type : 2,
 		title : '增加',

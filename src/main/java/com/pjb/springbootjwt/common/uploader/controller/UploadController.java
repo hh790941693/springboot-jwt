@@ -52,7 +52,7 @@ public class UploadController {
                         logger.info("返回的文件url:{}", url);
 
                         map.put("code", "1");
-                        map.put("msg", "success");
+                        map.put("msg", "操作成功");
                         map.put("data", url);
                     }
                 }
@@ -61,7 +61,7 @@ public class UploadController {
             logger.info("上传出现异常:{}",e.getMessage());
             e.printStackTrace();
             map.put("code", "0");
-            map.put("msg", "error");
+            map.put("msg", "操作失败");
             map.put("data", "");
         }
         return map;
