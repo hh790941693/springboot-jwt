@@ -280,14 +280,14 @@ public class WebSocketServerController extends AdminBaseController
 	 * 
 	 */
 	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.USER_MANAGE,subModule="",describe="聊天记录监控首页")
-	@RequestMapping(value = "wsserverChartLogMonitor.page", method = RequestMethod.GET)
+	@RequestMapping(value = "wsserverChartMonitor.page", method = RequestMethod.GET)
 	public String chatLogMonitor(Model model,HttpServletRequest request)
 	{
-		logger.debug("访问wsserverChartLogMonitor.page");
+		logger.debug("访问wsserverChartMonitor.page");
 		model.addAttribute("webserverip", configMap.get("webserver.ip"));
 		int serverPort = request.getServerPort();
 		model.addAttribute("webserverport", serverPort);
-		return "ws/wsserverChartLogMonitor";
+		return "ws/wsserverChartMonitor";
 	}
 	
 	
