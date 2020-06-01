@@ -89,7 +89,10 @@
 			}
 		}else{
             headerTitle = "websocket客户端";
-			$("#myImg").attr("src", parent.s_selfimg);
+            if (parent.s_selfimg == "" || parent.s_selfimg == null) {
+                var errorImgUrl = rootUrl+"../img/"+$.ws.errorImageName;
+                $("#myImg").attr("src",errorImgUrl);
+            }
 		}
 		$("#curUser").text(parent.s_user);
 
@@ -144,7 +147,11 @@
 
                     $("#coinNum").text(coinNum);
                     $("#onlineNum").text(onlineNum);
-                    $("#myImg").attr("src", headImage);
+                    if (headImage == null || headImage == ""){
+                        $("#myImg").attr("src",rootUrl+"../img/"+$.ws.errorImageName);
+                    }else {
+                        $("#myImg").attr("src", headImage);
+                    }
                 }
             });
         }
