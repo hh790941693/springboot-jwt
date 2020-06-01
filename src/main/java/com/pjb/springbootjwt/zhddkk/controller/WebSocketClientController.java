@@ -665,7 +665,9 @@ public class WebSocketClientController extends AdminBaseController
 		//当前用户信息
 		WsUsersDO currentOnlineUserInfo = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
 		WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", currentOnlineUserInfo.getId()));
-		currentOnlineUserInfo.setHeadImage(wsUserProfileDO.getImg());
+		if (null != wsUserProfileDO) {
+            currentOnlineUserInfo.setHeadImage(wsUserProfileDO.getImg());
+        }
 		//我的好友列表
 		List<WsUsersDO> friendsUserList = wsUsersService.queryMyFriendList(currentOnlineUserInfo.getId());
 

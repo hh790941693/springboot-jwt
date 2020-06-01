@@ -139,7 +139,7 @@
 		// 加载图片失败
 		function imgerror(imgObj){
 			var scrVar = $(imgObj).attr("src");
-			$(imgObj).attr("src",rootUrl+"/img/imgerror_default.jpg");
+			$(imgObj).attr("src",rootUrl+"img/"+$.ws.errorImageName);
 		}
 	</script>
 </html>
