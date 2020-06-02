@@ -250,14 +250,14 @@
 					for (var x=0;x<cyy.length;x++){
 						$("#selectCyy").append("<option value=" + cyy[x].name + ">" + cyy[x].name+ "</option>")
 					}
-					// 好友列表
+					// 好友用户列表
 					var usersList = jsonObj.friendsList;
 					var selectUser = $("#selectUser").val();
 					$("#selectUser").empty();
 					if (usersList != "") {
 						if (selectUser == null || selectUser == undefined) {
 							for (var i=0;i<usersList.length;i++) {
-								if (usersList[i].name == user) {
+								if (usersList[i].name == parent.s_user) {
 									continue;
 								}
 								$("#selectUser").append("<option value=" + usersList[i].name + ">" + usersList[i].name+ "</option>");
@@ -267,7 +267,7 @@
 							for (var i=0;i<usersList.length;i++){
 								var nameTmp = usersList[i].name;
 								var enableTmp = usersList[i].enable;
-								if (nameTmp == selectUser || nameTmp == user || enableTmp=="0"){
+								if (nameTmp == selectUser || nameTmp == parent.s_user || enableTmp=="0"){
 									continue;
 								}
 								var state = usersList[i].state;
