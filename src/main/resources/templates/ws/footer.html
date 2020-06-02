@@ -33,6 +33,10 @@
 		display: inline-block;
 		margin-top: -10px;
 	}
+
+	#copyrightDiv li{
+		cursor: pointer;
+	}
 </style>
 </head>
 <body>
@@ -42,17 +46,17 @@
 			<div style="float:left;">
 				<label id="curUser22">邮箱:547495788@qq.com</label>
 			</div>
-			<div style="float:left;margin-left: 350px;">
-				<label id="cliName">所有版权信息归作者所有</label>
-				<label id="versionLabel" style='margin-left:15px;color:blue;font-weight:bold;'></label>
+			<div style="float:left;margin-left: 230px;">
+				<label id="cliName">COPYRIGHT © 2019 – 2030 版权信息归作者所有</label>
+				<label id="versionLabel" style='margin-left:10px;color:blue;font-weight:bold;'></label>
 				<a href='javascript:void(0)' onclick='checkUpdate()' style='margin-left:15px;'>检查更新</a>
 			</div>
-			<div id="copyrightDiv" style="float:right;">
+			<div id="copyrightDiv" style="float:right;color:blue;">
 				<ul>
-					<li>联系作者 | </li>
-					<li>捐赠作者 | </li>
-					<li>提出疑问 | </li>
-					<li>关于我们</li>
+					<li onclick="contactAuthor()">联系作者 | </li>
+					<li onclick="donate()">捐赠作者 | </li>
+					<li onclick="feedbackUs()">提出疑问 | </li>
+					<li onclick="aboutUs()">关于我们</li>
 				</ul>
 			</div>
 		</div>
@@ -66,8 +70,11 @@
 	<div th:include="common :: footer"></div>
 </body>
 	<script type="text/javascript">
+		//当前版本号
 		var curVersion = "";
 		queryVersion();
+
+		//查询版本号
 		function queryVersion(){
 			$.ajax({
 				type: 'GET',
@@ -81,6 +88,7 @@
 			});
 		}
 
+		//检查升级
 		function checkUpdate(){
 			$.ajax({
 				type: 'GET',
@@ -110,6 +118,7 @@
 			});
 		}
 
+		//开始升级
 		function toUpdate(curVersion){
 			$.ajax({
 				type: 'GET',
@@ -119,6 +128,54 @@
 				success: function(result) {
 					console.log("升级结果:"+result)
 				}
+			});
+		}
+
+		//联系作者
+		function contactAuthor(){
+			parent.layer.open({
+				type : 2,
+				title : '联系作者',
+				maxmin : true,
+				shadeClose : false,//点击遮罩关闭层
+				area : [ '530px', '300px' ],
+				content : rootUrl + 'index/contactAuthor.page'
+			});
+		}
+
+		//捐赠作者
+		function donate(){
+			parent.layer.open({
+				type : 2,
+				title : '捐赠作者',
+				maxmin : true,
+				shadeClose : false,//点击遮罩关闭层
+				area : [ '530px', '300px' ],
+				content : rootUrl + 'index/donate.page'
+			});
+		}
+
+		//提出疑问
+		function feedbackUs() {
+			parent.layer.open({
+				type : 2,
+				title : '提出疑问',
+				maxmin : true,
+				shadeClose : false,//点击遮罩关闭层
+				area : [ '530px', '300px' ],
+				content : rootUrl + 'index/feedbackUs.page'
+			});
+		}
+
+		//关于我们
+		function aboutUs() {
+			parent.layer.open({
+				type : 2,
+				title : '关于我们',
+				maxmin : true,
+				shadeClose : false,//点击遮罩关闭层
+				area : [ '530px', '300px' ],
+				content : rootUrl + 'index/aboutUs.page'
 			});
 		}
 	</script>

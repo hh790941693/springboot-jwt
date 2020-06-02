@@ -166,7 +166,7 @@
 				}
 
 				if (toUser == null || toUser == "") {
-					var msg = "<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 你暂时没有好友,快去<a href='javascript:void(0)' onclick='toAddUser()'>添加用户</a>吧!</p>";
+					var msg = "<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 你暂时没有好友,快去<a href='javascript:void(0)' onclick='toAddUser()'>添加好友</a>吧!</p>";
 					var textArea = $("#msgFromServer").append(msg);
 					parent.chatRecord = parent.chatRecord + msg;
 					textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
@@ -322,11 +322,9 @@
 
 		//添加好友
 		function toAddUser(){
-			var cur_pageid = "addFriends.page";
-			parent.cur_pageid = cur_pageid;
-			parent.showPage(cur_pageid);
-			$("#leftNavi ul li",window.parent.document).removeClass("mouseleftclick");
-			$("#"+cur_pageid,window.parent.document).addClass("mouseleftclick");
+			var curPageid = "/zhddkk/wsUsers/wsUsers";
+			parent.curPageid = curPageid;
+			parent.showPage(curPageid);
 		}
 
 		//清屏

@@ -34,6 +34,8 @@ import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,7 +63,7 @@ public class WebSocketClientController extends AdminBaseController
 
 	private static final String REDIS_KEY_PREFIX = "ws_"; //登陆用户的redis缓存前缀
 	
-	private static final Log logger = LogFactory.getLog(WebSocketClientController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WebSocketClientController.class);
 	
 	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMddHHmmss");
 	
@@ -284,12 +286,8 @@ public class WebSocketClientController extends AdminBaseController
 		}catch (Exception e) {
 			logger.debug("设置redis缓存失败,key:"+redisKey+" error:"+e.getMessage());
 		}
-		
-		if (user.equals("admin")) {
-			return "ws/wsserverIndex";
-		}else{
-			return "ws/wsclientIndex";
-		}
+
+		return "ws/wsclientIndex";
 	}
 
 	/**

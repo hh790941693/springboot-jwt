@@ -300,7 +300,7 @@
 						success: function(result) {
 							if (result.code == 1) {
 								layer.msg("评论成功");
-								setTimeout(refresh, 1500);
+								setTimeout(refresh, 800);
 							}
 						}
 					});
@@ -320,7 +320,7 @@
 				success: function(result) {
 					if (result.code == 1) {
 						layer.msg("点赞成功");
-						setTimeout(refresh, 1000);
+						setTimeout(refresh, 500);
 					}
 				}
 			});
@@ -338,7 +338,7 @@
 						success: function(result) {
 							if (result.code == 1) {
 								layer.msg("删除成功");
-								setTimeout(refresh, 1000);
+								setTimeout(refresh, 500);
 							}
 						}
 					});
@@ -382,26 +382,14 @@
 		}
 
 		//刷新
-		function refresh()
-		{
+		function refresh(){
 			window.location.href = window.location.href;
 		};
 
 		//对img绑定放大事件
 		$(".picDivClass img").click(function(){
-			// 记录点击坐标
-			var circleObj = $(this).parent().parent();
-			var canvasObj = $(circleObj)[0];
-			var offleft = canvasObj.offsetLeft;
-			var offtop = canvasObj.offsetTop;
-			var clientY = event.clientY;
-			var mouseY = clientY-offtop;
 			$.ws.gShowImg($(this).attr("src"));
 		})
-
-		function refresh(){
-			window.location.href = window.location.href;
-		};
 
 		function imgerror(imgObj){
 		    var errorImgUrl = rootUrl+"img/"+$.ws.errorImageName;

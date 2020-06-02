@@ -58,7 +58,12 @@
 
 		<!--左侧导航栏-->
 		<div id="leftNaviDiv" style="width:14%;height:100%;float:left;border:2px solid green;">
-			<iframe id="leftNaviIframePage" src="clientLeftNavi.page" width="100%" height="100%"></iframe>
+			<div th:if="${user == 'admin'}">
+				<iframe id="leftNaviIframePage" src="serverLeftNavi.page" width="100%" height="100%"></iframe>
+			</div>
+			<div th:if="${user != 'admin'}">
+				<iframe id="leftNaviIframePage" src="clientLeftNavi.page" width="100%" height="100%"></iframe>
+			</div>
 		</div>
 
 		<!--右侧子页面-->
@@ -135,14 +140,19 @@
 
         // 默认显示页:聊天窗口首页
         var curPageid = "wsclientChat.page";
+        if (s_user == 'admin'){
+			curPageid = "/zhddkk/wsUsers/wsUsersForAdmin";
+		}
         showPage(curPageid);
         function showPage(pageId) {
 			curPageid = pageId;
 			var url = pageId + "?user="+s_user;
 			if (pageId.indexOf("gameIndex.page") != -1){
-				window.location.href=pageId;
+				window.location.href = pageId;
 			}else if (pageId.indexOf("canvasIndex.page") != -1) {
 				window.location.href = pageId;
+			}else if (pageId.indexOf("configurationLi") != -1) {
+				$("#configurationDiv").slideDown();
 			}else{
 				$("#iframePage").attr("src", url);
 			}
@@ -259,11 +269,11 @@
             }else if (typeId == 2){
                 //在线消息
                 defaultCss = "color:green;font-size:10px;line-height:14px;";
-                showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->我] " +msg;
+                showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] " +msg;
             }else if (typeId == 3){
                 //离线消息
                 defaultCss = "color:grey;font-size:10px;line-height:14px;";
-                showStr="["+curTime+"] ["+typeDesc+"] [我-->"+msgTo+"] " +msg;
+                showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] " +msg;
             }else if (typeId == 4){
                 //广告消息
                 defaultCss = "color:blue;font-size:10px;line-height:14px;";
@@ -276,11 +286,10 @@
                 defaultCss = "color:blue;font-size:10px;line-height:14px;";
             }
 
-            if (curPageid != "wsclientChat.page"){
+            if (curPageid != "wsclientChat.page" && curPageid != "wsserverChartMonitor.page"){
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 chatRecord = chatRecord + htmlData;
                 unreadCount = unreadCount+1;
-                //$("#unreadCountSpan").text(unreadCount);
 				$("#leftNaviIframePage").contents().find("#unreadCountSpan").text(unreadCount);
             }else{
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";

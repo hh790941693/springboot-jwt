@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
+    <meta charset="UTF-8">
+    <title>捐赠作者</title>
+    <style>
+        p{
+            height:28px;
+        }
+
+        span{
+            display: inline-block;
+            width:70px;
+        }
+    </style>
+</head>
+<body>
+    <div style="width:60%;height:70%;margin:0 auto;padding-top:20px;" align="center">
+        <p>
+            <span>捐赠人：</span><input id="name" type="text" placeholder="请填写姓名" autocomplete="off">
+        </p>
+        <p>
+            <span>联系方式：</span><input id="telephone" type="text" placeholder="请填写手机号" autocomplete="off">
+        </p>
+        <p>
+            <span>捐赠金额：</span><input id="money" type="number"  placeholder="请填写金额" autocomplete="off">
+        </p>
+        <p>
+            <span>备注：</span><input id="remark" type="text" placeholder="请填写备注" autocomplete="off">
+        </p>
+        <p style="margin-top:18px;">
+            <button class="btn btn-sm btn-primary" onclick="donate()">捐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;赠</button>
+        </p>
+    </div>
+
+    <div th:include="common::footer"></div>
+</body>
+    <script>
+        function donate() {
+            var name=$("#name").val();
+            var telephone=$("#telephone").val();
+            var money=$("#money").val();
+            var remark=$("#remark").val();
+            if (name != '' && telephone != '' && money != 0) {
+                layer.msg("恭喜"+name+",捐赠成功!");
+                setTimeout(function () {
+                    parent.layer.closeAll();
+                }, 2000);
+            }
+        }
+    </script>
+</html>
