@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: header"></head>
+    <meta charset="UTF-8">
+    <title>提出疑问</title>
+    <style>
+        p{
+            height:28px;
+        }
+
+        span{
+            display: inline-block;
+            width:70px;
+        }
+    </style>
+</head>
+<body>
+    <div style="width:60%;height:70%;margin:0 auto;padding-top:20px;" align="center">
+        <p>
+            <span>联系人：</span><input id="name" type="text" placeholder="请填写姓名" autocomplete="off">
+        </p>
+        <p>
+            <span>联系方式：</span><input id="telephone" type="text" placeholder="请填写手机号" autocomplete="off">
+        </p>
+        <div>
+            <span>描述：</span>
+            <textarea id="feedback" rows="6"></textarea>
+        </div>
+        <p style="margin-top: 18px;">
+            <button class="btn btn-sm btn-primary" onclick="send()">提&nbsp;&nbsp;&nbsp;交</button>
+        </p>
+    </div>
+    <div th:include="common::footer"></div>
+</body>
+    <script>
+        function send() {
+            var name=$("#name").val();
+            var telephone=$("#telephone").val();
+            var feedback=$("#money").val();
+            if (name != '' && telephone != '' && feedback != 0) {
+                layer.msg("提交成功!");
+                setTimeout(function () {
+                    parent.layer.closeAll();
+                }, 2000);
+            }
+        }
+    </script>
+</html>

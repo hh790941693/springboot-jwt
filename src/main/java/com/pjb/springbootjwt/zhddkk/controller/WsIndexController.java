@@ -31,4 +31,28 @@ public class WsIndexController {
         }
         return Result.fail();
     }
+
+    //联系作者
+    @RequestMapping("/contactAuthor.page")
+    public String contactAuthor(){
+        return "ws/contactAuthor";
+    }
+
+    //捐赠作者
+    @RequestMapping("/donate.page")
+    public String donate(){
+        return "ws/donate";
+    }
+
+    //提出疑问
+    @RequestMapping("/feedbackUs.page")
+    public String feedbackUs(){
+        return "ws/feedbackUs";
+    }
+
+    //关于我们
+    @RequestMapping("/aboutUs.page")
+    public String aboutUs(){
+        return "ws/aboutUs";
+    }
 }
