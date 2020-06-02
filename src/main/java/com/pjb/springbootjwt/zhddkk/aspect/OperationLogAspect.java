@@ -12,12 +12,12 @@ import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsOperationLogService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 public class OperationLogAspect {
 
-	private static final Log logger = LogFactory.getLog(OperationLogAspect.class);
+	private static final Logger logger = LoggerFactory.getLogger(OperationLogAspect.class);
 
 	@Autowired
 	private WsUsersService wsUsersService;

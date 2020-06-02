@@ -34,7 +34,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
-        logger.info("进入到拦截器AuthenticationInterceptor.preHandle");
+        //logger.info("进入到拦截器AuthenticationInterceptor.preHandle");
         // 如果不是映射到方法直接通过
         if(!(object instanceof HandlerMethod)){
             return true;
@@ -42,7 +42,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         HandlerMethod handlerMethod = (HandlerMethod)object;
         Method method = handlerMethod.getMethod();
         String methodName = method.getName();
-        logger.info("方法名:{}", methodName);
+        //logger.info("方法名:{}", methodName);
         if (method.isAnnotationPresent(RequiresAuthentication.class)) {
             logger.info("当前请求需要token");
             String token = httpServletRequest.getHeader("Authorization");

@@ -32,8 +32,8 @@ import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -52,7 +52,7 @@ import net.sf.json.JSONArray;
 @RequestMapping("ws")
 public class WebSocketServerController extends AdminBaseController
 {
-	private static final Log logger = LogFactory.getLog(WebSocketServerController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WebSocketServerController.class);
 	
 	private static Map<String,String> configMap = WsInterceptor.getConfigMap();
 
