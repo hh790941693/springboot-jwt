@@ -53,7 +53,7 @@
 		<input type="hidden" id="webserverip" name="webserverip" th:value="${webserverip}">
 		<input type="hidden" id="webserverport" name="webserverport" th:value="${webserverport}">
 		<input type="hidden" id="selfimg" name="selfimg" th:value="${selfimg}">
-		<input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
+        <input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
 
 		<!--左侧导航栏-->
 		<div id="leftNaviDiv" style="width:14%;height:100%;float:left;border:2px solid green;">
@@ -61,7 +61,7 @@
 		</div>
 
 		<!--右侧子页面-->
-		<div id="rightIframeDiv" align="center" style="width:86%;height:100%;float:left;border:2px solid green;">
+		<div id="rightIframeDiv" align="center" style="width:86%;height:100%;float:left;border:2px solid green;overflow: hidden;">
 			<iframe id="iframePage" width="100%" height="100%"></iframe>
 		</div>
 	</div>
@@ -76,12 +76,12 @@
 		<img id="musicPicImg" src="../img/others/musicplayer.jpg" style="width:100%;height:100%;">
 	</div>
 
-	<!--二维码登录(隐藏)-->
+	<!--右上角 二维码-->
 	<div id="qrDiv" style="display:none">
 		<img id="qrcodeImg">
 	</div>
 
-	<!--简易音乐播放器(隐藏)-->
+	<!--左下角 迷你音乐播放器-->
 	<div id='musicIframeDiv'>
 		<div id='musicIframeHeader'>
 			<span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
@@ -336,7 +336,7 @@
 
         adjustMusicWindowPosition();
         //音乐播放器可拖动代码
-        $.ws.dragPanelMove("#musicIframeHeader","#musicIframeDiv");
+		$.ws.dragPanelMove("#musicIframeHeader","#musicIframeDiv");
 
         //窗口大小变化事件
         $(window).resize(function () {
@@ -383,7 +383,7 @@
 			});
 		};
 
-        //签到
+		//签到
         function sign(){
             $.ajax({
                 type: 'POST',

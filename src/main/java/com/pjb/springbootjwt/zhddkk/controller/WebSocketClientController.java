@@ -284,12 +284,8 @@ public class WebSocketClientController extends AdminBaseController
 		}catch (Exception e) {
 			logger.debug("设置redis缓存失败,key:"+redisKey+" error:"+e.getMessage());
 		}
-		
-		if (user.equals("admin")) {
-			return "ws/wsserverIndex";
-		}else{
-			return "ws/wsclientIndex";
-		}
+
+		return "ws/wsclientIndex";
 	}
 
 	/**
