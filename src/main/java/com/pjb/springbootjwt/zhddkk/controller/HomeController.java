@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 首页
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 public class HomeController {
 	
 	@RequestMapping({"","/index"})
-	public String v_home(Model model, HttpServletRequest request) {
+	public String v_home(Model model, HttpServletRequest request, HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
 		if (null != cookies) {
 			boolean isAdmin = false;
@@ -26,14 +27,14 @@ public class HomeController {
 					if (cookie.getValue().equals("admin")){
 						isAdmin = true;
 					}
-				}
-
-				if (cookie.getName().equals(CommonConstants.S_PASS) && cookie.getMaxAge() != 0) {
-					//对密码进行解密
+				}else if (cookie.getName().equals(CommonConstants.S_PASS) && cookie.getMaxAge() != 0) {
 					if (isAdmin){
-						cookie.setMaxAge(0);
+						//不保存admin密码
 						model.addAttribute(CommonConstants.S_PASS, "");
+						cookie.setMaxAge(0);
+						response.addCookie(cookie);
 					}else {
+						//对密码进行解密
 						String passDecrypt = SecurityAESUtil.decryptAES(cookie.getValue(), CommonConstants.AES_PASSWORD);
 						model.addAttribute(CommonConstants.S_PASS, passDecrypt);
 					}
