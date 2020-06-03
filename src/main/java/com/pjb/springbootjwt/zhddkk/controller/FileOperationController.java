@@ -58,7 +58,7 @@ public class FileOperationController
 	public String musicPlayer(Model model,@RequestParam(value="user",required=false) String user)
 	{
 		model.addAttribute("user", user);
-		return "music/musicPlayer";
+		return "music/musicPlayerVue";
 	}
 	
 	/**
@@ -191,7 +191,7 @@ public class FileOperationController
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.MUSIC,subModule="",describe="显示音乐列表")
 	@RequestMapping("showFiles.do")
 	@ResponseBody
-	public Object showFiles(HttpServletRequest request, @RequestParam(value="user",required=false) String user, @RequestParam("fileType") final String fileType) {
+	public Object showFiles(HttpServletRequest request, @RequestParam(value="user",required=false) String user, @RequestParam("fileType") String fileType) {
 		List<WsFileDO> fileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", "music"));
 		List<WsFileDO> finalList = new ArrayList<WsFileDO>();
 		String webserverip = webSocketConfig.getAddress();
@@ -218,16 +218,6 @@ public class FileOperationController
 				wsFileDO.setAccessStatus("0");
 			}
 			finalList.add(wsFileDO);
-//			}else{
-//				String diskPath = wsFileDO.getDiskPath();
-//				String filename = url.substring(url.lastIndexOf("/")+1);
-//				File file = new File(diskPath+File.separator+filename);
-//				if (file.exists() && file.isFile()) {
-//					logger.info("删除文件:{}",filename);
-//					file.delete();
-//				}
-//				wsFileService.deleteById(wsFileDO.getId());
-//			}
 		}
 		
 		ExtReturn er = new ExtReturn();
