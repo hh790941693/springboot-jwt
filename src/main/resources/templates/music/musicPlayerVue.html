@@ -119,15 +119,8 @@
 	</body>
 
 	<script type="text/javascript">
-		// 全局变量
-		var playMode = -1; //播放模式   默认为顺序播放
-
-		// 播放模式监听
-		$("#playModeDiv input[name='playmode']").each(function(index, val){
-			$(val).click(function(){
-				playMode = $(val).val();
-			})
-		})
+		//播放模式 0:单曲循环 1:顺序播放 2:随机播放
+		var playMode = -1;
 
 		var app = new Vue({
 			el: '#playerDiv',
@@ -233,7 +226,7 @@
 					var randomNum = randomNumber(0,app.musicData.length-1);
 					app.curSelectedIndex = randomNum;
 					var selectedTr = $("table tr").get(app.curSelectedIndex+1);
-					playByIndex(selectedTr);
+					app.playByIndex(selectedTr);
 				},
 				deleteMusic:function (id) {
 					//删除音乐
@@ -261,6 +254,14 @@
 			}
 		});
 
+		// 播放模式监听
+		$("#playModeDiv input[name='playmode']").each(function(index, val){
+			$(val).click(function(){
+				playMode = $(val).val();
+				console.log("playMode:"+playMode);
+			})
+		})
+
 		function showList(obj){
 			if ($(obj).text() == "关闭列表"){
 				$("#musicList").slideUp(500);
@@ -283,12 +284,16 @@
 	            if (e == "ended"){
 	            	if (playMode == 0){
 	            		// 单曲循环
+						console.log("单曲循环");
+						$("#btnPlay").text("播放");
 	            		app.play();
 	            	}else if (playMode == 1){
 	            		//顺序播放
+						console.log("顺序播放");
 	            		app.nextMusic();
 	            	}else if (playMode == 2){
 	            		//随机播放
+						console.log("随机播放");
 	            		app.randomMusic();
 	            	}
 	            }else if (e == "error"){
