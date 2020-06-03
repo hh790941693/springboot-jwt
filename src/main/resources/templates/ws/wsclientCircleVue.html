@@ -126,10 +126,10 @@
 						<div style='display:inline-block;height:100%;width:100%;'>
                             <img :src="item.headImg" width='30' height='30' :onerror="defaultImg">
                             <template v-if="curUser == item.userName">
-                                <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span>
+                                <span class='myselfUserSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
                             </template>
                             <template v-else>
-                                <span class='userSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span>
+                                <span class='userSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
                             </template>
                             <span class='likeNumSpanClass'>已有{{item.likeNum}}人点赞</span>
                             <span class='buttonGroupSpan'>
@@ -148,22 +148,22 @@
 				</div>
 				<div class='picDivClass' align='center'>
 					<template v-if="item.pic1 != null && item.pic1 != ''">
-					    <img :src='item.pic1' width='100px' height='100px' @click="showPic(item.pic1)" onerror='imgerror(this)' style='margin-left:20px;'>
+					    <img :src='item.pic1' width='100px' height='100px' @click="showPic(item.pic1)" :onerror="defaultImg" style='margin-left:20px;'>
                     </template>
                     <template v-if="item.pic2 != null && item.pic2 != ''">
-					    <img :src='item.pic2' width='100px' height='100px' @click="showPic(item.pic2)" onerror='imgerror(this)' style='margin-left:20px;'>
+					    <img :src='item.pic2' width='100px' height='100px' @click="showPic(item.pic2)" :onerror="defaultImg" style='margin-left:20px;'>
                     </template>
                     <template v-if="item.pic3 != null && item.pic3 != ''">
-					    <img :src='item.pic3' width='100px' height='100px' @click="showPic(item.pic3)" onerror='imgerror(this)' style='margin-left:20px;'>
+					    <img :src='item.pic3' width='100px' height='100px' @click="showPic(item.pic3)" :onerror="defaultImg" style='margin-left:20px;'>
                     </template>
                     <template v-if="item.pic4 != null && item.pic4 != ''">
-					    <img :src='item.pic4' width='100px' height='100px' @click="showPic(item.pic4)" onerror='imgerror(this)' style='margin-left:20px;'>
+					    <img :src='item.pic4' width='100px' height='100px' @click="showPic(item.pic4)" :onerror="defaultImg" style='margin-left:20px;'>
                     </template>
 				</div>
 
 				<div class='commentDivClass' v-for="commentItem in item.commentList">
 					<p>
-                        <span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>{{commentItem.userName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class='commentNameSpanClass' @click='queryPersonInfo(commentItem.userName)'>{{commentItem.userName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <span class='commentSpanClass'>{{commentItem.comment}}</span>
                         <template v-if="curUser == 'admin' || curUser == item.userName">
                             <a href='javascript:void(0)' @click='deleteComment(commentItem.id)'>删除</a>
@@ -325,6 +325,17 @@
                     //图片点击事件
                     $.ws.gShowImg(imgUrl);
                 },
+                //查看个人信息
+                queryPersonInfo:function(username){
+                    layer.open({
+                        type: 2,
+                        title: '用户个人信息',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['384px', '415px'],
+                        content: '/zhddkk/wsUsers/showPersonalInfo.page?user='+username
+                    });
+                },
 			},
 			created: function () {
 				this.queryCircleList(1, 5);
@@ -342,27 +353,5 @@
 			window.location.href = window.location.href;
 		};
 
-
-		function imgerror(imgObj){
-		    var errorImgUrl = rootUrl+"img/"+$.ws.errorImageName;
-            console.log("errorImgUrl:"+errorImgUrl);
-			$(imgObj).attr("src",errorImgUrl);
-		}
-
-		//查看个人信息
-		function queryPersonInfo(thisObj){
-			var username = $(thisObj).text();
-			if (username.indexOf(":")!= -1){
-				username = username.replace(":","");
-			}
-			layer.open({
-				type: 2,
-				title: '用户个人信息',
-				shadeClose: true,
-				shade: 0.8,
-				area: ['384px', '415px'],
-				content: '/zhddkk/wsUsers/showPersonalInfo.page?user='+username
-			});
-		}
 	</script>
 </html>
