@@ -213,6 +213,18 @@
 							app.circleList = resultData.records;
 							app.totalPage = resultData.pages;
 							app.totalCount = resultData.total;
+
+                            if (app.curPage >= app.totalPage){
+                                $("#nextBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled",true);
+                            }else{
+                                $("#nextBtn").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled",false);
+                            }
+
+                            if (app.curPage <= 1){
+                                $("#preBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled",true);
+                            }else{
+                                $("#preBtn").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled",false);
+                            }
 						}
 					});
 				},
