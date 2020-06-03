@@ -42,7 +42,7 @@
 	}
 	
 	.myselfUserSpanClass{
-		width:48%;
+		width:46%;
 		font-size:20px;
 		font-weight:bold;
 		color:green;
@@ -119,10 +119,10 @@
 <body>
 	<div id="mainDiv">
 		<div id='addCircleDiv' align='right' style='margin-bottom: 5px;'>
-			<span>总条数:{{totalCount}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>当前第</span><span id='curPageSpan'></span><span>页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{totalPage}}页</span>
-			<button onclick='toPrePage()' class='btn btn-sm btn-primary' >&lt;&lt;</button>&nbsp;&nbsp;
-			<button onclick='toNextPage()' class='btn btn-sm btn-primary' >&gt;&gt;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button onclick='addCircle()' class='btn btn-sm btn-primary'>&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;布&nbsp;&nbsp;</button>
+			<span>总条数:{{totalCount}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>当前第{{curPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{totalPage}}页</span>
+			<button @click='toPrePage()' class='btn btn-sm btn-primary' >&lt;&lt;</button>&nbsp;&nbsp;
+			<button @click='toNextPage()' class='btn btn-sm btn-primary' >&gt;&gt;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button @click='addCircle()' class='btn btn-sm btn-primary'>&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;布&nbsp;&nbsp;</button>
 		</div>
 		<hr/>
 		<div id="circleDiv" v-for="(item,index) in circleList">
@@ -175,8 +175,8 @@
 		</div>
 		
 		<div id="naviDiv" align="center">
-			<button id='preBtn' onclick='toPrePage()' class='btn btn-sm btn-primary' >前一页</button>
-			<button id='nextBtn' onclick='toNextPage()' class='btn btn-sm btn-primary' >后一页</button>
+			<button id='preBtn' @click='toPrePage()' class='btn btn-sm btn-primary' >前一页</button>
+			<button id='nextBtn' @click='toNextPage()' class='btn btn-sm btn-primary' >后一页</button>
 		</div>		
 	</div>
 
@@ -185,9 +185,9 @@
 
 	<script type="text/javascript">
         var curUser = parent.s_user;
-        var curPage = 1;
-        var numPerPage = 5;
-        var totalPage = 0;
+        //var curPage = 1;
+        //var numPerPage = 5;
+        //var totalPage = 0;
 		$("#preBtn").hide();
 		$("#nextBtn").hide();
 		var app = new Vue({
@@ -298,6 +298,31 @@
                         },
                         function(){layer.close();}
                     );
+                },
+                toPrePage:function () {
+                    //上一页
+                    if (app.curPage>=1){
+                        app.curPage = app.curPage-1;
+                        app.queryCircleList(app.curPage,app.numPerPage);
+                    }
+                },
+                toNextPage:function () {
+                    //下一页
+                    if (app.curPage<app.totalPage){
+                        app.curPage = app.curPage+1;
+                        app.queryCircleList(app.curPage,app.numPerPage);
+                    }
+                },
+                addCircle:function () {
+                    //新增朋友圈
+                    layer.open({
+                        type: 2,
+                        title: '添加朋友圈',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['484px', '490px'],
+                        content: rootUrl+'ws/wsclientAddCircle.page?user='+app.curUser
+                    });
                 }
 			},
 			created: function () {
@@ -305,37 +330,11 @@
 			}
 		});
 
-		//上一页
-		function toPrePage(){
-			if (curPage>1){
-				curPage = curPage-1;
-				queryCirclList(curPage,numPerPage);
-			}
-		}
-		//下一页
-		function toNextPage(){
-			if (curPage<totalPage){
-				curPage = curPage+1;
-				queryCirclList(curPage,numPerPage);
-			}
-		}
 		$("#naviDiv").hover(function(){
 			$("#preBtn,#nextBtn").show();
 		},function(){
 			$("#preBtn,#nextBtn").hide();
 		})
-
-		//新增朋友圈内容
-		function addCircle(){
-			layer.open({
-				type: 2,
-				title: '添加朋友圈',
-				shadeClose: true,
-				shade: 0.8,
-				area: ['484px', '490px'],
-				content: 'wsclientAddCircle.page?user='+curUser
-			});
-		}
 
 		//刷新
 		function refresh(){
