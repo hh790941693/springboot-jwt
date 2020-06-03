@@ -544,7 +544,7 @@ public class WebSocketClientController extends AdminBaseController
 	@RequestMapping(value = "wsclientCircle.page")
 	public String clientCircle() {
 		logger.debug("访问wsclientCircle.page");
-		return "ws/wsclientCircle";
+		return "ws/wsclientCircleVue";
 	}
 	
 	/**
