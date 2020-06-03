@@ -144,8 +144,8 @@
                                 <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span>
                                 <span class='likeNumSpanClass'>已有{{item.likeNum}}人点赞</span>
                                 <span class='buttonGroupSpan'>
-                                    <button onclick='toComment(item.id)' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;
-                                    <button onclick='toLike(item.id)' class='btn btn-sm btn-info'>点赞</button>
+                                    <button @click='toComment(item.id)' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;
+                                    <button @click='toLike(item.id)' class='btn btn-sm btn-info'>点赞</button>
                                 </span>
                                 <span class='timeSpanClass'>{{item.createTime}}</span>
                             </template>
