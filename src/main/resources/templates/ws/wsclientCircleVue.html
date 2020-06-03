@@ -71,7 +71,7 @@
 	}
 	
 	.timeSpanClass{
-	    width: 120px;
+	    width: 124px;
     	font-size:13px;
     	color:grey;
     	margin-left:18px;
@@ -129,22 +129,49 @@
 			<div>
 				<div class='bodyDivClass'>
 					<div class='nameDivClass'>
-						<div style='display:inline-block;height:100%;width:540px;'><img src='{{item.headImg}}' width='30' height='30' onerror='imgerror(this)'>
-							<span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span></div><span class='likeNumSpanClass'>已有{{item.likeNum}}人点赞</span><span class='buttonGroupSpan'><button onclick='toComment("+circleId+")' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;<button onclick='toLike("+circleId+")' class='btn btn-sm btn-info'>点赞</button>&nbsp;&nbsp;&nbsp;<button onclick='deleteCircle(item.id)' class='btn btn-sm btn-danger'>删除</button></span><span class='timeSpanClass'>发表于{{item.createTime}}</span>
+						<div style='display:inline-block;height:100%;width:100%;'><img :src="item.headImg" width='30' height='30' onerror='imgerror(this)'>
+                            <template v-if="curUser == 'admin' || curUser == item.userName">
+							    <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span>
+                                <span class='likeNumSpanClass'>已有{{item.likeNum}}人点赞</span>
+                                <span class='buttonGroupSpan'>
+                                    <button @click='toComment(item.id)' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;
+                                    <button @click='toLike(item.id)' class='btn btn-sm btn-info'>点赞</button>&nbsp;&nbsp;&nbsp;
+                                    <button onclick='deleteCircle(item.id)' class='btn btn-sm btn-danger'>删除</button>
+                                </span>
+                                <span class='timeSpanClass'>{{item.createTime}}</span>
+                            </template>
+                            <template v-else>
+                                <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span>
+                                <span class='likeNumSpanClass'>已有{{item.likeNum}}人点赞</span>
+                                <span class='buttonGroupSpan'>
+                                    <button onclick='toComment(item.id)' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;
+                                    <button onclick='toLike(item.id)' class='btn btn-sm btn-info'>点赞</button>
+                                </span>
+                                <span class='timeSpanClass'>{{item.createTime}}</span>
+                            </template>
+                        </div>
 					</div>
 					<div class='contentDivClass'>
 						<span>{{item.content}}</span>
 					</div>
 				</div>
 				<div class='picDivClass' align='center'>
-					<img src='{{item.pic1}}' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
-					<img src='{{item.pic2}}' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
-					<img src='{{item.pic3}}' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
-					<img src='{{item.pic4}}' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+					<template v-if="item.pic1 != null && item.pic1 != ''">
+					    <img :src='item.pic1' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+                    </template>
+                    <template v-if="item.pic2 != null && item.pic2 != ''">
+					    <img :src='item.pic2' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+                    </template>
+                    <template v-if="item.pic3 != null && item.pic3 != ''">
+					    <img :src='item.pic3' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+                    </template>
+                    <template v-if="item.pic4 != null && item.pic4 != ''">
+					    <img :src='item.pic4' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+                    </template>
 				</div>
 
 				<div class='commentDivClass' v-for="commentItem in item.commentList">
-					<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>{{commentItem.userName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>{{commentItem.comment}}</span><a href='javascript:void(0)' onclick='deleteComment(commentItem.id)'>删除</a><span class='commentTimeSpanClass'>发表于{{commentItem.createTime}}</span></p>
+					<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>{{commentItem.userName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>{{commentItem.comment}}</span><a href='javascript:void(0)' onclick='deleteComment(commentItem.id)'>删除</a><span class='commentTimeSpanClass'>{{commentItem.createTime}}</span></p>
 				</div>
 				<hr/>
 			</div>
@@ -160,27 +187,24 @@
 </body>
 
 	<script type="text/javascript">
-		var curUser=parent.s_user;
-		//var curPage = 1;
-		//var numPerPage = 5;
-		//var totalPage = 0;
 		$("#preBtn").hide();
 		$("#nextBtn").hide();
 		var app = new Vue({
 			el: '#mainDiv',
 			data: {
-				circleList: {},
+				circleList:{},
 				curSelectedIndex:0,
 				curPage:1,
 				numPerPage:5,
+                curUser:parent.s_user,
 			},
 			methods: {
 				queryCircleList:function (curPagePara,numPerPagePara) {
+				    //查询朋友圈列表
 					$.ajax({
 						type: "POST",
 						url: rootUrl+'ws/queryCircleByPage.do',
 						data: {'curPage':curPagePara, 'numPerPage':numPerPagePara},
-						async:false,
 						success: function (result) {
 							if (result.code == 0){
 								return;
@@ -190,6 +214,47 @@
 						}
 					});
 				},
+                toComment:function (id) {
+                    //评论
+                    layer.prompt({
+                        formType: 2,
+                        value: '',
+                        title: '请输入评论内容'
+                    }, function(value,index){
+                        layer.close(index);
+                        if (value != ""){
+                            $.ajax({
+                                type: 'POST',
+                                url: rootUrl+'ws/toComment.do',
+                                //dataType: 'json',
+                                data:{'user':app.curUser,'circleId':id,'comment':value},
+                                async:false,
+                                success: function(result) {
+                                    if (result.code == 1) {
+                                        layer.msg("评论成功");
+                                        setTimeout(refresh, 800);
+                                    }
+                                }
+                            });
+                        }else{
+                            alert("评论内容不能为空!");
+                        }
+                    });
+                },
+                toLike:function (id) {
+				    //点赞
+                    $.ajax({
+                        type: 'POST',
+                        url: rootUrl+'ws/toLike.do',
+                        data:{'user':app.curUser,'circleId':id},
+                        success: function(result) {
+                            if (result.code == 1) {
+                                layer.msg("点赞成功");
+                                setTimeout(refresh, 500);
+                            }
+                        }
+                    });
+                },
 			},
 			created: function () {
 				this.queryCircleList(1, 5);
