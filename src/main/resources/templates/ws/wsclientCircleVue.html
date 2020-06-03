@@ -296,7 +296,7 @@
                 },
                 toPrePage:function () {
                     //上一页
-                    if (app.curPage>=1){
+                    if (app.curPage>1){
                         app.curPage = app.curPage-1;
                         app.queryCircleList(app.curPage,app.numPerPage);
                     }
