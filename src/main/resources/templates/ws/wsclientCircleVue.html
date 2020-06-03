@@ -34,10 +34,10 @@
 	}
 	
 	.userSpanClass{
-		width:49%;
+		width:46%;
 		font-size:20px;
 		font-weight:bold;
-		color:blue;
+		color:green;
 		cursor:pointer;
 	}
 	
@@ -45,20 +45,25 @@
 		width:46%;
 		font-size:20px;
 		font-weight:bold;
-		color:green;
+		color:blue;
 		cursor:pointer;
 	}
 
 	.commentNameSpanClass{
 		color:blue;
-		width:65px;
-		margin-left:10px;
+		width:3%;
+		margin-left:40px;
 		cursor:pointer;
 	}
 	
 	.commentDivClass{
 		margin-top:2px;
 	}
+
+    .contentSpanClass{
+        text-indent: 2em;
+    }
+
 	.commentDivClass p{
 		background-color:#d6f3d9;
 		margin-bottom:1px;
@@ -69,7 +74,7 @@
 		font-size:20px;
 		margin-bottom:2px;
 	}
-	
+
 	.timeSpanClass{
 	    width: 124px;
     	font-size:13px;
@@ -93,18 +98,7 @@
 		font-size:13px;
 		margin-left:30px;
 	}
-	
-	#showBigImageDiv{
-	    width: 400px;
-	    height: 350px;
-	    display: none;
-	    position: fixed;
-	    top: 130px;
-	    left: 350px;
-	    z-index:99;
-	    border:1px solid black;
-	}
-	
+
 	.buttonGroupSpan{
 		width:170px;
 		padding-top: 3px;
@@ -113,7 +107,7 @@
 	.btnDisabledClass{
 		background-color:grey;
 		color:black;
-	}	
+	}
 </style>
 </head>
 <body>
@@ -130,7 +124,12 @@
 				<div class='bodyDivClass'>
 					<div class='nameDivClass'>
 						<div style='display:inline-block;height:100%;width:100%;'><img :src="item.headImg" width='30' height='30' onerror='imgerror(this)'>
-                            <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span>
+                            <template v-if="curUser == item.userName">
+                                <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span>
+                            </template>
+                            <template v-else>
+                                <span class='userSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span>
+                            </template>
                             <span class='likeNumSpanClass'>已有{{item.likeNum}}人点赞</span>
                             <span class='buttonGroupSpan'>
                                 <button @click='toComment(item.id)' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;
@@ -143,7 +142,7 @@
                         </div>
 					</div>
 					<div class='contentDivClass'>
-						<span>{{item.content}}</span>
+						<span class="contentSpanClass">{{item.content}}</span>
 					</div>
 				</div>
 				<div class='picDivClass' align='center'>
