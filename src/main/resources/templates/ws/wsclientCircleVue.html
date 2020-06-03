@@ -185,16 +185,12 @@
 
 	<script type="text/javascript">
         var curUser = parent.s_user;
-        //var curPage = 1;
-        //var numPerPage = 5;
-        //var totalPage = 0;
 		$("#preBtn").hide();
 		$("#nextBtn").hide();
 		var app = new Vue({
 			el: '#mainDiv',
 			data: {
 				circleList:{},
-				curSelectedIndex:0,
 				curPage:1,
 				numPerPage:5,
                 totalCount:0,
