@@ -125,7 +125,29 @@
 			<button onclick='addCircle()' class='btn btn-sm btn-primary'>&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;布&nbsp;&nbsp;</button>
 		</div>
 		<hr/>
-		<div id="circleDiv">
+		<div id="circleDiv" v-for="(item,index) in circleList">
+			<div>
+				<div class='bodyDivClass'>
+					<div class='nameDivClass'>
+						<div style='display:inline-block;height:100%;width:540px;'><img src='{{item.headImg}}' width='30' height='30' onerror='imgerror(this)'>
+							<span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span></div><span class='likeNumSpanClass'>已有{{item.likeNum}}人点赞</span><span class='buttonGroupSpan'><button onclick='toComment("+circleId+")' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;<button onclick='toLike("+circleId+")' class='btn btn-sm btn-info'>点赞</button>&nbsp;&nbsp;&nbsp;<button onclick='deleteCircle(item.id)' class='btn btn-sm btn-danger'>删除</button></span><span class='timeSpanClass'>发表于{{item.createTime}}</span>
+					</div>
+					<div class='contentDivClass'>
+						<span>{{item.content}}</span>
+					</div>
+				</div>
+				<div class='picDivClass' align='center'>
+					<img src='{{item.pic1}}' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+					<img src='{{item.pic2}}' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+					<img src='{{item.pic3}}' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+					<img src='{{item.pic4}}' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+				</div>
+
+				<div class='commentDivClass' v-for="commentItem in item.commentList">
+					<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>{{commentItem.userName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>{{commentItem.comment}}</span><a href='javascript:void(0)' onclick='deleteComment(commentItem.id)'>删除</a><span class='commentTimeSpanClass'>发表于{{commentItem.createTime}}</span></p>
+				</div>
+				<hr/>
+			</div>
 		</div>
 		
 		<div id="naviDiv" align="center">
@@ -139,13 +161,13 @@
 
 	<script type="text/javascript">
 		var curUser=parent.s_user;
-		var curPage = 1;
-		var numPerPage = 5;
-		var totalPage = 0;
+		//var curPage = 1;
+		//var numPerPage = 5;
+		//var totalPage = 0;
 		$("#preBtn").hide();
 		$("#nextBtn").hide();
 		var app = new Vue({
-			el: '#playerDiv',
+			el: '#mainDiv',
 			data: {
 				circleList: {},
 				curSelectedIndex:0,
@@ -170,14 +192,9 @@
 				},
 			},
 			created: function () {
-				this.queryCircleList(app.curPage, app.numPerPage);
+				this.queryCircleList(1, 5);
 			}
 		});
-
-
-
-
-		queryCirclList(curPage,numPerPage);
 
 		//上一页
 		function toPrePage(){
@@ -199,119 +216,6 @@
 			$("#preBtn,#nextBtn").hide();
 		})
 
-		//查询朋友圈列表
-		function queryCirclList(curPagePara,numPerPagePara){
-			$("#curPageSpan").text(curPagePara);
-
-			if (curPage <= 1){
-				$("#preBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled",true);
-			}else{
-				$("#preBtn").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled",false);
-			}
-			$.ajax({
-				type: 'POST',
-				url: rootUrl+'ws/queryCircleByPage.do',
-				data: {'curPage':curPagePara, 'numPerPage':numPerPagePara},
-				//contentType:"application/json",
-				async:false,
-				success: function(result) {
-					if (result.code == 0){
-						return;
-					}
-					var resultData = result.data;
-					var list = resultData.records;
-					totalPage = resultData.pages;
-					var totalCount = resultData.total;
-					$("#totalPageSpan").text(totalPage);
-					$("#totalCountSpan").text(totalCount);
-					if (curPage >= totalPage){
-						$("#nextBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled",true);
-					}else{
-						$("#nextBtn").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled",false);
-					}
-					if (list.length>0){
-						$("#circleDiv").empty();
-						var htmlData = "";
-						for (var i=0;i<list.length;i++){
-							var circle = list[i];
-							var circleId = circle.id;
-							var userName = circle.userName;
-							var content = circle.content;
-							var likeNum = circle.likeNum;
-							var createTime = circle.createTime;
-							var commentList = circle.commentList;
-							var headImg = circle.headImg;
-							if (headImg == "" || headImg == null){
-								headImg = "../img/"+$.ws.errorImageName;
-							}
-							var pic1 = circle.pic1;
-							var pic2 = circle.pic2;
-							var pic3 = circle.pic3;
-							var pic4 = circle.pic4;
-
-							var picArr = new Array();
-							if (pic1 != "" && pic1 != null){
-								picArr.push(pic1)
-							}
-							if (pic2 != ""  && pic2 != null){
-								picArr.push(pic2)
-							}
-							if (pic3 != ""  && pic3 != null){
-								picArr.push(pic3)
-							}
-							if (pic4 != ""  && pic4 != null){
-								picArr.push(pic4)
-							}
-
-							htmlData += "<div id='"+circleId+"'>";
-							htmlData += "      <div class='bodyDivClass'>";
-							htmlData += "            <div class='nameDivClass'>";
-							htmlData += "                 <div style='display:inline-block;height:100%;width:540px;'><img alt='' src='"+headImg+"' width='30' height='30' onerror='imgerror(this)'>";
-							var compareTwotimeResult = compareTwoTime(new Date(createTime).getTime(),new Date().getTime());
-							if (curUser == userName || curUser == 'admin'){
-								htmlData += "             <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>"+userName+"</span></div><span class='likeNumSpanClass'>已有"+likeNum+"人点赞</span><span class='buttonGroupSpan'><button onclick='toComment("+circleId+")' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;<button onclick='toLike("+circleId+")' class='btn btn-sm btn-info'>点赞</button>&nbsp;&nbsp;&nbsp;<button onclick='deleteCircle("+circleId+")' class='btn btn-sm btn-danger'>删除</button></span><span class='timeSpanClass'>发表于"+compareTwotimeResult+"</span>";
-							}else{
-								htmlData += "             <span class='userSpanClass' onclick='queryPersonInfo(this)'>"+userName+"</span></div><span class='likeNumSpanClass'>已有"+likeNum+"人点赞</span><span class='buttonGroupSpan'><button onclick='toComment("+circleId+")' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;<button onclick='toLike("+circleId+")' class='btn btn-sm btn-info'>点赞</button></span><span class='timeSpanClass'>发表于"+compareTwotimeResult+"</span>";
-							}
-							htmlData += "            </div>";
-							htmlData += "            <div class='contentDivClass'>";
-							htmlData += "               <span>"+content+"</span>";
-							htmlData += "            </div>";
-							htmlData += "      </div>";
-							if (picArr.length>0){
-								htmlData += "  <div class='picDivClass' align='center'>";
-								for (var k=0;k<picArr.length;k++){
-									var imgId = "circleImg"+i;
-									htmlData += "    <img id='"+imgId+"' src='"+picArr[k]+"' alt='' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>";
-								}
-								htmlData += "  </div>";
-							}
-
-							htmlData += "      <div class='commentDivClass'>";
-							if (commentList.length>0){
-								for (var j=0;j<commentList.length;j++){
-									var commentObj = commentList[j];
-									var commentId = commentObj.id;
-									var commentUserName = commentObj.userName;
-									var commentText = commentObj.comment;
-									var commentCreateTime = commentObj.createTime;
-									var commentTimeResult = compareTwoTime(new Date(commentCreateTime).getTime(),new Date().getTime());
-									if (curUser == commentUserName || curUser == 'admin'){
-										htmlData += "<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>"+commentUserName+":</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>"+commentText+"</span><a href='javascript:void(0)' onclick='deleteComment("+commentId+")'>删除</a><span class='commentTimeSpanClass'>发表于"+commentTimeResult+"</span></p>";
-									}else{
-										htmlData += "<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>"+commentUserName+":</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>"+commentText+"</span><span class='commentTimeSpanClass' style='margin-left:55px;'>发表于"+commentTimeResult+"</span></p>";
-									}
-								}
-							}
-							htmlData += "      </div>";
-							htmlData += "</div>";
-							htmlData += "<hr/>";
-						}
-						$("#circleDiv").append(htmlData);
-					}
-				}
-			});
-		}
 		//评论
 		function toComment(circleId){
 			var comment="";
