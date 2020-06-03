@@ -148,16 +148,16 @@
 				</div>
 				<div class='picDivClass' align='center'>
 					<template v-if="item.pic1 != null && item.pic1 != ''">
-					    <img :src='item.pic1' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+					    <img :src='item.pic1' width='100px' height='100px' @click="showPic(item.pic1)" onerror='imgerror(this)' style='margin-left:20px;'>
                     </template>
                     <template v-if="item.pic2 != null && item.pic2 != ''">
-					    <img :src='item.pic2' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+					    <img :src='item.pic2' width='100px' height='100px' @click="showPic(item.pic2)" onerror='imgerror(this)' style='margin-left:20px;'>
                     </template>
                     <template v-if="item.pic3 != null && item.pic3 != ''">
-					    <img :src='item.pic3' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+					    <img :src='item.pic3' width='100px' height='100px' @click="showPic(item.pic3)" onerror='imgerror(this)' style='margin-left:20px;'>
                     </template>
                     <template v-if="item.pic4 != null && item.pic4 != ''">
-					    <img :src='item.pic4' width='100px' height='100px' onerror='imgerror(this)' style='margin-left:20px;'>
+					    <img :src='item.pic4' width='100px' height='100px' @click="showPic(item.pic4)" onerror='imgerror(this)' style='margin-left:20px;'>
                     </template>
 				</div>
 
@@ -323,7 +323,11 @@
                         area: ['484px', '490px'],
                         content: rootUrl+'ws/wsclientAddCircle.page?user='+app.curUser
                     });
-                }
+                },
+                showPic:function(imgUrl){
+                    //图片点击事件
+                    $.ws.gShowImg(imgUrl);
+                },
 			},
 			created: function () {
 				this.queryCircleList(1, 5);
