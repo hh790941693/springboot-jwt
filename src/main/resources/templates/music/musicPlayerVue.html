@@ -272,6 +272,34 @@
 			window.location.href = window.location.href;
 		}
 
+        //上传文件校验
+        function verify(){
+            var uploadFiles=$("#fileInput").val();
+            if (uploadFiles == ""){
+                return false;
+            }
+            layer.msg("上传中....");
+            return true;
+        }
+
+        $("#hidden_frame").load(function(){
+            var bodyText=$(this).contents().find("body").text();
+            var uploadRes = JSON.parse(bodyText);
+            var showText = "";
+            $.each(uploadRes,function(i,val) {
+                var filename = val.filename;
+                var uploadFlag = val.uploadFlag;
+                if (uploadFlag){
+                    showText += filename+":"+"<span style='color:blue;font-weight: bold;'>上传成功</span><br/>";
+                }else{
+                    showText += filename+":"+"<span style='color:red;font-weight: bold;'>上传失败</span><br/>";
+                }
+            });
+            layer.closeAll();
+            layer.alert(showText);
+            setTimeout(refreash,3000);
+        });
+
 		// 绑定事件
 		Media = document.getElementById("player");
 		var eventTester = function(e){
