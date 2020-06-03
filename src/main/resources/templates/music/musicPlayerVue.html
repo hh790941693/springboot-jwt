@@ -130,12 +130,6 @@
 				hoverIndex:-1,
 			},
 			methods: {
-				mouseOver:function(){
-					this.class = "mouseonClass";
-				},
-				mouseLeave:function(){
-					this.class = "";
-				},
 				queryMusicList:function () {
 					var fileType = ".mp3";
 					var user = $('#user').val();
@@ -149,12 +143,14 @@
 					});
 				},
 				doublePlay:function(musicIndex){
+					//双击播放
 					console.log("双击播放:");
 					app.curSelectedIndex = musicIndex;
 					var selectedTr = $("table tr").get(app.curSelectedIndex+1);
 					app.playByIndex(selectedTr);
 				},
 				play:function(){
+					//播放
 					console.log("开始播放音乐");
 					var checkedInput=$("table tr").find("input[checked='checked']");
 					var checkedTr=$(checkedInput).parent().parent().parent();
@@ -232,7 +228,6 @@
 					//删除音乐
 					layer.confirm("确定删除吗?", {btn: ['确定', '取消'], title: "提示"},
 						function (){
-
 							$.ajax({
 								type:"POST",
 								url:rootUrl + "file/delFile.do",
