@@ -73,10 +73,6 @@
 			<span style="color:yellow;font-weight:bold;font-size: 30px;height:100%;display:inline-block;" id="loginUser"></span>
 		</div>
 
-		<div align="left" style="width:15%;height:78%;color:white;float:left;margin-top: 8px;">
-			<span id="onlineCount" style='height:100%;display:inline-block;'>在线0名</span>
-		</div>
-
 		<div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
 			<button id="refreashConlineCount" class='btn btn-sm btn-info' onclick="getOnlineInfo()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>&nbsp;&nbsp;
 			<button class='btn btn-sm btn-primary' onclick="changeBackgroundImage()">更换背景</button>&nbsp;&nbsp;
@@ -254,18 +250,14 @@
 					$("#selectCyy").append("<option value=" + cyy[x].name + ">" + cyy[x].name+ "</option>")
 				}
 
-				// 在线人数
-				var count = jsonObj.onlineCount;
-				// 好友列表
+				// 所有用户列表
 				var usersList = jsonObj.userInfoList;
-
-				$("#onlineCount").html("在线"+count+"名");
 				var selectUser = $("#selectUser").val();
 				$("#selectUser").empty();
 				if (usersList != "") {
 					if (selectUser == null || selectUser == undefined) {
 						for (var i=0;i<usersList.length;i++) {
-							if (usersList[i].name == user) {
+							if (usersList[i].name == parent.s_user) {
 								continue;
 							}
 							$("#selectUser").append("<option value=" + usersList[i].name + ">" + usersList[i].name+ "</option>");
@@ -275,7 +267,7 @@
 						for (var i=0;i<usersList.length;i++){
 							var nameTmp = usersList[i].name;
 							var enableTmp = usersList[i].enable;
-							if (nameTmp == selectUser || nameTmp == user || enableTmp=="0"){
+							if (nameTmp == selectUser || nameTmp == parent.s_user || enableTmp=="0"){
 								continue;
 							}
 							var state = usersList[i].state;
