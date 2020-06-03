@@ -119,7 +119,7 @@
 <body>
 	<div id="mainDiv">
 		<div id='addCircleDiv' align='right' style='margin-bottom: 5px;'>
-			<span>总条数:</span><span id="totalCountSpan"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span>当前第</span><span id='curPageSpan'></span><span>页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共</span><span id='totalPageSpan'></span><span>页</span>
+			<span>总条数:{{totalCount}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>当前第</span><span id='curPageSpan'></span><span>页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{totalPage}}页</span>
 			<button onclick='toPrePage()' class='btn btn-sm btn-primary' >&lt;&lt;</button>&nbsp;&nbsp;
 			<button onclick='toNextPage()' class='btn btn-sm btn-primary' >&gt;&gt;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<button onclick='addCircle()' class='btn btn-sm btn-primary'>&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;布&nbsp;&nbsp;</button>
@@ -130,25 +130,16 @@
 				<div class='bodyDivClass'>
 					<div class='nameDivClass'>
 						<div style='display:inline-block;height:100%;width:100%;'><img :src="item.headImg" width='30' height='30' onerror='imgerror(this)'>
-                            <template v-if="curUser == 'admin' || curUser == item.userName">
-							    <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span>
-                                <span class='likeNumSpanClass'>已有{{item.likeNum}}人点赞</span>
-                                <span class='buttonGroupSpan'>
-                                    <button @click='toComment(item.id)' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;
-                                    <button @click='toLike(item.id)' class='btn btn-sm btn-info'>点赞</button>&nbsp;&nbsp;&nbsp;
-                                    <button onclick='deleteCircle(item.id)' class='btn btn-sm btn-danger'>删除</button>
-                                </span>
-                                <span class='timeSpanClass'>{{item.createTime}}</span>
-                            </template>
-                            <template v-else>
-                                <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span>
-                                <span class='likeNumSpanClass'>已有{{item.likeNum}}人点赞</span>
-                                <span class='buttonGroupSpan'>
-                                    <button @click='toComment(item.id)' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;
-                                    <button @click='toLike(item.id)' class='btn btn-sm btn-info'>点赞</button>
-                                </span>
-                                <span class='timeSpanClass'>{{item.createTime}}</span>
-                            </template>
+                            <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>{{item.userName}}</span>
+                            <span class='likeNumSpanClass'>已有{{item.likeNum}}人点赞</span>
+                            <span class='buttonGroupSpan'>
+                                <button @click='toComment(item.id)' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;
+                                <button @click='toLike(item.id)' class='btn btn-sm btn-info'>点赞</button>&nbsp;&nbsp;&nbsp;
+                                <template v-if="curUser == 'admin' || curUser == item.userName">
+                                    <button @click='deleteCircle(item.id)' class='btn btn-sm btn-danger'>删除</button>
+                                </template>
+                            </span>
+                            <span class='timeSpanClass'>{{item.createTime}}</span>
                         </div>
 					</div>
 					<div class='contentDivClass'>
@@ -171,7 +162,13 @@
 				</div>
 
 				<div class='commentDivClass' v-for="commentItem in item.commentList">
-					<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>{{commentItem.userName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>{{commentItem.comment}}</span><a href='javascript:void(0)' onclick='deleteComment(commentItem.id)'>删除</a><span class='commentTimeSpanClass'>{{commentItem.createTime}}</span></p>
+					<p>
+                        <span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>{{commentItem.userName}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class='commentSpanClass'>{{commentItem.comment}}</span>
+                        <template v-if="curUser == 'admin' || curUser == item.userName">
+                            <a href='javascript:void(0)' @click='deleteComment(commentItem.id)'>删除</a>
+                        </template>
+                        <span class='commentTimeSpanClass'>{{commentItem.createTime}}</span></p>
 				</div>
 				<hr/>
 			</div>
@@ -187,6 +184,10 @@
 </body>
 
 	<script type="text/javascript">
+        var curUser = parent.s_user;
+        var curPage = 1;
+        var numPerPage = 5;
+        var totalPage = 0;
 		$("#preBtn").hide();
 		$("#nextBtn").hide();
 		var app = new Vue({
@@ -196,6 +197,8 @@
 				curSelectedIndex:0,
 				curPage:1,
 				numPerPage:5,
+                totalCount:0,
+                totalPage:0,
                 curUser:parent.s_user,
 			},
 			methods: {
@@ -211,6 +214,8 @@
 							}
 							var resultData = result.data;
 							app.circleList = resultData.records;
+							app.totalPage = resultData.pages;
+							app.totalCount = resultData.total;
 						}
 					});
 				},
@@ -255,6 +260,45 @@
                         }
                     });
                 },
+                deleteCircle:function (id) {
+                    //删除朋友圈
+                    layer.confirm('确认要删除？', {btn: ['确定','取消']},
+                        function(){
+                            $.ajax({
+                                type: 'POST',
+                                url: rootUrl+'ws/toDeleteCircle.do',
+                                //dataType: 'json',
+                                data:{'id':id},
+                                success: function(result) {
+                                    if (result.code == 1) {
+                                        layer.msg("删除成功");
+                                        setTimeout(refresh, 500);
+                                    }
+                                }
+                            });
+                        },
+                        function(){layer.close();}
+                    );
+                },
+                deleteComment:function (id) {
+                    //删除评论
+                    layer.confirm('确认要删除？', {btn: ['确定','取消']},
+                        function(){
+                            $.ajax({
+                                type: 'POST',
+                                url: rootUrl+'ws/toDeleteComment.do',
+                                data:{'id':id},
+                                success: function(result) {
+                                    if (result.code == 1) {
+                                        layer.msg("删除成功");
+                                        setTimeout(refresh, 1000);
+                                    }
+                                }
+                            });
+                        },
+                        function(){layer.close();}
+                    );
+                }
 			},
 			created: function () {
 				this.queryCircleList(1, 5);
@@ -280,96 +324,6 @@
 		},function(){
 			$("#preBtn,#nextBtn").hide();
 		})
-
-		//评论
-		function toComment(circleId){
-			var comment="";
-			layer.prompt({
-				formType: 2,
-				value: '',
-				title: '请输入评论内容'
-			}, function(value,index){
-				comment = value;
-				layer.close(index);
-
-				if (comment != ""){
-					$.ajax({
-						type: 'POST',
-						url: rootUrl+'ws/toComment.do',
-						//dataType: 'json',
-						data:{user:curUser,circleId:circleId,comment:comment},
-						async:false,
-						success: function(result) {
-							if (result.code == 1) {
-								layer.msg("评论成功");
-								setTimeout(refresh, 800);
-							}
-						}
-					});
-				}else{
-					alert("评论内容不能为空!");
-				}
-			});
-		}
-		//点赞
-		function toLike(circleId){
-			$.ajax({
-				type: 'POST',
-				url: rootUrl+'ws/toLike.do',
-				//dataType: 'json',
-				data:{user:curUser,circleId:circleId},
-				async:false,
-				success: function(result) {
-					if (result.code == 1) {
-						layer.msg("点赞成功");
-						setTimeout(refresh, 500);
-					}
-				}
-			});
-		}
-		//删除朋友圈
-		function deleteCircle(circleId){
-			layer.confirm('确认要删除？', {btn: ['确定','取消']},
-				function(){
-					$.ajax({
-						type: 'POST',
-						url: rootUrl+'ws/toDeleteCircle.do',
-						//dataType: 'json',
-						data:{id:circleId},
-						async:false,
-						success: function(result) {
-							if (result.code == 1) {
-								layer.msg("删除成功");
-								setTimeout(refresh, 500);
-							}
-						}
-					});
-				},
-				function(){layer.close();}
-			);
-		}
-
-		//删除评论
-		function deleteComment(commentId){
-			layer.confirm('确认要删除？', {btn: ['确定','取消']},
-				function(){
-					$.ajax({
-						type: 'POST',
-						url: rootUrl+'ws/toDeleteComment.do',
-						//dataType: 'json',
-						data:{id:commentId},
-						async:false,
-						success: function(result) {
-							if (result.code == 1) {
-								layer.msg("删除成功");
-								setTimeout(refresh, 1000);
-							}
-						}
-					});
-				},
-				function(){layer.close();}
-			);
-		}
 
 		//新增朋友圈内容
 		function addCircle(){
