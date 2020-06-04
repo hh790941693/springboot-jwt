@@ -16,7 +16,7 @@
 			}
 			
 			#mainDiv button{
-				width:50px;
+				width:38px;
 				height:24px;
 				font-size:5px;
 			}
@@ -36,6 +36,7 @@
 					<button id="btnPre" @click="preMusic()">&lt;&lt;</button>
 					<button id="btnPlay" @click="play()">播放</button>
 					<button id="btnNext" @click="nextMusic()">&gt;&gt;</button>
+					<button id="btnChangeMode" @click="changePlayMode()">{{playModeText}}</button>
 				</div>
 				<div id="songNameDiv" style='font-size:8px;margin-top:5px;' >
 					<span id="statusSpan">{{playTips}}:</span><br/><span id="songNameSpan" style='color:green;'>{{songName}}</span>
@@ -47,8 +48,6 @@
 	</body>
 
 	<script type="text/javascript">
-		// 全局变量
-		var playMode = 1; //播放模式   默认为顺序播放
 		//当前用户
 		var loginUser = parent.s_user;
 
@@ -58,7 +57,14 @@
 				musicData: {},
 				songName:'',
 				curSelectedIndex:0,
-				playTips:'等待播放'
+				playTips:'等待播放',
+				playModeMap:{
+					0:'单曲',
+					1:'顺序',
+					2:'随机'
+				},
+				playMode:1,  // 0:单曲循环 1:顺序播放 2:随机播放
+				playModeText:'顺序',
 			},
 			methods: {
 				queryMusicList:function () {
@@ -123,6 +129,14 @@
 					app.curSelectedIndex = randomNum;
 					app.play();
 				},
+				changePlayMode:function () {
+					if (app.playMode >= Object.keys(app.playModeMap).length-1){
+						app.playMode = 0;
+					}else{
+						app.playMode = app.playMode+1;
+					}
+					app.playModeText = app.playModeMap[app.playMode];
+				},
 			},
 			created: function () {
 				this.queryMusicList();
@@ -134,19 +148,19 @@
 		var eventTester = function(e){
 	        Media.addEventListener(e,function(){
 	            if (e == "ended"){
-	            	if (playMode == 0){
+	            	if (app.playMode == 0){
 	            		// 单曲循环
 						$("#btnPlay").text("播放");
 	            		app.play();
-	            	}else if (playMode == 1){
+	            	}else if (app.playMode == 1){
 	            		//顺序播放
 						app.nextMusic();
-	            	}else if (playMode == 2){
+	            	}else if (app.playMode == 2){
 	            		//随机播放
 						app.randomMusic();
 	            	}
 	            }else if (e == "error"){
-	            	if (playMode == 1 || playMode == 2){
+	            	if (app.playMode == 1 || app.playMode == 2){
 						app.nextMusic();
 	            	}
 	            }
