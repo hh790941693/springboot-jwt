@@ -138,7 +138,9 @@
 						url: rootUrl + "file/showFiles.do",
 						data: {user: user, fileType: fileType},
 						success: function (result) {
-							app.musicData = result.dataList;
+							if (result.code == 1) {
+								app.musicData = result.data;
+							}
 						}
 					});
 				},

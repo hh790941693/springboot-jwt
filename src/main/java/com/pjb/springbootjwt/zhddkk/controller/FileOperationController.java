@@ -7,13 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.FileUploadResultBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
-import com.pjb.springbootjwt.zhddkk.model.ExtReturn;
 import com.pjb.springbootjwt.zhddkk.service.WsFileService;
 import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
@@ -191,12 +191,11 @@ public class FileOperationController
 	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.MUSIC,subModule="",describe="显示音乐列表")
 	@RequestMapping("showFiles.do")
 	@ResponseBody
-	public Object showFiles(HttpServletRequest request, @RequestParam(value="user",required=false) String user, @RequestParam("fileType") String fileType) {
+	public Result<List<WsFileDO>> showFiles(HttpServletRequest request, @RequestParam(value="user",required=false) String user, @RequestParam("fileType") String fileType) {
 		List<WsFileDO> fileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", "music"));
-		List<WsFileDO> finalList = new ArrayList<WsFileDO>();
-		String webserverip = webSocketConfig.getAddress();
 
 		List<WsFileDO> needBatchUpdateList = new ArrayList<>();
+		String webserverip = webSocketConfig.getAddress();
 		for (WsFileDO wsFileDO : fileList) {
 			String url = wsFileDO.getUrl();
 			String oldIp = url.substring(url.indexOf("//")+2, url.lastIndexOf(":"));
@@ -217,13 +216,8 @@ public class FileOperationController
 			}else{
 				wsFileDO.setAccessStatus("0");
 			}
-			finalList.add(wsFileDO);
 		}
-		
-		ExtReturn er = new ExtReturn();
-		er.setDataList(finalList);
-		er.setTotal(finalList.size());
-		er.setSuccess(true);
-		return JsonUtil.javaobject2Jsonobject(er);
+
+		return Result.ok(fileList);
 	}
 }
