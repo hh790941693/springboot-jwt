@@ -23,6 +23,12 @@
 	    background-color:#aaeca812;
 		overflow: scroll;
 	}
+
+	#addCircleDiv{
+		padding-bottom:5px;
+		margin-top:-4px;
+	}
+
 	#naviDiv{
 	    width: 130px;
 	    height: 30px;
@@ -30,23 +36,30 @@
 	    bottom: 5px;
 	    right: 5px;
 	}
-	
+
+	.circleDivClass{
+		margin-bottom: 15px;
+		border-top: 1px solid grey;
+		border-left:1px solid grey;
+		border-right:1px solid grey;
+	}
+
 	.nameDivClass{
 		background-color:#b3d7ff;
-		height:37px;
+		height:28px;
 	}
 	
 	.userSpanClass{
-		width:24%;
-		font-size:20px;
+		width:46%;
+		font-size:16px;
 		font-weight:bold;
 		color:green;
 		cursor:pointer;
 	}
 	
 	.myselfUserSpanClass{
-		width:24%;
-		font-size:20px;
+		width:46%;
+		font-size:16px;
 		font-weight:bold;
 		color:blue;
 		cursor:pointer;
@@ -84,16 +97,16 @@
 	}
 
 	.timeSpanClass{
-	    width: 60px;
+	    width: 10%;
     	font-size:13px;
     	color:grey;
 		float:right;
-		margin-top:10px;
+		margin-top:5px;
 	}
 	
 	.likeNumSpanClass{
 		color:green;
-	    width: 29%;
+	    width: 11%;
     	font-size:15px;
 	}
 	
@@ -123,18 +136,17 @@
 <body>
 	<div id="mainDiv">
 		<div id='addCircleDiv' align='right'>
-			<span>总条数:{{totalCount}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>当前第{{curPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{totalPage}}页</span>
+			<span>总条数:{{totalCount}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>当前第{{curPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{totalPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;
 			<button @click='toPrePage()' class='btn btn-sm btn-primary' >&lt;&lt;</button>&nbsp;&nbsp;
 			<button @click='toNextPage()' class='btn btn-sm btn-primary' >&gt;&gt;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<button @click='addCircle()' class='btn btn-sm btn-primary'>&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;布&nbsp;&nbsp;</button>
 		</div>
-		<hr/>
-		<div id="circleDiv" v-for="(item,index) in circleList">
+		<div class="circleDivClass" v-for="(item,index) in circleList">
 			<div>
 				<div class='bodyDivClass'>
 					<div class='nameDivClass'>
 						<div style='display:inline-block;height:100%;width:100%;'>
-                            <img :src="item.headImg" width='35' height='35' :onerror="defaultImg">
+                            <img :src="item.headImg" width='25' height='25' :onerror="defaultImg">
                             <template v-if="curUser == item.userName">
                                 <span class='myselfUserSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
                             </template>
@@ -143,10 +155,10 @@
                             </template>
                             <span class='likeNumSpanClass'>{{item.likeNum}}人点赞</span>
                             <span class='buttonGroupSpan'>
-                                <button @click='toComment(item.id)' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;
-                                <button @click='toLike(item.id)' class='btn btn-sm btn-info'>点赞</button>&nbsp;&nbsp;&nbsp;
+                                <button @click='toComment(item.id)' class='label label-primary'>评论</button>&nbsp;&nbsp;&nbsp;
+                                <button @click='toLike(item.id)' class='label label-info'>点赞</button>&nbsp;&nbsp;&nbsp;
                                 <template v-if="curUser == 'admin' || curUser == item.userName">
-                                    <button @click='deleteCircle(item.id)' class='btn btn-sm btn-danger'>删除</button>
+                                    <button @click='deleteCircle(item.id)' class='label label-danger'>删除</button>
                                 </template>
                             </span>
                             <span class='timeSpanClass'>{{compareTwoTime(new Date(item.createTime).getTime(),new Date().getTime())}}</span>
@@ -180,7 +192,6 @@
                         </template>
                         <span class='commentTimeSpanClass'>{{compareTwoTime(new Date(commentItem.createTime).getTime(),new Date().getTime())}}</span></p>
 				</div>
-				<hr/>
 			</div>
 		</div>
 		
