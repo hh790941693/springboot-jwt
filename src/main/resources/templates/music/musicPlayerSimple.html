@@ -250,11 +250,13 @@
 				data:{user:loginUser, fileType:fileType},
 				//dataType:'json',
 				success:function(result){
-					var dataList = result.dataList;
+					if (result.code == 0){
+						return;
+					}
+					var dataList = result.data;
 					for (var i=0;i<dataList.length;i++){
 						var id=dataList[i].id;
 						var fileName=dataList[i].filename;
-						var author = dataList[i].author;
 						var fileSize = dataList[i].fileSize;
 						fileSize = (parseInt(fileSize)/1024.0/1024.0).toFixed(0);
 						var updateTime = dataList[i].updateTime;
