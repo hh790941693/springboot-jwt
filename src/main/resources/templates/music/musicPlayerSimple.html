@@ -75,6 +75,9 @@
 				},
 				play:function(){
 					//播放
+					if (app.musicData == null || app.musicData == undefined || app.musicData.length == 0){
+						return;
+					}
 					console.log("开始播放音乐");
 					var selectedMusicInfo = app.musicData[app.curSelectedIndex];
 					var filename = selectedMusicInfo.filename;
