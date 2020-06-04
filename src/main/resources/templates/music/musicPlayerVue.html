@@ -103,7 +103,7 @@
 							</div>
 						</td>
 						<td>{{music.id}}</td>
-						<td @click="doublePlay(index)">{{music.filename}}</td>
+						<td @dblclick="doublePlay(index)">{{music.filename}}</td>
 						<td>{{music.trackLength}}</td>
 						<td>{{(parseInt(music.fileSize)/1024.0/1024.0).toFixed(0)}}M</td>
 						<td>{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
