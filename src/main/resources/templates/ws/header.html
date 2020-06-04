@@ -26,13 +26,13 @@
 	<!--头部-->
 	<div id="headerDiv" align="center">
 		<img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
-		<div style="float:left;border-right: 1px solid grey;">
+		<div style="float:left;">
             <div style="float:left;">
 			    <img id='myImg' alt=""  width="50" height="50">
             </div>
             <div style="float:left;margin-left:3px;margin-right: 3px;">
                 <div style="height:65%;text-align: left;">
-			         <label style="font-size: 19px;">你好:</label><label id="curUser" style="color:blue;font-size:23px;"></label>
+			         <label style="font-size: 14px;">你好:</label><label id="curUser" style="color:blue;font-size:23px;"></label>
                 </div>
                 <div style="height:34%;text-align: left;">
                     <label>在线:</label><label id="onlineNum">0</label>&nbsp;&nbsp;
@@ -42,19 +42,19 @@
 		</div>
 
 		<!--头部标题-->
-		<div id="headerTitleDiv" style="float:left;font-size:20px;width:35%;height:100%;padding-top:13px;display: none;border-right: 1px solid grey;">
+		<div id="headerTitleDiv" style="float:left;font-size:20px;width:35%;height:100%;padding-top:13px;display: none;">
 			<label id="titleLabel" style="color:black;">websocket客户端</label>
 		</div>
 
 		<!--天气-->
-		<div id="weatherDiv" style="float:left;font-size:18px;width:35%;height:100%;padding-top:13px;display: block;border-right: 1px solid grey;">
+		<div id="weatherDiv" style="float:left;font-size:18px;width:35%;height:100%;padding-top:13px;display: block;">
 			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="location" style="color:black;"></label>
 		</div>
 
 		<!--滚动新闻-->
-		<div id="scrollAdDiv" style="float:left;height:100%;overflow:hidden;width:29%;border-right: 1px solid grey;margin-left: 3px;">
+		<div id="scrollAdDiv" style="float:left;height:100%;overflow:hidden;width:29%;margin-left: 3px;">
 			<div id="adContentOutDiv" style="height:200%;text-align: left;">
 				<div id="adContentDiv"></div>
 				<div id="adNoContentDiv"></div>
@@ -68,7 +68,7 @@
 				<span id="curTimeSpan">0000-00-00 00:00:00</span>
 			</div>
 			<div>
-				<button id="signBtn" onclick="sign()" class='btn btn-sm btn-info'>签到</button>&nbsp;&nbsp;
+				<button id="signBtn" onclick="sign()" class='btn btn-sm btn-info'>签&nbsp;&nbsp;到</button>&nbsp;&nbsp;
 				<button id="showQRCodeBtn" onclick="showQRCode()" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
 				<button id="setPersonInfoBtn" onclick="setPersonInfoBtn()" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>&nbsp;&nbsp;
 				<button id="exitBtn" class='btn btn-sm btn-danger' onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
