@@ -22,7 +22,7 @@
 	}
 	
 	.imgClass{
-	
+	    margin-left:30px;
 	}
 	
 	.imgDiv{
@@ -43,7 +43,8 @@
 				<input id="userNameHidden" name="user" th:value="${user}" hidden="hidden">
 			</div>
 			<div>
-				<span>内&nbsp;&nbsp;&nbsp;&nbsp;容:</span><textarea id="contentTa" name="content" rows="3" cols="40" placeholder="请输入内容"></textarea>
+				<span>内&nbsp;&nbsp;&nbsp;&nbsp;容:</span>
+                <textarea id="contentTa" style="margin-left:10px;" name="content" rows="3" cols="40" placeholder="请输入内容"></textarea>
 			</div>
 			<hr/>
 			<div>
@@ -51,21 +52,21 @@
 			</div>
 			<div class='imgDiv'>
 				<input id="circleImgFile1" name="circleImgFile1" class="inputImgClass" type="hidden">
-				<img id="circleImg1" class="imgClass" alt="" width="60px" height="60px">
 				<button type="button" id="imageBtn1" class="layui-btn">
 					<i class="layui-icon">&#xe67c;</i>上传图片
 				</button>
+				<img id="circleImg1" class="imgClass" alt="" width="60px" height="60px" hidden="hidden">
 			</div>
 			<hr/>
 			<div>
 				<span>图&nbsp;&nbsp;&nbsp;&nbsp;片2:</span>
 			</div>
 			<div class='imgDiv'>
-				<input id="circleImgFile2" name="circleImgFile2" class="inputImgClass" type="hidden"></input>
-				<img id="circleImg2" class="imgClass" alt="" width="60px" height="60px">
-				<button type="button" id="imageBtn2" class="layui-btn">
-					<i class="layui-icon">&#xe67c;</i>上传图片
-				</button>
+				<input id="circleImgFile2" name="circleImgFile2" class="inputImgClass" type="hidden">
+                <button type="button" id="imageBtn2" class="layui-btn">
+                    <i class="layui-icon">&#xe67c;</i>上传图片
+                </button>
+				<img id="circleImg2" class="imgClass" alt="" width="60px" height="60px" hidden="hidden">
 			</div>
 			<hr/>
 			<div>
@@ -73,10 +74,10 @@
 			</div>
 			<div class='imgDiv'>
 				<input id="circleImgFile3" name="circleImgFile3" class="inputImgClass" type="hidden">
-				<img id="circleImg3" class="imgClass" alt="" width="60px" height="60px">
-				<button type="button" id="imageBtn3" class="layui-btn">
-					<i class="layui-icon">&#xe67c;</i>上传图片
-				</button>
+                <button type="button" id="imageBtn3" class="layui-btn">
+                    <i class="layui-icon">&#xe67c;</i>上传图片
+                </button>
+				<img id="circleImg3" class="imgClass" alt="" width="60px" height="60px" hidden="hidden">
 			</div>
 			<hr/>
 			<div>
@@ -84,10 +85,10 @@
 			</div>
 			<div class='imgDiv'>
 				<input id="circleImgFile4" name="circleImgFile4" class="inputImgClass" type="hidden">
-				<img id="circleImg4" class="imgClass" alt="" width="60px" height="60px">
-				<button type="button" id="imageBtn4" class="layui-btn">
-					<i class="layui-icon">&#xe67c;</i>上传图片
-				</button>
+                <button type="button" id="imageBtn4" class="layui-btn">
+                    <i class="layui-icon">&#xe67c;</i>上传图片
+                </button>
+				<img id="circleImg4" class="imgClass" alt="" width="60px" height="60px" hidden="hidden">
 			</div>
 			<hr/>
 			<div align="center" style='margin-top:20px;'>
