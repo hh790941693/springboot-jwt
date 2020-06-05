@@ -77,11 +77,6 @@
 		<iframe id="footerIframePage" src="footer.page" width="100%" height="100%"></iframe>
 	</div>
 
-	<!--右侧音乐播放器图标(隐藏)-->
-	<div id="musicPicDiv" style="position: fixed;top:84px;width:30px;height:30px;">
-		<img id="musicPicImg" src="../img/others/musicplayer.jpg" style="width:100%;height:100%;">
-	</div>
-
 	<!--右上角 二维码-->
 	<div id="qrDiv" style="display:none">
 		<img id="qrcodeImg">
@@ -406,17 +401,15 @@
             });
         }
 
-		//点击音乐播放器图标显示/隐藏简易音乐播放器
-        var musicPicRightPos = (window.innerWidth-$("#mainDiv").width())/2;
-        $("#musicPicDiv").css("right", (musicPicRightPos-15)+"px");
-		$("#musicPicImg").click(function () {
+		//显示简易音乐播放器(供子iframe调用)
+		function showSimpleMusicPlayer(){
 			var displayStatus = $("#musicIframeDiv").css("display");
 			if (displayStatus == "none"){
 				$("#musicIframeDiv").css("display", "block");
 			}else{
 				$("#musicIframeDiv").css("display", "none");
 			}
-		});
+		}
 
 		//首页窗口阴影调整
 		var clock = 0;

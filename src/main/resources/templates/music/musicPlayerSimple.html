@@ -147,7 +147,6 @@
 		Media = document.getElementById("player");
 		var eventTester = function(e){
 	        Media.addEventListener(e,function(){
-	            console.log("addListener:"+e);
 	            if (e == "ended"){
 	            	if (app.playMode == 0){
 	            		// 单曲循环
