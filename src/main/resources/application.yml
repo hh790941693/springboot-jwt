@@ -9,7 +9,6 @@ server:
     max-threads: 1000
     min-spare-threads: 30
     uri-encoding: utf-8
-    basedir: c:\\tomcatTemp
 
 mybatis:
   config-location: classpath:mybatis.xml
