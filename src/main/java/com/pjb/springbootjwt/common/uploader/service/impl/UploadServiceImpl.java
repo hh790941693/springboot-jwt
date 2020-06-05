@@ -39,6 +39,7 @@ public class UploadServiceImpl implements UploadService {
         String newFileName = renameToUUID(file.getOriginalFilename());
         logger.info("newFileName:"+newFileName);
         String totalFolder = uploadConfig.getStorePath() + folder + File.separator;
+        logger.info("totalFolder："+totalFolder);
         File newFile = new File(totalFolder, newFileName);
         FileUtils.writeByteArrayToFile(newFile, file.getBytes());
         String viewUrl = uploadConfig.getViewUrl() + folder + "/" + newFileName;
