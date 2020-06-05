@@ -42,12 +42,12 @@
 		</div>
 
 		<!--头部标题-->
-		<div id="headerTitleDiv" style="float:left;font-size:20px;width:60%;height:100%;padding-top:13px;display: none;">
+		<div id="headerTitleDiv" style="float:left;font-size:20px;width:54%;height:100%;padding-top:13px;display: none;">
 			<label id="titleLabel" style="color:black;">websocket客户端</label>
 		</div>
 
 		<!--天气-->
-		<div id="weatherDiv" style="float:left;font-size:18px;width:60%;height:100%;padding-top:13px;display: block;">
+		<div id="weatherDiv" style="float:left;font-size:18px;width:54%;height:100%;padding-top:13px;display: block;">
 			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="location" style="color:black;"></label>
@@ -68,7 +68,8 @@
 				<span id="curTimeSpan">0000-00-00 00:00:00</span>
 			</div>
 			<div>
-				<button id="signBtn" onclick="parent.sign()" class='btn btn-sm btn-info'>签&nbsp;&nbsp;到</button>&nbsp;&nbsp;
+                <button id="simpleMusicBtn" onclick="parent.showSimpleMusicPlayer()" class='btn btn-sm btn-warning'>音&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乐</button>&nbsp;&nbsp;
+                <button id="signBtn" onclick="parent.sign()" class='btn btn-sm btn-info'>签&nbsp;&nbsp;到</button>&nbsp;&nbsp;
 				<button id="showQRCodeBtn" onclick="parent.showQRCode()" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
 				<button id="setPersonInfoBtn" onclick="parent.setPersonInfoBtn()" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>&nbsp;&nbsp;
 				<button id="exitBtn" class='btn btn-sm btn-danger' onclick="parent.toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
@@ -199,7 +200,7 @@
 						var data = result.data;
 						var totalAds = "";
 						$.each(data,function(i,val){
-							totalAds += val.content+"&nbsp;&nbsp;&nbsp;"+val.createTime+"<br/>";
+							totalAds += "<span style='font-weight: bold;'>"+val.content+"</span>"+"&nbsp;&nbsp;&nbsp;"+val.createTime+"<br/>";
 						});
 						$("#adContentDiv").html(totalAds);
 					}
