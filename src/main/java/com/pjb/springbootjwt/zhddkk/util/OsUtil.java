@@ -23,7 +23,7 @@ public class OsUtil {
         String version = "";
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://101.132.176.9:3306/zhdd?useSSL=false", "root", "123456");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zhdd?useSSL=false", "root", "123456");
             DatabaseMetaData metaData = (DatabaseMetaData) conn.getMetaData();
             version = metaData.getDatabaseProductVersion();
         } catch (Exception e) {
@@ -67,6 +67,12 @@ public class OsUtil {
             }
         }else{
             //linux do nothing
+            String cmd = "ps -ef | grep "+processName+" | grep -v grep";
+            String result = ExcuteLinuxCmdUtil.runLinuxCmd(cmd);
+            System.out.println(result);
+            if (result.contains(processName)){
+                return true;
+            }
         }
         return false;
     }
