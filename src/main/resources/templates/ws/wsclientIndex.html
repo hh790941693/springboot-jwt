@@ -460,11 +460,15 @@
                 async:false,
                 success: function(result) {
                     if (result.code == 1){
-                        var data = result.data;
                         var totalAds = "";
-                        $.each(data,function(i,val){
-                            totalAds += "<span style='font-weight: bold;font-size:15px;'>"+val.content+"</span>&nbsp;&nbsp;<span style='font-size:11px;'>"+val.createTime+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                        });
+                        var data = result.data;
+                        if (data.length == 0){
+                            totalAds = "<span style='font-weight: bold;font-size:14px;color:red;'>暂无消息</span>";
+                        }else {
+                            $.each(data, function (i, val) {
+                                totalAds += "<span style='font-weight: bold;font-size:14px;'>" + val.content + "</span>&nbsp;&nbsp;<span style='font-size:10px;'>" + val.createTime + "</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            });
+                        }
                         $("#adsSpan").html(totalAds);
                     }
                 }

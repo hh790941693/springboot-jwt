@@ -81,7 +81,7 @@ public class WsAdsController extends AdminBaseController {
 		Page<WsAdsDO> page = wsAdsService.selectPage(new Page<>(1,count), new EntityWrapper<WsAdsDO>()
 			.orderBy("create_time", false));
 		List<WsAdsDO> list = page.getRecords();
-		if (null != list && list.size()>0){
+		if (null != list){
 			return Result.ok(list);
 		}
 
