@@ -244,7 +244,7 @@ function batchRemove() {
 }
 
 function reply(id){
-    layer.prompt({title: '随便写点啥，并确认', formType: 2}, function(text, index){
+    layer.prompt({title: '答复', formType: 2}, function(text, index){
         layer.close(index);
         $.ajax({
             type : 'POST',
