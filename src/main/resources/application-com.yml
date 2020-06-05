@@ -1,3 +1,9 @@
+server:
+  address: localhost
+  port: 8100
+  tomcat:
+    basedir: c:\\tomcatTemp
+
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -23,7 +29,7 @@ spring:
 upload:
   config:
     #本地存储路径
-    store-path: /home/ws
+    store-path: D:\\temp\\
     #访问url(需要通过nginx来访问)
     #server {
     #  listen 8101;
@@ -33,4 +39,4 @@ upload:
     #    autoindex on;
     #  }
     #}
-    view-url: http://${server.address}:8007/
+    view-url: http://${server.address}:8101/

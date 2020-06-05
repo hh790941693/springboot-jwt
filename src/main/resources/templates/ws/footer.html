@@ -44,9 +44,6 @@
 	<div id="footDiv" align="center">
 		<div style="height:20px;">
 			<div style="float:left;">
-				<label id="curUser22">邮箱:547495788@qq.com</label>
-			</div>
-			<div style="float:left;margin-left: 230px;">
 				<label id="cliName">COPYRIGHT © 2019 – 2030 版权信息归作者所有</label>
 				<label id="versionLabel" style='margin-left:10px;color:blue;font-weight:bold;'></label>
 				<a href='javascript:void(0)' onclick='checkUpdate()' style='margin-left:15px;'>检查更新</a>
@@ -63,7 +60,6 @@
 
 		<!--提示栏 -->
 		<div id="statusDiv" align="right">
-			<!--<span id="statusTips"></span>-->
 			<marquee direction="left" behavior="alternate" scrolldelay="10" scrollamount="10"><span id="statusTips" ></span></marquee>
 		</div>
 	</div>
@@ -136,8 +132,8 @@
 			parent.layer.open({
 				type : 2,
 				title : '联系作者',
-				maxmin : true,
-				shadeClose : false,//点击遮罩关闭层
+				maxmin : false,
+				shadeClose : true,//点击遮罩关闭层
 				area : [ '530px', '300px' ],
 				content : rootUrl + 'index/contactAuthor.page'
 			});
@@ -148,8 +144,8 @@
 			parent.layer.open({
 				type : 2,
 				title : '捐赠作者',
-				maxmin : true,
-				shadeClose : false,//点击遮罩关闭层
+				maxmin : false,
+				shadeClose : true,//点击遮罩关闭层
 				area : [ '530px', '300px' ],
 				content : rootUrl + 'index/donate.page'
 			});
@@ -160,8 +156,8 @@
 			parent.layer.open({
 				type : 2,
 				title : '提出疑问',
-				maxmin : true,
-				shadeClose : false,//点击遮罩关闭层
+				maxmin : false,
+				shadeClose : true,//点击遮罩关闭层
 				area : [ '530px', '300px' ],
 				content : rootUrl + 'index/feedbackUs.page'
 			});
@@ -172,8 +168,8 @@
 			parent.layer.open({
 				type : 2,
 				title : '关于我们',
-				maxmin : true,
-				shadeClose : false,//点击遮罩关闭层
+				maxmin : false,
+				shadeClose : true,//点击遮罩关闭层
 				area : [ '530px', '300px' ],
 				content : rootUrl + 'index/aboutUs.page'
 			});

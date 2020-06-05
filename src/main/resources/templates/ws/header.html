@@ -7,7 +7,7 @@
 		width:100%;
 		height:100%;
 		font-weight:bold;
-		background-repeat: no-repeat;
+		background-repeat: repeat-x;
 		background-position: 0px -230px;
 	}
 
@@ -28,7 +28,7 @@
 		<img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
 		<div style="float:left;">
             <div style="float:left;">
-			    <img id='myImg' alt=""  width="50" height="50">
+			    <img id='myImg' alt=""  width="50" height="100%">
             </div>
             <div style="float:left;margin-left:3px;margin-right: 3px;">
                 <div style="height:65%;text-align: left;">
@@ -42,19 +42,19 @@
 		</div>
 
 		<!--头部标题-->
-		<div id="headerTitleDiv" style="float:left;font-size:20px;width:35%;height:100%;padding-top:13px;display: none;">
+		<div id="headerTitleDiv" style="float:left;font-size:20px;width:54%;height:100%;padding-top:13px;display: none;">
 			<label id="titleLabel" style="color:black;">websocket客户端</label>
 		</div>
 
 		<!--天气-->
-		<div id="weatherDiv" style="float:left;font-size:18px;width:35%;height:100%;padding-top:13px;display: block;">
+		<div id="weatherDiv" style="float:left;font-size:18px;width:54%;height:100%;padding-top:13px;display: block;">
 			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="location" style="color:black;"></label>
 		</div>
 
 		<!--滚动新闻-->
-		<div id="scrollAdDiv" style="float:left;height:100%;overflow:hidden;width:29%;margin-left: 3px;">
+		<div id="scrollAdDiv" style="float:left;height:100%;overflow:hidden;width:29%;margin-left: 3px;display: none;">
 			<div id="adContentOutDiv" style="height:200%;text-align: left;">
 				<div id="adContentDiv"></div>
 				<div id="adNoContentDiv"></div>
@@ -62,16 +62,17 @@
 		</div>
 
 		<!--右侧按钮组-->
-		<div id="btnDiv" style="float:right;margin-right:5px;">
+		<div id="btnDiv" style="float:right;margin-right:5px;height:100%;">
 			<!--当前时间-->
-			<div style="text-align:right;">
+			<div style="text-align:right;height:30%;">
 				<span id="curTimeSpan">0000-00-00 00:00:00</span>
 			</div>
-			<div>
-				<button id="signBtn" onclick="sign()" class='btn btn-sm btn-info'>签&nbsp;&nbsp;到</button>&nbsp;&nbsp;
-				<button id="showQRCodeBtn" onclick="showQRCode()" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
-				<button id="setPersonInfoBtn" onclick="setPersonInfoBtn()" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>&nbsp;&nbsp;
-				<button id="exitBtn" class='btn btn-sm btn-danger' onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
+			<div style="height:69%;padding-top:4px;">
+                <button id="simpleMusicBtn" onclick="parent.showSimpleMusicPlayer()" class='btn btn-sm btn-warning'>音&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乐</button>&nbsp;&nbsp;
+                <button id="signBtn" onclick="parent.sign()" class='btn btn-sm btn-info'>签&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;到</button>&nbsp;&nbsp;
+				<button id="showQRCodeBtn" onclick="parent.showQRCode()" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
+				<button id="setPersonInfoBtn" onclick="parent.setPersonInfoBtn()" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>&nbsp;&nbsp;
+				<button id="exitBtn" class='btn btn-sm btn-danger' onclick="parent.toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
 			</div>
 		</div>
 	</div>
@@ -188,7 +189,7 @@
 		setInterval(Marquee, 100);
 
 		//获取最新广告
-		queryRecentAdsList();
+		//queryRecentAdsList();
 		function queryRecentAdsList(){
 			$.ajax({
 				type: 'GET',
@@ -199,7 +200,7 @@
 						var data = result.data;
 						var totalAds = "";
 						$.each(data,function(i,val){
-							totalAds += val.content+"&nbsp;&nbsp;&nbsp;"+val.createTime+"<br/>";
+							totalAds += "<span style='font-weight: bold;'>"+val.content+"</span>"+"&nbsp;&nbsp;&nbsp;"+val.createTime+"<br/>";
 						});
 						$("#adContentDiv").html(totalAds);
 					}
@@ -208,26 +209,6 @@
 		}
 
 		//定时获取最新广告
-		setInterval(queryRecentAdsList, 60000);
-
-		//签到
-		function sign(){
-            parent.sign();
-        }
-
-		//扫码登录
-		function showQRCode(){
-			return parent.showQRCode();
-		}
-
-		//设置个人信息
-		function setPersonInfoBtn(){
-			parent.setPersonInfoBtn();
-		}
-
-		//退出
-		function toIndex(){
-			parent.toIndex();
-		}
+		//setInterval(queryRecentAdsList, 60000);
 	</script>
 </html>

@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.util.Properties;
 
 public class OsUtil {
     public static void main(String[] args){
@@ -41,24 +42,31 @@ public class OsUtil {
     }
 
     public static boolean findProcess(String processName) {
-        BufferedReader bufferedReader = null;
-        try {
-            Process proc = Runtime.getRuntime().exec("tasklist -fi " + '"'+ "imagename eq " + processName +'"');
-            bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                if (line.contains(processName)) {
-                    return true;
+        Properties props = System.getProperties();
+        String osName = props.getProperty("os.name");
+        if (osName.contains("windows") || osName.contains("Windows")) {
+            BufferedReader bufferedReader = null;
+            try {
+                Process proc = Runtime.getRuntime().exec("tasklist -fi " + '"' + "imagename eq " + processName + '"');
+                bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+                String line = null;
+                while ((line = bufferedReader.readLine()) != null) {
+                    if (line.contains(processName)) {
+                        return true;
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (bufferedReader != null) {
+                    try {
+                        bufferedReader.close();
+                    } catch (Exception ex) {
+                    }
                 }
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (Exception ex) {}
-            }
+        }else{
+            //linux do nothing
         }
         return false;
     }

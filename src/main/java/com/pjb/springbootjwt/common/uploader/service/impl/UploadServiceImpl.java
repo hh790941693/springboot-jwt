@@ -38,7 +38,8 @@ public class UploadServiceImpl implements UploadService {
         String originFilename = file.getOriginalFilename();
         String newFileName = renameToUUID(file.getOriginalFilename());
         logger.info("newFileName:"+newFileName);
-        String totalFolder = uploadConfig.getStorePath() + folder + File.separator;
+        String totalFolder = uploadConfig.getStorePath() + File.separator + folder + File.separator;
+        logger.info("totalFolder："+totalFolder);
         File newFile = new File(totalFolder, newFileName);
         FileUtils.writeByteArrayToFile(newFile, file.getBytes());
         String viewUrl = uploadConfig.getViewUrl() + folder + "/" + newFileName;
@@ -47,18 +48,18 @@ public class UploadServiceImpl implements UploadService {
         wsFileDO.setUser(userId);
         wsFileDO.setFolder(folder);
         wsFileDO.setFilename(file.getOriginalFilename());
-        wsFileDO.setDiskPath(uploadConfig.getStorePath() + folder);
+        wsFileDO.setDiskPath(uploadConfig.getStorePath() + File.separator + folder);
         wsFileDO.setUrl(viewUrl);
         wsFileDO.setFileSize(newFile.length());
 
-        String trackLength = "";
-        if (originFilename.endsWith("mp3")) {
-            try {
-                trackLength = MusicParserUtil.getMusicTrackTime(newFile.getAbsolutePath());
-            }catch (Exception e){
-                logger.info("获取音乐文件时长异常:"+e.getMessage());
-            }
-        }
+        String trackLength = "00:00";
+//        if (originFilename.endsWith("mp3")) {
+//            try {
+//                trackLength = MusicParserUtil.getMusicTrackTime(newFile.getAbsolutePath());
+//            }catch (Exception e){
+//                logger.info("获取音乐文件时长异常:"+e.getMessage());
+//            }
+//        }
         wsFileDO.setTrackLength(trackLength);
         wsFileService.insert(wsFileDO);
 

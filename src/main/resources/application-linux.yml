@@ -1,8 +1,8 @@
 server:
-  address: localhost
+  address: 192.168.2.115
   port: 8100
   tomcat:
-    basedir: c:\\tomcatTemp
+    basedir: /opt/tomcatTemp
 
 spring:
   datasource:
@@ -14,7 +14,7 @@ spring:
     ehcache:
       config: classpath:ehcache.xml
   redis:
-    host: 192.168.1.42
+    host: 192.168.31.153
     port: 6379
     password: 123456
     database: 0
@@ -29,13 +29,13 @@ spring:
 upload:
   config:
     #本地存储路径
-    store-path: D:\\temp\\
+    store-path: /home/springbootJwt
     #访问url(需要通过nginx来访问)
     #server {
     #  listen 8101;
     #  server_name  localhost;
     #  location / {
-    #    root D:\\temp;
+    #    root /home/springbootJwt;
     #    autoindex on;
     #  }
     #}

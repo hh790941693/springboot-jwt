@@ -10,37 +10,54 @@
 				padding:0;
 			}
 			#mainDiv{
-				width:168px;
+				width:100%;
 				height:100%;
 				overflow:hidden;
 			}
-			
+
+			#buttons{
+				width:100%;
+			}
+
 			#mainDiv button{
-				width:38px;
-				height:24px;
+				width:23%;
+				height:100%;
 				font-size:5px;
 			}
 
 			#playerDiv{
 				display:none;
+				width:100%;
+				height:1%;
+			}
+
+			#buttonsDiv{
+				width:100%;
+				height:35%;
+				margin-left:3px;
+				margin-top:5px;
+			}
+			#songNameDiv{
+				width:100%;
+				height:64%;
+				font-size:8px;
+				margin-top:5px;
 			}
 		</style>
 	</head> 
 	<body>
 		<div id="mainDiv">
-			<div id="buttons">
-				<div id='playerDiv' style="width:1px;">
-					<audio id="player" controls="controls" src="" style="width:100%;"></audio>
-				</div>
-				<div style="width:100%;height:25px;margin-left:3px;margin-top:5px;">
-					<button id="btnPre" @click="preMusic()">&lt;&lt;</button>
-					<button id="btnPlay" @click="play()">播放</button>
-					<button id="btnNext" @click="nextMusic()">&gt;&gt;</button>
-					<button id="btnChangeMode" @click="changePlayMode()">{{playModeText}}</button>
-				</div>
-				<div id="songNameDiv" style='font-size:8px;margin-top:5px;' >
-					<span id="statusSpan">{{playTips}}:</span><br/><span id="songNameSpan" style='color:green;'>{{songName}}</span>
-				</div>
+			<div id='playerDiv'>
+				<audio id="player" controls="controls" src="" style="width:100%;"></audio>
+			</div>
+			<div id="buttonsDiv">
+				<button id="btnPre" @click="preMusic()">&lt;&lt;</button>
+				<button id="btnPlay" @click="play()">播放</button>
+				<button id="btnNext" @click="nextMusic()">&gt;&gt;</button>
+				<button id="btnChangeMode" @click="changePlayMode()">{{playModeText}}</button>
+			</div>
+			<div id="songNameDiv">
+				<span id="statusSpan">{{playTips}}:</span><br/><span id="songNameSpan" style='color:green;'>{{songName}}</span>
 			</div>
 		</div>
 
@@ -75,6 +92,9 @@
 						success: function (result) {
 							if (result.code == 1) {
 								app.musicData = result.data;
+								if (app.musicData.length == 0){
+								    app.songName = "暂无歌曲";
+                                }
 							}
 						}
 					});
@@ -161,7 +181,7 @@
 	            	}
 	            }else if (e == "error"){
 	            	if (app.playMode == 1 || app.playMode == 2){
-						app.nextMusic();
+                        //do nothing
 	            	}
 	            }
 	        });

@@ -36,8 +36,7 @@ import org.springframework.stereotype.Component;
 
 @ServerEndpoint(value = "/zhddWebSocket/{user}/{pass}/{userAgent}", configurator = HttpSessionConfigurator.class)
 @Component
-public class ZhddWebSocket 
-{
+public class ZhddWebSocket {
 	private static final Logger logger = LoggerFactory.getLogger(ZhddWebSocket.class);
 	
 	private static Map<String,ZhddWebSocket> clients = new ConcurrentHashMap<String,ZhddWebSocket>();
@@ -62,7 +61,7 @@ public class ZhddWebSocket
 
 	@OnMessage
 	public void onMessage(String message, Session session) throws IOException, InterruptedException {
-		if (this.user == null || this.session==null) {
+		if (StringUtils.isBlank(message) || this.user == null || this.session == null) {
 			return;
 		}
 
@@ -139,8 +138,6 @@ public class ZhddWebSocket
 	
 	@javax.websocket.OnOpen
 	public void OnOpen(@PathParam("user") String user, @PathParam("pass") String pass, @PathParam("userAgent") String userAgent, Session session, EndpointConfig endpointConfig) {
-        logger.info("用户连接 user:{}", user);
-
         if (endpointConfig.getUserProperties().containsKey(HttpSession.class.getName())) {
 			HttpSession httpSession = (HttpSession) endpointConfig.getUserProperties().get(HttpSession.class.getName());
 			String sessionUser = (String) httpSession.getAttribute(CommonConstants.S_USER + "_" + user);
@@ -153,7 +150,6 @@ public class ZhddWebSocket
 
 		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user).eq("password", pass));
 		if (null == wsUsersDO) {
-			System.out.println("用户:"+user+"登录失败!");
 			logger.info("用户{}不存在或者密码错误", user);
 			this.session = null;
 			this.user = null;
@@ -163,6 +159,7 @@ public class ZhddWebSocket
 			return;
 		}
 
+        logger.info("用户:{} 已连接上服务器", user);
 		this.session = session;
 		this.user = user;
 		this.userAgent = userAgent;
@@ -219,11 +216,12 @@ public class ZhddWebSocket
 	
 	@javax.websocket.OnClose
 	public void OnClose() {
+		logger.info("用户:{} 已断开服务器", this.user);
 		subOnLineCount();
 		clients.remove(this.user);
 		SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String curTime = sdfx.format(new Date());
-		String msg =  user + "已下线!";
+		String msg = user + "已下线!";
 		logger.debug(msg);
 		for (Entry<String,ZhddWebSocket> entry : clients.entrySet()) {
 			if (!entry.getKey().equals(user)) {
@@ -255,8 +253,7 @@ public class ZhddWebSocket
 	
 	@OnError
 	public void onError(Throwable throwable) {
-		System.out.println(this.user+"连接异常:" + throwable.getMessage());
-		logger.info("用户{}连接异常",this.user);
+		logger.info("用户{}: 连接服务器异常",this.user);
 		clients.remove(this.user);
 	}
 	

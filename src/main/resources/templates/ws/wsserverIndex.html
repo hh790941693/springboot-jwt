@@ -3,11 +3,56 @@
 	<title>WebSocket服务端</title>
 
 	<style type="text/css">
-		#mainDiv{
-			width:1318px;
-			height:610px;
-			margin:1px auto;
+
+        #mainDiv{
+            width:1318px;
+            height:737px;
+            margin:0 auto;
+        }
+
+        #headerPage{
+            width:100%;
+            height:7.87%;
+            border:2px solid green;
+        }
+
+		#centerDiv{
+			width:100%;
+			height:85.07%;
 		}
+
+        #recentNewsDiv{
+            width:100%;
+            height:3.5%;
+            border:2px solid green;
+            background-color:#97eab0;
+        }
+
+        #leftAndRightIframeDiv{
+            width:100%;
+            height:96.5%;
+        }
+
+        #leftNaviDiv{
+            width:14%;
+            height:100%;
+            float:left;
+            border:2px solid green;
+        }
+
+        #rightIframeDiv{
+            width:86%;
+            height:100%;
+            float:left;
+            border:2px solid green;
+            overflow: hidden;
+        }
+
+        #footerDiv{
+            width:100%;
+            height:7.05%;
+            border:2px solid green;
+        }
 
 		#qrDiv{
 			position: fixed;
@@ -38,43 +83,53 @@
 		.divShadow{
 			box-shadow: grey 0 0 10px;
 		}
-	</style>
+    </style>
 </head>
 <body>
-    <!--头部-->
-	<div id="headerPage" class="divShadow" align="center" style="width:1318px;height:58px;border:2px solid green;margin: 0 auto;">
-		<iframe id="headerIframePage" src="header.page" width="100%" height="100%"></iframe>
-	</div>
+    <div id="mainDiv">
+        <!--头部-->
+        <div id="headerPage" class="divShadow" align="center">
+            <iframe id="headerIframePage" src="header.page" width="100%" height="100%"></iframe>
+        </div>
 
-	<!--中间部分-->
-	<div id='mainDiv' class="divShadow">
-		<input type="hidden" id="user" name="user" th:value="${user}">
-		<input type="hidden" id="pass" name="pass" th:value="${pass}">
-		<input type="hidden" id="webserverip" name="webserverip" th:value="${webserverip}">
-		<input type="hidden" id="webserverport" name="webserverport" th:value="${webserverport}">
-		<input type="hidden" id="selfimg" name="selfimg" th:value="${selfimg}">
-        <input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
+        <!--中间部分-->
+        <div id='centerDiv' class="divShadow">
+            <!--用户登录相关信息-->
+            <input type="hidden" id="user" name="user" th:value="${user}">
+            <input type="hidden" id="pass" name="pass" th:value="${pass}">
+            <input type="hidden" id="webserverip" name="webserverip" th:value="${webserverip}">
+            <input type="hidden" id="webserverport" name="webserverport" th:value="${webserverport}">
+            <input type="hidden" id="selfimg" name="selfimg" th:value="${selfimg}">
+            <input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
 
-		<!--左侧导航栏-->
-		<div id="leftNaviDiv" style="width:14%;height:100%;float:left;border:2px solid green;">
-			<iframe id="leftNaviIframePage" src="serverLeftNavi.page" width="100%" height="100%"></iframe>
-		</div>
+            <!--滚动消息-->
+            <div id="recentNewsDiv">
+                <marquee direction="left" scrolldelay="10" scrollamount="10"><span id="adsSpan"></span></marquee>
+            </div>
 
-		<!--右侧子页面-->
-		<div id="rightIframeDiv" align="center" style="width:86%;height:100%;float:left;border:2px solid green;overflow: hidden;">
-			<iframe id="iframePage" width="100%" height="100%"></iframe>
-		</div>
-	</div>
+            <div id="leftAndRightIframeDiv">
+                <!--左侧导航栏-->
+                <div id="leftNaviDiv">
+                    <div th:if="${user == 'admin'}">
+                        <iframe id="leftNaviIframePage" src="serverLeftNavi.page" width="100%" height="100%"></iframe>
+                    </div>
+                    <div th:if="${user != 'admin'}">
+                        <iframe id="leftNaviIframePage" src="clientLeftNavi.page" width="100%" height="100%"></iframe>
+                    </div>
+                </div>
 
-	<!--底部-->
-	<div id="footerDiv" class="divShadow" align="center" style="width:1318px;height:52px;border:2px solid green;margin: 0 auto;">
-		<iframe id="footerIframePage" src="footer.page" width="100%" height="100%"></iframe>
-	</div>
+                <!--右侧子页面-->
+                <div id="rightIframeDiv" align="center">
+                    <iframe id="iframePage" width="100%" height="100%"></iframe>
+                </div>
+            </div>
+        </div>
 
-	<!--右侧音乐播放器图标(隐藏)-->
-	<div id="musicPicDiv" style="position: fixed;top:84px;width:30px;height:30px;">
-		<img id="musicPicImg" src="../img/others/musicplayer.jpg" style="width:100%;height:100%;">
-	</div>
+        <!--底部-->
+        <div id="footerDiv" class="divShadow" align="center">
+            <iframe id="footerIframePage" src="footer.page" width="100%" height="100%"></iframe>
+        </div>
+    </div>
 
 	<!--右上角 二维码-->
 	<div id="qrDiv" style="display:none">
@@ -136,15 +191,15 @@
         function showPage(pageId){
 			curPageid = pageId;
 			var url = pageId + "?user="+s_user;
-            if (pageId.indexOf("gameIndex.page") != -1){
-                window.location.href=pageId;
-            }else if (pageId.indexOf("canvasIndex.page") != -1){
-                window.location.href=pageId;
-            }else if (pageId.indexOf("configurationLi") != -1){
-                $("#configurationDiv").slideDown();
-            }else{
-                $("#iframePage").attr("src",url);
-            }
+			if (pageId.indexOf("gameIndex.page") != -1){
+				window.location.href = pageId;
+			}else if (pageId.indexOf("canvasIndex.page") != -1) {
+				window.location.href = pageId;
+			}else if (pageId.indexOf("configurationLi") != -1) {
+				$("#configurationDiv").slideDown();
+			}else{
+				$("#iframePage").attr("src", url);
+			}
         }
 
         // ---------------------------------以下是供聊天用的全局变量-----------------------
@@ -279,7 +334,6 @@
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 chatRecord = chatRecord + htmlData;
                 unreadCount = unreadCount+1;
-                //$("#unreadCountSpan").text(unreadCount);
 				$("#leftNaviIframePage").contents().find("#unreadCountSpan").text(unreadCount);
             }else{
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
@@ -327,8 +381,8 @@
 
         function adjustMusicWindowPosition(){
             var headDivHeight = $("#headerPage").height();
-            var mainDivHeight = $("#mainDiv").height();
-            var mainDivLeft = $("#mainDiv").offset().left;
+            var mainDivHeight = $("#centerDiv").height();
+            var mainDivLeft = $("#centerDiv").offset().left;
             var musicIframeDivHeight=$("#musicIframeDiv").height();
             $("#musicIframeDiv").css("top",headDivHeight+mainDivHeight-musicIframeDivHeight-16);
             $("#musicIframeDiv").css("left",mainDivLeft+3);
@@ -396,17 +450,15 @@
             });
         }
 
-		//点击音乐播放器图标显示/隐藏简易音乐播放器
-        var musicPicRightPos = (window.innerWidth-$("#mainDiv").width())/2;
-        $("#musicPicDiv").css("right", (musicPicRightPos-15)+"px");
-		$("#musicPicImg").click(function () {
+		//显示简易音乐播放器(供子iframe调用)
+		function showSimpleMusicPlayer(){
 			var displayStatus = $("#musicIframeDiv").css("display");
 			if (displayStatus == "none"){
 				$("#musicIframeDiv").css("display", "block");
 			}else{
 				$("#musicIframeDiv").css("display", "none");
 			}
-		});
+		}
 
 		//首页窗口阴影调整
 		var clock = 0;
@@ -440,5 +492,31 @@
 			}
 			clock++;
 		},100);
+
+        //获取最新广告
+        queryRecentAdsList();
+        function queryRecentAdsList(){
+            $.ajax({
+                type: 'GET',
+                url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
+                async:false,
+                success: function(result) {
+                    if (result.code == 1){
+                        var totalAds = "";
+                        var data = result.data;
+                        if (data.length == 0){
+                            totalAds = "<span style='font-weight: bold;font-size:14px;color:red;'>暂无消息</span>";
+                        }else {
+                            $.each(data, function (i, val) {
+                                totalAds += "<span style='font-weight: bold;font-size:14px;'>" + val.content + "</span>&nbsp;&nbsp;<span style='font-size:10px;'>" + val.createTime + "</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            });
+                        }
+                        $("#adsSpan").html(totalAds);
+                    }
+                }
+            });
+        }
+        //定时获取最新广告
+        setInterval(queryRecentAdsList, 60000);
     </script>
 </html>
