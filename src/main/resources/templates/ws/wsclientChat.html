@@ -22,11 +22,12 @@
 		position: fixed;
 		left:250px;
 		top:80px;
+		border:2px solid green;
 	}
 	
 	#header{
 		width:100%;
-		height:40px;
+		height:30px;
 		padding-top:5px;
 		padding-left:5px;
 		cursor: move;
@@ -37,16 +38,12 @@
 		width:100%;
 		height:350px;
 		overflow:auto;
-		border:2px solid green;
 		background-color:white;
 		padding:3px;
 	}
 	
 	#footer{
 		width:100%;
-	    border-left:2px solid green;
-	    border-right:2px solid green;
-	    border-bottom:2px solid green;
 	}
 	
 	#adDiv{
@@ -69,15 +66,15 @@
 <body>
 	<div id="mainDiv">
 		<div id="header">
-			<div align="left" style="width:20%;height:100%;float:left">
-				<span style="color:yellow;font-weight:bold;font-size: 30px;height:100%;display:inline-block;" id="loginUser"></span>
+			<div align="left" style="width:20%;height:100%;float:left;margin-top:-5px;">
+				<span style="color:yellow;font-weight:bold;font-size:24px;height:100%;display:inline-block;" id="loginUser"></span>
 			</div>
 
 			<div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
-				<button id="refreashConlineCount" class='btn btn-sm btn-info' onclick="getOnlineInfo()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>&nbsp;&nbsp;
-				<button class='btn btn-sm btn-primary' onclick="changeBackgroundImage()">更换背景</button>&nbsp;&nbsp;
-				<button class='btn btn-sm btn-danger' onclick="clearScreen()">清&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;屏</button>&nbsp;&nbsp;
-				<button id="btnReconnect" class='btn btn-sm btn-primary' type="button" onclick="loginServer()">重新连接</button>
+				<button id="refreashConlineCount" class='label label-info' onclick="getOnlineInfo()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>&nbsp;&nbsp;
+				<button class='label label-primary' onclick="changeBackgroundImage()">更换背景</button>&nbsp;&nbsp;
+				<button class='label label-danger' onclick="clearScreen()">清&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;屏</button>&nbsp;&nbsp;
+				<button id="btnReconnect" class='label label-primary' type="button" onclick="loginServer()">重新连接</button>
 			</div>
 		</div>
 	
@@ -93,7 +90,7 @@
 			</div>
 			<div style="height:33px;">
 				<input id="msgToServer" autocomplete="off" style="width:80%;float:left;height:100%;border:2px solid grey" placeholder="请输入聊天内容"></input>
-				<button id="sendBtn" type="button" class='btn btn-sm btn-primary' style="width:20%;height:100%;float:right;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
+				<button id="sendBtn" type="button" class='btn btn-sm btn-success' style="width:20%;height:100%;float:right;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
 			</div>
 		</div>
 	</div>
