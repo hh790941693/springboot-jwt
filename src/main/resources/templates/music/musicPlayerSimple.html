@@ -57,7 +57,7 @@
 				<button id="btnChangeMode" @click="changePlayMode()">{{playModeText}}</button>
 			</div>
 			<div id="songNameDiv">
-				<span id="statusSpan">{{playTips}}:</span><br/><span id="songNameSpan" style='color:green;'>1111111{{songName}}</span>
+				<span id="statusSpan">{{playTips}}:</span><br/><span id="songNameSpan" style='color:green;'>{{songName}}</span>
 			</div>
 		</div>
 
@@ -92,6 +92,9 @@
 						success: function (result) {
 							if (result.code == 1) {
 								app.musicData = result.data;
+								if (app.musicData.length == 0){
+								    app.songName = "暂无歌曲";
+                                }
 							}
 						}
 					});
