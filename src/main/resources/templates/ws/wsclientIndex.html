@@ -5,10 +5,10 @@
 	<style type="text/css">
 
         #mainDiv{
-            //width:1318px;
-            //height:737px;
-            width:99.99%;
-            height:99.99%;
+            width:1318px;
+            height:737px;
+            //width:99.99%;
+            //height:99.99%;
             margin:0 auto;
         }
 
@@ -460,8 +460,11 @@
 		//显示简易音乐播放器(供子iframe调用)
 		function showSimpleMusicPlayer(){
 			var displayStatus = $("#musicIframeDiv").css("display");
+			var leftNaviWidth=$("#leftNaviDiv").width();
 			if (displayStatus == "none"){
 				$("#musicIframeDiv").css("display", "block");
+                $("#musicIframeDiv").css("width", leftNaviWidth+"px");
+                $("#musicIframeDiv").css("height", "97px");
 			}else{
 				$("#musicIframeDiv").css("display", "none");
 			}
