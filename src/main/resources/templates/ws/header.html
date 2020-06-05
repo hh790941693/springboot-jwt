@@ -68,10 +68,10 @@
 				<span id="curTimeSpan">0000-00-00 00:00:00</span>
 			</div>
 			<div>
-				<button id="signBtn" onclick="sign()" class='btn btn-sm btn-info'>签&nbsp;&nbsp;到</button>&nbsp;&nbsp;
-				<button id="showQRCodeBtn" onclick="showQRCode()" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
-				<button id="setPersonInfoBtn" onclick="setPersonInfoBtn()" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>&nbsp;&nbsp;
-				<button id="exitBtn" class='btn btn-sm btn-danger' onclick="toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
+				<button id="signBtn" onclick="parent.sign()" class='btn btn-sm btn-info'>签&nbsp;&nbsp;到</button>&nbsp;&nbsp;
+				<button id="showQRCodeBtn" onclick="parent.showQRCode()" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
+				<button id="setPersonInfoBtn" onclick="parent.setPersonInfoBtn()" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>&nbsp;&nbsp;
+				<button id="exitBtn" class='btn btn-sm btn-danger' onclick="parent.toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
 			</div>
 		</div>
 	</div>
@@ -209,25 +209,5 @@
 
 		//定时获取最新广告
 		setInterval(queryRecentAdsList, 60000);
-
-		//签到
-		function sign(){
-            parent.sign();
-        }
-
-		//扫码登录
-		function showQRCode(){
-			return parent.showQRCode();
-		}
-
-		//设置个人信息
-		function setPersonInfoBtn(){
-			parent.setPersonInfoBtn();
-		}
-
-		//退出
-		function toIndex(){
-			parent.toIndex();
-		}
 	</script>
 </html>
