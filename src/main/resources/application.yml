@@ -1,6 +1,4 @@
 server:
-  port: 8100
-  address: localhost
   servlet:
     context-path: /
     session:

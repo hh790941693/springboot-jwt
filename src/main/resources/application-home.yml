@@ -1,3 +1,9 @@
+server:
+  address: localhost
+  port: 8100
+  tomcat:
+    basedir: c:\\tomcatTemp
+
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -34,7 +40,3 @@ upload:
     #  }
     #}
     view-url: http://${server.address}:8101/
-
-server:
-  tomcat:
-    basedir: c:\\tomcatTemp
