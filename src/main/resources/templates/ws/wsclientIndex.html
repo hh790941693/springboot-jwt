@@ -3,9 +3,9 @@
 	<title>WebSocket客户端</title>
 
 	<style type="text/css">
-		#mainDiv{
+		#centerDiv{
 			width:1318px;
-			height:610px;
+			height:627px;
 			margin:1px auto;
 		}
 
@@ -47,7 +47,7 @@
 	</div>
 
 	<!--中间部分-->
-	<div id='mainDiv' class="divShadow">
+	<div id='centerDiv' class="divShadow">
 		<!--用户登录相关信息-->
 		<input type="hidden" id="user" name="user" th:value="${user}">
 		<input type="hidden" id="pass" name="pass" th:value="${pass}">
@@ -56,20 +56,26 @@
 		<input type="hidden" id="selfimg" name="selfimg" th:value="${selfimg}">
         <input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
 
-		<!--左侧导航栏-->
-		<div id="leftNaviDiv" style="width:14%;height:100%;float:left;border:2px solid green;">
-			<div th:if="${user == 'admin'}">
-				<iframe id="leftNaviIframePage" src="serverLeftNavi.page" width="100%" height="100%"></iframe>
-			</div>
-			<div th:if="${user != 'admin'}">
-				<iframe id="leftNaviIframePage" src="clientLeftNavi.page" width="100%" height="100%"></iframe>
-			</div>
-		</div>
+        <div id="recentNewsDiv" style="width:1318px;height:22px;margin:0 auto;border:2px solid green;">
+            <marquee direction="left" scrolldelay="10" scrollamount="10"><span id="adsSpan"></span></marquee>
+        </div>
 
-		<!--右侧子页面-->
-		<div id="rightIframeDiv" align="center" style="width:86%;height:100%;float:left;border:2px solid green;overflow: hidden;">
-			<iframe id="iframePage" width="100%" height="100%"></iframe>
-		</div>
+        <div style="height:605px;">
+            <!--左侧导航栏-->
+            <div id="leftNaviDiv" style="width:14%;height:100%;float:left;border:2px solid green;">
+                <div th:if="${user == 'admin'}">
+                    <iframe id="leftNaviIframePage" src="serverLeftNavi.page" width="100%" height="100%"></iframe>
+                </div>
+                <div th:if="${user != 'admin'}">
+                    <iframe id="leftNaviIframePage" src="clientLeftNavi.page" width="100%" height="100%"></iframe>
+                </div>
+            </div>
+
+            <!--右侧子页面-->
+            <div id="rightIframeDiv" align="center" style="width:86%;height:100%;float:left;border:2px solid green;overflow: hidden;">
+                <iframe id="iframePage" width="100%" height="100%"></iframe>
+            </div>
+        </div>
 	</div>
 
 	<!--底部-->
@@ -332,8 +338,8 @@
 
         function adjustMusicWindowPosition(){
             var headDivHeight = $("#headerPage").height();
-            var mainDivHeight = $("#mainDiv").height();
-            var mainDivLeft = $("#mainDiv").offset().left;
+            var mainDivHeight = $("#centerDiv").height();
+            var mainDivLeft = $("#centerDiv").offset().left;
             var musicIframeDivHeight=$("#musicIframeDiv").height();
             $("#musicIframeDiv").css("top",headDivHeight+mainDivHeight-musicIframeDivHeight-16);
             $("#musicIframeDiv").css("left",mainDivLeft+3);
@@ -443,5 +449,27 @@
 			}
 			clock++;
 		},100);
+
+        //获取最新广告
+        queryRecentAdsList();
+        function queryRecentAdsList(){
+            $.ajax({
+                type: 'GET',
+                url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
+                async:false,
+                success: function(result) {
+                    if (result.code == 1){
+                        var data = result.data;
+                        var totalAds = "";
+                        $.each(data,function(i,val){
+                            totalAds += val.content+"&nbsp;&nbsp;"+val.createTime+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                        });
+                        $("#adsSpan").html(totalAds);
+                    }
+                }
+            });
+        }
+        //定时获取最新广告
+        setInterval(queryRecentAdsList, 60000);
     </script>
 </html>

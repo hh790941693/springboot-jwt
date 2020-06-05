@@ -42,19 +42,19 @@
 		</div>
 
 		<!--头部标题-->
-		<div id="headerTitleDiv" style="float:left;font-size:20px;width:35%;height:100%;padding-top:13px;display: none;">
+		<div id="headerTitleDiv" style="float:left;font-size:20px;width:60%;height:100%;padding-top:13px;display: none;">
 			<label id="titleLabel" style="color:black;">websocket客户端</label>
 		</div>
 
 		<!--天气-->
-		<div id="weatherDiv" style="float:left;font-size:18px;width:35%;height:100%;padding-top:13px;display: block;">
+		<div id="weatherDiv" style="float:left;font-size:18px;width:60%;height:100%;padding-top:13px;display: block;">
 			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
 			<label id="location" style="color:black;"></label>
 		</div>
 
 		<!--滚动新闻-->
-		<div id="scrollAdDiv" style="float:left;height:100%;overflow:hidden;width:29%;margin-left: 3px;">
+		<div id="scrollAdDiv" style="float:left;height:100%;overflow:hidden;width:29%;margin-left: 3px;display: none;">
 			<div id="adContentOutDiv" style="height:200%;text-align: left;">
 				<div id="adContentDiv"></div>
 				<div id="adNoContentDiv"></div>
@@ -188,7 +188,7 @@
 		setInterval(Marquee, 100);
 
 		//获取最新广告
-		queryRecentAdsList();
+		//queryRecentAdsList();
 		function queryRecentAdsList(){
 			$.ajax({
 				type: 'GET',
@@ -208,6 +208,6 @@
 		}
 
 		//定时获取最新广告
-		setInterval(queryRecentAdsList, 60000);
+		//setInterval(queryRecentAdsList, 60000);
 	</script>
 </html>
