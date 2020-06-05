@@ -28,7 +28,7 @@
 		<img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
 		<div style="float:left;">
             <div style="float:left;">
-			    <img id='myImg' alt=""  width="50" height="50">
+			    <img id='myImg' alt=""  width="50" height="100%">
             </div>
             <div style="float:left;margin-left:3px;margin-right: 3px;">
                 <div style="height:65%;text-align: left;">
@@ -62,12 +62,12 @@
 		</div>
 
 		<!--右侧按钮组-->
-		<div id="btnDiv" style="float:right;margin-right:5px;">
+		<div id="btnDiv" style="float:right;margin-right:5px;height:100%;">
 			<!--当前时间-->
-			<div style="text-align:right;">
+			<div style="text-align:right;height:30%;">
 				<span id="curTimeSpan">0000-00-00 00:00:00</span>
 			</div>
-			<div>
+			<div style="height:69%;padding-top:5px;">
                 <button id="simpleMusicBtn" onclick="parent.showSimpleMusicPlayer()" class='btn btn-sm btn-warning'>音&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乐</button>&nbsp;&nbsp;
                 <button id="signBtn" onclick="parent.sign()" class='btn btn-sm btn-info'>签&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;到</button>&nbsp;&nbsp;
 				<button id="showQRCodeBtn" onclick="parent.showQRCode()" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
