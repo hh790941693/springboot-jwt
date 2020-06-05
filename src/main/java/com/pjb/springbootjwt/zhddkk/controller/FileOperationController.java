@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.FileUploadResultBean;
@@ -48,6 +49,9 @@ public class FileOperationController
 
 	@Autowired
 	private WebSocketConfig webSocketConfig;
+
+    @Autowired
+    private UploadConfig uploadConfig;
 
 	/**
 	 * 音乐播放首页
@@ -112,11 +116,19 @@ public class FileOperationController
 			if (delFlag) {
 				//删除原文件
 				String diskPath = wsFileDO.getDiskPath();
+				String dymicDiskPath = uploadConfig.getStorePath()+File.separator+wsFileDO.getFolder();
+				logger.info("diskPath:"+diskPath);
+                logger.info("dymicDiskPath:"+dymicDiskPath);
 				String url = wsFileDO.getUrl();
 				String filename = url.substring(url.lastIndexOf("/")+1);
-				File file = new File(diskPath+File.separator+filename);
-				if (file.exists() && file.isFile()) {
-					logger.info("删除文件:{}"+filename);
+				File file = null;
+				if (diskPath.equals(dymicDiskPath)) {
+                    file = new File(diskPath + File.separator + filename);
+                }else{
+                    file = new File(dymicDiskPath + File.separator + filename);
+                }
+				if (null != file && file.exists() && file.isFile()) {
+					logger.info("删除文件:{} "+file.getAbsolutePath());
 					file.delete();
 				}
 				return "success";
