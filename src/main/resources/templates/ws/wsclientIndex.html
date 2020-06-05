@@ -7,8 +7,6 @@
         #mainDiv{
             width:1318px;
             height:737px;
-            //width:99.99%;
-            //height:99.99%;
             margin:0 auto;
         }
 
@@ -172,22 +170,21 @@
         var s_webserverport = $('#webserverport').val();
         var s_userAgent = $('#useragent').val();
         var s_selfimg = $('#selfimg').val();
+        //窗口大小发生变化时,是否动态放大或者缩小布局
+        var resizeFlag = false;
 
-		//退出(返回登录页)
-        function toIndex(){
-            //window.location.href = rootUrl+"ws";
-			$.ajax({
-				type: 'POST',
-				url: rootUrl+'ws/logout.do',
-				data:{"user":s_user},
-				async:false,
-				success: function(result) {
-					if (result == "success"){
-						window.location.href = rootUrl;
-					}
-				}
-			});
-        }
+        //获取当前窗口大小
+        var winInnerWidth = window.innerWidth;
+        var winInnerHeight = window.innerHeight;
+        //当浏览器大小变化时
+        $(window).resize(function () {
+            if (resizeFlag) {
+                winInnerWidth = window.innerWidth;
+                winInnerHeight = window.innerHeight;
+                $("#mainDiv").width(winInnerWidth+"px");
+                $("#mainDiv").height(winInnerHeight+"px");
+            }
+        });
 
         // 默认显示页:聊天窗口首页
         var curPageid = "wsclientChat.page";
@@ -367,6 +364,7 @@
             return obj;
         }
 
+        //断开连接
         function stop(){
             if (webSocket != null){
                 webSocket.close();
@@ -453,6 +451,21 @@
                 async:false,
                 success: function(result) {
                     layer.msg(result.msg);
+                }
+            });
+        }
+
+        //退出(返回登录页)
+        function toIndex(){
+            $.ajax({
+                type: 'POST',
+                url: rootUrl+'ws/logout.do',
+                data:{"user":s_user},
+                async:false,
+                success: function(result) {
+                    if (result == "success"){
+                        window.location.href = rootUrl;
+                    }
                 }
             });
         }
