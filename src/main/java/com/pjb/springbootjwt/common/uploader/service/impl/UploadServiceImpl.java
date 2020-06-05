@@ -52,14 +52,14 @@ public class UploadServiceImpl implements UploadService {
         wsFileDO.setUrl(viewUrl);
         wsFileDO.setFileSize(newFile.length());
 
-        String trackLength = "";
-        if (originFilename.endsWith("mp3")) {
-            try {
-                trackLength = MusicParserUtil.getMusicTrackTime(newFile.getAbsolutePath());
-            }catch (Exception e){
-                logger.info("获取音乐文件时长异常:"+e.getMessage());
-            }
-        }
+        String trackLength = "00:00";
+//        if (originFilename.endsWith("mp3")) {
+//            try {
+//                trackLength = MusicParserUtil.getMusicTrackTime(newFile.getAbsolutePath());
+//            }catch (Exception e){
+//                logger.info("获取音乐文件时长异常:"+e.getMessage());
+//            }
+//        }
         wsFileDO.setTrackLength(trackLength);
         wsFileService.insert(wsFileDO);
 
