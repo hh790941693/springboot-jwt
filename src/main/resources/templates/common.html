@@ -1,45 +1,43 @@
 <!-- 页面通用元数据和CSS -->
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:fragment="header">
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title></title>
-	<meta name="keywords" content="">
-	<meta name="description" content="">
-	<link rel="stylesheet" type="text/css" th:href="@{/js/timepicker/jquery.datetimepicker.css}"/>
-	<link rel="stylesheet" type="text/css" th:href="@{/js/bootstrap/css/bootstrap.min.css?v=3.3.6}"/>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css?v=4.4.0}">
-	<link rel="stylesheet" type="text/css" th:href="@{/js/plugins/layui/css/layui.css}">
-	<link rel="stylesheet" type="text/css" th:href="@{/js/bootstraptable/bootstrap-table.min.css}"/>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css?v=4.1.0}">
-	<link rel="stylesheet" type="text/css" th:href="@{/js/plugins/fancybox/jquery.fancybox.css}">
+	<head th:fragment="header">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+		<link rel="stylesheet" type="text/css" th:href="@{/js/timepicker/jquery.datetimepicker.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/js/bootstrap/css/bootstrap.min.css?v=3.3.6}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css?v=4.4.0}">
+		<link rel="stylesheet" type="text/css" th:href="@{/js/plugins/layui/css/layui.css}">
+		<link rel="stylesheet" type="text/css" th:href="@{/js/bootstraptable/bootstrap-table.min.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/style.css?v=4.1.0}">
+		<link rel="stylesheet" type="text/css" th:href="@{/js/plugins/fancybox/jquery.fancybox.css}">
+	</head>
+	<!-- 页面通用JS -->
+	<div th:fragment="footer">
+		<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js?v=2.1.4}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstraptable/bootstrap-table.min.js?v=3.3.6}"></script>
+		<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
+		<!--<script type="text/javascript" th:src="@{/js/bootstrap/js/popper.js}"></script>-->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.js"></script>
+		<script type="text/javascript" th:src="@{/js/plugins/select2/js/select2.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/plugins/select2/js/i18n/zh-CN.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery/jquery.validate.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
+		<script type="text/javascript" th:src="@{/js/timepicker/jquery.datetimepicker.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/plugins/layui/layui.all.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstraptable/locale/bootstrap-table-zh-CN.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/plugins/fancybox/jquery.fancybox.js}"></script>
+		<script type="text/javascript" th:src="@{/js/vue/vue.min.js}"></script>
+	</div>
 
-</head>
-<!-- 页面通用JS -->
-<div th:fragment="footer">
-	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js?v=2.1.4}"></script>
-	<script type="text/javascript" th:src="@{/js/bootstraptable/bootstrap-table.min.js?v=3.3.6}"></script>
-	<script type="text/javascript" th:src="@{/js/common/common.js}"></script>
-	<!--<script type="text/javascript" th:src="@{/js/bootstrap/js/popper.js}"></script>-->
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.js"></script>
-	<script type="text/javascript" th:src="@{/js/plugins/select2/js/select2.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/plugins/select2/js/i18n/zh-CN.js}"></script>
-	<script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
-	<script type="text/javascript" th:src="@{/js/jquery/jquery.validate.js}"></script>
-	<script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
-	<script type="text/javascript" th:src="@{/js/timepicker/jquery.datetimepicker.js}"></script>
-	<script type="text/javascript" th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/plugins/layui/layui.all.js}"></script>
-	<script type="text/javascript" th:src="@{/js/bootstraptable/locale/bootstrap-table-zh-CN.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/plugins/fancybox/jquery.fancybox.js}"></script>
-	<script type="text/javascript" th:src="@{/js/vue/vue.min.js}"></script>
-</div>
-
-<!-- canvas游戏专用JS -->
-<div th:fragment="gameHeader">
-	<script type="text/javascript" th:src="@{/js/jquery/jquery-1.4.4.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
-	<script type="text/javascript" th:src="@{/js/jquery/pukeTool.js}"></script>
-	<script type="text/javascript" th:src="@{/js/jquery/tool.js}"></script>
-</div>
+	<!-- canvas游戏专用JS -->
+	<div th:fragment="gameHeader">
+		<script type="text/javascript" th:src="@{/js/jquery/jquery-1.4.4.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery/pukeTool.js}"></script>
+		<script type="text/javascript" th:src="@{/js/jquery/tool.js}"></script>
+	</div>
 </html>
