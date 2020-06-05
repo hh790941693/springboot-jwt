@@ -38,7 +38,7 @@ public class UploadServiceImpl implements UploadService {
         String originFilename = file.getOriginalFilename();
         String newFileName = renameToUUID(file.getOriginalFilename());
         logger.info("newFileName:"+newFileName);
-        String totalFolder = uploadConfig.getStorePath() + File.separator+ folder + File.separator;
+        String totalFolder = uploadConfig.getStorePath() + File.separator + folder + File.separator;
         logger.info("totalFolder："+totalFolder);
         File newFile = new File(totalFolder, newFileName);
         FileUtils.writeByteArrayToFile(newFile, file.getBytes());
@@ -48,7 +48,7 @@ public class UploadServiceImpl implements UploadService {
         wsFileDO.setUser(userId);
         wsFileDO.setFolder(folder);
         wsFileDO.setFilename(file.getOriginalFilename());
-        wsFileDO.setDiskPath(uploadConfig.getStorePath() + folder);
+        wsFileDO.setDiskPath(uploadConfig.getStorePath() + File.separator + folder);
         wsFileDO.setUrl(viewUrl);
         wsFileDO.setFileSize(newFile.length());
 
