@@ -1487,7 +1487,7 @@ public class WebSocketClientController extends AdminBaseController
         if (osName.contains("windows") || osName.contains("Windows")) {
             nginxPs = OsUtil.findWindowProcess("nginx.exe");
         }else{
-            String result = ExcuteLinuxCmdUtil.runLinuxCmd("ps -ef | grep nginx | grep -v grep");
+            String result = ExcuteLinuxCmdUtil.executeLinuxCmd("ps -ef | grep nginx | grep -v grep");
             System.out.println(result);
             if (result.contains("nginx")){
                 nginxPs = true;
