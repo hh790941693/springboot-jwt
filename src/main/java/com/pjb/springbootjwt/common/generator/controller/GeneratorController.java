@@ -1,6 +1,5 @@
 package com.pjb.springbootjwt.common.generator.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.pjb.springbootjwt.common.generator.domain.TableDO;
 import com.pjb.springbootjwt.common.generator.service.GeneratorService;
 import com.pjb.springbootjwt.common.generator.type.EnumGen;
