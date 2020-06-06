@@ -65,6 +65,8 @@
 		<div id="btnDiv" style="float:right;margin-right:5px;height:100%;">
 			<!--当前时间-->
 			<div style="text-align:right;height:30%;">
+				<input type="radio" name="showmode" value="0" checked="checked">无&nbsp;&nbsp;
+                <input type="radio" name="showmode" value="1">有&nbsp;&nbsp;
 				<span id="curTimeSpan">0000-00-00 00:00:00</span>
 			</div>
 			<div style="height:69%;padding-top:4px;">
@@ -105,7 +107,21 @@
 		setInterval(function(){
 			var curTime = getCurrentTime();
 			$("#curTimeSpan").text(curTime);
-		},1000)
+		},1000);
+
+        // 播放模式监听
+        $("input[name='showmode']").each(function(index, val){
+            $(val).click(function(){
+                var showMode = $(val).val();
+                console.log("showMode:"+showMode);
+                if (showMode == 0){
+                    parent.resizeFlag = false;
+                    parent.setDefaultWindowSize();
+                }else{
+                    parent.resizeFlag = true;
+                }
+            })
+        })
 
 		//定时获取天气
 		grapWeatherInfo();

@@ -183,8 +183,17 @@
                 winInnerHeight = window.innerHeight;
                 $("#mainDiv").width(winInnerWidth+"px");
                 $("#mainDiv").height(winInnerHeight+"px");
+            }else{
+                //设置默认的窗口大小
+                setDefaultWindowSize();
             }
         });
+
+        //设置默认的窗口大小
+        function setDefaultWindowSize(){
+            $("#mainDiv").width("1318px");
+            $("#mainDiv").height("720px");
+        }
 
         // 默认显示页:聊天窗口首页
         var curPageid = "wsclientChat.page";
