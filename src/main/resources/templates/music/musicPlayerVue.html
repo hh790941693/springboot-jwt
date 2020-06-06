@@ -246,8 +246,8 @@
 								data:{id:id},
 								success:function(result){
 									if (result == "success"){
-										layer.msg("操作成功");
-										refreash();
+										layer.msg("删除成功");
+										app.queryMusicList();
 									}
 								}
 							});
