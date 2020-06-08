@@ -31,6 +31,14 @@
 	#addCircleDiv{
 		padding-bottom:5px;
 		margin-top:-4px;
+		height:6.3%;
+		border-bottom: 1px solid grey;
+	}
+
+	#bodyCircleDiv{
+		height:94%;
+		margin-top:2px;
+		overflow-y: scroll;
 	}
 
 	#naviDiv{
@@ -145,28 +153,28 @@
 			<button @click='toNextPage()' class='btn btn-sm btn-primary' >&gt;&gt;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<button @click='addCircle()' class='btn btn-sm btn-success'>&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;布&nbsp;&nbsp;</button>
 		</div>
-		<div class="circleDivClass" v-for="(item,index) in circleList">
-			<div>
+		<div id="bodyCircleDiv">
+			<div class="circleDivClass" v-for="(item,index) in circleList">
 				<div class='bodyDivClass'>
 					<div class='nameDivClass'>
 						<div style='display:inline-block;height:100%;width:100%;'>
-                            <img :src="item.headImg" width='25' height='25' :onerror="defaultImg">
-                            <template v-if="curUser == item.userName">
-                                <span class='myselfUserSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
-                            </template>
-                            <template v-else>
-                                <span class='userSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
-                            </template>
-                            <span class='likeNumSpanClass'>{{item.likeNum}}人点赞</span>
-                            <span class='buttonGroupSpan'>
-                                <button @click='toComment(item.id)' class='label label-primary'>评论</button>&nbsp;&nbsp;&nbsp;
-                                <button @click='toLike(item.id)' class='label label-info'>点赞</button>&nbsp;&nbsp;&nbsp;
-                                <template v-if="curUser == 'admin' || curUser == item.userName">
-                                    <button @click='deleteCircle(item.id)' class='label label-danger'>删除</button>
-                                </template>
-                            </span>
-                            <span class='timeSpanClass'>{{compareTwoTime(new Date(item.createTime).getTime(),new Date().getTime())}}</span>
-                        </div>
+							<img :src="item.headImg" width='25' height='25' :onerror="defaultImg">
+							<template v-if="curUser == item.userName">
+								<span class='myselfUserSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
+							</template>
+							<template v-else>
+								<span class='userSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
+							</template>
+							<span class='likeNumSpanClass'>{{item.likeNum}}人点赞</span>
+							<span class='buttonGroupSpan'>
+								<button @click='toComment(item.id)' class='label label-primary'>评论</button>&nbsp;&nbsp;&nbsp;
+								<button @click='toLike(item.id)' class='label label-info'>点赞</button>&nbsp;&nbsp;&nbsp;
+								<template v-if="curUser == 'admin' || curUser == item.userName">
+									<button @click='deleteCircle(item.id)' class='label label-danger'>删除</button>
+								</template>
+							</span>
+							<span class='timeSpanClass'>{{compareTwoTime(new Date(item.createTime).getTime(),new Date().getTime())}}</span>
+						</div>
 					</div>
 					<div class='contentDivClass'>
 						<span class="contentSpanClass">{{item.content}}</span>
@@ -174,27 +182,27 @@
 				</div>
 				<div class='picDivClass' align='center'>
 					<template v-if="item.pic1 != null && item.pic1 != ''">
-					    <img :src='item.pic1' width='100px' height='100px' @click="showPic(item.pic1)" :onerror="defaultImg" style='margin-left:20px;'>
-                    </template>
-                    <template v-if="item.pic2 != null && item.pic2 != ''">
-					    <img :src='item.pic2' width='100px' height='100px' @click="showPic(item.pic2)" :onerror="defaultImg" style='margin-left:20px;'>
-                    </template>
-                    <template v-if="item.pic3 != null && item.pic3 != ''">
-					    <img :src='item.pic3' width='100px' height='100px' @click="showPic(item.pic3)" :onerror="defaultImg" style='margin-left:20px;'>
-                    </template>
-                    <template v-if="item.pic4 != null && item.pic4 != ''">
-					    <img :src='item.pic4' width='100px' height='100px' @click="showPic(item.pic4)" :onerror="defaultImg" style='margin-left:20px;'>
-                    </template>
+						<img :src='item.pic1' width='100px' height='100px' @click="showPic(item.pic1)" :onerror="defaultImg" style='margin-left:20px;'>
+					</template>
+					<template v-if="item.pic2 != null && item.pic2 != ''">
+						<img :src='item.pic2' width='100px' height='100px' @click="showPic(item.pic2)" :onerror="defaultImg" style='margin-left:20px;'>
+					</template>
+					<template v-if="item.pic3 != null && item.pic3 != ''">
+						<img :src='item.pic3' width='100px' height='100px' @click="showPic(item.pic3)" :onerror="defaultImg" style='margin-left:20px;'>
+					</template>
+					<template v-if="item.pic4 != null && item.pic4 != ''">
+						<img :src='item.pic4' width='100px' height='100px' @click="showPic(item.pic4)" :onerror="defaultImg" style='margin-left:20px;'>
+					</template>
 				</div>
 
 				<div class='commentDivClass' v-for="commentItem in item.commentList">
 					<p>
-                        <span class='commentNameSpanClass' @click='queryPersonInfo(commentItem.userName)'>{{commentItem.userName}}:</span>
-                        <span class='commentSpanClass'>{{commentItem.comment}}</span>
-                        <template v-if="curUser == 'admin' || curUser == item.userName">
-                            <a href='javascript:void(0)' @click='deleteComment(commentItem.id)' style="color:blue;cursor:pointer;">删除</a>
-                        </template>
-                        <span class='commentTimeSpanClass'>{{compareTwoTime(new Date(commentItem.createTime).getTime(),new Date().getTime())}}</span></p>
+						<span class='commentNameSpanClass' @click='queryPersonInfo(commentItem.userName)'>{{commentItem.userName}}:</span>
+						<span class='commentSpanClass'>{{commentItem.comment}}</span>
+						<template v-if="curUser == 'admin' || curUser == item.userName">
+							<a href='javascript:void(0)' @click='deleteComment(commentItem.id)' style="color:blue;cursor:pointer;">删除</a>
+						</template>
+						<span class='commentTimeSpanClass'>{{compareTwoTime(new Date(commentItem.createTime).getTime(),new Date().getTime())}}</span></p>
 				</div>
 			</div>
 		</div>
