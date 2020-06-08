@@ -30,7 +30,7 @@
 
 			#addMusic{
 				width:100%;
-				height:6.5%;
+				height:5%;
 				margin:0 auto;
 				border-bottom:1px solid grey;
 				padding-top: 2px;
@@ -62,7 +62,7 @@
 				<input type="text" id="user" name="user" th:value="${user}" hidden="true">
 				<input type="hidden" name="folder" value="music">
 				文件:<input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg" style="display: inline-block;">
-				<input type="submit" class='btn btn-primary' value="上传歌曲">
+				<input type="submit" value="上传歌曲">
 			</form>
 		</div>		
 		<div id="playerDiv">
@@ -77,11 +77,11 @@
 
 					<div style="float:right;margin-top:10px;width:60%;">
 						<div style="float:left;margin-left:10px;height:40px;">
-							<button id="btnPre" style='height:40px;' class='btn btn-primary' @click="preMusic()">上一首</button>
-							<button id="btnPlay" style='height:40px;width:74px;' class='btn btn-success' @click="play()">播放</button>
-							<button id="btnNext" style='height:40px;' class='btn btn-primary' @click="nextMusic()">下一首</button>
-							<button id="btnShowList" style='height:40px;' class='btn btn-warning' onclick="showList(this)">关闭列表</button>
-							<button id="btnRefresh" style='height:40px;' class='btn btn-info' @click="refreash()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>
+							<button id="btnPre" class='btn btn-primary' @click="preMusic()">上一首</button>
+							<button id="btnPlay" class='btn btn-success' @click="play()">播放</button>
+							<button id="btnNext" class='btn btn-primary' @click="nextMusic()">下一首</button>
+							<button id="btnShowList" class='btn btn-warning' onclick="showList(this)">关闭列表</button>
+							<button id="btnRefresh" class='btn btn-info' @click="refreash()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>
 						</div>
 						<div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
 							<input type="radio" name="playmode" value="-1" checked="checked">&nbsp;无&nbsp;&nbsp;
