@@ -69,7 +69,7 @@
 		#musicIframeDiv {
 			position: absolute;
 			width:178px;
-			height:97px;
+			height:118px;
 			background: black;
 			color: rgb(255%,255%,255%);
 			display: none;
@@ -398,7 +398,7 @@
             var mainDivHeight = $("#centerDiv").height();
             var mainDivLeft = $("#centerDiv").offset().left;
             var musicIframeDivHeight=$("#musicIframeDiv").height();
-            $("#musicIframeDiv").css("top",headDivHeight+mainDivHeight-musicIframeDivHeight-16);
+            $("#musicIframeDiv").css("top",headDivHeight+mainDivHeight-musicIframeDivHeight-20);
             $("#musicIframeDiv").css("left",mainDivLeft+3);
         }
 
@@ -486,7 +486,7 @@
 			if (displayStatus == "none"){
 				$("#musicIframeDiv").css("display", "block");
                 $("#musicIframeDiv").css("width", leftNaviWidth+"px");
-                $("#musicIframeDiv").css("height", "97px");
+                $("#musicIframeDiv").css("height", "118px");
 			}else{
 				$("#musicIframeDiv").css("display", "none");
 			}
