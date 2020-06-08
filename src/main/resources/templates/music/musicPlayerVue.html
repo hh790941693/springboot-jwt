@@ -66,16 +66,16 @@
 			</form>
 		</div>		
 		<div id="playerDiv">
-			<div id="buttons" style="height:92px;">
-				<div id="songNameDiv" align="center" style="background-color:yellow;height:35px;border-bottom:2px solid green;padding-top:7px;">
+			<div id="buttons" style="height:13%;">
+				<div id="songNameDiv" align="center" style="background-color:yellow;height:35%;border-bottom:2px solid green;padding-top:7px;">
 					<span id="statusSpan">初始化:</span><label id="songName"></label>
 				</div>
-				<div style="height:57px;">
-					<div style="float:left;width:365px;height:46px;margin-top:5px;margin-left: 5px;">
+				<div style="height:57%;">
+					<div style="float:left;width:37%;height:46px;margin-top:5px;margin-left: 5px;">
 						<audio id="player" controls="controls" src="" style="width:100%;height:100%;"></audio>
 					</div>
 
-					<div style="float:right;margin-top:10px;width:740px;">
+					<div style="float:right;margin-top:10px;width:60%;">
 						<div style="float:left;margin-left:10px;height:40px;">
 							<button id="btnPre" style='height:40px;' class='btn btn-primary' @click="preMusic()">上一首</button>
 							<button id="btnPlay" style='height:40px;width:74px;' class='btn btn-success' @click="play()">播放</button>
@@ -83,7 +83,7 @@
 							<button id="btnShowList" style='height:40px;' class='btn btn-warning' onclick="showList(this)">关闭列表</button>
 							<button id="btnRefresh" style='height:40px;' class='btn btn-info' @click="refreash()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>
 						</div>
-						<div id="playModeDiv" style="float:left;margin-top:12px;margin-left:25px;">
+						<div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
 							<input type="radio" name="playmode" value="-1" checked="checked">&nbsp;无&nbsp;&nbsp;
 							<input type="radio" name="playmode" value="0">&nbsp;单曲循环&nbsp;&nbsp;
 							<input type="radio" name="playmode" value="1" >&nbsp;顺序播放&nbsp;&nbsp;
