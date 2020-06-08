@@ -4,12 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -1485,7 +1480,19 @@ public class WebSocketClientController extends AdminBaseController
         systemInfoBean.setJavaHome(System.getProperty("java.home"));
         systemInfoBean.setJavaVersion(System.getProperty("java.version"));
         systemInfoBean.setDbVersion(OsUtil.queryMysqlVersion());
-        boolean nginxPs = OsUtil.findProcess("nginx.exe");
+
+        Properties props = System.getProperties();
+        String osName = props.getProperty("os.name");
+        boolean nginxPs = false;
+        if (osName.contains("windows") || osName.contains("Windows")) {
+            nginxPs = OsUtil.findWindowProcess("nginx.exe");
+        }else{
+            String result = ExcuteLinuxCmdUtil.executeLinuxCmd("ps -ef | grep nginx | grep -v grep");
+            System.out.println(result);
+            if (result.contains("nginx")){
+                nginxPs = true;
+            }
+        }
         systemInfoBean.setNginxFlag(nginxPs);
 
         String storePath = uploadConfig.getStorePath();

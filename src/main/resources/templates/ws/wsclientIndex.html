@@ -6,7 +6,7 @@
 
         #mainDiv{
             width:1318px;
-            height:737px;
+            height:720px;
             margin:0 auto;
         }
 
@@ -104,7 +104,7 @@
 
             <!--滚动消息-->
             <div id="recentNewsDiv">
-                <marquee direction="left" scrolldelay="10" scrollamount="10"><span id="adsSpan"></span></marquee>
+                <marquee direction="left" scrolldelay="10" scrollamount="7"><span id="adsSpan"></span></marquee>
             </div>
 
             <div id="leftAndRightIframeDiv">
@@ -183,8 +183,17 @@
                 winInnerHeight = window.innerHeight;
                 $("#mainDiv").width(winInnerWidth+"px");
                 $("#mainDiv").height(winInnerHeight+"px");
+            }else{
+                //设置默认的窗口大小
+                setDefaultWindowSize();
             }
         });
+
+        //设置默认的窗口大小
+        function setDefaultWindowSize(){
+            $("#mainDiv").width("1318px");
+            $("#mainDiv").height("720px");
+        }
 
         // 默认显示页:聊天窗口首页
         var curPageid = "wsclientChat.page";

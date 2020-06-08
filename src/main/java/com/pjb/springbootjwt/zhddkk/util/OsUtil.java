@@ -13,7 +13,7 @@ public class OsUtil {
         System.out.println("java家目录:"+System.getProperty("java.home"));
         System.out.println("jdk版本:"+System.getProperty("java.version"));
         System.out.println("mysql版本:"+queryMysqlVersion());
-        boolean nginxPs = findProcess("nginx");
+        boolean nginxPs = findWindowProcess("nginx.exe");
         System.out.println("nginx进程:"+nginxPs);
     }
 
@@ -23,7 +23,7 @@ public class OsUtil {
         String version = "";
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://101.132.176.9:3306/zhdd?useSSL=false", "root", "123456");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zhdd?useSSL=false", "root", "123456");
             DatabaseMetaData metaData = (DatabaseMetaData) conn.getMetaData();
             version = metaData.getDatabaseProductVersion();
         } catch (Exception e) {
@@ -41,32 +41,26 @@ public class OsUtil {
         return version;
     }
 
-    public static boolean findProcess(String processName) {
-        Properties props = System.getProperties();
-        String osName = props.getProperty("os.name");
-        if (osName.contains("windows") || osName.contains("Windows")) {
-            BufferedReader bufferedReader = null;
-            try {
-                Process proc = Runtime.getRuntime().exec("tasklist -fi " + '"' + "imagename eq " + processName + '"');
-                bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-                String line = null;
-                while ((line = bufferedReader.readLine()) != null) {
-                    if (line.contains(processName)) {
-                        return true;
-                    }
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            } finally {
-                if (bufferedReader != null) {
-                    try {
-                        bufferedReader.close();
-                    } catch (Exception ex) {
-                    }
+    public static boolean findWindowProcess(String processName) {
+        BufferedReader bufferedReader = null;
+        try {
+            Process proc = Runtime.getRuntime().exec("tasklist -fi " + '"' + "imagename eq " + processName + '"');
+            bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                if (line.contains(processName)) {
+                    return true;
                 }
             }
-        }else{
-            //linux do nothing
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (Exception ex) {
+                }
+            }
         }
         return false;
     }
