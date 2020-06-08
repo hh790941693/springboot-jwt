@@ -94,7 +94,7 @@ function add() {
 		title : '增加',
 		maxmin : true,
 		shadeClose : false,//点击遮罩关闭层
-		area : [ '1000px', '520px' ],
+		area : [ '600px', '420px' ],
 		content : prefix + '/add?type='+type
 	});
 }

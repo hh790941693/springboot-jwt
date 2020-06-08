@@ -99,7 +99,6 @@
 						<th style="width:60px;">选择</th>
 						<th style="width:60px;">主键</th>
 						<th style="width:200px;">歌曲名称</th>
-						<th style="width:60px;">时长</th>
 						<th style="width:60px;">大小</th>
 						<th style="width:40px;">访问性</th>
 						<th style="display:none;">url</th>
@@ -116,7 +115,6 @@
 						</td>
 						<td>{{music.id}}</td>
 						<td @dblclick="doublePlay(index)">{{music.filename}}</td>
-						<td>{{music.trackLength}}</td>
 						<td>{{(parseInt(music.fileSize)/1024.0/1024.0).toFixed(0)}}M</td>
 						<td>{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
 						<td>
