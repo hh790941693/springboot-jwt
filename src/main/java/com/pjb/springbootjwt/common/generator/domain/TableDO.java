@@ -1,5 +1,7 @@
 package com.pjb.springbootjwt.common.generator.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class TableDO {
     // 引擎
     private String engine;
     // 创建时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
     // 表的主键
     private ColumnDO pk;

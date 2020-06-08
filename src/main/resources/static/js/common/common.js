@@ -216,6 +216,16 @@ $.ws = {
                     isMove = false;
                 });
         });
+    },
+    subStringText:function (content, maxLength) {
+        var res = "";
+        if (content.length <= maxLength){
+            res = content;
+        }else{
+            res = content.substring(0, maxLength);
+            res += "&nbsp;&nbsp;<a style='color:blue;cursor:pointer;' onclick=\"layer.alert('"+content+"')\">详情</a>";
+        }
+        return res;
     }
 }
 

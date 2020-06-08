@@ -75,7 +75,10 @@ function load() {
 			},
 						{
 				field : 'msg',
-				title : '消息内容'
+				title : '消息内容',
+				formatter:function (value) {
+					return $.ws.subStringText(value, 30);
+				}
 			},
 						{
 				field : 'remark',

@@ -17,8 +17,10 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
+import com.pjb.springbootjwt.util.HttpClientUtils;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.SystemInfoBean;
+import com.pjb.springbootjwt.zhddkk.bean.WangyiNewsBean;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
@@ -41,6 +43,7 @@ import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * webSocket控制器
@@ -94,6 +97,9 @@ public class WebSocketClientController extends AdminBaseController
 
     @Autowired
     private UploadConfig uploadConfig;
+
+    @Autowired
+    private RestTemplate restTemplate;
 	
 	/**
 	 *客户端登录首页
@@ -1504,5 +1510,79 @@ public class WebSocketClientController extends AdminBaseController
         }
 
         return Result.ok(systemInfoBean);
+	}
+
+	/**
+	 * 网易新闻
+	 * @return
+	 */
+	@RequestMapping("/wangyiNews.page")
+	public String wangyiNews() {
+		return "ws/wangyiNews";
+	}
+
+	/**
+	 * 网易: https://3g.163.com
+	 * 新闻：/touch/reconstruct/article/list/BBM54PGAwangning/0-10.html
+	 * 娱乐：/touch/reconstruct/article/list/BA10TA81wangning/0-10.html
+	 * 体育：/touch/reconstruct/article/list/BA8E6OEOwangning/0-10.html
+	 * 财经：/touch/reconstruct/article/list/BA8EE5GMwangning/0-10.html
+	 * 军事：/touch/reconstruct/article/list/BAI67OGGwangning/0-10.html
+	 * 科技：/touch/reconstruct/article/list/BA8D4A3Rwangning/0-10.html
+	 * 手机：/touch/reconstruct/article/list/BAI6I0O5wangning/0-10.html
+	 * 数码：/touch/reconstruct/article/list/BAI6JOD9wangning/0-10.html
+	 * 时尚：/touch/reconstruct/article/list/BA8F6ICNwangning/0-10.html
+	 * 游戏：/touch/reconstruct/article/list/BAI6RHDKwangning/0-10.html
+	 * 教育：/touch/reconstruct/article/list/BA8FF5PRwangning/0-10.html
+	 * 健康：/touch/reconstruct/article/list/BDC4QSV3wangning/0-10.html
+	 * 旅游：/touch/reconstruct/article/list/BEO4GINLwangning/0-10.html
+	 * 视频：/touch/nc/api/video/recommend/Video_Recom/0-10.do?callback=videoList
+	 * @return
+	 */
+	@RequestMapping("/queryWangyiNewsType")
+	@ResponseBody
+	public Result<List<WangyiNewsBean>> queryWangyiNewsType(){
+		String baseUrl = "https://3g.163.com";
+		String branchUrlFormat = baseUrl+"/touch/reconstruct/article/list/%swangning";
+		List<WangyiNewsBean> list = new ArrayList<>();
+		WangyiNewsBean wyBean1 = new WangyiNewsBean("新闻", "BBM54PGA", String.format(branchUrlFormat, "BBM54PGA"));
+		WangyiNewsBean wyBean2 = new WangyiNewsBean("娱乐", "BA10TA81", String.format(branchUrlFormat, "BA10TA81"));
+		WangyiNewsBean wyBean3 = new WangyiNewsBean("体育", "BA8E6OEO", String.format(branchUrlFormat, "BA8E6OEO"));
+		WangyiNewsBean wyBean4 = new WangyiNewsBean("财经", "BA8EE5GM", String.format(branchUrlFormat, "BA8EE5GM"));
+		WangyiNewsBean wyBean5 = new WangyiNewsBean("军事", "BAI67OGG", String.format(branchUrlFormat, "BAI67OGG"));
+		WangyiNewsBean wyBean6 = new WangyiNewsBean("科技", "BA8D4A3R", String.format(branchUrlFormat, "BA8D4A3R"));
+		WangyiNewsBean wyBean7 = new WangyiNewsBean("手机", "BAI6I0O5", String.format(branchUrlFormat, "BAI6I0O5"));
+		WangyiNewsBean wyBean8 = new WangyiNewsBean("数码", "BAI6JOD9", String.format(branchUrlFormat, "BAI6JOD9"));
+		WangyiNewsBean wyBean9 = new WangyiNewsBean("时尚", "BA8F6ICN", String.format(branchUrlFormat, "BA8F6ICN"));
+		WangyiNewsBean wyBean10 = new WangyiNewsBean("游戏", "BAI6RHDK", String.format(branchUrlFormat, "BAI6RHDK"));
+		WangyiNewsBean wyBean11 = new WangyiNewsBean("教育", "BA8FF5PR", String.format(branchUrlFormat, "BA8FF5PR"));
+		WangyiNewsBean wyBean12 = new WangyiNewsBean("健康", "BDC4QSV3", String.format(branchUrlFormat, "BDC4QSV3"));
+		WangyiNewsBean wyBean13 = new WangyiNewsBean("旅游", "BEO4GINL", String.format(branchUrlFormat, "BEO4GINL"));
+		WangyiNewsBean wyBean14 = new WangyiNewsBean("视频", "", "https://3g.163.com/touch/nc/api/video/recommend/Video_Recom/0-10.do?callback=videoList");
+		list.add(wyBean1);
+		list.add(wyBean2);
+		list.add(wyBean3);
+		list.add(wyBean4);
+		list.add(wyBean5);
+		list.add(wyBean6);
+		list.add(wyBean7);
+		list.add(wyBean8);
+		list.add(wyBean9);
+		list.add(wyBean10);
+		list.add(wyBean11);
+		list.add(wyBean12);
+		list.add(wyBean13);
+		list.add(wyBean14);
+
+		return Result.ok(list);
+	}
+
+	@RequestMapping("/queryWangyiNews")
+	@ResponseBody
+	@CrossOrigin(value = "*")
+	public Object queryWangyiNewsType(String url){
+		Object result = restTemplate.getForObject(url+"/0-99.html", Object.class);
+		System.out.println(result);
+		return result;
 	}
 }

@@ -76,11 +76,18 @@ function load() {
 			},
 						{
 				field : 'title',
-				title : '标题'
+				title : '标题',
+				visible: false,
+				formatter:function (value) {
+					return $.ws.subStringText(value, 10);
+				}
 			},
 						{
 				field : 'content',
-				title : '问题描述'
+				title : '问题描述',
+				formatter:function (value) {
+					return $.ws.subStringText(value, 15);
+				}
 			},
 						{
 				field : 'picUrl',
@@ -97,7 +104,10 @@ function load() {
 			},
 						{
 				field : 'replyContent',
-				title : '答复内容'
+				title : '答复内容',
+				formatter:function (value) {
+					return $.ws.subStringText(value, 15);
+				}
 			},
 						{
 				field : 'replyTime',

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="common :: header"></head>
+        <meta charset="UTF-8">
+        <title>网易新闻</title>
+        <style>
+            #mainDiv{
+                width:70%;
+                height:100%;
+                margin:0 auto;
+                border:1px solid red;
+                padding:10px;
+            }
+            ul li{
+                float:left;
+                width:7%;
+                cursor: pointer;
+            }
+
+            #headDiv{
+                height:5%;
+            }
+
+            #contentDiv{
+                height:90%;
+                overflow-y: scroll;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="mainDiv" style="width:800px;height:550px;">
+            <div id="headDiv">
+                <ul>
+                   <li v-for="row in typeList" @click="listNews(row.newsType, row.url)">
+                       {{row.newsType}}
+                   </li>
+                </ul>
+            </div>
+            <div id="contentDiv">
+
+            </div>
+        </div>
+
+
+        <div th:include="common::footer"></div>
+    </body>
+    <script>
+        var app = new Vue({
+            el: '#mainDiv',
+            data: {
+                typeList:{},
+                contentList:{},
+            },
+            methods: {
+                queryNewsTypeList:function () {
+                    //查询朋友圈列表
+                    $.ajax({
+                        type: "GET",
+                        url: rootUrl+'ws/queryWangyiNewsType',
+                        success: function (result) {
+                            if (result.code == 0){
+                                return;
+                            }
+                            app.typeList = result.data;
+                        }
+                    });
+                },
+                listNews:function (type, url) {
+                    $.ajax({
+                        type: "GET",
+                        url: rootUrl+"/ws/queryWangyiNews?url="+url,
+                        success: function (result) {
+                            console.log(result);
+                        }
+                    });
+                }
+            },
+            created: function () {
+                this.queryNewsTypeList();
+            }
+        });
+
+    </script>
+</html>

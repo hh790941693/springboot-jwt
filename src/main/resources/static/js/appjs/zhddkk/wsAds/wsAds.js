@@ -55,15 +55,22 @@ function load() {
 			},
 						{
 				field : 'title',
-				title : '标题'
+				title : '标题',
+				formatter:function (value) {
+					return $.ws.subStringText(value, 15);
+				}
 			},
 						{
 				field : 'content',
-				title : '内容'
+				title : '内容',
+				formatter:function (value) {
+					return $.ws.subStringText(value, 30);
+				}
 			},
 						{
 				field : 'receiveList',
-				title : '接收人列表'
+				title : '接收人列表',
+				visible:false
 			},
 						{
 				field : 'createTime',
