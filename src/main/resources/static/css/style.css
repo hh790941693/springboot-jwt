@@ -7369,4 +7369,8 @@ table{
     border: 1px solid grey;
 }
 
+.ibox-content .row{
+    margin-bottom: 3px;
+}
+
 
