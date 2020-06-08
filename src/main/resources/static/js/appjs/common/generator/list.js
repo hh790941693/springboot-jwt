@@ -46,7 +46,7 @@ function load() {
 						title : 'engine'
 					},
 					{
-						field : 'tableComment',
+						field : 'comments',
 						title : '表描述'
 					},
 					{
