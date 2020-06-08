@@ -69,7 +69,7 @@
 		#musicIframeDiv {
 			position: absolute;
 			width:178px;
-			height:97px;
+			height:118px;
 			background: black;
 			color: rgb(255%,255%,255%);
 			display: none;
@@ -395,11 +395,13 @@
 
         function adjustMusicWindowPosition(){
             var headDivHeight = $("#headerPage").height();
-            var mainDivHeight = $("#centerDiv").height();
-            var mainDivLeft = $("#centerDiv").offset().left;
+            var centerDivHeight = $("#centerDiv").height();
+            var centerDivLeft = $("#centerDiv").offset().left;
+            var leftNaviDivWidth = $("#leftNaviDiv").width();
             var musicIframeDivHeight=$("#musicIframeDiv").height();
-            $("#musicIframeDiv").css("top",headDivHeight+mainDivHeight-musicIframeDivHeight-16);
-            $("#musicIframeDiv").css("left",mainDivLeft+3);
+            $("#musicIframeDiv").css("width", leftNaviDivWidth+"px");
+            $("#musicIframeDiv").css("top",headDivHeight+centerDivHeight-musicIframeDivHeight-20);
+            $("#musicIframeDiv").css("left",centerDivLeft+3);
         }
 
         adjustMusicWindowPosition();
@@ -486,7 +488,7 @@
 			if (displayStatus == "none"){
 				$("#musicIframeDiv").css("display", "block");
                 $("#musicIframeDiv").css("width", leftNaviWidth+"px");
-                $("#musicIframeDiv").css("height", "97px");
+                $("#musicIframeDiv").css("height", "118px");
 			}else{
 				$("#musicIframeDiv").css("display", "none");
 			}
