@@ -42,6 +42,18 @@
 			    margin: 0px auto;
 			    overflow-y: scroll;
 			}
+
+			#uploadResultDiv{
+				padding-left: 10px;
+				padding-top: 5px;
+			}
+			#uploadResultDiv p{
+				border-bottom: 1px solid grey;
+				height:25px;
+			}
+			#uploadResultDiv span{
+				display: inline-block;
+			}
 		</style>
 	</head> 
 	<body>
@@ -297,18 +309,29 @@
         $("#hidden_frame").load(function(){
             var bodyText=$(this).contents().find("body").text();
             var uploadRes = JSON.parse(bodyText);
-            var showText = "";
+            var showText = "<div id='uploadResultDiv'>";
             $.each(uploadRes,function(i,val) {
                 var filename = val.filename;
                 var uploadFlag = val.uploadFlag;
                 if (uploadFlag){
-                    showText += filename+":"+"<span style='color:blue;font-weight: bold;'>上传成功</span><br/>";
+					showText += "<p><span style='width:82%;'>"+filename+"</span><span style='width:15%;color:blue;font-weight: bold;'>上传成功</span></p>";
                 }else{
-                    showText += filename+":"+"<span style='color:red;font-weight: bold;'>上传失败</span><br/>";
+					showText += "<p><span style='width:82%;'>"+filename+"</span><span style='width:15%;color:blue;font-weight: bold;'>上传失败</span></p>";
                 }
             });
+			showText+="</div>";
             layer.closeAll();
-            layer.alert(showText);
+			layer.open({
+				type: 1,
+				title: "上传结果",
+				shadeClose: true,
+				shade: 0.3,
+				offset: "20%",
+				shadeClose : false,
+				area: ['530px', '60%'],
+				content: showText
+			});
+            //layer.alert(showText);
             setTimeout(refreash,3000);
         });
 
