@@ -43,6 +43,7 @@ import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * webSocket控制器
@@ -96,6 +97,9 @@ public class WebSocketClientController extends AdminBaseController
 
     @Autowired
     private UploadConfig uploadConfig;
+
+    @Autowired
+    private RestTemplate restTemplate;
 	
 	/**
 	 *客户端登录首页
@@ -1577,7 +1581,7 @@ public class WebSocketClientController extends AdminBaseController
 	@ResponseBody
 	@CrossOrigin(value = "*")
 	public Object queryWangyiNewsType(String url){
-		Object result = HttpClientUtils.sendGetRequestV2(url+"/0-99.html", new LinkedHashMap<>(), Object.class);
+		Object result = restTemplate.getForObject(url+"/0-99.html", Object.class);
 		System.out.println(result);
 		return result;
 	}
