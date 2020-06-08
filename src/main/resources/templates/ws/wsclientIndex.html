@@ -395,11 +395,13 @@
 
         function adjustMusicWindowPosition(){
             var headDivHeight = $("#headerPage").height();
-            var mainDivHeight = $("#centerDiv").height();
-            var mainDivLeft = $("#centerDiv").offset().left;
+            var centerDivHeight = $("#centerDiv").height();
+            var centerDivLeft = $("#centerDiv").offset().left;
+            var leftNaviDivWidth = $("#leftNaviDiv").width();
             var musicIframeDivHeight=$("#musicIframeDiv").height();
-            $("#musicIframeDiv").css("top",headDivHeight+mainDivHeight-musicIframeDivHeight-20);
-            $("#musicIframeDiv").css("left",mainDivLeft+3);
+            $("#musicIframeDiv").css("width", leftNaviDivWidth+"px");
+            $("#musicIframeDiv").css("top",headDivHeight+centerDivHeight-musicIframeDivHeight-20);
+            $("#musicIframeDiv").css("left",centerDivLeft+3);
         }
 
         adjustMusicWindowPosition();
