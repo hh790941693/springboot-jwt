@@ -42,7 +42,7 @@
         <div id="mainDiv">
             <div id="headDiv">
                 <ul>
-                   <li v-for="row in typeList" @click="listNews(row.newsType, row.docId, row.url)" :id="row.docId" th:align="center">
+                   <li v-for="(row, i) in typeList" @click="listNews(i)" :id="row.docId" th:align="center">
                        {{row.newsType}}
                    </li>
                 </ul>
@@ -78,7 +78,7 @@
             data: {
                 typeList:{},
                 contentList:{},
-                typeName:'',
+                selectedIndex:0,
             },
             methods: {
                 queryNewsTypeList:function () {
@@ -91,22 +91,27 @@
                                 return;
                             }
                             app.typeList = result.data;
-                            $("#headDiv ul li").eq(0).trigger("click");
+
+                            app.listNews(app.selectedIndex);
                         }
                     });
                 },
-                listNews:function (typeName, docId, url) {
-                    app.typeName = typeName;
-                    $('#headDiv ul li').css("background-color", "").css("color","black");
-                    $('#headDiv ul li[id="'+docId+'"]').css("background-color","blue").css("color","white");
+                listNews:function (index) {
+                    app.selectedIndex = index;
+                    var selectedInfo = app.typeList[app.selectedIndex];
+                    var docId = selectedInfo.docId;
+
                     $.ajax({
                         type: "GET",
                         dataType: "jsonp",
                         jsonp: "callback",
                         jsonpCallback: "artiList",
-                        url: url + "/0-20.html",
+                        url: selectedInfo.url + "/0-20.html",
                         success: function (result) {
                             app.contentList = result[docId];
+
+                            $('#headDiv ul li').css("background-color", "").css("color","black");
+                            $('#headDiv ul li[id="'+docId+'"]').css("background-color","blue").css("color","white");
                         }
                     });
                 }
