@@ -84,6 +84,9 @@ public class WebSocketServerController extends AdminBaseController
 	@Autowired
 	private WsSignService wsSignService;
 
+	@Autowired
+	private WsFileService wsFileService;
+
 	/**
 	 * 让某用户下线
 	 * @param user
@@ -741,6 +744,35 @@ public class WebSocketServerController extends AdminBaseController
                     .ge("time", sdfx.format(dayBeginDate))
                     .le("time", sdfx.format(dayEndDate)));
             map.put(timeName, count);
+        }
+
+        return map;
+    }
+
+    /**
+     * 每日文件上传大小
+     * @return
+     */
+    @RequestMapping("/queryUploadFileData.do")
+    @ResponseBody
+    public Map<String, Long> queryUploadFileData(){
+        Map<String, Long> map = new LinkedHashMap<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (int i=6;i>=0;i--){
+            Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
+            Date dayBeginDate = DateUtil.dayBeginDate(date);
+            Date dayEndDate = DateUtil.dayEndDate(date);
+            String timeName = sdf.format(date);
+
+            List<WsFileDO> wsFileList = wsFileService.selectList(new EntityWrapper<WsFileDO>()
+                    .ge("create_time", dayBeginDate)
+                    .le("create_time", dayEndDate));
+            long fileSize = 0;
+            for (WsFileDO wsFileDO : wsFileList){
+                fileSize += wsFileDO.getFileSize();
+            }
+            map.put(timeName, fileSize);
         }
 
         return map;
