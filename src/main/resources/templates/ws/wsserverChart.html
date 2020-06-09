@@ -9,39 +9,65 @@
             width:100%;
             height:100%;
             margin:0 auto;
-            border:1px solid red;
         }
     </style>
 </head>
 <body>
     <div id="mainDiv">
-        <div style="width:100%;height:40%;border: 1px solid green;">
-             <div id="row1-left-echarts-chart" style="width:49%;height:100%;float:left;border:1px solid blue;">
+        <div style="width:100%;height:40%;">
+             <div id="row1-left-echarts-chart" style="width:49%;height:100%;float:left;">
 
              </div>
 
-            <div id="row1-right-echarts-chart" style="width:49%;height:100%;float:right;border:1px solid grey;">
+            <div id="row1-right-echarts-chart" style="width:49%;height:100%;float:right;">
+
+            </div>
+        </div>
+        <div style="width:100%;height:40%;">
+            <div id="row2-echarts-chart" style="width:98%;height:100%;">
 
             </div>
         </div>
     </div>
+    <div th:include="common::footer"></div>
 </body>
     <script>
+
+        //每日签到人数
         var leftChart = echarts.init(document.getElementById("row1-left-echarts-chart"));
-        var leftOption = {
-            xAxis: {
-                type: 'category',
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [{
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
-                type: 'line'
-            }]
-        };
-        leftChart.setOption(leftOption);
+        $.ajax({
+            type: 'GET',
+            url: rootUrl + 'ws/querySignData.do',
+            async: true,
+            success: function (result) {
+                var itemNameArr = [];
+                var itemValueArr = [];
+                console.log(result);
+                $.each(result,function (key,val) {
+                    itemNameArr.push(key);
+                    itemValueArr.push(val);
+
+                    var leftOption = {
+                        title: {
+                            text: '每日签到人数'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: itemNameArr
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: itemValueArr,
+                            type: 'line'
+                        }]
+                    };
+
+                    leftChart.setOption(leftOption);
+                })
+            }
+        });
 
         var rightChart = echarts.init(document.getElementById("row1-right-echarts-chart"));
         var rightOption = {
@@ -62,5 +88,41 @@
             }]
         };
         rightChart.setOption(rightOption);
+
+
+        //每日在线人数
+        var onlineChart = echarts.init(document.getElementById("row2-echarts-chart"));
+        $.ajax({
+            type: 'GET',
+            url: rootUrl + 'ws/queryOnlineUserData.do',
+            async: true,
+            success: function (result) {
+                console.log(result);
+                var itemNameArr = [];
+                var itemValueArr = [];
+                $.each(result,function (key,val) {
+                    itemNameArr.push(key);
+                    itemValueArr.push(val);
+
+                    var onlineOption = {
+                        title: {
+                            text: '每日在线人数'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: itemNameArr
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: itemValueArr,
+                            type: 'line'
+                        }]
+                    };
+                    onlineChart.setOption(onlineOption);
+                })
+            }
+        });
     </script>
 </html>

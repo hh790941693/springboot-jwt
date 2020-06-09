@@ -3,10 +3,7 @@ package com.pjb.springbootjwt.zhddkk.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
@@ -19,6 +16,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.bean.JsonResult;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
@@ -82,6 +80,9 @@ public class WebSocketServerController extends AdminBaseController
 
 	@Autowired
 	private WsChatlogService wsChatlogService;
+
+	@Autowired
+	private WsSignService wsSignService;
 
 	/**
 	 * 让某用户下线
@@ -695,4 +696,53 @@ public class WebSocketServerController extends AdminBaseController
 	public String wsserverChat(){
 		return "ws/wsserverChart";
 	}
+
+    /**
+     * 每日签到人数
+     * @return
+     */
+	@RequestMapping("/querySignData.do")
+    @ResponseBody
+	public Map<String, Integer> querySignData(){
+	    Map<String, Integer> map = new LinkedHashMap<>();
+	    SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        for (int i=6;i>=0;i--){
+            Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
+            Date dayBeginDate = DateUtil.dayBeginDate(date);
+            Date dayEndDate = DateUtil.dayEndDate(date);
+            String timeName = sdf.format(date);
+
+            int count = wsSignService.selectCount(new EntityWrapper<WsSignDO>().ge("create_time", dayBeginDate)
+                .le("create_time", dayEndDate));
+            map.put(timeName, count);
+        }
+
+	    return map;
+    }
+
+    /**
+     * 每日在线人数
+     * @return
+     */
+    @RequestMapping("/queryOnlineUserData.do")
+    @ResponseBody
+    public Map<String, Integer> queryOnlineUserData(){
+        Map<String, Integer> map = new LinkedHashMap<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (int i=30;i>=0;i--){
+            Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
+            Date dayBeginDate = DateUtil.dayBeginDate(date);
+            Date dayEndDate = DateUtil.dayEndDate(date);
+            String timeName = sdf.format(date);
+
+            int count = wsChatlogService.selectCount(new EntityWrapper<WsChatlogDO>()
+                    .eq("to_user", "")
+                    .ge("time", sdfx.format(dayBeginDate))
+                    .le("time", sdfx.format(dayEndDate)));
+            map.put(timeName, count);
+        }
+
+        return map;
+    }
 }
