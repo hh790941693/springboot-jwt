@@ -686,4 +686,13 @@ public class WebSocketServerController extends AdminBaseController
 		}
 		logger.debug("结束导出操作日志");
 	}
+
+	/**
+	 * 领导驾驶舱
+	 * @return
+	 */
+	@RequestMapping("/wsserverChart.page")
+	public String wsserverChat(){
+		return "ws/wsserverChart";
+	}
 }
