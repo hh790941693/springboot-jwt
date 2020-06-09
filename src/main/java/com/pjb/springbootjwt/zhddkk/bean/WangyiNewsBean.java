@@ -2,12 +2,12 @@ package com.pjb.springbootjwt.zhddkk.bean;
 
 public class WangyiNewsBean {
     private String newsType;
-    private String docdId;
+    private String docId;
     private String url;
 
-    public WangyiNewsBean(String newsType, String docdId, String url){
+    public WangyiNewsBean(String newsType, String docId, String url){
         this.newsType = newsType;
-        this.docdId = docdId;
+        this.docId = docId;
         this.url = url;
     }
 
@@ -19,12 +19,12 @@ public class WangyiNewsBean {
         this.newsType = newsType;
     }
 
-    public String getDocdId() {
-        return docdId;
+    public String getDocId() {
+        return docId;
     }
 
-    public void setDocdId(String docdId) {
-        this.docdId = docdId;
+    public void setDocId(String docId) {
+        this.docId = docId;
     }
 
     public String getUrl() {
