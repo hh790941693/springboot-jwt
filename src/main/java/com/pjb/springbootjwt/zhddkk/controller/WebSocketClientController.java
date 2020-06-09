@@ -1554,7 +1554,6 @@ public class WebSocketClientController extends AdminBaseController
 		WangyiNewsBean wyBean11 = new WangyiNewsBean("教育", "BA8FF5PRwangning", String.format(branchUrlFormat, "BA8FF5PRwangning"));
 		WangyiNewsBean wyBean12 = new WangyiNewsBean("健康", "BDC4QSV3wangning", String.format(branchUrlFormat, "BDC4QSV3wangning"));
 		WangyiNewsBean wyBean13 = new WangyiNewsBean("旅游", "BEO4GINLwangning", String.format(branchUrlFormat, "BEO4GINLwangning"));
-		WangyiNewsBean wyBean14 = new WangyiNewsBean("视频", "", "https://3g.163.com/touch/nc/api/video/recommend/Video_Recom/0-10.do?callback=videoList");
 		list.add(wyBean1);
 		list.add(wyBean2);
 		list.add(wyBean3);
@@ -1568,7 +1567,6 @@ public class WebSocketClientController extends AdminBaseController
 		list.add(wyBean11);
 		list.add(wyBean12);
 		list.add(wyBean13);
-		list.add(wyBean14);
 
 		return Result.ok(list);
 	}
