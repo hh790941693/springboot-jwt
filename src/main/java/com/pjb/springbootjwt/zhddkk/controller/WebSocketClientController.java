@@ -17,7 +17,6 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
-import com.pjb.springbootjwt.util.HttpClientUtils;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.SystemInfoBean;
 import com.pjb.springbootjwt.zhddkk.bean.WangyiNewsBean;
@@ -98,9 +97,6 @@ public class WebSocketClientController extends AdminBaseController
     @Autowired
     private UploadConfig uploadConfig;
 
-    @Autowired
-    private RestTemplate restTemplate;
-	
 	/**
 	 *客户端登录首页
 	 * 
@@ -1543,21 +1539,21 @@ public class WebSocketClientController extends AdminBaseController
 	@ResponseBody
 	public Result<List<WangyiNewsBean>> queryWangyiNewsType(){
 		String baseUrl = "https://3g.163.com";
-		String branchUrlFormat = baseUrl+"/touch/reconstruct/article/list/%swangning";
+		String branchUrlFormat = baseUrl+"/touch/reconstruct/article/list/%s";
 		List<WangyiNewsBean> list = new ArrayList<>();
-		WangyiNewsBean wyBean1 = new WangyiNewsBean("新闻", "BBM54PGA", String.format(branchUrlFormat, "BBM54PGA"));
-		WangyiNewsBean wyBean2 = new WangyiNewsBean("娱乐", "BA10TA81", String.format(branchUrlFormat, "BA10TA81"));
-		WangyiNewsBean wyBean3 = new WangyiNewsBean("体育", "BA8E6OEO", String.format(branchUrlFormat, "BA8E6OEO"));
-		WangyiNewsBean wyBean4 = new WangyiNewsBean("财经", "BA8EE5GM", String.format(branchUrlFormat, "BA8EE5GM"));
-		WangyiNewsBean wyBean5 = new WangyiNewsBean("军事", "BAI67OGG", String.format(branchUrlFormat, "BAI67OGG"));
-		WangyiNewsBean wyBean6 = new WangyiNewsBean("科技", "BA8D4A3R", String.format(branchUrlFormat, "BA8D4A3R"));
-		WangyiNewsBean wyBean7 = new WangyiNewsBean("手机", "BAI6I0O5", String.format(branchUrlFormat, "BAI6I0O5"));
-		WangyiNewsBean wyBean8 = new WangyiNewsBean("数码", "BAI6JOD9", String.format(branchUrlFormat, "BAI6JOD9"));
-		WangyiNewsBean wyBean9 = new WangyiNewsBean("时尚", "BA8F6ICN", String.format(branchUrlFormat, "BA8F6ICN"));
-		WangyiNewsBean wyBean10 = new WangyiNewsBean("游戏", "BAI6RHDK", String.format(branchUrlFormat, "BAI6RHDK"));
-		WangyiNewsBean wyBean11 = new WangyiNewsBean("教育", "BA8FF5PR", String.format(branchUrlFormat, "BA8FF5PR"));
-		WangyiNewsBean wyBean12 = new WangyiNewsBean("健康", "BDC4QSV3", String.format(branchUrlFormat, "BDC4QSV3"));
-		WangyiNewsBean wyBean13 = new WangyiNewsBean("旅游", "BEO4GINL", String.format(branchUrlFormat, "BEO4GINL"));
+		WangyiNewsBean wyBean1 = new WangyiNewsBean("新闻", "BBM54PGAwangning", String.format(branchUrlFormat, "BBM54PGAwangning"));
+		WangyiNewsBean wyBean2 = new WangyiNewsBean("娱乐", "BA10TA81wangning", String.format(branchUrlFormat, "BA10TA81wangning"));
+		WangyiNewsBean wyBean3 = new WangyiNewsBean("体育", "BA8E6OEOwangning", String.format(branchUrlFormat, "BA8E6OEOwangning"));
+		WangyiNewsBean wyBean4 = new WangyiNewsBean("财经", "BA8EE5GMwangning", String.format(branchUrlFormat, "BA8EE5GMwangning"));
+		WangyiNewsBean wyBean5 = new WangyiNewsBean("军事", "BAI67OGGwangning", String.format(branchUrlFormat, "BAI67OGGwangning"));
+		WangyiNewsBean wyBean6 = new WangyiNewsBean("科技", "BA8D4A3Rwangning", String.format(branchUrlFormat, "BA8D4A3Rwangning"));
+		WangyiNewsBean wyBean7 = new WangyiNewsBean("手机", "BAI6I0O5wangning", String.format(branchUrlFormat, "BAI6I0O5wangning"));
+		WangyiNewsBean wyBean8 = new WangyiNewsBean("数码", "BAI6JOD9wangning", String.format(branchUrlFormat, "BAI6JOD9wangning"));
+		WangyiNewsBean wyBean9 = new WangyiNewsBean("时尚", "BA8F6ICNwangning", String.format(branchUrlFormat, "BA8F6ICNwangning"));
+		WangyiNewsBean wyBean10 = new WangyiNewsBean("游戏", "BAI6RHDKwangning", String.format(branchUrlFormat, "BAI6RHDKwangning"));
+		WangyiNewsBean wyBean11 = new WangyiNewsBean("教育", "BA8FF5PRwangning", String.format(branchUrlFormat, "BA8FF5PRwangning"));
+		WangyiNewsBean wyBean12 = new WangyiNewsBean("健康", "BDC4QSV3wangning", String.format(branchUrlFormat, "BDC4QSV3wangning"));
+		WangyiNewsBean wyBean13 = new WangyiNewsBean("旅游", "BEO4GINLwangning", String.format(branchUrlFormat, "BEO4GINLwangning"));
 		WangyiNewsBean wyBean14 = new WangyiNewsBean("视频", "", "https://3g.163.com/touch/nc/api/video/recommend/Video_Recom/0-10.do?callback=videoList");
 		list.add(wyBean1);
 		list.add(wyBean2);
@@ -1575,14 +1571,5 @@ public class WebSocketClientController extends AdminBaseController
 		list.add(wyBean14);
 
 		return Result.ok(list);
-	}
-
-	@RequestMapping("/queryWangyiNews")
-	@ResponseBody
-	@CrossOrigin(value = "*")
-	public Object queryWangyiNewsType(String url){
-		Object result = restTemplate.getForObject(url+"/0-99.html", Object.class);
-		System.out.println(result);
-		return result;
 	}
 }
