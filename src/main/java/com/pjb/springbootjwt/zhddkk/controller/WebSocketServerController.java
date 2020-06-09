@@ -16,7 +16,6 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
-import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.bean.JsonResult;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;

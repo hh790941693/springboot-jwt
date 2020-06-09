@@ -53,14 +53,38 @@
                         },
                         xAxis: {
                             type: 'category',
-                            data: itemNameArr
+                            data: itemNameArr,
+                            splitLine:{
+                                show:false
+                            }
                         },
                         yAxis: {
-                            type: 'value'
+                            type: 'value',
+                            splitLine:{
+                                show:false
+                            }
                         },
                         series: [{
                             data: itemValueArr,
-                            type: 'line'
+                            type: 'line',
+                            itemStyle : {
+                                normal: {
+                                    color: 'black',
+                                    label : {
+                                        show: true,
+                                        formatter:function (params) {
+                                            if (params.value==0){
+                                                return "";
+                                            }else{
+                                                return params.value;
+                                            }
+                                        }
+                                    },
+                                    lineStyle:{
+                                        color:'green'
+                                    }
+                                }
+                            }
                         }]
                     };
 
@@ -89,19 +113,42 @@
                             text: '每日上传文件(单位: M)'
                         },
                         tooltip: {
-                            formatter: '{b}\n{c}'
+                            formatter: '{b}\n{c}M'
                         },
                         xAxis: {
                             type: 'category',
-                            data: itemNameArr
+                            data: itemNameArr,
+                            splitLine:{
+                                show:false
+                            }
                         },
                         yAxis: {
-                            type: 'value'
+                            type: 'value',
+                            splitLine:{
+                                show:false
+                            }
                         },
                         series: [{
                             data: itemValueArr,
                             type: 'line',
-                            itemStyle : { normal: {label : {show: true}}}
+                            itemStyle : {
+                                normal: {
+                                    color: 'black',
+                                    label : {
+                                        show: true,
+                                        formatter:function (params) {
+                                            if (params.value==0){
+                                                return "";
+                                            }else{
+                                                return params.value;
+                                            }
+                                        }
+                                    },
+                                    lineStyle:{
+                                        color:'blue'
+                                    }
+                                }
+                            }
                         }]
                     };
                     fileSizeChart.setOption(fileSizeOption);
@@ -124,20 +171,49 @@
                     itemValueArr.push(val);
 
                     var onlineOption = {
+                        grid: {
+                            left:'5%',
+                            top:'2%',
+                            right:'3%'
+                        },
                         title: {
                             x: 'center',
                             text: '每日在线人数'
                         },
                         xAxis: {
                             type: 'category',
-                            data: itemNameArr
+                            data: itemNameArr,
+                            splitLine:{
+                                show:false
+                            }
                         },
                         yAxis: {
-                            type: 'value'
+                            type: 'value',
+                            splitLine:{
+                                show:false
+                            }
                         },
                         series: [{
                             data: itemValueArr,
-                            type: 'line'
+                            type: 'line',
+                            itemStyle : {
+                                normal: {
+                                    color: 'black',
+                                    label : {
+                                        show: true,
+                                        formatter:function (params) {
+                                            if (params.value==0){
+                                                return "";
+                                            }else{
+                                                return params.value;
+                                            }
+                                        }
+                                    },
+                                    lineStyle:{
+                                        color:'red'
+                                    }
+                                }
+                            }
                         }]
                     };
                     onlineChart.setOption(onlineOption);
