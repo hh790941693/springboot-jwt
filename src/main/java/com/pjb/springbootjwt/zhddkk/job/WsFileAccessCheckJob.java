@@ -47,7 +47,7 @@ public class WsFileAccessCheckJob {
 
     @Scheduled(cron="0 */1 * * * ?")
     public void cronJob(){
-        logger.info("进入定时任务");
+        logger.info("[定时任务]定时检查文件资源url的访问性");
         checkWsFile();
         checkWsCircle();
         checkWsUserProfile();
