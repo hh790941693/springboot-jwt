@@ -15,16 +15,30 @@
 <body>
     <div id="mainDiv">
         <div style="width:100%;height:40%;">
+            <!--每日签到数-->
              <div id="row1-left-echarts-chart" style="width:49%;height:100%;float:left;">
 
              </div>
 
+            <!--每日上传文件-->
             <div id="row1-right-echarts-chart" style="width:49%;height:100%;float:right;">
 
             </div>
         </div>
         <div style="width:100%;height:40%;">
+            <!--每日在线人数-->
             <div id="row2-echarts-chart" style="width:98%;height:100%;">
+
+            </div>
+        </div>
+
+        <div style="width:100%;height:40%;">
+            <!--用户性别分布-->
+            <div id="row3-left-echarts-chart" style="width:49%;height:100%;float:left;">
+
+            </div>
+            <!--用户年龄分布-->
+            <div id="row3-right-echarts-chart" style="width:49%;height:100%;float:left;">
 
             </div>
         </div>
@@ -220,5 +234,85 @@
                 })
             }
         });
+
+        //用户性别比例
+        var sexChart = echarts.init(document.getElementById("row3-left-echarts-chart"));
+        var sexOption = {
+            title: {
+                text: '用户性别分布',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['男', '女', '未知']
+            },
+            series: [
+                {
+                    name: '男女比例',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: [
+                        {value: 335, name: '男'},
+                        {value: 310, name: '女'},
+                        {value: 234, name: '未知'},
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        sexChart.setOption(sexOption);
+
+        //用户性别比例
+        var ageChart = echarts.init(document.getElementById("row3-right-echarts-chart"));
+        var ageOption = {
+            title: {
+                text: '用户年龄分布',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['18-20', '21-30', '31-40', '41-50', '51以上']
+            },
+            series: [
+                {
+                    name: '年龄分布',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: [
+                        {value: 12, name: '18-20'},
+                        {value: 23, name: '21-30'},
+                        {value: 32, name: '31-40'},
+                        {value: 36, name: '41-50'},
+                        {value: 21, name: '51以上'},
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        ageChart.setOption(ageOption);
     </script>
 </html>
