@@ -36,7 +36,6 @@ public class ModifyUserStatusListener implements ServletContextListener, Command
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("run.....");
 		logger.info("进入ModifyUserStatusListener");
 		updateUser();
 	}
