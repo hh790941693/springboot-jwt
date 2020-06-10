@@ -266,7 +266,6 @@ public class WebSocketClientController extends AdminBaseController
 		logger.info("sessionId: {}", sessionId);
 		session.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
 		session.setAttribute(CommonConstants.S_USER+"_"+user, user);
-		//session.setAttribute(CommonConstants.S_USER, user);
 		session.setAttribute(CommonConstants.S_PASS+"_"+user, dbPass);
 		session.setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
 		session.setAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
@@ -1410,6 +1409,7 @@ public class WebSocketClientController extends AdminBaseController
 		hs.removeAttribute(CommonConstants.S_WEBSERVERIP);
 		hs.removeAttribute(CommonConstants.S_WEBSERVERPORT);
 		hs.removeAttribute(CommonConstants.S_IMG+"_"+user);
+		hs.removeAttribute(CommonConstants.S_USER_AGENT+"_"+user);
 	}
 	
 	/**
