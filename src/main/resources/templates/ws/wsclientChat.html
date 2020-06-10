@@ -334,5 +334,19 @@
 		function loginServer(){
 			parent.loginServer();
 		}
+
+		//当浏览器大小变化时
+		$(window).resize(function () {
+			winInnerWidth = window.innerWidth;
+			winInnerHeight = window.innerHeight;
+			var mainDivWidth = $("#mainDiv").width();
+			var mainDivHeight = $("#mainDiv").height();
+			if (winInnerWidth>=mainDivWidth) {
+				$("#mainDiv").css("left", (winInnerWidth - mainDivWidth) / 2 + "px");
+			}
+			if (winInnerHeight>=mainDivHeight) {
+				$("#mainDiv").css("top", (winInnerHeight - mainDivHeight) / 2 + "px");
+			}
+		});
 	</script>
 </html>
