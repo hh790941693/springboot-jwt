@@ -216,18 +216,18 @@ public class WebSocketClientController extends AdminBaseController
 		String webserverip = webSocketConfig.getAddress();
 		String webserverPort = webSocketConfig.getPort();
 		logger.info("------------------配置信息------------------:"+configMap);
-		logger.info("webserverip:"+webserverip);
-		logger.info("webserverPort:"+webserverPort);
+		logger.info("webserverip:{} webserverPort:{}",webserverip, webserverPort);
 
 		String userAgent = request.getHeader("User-Agent");
-		logger.info("user:"+user+"  userAgent:"+userAgent);
+		logger.info("userAgent:"+userAgent);
 		String shortAgent = "unknown device";
 		try {
 			shortAgent = userAgent.split("\\(")[1].split("\\)")[0].replaceAll("\\(", "").replaceAll("\\)", "");
 		}catch (Exception e) {
 			logger.warn("获取客户端信息失败!"+e.getMessage());
 		}
-		
+
+		//传给前端html的数据
 		model.addAttribute(CommonConstants.S_USER, user);
 		model.addAttribute(CommonConstants.S_PASS, dbPass);
 		model.addAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
@@ -264,15 +264,14 @@ public class WebSocketClientController extends AdminBaseController
 		HttpSession session = request.getSession();
 		String sessionId = session.getId();
 		logger.info("sessionId: {}", sessionId);
-
 		session.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
 		session.setAttribute(CommonConstants.S_USER+"_"+user, user);
-		session.setAttribute(CommonConstants.S_USER, user);
+		//session.setAttribute(CommonConstants.S_USER, user);
 		session.setAttribute(CommonConstants.S_PASS+"_"+user, dbPass);
 		session.setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
 		session.setAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
 		session.setAttribute(CommonConstants.S_IMG+"_"+user, selfImg);
-		session.setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
+		session.setAttribute(CommonConstants.S_USER_AGENT+"_"+user, shortAgent);
 		
 		String redisKey = REDIS_KEY_PREFIX+user;
 		try {
