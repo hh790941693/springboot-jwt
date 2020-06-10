@@ -17,7 +17,9 @@
 		margin:0 auto;
 		box-shadow: grey 10px 6px 10px;
 		border:1px solid grey;
-		position:relative;
+		position:fixed;
+		left:38%;
+		top:37%;
 		background-repeat: no-repeat;
 		background-position: 0px 0px;
 	}
@@ -255,5 +257,21 @@
 		}
 		return isCheckFinish;
 	}
+
+	//当浏览器大小变化时
+	$(window).resize(function () {
+		winInnerWidth = window.innerWidth;
+		winInnerHeight = window.innerHeight;
+		var mainDivWidth = $("#mainDiv").width();
+		var mainDivHeight = $("#mainDiv").height();
+		if (winInnerWidth>=mainDivWidth) {
+			$("#mainDiv").css("left", (winInnerWidth - mainDivWidth) / 2 + "px");
+		}
+		if (winInnerHeight>=mainDivHeight) {
+			$("#mainDiv").css("top", (winInnerHeight - mainDivHeight) / 2 + "px");
+		}
+		//console.log("window:"+winInnerWidth+","+winInnerHeight);
+		//console.log("mainDiv:"+mainDivWidth+","+mainDivHeight);
+	});
 </script>
 </html>
