@@ -261,14 +261,18 @@ public class WebSocketClientController extends AdminBaseController
 		response.addCookie(webserverportCookie);
 		
 		//session
-		request.getSession().setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
-		request.getSession().setAttribute(CommonConstants.S_USER+"_"+user, user);
-		request.getSession().setAttribute(CommonConstants.S_USER, user);
-		request.getSession().setAttribute(CommonConstants.S_PASS+"_"+user, dbPass);
-		request.getSession().setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
-		request.getSession().setAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
-		request.getSession().setAttribute(CommonConstants.S_IMG+"_"+user, selfImg);
-		request.getSession().setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
+		HttpSession session = request.getSession();
+		String sessionId = session.getId();
+		logger.info("sessionId: {}", sessionId);
+
+		session.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
+		session.setAttribute(CommonConstants.S_USER+"_"+user, user);
+		session.setAttribute(CommonConstants.S_USER, user);
+		session.setAttribute(CommonConstants.S_PASS+"_"+user, dbPass);
+		session.setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
+		session.setAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
+		session.setAttribute(CommonConstants.S_IMG+"_"+user, selfImg);
+		session.setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
 		
 		String redisKey = REDIS_KEY_PREFIX+user;
 		try {
