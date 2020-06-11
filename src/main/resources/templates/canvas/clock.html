@@ -5,6 +5,10 @@
 		<title></title>
 		
 		<style type="text/css">
+			body{
+				margin: 0;
+				padding: 0;
+			}
 			#canvas{
 				display:block;
 				margin:3px auto;
@@ -12,11 +16,13 @@
 		</style>
 	</head> 
 	<body>
-		<canvas id="canvas" width="600" height="550" style="background:#000">
-			你的浏览器不支持canvas标签
-		</canvas>
-		
-		<audio id="player" controls="controls" src="" style="width:100%;display:none;"></audio>
+		<div style="width: 99%;height:700px;padding: 5px;">
+			<canvas id="canvas" width="600" height="550" style="background:#000">
+				你的浏览器不支持canvas标签
+			</canvas>
+
+			<audio id="player" controls="controls" src="" style="width:100%;display:none;"></audio>
+		</div>
 	</body>
 	<script type="text/javascript">	
 		var ctx = document.getElementById("canvas").getContext("2d");
