@@ -85,9 +85,14 @@
 			<div id="footer" align="left">
 				<div style="height:25px;">
 					<select id="selectUser" style="width:50%;height:100%;float:left;">
+						<option v-for="row in friendList">
+							{{row.name}}
+						</option>
 					</select>
-					<select id="selectCyy" style="width:50%;height:100%;float:right;"
-						onchange="document.getElementById('msgToServer').value=this.options[this.selectedIndex].value">
+					<select id="selectCyy" style="width:50%;height:100%;float:right;">
+						<option v-for="cyy in cyyList">
+							{{cyy.name}}
+						</option>
 					</select>
 				</div>
 				<div style="height:33px;">
@@ -157,6 +162,7 @@
 			el: '#mainDiv',
 			data: {
 				friendList:{},
+				cyyList:{},
 			},
 			methods: {
 				getOnlineInfo:function () {
@@ -170,6 +176,7 @@
 							}
 							var jsonObj = result.data;
 							app.friendList = jsonObj.friendsList;
+							app.cyyList = jsonObj.commonMap.cyy;
 						}
 					});
 				},
@@ -180,7 +187,7 @@
 		});
 
 		// 获取在线人数信息
-		getOnlineInfo();
+		//getOnlineInfo();
 
 		// 发送消息给服务器
 		function send() {
@@ -333,9 +340,9 @@
 		}
 
 		//定时获取在线人数信息
-		setInterval(function(){
-			getOnlineInfo();
-		},10000);
+		// setInterval(function(){
+		// 	getOnlineInfo();
+		// },10000);
 
 		//聊天窗口可拖动
 		$.ws.dragPanelMove("#header","#mainDiv");
