@@ -18,21 +18,27 @@
 		
 	</head> 
 	<body>
-		<div id="mainDiv" style="width:985px;height:765px;margin:5px auto;overflow:hidden;border:2px solid green;">
-            <canvas id="canvas" style="background-color:grey;margin:5px;float:left">
+		<div id="mainDiv" style="width:99%;height:700px;margin:0 auto;overflow:hidden;">
+            <canvas id="canvas" style="background-color:grey;float:left;">
             </canvas>
             
-            <div id="rightDiv" style="float:right;width:290px;height:100%;">
-                <button id="startBtn">开&nbsp;&nbsp;&nbsp;始</button>
-                <button id="restartBtn">重新开始</button>
-				<button id="refreshBtn">刷新</button><br/>
-	                棋盘大小:<input id="qpSizeInput" type="range" value=75  min=55 max=75 step=5 onchange="changeQpSize()">
-					<span id="qpSize">75</span><br/>
-	                自动下棋<input id="autoPlay" style="width:15px;" type="checkbox">&nbsp;
-	                显示日志<input id="showLog" style="width:15px;" type="checkbox" checked="checked">
-                <canvas id="rightCanvas" style="margin-top:5px;background-color:#124C71">
-                </canvas>
-                <div id="textAreaDiv" style="width:287px;height:460px;margin:2px 2px 2px 0px;">
+            <div id="rightDiv" style="float:right;width:28%;height:auto;border:2px solid green;">
+				<div style="height:3%;">
+					<button id="startBtn">开&nbsp;&nbsp;&nbsp;始</button>
+					<button id="restartBtn">重新开始</button>
+					<button id="refreshBtn">刷新</button>
+				</div>
+				<div style="height:6%;">
+					棋盘大小:<input id="qpSizeInput" type="range" value=65  min=55 max=65 step=5 onchange="changeQpSize()">
+					<span id="qpSize">65</span><br/>
+					自动下棋<input id="autoPlay" style="width:15px;" type="checkbox">&nbsp;
+					显示日志<input id="showLog" style="width:15px;" type="checkbox" checked="checked">
+				</div>
+				<div style="height:33%;">
+					<canvas id="rightCanvas" style="margin-top:5px;background-color:#124C71">
+					</canvas>
+				</div>
+                <div id="textAreaDiv" style="width:100%;height:57%;">
                     <textarea id="msgText" style="width:100%;height:100%;color:blue;font-size:10px;">
                     </textarea>
                 </div>
@@ -48,7 +54,7 @@
         // 棋盘边界宽度
         var BORDER = 40;
         // 每个方格的宽高(宽=高)
-        var DIV_SIZE = 75;
+        var DIV_SIZE = 65;
     
         // 主画布
 		var canvas = document.getElementById("canvas");
