@@ -18,9 +18,10 @@
 
 	#mainDiv{
 		width:854px;
+        height:444px;
 		margin:0 auto;
 		position: fixed;
-		left:250px;
+		left:138px;
 		top:80px;
 	}
 	
@@ -65,36 +66,41 @@
 <body>
 	<div id="mainDiv">
 		<div style="width:74.8%;height:100%;float:left;border:2px solid green;">
+            <!--头部按钮组-->
 			<div id="header">
 				<div align="left" style="width:20%;height:100%;float:left;margin-top:-5px;">
-					<span style="color:yellow;font-weight:bold;font-size:24px;height:100%;display:inline-block;" id="loginUser"></span>
+					<span style="color:yellow;font-weight:bold;font-size:24px;height:100%;display:inline-block;">{{loginUser}}</span>
 				</div>
 
 				<div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
 					<button id="refreashConlineCount" class='label label-info' onclick="getOnlineInfo()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>&nbsp;&nbsp;
 					<button class='label label-primary' onclick="changeBackgroundImage()">更换背景</button>&nbsp;&nbsp;
-					<button class='label label-primary' onclick="showMyFriend()">好友列表</button>&nbsp;&nbsp;
 					<button class='label label-danger' onclick="clearScreen()">清&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;屏</button>&nbsp;&nbsp;
 					<button id="btnReconnect" class='label label-primary' type="button" onclick="loginServer()">重新连接</button>
 				</div>
 			</div>
 
+            <!--中间聊天框-->
 			<div id="msgFromServer" align="left">
 			</div>
 
+            <!--下方聊天内容发送-->
 			<div id="footer" align="left">
 				<div style="height:25px;">
+                    <!--选择对象-->
 					<select id="selectUser" style="width:50%;height:100%;float:left;">
-						<option v-for="row in friendList">
+						<option v-for="row in friendList" :value="row.name">
 							{{row.name}}
 						</option>
 					</select>
-					<select id="selectCyy" style="width:50%;height:100%;float:right;">
+                    <!--选择常用语-->
+					<select id="selectCyy" style="width:50%;height:100%;float:right;" @change="selectText">
 						<option v-for="cyy in cyyList">
 							{{cyy.name}}
 						</option>
 					</select>
 				</div>
+                <!--聊天内容  发送按钮-->
 				<div style="height:33px;">
 					<input id="msgToServer" autocomplete="off" style="width:80%;float:left;height:100%;border:2px solid grey" placeholder="请输入聊天内容"></input>
 					<button id="sendBtn" type="button" class='btn btn-sm btn-success' style="width:20%;height:100%;float:right;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
@@ -102,21 +108,22 @@
 			</div>
 		</div>
 
+        <!--右侧好友列表-->
 		<div style="width: 24%;height:100%;float:right;border:2px solid white;background-color: white;">
-			<div id="friendsListDiv" style="width: 100%;height: 100%;">
-				<div v-for="row in friendList" style="width:100%;height:40px;margin-bottom: 3px;">
-					<div style="width:26%;height:40px;float: left;">
+			<div id="friendsListDiv" style="width: 100%;height: 100%;overflow-y: scroll;">
+				<div v-for="row in friendList" style="width:100%;height:50px;margin-bottom: 8px;">
+					<div style="width:26%;height:50px;float: left;">
 						<img :src="row.headImage" width="100%" height="100%">
 					</div>
-					<div style="width:67%;height:40px;float:left;margin-left: 5px;">
+					<div style="width:67%;height:50px;float:left;margin-left: 5px;">
 						<div>
 							<template v-if="row.state == '0'">
-								<span style="font-size: 14px;color:grey;">{{row.name}}</span>
+								<p style="font-size: 14px;color:grey;">{{row.name}}</p>
 							</template>
 							<template v-else>
-								<span style="font-size: 14px;color: red;">{{row.name}}</span>
+								<p style="font-size: 14px;color: red;">{{row.name}}</p>
 							</template>
-							<span style="font-size: 12px;">{{row.lastLoginTime}}</span>
+							<p style="font-size: 12px;">{{row.lastLoginTime}}</p>
 						</div>
 						<div>
 							<span style="font-size: 12px;">{{row.sign}}</span>
@@ -143,26 +150,20 @@
 </body>
 
 	<script type="text/javascript">
-		var user = parent.s_user;
-		var pass = parent.s_pass;
-		//当前用户的状态信息
-		var currentUserOnlineInfo = undefined;
-		if (null != parent.webSocket){
-			$("#loginUser").html(user);
-		}
-
 		//清空聊天框内容
 		$("#msgFromServer").val("");
 		$("#msgFromServer").append(parent.chatRecord);
 		//未读消息数
 		parent.unreadCount=0;
 		$("#unreadCountSpan", window.parent.document).text("");
+		var currentUserOnlineInfo = undefined;
 
 		var app = new Vue({
 			el: '#mainDiv',
 			data: {
 				friendList:{},
 				cyyList:{},
+                loginUser:parent.s_user,
 			},
 			methods: {
 				getOnlineInfo:function () {
@@ -177,17 +178,39 @@
 							var jsonObj = result.data;
 							app.friendList = jsonObj.friendsList;
 							app.cyyList = jsonObj.commonMap.cyy;
+
+                            currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
+                            // 是否被禁用
+                            var enableStatus = currentUserOnlineInfo.enable;
+                            if (enableStatus == "0"){
+                                layer.tips('该账户已被禁用,10秒后强制退出!', '#msgFromServer', {
+                                    tips: [2, 'red']
+                                });
+                                updateChatMsg("<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 该账户已被禁用,10秒后强制退出!</p>");
+                                setTimeout(logout,10000);
+                                return;
+                            }
+
+                            // 是否被禁言
+                            var speakStatus = currentUserOnlineInfo.speak;
+                            if (speakStatus == "0"){
+                                $("#sendBtn").attr("disabled",true);
+                                $("#sendBtn").html("<span style='color:red;font-weight: bold;'>你已被禁言</span>");
+                            }else{
+                                $("#sendBtn").attr("disabled",false);
+                                $("#sendBtn").html("发送");
+                            }
 						}
 					});
 				},
+                selectText:function (e) {
+                    $("#msgToServer").val(e.target.value);
+                }
 			},
 			created: function () {
 				this.getOnlineInfo();
 			}
 		});
-
-		// 获取在线人数信息
-		//getOnlineInfo();
 
 		// 发送消息给服务器
 		function send() {
@@ -266,83 +289,10 @@
 			textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
 		}
 
-		//获取在线相关信息
-		function getOnlineInfo() {
-			$.ajax({
-				type: 'GET',
-				url: 'getOnlineInfo.json',
-				data:{"user":parent.s_user},
-				//dataType: 'json',
-				success: function(result) {
-					if (result.code == 0){
-						return;
-					}
-					var jsonObj = result.data;
-					currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
-					// 是否被禁用
-					var enableStatus = currentUserOnlineInfo.enable;
-					if (enableStatus == "0"){
-						layer.tips('该账户已被禁用,10秒后强制退出!', '#msgFromServer', {
-							tips: [2, 'red']
-						});
-						updateChatMsg("<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 该账户已被禁用,10秒后强制退出!</p>");
-						setTimeout(logout,10000);
-						return;
-					}
-
-					// 是否被禁言
-					var speakStatus = currentUserOnlineInfo.speak;
-					if (speakStatus == "0"){
-						$("#sendBtn").attr("disabled",true);
-						$("#sendBtn").html("<span style='color:red;font-weight: bold;'>你已被禁言</span>");
-					}else{
-						$("#sendBtn").attr("disabled",false);
-						$("#sendBtn").html("发送");
-					}
-
-					// 聊天常用语
-					var cyy = jsonObj.commonMap.cyy;
-					$("#selectCyy").empty();
-					for (var x=0;x<cyy.length;x++){
-						$("#selectCyy").append("<option value=" + cyy[x].name + ">" + cyy[x].name+ "</option>")
-					}
-					// 好友用户列表
-					var usersList = jsonObj.friendsList;
-					var selectUser = $("#selectUser").val();
-					$("#selectUser").empty();
-					if (usersList != "") {
-						if (selectUser == null || selectUser == undefined) {
-							for (var i=0;i<usersList.length;i++) {
-								if (usersList[i].name == parent.s_user) {
-									continue;
-								}
-								$("#selectUser").append("<option value=" + usersList[i].name + ">" + usersList[i].name+ "</option>");
-							}
-						}else{
-							$("#selectUser").append("<option value=" + selectUser + ">" + selectUser+ "</option>")
-							for (var i=0;i<usersList.length;i++){
-								var nameTmp = usersList[i].name;
-								var enableTmp = usersList[i].enable;
-								if (nameTmp == selectUser || nameTmp == parent.s_user || enableTmp=="0"){
-									continue;
-								}
-								var state = usersList[i].state;
-								if (state == "0"){
-									$("#selectUser").append("<option style='color:grey;' value=" + nameTmp + ">" + nameTmp+ "</option>");
-								}else{
-									$("#selectUser").append("<option style='color:#FF0000;' value=" + nameTmp + ">" + nameTmp+ "</option>");
-								}
-							}
-						}
-					}
-				}
-			});
-		}
-
 		//定时获取在线人数信息
-		// setInterval(function(){
-		// 	getOnlineInfo();
-		// },10000);
+		setInterval(function(){
+			app.getOnlineInfo();
+		},10000);
 
 		//聊天窗口可拖动
 		$.ws.dragPanelMove("#header","#mainDiv");
