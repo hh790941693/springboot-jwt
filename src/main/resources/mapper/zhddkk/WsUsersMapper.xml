@@ -15,7 +15,7 @@
 
     <select id="queryMyFriendList" resultType="com.pjb.springbootjwt.zhddkk.domain.WsUsersDO">
         SELECT
-            t2.*,t3.img as head_image
+            t2.*,t3.img as head_image,t3.sign
         FROM ws_friends t1
         LEFT JOIN
             ws_users t2 ON t2.id = t1.fid

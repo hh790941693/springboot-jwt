@@ -28,12 +28,13 @@ public class WsOnlineInfo
 	
 	// 好友列表
 	private List<WsUsersDO> friendsList;
-	
-	// 字典列表
-	//private List<WsDic> dicList;
-	
-	//private Map<String, List<WsDic>> dicMap;
-	
+
+	//好友在线数
+	private int onlineFriendCount = 0;
+
+	//好友离线数
+	private int offlineFriendCount = 0;
+
 	// 敏感词、脏话、常用语、注册问题
 	private Map<String, List<WsCommonDO>> commonMap;
 
@@ -100,4 +101,20 @@ public class WsOnlineInfo
 	public void setFriendsList(List<WsUsersDO> friendsList) {
 		this.friendsList = friendsList;
 	}
+
+    public int getOnlineFriendCount() {
+        return onlineFriendCount;
+    }
+
+    public void setOnlineFriendCount(int onlineFriendCount) {
+        this.onlineFriendCount = onlineFriendCount;
+    }
+
+    public int getOfflineFriendCount() {
+        return offlineFriendCount;
+    }
+
+    public void setOfflineFriendCount(int offlineFriendCount) {
+        this.offlineFriendCount = offlineFriendCount;
+    }
 }
