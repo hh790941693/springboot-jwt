@@ -1,259 +1,275 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="common :: header"></head>
-    <title>登录</title>
-    <style type="text/css">
-        a{
-            font-size:13px;
-        }
+<title>登录</title>
+<style type="text/css">
+	a{
+		font-size:13px;
+	}
 
-        body{
-            padding-top:270px;
-        }
+	body{
+		padding-top:270px;
+	}
 
-        #mainDiv{
-            width:400px;
-            height:230px;
-            margin:0 auto;
-            box-shadow: grey 10px 6px 10px;
-            border:1px solid grey;
-            position:relative;
-            background-repeat: no-repeat;
-            background-position: 0px 0px;
-        }
+	#mainDiv{
+		width:400px;
+		height:230px;
+		margin:0 auto;
+		box-shadow: grey 10px 6px 10px;
+		border:1px solid grey;
+		position:fixed;
+		left:38%;
+		top:37%;
+		background-repeat: no-repeat;
+		background-position: 0px 0px;
+	}
 
-        #loginForm{
-            padding-left: 40px;
-            padding-top: 30px;
-        }
+	#loginForm{
+		padding-left: 40px;
+		padding-top: 30px;
+	}
 
-        input{
-            border: 0;
-            outline: none;
-            border-bottom: 1px solid grey;
-            height: 22px;
-        }
+	input{
+		border: 0;
+		outline: none;
+		border-bottom: 1px solid grey;
+		height: 22px;
+	}
 
-        button{
-            box-shadow: grey 5px 5px 10px;
-        }
-    </style>
+	button{
+		box-shadow: grey 5px 5px 10px;
+	}
+</style>
 </head>
 <body>
-	<div id="mainDiv">
-		<div style="margin-top:10px;margin-left:115px;color:blue">
-				欢迎使用webSocket 
-		</div>
-		<button id="phonelogin" class='btn btn-success btn-sm' style="position:absolute;top:1px;left:315px;">扫码登录</button>
-		<img id="backgroundImg" src="../img/fengjing/fj10.jpg" hidden>
-		<form id="loginForm" action="ws/wslogin.do" method="post" onsubmit="return checkEnvironment()">
-			<div style="height:25px;">
-				<label for="user">用户名:</label>
-				<input id="user" name="user" type="text" th:value="${user}" placeholder="请输入用户名" autocomplete="off" style="width:178px;margin-left:10px;">
-			</div>
-			<div style="height:25px;margin-top:10px;">
-				<label for="pass">密&nbsp;&nbsp;&nbsp;码:</label>
-				<input id="pass" name="pass" type="password" th:value="${pass}" placeholder="请输入密码" autocomplete="off"  style="width:178px;margin-left:11px;">
-			</div>
-			<div style="height:25px;margin-top:10px;">
-				<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:50px;">注&nbsp;&nbsp;&nbsp;&nbsp;册</a>
-				<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;">忘记密码</a>
-				<a href="javascript:void(0)" onclick="openGame(this)" style="text-decoration:none;margin-left:20px;">隐藏动画</a>
-				<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;">玩游戏</a>
-			</div>
-			
-			<div align="center" style="margin-top:20px;margin-left:-30px;">
-				<button id="btnlogin" class='btn btn-success btn-sm'  type="submit" style="width:100px;" >登&nbsp;&nbsp;&nbsp;录</button>
-			</div>
-		</form>
-		
-		<div style="position:absolute;width:180px;height:180px;left:410px;top:1px;">
-			<img id="qrImg" style="width:160px;height:160px;display:none">
-		</div>
+<div id="mainDiv">
+	<div style="margin-top:10px;margin-left:115px;color:blue">
+		欢迎使用webSocket
 	</div>
-
-	<div id="checkDiv" style="width:200px;height:385px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
-		<div id="checkContentDiv" style="width:100%;height:auto;border:1px solid grey;background-color: #0C0C0C;padding: 5px 0 5px 10px;">
+	<button id="phonelogin" class='btn btn-success btn-sm' style="position:absolute;top:1px;left:315px;">扫码登录</button>
+	<img id="backgroundImg" src="../img/fengjing/fj10.jpg" hidden>
+	<form id="loginForm" action="ws/wslogin.do" method="post" onsubmit="return checkEnvironment()">
+		<div style="height:25px;">
+			<label for="user">用户名:</label>
+			<input id="user" name="user" type="text" th:value="${user}" placeholder="请输入用户名" autocomplete="off" style="width:178px;margin-left:10px;">
 		</div>
-	</div>
+		<div style="height:25px;margin-top:10px;">
+			<label for="pass">密&nbsp;&nbsp;&nbsp;码:</label>
+			<input id="pass" name="pass" type="password" th:value="${pass}" placeholder="请输入密码" autocomplete="off"  style="width:178px;margin-left:11px;">
+		</div>
+		<div style="height:25px;margin-top:10px;">
+			<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:50px;">注&nbsp;&nbsp;&nbsp;&nbsp;册</a>
+			<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;">忘记密码</a>
+			<a href="javascript:void(0)" onclick="openGame(this)" style="text-decoration:none;margin-left:20px;">隐藏动画</a>
+			<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;">玩游戏</a>
+		</div>
 
-	<div id='canvasDiv' style='position:fixed;left:1px;top:1px;width:100%;height:100%;z-index:-1;'>
-		<iframe id="iframePage" width="100%" height="100%" src="/canvas/snow.page"></iframe>
-	</div>
+		<div align="center" style="margin-top:20px;margin-left:-30px;">
+			<button id="btnlogin" class='btn btn-success btn-sm'  type="submit" style="width:100px;" >登&nbsp;&nbsp;&nbsp;录</button>
+		</div>
+	</form>
 
-    <div th:include="common::footer"></div>
+	<div style="position:absolute;width:180px;height:180px;left:410px;top:1px;">
+		<img id="qrImg" style="width:160px;height:160px;display:none">
+	</div>
+</div>
+
+<div id="checkDiv" style="width:200px;height:385px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
+	<div id="checkContentDiv" style="width:100%;height:auto;border:1px solid grey;background-color: #0C0C0C;padding: 5px 0 5px 10px;">
+	</div>
+</div>
+
+<div id='canvasDiv' style='position:fixed;left:1px;top:1px;width:100%;height:100%;z-index:-1;'>
+	<iframe id="iframePage" width="100%" height="100%" src="/canvas/snow.page"></iframe>
+</div>
+
+<div th:include="common::footer"></div>
 </body>
 
-    <script type="text/javascript">
-        var user = "";
-        $("#user").blur(function(){
-            user = $("#user").val();
-            if (user == ""){
-                layer.tips('用户名不能为空!', '#user', {
-                    tips: [2, '#78BA32']
-                });
-            }
-        })
-
-        var pass = "";
-        $("#pass").blur(function(){
-            pass = $("#pass").val();
-            if (pass == "")
-            {
-                layer.tips('密码不能为空!', '#pass', {
-                    tips: [2, '#78BA32']
-                });
-            }
-        })
-
-        //提交校验
-        $("#loginForm").validate({
-            rules: {
-                user:
-                    {
-                        required: true,
-                        minlength: 2,
-                        maxlength: 10
-                    },
-                pass:
-                    {
-                        required: true,
-                        minlength: 3,
-                        maxlength: 12
-                    }
-            },
-            messages:{
-                user:
-                    {
-                        required: "请输入用户名",
-                        minlength: "至少包含2个字符",
-                        maxlength:"最多包含10位字符"
-                    },
-                pass:
-                    {
-                        required: "请输入密码",
-                        minlength: "至少包含3个字符",
-                        maxlength:"最多包含12位字符"
-                    }
-            }
-        });
-
-        //注册账号
-        function regist(){
-            layer.open({
-                type: 2,
-                title: '注册账号',
-                shadeClose: true,
-                shade: 0.6,
-                area: ['488px', '439px'],
-                content: 'ws/register.page'
-            });
-        }
-
-        //忘记密码
-        function forgetPassword(){
-            layer.open({
-                type: 2,
-                title: '忘记密码',
-                shadeClose: true,
-                shade: 0.6,
-                area: ['490px', '318px'],
-                content: 'ws/forgetPassword.page?user='+user
-            });
-        }
-
-        //手机登录
-        $("#phonelogin").click(function(){
-            var imgSrc = $("#qrImg").attr("src");
-            if (imgSrc == "" || imgSrc == undefined){
-                $.ajax({
-                    type: 'POST',
-                    url: rootUrl+'ws/showQRCode.do',
-                    //dataType:'json',
-                    async:false,
-                    success: function(result) {
-                        $("#qrImg").css("display","block");
-                        $("#qrImg").attr("src",result);
-                    }
-                });
-            }else{
-                $("#qrImg").attr("src","");
-                $("#qrImg").css("display","none");
-            }
-        })
-
-        //关闭/开启动画
-        function openGame(thisObj){
-            var text=$(thisObj).text();
-            if (text == "开启动画"){
-                $("#iframePage").attr("src", rootUrl+"canvas/snow.page");
-                $(thisObj).text("隐藏动画");
-            }else{
-				$("#iframePage").attr("src", "");
-				$(thisObj).text("开启动画");
-            }
-        }
-
-        //玩游戏
-        function playGame(){
-            window.location.href = rootUrl + "canvas/canvasIndex.page";
-        }
-
-        //定时滚动登陆页背景图片
-        $.ws.backgroundImgAnimation("backgroundImg","mainDiv", 3, 10)
-
-		//模拟登录前的检查操作
-		var checkEnvTimer = null;
-		var isCheckFinish = false;
-        var textArr = new Array();
-		function checkEnvironment(){
-        	console.log("触发登录前的点击事件");
-            $.ajax({
-                type: 'GET',
-                url: rootUrl+'ws/querySystemInfo',
-                async:false,
-                success: function(result) {
-                    if (result.code == 1){
-                        var data = result.data;
-                        var osName = data.osName;
-                        var javaHome = data.javaHome;
-                        var javaVersion = data.javaVersion;
-                        var dbVersion = data.dbVersion;
-                        var nginxFlag = data.nginxFlag;
-                        var shareDir = data.shareDir;
-                        textArr = new Array("正在检查系统版本.....",osName,
-                            "正在检查java版本.....",javaVersion,
-                            "正在检查java家目录.....",javaHome,
-                            "正在检查数据库版本.....",dbVersion,
-                            "正在检查nginx进程状态.....", nginxFlag,
-                            "正在检查共享目录权限.....",shareDir,
-                            "正在检查其他事项....","检查完毕",
-                            "登录中.........","","","");
-                    }
-                }
-            });
-        	var text = "";
-        	var i = 0;
-        	if (null == checkEnvTimer && !isCheckFinish && textArr.length>0) {
-				$("#checkDiv").css("display", "block");
-				checkEnvTimer = setInterval(function () {
-					if (i >= textArr.length) {
-						isCheckFinish = true;
-						if (null != checkEnvTimer) {
-							checkEnvTimer = null;
-							console.log("清理定时器")
-							clearInterval(checkEnvTimer);
-							$("#checkDiv").css("display", "none");
-							$("#loginForm").submit();
-						}
-					}else{
-						text += "<span style='height:20px;color:white;display:inline-block;margin-bottom: 5px;'>" + textArr[i] + "</span><br/>";
-						$("#checkContentDiv").html(text);
-					}
-					i++;
-				}, 200);
-			}
-        	return isCheckFinish;
+<script type="text/javascript">
+	var user = "";
+	$("#user").blur(function(){
+		user = $("#user").val();
+		if (user == ""){
+			layer.tips('用户名不能为空!', '#user', {
+				tips: [2, '#78BA32']
+			});
 		}
-    </script>
+	})
+
+	var pass = "";
+	$("#pass").blur(function(){
+		pass = $("#pass").val();
+		if (pass == "")
+		{
+			layer.tips('密码不能为空!', '#pass', {
+				tips: [2, '#78BA32']
+			});
+		}
+	})
+
+	//提交校验
+	$("#loginForm").validate({
+		rules: {
+			user:
+					{
+						required: true,
+						minlength: 2,
+						maxlength: 10
+					},
+			pass:
+					{
+						required: true,
+						minlength: 3,
+						maxlength: 12
+					}
+		},
+		messages:{
+			user:
+					{
+						required: "请输入用户名",
+						minlength: "至少包含2个字符",
+						maxlength:"最多包含10位字符"
+					},
+			pass:
+					{
+						required: "请输入密码",
+						minlength: "至少包含3个字符",
+						maxlength:"最多包含12位字符"
+					}
+		}
+	});
+
+	//注册账号
+	function regist(){
+		layer.open({
+			type: 2,
+			title: '注册账号',
+			shadeClose: true,
+			shade: 0.6,
+			area: ['488px', '439px'],
+			content: 'ws/register.page'
+		});
+	}
+
+	//忘记密码
+	function forgetPassword(){
+		layer.open({
+			type: 2,
+			title: '忘记密码',
+			shadeClose: true,
+			shade: 0.6,
+			area: ['490px', '318px'],
+			content: 'ws/forgetPassword.page?user='+user
+		});
+	}
+
+	//手机登录
+	$("#phonelogin").click(function(){
+		var imgSrc = $("#qrImg").attr("src");
+		if (imgSrc == "" || imgSrc == undefined){
+			$.ajax({
+				type: 'POST',
+				url: rootUrl+'ws/showQRCode.do',
+				//dataType:'json',
+				async:false,
+				success: function(result) {
+					$("#qrImg").css("display","block");
+					$("#qrImg").attr("src",result);
+				}
+			});
+		}else{
+			$("#qrImg").attr("src","");
+			$("#qrImg").css("display","none");
+		}
+	})
+
+	//关闭/开启动画
+	function openGame(thisObj){
+		var text=$(thisObj).text();
+		if (text == "开启动画"){
+			$("#iframePage").attr("src", rootUrl+"canvas/snow.page");
+			$(thisObj).text("隐藏动画");
+		}else{
+			$("#iframePage").attr("src", "");
+			$(thisObj).text("开启动画");
+		}
+	}
+
+	//玩游戏
+	function playGame(){
+		window.location.href = rootUrl + "canvas/canvasIndex.page";
+	}
+
+	//定时滚动登陆页背景图片
+	$.ws.backgroundImgAnimation("backgroundImg","mainDiv", 3, 10)
+
+	//模拟登录前的检查操作
+	var checkEnvTimer = null;
+	var isCheckFinish = false;
+	var textArr = new Array();
+	function checkEnvironment(){
+		console.log("触发登录前的点击事件");
+		$.ajax({
+			type: 'GET',
+			url: rootUrl+'ws/querySystemInfo',
+			async:false,
+			success: function(result) {
+				if (result.code == 1){
+					var data = result.data;
+					var osName = data.osName;
+					var javaHome = data.javaHome;
+					var javaVersion = data.javaVersion;
+					var dbVersion = data.dbVersion;
+					var nginxFlag = data.nginxFlag;
+					var shareDir = data.shareDir;
+					textArr = new Array("正在检查系统版本.....",osName,
+							"正在检查java版本.....",javaVersion,
+							"正在检查java家目录.....",javaHome,
+							"正在检查数据库版本.....",dbVersion,
+							"正在检查nginx进程状态.....", nginxFlag,
+							"正在检查共享目录权限.....",shareDir,
+							"正在检查其他事项....","检查完毕",
+							"登录中.........","","","");
+				}
+			}
+		});
+		var text = "";
+		var i = 0;
+		if (null == checkEnvTimer && !isCheckFinish && textArr.length>0) {
+			$("#checkDiv").css("display", "block");
+			checkEnvTimer = setInterval(function () {
+				if (i >= textArr.length) {
+					isCheckFinish = true;
+					if (null != checkEnvTimer) {
+						checkEnvTimer = null;
+						console.log("清理定时器")
+						clearInterval(checkEnvTimer);
+						$("#checkDiv").css("display", "none");
+						$("#loginForm").submit();
+					}
+				}else{
+					text += "<span style='height:20px;color:white;display:inline-block;margin-bottom: 5px;'>" + textArr[i] + "</span><br/>";
+					$("#checkContentDiv").html(text);
+				}
+				i++;
+			}, 200);
+		}
+		return isCheckFinish;
+	}
+
+	//当浏览器大小变化时
+	$(window).resize(function () {
+		winInnerWidth = window.innerWidth;
+		winInnerHeight = window.innerHeight;
+		var mainDivWidth = $("#mainDiv").width();
+		var mainDivHeight = $("#mainDiv").height();
+		if (winInnerWidth>=mainDivWidth) {
+			$("#mainDiv").css("left", (winInnerWidth - mainDivWidth) / 2 + "px");
+		}
+		if (winInnerHeight>=mainDivHeight) {
+			$("#mainDiv").css("top", (winInnerHeight - mainDivHeight) / 2 + "px");
+		}
+	});
+</script>
 </html>

@@ -6,23 +6,23 @@
 		<title></title>
 		
 		<style type="text/css">
-			*{
-				margin:0px;
-				padding:0px;
+			body{
+				margin: 0;
+				padding: 0;
 			}
 		</style>
 	</head> 
 	<body>
-		<div id='mainDiv' style='width:99%;height:100%;'>
-			<canvas id="canvas" style="background:#000;">
+		<div id='mainDiv' style='width:99%;height:700px;padding: 5px;'>
+			<canvas id="canvas" style="background:#000;width:100%;height:100%;">
 				你的浏览器不支持canvas标签
 			</canvas>
 		</div>
 	</body>
 	<script type="text/javascript">	
 		var canvas = document.getElementById("canvas");
-		canvas.width = window.innerWidth-10;
-		canvas.height = window.innerHeight-10;
+		canvas.width = $(canvas).width();
+		canvas.height = $(canvas).height();
 		var ctx = canvas.getContext("2d");
 		
 		var colorArray = new Array();

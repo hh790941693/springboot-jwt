@@ -27,11 +27,32 @@
 		background-color:blue;
 		color:white;
 	}
+
+	#mainDiv{
+		width:1318px;
+		height:720px;
+		margin:0 auto;
+	}
+
+	#leftNaviDiv{
+		width:12%;
+		height:100%;
+		float:left;
+		border:2px solid green;
+		text-align: center;
+	}
+
+	#rightCanvasDiv{
+		width:87%;
+		height:100%;
+		float:left;
+		border:2px solid green;
+	}
 </style>
 </head>
 <body>
-	<div style="width:1060px;height:650px;margin:2px auto;">
-		<div id="leftNavi" style="width:154px;height:100%;float:left;border:2px solid green;overflow-y: scroll;text-align: center">
+	<div id="mainDiv">
+		<div id="leftNaviDiv">
 			<ul>
 				<li id="../canvas/starts.page" class='mouseleftclick'>太阳系</li>
 				<li id="../canvas/collision.page" >碰撞球</li>
@@ -57,14 +78,14 @@
 				<li id="../canvas/gamemove.page">人物移动</li>
 				<li id="../canvas/snow.page">雪花</li>
 			</ul>
-		</div>
-		
-		<div id="diffPage" align="center" style="width:890px;height:100%;float:right;border:2px solid green">
-			<iframe id="iframePage" width="100%" height="95%" ></iframe>
+
 			<div>
 				<button id="showNewWindowBtn">全屏显示</button>
 				<button id="backBtn" style='display:none'>返&nbsp;&nbsp;&nbsp;&nbsp;回</button>
-			</div>			
+			</div>
+		</div>
+		<div id="rightCanvasDiv" align="center">
+			<iframe id="iframePage" width="100%" height="100%" ></iframe>
 		</div>
 	</div>
 
@@ -72,7 +93,7 @@
 </body>
 
 	<script type="text/javascript">
-		var curPage = "../canvas/starts.page";
+		var curPage = $("#leftNaviDiv ul li").eq(0).attr("id");
 		$('#iframePage').attr('src',curPage);
 		$("ul li").click(function (){
 			curPage = this.id;

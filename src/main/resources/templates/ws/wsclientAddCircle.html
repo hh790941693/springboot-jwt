@@ -121,7 +121,6 @@
 
 		$("#hidden_frame").load(function(){
 			var text=$(this).contents().find("body").text();
-			console.log("----------------:"+text);
 			if (text.indexOf("操作成功") != -1){
 				layer.msg('新增朋友圈成功');
 				var timeout = 0.7;

@@ -3,10 +3,7 @@ package com.pjb.springbootjwt.zhddkk.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
@@ -82,6 +79,12 @@ public class WebSocketServerController extends AdminBaseController
 
 	@Autowired
 	private WsChatlogService wsChatlogService;
+
+	@Autowired
+	private WsSignService wsSignService;
+
+	@Autowired
+	private WsFileService wsFileService;
 
 	/**
 	 * 让某用户下线
@@ -686,4 +689,91 @@ public class WebSocketServerController extends AdminBaseController
 		}
 		logger.debug("结束导出操作日志");
 	}
+
+	/**
+	 * 领导驾驶舱
+	 * @return
+	 */
+	@RequestMapping("/wsserverChart.page")
+	public String wsserverChat(){
+		return "ws/wsserverChart";
+	}
+
+    /**
+     * 每日签到人数
+     * @return
+     */
+	@RequestMapping("/querySignData.do")
+    @ResponseBody
+	public Map<String, Integer> querySignData(){
+	    Map<String, Integer> map = new LinkedHashMap<>();
+	    SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        for (int i=6;i>=0;i--){
+            Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
+            Date dayBeginDate = DateUtil.dayBeginDate(date);
+            Date dayEndDate = DateUtil.dayEndDate(date);
+            String timeName = sdf.format(date);
+
+            int count = wsSignService.selectCount(new EntityWrapper<WsSignDO>().ge("create_time", dayBeginDate)
+                .le("create_time", dayEndDate));
+            map.put(timeName, count);
+        }
+
+	    return map;
+    }
+
+    /**
+     * 每日在线人数
+     * @return
+     */
+    @RequestMapping("/queryOnlineUserData.do")
+    @ResponseBody
+    public Map<String, Integer> queryOnlineUserData(){
+        Map<String, Integer> map = new LinkedHashMap<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (int i=30;i>=0;i--){
+            Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
+            Date dayBeginDate = DateUtil.dayBeginDate(date);
+            Date dayEndDate = DateUtil.dayEndDate(date);
+            String timeName = sdf.format(date);
+
+            int count = wsChatlogService.selectCount(new EntityWrapper<WsChatlogDO>()
+                    .eq("to_user", "")
+                    .ge("time", sdfx.format(dayBeginDate))
+                    .le("time", sdfx.format(dayEndDate)));
+            map.put(timeName, count);
+        }
+
+        return map;
+    }
+
+    /**
+     * 每日文件上传大小
+     * @return
+     */
+    @RequestMapping("/queryUploadFileData.do")
+    @ResponseBody
+    public Map<String, Long> queryUploadFileData(){
+        Map<String, Long> map = new LinkedHashMap<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (int i=6;i>=0;i--){
+            Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
+            Date dayBeginDate = DateUtil.dayBeginDate(date);
+            Date dayEndDate = DateUtil.dayEndDate(date);
+            String timeName = sdf.format(date);
+
+            List<WsFileDO> wsFileList = wsFileService.selectList(new EntityWrapper<WsFileDO>()
+                    .ge("create_time", dayBeginDate)
+                    .le("create_time", dayEndDate));
+            long fileSize = 0;
+            for (WsFileDO wsFileDO : wsFileList){
+                fileSize += wsFileDO.getFileSize();
+            }
+            map.put(timeName, fileSize);
+        }
+
+        return map;
+    }
 }

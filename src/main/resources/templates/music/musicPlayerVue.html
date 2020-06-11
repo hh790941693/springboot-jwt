@@ -103,7 +103,7 @@
 						<th style="display:none;">url</th>
 						<th style="width:40px;">操作</th>
 					</tr>
-					<tr v-for="(music,index) in musicData" :key="index" @mouseover="hoverIndex=index" @mouseout="hoverIndex=-1" :class="{'mouseonClass':index==hoverIndex && index != curSelectedIndex}">
+					<tr v-for="(music,index) in musicData" :key="index">
 						<td>
 							<div v-if="index==0">
 								<input type='radio' name='selectMusic' checked="checked"/>
@@ -156,7 +156,7 @@
 				},
 				doublePlay:function(musicIndex){
 					//双击播放
-					console.log("双击播放:");
+					console.log("双击播放:"+musicIndex);
 					app.curSelectedIndex = musicIndex;
 					var selectedTr = $("table tr").get(app.curSelectedIndex+1);
 					app.playByIndex(selectedTr);
