@@ -7,11 +7,9 @@
 		<style type="text/css">
 			body{
 				margin:0;
+				padding: 0;
 			}
 
-			canvas{
-			}
-			
 			input{
 				width:50px
 			}
@@ -23,12 +21,14 @@
 		
 	</head> 
 	<body>
-		<div id="mainDiv" style="width:1105px;height:auto;margin:5px auto;overflow:hidden;">
-			<canvas id="canvas" style="width:780px;height:600px;background:#fff;float:left;">
-				你的浏览器不支持canvas标签
-			</canvas>
+		<div id="mainDiv" style="width:100%;height:auto;overflow:hidden;">
+			<div style="width: 70%;height:100%;float:left;border:1px solid red;">
+				<canvas id="canvas" style="width:780px;height:600px;background:#fff;float:left;">
+					你的浏览器不支持canvas标签
+				</canvas>
+			</div>
 
-			<div style="width:312px;height:auto;float:left;font-size:16px;margin:1px 1px 1px 5px;border:2px solid green;border:1px solid green">
+			<div style="width:28%;height:auto;float:right;font-size:16px;border:2px solid green;">
 				<button id="ctlShow">全部收起</button>
 				<div id="infoDiv" style="background-color:#1d3d79;color:white;padding-left:2px;">
 					<button id="totalNumBtn" class="toggleBtn" style="">-</button>
