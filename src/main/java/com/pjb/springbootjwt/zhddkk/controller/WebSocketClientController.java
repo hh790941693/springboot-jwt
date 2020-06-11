@@ -665,6 +665,17 @@ public class WebSocketClientController extends AdminBaseController
         }
 		//我的好友列表
 		List<WsUsersDO> friendsUserList = wsUsersService.queryMyFriendList(currentOnlineUserInfo.getId());
+        //好友在线数
+        int onlineFriendCount = 0;
+        //好友离线数
+        int offlineFriendCount = 0;
+		for (WsUsersDO wu : friendsUserList){
+		    if (wu.getState().equals("0")){
+                offlineFriendCount += 1;
+            }else{
+                onlineFriendCount += 1;
+            }
+        }
 
 		for (WsUsersDO wu : allUserList) {
 			if (socketMap.containsKey(wu.getName())) {
@@ -684,6 +695,8 @@ public class WebSocketClientController extends AdminBaseController
 		woi.setOnlineUserList(onlineUserList);
 		woi.setOfflineUserList(offlineUserList);
 		woi.setFriendsList(friendsUserList);
+		woi.setOnlineFriendCount(onlineFriendCount);
+		woi.setOfflineFriendCount(offlineFriendCount);
 		woi.setCommonMap(buildCommonData());
 		woi.setCurrentOnlineUserInfo(currentOnlineUserInfo);
 
