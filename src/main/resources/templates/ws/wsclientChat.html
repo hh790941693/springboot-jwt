@@ -17,12 +17,11 @@
     }
 
 	#mainDiv{
-		width:604px;
+		width:854px;
 		margin:0 auto;
 		position: fixed;
 		left:250px;
 		top:80px;
-		border:2px solid green;
 	}
 	
 	#header{
@@ -65,32 +64,60 @@
 </head>
 <body>
 	<div id="mainDiv">
-		<div id="header">
-			<div align="left" style="width:20%;height:100%;float:left;margin-top:-5px;">
-				<span style="color:yellow;font-weight:bold;font-size:24px;height:100%;display:inline-block;" id="loginUser"></span>
+		<div style="width:74.8%;height:100%;float:left;border:2px solid green;">
+			<div id="header">
+				<div align="left" style="width:20%;height:100%;float:left;margin-top:-5px;">
+					<span style="color:yellow;font-weight:bold;font-size:24px;height:100%;display:inline-block;" id="loginUser"></span>
+				</div>
+
+				<div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
+					<button id="refreashConlineCount" class='label label-info' onclick="getOnlineInfo()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>&nbsp;&nbsp;
+					<button class='label label-primary' onclick="changeBackgroundImage()">更换背景</button>&nbsp;&nbsp;
+					<button class='label label-primary' onclick="showMyFriend()">好友列表</button>&nbsp;&nbsp;
+					<button class='label label-danger' onclick="clearScreen()">清&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;屏</button>&nbsp;&nbsp;
+					<button id="btnReconnect" class='label label-primary' type="button" onclick="loginServer()">重新连接</button>
+				</div>
 			</div>
 
-			<div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
-				<button id="refreashConlineCount" class='label label-info' onclick="getOnlineInfo()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>&nbsp;&nbsp;
-				<button class='label label-primary' onclick="changeBackgroundImage()">更换背景</button>&nbsp;&nbsp;
-				<button class='label label-danger' onclick="clearScreen()">清&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;屏</button>&nbsp;&nbsp;
-				<button id="btnReconnect" class='label label-primary' type="button" onclick="loginServer()">重新连接</button>
+			<div id="msgFromServer" align="left">
+			</div>
+
+			<div id="footer" align="left">
+				<div style="height:25px;">
+					<select id="selectUser" style="width:50%;height:100%;float:left;">
+					</select>
+					<select id="selectCyy" style="width:50%;height:100%;float:right;"
+						onchange="document.getElementById('msgToServer').value=this.options[this.selectedIndex].value">
+					</select>
+				</div>
+				<div style="height:33px;">
+					<input id="msgToServer" autocomplete="off" style="width:80%;float:left;height:100%;border:2px solid grey" placeholder="请输入聊天内容"></input>
+					<button id="sendBtn" type="button" class='btn btn-sm btn-success' style="width:20%;height:100%;float:right;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
+				</div>
 			</div>
 		</div>
-	
-		<div id="msgFromServer" align="left">
-		</div>
-		
-		<div id="footer" align="left">
-			<div style="height:25px;">
-				<select id="selectUser" style="width:50%;height:100%;float:left;"></select>
-				<select id="selectCyy" style="width:50%;height:100%;float:right;"
-					onchange="document.getElementById('msgToServer').value=this.options[this.selectedIndex].value">
-				</select>
-			</div>
-			<div style="height:33px;">
-				<input id="msgToServer" autocomplete="off" style="width:80%;float:left;height:100%;border:2px solid grey" placeholder="请输入聊天内容"></input>
-				<button id="sendBtn" type="button" class='btn btn-sm btn-success' style="width:20%;height:100%;float:right;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
+
+		<div style="width: 24%;height:100%;float:right;border:2px solid white;background-color: white;">
+			<div id="friendsListDiv" style="width: 100%;height: 100%;">
+				<div v-for="row in friendList" style="width:100%;height:40px;margin-bottom: 3px;">
+					<div style="width:26%;height:40px;float: left;">
+						<img :src="row.headImage" width="100%" height="100%">
+					</div>
+					<div style="width:67%;height:40px;float:left;margin-left: 5px;">
+						<div>
+							<template v-if="row.state == '0'">
+								<span style="font-size: 14px;color:grey;">{{row.name}}</span>
+							</template>
+							<template v-else>
+								<span style="font-size: 14px;color: red;">{{row.name}}</span>
+							</template>
+							<span style="font-size: 12px;">{{row.lastLoginTime}}</span>
+						</div>
+						<div>
+							<span style="font-size: 12px;">{{row.sign}}</span>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -125,6 +152,32 @@
 		//未读消息数
 		parent.unreadCount=0;
 		$("#unreadCountSpan", window.parent.document).text("");
+
+		var app = new Vue({
+			el: '#mainDiv',
+			data: {
+				friendList:{},
+			},
+			methods: {
+				getOnlineInfo:function () {
+					$.ajax({
+						type: 'GET',
+						url: 'getOnlineInfo.json',
+						data: {"user": parent.s_user},
+						success: function (result) {
+							if (result.code == 0) {
+								return;
+							}
+							var jsonObj = result.data;
+							app.friendList = jsonObj.friendsList;
+						}
+					});
+				},
+			},
+			created: function () {
+				this.getOnlineInfo();
+			}
+		});
 
 		// 获取在线人数信息
 		getOnlineInfo();
@@ -189,7 +242,6 @@
 				toServerMsgObj.to = to;
 				toServerMsgObj.msg = msg;
 				var jsonObj = JSON.stringify(toServerMsgObj);
-				//var toSerMsg = "typeId:2;typeDesc:在线消息;from:" + from+";to:"+ to+";msg:"+msg;
 				parent.webSocket.send(jsonObj);
 			}else{
 				var msg = "<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";

@@ -102,6 +102,9 @@ public class WsUsersDO implements Serializable {
     @TableField(exist = false)
     private String headImage;
 
+    @TableField(exist = false)
+    private String sign;
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -278,5 +281,13 @@ public class WsUsersDO implements Serializable {
 
     public void setCoinNum(Integer coinNum) {
         this.coinNum = coinNum;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }
