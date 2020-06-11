@@ -20,11 +20,11 @@
 		
 	</head> 
 	<body>
-		<div id="mainDiv" style="width:1100px;height:720px;margin:5px auto;overflow:hidden;border:2px solid green;">
-            <canvas id="canvas" style="background-color:grey;margin:5px;float:left">
+		<div id="mainDiv" style="width:99%;height:690px;margin:0 auto;overflow:hidden;">
+            <canvas id="canvas" style="background-color:grey;margin:1px;float:left">
             </canvas>
             
-            <div style="float:right;width:224px;height:696px;">
+            <div style="float:right;width:224px;height:650px;">
                 <button id="startBtn">开&nbsp;&nbsp;&nbsp;始</button>
                 <button id="restartBtn">重新开始</button><br/>
                 <canvas id="rightCanvas" style="margin-top:5px;background-color:black">
@@ -36,12 +36,12 @@
 	<script type="text/javascript">
 		var canvas = document.getElementById("canvas");
 		canvas.width = 860;
-		canvas.height = 710;
+		canvas.height = 660;
 		var ctx = canvas.getContext("2d");
         
 		var rightCanvas = document.getElementById("rightCanvas");
 		rightCanvas.width = 220;
-		rightCanvas.height = 688;
+		rightCanvas.height = 620;
 		var rightCtx = rightCanvas.getContext("2d");
         
         // 缓冲画布
@@ -51,7 +51,7 @@
 		var bufferCxt = bufferCanvas.getContext("2d");
 
         var BORDER = 30;
-        var DIV_SIZE = 50;
+        var DIV_SIZE = 42;
         
         // 五子棋半径
         var CHESS_R = DIV_SIZE/2-5;
