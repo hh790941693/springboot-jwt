@@ -20,7 +20,7 @@ public class GameController
 		return "game/gameIndex";
 	}
 	
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.GAME,subModule="",describe="某某游戏首页")
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.GAME,subModule="",describe="某某JS游戏首页")
 	@RequestMapping("{gameName}.page")
 	public String xgameIndex(@PathVariable("gameName") String gameName,HttpServletRequest req) {
 		return "game/" + gameName;

@@ -5,7 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.baomidou.mybatisplus.enums.SqlLike;
+import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
+import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import org.apache.commons.lang.StringUtils;
@@ -49,6 +52,7 @@ public class WsAdsController extends AdminBaseController {
     /**
     * 跳转到广告表页面
 	*/
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="广告列表页面")
 	@GetMapping()
 	String wsAds(){
 	    return "zhddkk/wsAds/wsAds";
@@ -57,6 +61,7 @@ public class WsAdsController extends AdminBaseController {
     /**
      * 获取广告表列表数据
      */
+    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.AD_PUBLISH,subModule="",describe="广告列表")
 	@ResponseBody
 	@GetMapping("/list")
 	public Result<Page<WsAdsDO>> list(WsAdsDO wsAdsDTO){
@@ -91,6 +96,7 @@ public class WsAdsController extends AdminBaseController {
     /**
      * 跳转到广告表添加页面
      */
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="添加广告页面")
 	@GetMapping("/add")
 	String add(Model model){
 		WsAdsDO wsAds = new WsAdsDO();
@@ -113,6 +119,7 @@ public class WsAdsController extends AdminBaseController {
 	/**
 	 * 保存广告表
 	 */
+    @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.AD_PUBLISH,subModule="",describe="保存广告")
 	@ResponseBody
 	@PostMapping("/save")
 	@Transactional
@@ -167,6 +174,7 @@ public class WsAdsController extends AdminBaseController {
 	/**
 	 * 删除广告表
 	 */
+    @OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="删除广告")
 	@PostMapping("/remove")
 	@ResponseBody
 	public Result<String> remove( Integer id){

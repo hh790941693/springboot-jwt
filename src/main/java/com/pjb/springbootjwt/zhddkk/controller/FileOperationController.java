@@ -71,6 +71,7 @@ public class FileOperationController
 	 * @param user
 	 * @return
 	 */
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.MUSIC,subModule="",describe="简易音乐播放器首页")
 	@RequestMapping("musicPlayerSimple.page")
 	public String musicPlayerSimple(Model model,@RequestParam(value="user",required=false) String user)
 	{
@@ -103,7 +104,7 @@ public class FileOperationController
 		return "music/uploadResult";
 	}	
 	
-	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.MUSIC,subModule="",describe="删除文件")
+	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.MUSIC,subModule="",describe="删除音乐文件")
 	@RequestMapping("delFile.do")
 	@ResponseBody
 	@Transactional
