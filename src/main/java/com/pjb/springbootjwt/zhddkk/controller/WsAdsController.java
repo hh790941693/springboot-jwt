@@ -54,7 +54,7 @@ public class WsAdsController extends AdminBaseController {
 	*/
 	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="广告列表页面")
 	@GetMapping()
-	String wsAds(){
+    public String wsAds(){
 	    return "zhddkk/wsAds/wsAds";
 	}
 
@@ -98,7 +98,7 @@ public class WsAdsController extends AdminBaseController {
      */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="添加广告页面")
 	@GetMapping("/add")
-	String add(Model model){
+    public String add(Model model){
 		WsAdsDO wsAds = new WsAdsDO();
         model.addAttribute("wsAds", wsAds);
 	    return "zhddkk/wsAds/wsAdsForm";
@@ -110,7 +110,7 @@ public class WsAdsController extends AdminBaseController {
      * @param model 广告表实体
      */
 	@GetMapping("/edit/{id}")
-	String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id,Model model){
 		WsAdsDO wsAds = wsAdsService.selectById(id);
 		model.addAttribute("wsAds", wsAds);
 	    return "zhddkk/wsAds/wsAdsForm";

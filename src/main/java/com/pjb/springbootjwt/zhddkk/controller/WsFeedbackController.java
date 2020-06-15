@@ -57,7 +57,7 @@ public class WsFeedbackController extends AdminBaseController {
 	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FEED_BACK,subModule="",describe="我的反馈建议页面")
 	@GetMapping("/myFeedback")
 	//@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
-	String wsFeedback(Model model, String user){
+    public String wsFeedback(Model model, String user){
 		model.addAttribute("username", user);
 	    return "zhddkk/wsFeedback/wsFeedback";
 	}
@@ -68,7 +68,7 @@ public class WsFeedbackController extends AdminBaseController {
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FEED_BACK,subModule="",describe="反馈建议页面(管理员)")
     @GetMapping("/adminFeedback")
     //@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
-    String adminFeedback(){
+    public String adminFeedback(){
         return "zhddkk/wsFeedback/wsFeedbackForAdmin";
     }
 
@@ -118,7 +118,7 @@ public class WsFeedbackController extends AdminBaseController {
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FEED_BACK,subModule="",describe="添加反馈建议页面")
 	@GetMapping("/add")
 	//@RequiresPermissions("zhddkk:wsFeedback:add")
-	String add(Model model, String user){
+    public String add(Model model, String user){
 		WsFeedbackDO wsFeedback = new WsFeedbackDO();
         wsFeedback.setUserName(user);
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
@@ -136,7 +136,7 @@ public class WsFeedbackController extends AdminBaseController {
      */
 	@GetMapping("/edit/{id}")
 	//@RequiresPermissions("zhddkk:wsFeedback:edit")
-	String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id,Model model){
 		WsFeedbackDO wsFeedback = wsFeedbackService.selectById(id);
 		model.addAttribute("wsFeedback", wsFeedback);
 	    return "zhddkk/wsFeedback/wsFeedbackForm";

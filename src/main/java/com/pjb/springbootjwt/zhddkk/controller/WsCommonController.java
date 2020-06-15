@@ -53,7 +53,7 @@ public class WsCommonController extends AdminBaseController {
 	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.CONFIGURATION,subModule="",describe="通用配置页面")
 	@GetMapping("{type}")
 	//@RequiresPermissions("zhddkk:wsCommon:wsCommon")
-	String wsCommon(Model model, @PathVariable("type")String type){
+    public String wsCommon(Model model, @PathVariable("type")String type){
 		model.addAttribute("type", type);
 	    return "zhddkk/wsCommon/wsCommon";
 	}
@@ -84,7 +84,7 @@ public class WsCommonController extends AdminBaseController {
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.CONFIGURATION,subModule="",describe="添加配置页面")
 	@GetMapping("/add")
 	//@RequiresPermissions("zhddkk:wsCommon:add")
-	String add(Model model, String type){
+    public String add(Model model, String type){
 		WsCommonDO wsCommon = new WsCommonDO();
 		wsCommon.setType(type);
         model.addAttribute("wsCommon", wsCommon);
@@ -98,7 +98,7 @@ public class WsCommonController extends AdminBaseController {
      */
 	@GetMapping("/edit/{id}")
 	//@RequiresPermissions("zhddkk:wsCommon:edit")
-	String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id,Model model){
 		WsCommonDO wsCommon = wsCommonService.selectById(id);
 		model.addAttribute("wsCommon", wsCommon);
 	    return "zhddkk/wsCommon/wsCommonForm";

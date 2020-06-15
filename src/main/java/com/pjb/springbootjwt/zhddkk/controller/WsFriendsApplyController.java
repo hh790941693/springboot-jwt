@@ -53,7 +53,7 @@ public class WsFriendsApplyController extends AdminBaseController {
 	*/
 	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.APPLY,subModule="",describe="我的申请记录页面")
 	@GetMapping("/myApply")
-	String myApply(Model model, String user){
+    public String myApply(Model model, String user){
 		model.addAttribute("user", user);
 	    return "zhddkk/wsFriendsApply/myApply";
 	}
@@ -82,7 +82,7 @@ public class WsFriendsApplyController extends AdminBaseController {
 	 */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.APPLY,subModule="",describe="好友申请页面")
 	@GetMapping("/friendApply")
-	String friendApply(Model model, String user){
+    public String friendApply(Model model, String user){
 		model.addAttribute("user", user);
 		return "zhddkk/wsFriendsApply/friendApply";
 	}

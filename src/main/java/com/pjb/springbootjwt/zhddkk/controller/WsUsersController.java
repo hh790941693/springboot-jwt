@@ -74,7 +74,7 @@ public class WsUsersController extends AdminBaseController {
 	*/
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户列表页面")
 	@GetMapping("/wsUsers")
-	String wsUsers(Model model, String user){
+	public String wsUsers(Model model, String user){
 		model.addAttribute("user", user);
 	    return "zhddkk/wsUsers/wsUsers";
 	}
@@ -134,7 +134,7 @@ public class WsUsersController extends AdminBaseController {
      */
 	@GetMapping("/add")
 	@RequiresPermissions("zhddkk:wsUsers:add")
-	String add(Model model){
+    public String add(Model model){
 		WsUsersDO wsUsers = new WsUsersDO();
         model.addAttribute("wsUsers", wsUsers);
 	    return "zhddkk/wsUsers/wsUsersForm";
@@ -147,7 +147,7 @@ public class WsUsersController extends AdminBaseController {
      */
 	@GetMapping("/edit/{id}")
 	@RequiresPermissions("zhddkk:wsUsers:edit")
-	String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id,Model model){
 		WsUsersDO wsUsers = wsUsersService.selectById(id);
 		model.addAttribute("wsUsers", wsUsers);
 	    return "zhddkk/wsUsers/wsUsersForm";
@@ -232,7 +232,7 @@ public class WsUsersController extends AdminBaseController {
 	 */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户列表页面(管理员)")
 	@GetMapping("/wsUsersForAdmin")
-	String wsUsersForAdmin(Model model, String user){
+	public String wsUsersForAdmin(Model model, String user){
 		return "zhddkk/wsUsers/wsUsersForAdmin";
 	}
 

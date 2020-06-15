@@ -61,7 +61,7 @@ public class WsOperationLogController extends AdminBaseController {
 	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.OPERATION_LOG_MANAGE,subModule="",describe="操作日志列表页面")
 	@GetMapping()
 	//@RequiresPermissions("zhddkk:wsOperationLog:wsOperationLog")
-	String wsOperationLog(Model model){
+    public String wsOperationLog(Model model){
 		//用户列表
 		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", "admin")
 				.orderBy("name"));
@@ -104,7 +104,7 @@ public class WsOperationLogController extends AdminBaseController {
      */
 	@GetMapping("/add")
 	//@RequiresPermissions("zhddkk:wsOperationLog:add")
-	String add(Model model){
+    public String add(Model model){
 		WsOperationLogDO wsOperationLog = new WsOperationLogDO();
         model.addAttribute("wsOperationLog", wsOperationLog);
 	    return "zhddkk/wsOperationLog/wsOperationLogForm";
@@ -117,7 +117,7 @@ public class WsOperationLogController extends AdminBaseController {
      */
 	@GetMapping("/edit/{id}")
 	//@RequiresPermissions("zhddkk:wsOperationLog:edit")
-	String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id,Model model){
 		WsOperationLogDO wsOperationLog = wsOperationLogService.selectById(id);
 		model.addAttribute("wsOperationLog", wsOperationLog);
 	    return "zhddkk/wsOperationLog/wsOperationLogForm";

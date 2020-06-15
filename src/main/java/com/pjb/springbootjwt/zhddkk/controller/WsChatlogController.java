@@ -56,7 +56,7 @@ public class WsChatlogController extends AdminBaseController {
 	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.CHAT_HISTORY_MANAGE,subModule="",describe="聊天记录页面")
 	@GetMapping()
 	//@RequiresPermissions("zhddkk:wsChatlog:wsChatlog")
-	String wsChatlog(Model model){
+    public String wsChatlog(Model model){
 		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", "admin")
 			.orderBy("name"));
 	    model.addAttribute("allUserList", allUserList);
@@ -95,7 +95,7 @@ public class WsChatlogController extends AdminBaseController {
      */
 	@GetMapping("/add")
 	//@RequiresPermissions("zhddkk:wsChatlog:add")
-	String add(Model model){
+    public String add(Model model){
 		WsChatlogDO wsChatlog = new WsChatlogDO();
         model.addAttribute("wsChatlog", wsChatlog);
 	    return "zhddkk/wsChatlog/wsChatlogForm";
@@ -108,7 +108,7 @@ public class WsChatlogController extends AdminBaseController {
      */
 	@GetMapping("/edit/{id}")
 	//@RequiresPermissions("zhddkk:wsChatlog:edit")
-	String edit(@PathVariable("id") Long id,Model model){
+    public String edit(@PathVariable("id") Long id,Model model){
 		WsChatlogDO wsChatlog = wsChatlogService.selectById(id);
 		model.addAttribute("wsChatlog", wsChatlog);
 	    return "zhddkk/wsChatlog/wsChatlogForm";

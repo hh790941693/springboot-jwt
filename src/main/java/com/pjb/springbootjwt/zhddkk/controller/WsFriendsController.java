@@ -56,7 +56,7 @@ public class WsFriendsController extends AdminBaseController {
 	*/
 	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FRIENDS,subModule="",describe="好友列表页面")
 	@GetMapping()
-	String wsFriends(Model model, String user){
+    public String wsFriends(Model model, String user){
 		model.addAttribute("user", user);
 	    return "zhddkk/wsFriends/wsFriends";
 	}
