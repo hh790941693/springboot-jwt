@@ -71,6 +71,7 @@ public class FileOperationController
 	 * @param user
 	 * @return
 	 */
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.MUSIC,subModule="",describe="简易音乐播放器首页")
 	@RequestMapping("musicPlayerSimple.page")
 	public String musicPlayerSimple(Model model,@RequestParam(value="user",required=false) String user)
 	{
@@ -84,7 +85,6 @@ public class FileOperationController
 	 * @param fileType
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.MUSIC,subModule="",describe="上传文件首页")
 	@RequestMapping("upload.page")
 	public String uploadFile(Model model,@RequestParam(value="user",required=false) String user,@RequestParam(value="fileType",required=false) String fileType)
 	{
@@ -98,14 +98,13 @@ public class FileOperationController
 	 * @param model
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.MUSIC,subModule="",describe="上传文件结果首页")
 	@RequestMapping("uploadResult.page")
 	public String uploadFile(Model model)
 	{
 		return "music/uploadResult";
 	}	
 	
-	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.MUSIC,subModule="",describe="删除文件")
+	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.MUSIC,subModule="",describe="删除音乐文件")
 	@RequestMapping("delFile.do")
 	@ResponseBody
 	@Transactional
@@ -136,8 +135,7 @@ public class FileOperationController
 		}
         return "failed";
 	}
-	
-	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.MUSIC,subModule="",describe="上传文件")
+
 	@RequestMapping("uploadFiles.do")
     @Deprecated
 	public Object uploadFiles(@RequestParam MultipartFile[] files,@RequestParam("user")String user,@RequestParam("fileType")String fileType,HttpServletRequest request,Model model) {

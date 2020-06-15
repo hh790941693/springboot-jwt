@@ -14,6 +14,8 @@ public enum ModuleEnum {
 	APPLY("申请记录"),
 	CIRCLE("朋友圈"),
 	SETTING("设置"),
+	SIGN("签到"),
+    FEED_BACK("反馈建议"),
 	OTHER("其他"),
 	
 	//-------------------服务端------------------------------
@@ -21,10 +23,6 @@ public enum ModuleEnum {
 	CHAT_HISTORY_MANAGE("聊天记录管理"),
 	OPERATION_LOG_MANAGE("操作日志记录管理"),
 	CHAT_MONITOR("聊天监控"),
-	//MGC_CONFIGURATION("敏感词配置"),
-	//ZH_CONFIGURATION("脏话配置"),
-	//CYY_CONFIGURATION("常用语配置"),
-	//ZCWT_CONFIGURATION("注册问题配置"),
 	CONFIGURATION("配置"),
 	AD_PUBLISH("广告发布"),
 	TWOD_GAME("2D画图");

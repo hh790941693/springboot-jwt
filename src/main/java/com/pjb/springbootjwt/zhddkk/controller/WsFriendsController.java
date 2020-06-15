@@ -7,7 +7,10 @@ import java.util.List;
 
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.vo.Result;
+import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsApplyDO;
+import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsApplyService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +54,9 @@ public class WsFriendsController extends AdminBaseController {
     /**
     * 跳转到好友列表页面
 	*/
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FRIENDS,subModule="",describe="好友列表页面")
 	@GetMapping()
-	String wsFriends(Model model, String user){
+    public String wsFriends(Model model, String user){
 		model.addAttribute("user", user);
 	    return "zhddkk/wsFriends/wsFriends";
 	}
@@ -60,6 +64,7 @@ public class WsFriendsController extends AdminBaseController {
     /**
      * 获取好友列表列表数据
      */
+    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.FRIENDS,subModule="",describe="好友列表")
 	@ResponseBody
 	@GetMapping("/list")
 	public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDTO){
@@ -80,6 +85,7 @@ public class WsFriendsController extends AdminBaseController {
 	/**
 	 * 删除好友列表
 	 */
+    @OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.FRIENDS,subModule="",describe="删除好友")
 	@PostMapping("/remove")
 	@ResponseBody
 	@Transactional

@@ -3,7 +3,10 @@ package com.pjb.springbootjwt.zhddkk.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsDO;
+import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +51,9 @@ public class WsFriendsApplyController extends AdminBaseController {
     /**
     * 我的申请页面
 	*/
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.APPLY,subModule="",describe="我的申请记录页面")
 	@GetMapping("/myApply")
-	String myApply(Model model, String user){
+    public String myApply(Model model, String user){
 		model.addAttribute("user", user);
 	    return "zhddkk/wsFriendsApply/myApply";
 	}
@@ -57,6 +61,7 @@ public class WsFriendsApplyController extends AdminBaseController {
     /**
      * 我的申请列表
      */
+    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.APPLY,subModule="",describe="我的申请列表")
 	@ResponseBody
 	@GetMapping("/myApplyList")
 	public Result<Page<WsFriendsApplyDO>> myApplyList(WsFriendsApplyDO wsFriendsApplyDTO){
@@ -75,8 +80,9 @@ public class WsFriendsApplyController extends AdminBaseController {
 	/**
 	 * 好友申请页面
 	 */
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.APPLY,subModule="",describe="好友申请页面")
 	@GetMapping("/friendApply")
-	String friendApply(Model model, String user){
+    public String friendApply(Model model, String user){
 		model.addAttribute("user", user);
 		return "zhddkk/wsFriendsApply/friendApply";
 	}
@@ -84,6 +90,7 @@ public class WsFriendsApplyController extends AdminBaseController {
 	/**
 	 * 好友申请列表
 	 */
+    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.APPLY,subModule="",describe="好友申请列表")
 	@ResponseBody
 	@GetMapping("/friendApplyList")
 	public Result<Page<WsFriendsApplyDO>> friendApplyList(WsFriendsApplyDO wsFriendsApplyDTO){
@@ -99,7 +106,7 @@ public class WsFriendsApplyController extends AdminBaseController {
 		return Result.ok(page);
 	}
 
-
+    @OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.APPLY,subModule="",describe="通过/拒绝好友申请")
 	@PostMapping("/operateFriendApply")
 	@ResponseBody
 	public Result<String> operateFriendApply(int id, int status){

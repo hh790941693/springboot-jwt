@@ -74,7 +74,7 @@
 	</div>
 </div>
 
-<div id="checkDiv" style="width:200px;height:385px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
+<div id="checkDiv" style="width:200px;height:400px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
 	<div id="checkContentDiv" style="width:100%;height:auto;border:1px solid grey;background-color: #0C0C0C;padding: 5px 0 5px 10px;">
 	</div>
 </div>
@@ -259,17 +259,19 @@
 	}
 
 	//当浏览器大小变化时
-	$(window).resize(function () {
-		winInnerWidth = window.innerWidth;
-		winInnerHeight = window.innerHeight;
-		var mainDivWidth = $("#mainDiv").width();
-		var mainDivHeight = $("#mainDiv").height();
-		if (winInnerWidth>=mainDivWidth) {
-			$("#mainDiv").css("left", (winInnerWidth - mainDivWidth) / 2 + "px");
-		}
-		if (winInnerHeight>=mainDivHeight) {
-			$("#mainDiv").css("top", (winInnerHeight - mainDivHeight) / 2 + "px");
-		}
-	});
+    resizeWindows();
+	function resizeWindows(){
+        winInnerWidth = window.innerWidth;
+        winInnerHeight = window.innerHeight;
+        var mainDivWidth = $("#mainDiv").width();
+        var mainDivHeight = $("#mainDiv").height();
+        if (winInnerWidth>=mainDivWidth) {
+            $("#mainDiv").css("left", (winInnerWidth - mainDivWidth) / 2 + "px");
+        }
+        if (winInnerHeight>=mainDivHeight) {
+            $("#mainDiv").css("top", (winInnerHeight - mainDivHeight) / 2 + "px");
+        }
+	}
+	$(window).resize(resizeWindows);
 </script>
 </html>

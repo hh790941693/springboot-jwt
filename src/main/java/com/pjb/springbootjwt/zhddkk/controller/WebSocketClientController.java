@@ -431,7 +431,7 @@ public class WebSocketClientController extends AdminBaseController
 	}
 	
 	/**
-	    *聊天页面
+	 *聊天页面
 	 * 
 	 * @return
 	 */
@@ -447,7 +447,6 @@ public class WebSocketClientController extends AdminBaseController
 	 *
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FRIENDS,subModule="",describe="添加好友首页")
 	@RequestMapping(value = "addFriends.page")
 	public String addFriends() {
 		logger.debug("访问addFriends.page");
@@ -503,7 +502,6 @@ public class WebSocketClientController extends AdminBaseController
 	 *
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FRIENDS,subModule="",describe="好友列表首页")
 	@RequestMapping(value = "friendsList.page")
 	public String friendsList() {
 		logger.debug("访问friendsList.page");
@@ -566,7 +564,6 @@ public class WebSocketClientController extends AdminBaseController
 	 *
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.SETTING,subModule="",describe="用户信息设置首页")
 	@RequestMapping(value = "setPersonalInfo.page")
 	public String setPersonalInfo(Model model,@RequestParam("user")String user) {
 		logger.debug("访问setPersonalInfo.page");
@@ -581,7 +578,6 @@ public class WebSocketClientController extends AdminBaseController
 	 * @param user
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.SETTING,subModule="",describe="显示个用户信息首页")
 	@RequestMapping(value = "showPersonalInfo.page")
 	public String showPersonalInfo(Model model,@RequestParam("user")String user) {
 		logger.debug("访问showPersonalInfo.page");
@@ -725,7 +721,6 @@ public class WebSocketClientController extends AdminBaseController
 	 * 
 	 * true:存在  false:不存在
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.FRIENDS,subModule="",describe="显示所有用户信息")
 	@RequestMapping(value="showAllUser.json",method=RequestMethod.POST,produces="application/json")
 	@ResponseBody
 	@Deprecated
@@ -806,7 +801,6 @@ public class WebSocketClientController extends AdminBaseController
 	 * 
 	 * true:存在  false:不存在
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.FRIENDS,subModule="",describe="好友申请列表")
 	@RequestMapping(value="getFriendsApplyList.json",method=RequestMethod.GET)
 	@ResponseBody
 	public Object getFriendsApplyList(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage,@RequestParam("curUser") String curUser) {
@@ -850,7 +844,6 @@ public class WebSocketClientController extends AdminBaseController
 	 * 
 	 * true:存在  false:不存在
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.FRIENDS,subModule="",describe="我的申请列表")
 	@RequestMapping(value="getMyApplyList.json",method=RequestMethod.GET)
 	@ResponseBody
 	public Object getMyApplyList(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage,@RequestParam("curUser") String curUser) {
@@ -893,7 +886,6 @@ public class WebSocketClientController extends AdminBaseController
 	 * 添加好友申请
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.FRIENDS,subModule="",describe="添加好友")
 	@RequestMapping(value = "addFriend.do",method=RequestMethod.POST)
 	@ResponseBody
 	public String addFriend(Model model,@RequestParam("fromUserName")String fromUserName,
@@ -922,7 +914,6 @@ public class WebSocketClientController extends AdminBaseController
 	 * 同意好友申请
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.FRIENDS,subModule="",describe="同意好友申请")
 	@RequestMapping(value = "agreeFriend.do",method=RequestMethod.POST)
 	@ResponseBody
 	@Transactional
@@ -967,7 +958,6 @@ public class WebSocketClientController extends AdminBaseController
 	 * 拒绝好友申请
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.FRIENDS,subModule="",describe="拒绝好友申请")
 	@RequestMapping(value = "deagreeFriend.do",method=RequestMethod.POST)
 	@ResponseBody
 	public String deagreeFriend(Model model,@RequestParam("recordId")Integer recordId) {
@@ -992,7 +982,6 @@ public class WebSocketClientController extends AdminBaseController
 	 * 删除好友
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.FRIENDS,subModule="",describe="删除好友")
 	@RequestMapping(value = "deleteFriend.do",method=RequestMethod.POST)
 	@ResponseBody
 	public String deleteFriend(@RequestParam("id")Integer id) {
@@ -1200,7 +1189,6 @@ public class WebSocketClientController extends AdminBaseController
 	 * 
 	 * true:存在  false:不存在
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.FRIENDS,subModule="",describe="获取我的好友列表")
 	@RequestMapping(value="getMyFriendsList.json",method=RequestMethod.GET)
 	@ResponseBody
 	public Object getMyFriendsList(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage,@RequestParam("curUser") String curUser) {
@@ -1242,7 +1230,6 @@ public class WebSocketClientController extends AdminBaseController
 	 * 设置个人信息
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.SETTING,subModule="",describe="设置个人信息")
 	@RequestMapping(value = "setPersonInfo.do",method=RequestMethod.POST)
 	@ResponseBody
 	public String setPersonInfo(@RequestParam(value="userName",required=true) String userName,
@@ -1310,7 +1297,6 @@ public class WebSocketClientController extends AdminBaseController
 	 *
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.SETTING,subModule="",describe="查询个人信息")
 	@RequestMapping(value="queryPersonInfo.json",method=RequestMethod.POST)
 	@ResponseBody
 	public Object queryPersonInfo(@RequestParam("user") String user) {

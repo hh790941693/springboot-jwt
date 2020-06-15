@@ -58,9 +58,10 @@ public class WsOperationLogController extends AdminBaseController {
     /**
     * 跳转到操作日志,主要记录增删改的日志页面
 	*/
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.OPERATION_LOG_MANAGE,subModule="",describe="操作日志列表页面")
 	@GetMapping()
 	//@RequiresPermissions("zhddkk:wsOperationLog:wsOperationLog")
-	String wsOperationLog(Model model){
+    public String wsOperationLog(Model model){
 		//用户列表
 		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", "admin")
 				.orderBy("name"));
@@ -81,6 +82,7 @@ public class WsOperationLogController extends AdminBaseController {
     /**
      * 获取操作日志,主要记录增删改的日志列表数据
      */
+    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.OPERATION_LOG_MANAGE,subModule="",describe="操作日志列表")
 	@ResponseBody
 	@GetMapping("/list")
 	//@RequiresPermissions("zhddkk:wsOperationLog:wsOperationLog")
@@ -102,7 +104,7 @@ public class WsOperationLogController extends AdminBaseController {
      */
 	@GetMapping("/add")
 	//@RequiresPermissions("zhddkk:wsOperationLog:add")
-	String add(Model model){
+    public String add(Model model){
 		WsOperationLogDO wsOperationLog = new WsOperationLogDO();
         model.addAttribute("wsOperationLog", wsOperationLog);
 	    return "zhddkk/wsOperationLog/wsOperationLogForm";
@@ -115,7 +117,7 @@ public class WsOperationLogController extends AdminBaseController {
      */
 	@GetMapping("/edit/{id}")
 	//@RequiresPermissions("zhddkk:wsOperationLog:edit")
-	String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id,Model model){
 		WsOperationLogDO wsOperationLog = wsOperationLogService.selectById(id);
 		model.addAttribute("wsOperationLog", wsOperationLog);
 	    return "zhddkk/wsOperationLog/wsOperationLogForm";
@@ -181,7 +183,7 @@ public class WsOperationLogController extends AdminBaseController {
 	 *
 	 * @param response
 	 */
-	@OperationLogAnnotation(type= OperationEnum.QUERY,module=ModuleEnum.OPERATION_LOG_MANAGE,subModule="",describe="导出操作日志")
+	@OperationLogAnnotation(type= OperationEnum.EXPORT,module=ModuleEnum.OPERATION_LOG_MANAGE,subModule="",describe="导出操作日志")
 	@RequestMapping(value = "exportOperateLog.do", method = RequestMethod.GET)
 	public void exportOperateLog(String userId, String operModule, HttpServletResponse response){
 		logger.debug("开始导出操作日志");

@@ -13,7 +13,9 @@ public enum OperationEnum {
     
     PAGE("页面"),
 
-    BATCHDELETE("批量删除");
+    BATCHDELETE("批量删除"),
+
+    EXPORT("导出");
 
     String value;
 

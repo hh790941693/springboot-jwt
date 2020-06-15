@@ -46,7 +46,7 @@ public class ${className}Controller extends AdminBaseController {
 	*/
 	@GetMapping()
 	//@RequiresPermissions("${pathName}:${classname}:${classname}")
-	String ${classname}(){
+    public String ${classname}(){
 	    return "${pathName}/${classname}/${classname}";
 	}
 
@@ -67,7 +67,7 @@ public class ${className}Controller extends AdminBaseController {
      */
 	@GetMapping("/add")
 	//@RequiresPermissions("${pathName}:${classname}:add")
-	String add(Model model){
+    public String add(Model model){
 		${className}DO ${classname} = new ${className}DO();
         model.addAttribute("${classname}", ${classname});
 	    return "${pathName}/${classname}/${classname}Form";
@@ -80,7 +80,7 @@ public class ${className}Controller extends AdminBaseController {
      */
 	@GetMapping("/edit/{${pk.attrname}}")
 	//@RequiresPermissions("${pathName}:${classname}:edit")
-	String edit(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname},Model model){
+    public String edit(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname},Model model){
 		${className}DO ${classname} = ${classname}Service.selectById(${pk.attrname});
 		model.addAttribute("${classname}", ${classname});
 	    return "${pathName}/${classname}/${classname}Form";

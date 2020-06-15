@@ -5,7 +5,10 @@ import java.util.Arrays;
 import java.util.Date;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import com.pjb.springbootjwt.zhddkk.util.TimeUtil;
 import org.apache.commons.lang.StringUtils;
@@ -51,9 +54,10 @@ public class WsSignController extends AdminBaseController {
     /**
     * 跳转到用户签到表页面
 	*/
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.SIGN,subModule="",describe="用户签到页面")
 	@GetMapping()
 	//@RequiresPermissions("zhddkk:wsSign:wsSign")
-	String wsSign(Model model, String user){
+    public String wsSign(Model model, String user){
 	    model.addAttribute("user", user);
 	    return "zhddkk/wsSign/wsSign";
 	}
@@ -71,6 +75,7 @@ public class WsSignController extends AdminBaseController {
         return Result.ok(page);
 	}
 
+    @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.SIGN,subModule="",describe="用户签到")
 	@ResponseBody
     @PostMapping("/sign")
 	public Result<String> sign(String user){
@@ -106,7 +111,7 @@ public class WsSignController extends AdminBaseController {
      */
 	@GetMapping("/add")
 	//@RequiresPermissions("zhddkk:wsSign:add")
-	String add(Model model){
+    public String add(Model model){
 		WsSignDO wsSign = new WsSignDO();
         model.addAttribute("wsSign", wsSign);
 	    return "zhddkk/wsSign/wsSignForm";
@@ -119,7 +124,7 @@ public class WsSignController extends AdminBaseController {
      */
 	@GetMapping("/edit/{id}")
 	//@RequiresPermissions("zhddkk:wsSign:edit")
-	String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id,Model model){
 		WsSignDO wsSign = wsSignService.selectById(id);
 		model.addAttribute("wsSign", wsSign);
 	    return "zhddkk/wsSign/wsSignForm";

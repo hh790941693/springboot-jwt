@@ -91,7 +91,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * @param user
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.USER_MANAGE,subModule="",describe="使用户下线")
 	@RequestMapping(value = "offlineUser.do")
 	@ResponseBody
 	public String offlineUser(@RequestParam("user") String user)
@@ -124,7 +123,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * @param user
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户的禁用/启用")
 	@RequestMapping(value = "enableUser.do")
 	@ResponseBody
 	public String enableUser(@RequestParam("user") String user,@RequestParam("enable") String enable)
@@ -143,7 +141,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * @param user
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户的禁言/开言")
 	@RequestMapping(value = "enableSpeak.do")
 	@ResponseBody
 	public String enableSpeak(@RequestParam("user") String user,@RequestParam("speak") String speak)
@@ -162,7 +159,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * @param user
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.USER_MANAGE,subModule="",describe=" 给用户发送信息")
 	@RequestMapping(value = "sendText.do")
 	@ResponseBody
 	public String sendText(@RequestParam("user") String user, @RequestParam("msg") String message)
@@ -198,7 +194,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 用户管理页面
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户管理首页")
 	@RequestMapping(value = "wsserverUser.page", method = RequestMethod.GET)
 	public String userManage(Model model)
 	{
@@ -210,7 +205,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 聊天记录管理页面
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.CHAT_HISTORY_MANAGE,subModule="",describe="聊天记录管理首页")
 	@RequestMapping(value = "wsserverChartLog.page", method = RequestMethod.GET)
 	public String chatLogManage(Model model)
 	{
@@ -228,7 +222,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 操作日志管理页面
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.OPERATION_LOG_MANAGE,subModule="",describe="操作日志记录管理首页")
 	@RequestMapping(value = "wsserverOperationLog.page", method = RequestMethod.GET)
 	public String operationLog(Model model)
 	{
@@ -255,7 +248,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 操作日志管理页面
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.OPERATION_LOG_MANAGE,subModule="",describe="操作日志记录管理首页2")
 	@RequestMapping(value = "wsserverOperationLogByBootstrap.page", method = RequestMethod.GET)
 	public String operationLogByBootstrap(Model model)
 	{
@@ -282,7 +274,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 聊天记录监控页面
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.USER_MANAGE,subModule="",describe="聊天记录监控首页")
 	@RequestMapping(value = "wsserverChartMonitor.page", method = RequestMethod.GET)
 	public String chatLogMonitor(Model model,HttpServletRequest request)
 	{
@@ -298,7 +289,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 常用字典项配置页面
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.CONFIGURATION,subModule="",describe="常用字典项配置首页")
 	@RequestMapping(value = "wsserverCommon.page", method = RequestMethod.GET)
 	public String commonManager(Model model,@RequestParam("type") String type)
 	{
@@ -322,7 +312,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 广告首页
 	 * 
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="广告首页")
 	@RequestMapping(value = "ad.page")
 	public String adIndex()
 	{
@@ -334,7 +323,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 添加广告
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="添加广告首页")
 	@RequestMapping(value = "addAd.page")
 	public String addAd()
 	{
@@ -350,7 +338,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * @param req
 	 * @param resp
 	 */
-	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.AD_PUBLISH,subModule="",describe="发布广告")
 	@RequestMapping(value="addAd.do",method=RequestMethod.POST)
 	@ResponseBody
 	public String addAd(@RequestParam(value="adTitle",required=true) String adTitle,@RequestParam(value="adContent",required=true) String adContent,HttpServletRequest req,HttpServletResponse resp) {
@@ -400,7 +387,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 
 	 * true:存在  false:不存在
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.AD_PUBLISH,subModule="",describe="显示广告列表")
 	@RequestMapping(value="getAdsListByPage.json",method=RequestMethod.GET)
 	@ResponseBody
 	public Object getAdsListByPage(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage)
@@ -434,7 +420,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 
 	 * true:存在  false:不存在
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.USER_MANAGE,subModule="",describe="查询用户列表")
 	@RequestMapping(value="getOnlineUsersByPage.json",method=RequestMethod.POST,produces="application/json")
 	@ResponseBody
 	public Object getOnlineUsersByPage(@RequestBody WsUsersDO params) {
@@ -470,7 +455,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 
 	 * getChatLogByPage.json
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.CHAT_HISTORY_MANAGE,subModule="",describe="用户聊天记录列表")
 	@RequestMapping(value = "getChatLogByPage.json", method = RequestMethod.POST,produces="application/json")
 	@ResponseBody
 	public Object getChatLogByPage(@RequestBody WsChatlogDO params)
@@ -538,7 +522,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 
 	 * getChatLogByPage.json
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.CONFIGURATION,subModule="",describe="常用配置列表")
 	@RequestMapping(value = "getCommonByPage.json", method = RequestMethod.POST,produces="application/json")
 	@ResponseBody
 	public Object getCommonByPage(@RequestBody WsCommonDO params)
@@ -550,8 +533,7 @@ public class WebSocketServerController extends AdminBaseController
 		}
 		return wsCommonList;
 	}
-	
-	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.CONFIGURATION,subModule="",describe="添加配置")
+
 	@RequestMapping(value = "addCommonItem.do", method = RequestMethod.POST,produces="application/json")
 	@ResponseBody
 	public String addCommonItem(@RequestBody WsCommonDO params)
@@ -559,8 +541,7 @@ public class WebSocketServerController extends AdminBaseController
 		wsCommonService.insert(params);
 		return "success";
 	}
-	
-	@OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.CONFIGURATION,subModule="",describe="删除配置")
+
 	@RequestMapping(value = "deleteCommonItem.do", method = RequestMethod.POST,produces="application/json")
 	@ResponseBody
 	public String deleteCommonItem(@RequestBody WsCommonDO params)
@@ -568,8 +549,7 @@ public class WebSocketServerController extends AdminBaseController
 		wsCommonService.deleteById(params.getId());
 		return "success";
 	}
-	
-	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.CONFIGURATION,subModule="",describe="更新配置")
+
 	@RequestMapping(value = "updateCommonItem.do", method = RequestMethod.POST,produces="application/json")
 	@ResponseBody
 	public String updateCommonItem(@RequestBody WsCommonDO params)
@@ -633,7 +613,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 
 	 * @param response
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.USER_MANAGE,subModule="",describe="导出用户信息")
 	@RequestMapping(value = "exportUser.do", method = RequestMethod.GET)
 	public void exportUser(HttpServletResponse response){
 		logger.debug("开始导出用户信息");
@@ -661,7 +640,6 @@ public class WebSocketServerController extends AdminBaseController
 	 * 
 	 * @param response
 	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.OPERATION_LOG_MANAGE,subModule="",describe="导出操作日志")
 	@RequestMapping(value = "exportOperateLog.do", method = RequestMethod.GET)
 	public void exportOperateLog(String userName, String operModule, HttpServletResponse response){
 		logger.debug("开始导出操作日志");

@@ -72,8 +72,9 @@ public class WsUsersController extends AdminBaseController {
     /**
     * 跳转到用户账号表页面
 	*/
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户列表页面")
 	@GetMapping("/wsUsers")
-	String wsUsers(Model model, String user){
+	public String wsUsers(Model model, String user){
 		model.addAttribute("user", user);
 	    return "zhddkk/wsUsers/wsUsers";
 	}
@@ -81,6 +82,7 @@ public class WsUsersController extends AdminBaseController {
     /**
      * 获取用户账号表列表数据
      */
+    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户列表")
 	@ResponseBody
 	@GetMapping("/wsUsersList")
 	public Result<Page<WsUsersDO>> list(WsUsersDO wsUsersDTO, String curUser){
@@ -132,7 +134,7 @@ public class WsUsersController extends AdminBaseController {
      */
 	@GetMapping("/add")
 	@RequiresPermissions("zhddkk:wsUsers:add")
-	String add(Model model){
+    public String add(Model model){
 		WsUsersDO wsUsers = new WsUsersDO();
         model.addAttribute("wsUsers", wsUsers);
 	    return "zhddkk/wsUsers/wsUsersForm";
@@ -145,7 +147,7 @@ public class WsUsersController extends AdminBaseController {
      */
 	@GetMapping("/edit/{id}")
 	@RequiresPermissions("zhddkk:wsUsers:edit")
-	String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id,Model model){
 		WsUsersDO wsUsers = wsUsersService.selectById(id);
 		model.addAttribute("wsUsers", wsUsers);
 	    return "zhddkk/wsUsers/wsUsersForm";
@@ -195,6 +197,7 @@ public class WsUsersController extends AdminBaseController {
 		return Result.ok();
 	}
 
+    @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.USER_MANAGE,subModule="",describe="添加好友")
 	@PostMapping("/addAsFriends")
 	@ResponseBody
 	public Result<String> addAsFriends(String curUser, Integer toUserId){
@@ -227,14 +230,16 @@ public class WsUsersController extends AdminBaseController {
 	/**
 	 * 跳转到管理员用户列表
 	 */
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户列表页面(管理员)")
 	@GetMapping("/wsUsersForAdmin")
-	String wsUsersForAdmin(Model model, String user){
+	public String wsUsersForAdmin(Model model, String user){
 		return "zhddkk/wsUsers/wsUsersForAdmin";
 	}
 
 	/**
 	 * 获取管理员用户列表
 	 */
+    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户列表(管理员)")
 	@ResponseBody
 	@GetMapping("/wsUsersListForAdmin")
 	public Result<Page<WsUsersDO>> wsUsersListForAdmin(WsUsersDO wsUsersDTO) {
@@ -371,7 +376,7 @@ public class WsUsersController extends AdminBaseController {
 	 * @param user
 	 * @return
 	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.SETTING,subModule="",describe="显示个用户信息首页")
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.SETTING,subModule="",describe="显示用户信息首页")
 	@RequestMapping(value = "showPersonalInfo.page")
 	public String showPersonalInfo(Model model,@RequestParam("user")String user) {
 		logger.debug("访问showPersonalInfo.page");

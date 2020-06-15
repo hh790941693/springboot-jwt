@@ -6,6 +6,9 @@ import java.util.Date;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.baomidou.mybatisplus.enums.SqlLike;
+import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -47,9 +50,10 @@ public class WsCommonController extends AdminBaseController {
     /**
     * 跳转到页面
 	*/
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.CONFIGURATION,subModule="",describe="通用配置页面")
 	@GetMapping("{type}")
 	//@RequiresPermissions("zhddkk:wsCommon:wsCommon")
-	String wsCommon(Model model, @PathVariable("type")String type){
+    public String wsCommon(Model model, @PathVariable("type")String type){
 		model.addAttribute("type", type);
 	    return "zhddkk/wsCommon/wsCommon";
 	}
@@ -57,6 +61,7 @@ public class WsCommonController extends AdminBaseController {
     /**
      * 获取列表数据
      */
+    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.CONFIGURATION,subModule="",describe="通用配置列表")
 	@ResponseBody
 	@GetMapping("/list")
 	//@RequiresPermissions("zhddkk:wsCommon:wsCommon")
@@ -76,9 +81,10 @@ public class WsCommonController extends AdminBaseController {
     /**
      * 跳转到添加页面
      */
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.CONFIGURATION,subModule="",describe="添加配置页面")
 	@GetMapping("/add")
 	//@RequiresPermissions("zhddkk:wsCommon:add")
-	String add(Model model, String type){
+    public String add(Model model, String type){
 		WsCommonDO wsCommon = new WsCommonDO();
 		wsCommon.setType(type);
         model.addAttribute("wsCommon", wsCommon);
@@ -92,7 +98,7 @@ public class WsCommonController extends AdminBaseController {
      */
 	@GetMapping("/edit/{id}")
 	//@RequiresPermissions("zhddkk:wsCommon:edit")
-	String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id,Model model){
 		WsCommonDO wsCommon = wsCommonService.selectById(id);
 		model.addAttribute("wsCommon", wsCommon);
 	    return "zhddkk/wsCommon/wsCommonForm";
@@ -101,6 +107,7 @@ public class WsCommonController extends AdminBaseController {
 	/**
 	 * 保存
 	 */
+    @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.CONFIGURATION,subModule="",describe="保存通用配置")
 	@ResponseBody
 	@PostMapping("/save")
 	//@RequiresPermissions("zhddkk:wsCommon:add")
@@ -123,6 +130,7 @@ public class WsCommonController extends AdminBaseController {
 	/**
 	 * 删除
 	 */
+    @OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.CONFIGURATION,subModule="",describe="删除通用配置")
 	@PostMapping("/remove")
 	@ResponseBody
 	//@RequiresPermissions("zhddkk:wsCommon:remove")

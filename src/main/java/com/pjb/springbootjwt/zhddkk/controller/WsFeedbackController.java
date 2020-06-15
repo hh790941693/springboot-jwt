@@ -6,7 +6,10 @@ import java.util.Date;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.baomidou.mybatisplus.enums.SqlLike;
+import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +54,10 @@ public class WsFeedbackController extends AdminBaseController {
     /**
     * 跳转到问题反馈页面
 	*/
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FEED_BACK,subModule="",describe="我的反馈建议页面")
 	@GetMapping("/myFeedback")
 	//@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
-	String wsFeedback(Model model, String user){
+    public String wsFeedback(Model model, String user){
 		model.addAttribute("username", user);
 	    return "zhddkk/wsFeedback/wsFeedback";
 	}
@@ -61,15 +65,17 @@ public class WsFeedbackController extends AdminBaseController {
     /**
      * 跳转到问题反馈页面
      */
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FEED_BACK,subModule="",describe="反馈建议页面(管理员)")
     @GetMapping("/adminFeedback")
     //@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
-    String adminFeedback(){
+    public String adminFeedback(){
         return "zhddkk/wsFeedback/wsFeedbackForAdmin";
     }
 
     /**
      * 获取问题反馈列表数据
      */
+    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.FEED_BACK,subModule="",describe="我的反馈建议列表")
 	@ResponseBody
 	@GetMapping("/myFeedbackList")
 	//@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
@@ -89,6 +95,7 @@ public class WsFeedbackController extends AdminBaseController {
     /**
      * 获取问题反馈列表数据
      */
+    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.FEED_BACK,subModule="",describe="反馈建议列表(管理员)")
     @ResponseBody
     @GetMapping("/adminFeedbackList")
     //@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
@@ -108,9 +115,10 @@ public class WsFeedbackController extends AdminBaseController {
     /**
      * 跳转到问题反馈添加页面
      */
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FEED_BACK,subModule="",describe="添加反馈建议页面")
 	@GetMapping("/add")
 	//@RequiresPermissions("zhddkk:wsFeedback:add")
-	String add(Model model, String user){
+    public String add(Model model, String user){
 		WsFeedbackDO wsFeedback = new WsFeedbackDO();
         wsFeedback.setUserName(user);
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
@@ -128,7 +136,7 @@ public class WsFeedbackController extends AdminBaseController {
      */
 	@GetMapping("/edit/{id}")
 	//@RequiresPermissions("zhddkk:wsFeedback:edit")
-	String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id,Model model){
 		WsFeedbackDO wsFeedback = wsFeedbackService.selectById(id);
 		model.addAttribute("wsFeedback", wsFeedback);
 	    return "zhddkk/wsFeedback/wsFeedbackForm";
@@ -137,6 +145,7 @@ public class WsFeedbackController extends AdminBaseController {
 	/**
 	 * 保存问题反馈
 	 */
+    @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.FEED_BACK,subModule="",describe="保存反馈建议")
 	@ResponseBody
 	@PostMapping("/save")
 	//@RequiresPermissions("zhddkk:wsFeedback:add")
@@ -159,6 +168,7 @@ public class WsFeedbackController extends AdminBaseController {
 	/**
 	 * 删除问题反馈
 	 */
+    @OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.FEED_BACK,subModule="",describe="删除反馈建议")
 	@PostMapping("/remove")
 	@ResponseBody
 	//@RequiresPermissions("zhddkk:wsFeedback:remove")
@@ -183,6 +193,7 @@ public class WsFeedbackController extends AdminBaseController {
 		return Result.ok();
 	}
 
+    @OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.FEED_BACK,subModule="",describe="回复反馈建议(管理员)")
 	@ResponseBody
     @PostMapping("/replyFeedback")
 	public Result<String> replyFeedback(Integer id, String replyContext){

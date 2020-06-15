@@ -1,7 +1,9 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
-import com.pjb.springbootjwt.zhddkk.base.Result;
+import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
+import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 首页
@@ -31,6 +31,7 @@ public class HomeController {
 	 * @param response
 	 * @return
 	 */
+	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.LOGIN,subModule="",describe="登陆首页页面")
 	@RequestMapping({"","/index"})
 	public String v_home(Model model, HttpServletRequest request, HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
