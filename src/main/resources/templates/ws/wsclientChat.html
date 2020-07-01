@@ -73,7 +73,7 @@
 				</div>
 
 				<div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
-					<button id="refreashConlineCount" class='label label-info' onclick="getOnlineInfo()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>&nbsp;&nbsp;
+					<button id="refreashConlineCount" class='label label-info' @click="getOnlineInfo()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>&nbsp;&nbsp;
 					<button class='label label-primary' onclick="changeBackgroundImage()">更换背景</button>&nbsp;&nbsp;
 					<button class='label label-danger' onclick="clearScreen()">清&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;屏</button>&nbsp;&nbsp;
 					<button id="btnReconnect" class='label label-primary' type="button" onclick="loginServer()">重新连接</button>
@@ -172,10 +172,9 @@
                 loginUser:parent.s_user,
                 onlineFriendCount:0,
                 offlineFriendCount:0,
-
 			},
 			methods: {
-				getOnlineInfo:function () {
+				getOnlineInfo:function() {
 					$.ajax({
 						type: 'GET',
 						url: 'getOnlineInfo.json',
@@ -319,7 +318,7 @@
 		$.ws.dragPanelMove("#header","#mainDiv");
 
 		//定时切换背景图片
-		var imgIndex=1;
+		var imgIndex = 1;
 		var imgMaxIndex = 10;
 		function changeBackgroundImage(){
 			imgIndex++;
