@@ -95,7 +95,6 @@
 				//dataType: 'json',
 				async:false,
 				success: function(result) {
-					console.log("checkUpdate result:"+result);
 					//needUpdate:false;from:1.0;to:2.0
 					var needUpdate = result.split("needUpdate:")[1].split(";")[0];
 					if (needUpdate == "true"){
@@ -125,7 +124,7 @@
 				//dataType: 'json',
 				async:false,
 				success: function(result) {
-					console.log("升级结果:"+result)
+					console.log("升级结果:"+result);
 				}
 			});
 		}

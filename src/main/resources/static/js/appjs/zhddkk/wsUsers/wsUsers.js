@@ -292,9 +292,7 @@ function addAsFriends(id){
 
 //查看个人信息
 function queryPersonInfo(thisObj){
-    console.log(thisObj);
     var user=$(thisObj).text();
-    console.log(user);
     layer.open({
         type: 2,
         title: '用户个人信息',
