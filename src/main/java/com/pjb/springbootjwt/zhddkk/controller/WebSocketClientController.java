@@ -666,7 +666,7 @@ public class WebSocketClientController extends AdminBaseController
         //好友离线数
         int offlineFriendCount = 0;
 		for (WsUsersDO wu : friendsUserList){
-		    if (wu.getState().equals("0")){
+		    if (null != wu && wu.getState().equals("0")){
                 offlineFriendCount += 1;
             }else{
                 onlineFriendCount += 1;
