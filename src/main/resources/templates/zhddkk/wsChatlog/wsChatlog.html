@@ -22,7 +22,7 @@
                                 <div class="input-group">
                                     <div class="input-group-addon">用户</div>
                                     <select name="user" id="fromUser" th:value="${chatLogDO.user}" class="form-control select2">
-                                        <option value="">--- 请选择 ---</option>
+                                        <option value="">请选择</option>
                                         <option th:each="info:${allUserList}" th:value="${info.name}" th:text="${info.name}"
                                                 th:selected="${chatLogDO.user == info.name}">
                                         </option>
@@ -33,7 +33,7 @@
                                 <div class="input-group">
                                     <div class="input-group-addon">发给</div>
                                     <select name="toUser" id="toUser" th:value="${chatLogDO.toUser}" class="form-control select2">
-                                        <option value="">--- 请选择 ---</option>
+                                        <option value="">请选择</option>
                                         <option th:each="info:${allUserList}" th:value="${info.name}" th:text="${info.name}"
                                                 th:selected="${chatLogDO.toUser == info.name}">
                                         </option>
