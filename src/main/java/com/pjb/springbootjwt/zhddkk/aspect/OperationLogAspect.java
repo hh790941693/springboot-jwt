@@ -94,6 +94,9 @@ public class OperationLogAspect {
                 if (params.length == classArr.length) { //判断参数长度是否一样
                     //获得日志注解
                 	OperationLogAnnotation operationLog = method.getAnnotation(OperationLogAnnotation.class);
+                	if (null == operationLog){
+                		continue;
+					}
                 	wol.setOperModule(operationLog.module().getValue());
                 	wol.setOperType(operationLog.type().getValue());
                 	wol.setOperSubmodule(operationLog.subModule());
