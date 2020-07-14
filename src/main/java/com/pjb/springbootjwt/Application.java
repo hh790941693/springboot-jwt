@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -25,6 +26,8 @@ import java.io.File;
 import java.net.InetAddress;
 import java.util.Properties;
 
+//自动扫描与当前类的同包以及子包
+@ServletComponentScan
 @EnableTransactionManagement
 @SpringBootApplication
 @EnableCaching

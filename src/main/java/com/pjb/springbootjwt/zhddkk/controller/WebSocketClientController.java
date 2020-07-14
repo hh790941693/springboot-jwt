@@ -264,14 +264,14 @@ public class WebSocketClientController extends AdminBaseController
 		HttpSession session = request.getSession();
 		String sessionId = session.getId();
 		logger.info("sessionId: {}", sessionId);
-		session.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
-		session.setAttribute(CommonConstants.S_USER+"_"+user, user);
-		session.setAttribute(CommonConstants.S_PASS+"_"+user, dbPass);
+		//session.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
+		session.setAttribute(CommonConstants.S_USER, user);
+		session.setAttribute(CommonConstants.S_PASS, dbPass);
 		session.setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
 		session.setAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
-		session.setAttribute(CommonConstants.S_IMG+"_"+user, selfImg);
-		session.setAttribute(CommonConstants.S_USER_AGENT+"_"+user, shortAgent);
-		
+		session.setAttribute(CommonConstants.S_IMG, selfImg);
+		session.setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
+
 		String redisKey = REDIS_KEY_PREFIX+user;
 		try {
 			if (null != curUserObj) {
@@ -1459,13 +1459,13 @@ public class WebSocketClientController extends AdminBaseController
 	@ResponseBody
 	@GetMapping("/querySessionData")
 	public String querySessionData(String user, HttpServletRequest request){
-		logger.info("查询session数据, user:{}"+user);
+		logger.info("查询session数据, user:{}",user);
 		HttpSession httpSession = request.getSession();
-		String sessionUser = "";
-		String sessionPass = "";
+		Object sessionUser = "";
+        Object sessionPass = "";
 		try {
-			sessionUser = (String) httpSession.getAttribute(CommonConstants.S_USER+"_"+user);
-			sessionPass = (String) httpSession.getAttribute(CommonConstants.S_PASS+"_"+user);
+			sessionUser = httpSession.getAttribute(CommonConstants.S_USER);
+			sessionPass = httpSession.getAttribute(CommonConstants.S_PASS);
 		}catch (Exception e){
 			e.printStackTrace();
 		}
