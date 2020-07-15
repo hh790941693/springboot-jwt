@@ -35,12 +35,8 @@ public class SesstionTimeoutFilter implements Filter {
         String servletPath = httpServletRequest.getServletPath();
         String contextPath = httpServletRequest.getContextPath();
 
-        HttpSession httpSession = httpServletRequest.getSession();
-        if (null != httpSession){
-            String user = (String)httpSession.getAttribute(CommonConstants.S_USER);
-            logger.info("user:"+user);
-        }
-
+        String user = (String)httpServletRequest.getSession().getAttribute(CommonConstants.S_USER);
+        logger.info("user:"+user);
         logger.info("servletPath:"+servletPath);
         logger.info("contextPath:"+contextPath);
 

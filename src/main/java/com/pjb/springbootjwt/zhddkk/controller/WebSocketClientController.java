@@ -9,7 +9,6 @@ import java.util.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -52,6 +51,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Controller
 @RequestMapping("ws")
+@SessionAttributes(value={CommonConstants.S_USER,CommonConstants.S_PASS})
 public class WebSocketClientController extends AdminBaseController
 {
 	private static final int COOKIE_TIMEOUT = 1800; //cookie过期时间 30分钟
@@ -103,10 +103,10 @@ public class WebSocketClientController extends AdminBaseController
 	 * @param model
 	 * @return
 	 */
+	@Deprecated
 	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.LOGIN,subModule="",describe="登录首页")
 	@RequestMapping(value = {"","/","login.page"}, method = RequestMethod.GET)
-	public String login(Model model,@RequestParam(value="user",required=false)String user,HttpServletRequest request)
-	{
+	public String login(Model model,@RequestParam(value="user",required=false)String user,HttpServletRequest request) {
 		logger.debug("访问login.page,user:"+user);
 		if (StringUtils.isNotEmpty(user)) {
 			WsUsersDO curUser = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
@@ -141,7 +141,6 @@ public class WebSocketClientController extends AdminBaseController
 				}
 			}
 		}
-
 		return "ws/login";
 	}
 
@@ -261,16 +260,16 @@ public class WebSocketClientController extends AdminBaseController
 		response.addCookie(webserverportCookie);
 		
 		//session
-		HttpSession session = request.getSession();
-		String sessionId = session.getId();
+		//request.getSession().invalidate();
+		String sessionId = request.getSession().getId();
 		logger.info("sessionId: {}", sessionId);
 		//session.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
-		session.setAttribute(CommonConstants.S_USER, user);
-		session.setAttribute(CommonConstants.S_PASS, dbPass);
-		session.setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
-		session.setAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
-		session.setAttribute(CommonConstants.S_IMG, selfImg);
-		session.setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
+		request.getSession().setAttribute(CommonConstants.S_USER, user);
+		request.getSession().setAttribute(CommonConstants.S_PASS, dbPass);
+		request.getSession().setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
+		request.getSession().setAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
+		request.getSession().setAttribute(CommonConstants.S_IMG, selfImg);
+		request.getSession().setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
 
 		String redisKey = REDIS_KEY_PREFIX+user;
 		try {
@@ -373,7 +372,7 @@ public class WebSocketClientController extends AdminBaseController
 	@RequestMapping(value = "logout.do",method=RequestMethod.POST)
 	@ResponseBody
 	public String logout(@RequestParam("user")String user,HttpServletRequest request) {
-		String sessionUser = (String)request.getSession().getAttribute(CommonConstants.S_USER+"_"+user);
+		String sessionUser = (String)request.getSession().getAttribute(CommonConstants.S_USER);
 		System.out.println("清理session缓存:"+sessionUser);
 
 		if (StringUtils.isBlank(sessionUser)){
@@ -1402,13 +1401,12 @@ public class WebSocketClientController extends AdminBaseController
 	 * @param request
 	 */
 	private void removeSessionAttributes(String user, HttpServletRequest request) {
-		HttpSession hs = request.getSession();
-		hs.removeAttribute(CommonConstants.S_USER+"_"+user);
-		hs.removeAttribute(CommonConstants.S_PASS+"_"+user);
-		hs.removeAttribute(CommonConstants.S_WEBSERVERIP);
-		hs.removeAttribute(CommonConstants.S_WEBSERVERPORT);
-		hs.removeAttribute(CommonConstants.S_IMG+"_"+user);
-		hs.removeAttribute(CommonConstants.S_USER_AGENT+"_"+user);
+        request.getSession().removeAttribute(CommonConstants.S_USER);
+        request.getSession().removeAttribute(CommonConstants.S_PASS);
+        request.getSession().removeAttribute(CommonConstants.S_WEBSERVERIP);
+        request.getSession().removeAttribute(CommonConstants.S_WEBSERVERPORT);
+        request.getSession().removeAttribute(CommonConstants.S_IMG);
+        request.getSession().removeAttribute(CommonConstants.S_USER_AGENT);
 	}
 	
 	/**
@@ -1460,12 +1458,11 @@ public class WebSocketClientController extends AdminBaseController
 	@GetMapping("/querySessionData")
 	public String querySessionData(String user, HttpServletRequest request){
 		logger.info("查询session数据, user:{}",user);
-		HttpSession httpSession = request.getSession();
 		Object sessionUser = "";
         Object sessionPass = "";
 		try {
-			sessionUser = httpSession.getAttribute(CommonConstants.S_USER);
-			sessionPass = httpSession.getAttribute(CommonConstants.S_PASS);
+			sessionUser = request.getSession().getAttribute(CommonConstants.S_USER);
+			sessionPass = request.getSession().getAttribute(CommonConstants.S_PASS);
 		}catch (Exception e){
 			e.printStackTrace();
 		}
