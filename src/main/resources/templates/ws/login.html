@@ -66,6 +66,7 @@
 
 		<div align="center" style="margin-top:20px;margin-left:-30px;">
 			<button id="btnlogin" class='btn btn-success btn-sm'  type="submit" style="width:100px;" >登&nbsp;&nbsp;&nbsp;录</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" value="" checked="checked" id="checkFlag">登录前检查</label>
 		</div>
 	</form>
 
@@ -88,6 +89,7 @@
 
 <script type="text/javascript">
 	var user = "";
+	var checkBeforeLogin = true;
 	$("#user").blur(function(){
 		user = $("#user").val();
 		if (user == ""){
@@ -210,6 +212,9 @@
 	var textArr = new Array();
 	function checkEnvironment(){
 		console.log("触发登录前的点击事件");
+		if (!checkBeforeLogin){
+		    return true;
+        }
 		$.ajax({
 			type: 'GET',
 			url: rootUrl+'ws/querySystemInfo',
@@ -273,5 +278,16 @@
         }
 	}
 	$(window).resize(resizeWindows);
+
+    $("#checkFlag").click(function(){
+        var isChecked = $(this).attr("checked");
+        if (isChecked){
+            checkBeforeLogin = false;
+            $(this).removeAttr("checked");
+        }else{
+            checkBeforeLogin = true;
+            $(this).attr("checked","checked");
+        }
+    });
 </script>
 </html>
