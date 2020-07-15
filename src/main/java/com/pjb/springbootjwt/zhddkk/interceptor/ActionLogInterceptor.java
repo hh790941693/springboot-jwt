@@ -43,6 +43,9 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         }
 
         String url = request.getRequestURI();
+        if (!url.startsWith("/zhddkk") && !url.startsWith("/ws") && !url.startsWith("/file")){
+            return;
+        }
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss S");
         System.out.println("-----------------------------------action请求-------------------------------------");
         String functionName = "";
