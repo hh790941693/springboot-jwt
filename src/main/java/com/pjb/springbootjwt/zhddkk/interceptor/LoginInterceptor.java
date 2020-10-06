@@ -45,8 +45,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter implements Initi
 	}
 	
 	@SuppressWarnings("unused")
-	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
-	{
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
 		String uri = request.getRequestURI();
 		for (String filUrl : filterUrls) {
 			if (uri.endsWith(filUrl)){
@@ -54,20 +53,13 @@ public class LoginInterceptor extends HandlerInterceptorAdapter implements Initi
 			}
 		}
 
-		String user="";
-		String pass="";
-		String webserverip="";
-		String webserverport="";
-		HttpSession hs = request.getSession();
-		if (hs != null) {
-			user=(String)hs.getAttribute(CommonConstants.S_USER);
-			pass=(String)hs.getAttribute(CommonConstants.S_PASS);
-			webserverip=(String)hs.getAttribute(CommonConstants.S_WEBSERVERIP);
-			webserverport=(String)hs.getAttribute(CommonConstants.S_WEBSERVERPORT);
-			//System.out.println("uri:"+uri+"  user:"+user+"  pass:"+pass+"  webserverip:"+webserverip+"  webserverport:"+webserverport);
-			String url = request.getRequestURL().toString();
-			logger.debug("用户"+user+"访问:"+url);
-		}
+		String user = (String)request.getSession().getAttribute(CommonConstants.S_USER);
+		String pass = (String)request.getSession().getAttribute(CommonConstants.S_PASS);
+		String webserverip = (String)request.getSession().getAttribute(CommonConstants.S_WEBSERVERIP);
+		String webserverport = (String)request.getSession().getAttribute(CommonConstants.S_WEBSERVERPORT);
+		String url = request.getRequestURL().toString();
+		logger.debug("用户"+user+"访问:"+url);
+
 		if (StringUtils.isEmpty(user) || StringUtils.isEmpty(pass)) {
 			System.out.println("非法访问:"+uri);
 			try {

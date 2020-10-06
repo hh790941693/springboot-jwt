@@ -32,7 +32,7 @@ public class HomeController {
 	 * @return
 	 */
 	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.LOGIN,subModule="",describe="登陆首页页面")
-	@RequestMapping({"","/index"})
+	@RequestMapping({"/","/index"})
 	public String v_home(Model model, HttpServletRequest request, HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
 		if (null != cookies) {
