@@ -56,7 +56,7 @@ public class SesstionTimeoutFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        logger.info("============SesstionTimeoutFilter init()");
+        logger.info("============SesstionTimeoutFilter init()============");
     }
 
     @Override
@@ -128,6 +128,6 @@ public class SesstionTimeoutFilter implements Filter {
 
     @Override
     public void destroy() {
-        logger.info("============SesstionTimeoutFilter destroy()");
+        logger.info("============SesstionTimeoutFilter destroy()============");
     }
 }
