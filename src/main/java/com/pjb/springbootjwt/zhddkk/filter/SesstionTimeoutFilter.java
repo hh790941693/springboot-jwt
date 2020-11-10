@@ -13,20 +13,46 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @WebFilter(filterName = "sesstionTimeoutFilter",urlPatterns = {"/*"})
 public class SesstionTimeoutFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(SesstionTimeoutFilter.class);
 
-    private static final List<String> IGNORE_URL_LIST = Arrays.asList("", "/", "/index", "/wslogin.do", "/canvas/snow.page",
-            "/querySystemInfo", "/register.page", "/forgetPassword.page", "/canvas/canvasIndex.page",
-            "/queryAllCommonData.do", "/favicon.ico", "/getUserQuestion.json", "/showQRCode.do",
-            "/checkUserRegisterStatus.json", "/updatePassword.do");
+    // 忽略的URL地址列表
+    private static final List<String> IGNORE_URL_LIST = new ArrayList<>(Arrays.asList(
+            "",
+            "/",
+            "/index",
+            "/wslogin.do",
+            "/canvas/snow.page",
+            "/querySystemInfo",
+            "/register.page",
+            "/forgetPassword.page",
+            "/canvas/canvasIndex.page",
+            "/queryAllCommonData.do",
+            "/favicon.ico",
+            "/getUserQuestion.json",
+            "/showQRCode.do",
+            "/checkUserRegisterStatus.json",
+            "/updatePassword.do"));
+
+    // 忽略的URL前缀列表
+    private static final List<String> IGNORE_URL_PREFIX_LIST = new ArrayList<>(Arrays.asList(
+            "/js/",
+            "/canvas/",
+            "/zhddWebSocket/",
+            "/game/"));
+
+    // 忽略的URL后缀列表
+    private static final List<String> IGNORE_URL_SUFFIX_LIST = new ArrayList<>(Arrays.asList(
+            ".js",
+            ".css",
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".mp3"));
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -47,18 +73,31 @@ public class SesstionTimeoutFilter implements Filter {
 
         SessionInfoBean sessionInfoBean = (SessionInfoBean)httpServletRequest.getSession().getAttribute(CommonConstants.SESSION_INFO);
         String user = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
-        logger.info("user:" + user + ", servletPath:" + servletPath);
 
-        if (IGNORE_URL_LIST.contains(servletPath) || servletPath.startsWith("/zhddWebSocket/")
-                || servletPath.startsWith("/js/") || servletPath.startsWith("/canvas/")
-                || servletPath.startsWith("/game/")){
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
+        // 是否要过滤 true:过滤 false:不过滤
+        boolean filterFlag = false;
+        if (IGNORE_URL_LIST.contains(servletPath) || StringUtils.isNotBlank(user)){
+            filterFlag = true;
+        }
+        if (!filterFlag) {
+            for (String prefix : IGNORE_URL_PREFIX_LIST) {
+                if (servletPath.startsWith(prefix)){
+                    filterFlag = true;
+                    break;
+                }
+            }
+
+            if (!filterFlag) {
+                for (String suffix : IGNORE_URL_SUFFIX_LIST) {
+                    if (servletPath.endsWith(suffix)){
+                        filterFlag = true;
+                        break;
+                    }
+                }
+            }
         }
 
-        if (servletPath.endsWith(".js") || servletPath.endsWith(".css")
-                || servletPath.endsWith(".jpg") || servletPath.endsWith(".jpeg")
-                || servletPath.endsWith(".png") || StringUtils.isNotBlank(user)) {
+        if (filterFlag) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -72,12 +111,13 @@ public class SesstionTimeoutFilter implements Filter {
 
             // 如果不是异步请求
             httpServletResponse.sendRedirect(contextPath + "/");
-        } else { // JSON格式返回
+        } else {
             try {
                 Map<String, String> map = new HashMap<>();
                 map.put("resultCode", "-1");
                 map.put("resultMsg", "session invalid");
                 PrintWriter writer = httpServletResponse.getWriter();
+                // JSON格式返回
                 writer.write(JsonUtil.javaobject2Jsonstr(map));
                 writer.flush();
             } catch (IOException e) {
