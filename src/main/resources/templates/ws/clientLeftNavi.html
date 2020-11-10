@@ -69,7 +69,7 @@
         $("#leftNavi ul li").click(function (){
             var curPageid = this.id;
             parent.showPage(curPageid);
-            if (curPageid == "wsclientChat.page"){
+            if (curPageid.indexOf("wsclientChat.page") != -1){
                 parent.unreadCount = "";
                 $("#unreadCountSpan").text("");
             }

@@ -98,7 +98,7 @@
         }else {
             parent.showPage(curPageid);
         }
-        if (curPageid == "wsserverChartMonitor.page"){
+        if (curPageid.indexOf("wsserverChartMonitor.page") != -1){
             parent.unreadCount = "";
             $("#unreadCountSpan").text("");
         }
