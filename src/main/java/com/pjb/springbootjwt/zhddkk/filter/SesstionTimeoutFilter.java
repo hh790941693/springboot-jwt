@@ -22,7 +22,9 @@ public class SesstionTimeoutFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(SesstionTimeoutFilter.class);
 
-    private static final List<String> IGNORE_URL_LIST = Arrays.asList("", "/", "/index", "/wslogin.do", "/canvas/snow.page", "/ws/querySystemInfo");
+    private static final List<String> IGNORE_URL_LIST = Arrays.asList("", "/", "/index", "/wslogin.do", "/canvas/snow.page",
+            "/ws/querySystemInfo", "/ws/register.page", "/ws/forgetPassword.page", "/canvas/canvasIndex.page",
+            "/ws/queryAllCommonData.do", "/favicon.ico", "/ws/getUserQuestion.json", "/ws/showQRCode.do");
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -44,7 +46,9 @@ public class SesstionTimeoutFilter implements Filter {
         String user = (String) httpServletRequest.getSession().getAttribute(CommonConstants.S_USER);
         logger.info("user:" + user + ", servletPath:" + servletPath);
 
-        if (IGNORE_URL_LIST.contains(servletPath) || servletPath.startsWith("/zhddWebSocket/")) {
+        if (IGNORE_URL_LIST.contains(servletPath) || servletPath.startsWith("/zhddWebSocket/")
+                || servletPath.startsWith("/js/") || servletPath.startsWith("/canvas/")
+                || servletPath.startsWith("/game/")){
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
