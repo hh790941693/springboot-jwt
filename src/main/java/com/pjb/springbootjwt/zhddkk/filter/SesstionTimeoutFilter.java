@@ -23,8 +23,9 @@ public class SesstionTimeoutFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(SesstionTimeoutFilter.class);
 
     private static final List<String> IGNORE_URL_LIST = Arrays.asList("", "/", "/index", "/wslogin.do", "/canvas/snow.page",
-            "/ws/querySystemInfo", "/ws/register.page", "/ws/forgetPassword.page", "/canvas/canvasIndex.page",
-            "/ws/queryAllCommonData.do", "/favicon.ico", "/ws/getUserQuestion.json", "/ws/showQRCode.do");
+            "/querySystemInfo", "/register.page", "/forgetPassword.page", "/canvas/canvasIndex.page",
+            "/queryAllCommonData.do", "/favicon.ico", "/getUserQuestion.json", "/showQRCode.do",
+            "/checkUserRegisterStatus.json", "/updatePassword.do");
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

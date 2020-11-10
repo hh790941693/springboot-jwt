@@ -1,12 +1,10 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,8 +12,6 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
-import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
-import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.bean.JsonResult;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
@@ -23,7 +19,6 @@ import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
-import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
@@ -32,7 +27,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -55,15 +49,6 @@ public class WebSocketServerController extends AdminBaseController
 
 	@Autowired
 	private WsOperLogService wsOperLogService;
-
-	@Value("${server.address}")
-	private String serverAddress;
-
-	@Value("${server.port}")
-	private String serverPort;
-
-	@Autowired
-	private UploadConfig uploadConfig;
 
 	@Autowired
 	private WsUsersService wsUsersService;
@@ -283,8 +268,7 @@ public class WebSocketServerController extends AdminBaseController
 		model.addAttribute("webserverport", serverPort);
 		return "ws/wsserverChartMonitor";
 	}
-	
-	
+
 	/**
 	 * 常用字典项配置页面
 	 * 
@@ -413,8 +397,7 @@ public class WebSocketServerController extends AdminBaseController
 		rqe.setList(adslist);
 		return JsonUtil.javaobject2Jsonobject(rqe);
 	}
-	
-	
+
 	/**
 	 * 分页查询用户信息
 	 * 
@@ -505,7 +488,6 @@ public class WebSocketServerController extends AdminBaseController
 		return JsonUtil.javaobject2Jsonobject(jr);
 	}
 
-
 	/**
 	 * 清空操作日志
 	 * @return
@@ -557,57 +539,7 @@ public class WebSocketServerController extends AdminBaseController
 		wsCommonService.updateById(params);
 		return "success";
 	}
-	
-	/**
-	 * 生成二维码并显示出来
-	 *
-	 * @return
-	 */
-	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.OTHER,subModule="",describe="显示二维码")
-	@RequestMapping(value = "showQRCode.do", method = RequestMethod.POST)
-	@ResponseBody
-	public String showQRCode(HttpServletRequest request)
-	{
-		ServletContext sc = request.getServletContext();
-		String contextPathx = sc.getContextPath();
-		String scheme = request.getScheme();
 
-		String savePath = uploadConfig.getStorePath();
-		String qrCodeFilename = "qrcode.png";
-		String savePathAbs = savePath + File.separator + qrCodeFilename;
-		System.out.println("二维码文件路径:"+savePathAbs);
-		
-		boolean isNeedGenerateCode = false;
-		File qrCodeFile = new File(savePathAbs);
-		if (!qrCodeFile.exists()) {
-			isNeedGenerateCode = true;
-		}else {
-			long lastModified = qrCodeFile.lastModified();
-			Date lastModifiedDate = new Date(lastModified);
-			long diff = new Date().getTime()-lastModifiedDate.getTime();
-			long minutesDiff = diff / (1000*60);
-			System.out.println("距离上次生成时间有:"+minutesDiff+"分钟");
-			if (minutesDiff >= 60) {
-				//如果超过一个小时则可以重新生成二维码
-				isNeedGenerateCode = true;
-			}
-		}
-		
-		if (isNeedGenerateCode) {
-			String text = scheme + "://" + serverAddress + ":" + serverPort;
-			System.out.println("登录地址:"+text);
-			String qrCodeFilePath = null;
-			try {
-				qrCodeFilePath = QRCodeUtil.generateQRCode(text, 200, 200, "png", savePathAbs);
-				System.out.println("二维码文件新路径:"+qrCodeFilePath);
-			} catch (Exception e) {
-				System.out.println("生成二维码失败!"+e.getMessage());
-				e.printStackTrace();
-			}
-		}
-		return uploadConfig.getViewUrl()+"/"+qrCodeFilename;
-	}
-	
 	/**
 	 * 导出用户信息
 	 * 

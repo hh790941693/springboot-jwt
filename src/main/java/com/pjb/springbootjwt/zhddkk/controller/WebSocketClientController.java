@@ -1,9 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.servlet.http.Cookie;
@@ -16,9 +14,7 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.redis.RedisUtil;
-import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.base.Result;
-import com.pjb.springbootjwt.zhddkk.bean.SystemInfoBean;
 import com.pjb.springbootjwt.zhddkk.bean.WangyiNewsBean;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 
@@ -26,7 +22,6 @@ import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
-import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,92 +75,8 @@ public class WebSocketClientController extends AdminBaseController
     private WsFriendsApplyService wsFriendsApplyService;
 
     @Autowired
-    private WsChatlogService wsChatlogService;
-
-    @Autowired
     private WsCommonService wsCommonService;
 
-    @Autowired
-    private UploadConfig uploadConfig;
-
-	/**
-	 * 注册
-	 * 
-	 * @param model
-	 * @return
-	 */
-	@OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.REGISTER,subModule="",describe="注册账号")
-	@RequestMapping(value = "wsregister.do", method = RequestMethod.POST)
-	@ResponseBody
-    @Transactional
-	public String wsregister(Model model,@RequestParam("user")String user,
-			@RequestParam("pass")String pass,
-			@RequestParam("headImg")String headImg,
-			@RequestParam("confirmPass")String confirmPass,
-			@RequestParam("select1")String question1,@RequestParam("answer1")String answer1,
-			@RequestParam("select2")String question2,@RequestParam("answer2")String answer2,
-			@RequestParam("select3")String question3,@RequestParam("answer3")String answer3) {
-		// 是否已注册过  true:已注册
-		boolean isUserExist = false;
-
-		List<WsUsersDO> userList = wsUsersService.selectList(null);
-		for (WsUsersDO u : userList) {
-			if (u.getName().equals(user)) {
-				isUserExist = true;
-				break;
-			}
-		}
-		if (isUserExist){
-			// 如果已经注册
-			model.addAttribute("user", user);
-			model.addAttribute("detail","当前用户已注册,请直接登录!");
-			return "failed";
-		}
-
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		// 插入用户账号
-		WsUsersDO insrtWu = new WsUsersDO();
-		insrtWu.setName(user);
-		//对密码进行加密
-		String encryptPass = SecurityAESUtil.encryptAES(pass, CommonConstants.AES_PASSWORD);
-		insrtWu.setPassword(encryptPass);
-		insrtWu.setRegisterTime(sdf.format(new Date()));
-		insrtWu.setLastLoginTime(sdf.format(new Date()));
-		insrtWu.setQuestion1(question1);
-		insrtWu.setAnswer1(answer1);
-		insrtWu.setQuestion2(question2);
-		insrtWu.setAnswer2(answer2);
-		insrtWu.setQuestion3(question3);
-		insrtWu.setAnswer3(answer3);
-		wsUsersService.insert(insrtWu);
-
-		//插入注册日志
-		SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		WsChatlogDO loginLog = new WsChatlogDO();
-		loginLog.setTime(sdfx.format(new Date()));
-		loginLog.setUser(user);
-		loginLog.setToUser("");
-		loginLog.setMsg("注册成功");
-        wsChatlogService.insert(loginLog);
-
-        //插入用户profile信息
-        int userProfileCnt = wsUserProfileService.selectCount(new EntityWrapper<WsUserProfileDO>().eq("user_id", insrtWu.getId()));
-        if (userProfileCnt == 0){
-            WsUserProfileDO wsUserProfileDO = new WsUserProfileDO();
-            wsUserProfileDO.setUserId(insrtWu.getId());
-            wsUserProfileDO.setUserName(user);
-            wsUserProfileDO.setCreateTime(new Date());
-            if (StringUtils.isNotBlank(headImg)){
-            	wsUserProfileDO.setImg(headImg);
-			}
-            wsUserProfileService.insert(wsUserProfileDO);
-        }
-
-		model.addAttribute("user", user);
-		model.addAttribute("pass", pass);
-		return "success";
-	}
-	
 	/**
 	 * 退出
 	 * 
@@ -201,40 +112,7 @@ public class WebSocketClientController extends AdminBaseController
 //		}
 //		return "failed";
 	}
-	
-	
-	/**
-	 * 在登录页面点击注册时调用此方法
-	 * 
-	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.REGISTER,subModule="",describe="注册首页")
-	@RequestMapping(value = "register.page")
-	public String toRegister(Model model) {
-		logger.debug("访问register.page");
-		return "ws/register";
-	}
 
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.REGISTER,subModule="",describe="查询问题列表")
-	@RequestMapping(value = "queryAllCommonData.do")
-	@ResponseBody
-	public Map<String, List<WsCommonDO>> queryAllCommonData() {
-		logger.debug("访问queryAllCommonData.do");
-		Map<String, List<WsCommonDO>> map = buildCommonData();
-		return map;
-	}
-	
-	/**
-	 * 忘记密码
-	 * @return
-	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FORGET_PASSWORD,subModule="",describe="忘记密码首页")
-	@RequestMapping(value = "forgetPassword.page")
-	public String forgetPassword(Model model,@RequestParam("user")String user) {
-		logger.debug("访问forgetPassword.page");
-		model.addAttribute("user", user);
-		return "ws/forgetPassword";
-	}
-	
 	/**
 	 *聊天页面
 	 * 
@@ -391,56 +269,6 @@ public class WebSocketClientController extends AdminBaseController
 	}
 
 	/**
-	 * 获取用户的问题答案
-	 * getUserQuestion
-	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.OTHER,subModule="",describe="获取用户密保信息")
-	@RequestMapping(value = "getUserQuestion.json")
-	@ResponseBody
-	public Object getUserQuestion(@RequestParam("user")String user) {
-		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-		if (null != wsUsersDO) {
-			return JsonUtil.javaobject2Jsonobject(wsUsersDO);
-		}else{
-			return "failed";
-		}
-	}
-	
-	/**
-	 * 更新密码
-	 * 
-	 */
-	@OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.FORGET_PASSWORD,subModule="",describe="更新密码")
-	@RequestMapping(value = "updatePassword.do",method=RequestMethod.POST)
-	@ResponseBody
-	public Result<String> updatePassword(Model model,@RequestParam("user")String user,
-			@RequestParam("pass")String newPass,
-			@RequestParam("confirmPass")String confirmPass,
-			@RequestParam("select1")String question1,@RequestParam("answer1")String answer1,
-			@RequestParam("select2")String question2,@RequestParam("answer2")String answer2,
-			@RequestParam("select3")String question3,@RequestParam("answer3")String answer3) {
-		WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-		if (null == wsUsersDO){
-			return Result.fail();
-		}
-
-		if (wsUsersDO.getQuestion1().equals(question1) && wsUsersDO.getAnswer1().equals(answer1)
-				&& wsUsersDO.getQuestion2().equals(question2) && wsUsersDO.getAnswer2().equals(answer2)
-				&& wsUsersDO.getQuestion3().equals(question3) && wsUsersDO.getAnswer3().equals(answer3)
-				&& newPass.equals(confirmPass)) {
-			//对新密码进行加密
-			String newPassEncrypt = SecurityAESUtil.encryptAES(newPass, CommonConstants.AES_PASSWORD);
-			wsUsersDO.setPassword(newPassEncrypt);
-			boolean updateFlag = wsUsersService.updateById(wsUsersDO);
-			if (updateFlag) {
-				return Result.ok();
-			}
-		}
-
-		return Result.fail();
-	}
-	
-	/**
 	 * 获取在线人数信息
 	 * 
 	 * @return
@@ -503,24 +331,7 @@ public class WebSocketClientController extends AdminBaseController
 
 		return Result.ok(woi);
 	}
-	
-	/**
-	 * 检查某用户是否已经注册过
-	 * 
-	 * 0:存在  1:不存在
-	 */
-	@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.REGISTER,subModule="",describe="检查用户是否已经注册")
-	@RequestMapping(value="checkUserRegisterStatus.json",method=RequestMethod.POST)
-	@ResponseBody
-	public Result<String> checkUserRegisterStatus(@RequestParam("user") String user) {
-		int userCount = wsUsersService.selectCount(new EntityWrapper<WsUsersDO>().eq("name", user));
-		if (userCount>0){
-			return Result.fail();
-		}
 
-		return Result.ok();
-	}
-	
 	/**
 	 * 分页显示所有用户信息
 	 * 
@@ -1165,7 +976,7 @@ public class WebSocketClientController extends AdminBaseController
 		for (WsCommonDO common : commonList) {
 			String type = common.getType();
 			String name = common.getName();
-			
+
 			if (CommonUtil.validateEmpty(type) || CommonUtil.validateEmpty(name)) {
 				continue;
 			}
@@ -1179,7 +990,7 @@ public class WebSocketClientController extends AdminBaseController
 				commonMap.put(type, tmpDicList);
 			}
 		}
-		
+
 		return commonMap;
 	}
 	
@@ -1279,40 +1090,7 @@ public class WebSocketClientController extends AdminBaseController
 		return sessionUser+":"+sessionPass;
 	}
 
-	//查询系统信息
-	@ResponseBody
-	@GetMapping("/querySystemInfo")
-	public Result<SystemInfoBean> querySystemInfo(){
-        SystemInfoBean systemInfoBean = new SystemInfoBean();
-        systemInfoBean.setOsName(System.getProperty("os.name"));
-        systemInfoBean.setJavaHome(System.getProperty("java.home"));
-        systemInfoBean.setJavaVersion(System.getProperty("java.version"));
-        systemInfoBean.setDbVersion(OsUtil.queryMysqlVersion());
 
-        Properties props = System.getProperties();
-        String osName = props.getProperty("os.name");
-        boolean nginxPs = false;
-        if (osName.contains("windows") || osName.contains("Windows")) {
-            nginxPs = OsUtil.findWindowProcess("nginx.exe");
-        }else{
-            String result = ExcuteLinuxCmdUtil.executeLinuxCmd("ps -ef | grep nginx | grep -v grep");
-            System.out.println(result);
-            if (result.contains("nginx")){
-                nginxPs = true;
-            }
-        }
-        systemInfoBean.setNginxFlag(nginxPs);
-
-        String storePath = uploadConfig.getStorePath();
-        File sf = new File(storePath);
-        if (sf.isDirectory()){
-            systemInfoBean.setShareDir(storePath+":共享目录正常");
-        }else{
-            systemInfoBean.setShareDir(storePath+":共享目录不存在");
-        }
-
-        return Result.ok(systemInfoBean);
-	}
 
 	/**
 	 * 网易新闻

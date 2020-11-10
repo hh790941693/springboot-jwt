@@ -150,7 +150,7 @@
 			shadeClose: true,
 			shade: 0.6,
 			area: ['488px', '439px'],
-			content: 'ws/register.page'
+			content: 'register.page'
 		});
 	}
 
@@ -162,7 +162,7 @@
 			shadeClose: true,
 			shade: 0.6,
 			area: ['490px', '318px'],
-			content: 'ws/forgetPassword.page?user='+user
+			content: 'forgetPassword.page?user='+user
 		});
 	}
 
@@ -172,7 +172,7 @@
 		if (imgSrc == "" || imgSrc == undefined){
 			$.ajax({
 				type: 'POST',
-				url: rootUrl+'ws/showQRCode.do',
+				url: rootUrl+'showQRCode.do',
 				//dataType:'json',
 				async:false,
 				success: function(result) {
@@ -217,7 +217,7 @@
         }
 		$.ajax({
 			type: 'GET',
-			url: rootUrl+'ws/querySystemInfo',
+			url: rootUrl+'querySystemInfo',
 			async:false,
 			success: function(result) {
 				if (result.code == 1){
