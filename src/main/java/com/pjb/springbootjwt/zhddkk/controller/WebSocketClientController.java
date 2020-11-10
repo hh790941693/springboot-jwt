@@ -1218,6 +1218,7 @@ public class WebSocketClientController extends AdminBaseController
         request.getSession().removeAttribute(CommonConstants.S_WEBSERVERPORT);
         request.getSession().removeAttribute(CommonConstants.S_IMG);
         request.getSession().removeAttribute(CommonConstants.S_USER_AGENT);
+        request.getSession().invalidate();
 	}
 	
 	/**
