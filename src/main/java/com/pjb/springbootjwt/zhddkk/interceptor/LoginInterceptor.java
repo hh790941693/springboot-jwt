@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -53,10 +53,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter implements Initi
 			}
 		}
 
-		String user = (String)request.getSession().getAttribute(CommonConstants.S_USER);
-		String pass = (String)request.getSession().getAttribute(CommonConstants.S_PASS);
-		String webserverip = (String)request.getSession().getAttribute(CommonConstants.S_WEBSERVERIP);
-		String webserverport = (String)request.getSession().getAttribute(CommonConstants.S_WEBSERVERPORT);
+		SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
+		String user = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
+		String pass = sessionInfoBean == null ? "" : sessionInfoBean.getPassword();
 		String url = request.getRequestURL().toString();
 		logger.debug("用户"+user+"访问:"+url);
 
@@ -75,7 +74,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter implements Initi
 	
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		//System.out.println("-------------------login afterCompletion------------------");
 	}
 
 }

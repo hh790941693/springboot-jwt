@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.zhddkk.base.Result;
+import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.bean.WangyiNewsBean;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 
@@ -1079,8 +1080,9 @@ public class WebSocketClientController extends AdminBaseController
 		Object sessionUser = "";
         Object sessionPass = "";
 		try {
-			sessionUser = request.getSession().getAttribute(CommonConstants.S_USER);
-			sessionPass = request.getSession().getAttribute(CommonConstants.S_PASS);
+			SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
+			sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
+			sessionPass = sessionInfoBean == null ? "" : sessionInfoBean.getPassword();
 		}catch (Exception e){
 			e.printStackTrace();
 		}

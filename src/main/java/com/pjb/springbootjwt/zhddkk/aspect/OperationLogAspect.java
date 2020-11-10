@@ -7,11 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsOperationLogService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -56,9 +58,10 @@ public class OperationLogAspect {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String requestUrl = request.getRequestURL().toString();
-        String userName = (String)request.getSession().getAttribute(CommonConstants.S_USER);
+		SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
+		String userName = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
 
-        if (null != userName) {
+        if (StringUtils.isNotBlank(userName)) {
 			WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
 			wol.setUserName(userName);
 			wol.setUserId(wsUsersDO.getId());

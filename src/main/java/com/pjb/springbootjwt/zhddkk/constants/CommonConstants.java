@@ -6,6 +6,9 @@ public class CommonConstants
 	public static final String UPLOAD_PATH_SUFFIX = "/WEB-INF/upload";
 	public static final String UPLOAD_TEMP_SUFFIX = "/WEB-INF/temp";
 
+	// session信息
+	public static final String SESSION_INFO = "sessionInfo";
+
 	public static final String S_USER = "user";
 	public static final String S_PASS = "pass";
 	public static final String S_WEBSERVERIP = "webserverip";

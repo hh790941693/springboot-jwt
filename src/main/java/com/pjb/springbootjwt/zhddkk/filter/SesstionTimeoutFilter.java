@@ -1,5 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.filter;
 
+import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +45,8 @@ public class SesstionTimeoutFilter implements Filter {
         httpServletResponse.setHeader("Access-Control-Allow-Credentials", "*");
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 
-        String user = (String) httpServletRequest.getSession().getAttribute(CommonConstants.S_USER);
+        SessionInfoBean sessionInfoBean = (SessionInfoBean)httpServletRequest.getSession().getAttribute(CommonConstants.SESSION_INFO);
+        String user = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
         logger.info("user:" + user + ", servletPath:" + servletPath);
 
         if (IGNORE_URL_LIST.contains(servletPath) || servletPath.startsWith("/zhddWebSocket/")

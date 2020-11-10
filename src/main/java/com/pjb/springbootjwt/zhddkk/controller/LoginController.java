@@ -5,6 +5,7 @@ import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.base.Result;
+import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.bean.SystemInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsChatlogDO;
@@ -237,6 +238,9 @@ public class LoginController {
         request.getSession().setAttribute(CommonConstants.S_IMG, selfImg);
         request.getSession().setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
 
+        SessionInfoBean sessionInfoBean = new SessionInfoBean(user, dbPass, webserverip, webserverPort, selfImg, shortAgent);
+        request.getSession().setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
+
         String redisKey = REDIS_KEY_PREFIX+user;
         try {
             if (null != curUserObj) {
@@ -256,19 +260,15 @@ public class LoginController {
     @RequestMapping(value = "wsclientIndex.page")
     public String wsclientIndex(HttpServletRequest request, Model model) {
         logger.debug("访问wsclientIndex.page");
-        String user = (String)request.getSession().getAttribute(CommonConstants.S_USER);
-        String password = (String)request.getSession().getAttribute(CommonConstants.S_PASS);
-        String webserverIp = (String)request.getSession().getAttribute(CommonConstants.S_WEBSERVERIP);
-        String webserverPort = (String)request.getSession().getAttribute(CommonConstants.S_WEBSERVERPORT);
-        String selfImg = (String)request.getSession().getAttribute(CommonConstants.S_IMG);
-        String userAgent = (String)request.getSession().getAttribute(CommonConstants.S_USER_AGENT);
 
-        model.addAttribute(CommonConstants.S_USER, user);
-        model.addAttribute(CommonConstants.S_PASS, password);
-        model.addAttribute(CommonConstants.S_WEBSERVERIP, webserverIp);
-        model.addAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
-        model.addAttribute(CommonConstants.S_IMG, selfImg);
-        model.addAttribute(CommonConstants.S_USER_AGENT, userAgent);
+        SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
+
+        model.addAttribute(CommonConstants.S_USER, sessionInfoBean.getUser());
+        model.addAttribute(CommonConstants.S_PASS, sessionInfoBean.getPassword());
+        model.addAttribute(CommonConstants.S_WEBSERVERIP, sessionInfoBean.getWebserverIp());
+        model.addAttribute(CommonConstants.S_WEBSERVERPORT, sessionInfoBean.getWebserverPort());
+        model.addAttribute(CommonConstants.S_IMG, sessionInfoBean.getSelfImg());
+        model.addAttribute(CommonConstants.S_USER_AGENT, sessionInfoBean.getUserAgent());
         return "ws/wsclientIndex";
     }
 
