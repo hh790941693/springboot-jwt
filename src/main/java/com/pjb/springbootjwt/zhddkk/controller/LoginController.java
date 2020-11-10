@@ -207,7 +207,8 @@ public class LoginController {
         //session
         //request.getSession().invalidate();
         String sessionId = request.getSession().getId();
-        logger.info("sessionId: {}", sessionId);
+        System.out.println("创建SESSION:" + sessionId);
+        logger.info("创建SESSION: {}", sessionId);
         //session.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
         request.getSession().setAttribute(CommonConstants.S_USER, user);
         request.getSession().setAttribute(CommonConstants.S_PASS, dbPass);

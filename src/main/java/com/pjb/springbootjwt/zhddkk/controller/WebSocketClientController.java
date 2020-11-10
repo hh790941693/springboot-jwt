@@ -9,6 +9,7 @@ import java.util.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -183,28 +184,32 @@ public class WebSocketClientController extends AdminBaseController
 	@RequestMapping(value = "logout.do",method=RequestMethod.POST)
 	@ResponseBody
 	public String logout(@RequestParam("user")String user,HttpServletRequest request) {
-		String sessionUser = (String)request.getSession().getAttribute(CommonConstants.S_USER);
-		System.out.println("清理session缓存:"+sessionUser);
-
-		if (StringUtils.isBlank(sessionUser)){
-			return "success";
-		}
-
-		if (user.equals(sessionUser)) {
-			removeSessionAttributes(user, request);
-			//removeCookies(request,response);
-			
-			String redisKey = REDIS_KEY_PREFIX+user;
-			String redisValue = SDF.format(new Date()).concat("_").concat("0");
-			try {
-				logger.debug("设置redis缓存,key:"+redisKey+"  value:"+redisValue);
-                //redisUtil.set(redisKey, redisValue);
-			}catch (Exception e) {
-				logger.debug("设置redis缓存失败,key:"+redisKey+" error:"+e.getMessage());
-			}
-			return "success";
-		}
-		return "failed";
+		HttpSession httpSession = request.getSession(false);
+		System.out.println("退出前SESSION:"+ httpSession.getId());
+		httpSession.invalidate();
+		return "success";
+//		String sessionUser = (String)request.getSession().getAttribute(CommonConstants.S_USER);
+//		System.out.println("清理session缓存:"+sessionUser);
+//
+//		if (StringUtils.isBlank(sessionUser)){
+//			return "success";
+//		}
+//
+//		if (user.equals(sessionUser)) {
+//			removeSessionAttributes(user, request);
+//			//removeCookies(request,response);
+//
+//			String redisKey = REDIS_KEY_PREFIX+user;
+//			String redisValue = SDF.format(new Date()).concat("_").concat("0");
+//			try {
+//				logger.debug("设置redis缓存,key:"+redisKey+"  value:"+redisValue);
+//                //redisUtil.set(redisKey, redisValue);
+//			}catch (Exception e) {
+//				logger.debug("设置redis缓存失败,key:"+redisKey+" error:"+e.getMessage());
+//			}
+//			return "success";
+//		}
+//		return "failed";
 	}
 	
 	
