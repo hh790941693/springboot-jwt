@@ -22,7 +22,7 @@ public class SesstionTimeoutFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(SesstionTimeoutFilter.class);
 
-    private static final List<String> IGNORE_URL_LIST = Arrays.asList("", "/", "/index", "/wslogin.do", "/canvas/snow.page");
+    private static final List<String> IGNORE_URL_LIST = Arrays.asList("", "/", "/index", "/wslogin.do", "/canvas/snow.page", "/ws/querySystemInfo");
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

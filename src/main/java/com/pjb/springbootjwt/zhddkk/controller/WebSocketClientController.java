@@ -52,21 +52,11 @@ import org.springframework.web.client.RestTemplate;
  */
 @Controller
 @RequestMapping("ws")
-@SessionAttributes(value={CommonConstants.S_USER,CommonConstants.S_PASS})
 public class WebSocketClientController extends AdminBaseController
 {
-	private static final int COOKIE_TIMEOUT = 1800; //cookie过期时间 30分钟
-
-	private static final String REDIS_KEY_PREFIX = "ws_"; //登陆用户的redis缓存前缀
-	
 	private static final Logger logger = LoggerFactory.getLogger(WebSocketClientController.class);
-	
-	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMddHHmmss");
-	
-	private static Map<String,String> configMap = WsInterceptor.getConfigMap();
 
-	@Autowired
-	private WebSocketConfig webSocketConfig;
+	private static Map<String,String> configMap = WsInterceptor.getConfigMap();
 
     @Autowired
     private RedisUtil redisUtil;
