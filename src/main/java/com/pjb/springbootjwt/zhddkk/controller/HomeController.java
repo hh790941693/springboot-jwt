@@ -23,45 +23,45 @@ import java.util.Enumeration;
 @Controller
 public class HomeController {
 
-	/**
-	 * 首页登录
-	 *
-	 * @param model
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.LOGIN,subModule="",describe="登陆首页页面")
-	@RequestMapping({"/","/index"})
-	public String v_home(Model model, HttpServletRequest request, HttpServletResponse response) {
-		Cookie[] cookies = request.getCookies();
-		if (null != cookies) {
-			boolean isAdmin = false;
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals(CommonConstants.S_USER) && cookie.getMaxAge() != 0) {
-					model.addAttribute(CommonConstants.S_USER, cookie.getValue());
-					if (cookie.getValue().equals("admin")){
-						isAdmin = true;
-					}
-				}else if (cookie.getName().equals(CommonConstants.S_PASS) && cookie.getMaxAge() != 0) {
-					if (isAdmin){
-						//不保存admin密码
-						model.addAttribute(CommonConstants.S_PASS, "");
-						cookie.setMaxAge(0);
-						response.addCookie(cookie);
-					}else {
-						//对密码进行解密
-						String passDecrypt = SecurityAESUtil.decryptAES(cookie.getValue(), CommonConstants.AES_PASSWORD);
-						model.addAttribute(CommonConstants.S_PASS, passDecrypt);
-					}
-				}
-			}
-		}else{
-			model.addAttribute(CommonConstants.S_USER, "");
-			model.addAttribute(CommonConstants.S_PASS, "");
-		}
-		return "ws/login";
-	}
+//	/**
+//	 * 首页登录
+//	 *
+//	 * @param model
+//	 * @param request
+//	 * @param response
+//	 * @return
+//	 */
+//	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.LOGIN,subModule="",describe="登陆首页页面")
+//	@RequestMapping({"/","/index"})
+//	public String v_home(Model model, HttpServletRequest request, HttpServletResponse response) {
+//		Cookie[] cookies = request.getCookies();
+//		if (null != cookies) {
+//			boolean isAdmin = false;
+//			for (Cookie cookie : cookies) {
+//				if (cookie.getName().equals(CommonConstants.S_USER) && cookie.getMaxAge() != 0) {
+//					model.addAttribute(CommonConstants.S_USER, cookie.getValue());
+//					if (cookie.getValue().equals("admin")){
+//						isAdmin = true;
+//					}
+//				}else if (cookie.getName().equals(CommonConstants.S_PASS) && cookie.getMaxAge() != 0) {
+//					if (isAdmin){
+//						//不保存admin密码
+//						model.addAttribute(CommonConstants.S_PASS, "");
+//						cookie.setMaxAge(0);
+//						response.addCookie(cookie);
+//					}else {
+//						//对密码进行解密
+//						String passDecrypt = SecurityAESUtil.decryptAES(cookie.getValue(), CommonConstants.AES_PASSWORD);
+//						model.addAttribute(CommonConstants.S_PASS, passDecrypt);
+//					}
+//				}
+//			}
+//		}else{
+//			model.addAttribute(CommonConstants.S_USER, "");
+//			model.addAttribute(CommonConstants.S_PASS, "");
+//		}
+//		return "ws/login";
+//	}
 
 	/**
 	 * 查看session信息

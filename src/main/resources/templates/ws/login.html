@@ -48,7 +48,7 @@
 	</div>
 	<button id="phonelogin" class='btn btn-success btn-sm' style="position:absolute;top:1px;left:315px;">扫码登录</button>
 	<img id="backgroundImg" src="../img/fengjing/fj10.jpg" hidden>
-	<form id="loginForm" action="ws/wslogin.do" method="post" onsubmit="return checkEnvironment()">
+	<form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
 		<div style="height:25px;">
 			<label for="user">用户名:</label>
 			<input id="user" name="user" type="text" th:value="${user}" placeholder="请输入用户名" autocomplete="off" style="width:178px;margin-left:10px;">

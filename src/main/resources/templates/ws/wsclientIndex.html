@@ -89,7 +89,7 @@
     <div id="mainDiv">
         <!--头部-->
         <div id="headerPage" class="divShadow" align="center">
-            <iframe id="headerIframePage" src="header.page" width="100%" height="100%"></iframe>
+            <iframe id="headerIframePage" src="ws/header.page" width="100%" height="100%"></iframe>
         </div>
 
         <!--中间部分-->
@@ -111,10 +111,10 @@
                 <!--左侧导航栏-->
                 <div id="leftNaviDiv">
                     <div th:if="${user == 'admin'}">
-                        <iframe id="leftNaviIframePage" src="serverLeftNavi.page" width="100%" height="100%"></iframe>
+                        <iframe id="leftNaviIframePage" src="ws/serverLeftNavi.page" width="100%" height="100%"></iframe>
                     </div>
                     <div th:if="${user != 'admin'}">
-                        <iframe id="leftNaviIframePage" src="clientLeftNavi.page" width="100%" height="100%"></iframe>
+                        <iframe id="leftNaviIframePage" src="ws/clientLeftNavi.page" width="100%" height="100%"></iframe>
                     </div>
                 </div>
 
@@ -127,7 +127,7 @@
 
         <!--底部-->
         <div id="footerDiv" class="divShadow" align="center">
-            <iframe id="footerIframePage" src="footer.page" width="100%" height="100%"></iframe>
+            <iframe id="footerIframePage" src="ws/footer.page" width="100%" height="100%"></iframe>
         </div>
     </div>
 
@@ -196,7 +196,7 @@
         }
 
         // 默认显示页:聊天窗口首页
-        var curPageid = "wsclientChat.page";
+        var curPageid = "ws/wsclientChat.page";
         if (s_user == 'admin'){
 			curPageid = "/zhddkk/wsUsers/wsUsersForAdmin";
 		}
