@@ -1,5 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.interceptor;
 
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -65,8 +66,6 @@ public class ActionLogInterceptor implements HandlerInterceptor {
                 functionName = functionName.substring(0,index).trim();
             }
         }
-        System.out.println("接口地址: "+ url);
-        System.out.println("调用方法: "+ functionName);
 
         StringBuilder paramsSb = new StringBuilder();
         Map parameterMap = request.getParameterMap();
@@ -78,9 +77,15 @@ public class ActionLogInterceptor implements HandlerInterceptor {
             String value = request.getParameter(name);
             paramsSb.append(name).append(":").append(value).append(" ");
         }
+        System.out.println("接口地址: "+ url);
+        System.out.println("调用方法: "+ functionName);
         System.out.println("参数列表: " + paramsSb.toString());
         System.out.println("耗时    : " + (System.currentTimeMillis() - startTime) + "ms");
         System.out.println("操作时间: "+ dateFormat.format(new Date()));
+        String user = (String)request.getSession(false).getAttribute(CommonConstants.S_USER);
+        if (StringUtils.isNotBlank(user)){
+            System.out.println("操作用户: " + user);
+        }
         if (StringUtils.isNotBlank(viewName)){
             System.out.println("页面    : "+ viewName);
         }
