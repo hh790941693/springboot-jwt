@@ -179,19 +179,11 @@ public class LoginController {
             logger.warn("获取客户端信息失败!"+e.getMessage());
         }
 
-        //传给前端html的数据
-        model.addAttribute(CommonConstants.S_USER, user);
-        model.addAttribute(CommonConstants.S_PASS, dbPass);
-        model.addAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
-        model.addAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
-        model.addAttribute(CommonConstants.S_USER_AGENT, shortAgent);
-
         //个人头像
         WsUserProfileDO wup = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_name", user));
         String selfImg = "";
         if (null != wup) {
             selfImg = wup.getImg();
-            model.addAttribute(CommonConstants.S_IMG, selfImg);
         }
 
         //记录cookie
@@ -241,8 +233,21 @@ public class LoginController {
 
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.REGISTER,subModule="",describe="登录成功页面")
     @RequestMapping(value = "wsclientIndex.page")
-    public String wsclientIndex(Model model) {
+    public String wsclientIndex(HttpServletRequest request, Model model) {
         logger.debug("访问wsclientIndex.page");
+        String user = (String)request.getSession().getAttribute(CommonConstants.S_USER);
+        String password = (String)request.getSession().getAttribute(CommonConstants.S_PASS);
+        String webserverIp = (String)request.getSession().getAttribute(CommonConstants.S_WEBSERVERIP);
+        String webserverPort = (String)request.getSession().getAttribute(CommonConstants.S_WEBSERVERPORT);
+        String selfImg = (String)request.getSession().getAttribute(CommonConstants.S_IMG);
+        String userAgent = (String)request.getSession().getAttribute(CommonConstants.S_USER_AGENT);
+
+        model.addAttribute(CommonConstants.S_USER, user);
+        model.addAttribute(CommonConstants.S_PASS, password);
+        model.addAttribute(CommonConstants.S_WEBSERVERIP, webserverIp);
+        model.addAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
+        model.addAttribute(CommonConstants.S_IMG, selfImg);
+        model.addAttribute(CommonConstants.S_USER_AGENT, userAgent);
         return "ws/wsclientIndex";
     }
 
