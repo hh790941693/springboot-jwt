@@ -36,7 +36,8 @@ public class SesstionTimeoutFilter implements Filter {
             "/getUserQuestion.json",
             "/showQRCode.do",
             "/checkUserRegisterStatus.json",
-            "/updatePassword.do"));
+            "/updatePassword.do",
+            "/loginfail.page"));
 
     // 忽略的URL前缀列表
     private static final List<String> IGNORE_URL_PREFIX_LIST = new ArrayList<>(Arrays.asList(

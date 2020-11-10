@@ -124,7 +124,7 @@ public class LoginController {
     @OperationLogAnnotation(type= OperationEnum.UPDATE,module= ModuleEnum.LOGIN,subModule="",describe="登录")
     @RequestMapping(value = "wslogin.do", method = RequestMethod.POST)
     public void wsclient(Model model, @RequestParam("user")String user, @RequestParam("pass")String pass,
-                           HttpServletRequest request, HttpServletResponse response) throws IOException {
+                           HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 检查当前用户是否已经登录过
         Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
 
@@ -156,33 +156,33 @@ public class LoginController {
 
         if (!isRegister){
             // 用户未注册
-            model.addAttribute("user", user);
-            model.addAttribute("detail","当前用户未注册,请先注册!");
-            response.sendRedirect("loginfail.page");
+            request.setAttribute("user", user);
+            request.setAttribute("detail", "当前用户未注册,请先注册!");
+            request.getRequestDispatcher("loginfail.page").forward(request, response);
             return;
         }
 
         if (isEnable.equals("0")){
             // 此账号已被禁用
-            model.addAttribute("user", user);
-            model.addAttribute("detail","当前用户已被禁用!");
-            response.sendRedirect("loginfail.page");
+            request.setAttribute("user", user);
+            request.setAttribute("detail", "当前用户已被禁用!");
+            request.getRequestDispatcher("loginfail.page").forward(request, response);
             return;
         }
 
         if (isLogin){
             // 如果已登录
-            model.addAttribute("user", user);
-            model.addAttribute("detail","当前用户已经登录了,请不要重复登录!");
-            response.sendRedirect("loginfail.page");
+            request.setAttribute("user", user);
+            request.setAttribute("detail", "当前用户已经登录了,请不要重复登录!");
+            request.getRequestDispatcher("loginfail.page").forward(request, response);
             return;
         }
 
         // 如果密码不对
         if (!pass.equals(dbPassDecrypted)){
-            model.addAttribute("user", user);
-            model.addAttribute("detail","密码不对!");
-            response.sendRedirect("loginfail.page");
+            request.setAttribute("user", user);
+            request.setAttribute("detail", "密码不对!");
+            request.getRequestDispatcher("loginfail.page").forward(request, response);
             return;
         }
 
