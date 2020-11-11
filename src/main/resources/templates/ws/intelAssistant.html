@@ -7,7 +7,7 @@
     <title>PC机器人聊天界面</title>
     <style>
         .box{
-            width: 100%;
+            width: 99%;
             height: 500px;
             position:absolute;
             top:0;
@@ -20,7 +20,7 @@
         }
         #chatDiv{
             width: 100%;
-            height:60px;
+            height:58px;
             line-height:40px;
             border-top:1px solid #ccc;
             position:absolute;
@@ -88,7 +88,7 @@
             top:0;
         }
         .info_box .info_l span{margin-left: 60px;margin-top:16px;}
-        .info_box .info_r span{margin-left:28%;margin-top:16px;}
+        .info_box .info_r span{margin-left:28%;margin-top:16px;text-align: right;}
 
         .info_box span{
             width: 66%;
@@ -159,7 +159,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: '/ws/roobotChat?text='+content,
+                    url: '/ws/robotChat?text='+content,
                     success: function (result) {
                         // 机器人
                         var nDiv = document.createElement('div');
@@ -173,6 +173,10 @@
                         spans.className='infol';
                         nDiv.className='info_l';
                         imgs.src='../img/car.jpg';
+
+                        let scrollHeight = $(".info_box")[0].scrollHeight;
+                        let height = $(".info_box").height();
+                        $(".info_box").scrollTop(scrollHeight - height);
                     }
                 });
             }

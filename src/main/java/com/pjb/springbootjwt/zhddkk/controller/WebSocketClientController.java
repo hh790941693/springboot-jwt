@@ -1100,9 +1100,16 @@ public class WebSocketClientController extends AdminBaseController
 		return "ws/intelAssistant";
 	}
 
+	/**
+	 * 与机器人聊天
+	 *
+	 * @param request
+	 * @param text 人类聊天内容
+	 * @return
+	 */
 	@ResponseBody
-	@GetMapping("/roobotChat")
-	public String roobotChat(HttpServletRequest request, String text){
+	@GetMapping("/robotChat")
+	public String robotChat(HttpServletRequest request, String text){
 		for (Map.Entry<String, String> entry: chatMappingMap.entrySet()) {
 			if (entry.getKey().contains(text) || text.contains(entry.getKey())){
 				return entry.getValue();
