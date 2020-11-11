@@ -1092,7 +1092,14 @@ public class WebSocketClientController extends AdminBaseController
 		return sessionUser+":"+sessionPass;
 	}
 
-
+	/**
+	 * 智能助手
+	 */
+	@GetMapping("intelAssistant.page")
+	String intelAssistantPage(Model model, String user){
+		model.addAttribute("user", user);
+		return "ws/intelAssistant";
+	}
 
 	/**
 	 * 网易新闻
