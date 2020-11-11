@@ -263,9 +263,8 @@ public class WebSocketServerController extends AdminBaseController
 	public String chatLogMonitor(Model model,HttpServletRequest request)
 	{
 		logger.debug("访问wsserverChartMonitor.page");
-		model.addAttribute("webserverip", configMap.get("webserver.ip"));
-		int serverPort = request.getServerPort();
-		model.addAttribute("webserverport", serverPort);
+		model.addAttribute("webserverip", configMap.get(CommonConstants.S_WEBSERVERIP));
+		model.addAttribute("webserverport", configMap.get(CommonConstants.S_WEBSERVERPORT));
 		return "ws/wsserverChartMonitor";
 	}
 

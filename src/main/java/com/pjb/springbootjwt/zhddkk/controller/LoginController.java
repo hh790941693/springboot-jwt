@@ -47,8 +47,6 @@ public class LoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    private static SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMddHHmmss");
-
     private static Map<String,String> configMap = WsInterceptor.getConfigMap();
 
     @Autowired
@@ -188,8 +186,9 @@ public class LoginController {
 
         String webserverip = webSocketConfig.getAddress();
         String webserverPort = webSocketConfig.getPort();
-        logger.info("------------------配置信息------------------:"+configMap);
         logger.info("webserverip:{} webserverPort:{}",webserverip, webserverPort);
+        configMap.put(CommonConstants.S_WEBSERVERIP, webserverip);
+        configMap.put(CommonConstants.S_WEBSERVERPORT, webserverPort);
 
         String userAgent = request.getHeader("User-Agent");
         logger.info("userAgent:"+userAgent);
@@ -262,7 +261,6 @@ public class LoginController {
         logger.debug("访问wsclientIndex.page");
 
         SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
-
         model.addAttribute(CommonConstants.S_USER, sessionInfoBean.getUser());
         model.addAttribute(CommonConstants.S_PASS, sessionInfoBean.getPassword());
         model.addAttribute(CommonConstants.S_WEBSERVERIP, sessionInfoBean.getWebserverIp());

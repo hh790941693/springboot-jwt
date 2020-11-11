@@ -1,9 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.interceptor;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -140,86 +137,74 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
 		}
 	}
 
-
 	/**
 	 * 加载config.properties中的配置项到内存中去
 	 */
 	private void loadConfigPropertiesData() {
 		logger.info("call loadConfigPropertiesData");
-		String configPath = null;
-		try {
-			configPath = this.getClass().getResource("../../../../config.properties").getPath();
-		}catch (Exception e) {
-			logger.info("查找文件config.properties失败! 改从ServiceConstants中加载配置");
-			System.out.println("查找文件config.properties失败! 改从ServiceConstants中加载配置");
-			
-			loadDefaultConfigData();
-			System.out.println("ServiceConstants配置:" + configMap);
-			return;
-		}
-		
-		if (null == configPath) {
-			loadDefaultConfigData();
-			return;
-		}
 
-		File f = new File(configPath);
-		if (!f.exists()) {
-			System.out.println("config.properties不存在! 改从ServiceConstants中加载配置");
-			
-			loadDefaultConfigData();
-			System.out.println("ServiceConstants配置:" + configMap);
-			return;
-		}
-		FileReader fr = null;
+		InputStream stream = null;
+		InputStreamReader reader = null;
 		BufferedReader br = null;
 		try {
-			fr = new FileReader(f);
-			br = new BufferedReader(fr);
+			stream = getClass().getClassLoader().getResourceAsStream("config.properties");
+			reader = new InputStreamReader(stream,"UTF-8");
+			br = new BufferedReader(reader);
 			String data = null;
 			while ((data = br.readLine()) != null) {
-				if (data.startsWith("#")){
+				if (data.startsWith("#")) {
 					continue;
 				}
-				if (data.trim().equals("")){
+				if (data.trim().equals("")) {
 					continue;
 				}
 				String key = data.split("=")[0].trim();
 				String value = "";
-				if (data.split("=").length >1) {
+				if (data.split("=").length > 1) {
 					value = data.split("=")[1].trim();
 				}
 				if (!configMap.containsKey(key)) {
 					configMap.put(key, value);
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally{
-			if (fr != null) {
-				try {
-					fr.close();
-				} catch (Exception e1) {
-					
-				}
-			}
+		} catch (Exception e) {
+			logger.info("查找文件config.properties失败! 改从ServiceConstants中加载配置");
+			System.out.println("查找文件config.properties失败! 改从ServiceConstants中加载配置");
+			
+			loadDefaultConfigData();
+			return;
+		}finally{
 			if (br != null) {
 				try {
 					br.close();
 				} catch (Exception e2) {
-					
+
+				}
+			}
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (Exception e1) {
+
+				}
+			}
+			if (stream != null) {
+				try {
+					stream.close();
+				} catch (Exception e3) {
+
 				}
 			}
 		}
+		System.out.println("ServiceConstants配置:" + configMap);
 	}
-	
+
 	private void loadDefaultConfigData() {
-//		configMap.put("login.cmsUrl", ServiceConstants.LOGIN_URL);
-//		configMap.put("login.userName", ServiceConstants.LOGIN_USER);
-//		configMap.put("login.passwd", ServiceConstants.LOGIN_PASS);
-//		configMap.put("service.endpoint", ServiceConstants.END_POINT);
-//		configMap.put("service.default.sessionid", ServiceConstants.DEFAULT_SESSIONID);
-//		configMap.put("login.switch", String.valueOf(ServiceConstants.INIT_SWITCH));
-		configMap.put("version", "1.0");
+		// 版本号
+		configMap.put("author", "huangchaohui");
+		configMap.put("contact", "547495788@qq.com");
+		configMap.put("address", "Flower Gaden#5,Freedom street,Da Ye,Huang Shi,Wu Han,Hu Bei province");
+		configMap.put("copyRight", "All Rights reserved@2018-2035");
+		configMap.put("version", "1.0-Snapshot");
 	}
 }
