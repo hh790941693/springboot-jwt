@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script type="text/javascript" th:src="@{/js/jquery/jquery.min.js?v=2.1.4}"></script>
     <title>PC机器人聊天界面</title>
     <style>
         .box{
@@ -130,62 +131,47 @@
             <div id="chatDiv">
                 <img src="../img/man.jpg" id='pic'>
                 <input type="text" placeholder='尽情畅聊吧' id='inp'>
-                <input type="button" value='发送' id='send'>
+                <input type="button" value='发送' id='btnSend'>
             </div>
         </div>
     </div>
 
     <script>
-        var send =document.getElementById('send');
-        var pic =document.getElementById('pic');
-        var txt =document.getElementById('inp');
         var info_box = document.getElementsByClassName('info_box')[0];
-
-        var onoff=true;
-        pic.onclick=function(){
-            if(onoff){
-                pic.src='../img/man.jpg';
-                onoff=false;
-            }
-            else{
-                pic.src='../img/man.jpg';
-                onoff=true;
-            }
-        };
-        send.onclick=function(){
-            if(txt.value===''){
+        $("#btnSend").click(function(){
+            var content = $("#inp").val();
+            if(content === ''){
                 alert('请输入内容');
             }else{
+                // 人类
                 var nDiv = document.createElement('div');
                 var spans = document.createElement('span');
                 var imgs = document.createElement('img');
-                var sTxt = document.createTextNode(txt.value);
-                var info_box = document.getElementsByClassName('info_box')[0];
+                var sTxt = document.createTextNode(content);
+
                 spans.appendChild(sTxt);
                 nDiv.appendChild(spans);
                 nDiv.appendChild(imgs);
-                // nDiv.style.display='block';
                 info_box.insertBefore(nDiv,info_box.lastChild);
                 spans.className='infor';
                 nDiv.className='info_r';
                 imgs.src='../img/man.jpg';
 
+                // 机器人
                 var nDiv = document.createElement('div');
                 var spans = document.createElement('span');
                 var imgs = document.createElement('img');
                 var sTxt = document.createTextNode("你说啥？");
-                var info_box = document.getElementsByClassName('info_box')[0];
                 spans.appendChild(sTxt);
                 nDiv.appendChild(spans);
                 nDiv.appendChild(imgs);
-                // nDiv.style.display='block';
                 info_box.insertBefore(nDiv,info_box.lastChild);
                 spans.className='infol';
                 nDiv.className='info_l';
                 imgs.src='../img/car.jpg';
             }
-            txt.value='';
-        }
+            $("#inp").val("");
+        });
     </script>
 </body>
 </html>

@@ -13,6 +13,7 @@ import com.pjb.springbootjwt.zhddkk.constants.ServiceConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsDicDO;
 import com.pjb.springbootjwt.zhddkk.service.WsDicService;
 import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -44,6 +45,8 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
 	
 	// config.properties中的记录
 	public static Map<String, String> configMap = new HashMap<String, String>();
+
+	public static Map<String, String> chatMappingMap = new HashMap<>();
 	
 	public static List<WsDicDO> getDicList() {
 		return dicList;
@@ -67,6 +70,14 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
 
 	public static void setConfigMap(Map<String, String> configMap) {
 		WsInterceptor.configMap = configMap;
+	}
+
+	public static Map<String, String> getChatMappingMap() {
+		return chatMappingMap;
+	}
+
+	public static void setChatMappingMap(Map<String, String> chatMappingMap) {
+		WsInterceptor.chatMappingMap = chatMappingMap;
 	}
 
 	@Override
@@ -97,6 +108,7 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
 		dicMap.clear();
 		dicList.clear();
 		configMap.clear();
+		chatMappingMap.clear();
 		try {
 			loadDicData();
 		} catch (Exception e) {
@@ -105,10 +117,17 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
 		}
 
 		try {
-			loadConfigPropertiesData();
+			loadConfigPropertiesData("config.properties", configMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("初始化config.properties失败!" + e.getMessage());
+		}
+
+		try {
+			loadConfigPropertiesData("chatmapping.properties", chatMappingMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("初始化chatmapping.properties失败!" + e.getMessage());
 		}
 	}
 	
@@ -138,16 +157,19 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
 	}
 
 	/**
-	 * 加载config.properties中的配置项到内存中去
+	 * 加载指定的配置文件内容到内存中去
 	 */
-	private void loadConfigPropertiesData() {
-		logger.info("call loadConfigPropertiesData");
+	private void loadConfigPropertiesData(String filename, Map<String, String> map) {
+		if (StringUtils.isBlank(filename)){
+			return;
+		}
+		logger.info("call load data from:"+filename);
 
 		InputStream stream = null;
 		InputStreamReader reader = null;
 		BufferedReader br = null;
 		try {
-			stream = getClass().getClassLoader().getResourceAsStream("config.properties");
+			stream = getClass().getClassLoader().getResourceAsStream(filename);
 			reader = new InputStreamReader(stream,"UTF-8");
 			br = new BufferedReader(reader);
 			String data = null;
@@ -163,14 +185,14 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
 				if (data.split("=").length > 1) {
 					value = data.split("=")[1].trim();
 				}
-				if (!configMap.containsKey(key)) {
-					configMap.put(key, value);
+				if (!map.containsKey(key)) {
+					map.put(key, value);
 				}
 			}
 		} catch (Exception e) {
-			logger.info("查找文件config.properties失败! 改从ServiceConstants中加载配置");
-			System.out.println("查找文件config.properties失败! 改从ServiceConstants中加载配置");
-			
+			logger.info("查找文件"+filename+"失败! 改从ServiceConstants中加载配置");
+			System.out.println("查找文件"+filename+"失败! 改从ServiceConstants中加载配置");
+
 			loadDefaultConfigData();
 			return;
 		}finally{
@@ -178,25 +200,22 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
 				try {
 					br.close();
 				} catch (Exception e2) {
-
 				}
 			}
 			if (reader != null) {
 				try {
 					reader.close();
 				} catch (Exception e1) {
-
 				}
 			}
 			if (stream != null) {
 				try {
 					stream.close();
 				} catch (Exception e3) {
-
 				}
 			}
 		}
-		System.out.println("ServiceConstants配置:" + configMap);
+		System.out.println(filename+"配置:" + map);
 	}
 
 	private void loadDefaultConfigData() {
