@@ -54,6 +54,8 @@ public class WebSocketClientController extends AdminBaseController
 
 	private static Map<String,String> configMap = WsInterceptor.getConfigMap();
 
+	private static Map<String,String> chatMappingMap = WsInterceptor.getChatMappingMap();
+
     @Autowired
     private RedisUtil redisUtil;
 
@@ -968,8 +970,7 @@ public class WebSocketClientController extends AdminBaseController
 	        return "操作失败!可能当前系统是非linux系统"; 
 	      }
 	}
-	
-	
+
 	private Map<String,List<WsCommonDO>> buildCommonData() {
 		Map<String,List<WsCommonDO>> commonMap = new HashMap<String,List<WsCommonDO>>();
 		List<WsCommonDO> commonList = wsCommonService.selectList(null);
@@ -1047,8 +1048,6 @@ public class WebSocketClientController extends AdminBaseController
 		}
 	}
 
-
-
 	/**
 	 * 跳转到好友列表页面
 	 */
@@ -1099,6 +1098,17 @@ public class WebSocketClientController extends AdminBaseController
 	String intelAssistantPage(Model model, String user){
 		model.addAttribute("user", user);
 		return "ws/intelAssistant";
+	}
+
+	@ResponseBody
+	@GetMapping("/roobotChat")
+	public String roobotChat(HttpServletRequest request, String text){
+		for (Map.Entry<String, String> entry: chatMappingMap.entrySet()) {
+			if (entry.getKey().contains(text) || text.contains(entry.getKey())){
+				return entry.getValue();
+			}
+		}
+		return "主人,我没听懂";
 	}
 
 	/**

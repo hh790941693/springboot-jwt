@@ -157,18 +157,24 @@
                 nDiv.className='info_r';
                 imgs.src='../img/man.jpg';
 
-                // 机器人
-                var nDiv = document.createElement('div');
-                var spans = document.createElement('span');
-                var imgs = document.createElement('img');
-                var sTxt = document.createTextNode("你说啥？");
-                spans.appendChild(sTxt);
-                nDiv.appendChild(spans);
-                nDiv.appendChild(imgs);
-                info_box.insertBefore(nDiv,info_box.lastChild);
-                spans.className='infol';
-                nDiv.className='info_l';
-                imgs.src='../img/car.jpg';
+                $.ajax({
+                    type: "GET",
+                    url: '/ws/roobotChat?text='+content,
+                    success: function (result) {
+                        // 机器人
+                        var nDiv = document.createElement('div');
+                        var spans = document.createElement('span');
+                        var imgs = document.createElement('img');
+                        var sTxt = document.createTextNode(result);
+                        spans.appendChild(sTxt);
+                        nDiv.appendChild(spans);
+                        nDiv.appendChild(imgs);
+                        info_box.insertBefore(nDiv,info_box.lastChild);
+                        spans.className='infol';
+                        nDiv.className='info_l';
+                        imgs.src='../img/car.jpg';
+                    }
+                });
             }
             $("#inp").val("");
         });
