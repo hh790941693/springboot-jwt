@@ -64,15 +64,7 @@
 		},1000);
 
 		function toIndex(){
-			$.ajax({
-				type: 'POST',
-				url: rootUrl+'ws/logout.do',
-				data:{user:user},
-				async:false,
-				success: function(result) {
-					window.location.href = rootUrl;
-				}
-			});
+			window.location.href = rootUrl;
 		}
 	</script>
 </html>
