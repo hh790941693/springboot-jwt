@@ -8,6 +8,8 @@ import lombok.Data;
 @Data
 public class SessionInfoBean {
 
+    private String id;
+
     private String user;
 
     private String password;
@@ -20,7 +22,8 @@ public class SessionInfoBean {
 
     private String userAgent;
 
-    public SessionInfoBean(String user, String password, String webserverIp, String webserverPort, String selfImg, String userAgent) {
+    public SessionInfoBean(String id, String user, String password, String webserverIp, String webserverPort, String selfImg, String userAgent) {
+        this.id = id;
         this.user = user;
         this.password = password;
         this.webserverIp = webserverIp;

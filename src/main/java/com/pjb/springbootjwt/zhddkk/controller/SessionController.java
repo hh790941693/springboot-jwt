@@ -4,6 +4,7 @@ import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -56,5 +57,18 @@ public class SessionController {
 		}catch (Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 跳转session信息页面
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/sessionInfo.page")
+	public String sessionInfoPage(HttpServletRequest request, Model model){
+		HttpSession httpSession = request.getSession(false);
+		SessionInfoBean sessionInfoBean = (SessionInfoBean)httpSession.getAttribute(CommonConstants.SESSION_INFO);
+		model.addAttribute(CommonConstants.SESSION_INFO, JsonUtil.javaobject2Jsonobject(sessionInfoBean));
+		return "ws/sessionInfo";
 	}
 }

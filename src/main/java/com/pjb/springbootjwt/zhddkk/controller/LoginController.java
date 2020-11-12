@@ -237,7 +237,7 @@ public class LoginController {
         // 设置session非活动失效时间
         request.getSession().setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
         // 往session中存储用户信息
-        SessionInfoBean sessionInfoBean = new SessionInfoBean(user, dbPass, webserverip, webserverPort, selfImg, shortAgent);
+        SessionInfoBean sessionInfoBean = new SessionInfoBean(sessionId, user, dbPass, webserverip, webserverPort, selfImg, shortAgent);
         request.getSession().setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
         // 往redis中存储用户信息
