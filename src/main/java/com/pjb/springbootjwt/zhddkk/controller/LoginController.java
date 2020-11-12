@@ -110,6 +110,16 @@ public class LoginController {
             model.addAttribute(CommonConstants.S_USER, "");
             model.addAttribute(CommonConstants.S_PASS, "");
         }
+        SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
+        if (null != sessionInfoBean){
+            model.addAttribute(CommonConstants.S_USER, sessionInfoBean.getUser());
+            model.addAttribute(CommonConstants.S_PASS, sessionInfoBean.getPassword());
+            model.addAttribute(CommonConstants.S_WEBSERVERIP, sessionInfoBean.getWebserverIp());
+            model.addAttribute(CommonConstants.S_WEBSERVERPORT, sessionInfoBean.getWebserverPort());
+            model.addAttribute(CommonConstants.S_IMG, sessionInfoBean.getSelfImg());
+            model.addAttribute(CommonConstants.S_USER_AGENT, sessionInfoBean.getUserAgent());
+            return "ws/wsclientIndex";
+        }
         return "ws/login";
     }
 
