@@ -13,6 +13,7 @@ import com.pjb.springbootjwt.zhddkk.constants.ServiceConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsDicDO;
 import com.pjb.springbootjwt.zhddkk.service.WsDicService;
 import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
+import com.pjb.springbootjwt.zhddkk.util.UnicodeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,9 +182,11 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
 					continue;
 				}
 				String key = data.split("=")[0].trim();
+				key = UnicodeUtil.unicode2String(key);
 				String value = "";
 				if (data.split("=").length > 1) {
 					value = data.split("=")[1].trim();
+					value = UnicodeUtil.unicode2String(value);
 				}
 				if (!map.containsKey(key)) {
 					map.put(key, value);

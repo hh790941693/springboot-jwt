@@ -1111,7 +1111,8 @@ public class WebSocketClientController extends AdminBaseController
 	@GetMapping("/robotChat")
 	public String robotChat(HttpServletRequest request, String text){
 		for (Map.Entry<String, String> entry: chatMappingMap.entrySet()) {
-			if (entry.getKey().contains(text) || text.contains(entry.getKey())){
+		    String key = entry.getKey();
+			if (key.contains(text) || text.contains(key)){
 				return entry.getValue();
 			}
 		}
