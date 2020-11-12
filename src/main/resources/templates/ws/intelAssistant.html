@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script type="text/javascript" th:src="@{/js/jquery/jquery.min.js?v=2.1.4}"></script>
+    <script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/plugins/layui/css/layui.css}">
     <title>PC机器人聊天界面</title>
     <style>
         .box{
@@ -141,11 +143,14 @@
     </div>
 
     <script>
+        var clock = 0; // 时钟
+        var count = 0; // 页面无操作计数
+        var lastSendCount = 0; // 上次发送聊天内容的计数
         var info_box = document.getElementsByClassName('info_box')[0];
         $("#btnSend").click(function(){
             var content = $("#inp").val();
             if(content === ''){
-                alert('请输入内容');
+                layer.alert("请输入内容");
             }else{
                 // 人类
                 var nDiv = document.createElement('div');
@@ -160,32 +165,88 @@
                 spans.className='infor';
                 nDiv.className='info_r';
                 imgs.src='../img/man.jpg';
-
-                $.ajax({
-                    type: "GET",
-                    url: '/ws/robotChat?text='+content,
-                    success: function (result) {
-                        // 机器人
-                        var nDiv = document.createElement('div');
-                        var spans = document.createElement('span');
-                        var imgs = document.createElement('img');
-                        var sTxt = document.createTextNode(result);
-                        spans.appendChild(sTxt);
-                        nDiv.appendChild(spans);
-                        nDiv.appendChild(imgs);
-                        info_box.insertBefore(nDiv,info_box.lastChild);
-                        spans.className='infol';
-                        nDiv.className='info_l';
-                        imgs.src='../img/car.jpg';
-
-                        let scrollHeight = $(".info_box")[0].scrollHeight;
-                        let height = $(".info_box").height();
-                        $(".info_box").scrollTop(scrollHeight - height);
-                    }
-                });
+                if (clock - lastSendCount > 60){
+                    robotSay("主人,你终于来啦!");
+                    lastSendCount = clock;
+                } else {
+                    $.ajax({
+                        type: "GET",
+                        url: '/ws/robotChat?text=' + content,
+                        success: function (result) {
+                            // 机器人
+                            robotSay(result);
+                        }
+                    });
+                }
             }
             $("#inp").val("");
         });
+
+        /**
+         * 机器人说话
+         * @param text
+         */
+        function robotSay(text){
+            var nDiv = document.createElement('div');
+            var spans = document.createElement('span');
+            var imgs = document.createElement('img');
+            var sTxt = document.createTextNode(text);
+            spans.appendChild(sTxt);
+            nDiv.appendChild(spans);
+            nDiv.appendChild(imgs);
+            info_box.insertBefore(nDiv,info_box.lastChild);
+            spans.className='infol';
+            nDiv.className='info_l';
+            imgs.src='../img/car.jpg';
+
+            let scrollHeight = $(".info_box")[0].scrollHeight;
+            let height = $(".info_box").height();
+            $(".info_box").scrollTop(scrollHeight - height);
+        }
+
+        // 机器人自言自语
+        var randomWordsArr = ["嗯？", "主人还在吗？", "主人您怎么不说话了呢?", "主人今天心情可能不好，都不理我了。",
+            "主人，告诉您一个好消息，我今天捡到了100块钱。","主人人去哪了呢？", "哎，今天真倒霉。", "主人今天怎么还没下班呢？",
+            "趁主人不在的时候，我先偷吃个面包，๑乛◡乛๑", "(╥╯^╰╥)，好几天都没吃东西了。","ε=(･д･｀*)ﾊｧ…，窗前明月光，疑似地上霜。",
+            "主人又去哪里鬼混去了"];
+
+        var timeoutMin = 60; // 秒钟
+        window.setInterval(saySomethig, 1000);
+        function saySomethig() {
+            count++;
+            clock++;
+            if (count % timeoutMin == 0) {
+                var wordIndex = randomNumber(0, randomWordsArr.length-1);
+                robotSay(randomWordsArr[wordIndex]);
+            }
+        }
+
+        //监听鼠标
+        var mouseX;
+        var mouseY;
+        document.onmousemove = function (event) {
+            var x1 = event.clientX;
+            var y1 = event.clientY;
+            if (mouseX != x1 || mouseY != y1) {
+                count = 0;
+            }
+            mouseX = x1;
+            mouseY = y1;
+        };
+
+        //监听键盘
+        document.onkeydown = function () {
+            count = 0;
+        };
+
+        // 随机生成整数,包含左右边界
+        function randomNumber(start,end){
+            var range = end-start;
+            var rand = Math.random();
+            var num = start + Math.round(rand*range);
+
+            return num;
+        }
     </script>
 </body>
 </html>
