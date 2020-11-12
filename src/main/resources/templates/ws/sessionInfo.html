@@ -10,11 +10,11 @@
         height: auto;
         margin: 100px auto;
         border: 2px solid green;
+        padding: 2px;
     }
 
     table{
         width:100%;
-        margin-top:2px;
     }
 
     table th{
@@ -39,11 +39,11 @@
         <div id="mainDiv">
             <input type="hidden" th:value="${sessionInfo}" id="user">
             <table>
-                <tr><th style="width:40%">key</th><th>value</th></tr>
+                <tr><th style="width:40%">键</th><th>值</th></tr>
             </table>
 
-            <div align="center" style="margin:10px auto;">
-                <button onclick="toIndex()" class='btn btn-sm btn-primary'>返回首页</button>
+            <div align="center" style="margin:6px auto;">
+                <button onclick="toIndex()" class='btn btn-large btn-primary'>返回首页</button>
             </div>
 
             <div th:include="common::footer"></div>
@@ -51,20 +51,13 @@
         <script th:inline="javascript">
             var sessionInfo = [[${sessionInfo}]];
             $.each(sessionInfo, function(key,value){
-                var trElement = $('<tr><td style="width:40%">'+key+'</td><td>'+value+'</td></tr>');
+                var trElement = $('<tr><td>'+key+'</td><td>'+value+'</td></tr>');
                 $("table").append(trElement);
             });
 
+            // 返回首页
             function toIndex(){
-                $.ajax({
-                    type: 'POST',
-                    url: rootUrl+'/',
-                    data:{user:null},
-                    async:false,
-                    success: function(result) {
-                        window.location.href = rootUrl;
-                    }
-                });
+                window.location.href = rootUrl;
             }
         </script>
     </body>
