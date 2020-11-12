@@ -92,28 +92,6 @@ public class WebSocketClientController extends AdminBaseController
 		System.out.println("退出前SESSION:"+ httpSession.getId());
 		httpSession.invalidate();
 		return "success";
-//		String sessionUser = (String)request.getSession().getAttribute(CommonConstants.S_USER);
-//		System.out.println("清理session缓存:"+sessionUser);
-//
-//		if (StringUtils.isBlank(sessionUser)){
-//			return "success";
-//		}
-//
-//		if (user.equals(sessionUser)) {
-//			removeSessionAttributes(user, request);
-//			//removeCookies(request,response);
-//
-//			String redisKey = REDIS_KEY_PREFIX+user;
-//			String redisValue = SDF.format(new Date()).concat("_").concat("0");
-//			try {
-//				logger.debug("设置redis缓存,key:"+redisKey+"  value:"+redisValue);
-//                //redisUtil.set(redisKey, redisValue);
-//			}catch (Exception e) {
-//				logger.debug("设置redis缓存失败,key:"+redisKey+" error:"+e.getMessage());
-//			}
-//			return "success";
-//		}
-//		return "failed";
 	}
 
 	/**
@@ -738,8 +716,7 @@ public class WebSocketClientController extends AdminBaseController
 		}
 		return Result.fail();
 	}
-	
-	
+
 	/**
 	 * 点赞朋友圈
 	 * 
@@ -1014,21 +991,7 @@ public class WebSocketClientController extends AdminBaseController
 	private WsUsersDO querySpecityUserId(Integer id) {
 	    return wsUsersService.selectById(id);
 	}
-	
-	/**
-	 * 移除session中的变量
-	 * @param request
-	 */
-	private void removeSessionAttributes(String user, HttpServletRequest request) {
-        request.getSession().removeAttribute(CommonConstants.S_USER);
-        request.getSession().removeAttribute(CommonConstants.S_PASS);
-        request.getSession().removeAttribute(CommonConstants.S_WEBSERVERIP);
-        request.getSession().removeAttribute(CommonConstants.S_WEBSERVERPORT);
-        request.getSession().removeAttribute(CommonConstants.S_IMG);
-        request.getSession().removeAttribute(CommonConstants.S_USER_AGENT);
-        request.getSession().invalidate();
-	}
-	
+
 	/**
 	 * 移除kookie
 	 * @param request

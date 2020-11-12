@@ -1,5 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.interceptor;
 
+import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Configuration;
@@ -82,8 +83,9 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         System.out.println("参数列表: " + paramsSb.toString());
         System.out.println("耗时    : " + (System.currentTimeMillis() - startTime) + "ms");
         System.out.println("操作时间: "+ dateFormat.format(new Date()));
-        String user = (String)request.getSession(false).getAttribute(CommonConstants.S_USER);
-        if (StringUtils.isNotBlank(user)){
+        SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession(false).getAttribute(CommonConstants.SESSION_INFO);
+        if (null != sessionInfoBean){
+            String user = sessionInfoBean.getUser();
             System.out.println("操作用户: " + user);
         }
         if (StringUtils.isNotBlank(viewName)){

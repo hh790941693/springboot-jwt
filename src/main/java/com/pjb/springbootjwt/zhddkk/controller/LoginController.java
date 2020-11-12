@@ -1,7 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.base.Result;
@@ -34,7 +33,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -110,14 +108,11 @@ public class LoginController {
             model.addAttribute(CommonConstants.S_USER, "");
             model.addAttribute(CommonConstants.S_PASS, "");
         }
+
+        // 如果用户已登陆过，则直接跳转登陆成功首页
         SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
         if (null != sessionInfoBean){
-            model.addAttribute(CommonConstants.S_USER, sessionInfoBean.getUser());
-            model.addAttribute(CommonConstants.S_PASS, sessionInfoBean.getPassword());
-            model.addAttribute(CommonConstants.S_WEBSERVERIP, sessionInfoBean.getWebserverIp());
-            model.addAttribute(CommonConstants.S_WEBSERVERPORT, sessionInfoBean.getWebserverPort());
-            model.addAttribute(CommonConstants.S_IMG, sessionInfoBean.getSelfImg());
-            model.addAttribute(CommonConstants.S_USER_AGENT, sessionInfoBean.getUserAgent());
+            model.addAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
             return "ws/wsclientIndex";
         }
         return "ws/login";
@@ -239,17 +234,13 @@ public class LoginController {
         String sessionId = request.getSession().getId();
         System.out.println("创建SESSION:" + sessionId);
         logger.info("创建SESSION: {}", sessionId);
-        //session.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
-        request.getSession().setAttribute(CommonConstants.S_USER, user);
-        request.getSession().setAttribute(CommonConstants.S_PASS, dbPass);
-        request.getSession().setAttribute(CommonConstants.S_WEBSERVERIP, webserverip);
-        request.getSession().setAttribute(CommonConstants.S_WEBSERVERPORT, webserverPort);
-        request.getSession().setAttribute(CommonConstants.S_IMG, selfImg);
-        request.getSession().setAttribute(CommonConstants.S_USER_AGENT, shortAgent);
-
+        // 设置session非活动失效时间
+        request.getSession().setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
+        // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(user, dbPass, webserverip, webserverPort, selfImg, shortAgent);
         request.getSession().setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
+        // 往redis中存储用户信息
         String redisKey = REDIS_KEY_PREFIX+user;
         try {
             if (null != curUserObj) {
@@ -265,23 +256,25 @@ public class LoginController {
         response.sendRedirect("wsclientIndex.page");
     }
 
+    /**
+     * 登陆成功首页
+     *
+     * @param request
+     * @param model
+     * @return
+     */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.REGISTER,subModule="",describe="登录成功页面")
     @RequestMapping(value = "wsclientIndex.page")
     public String wsclientIndex(HttpServletRequest request, Model model) {
         logger.debug("访问wsclientIndex.page");
 
         SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
-        model.addAttribute(CommonConstants.S_USER, sessionInfoBean.getUser());
-        model.addAttribute(CommonConstants.S_PASS, sessionInfoBean.getPassword());
-        model.addAttribute(CommonConstants.S_WEBSERVERIP, sessionInfoBean.getWebserverIp());
-        model.addAttribute(CommonConstants.S_WEBSERVERPORT, sessionInfoBean.getWebserverPort());
-        model.addAttribute(CommonConstants.S_IMG, sessionInfoBean.getSelfImg());
-        model.addAttribute(CommonConstants.S_USER_AGENT, sessionInfoBean.getUserAgent());
+        model.addAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
         return "ws/wsclientIndex";
     }
 
     /**
-     * 登录失败
+     * 登录失败页面
      * @param model
      * @return
      */
@@ -292,9 +285,8 @@ public class LoginController {
         return "ws/loginfail";
     }
 
-
     /**
-     * 注册按钮事件
+     * 注册页面
      *
      */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.REGISTER,subModule="",describe="注册首页")
@@ -382,6 +374,10 @@ public class LoginController {
         return "success";
     }
 
+    /**
+     * 查询用户注册的问题相关信息
+     * @return
+     */
     @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.REGISTER,subModule="",describe="查询问题列表")
     @RequestMapping(value = "queryAllCommonData.do")
     @ResponseBody
@@ -476,7 +472,7 @@ public class LoginController {
     }
 
     /**
-     * 生成二维码并显示出来
+     * 生成二维码并显示
      *
      * @return
      */

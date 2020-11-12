@@ -95,12 +95,12 @@
         <!--中间部分-->
         <div id='centerDiv' class="divShadow">
             <!--用户登录相关信息-->
-            <input type="hidden" id="user" name="user" th:value="${user}">
-            <input type="hidden" id="pass" name="pass" th:value="${pass}">
-            <input type="hidden" id="webserverip" name="webserverip" th:value="${webserverip}">
-            <input type="hidden" id="webserverport" name="webserverport" th:value="${webserverport}">
-            <input type="hidden" id="selfimg" name="selfimg" th:value="${selfimg}">
-            <input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
+            <input type="hidden" id="user" name="user" th:value="${sessionInfo.user}">
+            <input type="hidden" id="pass" name="pass" th:value="${sessionInfo.password}">
+            <input type="hidden" id="webserverip" name="webserverip" th:value="${sessionInfo.webserverIp}">
+            <input type="hidden" id="webserverport" name="webserverport" th:value="${sessionInfo.webserverPort}">
+            <input type="hidden" id="selfimg" name="selfimg" th:value="${sessionInfo.selfImg}">
+            <input type="hidden" id="useragent" name="useragent" th:value="${sessionInfo.userAgent}">
 
             <!--滚动消息-->
             <div id="recentNewsDiv">
@@ -110,10 +110,10 @@
             <div id="leftAndRightIframeDiv">
                 <!--左侧导航栏-->
                 <div id="leftNaviDiv">
-                    <div th:if="${user == 'admin'}">
+                    <div th:if="${sessionInfo.user == 'admin'}">
                         <iframe id="leftNaviIframePage" src="ws/serverLeftNavi.page" width="100%" height="100%"></iframe>
                     </div>
-                    <div th:if="${user != 'admin'}">
+                    <div th:if="${sessionInfo.user != 'admin'}">
                         <iframe id="leftNaviIframePage" src="ws/clientLeftNavi.page" width="100%" height="100%"></iframe>
                     </div>
                 </div>
