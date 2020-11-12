@@ -50,10 +50,15 @@
         </div>
         <script th:inline="javascript">
             var sessionInfo = [[${sessionInfo}]];
-            $.each(sessionInfo, function(key,value){
-                var trElement = $('<tr><td>'+key+'</td><td>'+value+'</td></tr>');
+            if (JSON.stringify(sessionInfo) == "{}") {
+                var trElement = $('<tr><td>NA</td><td>尚未登陆,请先登录!</td></tr>');
                 $("table").append(trElement);
-            });
+            } else {
+                $.each(sessionInfo, function (key, value) {
+                    var trElement = $('<tr><td>' + key + '</td><td>' + value + '</td></tr>');
+                    $("table").append(trElement);
+                });
+            }
 
             // 返回首页
             function toIndex(){
