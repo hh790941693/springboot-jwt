@@ -14,10 +14,10 @@ import java.io.PrintWriter;
 import java.util.Enumeration;
 
 /**
- * 首页
+ * session信息控制器
  */
 @Controller
-public class HomeController {
+public class SessionController {
 	/**
 	 * 查看session信息
 	 * @param request
@@ -27,7 +27,7 @@ public class HomeController {
 	@RequestMapping("/sessionInfo")
 	@ResponseBody
 	public void querySessionInfo(HttpServletRequest request, HttpServletResponse response){
-		HttpSession httpSession = request.getSession();
+		HttpSession httpSession = request.getSession(false);
 		Enumeration<String> enumeration = httpSession.getAttributeNames();
 
 		response.setCharacterEncoding("UTF-8");
@@ -35,6 +35,12 @@ public class HomeController {
 		PrintWriter printWriter = null;
 		try {
 			printWriter = response.getWriter();
+			if (enumeration.hasMoreElements()) {
+				int maxInactiveInterval = httpSession.getMaxInactiveInterval();
+				String sessionId = httpSession.getId();
+				printWriter.println("sessionId : " + sessionId);
+				printWriter.println("maxInactiveInterval : " + maxInactiveInterval);
+			}
 			while (enumeration.hasMoreElements()){
 				String name = enumeration.nextElement();
 				Object value = null;
@@ -44,7 +50,7 @@ public class HomeController {
 				} else {
 					value = (String) httpSession.getAttribute(name);
 				}
-				String outputStr = name+" : "+value;
+				String outputStr = name + " : " + value;
 				printWriter.println(outputStr);
 			}
 		}catch (Exception e){
