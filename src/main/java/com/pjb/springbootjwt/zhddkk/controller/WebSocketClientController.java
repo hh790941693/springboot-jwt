@@ -1072,10 +1072,13 @@ public class WebSocketClientController extends AdminBaseController
 	 */
 	@ResponseBody
 	@GetMapping("/robotChat")
-	public String robotChat(HttpServletRequest request, String text){
+	public String robotChat(HttpServletRequest request, String text) throws InterruptedException {
 		for (Map.Entry<String, String> entry: chatMappingMap.entrySet()) {
 		    String key = entry.getKey();
 			if (key.contains(text) || text.contains(key)){
+				long sleepTimes = (long) (Math.random() * 150 + 20);
+				System.out.println(sleepTimes);
+				Thread.sleep(sleepTimes);
 				return entry.getValue();
 			}
 		}
