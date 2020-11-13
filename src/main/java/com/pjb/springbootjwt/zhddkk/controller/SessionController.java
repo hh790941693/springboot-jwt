@@ -3,6 +3,7 @@ package com.pjb.springbootjwt.zhddkk.controller;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,7 +69,31 @@ public class SessionController {
 	public String sessionInfoPage(HttpServletRequest request, Model model){
 		HttpSession httpSession = request.getSession(false);
 		SessionInfoBean sessionInfoBean = (SessionInfoBean)httpSession.getAttribute(CommonConstants.SESSION_INFO);
+		if (null != sessionInfoBean) {
+			String encryPassword = hidePassword(sessionInfoBean.getPassword());
+			sessionInfoBean.setPassword(encryPassword);
+		}
 		model.addAttribute(CommonConstants.SESSION_INFO, JsonUtil.javaobject2Jsonobject(sessionInfoBean));
 		return "ws/sessionInfo";
+	}
+
+	/**
+	 * 对密码做特殊处理
+	 *
+	 * @param password 密文
+	 * @return
+	 */
+	private String hidePassword(String password){
+		StringBuffer sb = new StringBuffer();
+		if (StringUtils.isNotBlank(password)) {
+			for (int i = 0; i < password.length() - 1; i++) {
+				if (i % 3 == 0) {
+					sb.append("*");
+				} else {
+					sb.append(password.charAt(i));
+				}
+			}
+		}
+		return sb.toString();
 	}
 }

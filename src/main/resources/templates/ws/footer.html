@@ -53,10 +53,11 @@
 			</div>
 			<div id="copyrightDiv" style="float:right;color:blue;">
 				<ul>
-					<li onclick="contactAuthor()">联系作者 | </li>
-					<li onclick="donate()">捐赠作者 | </li>
-					<li onclick="feedbackUs()">提出疑问 | </li>
-					<li onclick="aboutUs()">关于我们</li>
+					<li onclick="showSessionInfo()">会话信息&nbsp;|</li>
+					<li onclick="contactAuthor()">&nbsp;联系作者&nbsp;|</li>
+					<li onclick="donate()">&nbsp;捐赠作者&nbsp;|</li>
+					<li onclick="feedbackUs()">&nbsp;提出疑问&nbsp;|</li>
+					<li onclick="aboutUs()">&nbsp;关于我们</li>
 				</ul>
 			</div>
 		</div>
@@ -126,6 +127,18 @@
 				success: function(result) {
 					console.log("升级结果:"+result);
 				}
+			});
+		}
+
+		//查看session信息
+		function showSessionInfo(){
+			parent.layer.open({
+				type : 2,
+				title : '会话信息',
+				maxmin : false,
+				shadeClose : true,//点击遮罩关闭层
+				area : [ '560px', '400px' ],
+				content : rootUrl + '/sessionInfo.page'
 			});
 		}
 
