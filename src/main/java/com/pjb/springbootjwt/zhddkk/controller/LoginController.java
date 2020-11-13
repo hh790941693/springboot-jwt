@@ -327,7 +327,7 @@ public class LoginController {
             // 如果已经注册
             model.addAttribute("user", user);
             model.addAttribute("detail","当前用户已注册,请直接登录!");
-            return "failed";
+            return CommonConstants.FAIL;
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -371,7 +371,7 @@ public class LoginController {
 
         model.addAttribute("user", user);
         model.addAttribute("pass", pass);
-        return "success";
+        return CommonConstants.SUCCESS;
     }
 
     /**
@@ -533,7 +533,7 @@ public class LoginController {
         if (null != wsUsersDO) {
             return JsonUtil.javaobject2Jsonobject(wsUsersDO);
         }else{
-            return "failed";
+            return CommonConstants.FAIL;
         }
     }
 

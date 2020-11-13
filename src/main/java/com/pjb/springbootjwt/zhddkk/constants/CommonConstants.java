@@ -23,7 +23,7 @@ public class CommonConstants
 	public static final int SESSION_INACTIVE_TIMEOUT = 600;
 
 	public static final String SUCCESS = "success";
-	public static final String FAIL = "fail";
+	public static final String FAIL = "failed";
 	
 	//加密秘钥
 	public static final String AES_PASSWORD = "hch";

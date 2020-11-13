@@ -89,7 +89,7 @@ public class WebSocketServerController extends AdminBaseController
 					break;
 				} catch (IOException e) {
 					e.printStackTrace();
-					return "failed";
+					return CommonConstants.FAIL;
 				}
 			}
 		}
@@ -98,9 +98,9 @@ public class WebSocketServerController extends AdminBaseController
 		if (null != wsUsersDO) {
 			wsUsersDO.setState("0");
 			wsUsersService.updateById(wsUsersDO);
-			return "success";
+			return CommonConstants.SUCCESS;
 		}
-		return "failed";
+		return CommonConstants.FAIL;
 	}
 	
 	/**
@@ -116,9 +116,9 @@ public class WebSocketServerController extends AdminBaseController
 		if (null != wsUsersDO) {
 			wsUsersDO.setEnable(enable);
 			wsUsersService.updateById(wsUsersDO);
-			return "success";
+			return CommonConstants.SUCCESS;
 		}
-		return "failed";
+		return CommonConstants.FAIL;
 	}
 	
 	/**
@@ -134,9 +134,9 @@ public class WebSocketServerController extends AdminBaseController
 		if (null != wsUsersDO) {
 			wsUsersDO.setSpeak(speak);
 			wsUsersService.updateById(wsUsersDO);
-			return "success";
+			return CommonConstants.SUCCESS;
 		}
-		return "failed";
+		return CommonConstants.FAIL;
 	}
 	
 	/**
@@ -167,9 +167,9 @@ public class WebSocketServerController extends AdminBaseController
 				socketMap.get(user).getSession().getBasicRemote().sendText(chatBean.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
-				return "failed";
+				return CommonConstants.FAIL;
 			}
-			result = "success";
+			result = CommonConstants.SUCCESS;
 		}
 
 		return result;
@@ -359,9 +359,9 @@ public class WebSocketServerController extends AdminBaseController
 			res = wsAdsService.insert(wsAdsDO);
 		}
 		if (res) {
-			return "success";
+			return CommonConstants.SUCCESS;
 		}else {
-			return "failed";
+			return CommonConstants.FAIL;
 		}
 	}
 	
@@ -495,7 +495,7 @@ public class WebSocketServerController extends AdminBaseController
 	@ResponseBody
 	public String clearOperationLog(){
 		wsOperLogService.delete(null);
-		return "success";
+		return CommonConstants.SUCCESS;
 	}
 
 	/**
@@ -520,7 +520,7 @@ public class WebSocketServerController extends AdminBaseController
 	public String addCommonItem(@RequestBody WsCommonDO params)
 	{
 		wsCommonService.insert(params);
-		return "success";
+		return CommonConstants.SUCCESS;
 	}
 
 	@RequestMapping(value = "deleteCommonItem.do", method = RequestMethod.POST,produces="application/json")
@@ -528,7 +528,7 @@ public class WebSocketServerController extends AdminBaseController
 	public String deleteCommonItem(@RequestBody WsCommonDO params)
 	{
 		wsCommonService.deleteById(params.getId());
-		return "success";
+		return CommonConstants.SUCCESS;
 	}
 
 	@RequestMapping(value = "updateCommonItem.do", method = RequestMethod.POST,produces="application/json")
@@ -536,7 +536,7 @@ public class WebSocketServerController extends AdminBaseController
 	public String updateCommonItem(@RequestBody WsCommonDO params)
 	{
 		wsCommonService.updateById(params);
-		return "success";
+		return CommonConstants.SUCCESS;
 	}
 
 	/**

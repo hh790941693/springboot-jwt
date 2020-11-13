@@ -130,10 +130,10 @@ public class FileOperationController
 					logger.info("删除文件:{} "+file.getAbsolutePath());
 					file.delete();
 				}
-				return "success";
+				return CommonConstants.SUCCESS;
 			}
 		}
-        return "failed";
+        return CommonConstants.FAIL;
 	}
 
 	@RequestMapping("uploadFiles.do")
@@ -142,7 +142,7 @@ public class FileOperationController
         List<FileUploadResultBean> uploadResultList = new ArrayList<FileUploadResultBean>();
 		
 		if(files.length == 0){
-        	return "failed";
+			return CommonConstants.FAIL;
         }
         
 		String saveRootPath = request.getServletContext().getRealPath(CommonConstants.UPLOAD_PATH_SUFFIX);  //文件保存目录

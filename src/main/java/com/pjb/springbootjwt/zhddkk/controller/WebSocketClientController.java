@@ -91,7 +91,7 @@ public class WebSocketClientController extends AdminBaseController
 		HttpSession httpSession = request.getSession(false);
 		System.out.println("退出前SESSION:"+ httpSession.getId());
 		httpSession.invalidate();
-		return "success";
+		return CommonConstants.SUCCESS;
 	}
 
 	/**
@@ -504,7 +504,7 @@ public class WebSocketClientController extends AdminBaseController
 		}else{
 			logger.info(toUserName+"已是你的好友了,无需再次申请");
 		}
-		return "success";
+		return CommonConstants.SUCCESS;
 	}
 	
 	/**
@@ -517,10 +517,10 @@ public class WebSocketClientController extends AdminBaseController
 	public String agreeFriend(@RequestParam("recordId")Integer recordId) {
 		WsFriendsApplyDO wfa = wsFriendsApplyService.selectById(recordId);
 		if (null == wfa){
-			return "failed";
+			return CommonConstants.FAIL;
 		}
 		if (wfa.getProcessStatus().intValue() != 1){
-			return "failed";
+			return CommonConstants.FAIL;
 		}
 
 		wfa.setProcessStatus(3);
@@ -548,7 +548,7 @@ public class WebSocketClientController extends AdminBaseController
                 wsFriendsService.insert(wf2);
 			}
 		}
-		return "success";
+		return CommonConstants.SUCCESS;
 	}
 	
 	/**
@@ -560,19 +560,19 @@ public class WebSocketClientController extends AdminBaseController
 	public String deagreeFriend(Model model,@RequestParam("recordId")Integer recordId) {
 		WsFriendsApplyDO wfa = wsFriendsApplyService.selectById(recordId);
 		if (null == wfa){
-			return "failed";
+			return CommonConstants.FAIL;
 		}
 		if (wfa.getProcessStatus().intValue() != 1){
-			return "failed";
+			return CommonConstants.FAIL;
 		}
 
 		wfa.setProcessStatus(2);
 		boolean updateFlag = wsFriendsApplyService.updateById(wfa);
 		if (updateFlag){
-			return "success";
+			return CommonConstants.SUCCESS;
 		}
 
-		return "failed";
+		return CommonConstants.FAIL;
 	}
 	
 	/**
@@ -584,7 +584,7 @@ public class WebSocketClientController extends AdminBaseController
 	public String deleteFriend(@RequestParam("id")Integer id) {
 		WsFriendsDO wsFriendsDO = wsFriendsService.selectById(id);
 		if (null == wsFriendsDO){
-			return "failed";
+			return CommonConstants.FAIL;
 		}
 		
 		String uname = wsFriendsDO.getUname();
@@ -600,8 +600,8 @@ public class WebSocketClientController extends AdminBaseController
 			wsFriendsApplyService.delete(new EntityWrapper<WsFriendsApplyDO>().eq("from_name", uname)
 					.eq("to_name", fname));
 		}
-		
-		return "success";
+
+		return CommonConstants.SUCCESS;
 	}
 	
 	/**
@@ -883,9 +883,9 @@ public class WebSocketClientController extends AdminBaseController
 			}
 		}catch (Exception e) {
 			logger.error("更新个人信息失败!"+e.getMessage());
-			return "failed";
+			return CommonConstants.FAIL;
 		}
-		return "success";
+		return CommonConstants.SUCCESS;
 	}
 	
 	/**
@@ -902,7 +902,7 @@ public class WebSocketClientController extends AdminBaseController
 			return JsonUtil.javaobject2Jsonobject(wsUserProfileDO);
 		}
 
-		return "failed";
+		return CommonConstants.FAIL;
 	}
 
 	/**
