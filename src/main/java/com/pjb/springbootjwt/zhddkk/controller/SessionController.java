@@ -4,6 +4,7 @@ import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,11 +70,14 @@ public class SessionController {
 	public String sessionInfoPage(HttpServletRequest request, Model model){
 		HttpSession httpSession = request.getSession(false);
 		SessionInfoBean sessionInfoBean = (SessionInfoBean)httpSession.getAttribute(CommonConstants.SESSION_INFO);
+
+        SessionInfoBean copyBean = new SessionInfoBean();
+        BeanUtils.copyProperties(sessionInfoBean, copyBean);
 		if (null != sessionInfoBean) {
 			String encryPassword = hidePassword(sessionInfoBean.getPassword());
-			sessionInfoBean.setPassword(encryPassword);
+            copyBean.setPassword(encryPassword);
 		}
-		model.addAttribute(CommonConstants.SESSION_INFO, JsonUtil.javaobject2Jsonobject(sessionInfoBean));
+		model.addAttribute(CommonConstants.SESSION_INFO, JsonUtil.javaobject2Jsonobject(copyBean));
 		return "ws/sessionInfo";
 	}
 

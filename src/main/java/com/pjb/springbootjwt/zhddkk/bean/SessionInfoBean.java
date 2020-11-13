@@ -22,6 +22,10 @@ public class SessionInfoBean {
 
     private String userAgent;
 
+    public SessionInfoBean(){
+
+    }
+
     public SessionInfoBean(String id, String user, String password, String webserverIp, String webserverPort, String selfImg, String userAgent) {
         this.id = id;
         this.user = user;
