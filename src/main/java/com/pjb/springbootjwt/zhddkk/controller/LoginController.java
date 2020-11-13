@@ -32,6 +32,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -39,13 +40,11 @@ import java.util.*;
 @Controller
 public class LoginController {
 
-    private static final int COOKIE_TIMEOUT = 1800; //cookie过期时间 30分钟
-
     private static final String REDIS_KEY_PREFIX = "ws_"; //登陆用户的redis缓存前缀
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    private static Map<String,String> configMap = WsInterceptor.getConfigMap();
+    private static final Map<String,String> configMap = WsInterceptor.getConfigMap();
 
     @Autowired
     private WebSocketConfig webSocketConfig;
@@ -217,13 +216,13 @@ public class LoginController {
         Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP, webserverip);
         Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT, webserverPort);
         userCookie.setPath("/");
-        userCookie.setMaxAge(COOKIE_TIMEOUT);//用户名30分钟
+        userCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);//用户名30分钟
         passCookie.setPath("/");
         passCookie.setMaxAge(600);//密码10分钟
         webserveripCookie.setPath("/");
-        webserveripCookie.setMaxAge(COOKIE_TIMEOUT);
+        webserveripCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
         webserverportCookie.setPath("/");
-        webserverportCookie.setMaxAge(COOKIE_TIMEOUT);
+        webserverportCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
         response.addCookie(userCookie);
         response.addCookie(passCookie);
         response.addCookie(webserveripCookie);
@@ -231,11 +230,12 @@ public class LoginController {
 
         //session
         //request.getSession().invalidate();
-        String sessionId = request.getSession().getId();
+        HttpSession httpSession = request.getSession();
+        String sessionId = httpSession.getId();
         System.out.println("创建SESSION:" + sessionId);
         logger.info("创建SESSION: {}", sessionId);
         // 设置session非活动失效时间
-        request.getSession().setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT); //session不活动失效时间
+        httpSession.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT); //session不活动失效时间
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(sessionId, user, dbPass, webserverip, webserverPort, selfImg, shortAgent);
         request.getSession().setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);

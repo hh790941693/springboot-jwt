@@ -62,6 +62,8 @@ public class Application {
         log.info("==================> run at http://"+hostAddress+":" + serverProperties.getPort() + contextPath + "  <==================");
     }
 
+
+
     @Bean
     RestTemplate restTemplate(){
         return new RestTemplate();

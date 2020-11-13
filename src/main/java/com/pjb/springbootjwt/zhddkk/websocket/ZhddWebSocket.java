@@ -142,7 +142,7 @@ public class ZhddWebSocket {
 			HttpSession httpSession = (HttpSession) endpointConfig.getUserProperties().get(HttpSession.class.getName());
 			String sessionUser = (String) httpSession.getAttribute(CommonConstants.S_USER + "_" + user);
 			if (StringUtils.isBlank(sessionUser)) {
-				httpSession.setMaxInactiveInterval(CommonConstants.SESSION_TIMEOUT);
+				httpSession.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 				httpSession.setAttribute(CommonConstants.S_USER + "_" + user, user);
 				httpSession.setAttribute(CommonConstants.S_PASS + "_" + user, pass);
 			}

@@ -2,7 +2,7 @@ server:
   servlet:
     context-path: /
     session:
-      timeout: 180s
+      timeout: PT30M
   tomcat:
     max-threads: 1000
     min-spare-threads: 30

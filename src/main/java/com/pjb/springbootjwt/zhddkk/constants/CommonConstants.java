@@ -16,7 +16,11 @@ public class CommonConstants
 	public static final String S_IMG = "selfimg";           //个人头像
 	public static final String S_USER_AGENT = "useragent"; //设备信息
 
-	public static final int SESSION_TIMEOUT = 180; //session不活动时的超时时间  10分钟
+	//cookie过期时间(单位:秒) 30分钟
+	public static final int COOKIE_TIMEOUT = 1800;
+
+	//session不活动时的超时时间(单位:秒)  10分钟
+	public static final int SESSION_INACTIVE_TIMEOUT = 600;
 
 	public static final String SUCCESS = "success";
 	public static final String FAIL = "fail";
