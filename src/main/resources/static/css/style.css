@@ -3617,7 +3617,7 @@ code {
 
 .ibox {
     clear: both;
-    margin-bottom: 25px;
+    margin-bottom: 0;
     margin-top: 0;
     padding: 0;
 }
