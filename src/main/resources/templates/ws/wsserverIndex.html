@@ -328,7 +328,7 @@
                 defaultCss = "color:blue;font-size:10px;line-height:14px;";
             }
 
-            if (curPageid != "wsserverChartMonitor.page"){
+            if (curPageid.indexOf("wsserverChartMonitor.page") == -1){
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 chatRecord = chatRecord + htmlData;
                 unreadCount = unreadCount+1;
