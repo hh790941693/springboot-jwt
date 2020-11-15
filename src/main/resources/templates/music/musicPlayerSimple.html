@@ -129,23 +129,37 @@
 				},
 				nextMusic:function(){
 					//下一首
-					if (app.curSelectedIndex>=app.musicData.length-1){
-						app.curSelectedIndex = 0;
-					}else{
-						app.curSelectedIndex = app.curSelectedIndex+1;
-					}
-					$("#btnPlay").text("播放");
-					app.play();
+                    if (app.playMode == 1) {
+                        if (app.curSelectedIndex >= app.musicData.length - 1) {
+                            app.curSelectedIndex = 0;
+                        } else {
+                            app.curSelectedIndex = app.curSelectedIndex + 1;
+                        }
+                        $("#btnPlay").text("播放");
+                        app.play();
+                    } else if (app.playMode == 0){
+                        $("#btnPlay").text("播放");
+                        app.play();
+                    } else if (app.playMode == 2){
+                        app.randomMusic();
+                    }
 				},
 				preMusic:function(){
 					//上一首
-					if (app.curSelectedIndex==0){
-						app.curSelectedIndex = app.musicData.length-1;
-					}else{
-						app.curSelectedIndex = app.curSelectedIndex-1;
-					}
-					$("#btnPlay").text("播放");
-					app.play();
+                    if (app.playMode == 1) {
+                        if (app.curSelectedIndex == 0) {
+                            app.curSelectedIndex = app.musicData.length - 1;
+                        } else {
+                            app.curSelectedIndex = app.curSelectedIndex - 1;
+                        }
+                        $("#btnPlay").text("播放");
+                        app.play();
+                    } else if (app.playMode == 0){
+                        $("#btnPlay").text("播放");
+                        app.play();
+                    } else if (app.playMode == 2){
+                        app.randomMusic();
+                    }
 				},
                 playByIndex:function(){
                     var selectedMusicInfo = app.musicData[app.curSelectedIndex];
