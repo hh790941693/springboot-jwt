@@ -147,13 +147,25 @@
 					$("#btnPlay").text("播放");
 					app.play();
 				},
+                playByIndex:function(){
+                    var selectedMusicInfo = app.musicData[app.curSelectedIndex];
+                    var filename = selectedMusicInfo.filename;
+                    var url = selectedMusicInfo.url;
+                    app.songName = filename;
+
+                    $("#player").attr("src", url);
+                    $("#btnPlay").text("暂停");
+                    $("#statusSpan").text("正在播放:");
+
+                    $("#player")[0].play();
+                },
 				randomMusic:function(){
 					// 随机播放
 					var randomNum = randomNumber(0,app.musicData.length-1);
 					app.curSelectedIndex = randomNum;
-					app.play();
+                    app.playByIndex();
 				},
-				changePlayMode:function () {
+				changePlayMode:function(){
 					if (app.playMode >= Object.keys(app.playModeMap).length-1){
 						app.playMode = 0;
 					}else{
