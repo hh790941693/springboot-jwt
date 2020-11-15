@@ -18,7 +18,7 @@
 			.mouseonClass{
 				background-color:#ffc107;
 			}
-			
+
 			#musicTable th{
 				color:white;
 				text-align:center;
@@ -103,7 +103,7 @@
 						<th style="display:none;">url</th>
 						<th style="width:40px;">操作</th>
 					</tr>
-					<tr v-for="(music,index) in musicData" :key="index">
+					<tr v-for="(music,index) in musicData" :key="index" @mouseenter="mouseEnter(music, index)" @mouseleave="mouseLeave(music, index)">
 						<td>
 							<div v-if="index==0">
 								<input type='radio' name='selectMusic' checked="checked"/>
@@ -245,7 +245,7 @@
                         }
                     })
                 },
-				deleteMusic:function (id) {
+				deleteMusic:function(id) {
 					//删除音乐
 					layer.confirm("确定删除吗?", {btn: ['确定', '取消'], title: "提示"},
 						function (){
@@ -263,7 +263,21 @@
 						}
 						,function (){layer.close()}
 					);
-				}
+				},
+                mouseEnter:function (music, index) {
+					// 鼠标进入事件
+                    $.each($("#musicTable tr"), function(i,item){
+                        var itemId = $(item).children().eq(1).text();
+                        if (itemId == music.id && !$(item).hasClass("thClass") && !$(item).hasClass("selectRowClass")){
+                            $(item).addClass("mouseonClass");
+                        }else {
+                            $(item).removeClass("mouseonClass");
+                        }
+                    });
+                },
+                mouseLeave:function (music, index) {
+                    // 鼠标离开事件  do nothing
+                }
 			},
 			created: function () {
 				this.queryMusicList();
