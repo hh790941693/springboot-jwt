@@ -210,11 +210,20 @@ public class LoginController {
             selfImg = wup.getImg();
         }
 
+        //session
+        //request.getSession().invalidate();
+        HttpSession httpSession = request.getSession();
+        String sessionId = httpSession.getId();
+        System.out.println("创建SESSION:" + sessionId);
+        logger.info("创建SESSION: {}", sessionId);
+
         //记录cookie
         Cookie userCookie = new Cookie(CommonConstants.S_USER,user);
         Cookie passCookie = new Cookie(CommonConstants.S_PASS,dbPass);
         Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP, webserverip);
         Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT, webserverPort);
+        // 客户端的JSESSIONID
+        Cookie jsessionIdCookie = new Cookie("JSESSIONID", sessionId);
         userCookie.setPath("/");
         userCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);//用户名30分钟
         passCookie.setPath("/");
@@ -223,17 +232,14 @@ public class LoginController {
         webserveripCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
         webserverportCookie.setPath("/");
         webserverportCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
+        jsessionIdCookie.setPath("/");
+        jsessionIdCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT); // 客户端的JSESSIONID保存30分钟
         response.addCookie(userCookie);
         response.addCookie(passCookie);
         response.addCookie(webserveripCookie);
         response.addCookie(webserverportCookie);
+        response.addCookie(jsessionIdCookie);
 
-        //session
-        //request.getSession().invalidate();
-        HttpSession httpSession = request.getSession();
-        String sessionId = httpSession.getId();
-        System.out.println("创建SESSION:" + sessionId);
-        logger.info("创建SESSION: {}", sessionId);
         // 设置session非活动失效时间
         httpSession.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT); //session不活动失效时间
         // 往session中存储用户信息

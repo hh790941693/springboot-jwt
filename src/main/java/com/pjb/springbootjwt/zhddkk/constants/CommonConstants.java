@@ -9,6 +9,8 @@ public class CommonConstants
 	// session信息
 	public static final String SESSION_INFO = "sessionInfo";
 
+	public static final String JSESSIONID = "JSESSIONID";
+
 	public static final String S_USER = "user";
 	public static final String S_PASS = "pass";
 	public static final String S_WEBSERVERIP = "webserverip";
