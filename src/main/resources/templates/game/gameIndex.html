@@ -42,9 +42,9 @@
 				<li id="../game/myrussia.page" onclick="$('#iframePage').attr('src',this.id)">俄罗斯方块2</li>
 			</ul>
 
-			<div style="position: absolute;bottom: 10px;left:52px;">
+			<div style="position: absolute;bottom: 10px;left:30px;">
 				<button id="showNewWindowBtn">全屏显示</button>
-				<button id="backBtn" style='display:none'>返&nbsp;&nbsp;&nbsp;&nbsp;回</button>
+				&nbsp;&nbsp;&nbsp;<button id="backBtn">返&nbsp;&nbsp;&nbsp;&nbsp;回</button>
 			</div>
 		</div>
 		
@@ -69,7 +69,7 @@
 		})
 
 		$('#backBtn').click(function(){
-			window.location.href="../ws/wsserverIndex.page?user=admin";
+			top.location.href = rootUrl;
 		})
 
 		$("ul li").hover(function(){

@@ -81,7 +81,7 @@
 
 			<div>
 				<button id="showNewWindowBtn">全屏显示</button>
-				<button id="backBtn" style='display:none'>返&nbsp;&nbsp;&nbsp;&nbsp;回</button>
+				&nbsp;&nbsp;&nbsp;<button id="backBtn">返&nbsp;&nbsp;&nbsp;&nbsp;回</button>
 			</div>
 		</div>
 		<div id="rightCanvasDiv" align="center">
@@ -107,7 +107,7 @@
 		})
 
 		$('#backBtn').click(function(){
-			window.location.href="../ws/wsserverIndex.page?user=admin";
+            top.location.href = rootUrl;
 		})
 
 		$("ul li").hover(function(){
