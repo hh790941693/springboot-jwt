@@ -401,7 +401,7 @@ function queryPersonInfo(thisObj){
         type: 2,
         title: '用户个人信息',
         shadeClose: true,
-        shade: 0.8,
+        shade: 0.2,
         area: ['390px', '420px'],
         content: prefix+'/showPersonalInfo.page?user='+user
     });
