@@ -327,7 +327,7 @@
             if (uploadFiles == ""){
                 return false;
             }
-            layer.msg('正在上传文件，请稍候……', { icon: 16, shade: 0.3,shadeClose:false,time:300000 });
+            layer.msg('正在上传文件，请稍候……', { icon: 16, shade: 0.2,shadeClose:false,time:300000 });
             return true;
         }
 
@@ -350,9 +350,8 @@
 				type: 1,
 				title: "上传结果",
 				shadeClose: true,
-				shade: 0.3,
+				shade: 0.2,
 				offset: "20%",
-				shadeClose: false,
 				area: ['530px', '60%'],
 				content: showText
 			});
