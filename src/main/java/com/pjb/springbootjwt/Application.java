@@ -91,19 +91,19 @@ public class Application {
         //创建springboot临时目录
         if (StringUtils.isNotEmpty(tomcatTmpPath)) {
             log.info("准备创建tomcat临时目录:{}", tomcatTmpPath);
-            System.out.println("准备创建tomcat临时目录:"+tomcatTmpPath);
+            //System.out.println("准备创建tomcat临时目录:"+tomcatTmpPath);
             try {
                 File file = new File(tomcatTmpPath);
                 if (!file.exists()) {
                     if (file.mkdirs()){
                         log.info("创建临时目录成功");
-                        System.out.println("创建临时目录成功");
+                        //System.out.println("创建临时目录成功");
                     }
                 }
             }catch (Exception e){
                 e.printStackTrace();
                 log.info("创建临时目录异常:{}",e.getMessage());
-                System.out.println("创建临时目录异常:"+e.getMessage());
+                //System.out.println("创建临时目录异常:"+e.getMessage());
             }
         }
         return factory.createMultipartConfig();

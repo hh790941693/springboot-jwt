@@ -107,6 +107,7 @@ public class SesstionTimeoutFilter implements Filter {
 
         // 拦截 返回到登录页面
         logger.info("session user:" + user);
+        logger.info("servletPath:" + servletPath);
         // JSP格式返回
         if (!(httpServletRequest.getHeader("accept").indexOf("application/json") > -1 || (httpServletRequest
                 .getHeader("X-Requested-With") != null && httpServletRequest.getHeader("X-Requested-With").indexOf(
