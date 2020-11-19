@@ -34,11 +34,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
-import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
-import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
+import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * webSocket控制器

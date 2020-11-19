@@ -18,7 +18,7 @@ import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
-import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;

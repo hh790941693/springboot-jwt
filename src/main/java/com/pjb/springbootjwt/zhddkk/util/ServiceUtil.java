@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
-import com.pjb.springbootjwt.zhddkk.entity.Page;
+import com.pjb.springbootjwt.zhddkk.entity.PageEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.druid.util.StringUtils;
@@ -86,7 +86,7 @@ public class ServiceUtil {
 	 * @param numPerPage 每页显示条数
 	 * @return  数据库分页
 	 */
-	public static Page buildPage(int curPage, int numPerPage){
+	public static PageEntity buildPage(int curPage, int numPerPage){
 		int start = 0;
 		int limit = numPerPage;
 		if (curPage == 0 || curPage == 1){
@@ -95,7 +95,7 @@ public class ServiceUtil {
 		else{
 			start = (curPage-1) * numPerPage;
 		}
-		Page p = new Page();
+		PageEntity p = new PageEntity();
 		p.setStart(start);
 		p.setLimit(limit);
 		

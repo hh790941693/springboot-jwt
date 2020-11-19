@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
-import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
-import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
+import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

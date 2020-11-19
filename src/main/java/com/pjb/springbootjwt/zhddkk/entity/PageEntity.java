@@ -6,7 +6,7 @@ package com.pjb.springbootjwt.zhddkk.entity;
  * @author Administrator
  *
  */
-public class Page {
+public class PageEntity {
 	// 用户接受前台参数用
 	public int curPage;    //当前页码
 	public int numPerPage; //每页显示条数

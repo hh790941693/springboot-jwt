@@ -5,8 +5,8 @@ import java.util.Date;
 
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsDO;
-import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
-import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
+import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

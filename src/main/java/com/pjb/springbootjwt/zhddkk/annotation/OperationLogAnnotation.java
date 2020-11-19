@@ -1,8 +1,8 @@
 package com.pjb.springbootjwt.zhddkk.annotation;
 
 
-import com.pjb.springbootjwt.zhddkk.enumx.ModuleEnum;
-import com.pjb.springbootjwt.zhddkk.enumx.OperationEnum;
+import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

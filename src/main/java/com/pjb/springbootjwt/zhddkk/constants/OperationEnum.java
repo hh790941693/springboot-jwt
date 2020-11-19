@@ -1,4 +1,4 @@
-package com.pjb.springbootjwt.zhddkk.enumx;
+package com.pjb.springbootjwt.zhddkk.constants;
 
 public enum OperationEnum {
     INSERT("增加"),
