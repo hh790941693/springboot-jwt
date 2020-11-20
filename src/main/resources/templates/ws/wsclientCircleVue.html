@@ -150,9 +150,15 @@
 	<div id="mainDiv">
 		<div id='addCircleDiv' align='right'>
 			<span>总条数:{{totalCount}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>当前第{{curPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{totalPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;
-			<button @click='toPrePage()' class='btn btn-sm btn-primary' >&lt;&lt;</button>&nbsp;&nbsp;
-			<button @click='toNextPage()' class='btn btn-sm btn-primary' >&gt;&gt;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button @click='addCircle()' class='btn btn-sm btn-success'>&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;布&nbsp;&nbsp;</button>
+			<button @click='toPrePage()' class='btn btn-sm btn-primary' >
+                <span class="glyphicon glyphicon-arrow-left"></span>
+			</button>&nbsp;&nbsp;
+			<button @click='toNextPage()' class='btn btn-sm btn-primary' >
+                <span class="glyphicon glyphicon-arrow-right"></span>
+            </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button @click='addCircle()' class='btn btn-sm btn-success'>
+                <span class="glyphicon glyphicon-edit"> 发布</span>&nbsp;&nbsp;
+            </button>
 		</div>
 		<div id="bodyCircleDiv">
 			<div class="circleDivClass" v-for="(item,index) in circleList">
@@ -168,10 +174,16 @@
 							</template>
 							<span class='likeNumSpanClass'>{{item.likeNum}}人点赞</span>
 							<span class='buttonGroupSpan'>
-								<button @click='toComment(item.id)' class='label label-primary'>评论</button>&nbsp;&nbsp;&nbsp;
-								<button @click='toLike(item.id)' class='label label-info'>点赞</button>&nbsp;&nbsp;&nbsp;
+								<button @click='toComment(item.id)' class='label label-primary'>
+                                    <span class="glyphicon glyphicon-comment"></span>
+                                </button>&nbsp;&nbsp;&nbsp;
+								<button @click='toLike(item.id)' class='label label-info'>
+                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                </button>&nbsp;&nbsp;&nbsp;
 								<template v-if="curUser == 'admin' || curUser == item.userName">
-									<button @click='deleteCircle(item.id)' class='label label-danger'>删除</button>
+									<button @click='deleteCircle(item.id)' class='label label-danger'>
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
 								</template>
 							</span>
 							<span class='timeSpanClass'>{{compareTwoTime(new Date(item.createTime).getTime(),new Date().getTime())}}</span>
@@ -209,8 +221,12 @@
 		</div>
 		
 		<div id="naviDiv" align="center">
-			<button id='preBtn' @click='toPrePage()' class='btn btn-sm btn-primary' >前一页</button>
-			<button id='nextBtn' @click='toNextPage()' class='btn btn-sm btn-primary' >后一页</button>
+			<button id='preBtn' @click='toPrePage()' class='btn btn-sm btn-primary' >
+                <span class="glyphicon glyphicon-arrow-left"></span>
+            </button>
+			<button id='nextBtn' @click='toNextPage()' class='btn btn-sm btn-primary' >
+                <span class="glyphicon glyphicon-arrow-right"></span>
+            </button>
 		</div>		
 	</div>
 
