@@ -70,12 +70,22 @@
                 <input type="radio" name="showmode" value="1">有&nbsp;&nbsp;
 				<span id="curTimeSpan">0000-00-00 00:00:00</span>
 			</div>
-			<div style="height:69%;padding-top:4px;">
-                <button id="simpleMusicBtn" onclick="parent.showSimpleMusicPlayer()" class='btn btn-sm btn-warning'>音&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乐</button>&nbsp;&nbsp;
-                <button id="signBtn" onclick="parent.sign()" class='btn btn-sm btn-info'>签&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;到</button>&nbsp;&nbsp;
-				<button id="showQRCodeBtn" onclick="parent.showQRCode()" class='btn btn-sm btn-success'>扫码登录</button>&nbsp;&nbsp;
-				<button id="setPersonInfoBtn" onclick="parent.setPersonInfoBtn()" class="btn btn-sm btn-primary">设&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</button>&nbsp;&nbsp;
-				<button id="exitBtn" class='btn btn-sm btn-danger' onclick="parent.toIndex()">退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出</button>
+			<div style="height:69%;padding-top:6px;">
+                <button id="simpleMusicBtn" onclick="parent.showSimpleMusicPlayer()" class='btn btn-large btn-warning'>
+                    <span class="glyphicon glyphicon-music"></span>
+                </button>&nbsp;&nbsp;
+                <button id="signBtn" onclick="parent.sign()" class='btn btn-large btn-info' alt="签到">
+                    <span class="glyphicon glyphicon-check"></span>
+                </button>&nbsp;&nbsp;
+				<button id="showQRCodeBtn" onclick="parent.showQRCode()" class='btn btn-large btn-success'>
+                    <span class="glyphicon glyphicon-qrcode"></span>
+                </button>&nbsp;&nbsp;
+				<button id="setPersonInfoBtn" onclick="parent.setPersonInfoBtn()" class="btn btn-large btn-primary">
+                    <span class="glyphicon glyphicon-cog"></span>
+                </button>&nbsp;&nbsp;
+				<button id="exitBtn" class='btn btn-large btn-danger' onclick="parent.toIndex()">
+                    <span class="glyphicon glyphicon-log-out"></span>
+                </button>
 			</div>
 		</div>
 	</div>
