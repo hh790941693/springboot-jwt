@@ -71,10 +71,18 @@
 		</div>
 
 		<div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
-			<button id="refreashConlineCount" class='label label-info' onclick="getOnlineInfo()">刷&nbsp;&nbsp;&nbsp;&nbsp;新</button>&nbsp;&nbsp;
-			<button class='label label-primary' onclick="changeBackgroundImage()">更换背景</button>&nbsp;&nbsp;
-			<button class='label label-danger' onclick="clearScreen()">清&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;屏</button>&nbsp;&nbsp;
-			<button id="btnReconnect" class='label label-primary' type="button" onclick="loginServer()">重新连接</button>
+            <button id="refreashConlineCount" class='label label-info' th:title="刷新" onclick="getOnlineInfo()">
+                <span class="glyphicon glyphicon-refresh"></span>
+            </button>&nbsp;&nbsp;
+            <button class='label label-primary' th:title="切换背景" onclick="changeBackgroundImage()">
+                <span class="glyphicon glyphicon-picture"></span>
+            </button>&nbsp;&nbsp;
+            <button class='label label-danger' th:title="清屏" onclick="clearScreen()">
+                <span class="glyphicon glyphicon-ban-circle"></span>
+            </button>&nbsp;&nbsp;
+            <button id="btnReconnect" class='label label-primary' type="button" th:title="重新连接" onclick="loginServer()">
+                <span class="glyphicon glyphicon-retweet"></span>
+            </button>
 		</div>
 	</div>
 

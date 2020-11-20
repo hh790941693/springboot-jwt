@@ -71,19 +71,19 @@
 				<span id="curTimeSpan">0000-00-00 00:00:00</span>
 			</div>
 			<div style="height:69%;padding-top:6px;">
-                <button id="simpleMusicBtn" onclick="parent.showSimpleMusicPlayer()" class='btn btn-large btn-warning'>
+                <button id="simpleMusicBtn" onclick="parent.showSimpleMusicPlayer()" class='btn btn-large btn-warning' th:title="音乐">
                     <span class="glyphicon glyphicon-music"></span>
                 </button>&nbsp;&nbsp;
-                <button id="signBtn" onclick="parent.sign()" class='btn btn-large btn-info' alt="签到">
+                <button id="signBtn" onclick="parent.sign()" class='btn btn-large btn-info' th:title="签到">
                     <span class="glyphicon glyphicon-check"></span>
                 </button>&nbsp;&nbsp;
-				<button id="showQRCodeBtn" onclick="parent.showQRCode()" class='btn btn-large btn-success'>
+				<button id="showQRCodeBtn" onclick="parent.showQRCode()" class='btn btn-large btn-success' th:title="二维码登陆">
                     <span class="glyphicon glyphicon-qrcode"></span>
                 </button>&nbsp;&nbsp;
-				<button id="setPersonInfoBtn" onclick="parent.setPersonInfoBtn()" class="btn btn-large btn-primary">
+				<button id="setPersonInfoBtn" onclick="parent.setPersonInfoBtn()" class="btn btn-large btn-primary" th:title="设置">
                     <span class="glyphicon glyphicon-cog"></span>
                 </button>&nbsp;&nbsp;
-				<button id="exitBtn" class='btn btn-large btn-danger' onclick="parent.toIndex()">
+				<button id="exitBtn" class='btn btn-large btn-danger' onclick="parent.toIndex()" th:title="登出">
                     <span class="glyphicon glyphicon-log-out"></span>
                 </button>
 			</div>
