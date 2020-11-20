@@ -3,6 +3,7 @@ package com.pjb.springbootjwt.zhddkk.controller;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -260,31 +261,13 @@ public class WebSocketClientController extends AdminBaseController
 			return Result.fail(new WsOnlineInfo());
 		}
 		Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
+
 		//所有用户
 		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER));
 		//在线用户
 		List<WsUsersDO> onlineUserList = new ArrayList<WsUsersDO>();
 		//离线用户
 		List<WsUsersDO> offlineUserList = new ArrayList<WsUsersDO>();
-		//当前用户信息
-		WsUsersDO currentOnlineUserInfo = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-		WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", currentOnlineUserInfo.getId()));
-		if (null != wsUserProfileDO) {
-            currentOnlineUserInfo.setHeadImage(wsUserProfileDO.getImg());
-        }
-		//我的好友列表
-		List<WsUsersDO> friendsUserList = wsUsersService.queryMyFriendList(currentOnlineUserInfo.getId());
-        //好友在线数
-        int onlineFriendCount = 0;
-        //好友离线数
-        int offlineFriendCount = 0;
-		for (WsUsersDO wu : friendsUserList){
-		    if (null != wu && wu.getState().equals("0")){
-                offlineFriendCount += 1;
-            }else{
-                onlineFriendCount += 1;
-            }
-        }
 
 		for (WsUsersDO wu : allUserList) {
 			if (socketMap.containsKey(wu.getName())) {
@@ -295,7 +278,19 @@ public class WebSocketClientController extends AdminBaseController
 				offlineUserList.add(wu);
 			}
 		}
-		
+
+		//当前用户信息
+		WsUsersDO currentOnlineUserInfo = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+		WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", currentOnlineUserInfo.getId()));
+		if (null != wsUserProfileDO) {
+            currentOnlineUserInfo.setHeadImage(wsUserProfileDO.getImg());
+        }
+
+		//我的好友列表
+		List<WsUsersDO> friendsUserList = wsUsersService.queryMyFriendList(currentOnlineUserInfo.getId());
+		List<WsUsersDO> offLineFriendList = friendsUserList.stream().filter(wu->wu !=null && wu.getState().equals("0")).collect(Collectors.toList());
+		List<WsUsersDO> onineFriendList = friendsUserList.stream().filter(wu->wu !=null && wu.getState().equals("1")).collect(Collectors.toList());
+
 		WsOnlineInfo woi = new WsOnlineInfo();
 		woi.setOfflineCount(offlineUserList.size());
 		woi.setOnlineCount(onlineUserList.size());
@@ -304,8 +299,8 @@ public class WebSocketClientController extends AdminBaseController
 		woi.setOnlineUserList(onlineUserList);
 		woi.setOfflineUserList(offlineUserList);
 		woi.setFriendsList(friendsUserList);
-		woi.setOnlineFriendCount(onlineFriendCount);
-		woi.setOfflineFriendCount(offlineFriendCount);
+		woi.setOnlineFriendCount(onineFriendList.size());
+		woi.setOfflineFriendCount(offLineFriendList.size());
 		woi.setCommonMap(buildCommonData());
 		woi.setCurrentOnlineUserInfo(currentOnlineUserInfo);
 

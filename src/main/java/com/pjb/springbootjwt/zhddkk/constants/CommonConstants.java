@@ -1,8 +1,10 @@
 package com.pjb.springbootjwt.zhddkk.constants;
 
+/**
+ * 常量
+ */
 public class CommonConstants 
 {
-	public static final String SESSION_USER = "USER";
 	public static final String UPLOAD_PATH_SUFFIX = "/WEB-INF/upload";
 	public static final String UPLOAD_TEMP_SUFFIX = "/WEB-INF/temp";
 
