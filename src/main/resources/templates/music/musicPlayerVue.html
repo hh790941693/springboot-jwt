@@ -85,10 +85,10 @@
 							<button id="btnNext" class='btn btn-primary' @click="nextMusic()">
                                 <span class="glyphicon glyphicon-step-forward"></span>
                             </button>
-							<button id="btnShowList" class='btn btn-warning' onclick="showList(this)">关闭列表</button>
 							<button id="btnRefresh" class='btn btn-info' @click="refreash()">
                                 <span class="glyphicon glyphicon-refresh"></span>
                             </button>
+                            <button id="btnShowList" class='btn btn-warning' onclick="showList(this)">关闭列表</button>
 						</div>
 						<div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
 							<input type="radio" name="playmode" value="-1" checked="checked">&nbsp;无&nbsp;&nbsp;
@@ -126,10 +126,10 @@
 						<td>{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
 						<td>
 							<button class='delBtn btn btn-sm btn-success' @click="playMusic(music.id)">
-                                <span class="glyphicon glyphicon-play"></span> 播放
+                                <span class="glyphicon glyphicon-play"></span>
                             </button>
 							<button class='delBtn btn btn-sm btn-danger' @click="deleteMusic(music.id)">
-                                <span class="glyphicon glyphicon-remove"></span> 删除
+                                <span class="glyphicon glyphicon-remove"></span>
                             </button>
 						</td>
 					</tr>

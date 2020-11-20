@@ -54,7 +54,9 @@
 			<p>WebSocket</p>
 		</div>
 	</div>
-	<button id="phonelogin" class='btn btn-success btn-sm' style="position:absolute;top:8px;left:326px;">扫码登录</button>
+	<button id="phonelogin" class='btn btn-success btn-large' style="position:absolute;top:8px;left:350px;">
+        <span class="glyphicon glyphicon-qrcode"></span>
+    </button>
 	<img id="backgroundImg" src="../img/fengjing/fj10.jpg" hidden>
 	<form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
 		<div style="height:25px;">
@@ -73,7 +75,9 @@
 		</div>
 
 		<div align="center" style="margin-top:20px;margin-left:-30px;">
-			<button id="btnlogin" class='btn btn-success btn-sm'  type="submit" style="width:100px;" >登&nbsp;&nbsp;&nbsp;录</button>
+			<button id="btnlogin" class='btn btn-success btn-large'  type="submit" style="width:100px;" >
+                <span class="glyphicon glyphicon-log-in">&nbsp;登&nbsp;录&nbsp;</span>
+            </button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" value="" checked="checked" id="checkFlag">登录前检查</label>
 		</div>
 	</form>
