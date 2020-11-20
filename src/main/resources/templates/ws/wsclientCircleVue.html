@@ -200,7 +200,7 @@
 					<p>
 						<span class='commentNameSpanClass' @click='queryPersonInfo(commentItem.userName)'>{{commentItem.userName}}:</span>
 						<span class='commentSpanClass'>{{commentItem.comment}}</span>
-						<template v-if="curUser == 'admin' || curUser == item.userName">
+						<template v-if="curUser == 'admin' || curUser == commentItem.userName">
 							<a href='javascript:void(0)' @click='deleteComment(commentItem.id)' style="color:blue;cursor:pointer;">删除</a>
 						</template>
 						<span class='commentTimeSpanClass'>{{compareTwoTime(new Date(commentItem.createTime).getTime(),new Date().getTime())}}</span></p>
