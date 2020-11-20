@@ -261,7 +261,7 @@ public class WebSocketClientController extends AdminBaseController
 		}
 		Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
 		//所有用户
-		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", "admin"));
+		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER));
 		//在线用户
 		List<WsUsersDO> onlineUserList = new ArrayList<WsUsersDO>();
 		//离线用户
@@ -321,7 +321,7 @@ public class WebSocketClientController extends AdminBaseController
 	@ResponseBody
 	@Deprecated
 	public Object getOnlineUsersByPage(@RequestBody WsUsersDO params) {
-        int totalCount = wsUsersService.selectCount(new EntityWrapper<WsUsersDO>().ne("name", "admin"));
+        int totalCount = wsUsersService.selectCount(new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER));
 		int numPerPage = 15;
 		int curPage = 1;
 		String curUser = params.getName();
@@ -338,7 +338,7 @@ public class WebSocketClientController extends AdminBaseController
         Page<WsUsersDO> queryPage = new Page<WsUsersDO>(curPage, numPerPage);
 		List<WsUsersDO> userlist = new ArrayList<>();
 		Page<WsUsersDO> userPage = wsUsersService.selectPage(queryPage,
-                    new EntityWrapper<WsUsersDO>().ne("name", "admin").orderBy("last_login_time", false));
+                    new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER).orderBy("last_login_time", false));
 
 		if (null != userPage){
             userlist = userPage.getRecords();

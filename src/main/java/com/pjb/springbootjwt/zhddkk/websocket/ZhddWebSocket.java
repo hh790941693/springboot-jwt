@@ -120,7 +120,7 @@ public class ZhddWebSocket {
 				}
 
 				// 给admin发消息
-				Session adminSession = querySession("admin");
+				Session adminSession = querySession(CommonConstants.ADMIN_USER);
 				if (null != adminSession) {
 					ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg);
 					adminSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
@@ -182,7 +182,7 @@ public class ZhddWebSocket {
 		for (Entry<String,ZhddWebSocket> entry : clients.entrySet()) {
 			if (!entry.getKey().equals(user)) {
 				try {
-					ChatMessageBean chatBean = new ChatMessageBean(curTime,"1","系统消息","admin",entry.getKey(),msg);
+					ChatMessageBean chatBean = new ChatMessageBean(curTime,"1","系统消息",CommonConstants.ADMIN_USER,entry.getKey(),msg);
 					entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -203,7 +203,7 @@ public class ZhddWebSocket {
 			for (WsChatlogDO wcl : chatLogHistoryList) {
 				String time = wcl.getTime();
 				String sendmsg = wcl.getUser()+"-->我 " + wcl.getMsg();
-				ChatMessageBean chatBean = new ChatMessageBean(time,"1","系统消息","admin",user,sendmsg);
+				ChatMessageBean chatBean = new ChatMessageBean(time,"1","系统消息",CommonConstants.ADMIN_USER,user,sendmsg);
 				try {
 					this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 					Thread.sleep(50);
@@ -226,7 +226,7 @@ public class ZhddWebSocket {
 		for (Entry<String,ZhddWebSocket> entry : clients.entrySet()) {
 			if (!entry.getKey().equals(user)) {
 				try {
-					ChatMessageBean chatBean = new ChatMessageBean(curTime,"1","系统消息","admin",entry.getKey(),msg);
+					ChatMessageBean chatBean = new ChatMessageBean(curTime,"1","系统消息",CommonConstants.ADMIN_USER,entry.getKey(),msg);
 					entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 				} catch (IOException e) {
 					e.printStackTrace();

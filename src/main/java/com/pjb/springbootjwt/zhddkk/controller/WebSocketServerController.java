@@ -337,12 +337,12 @@ public class WebSocketServerController extends AdminBaseController
 			
 			Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
 			for (Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
-				if (entry.getKey().equals("admin")) {
+				if (entry.getKey().equals(CommonConstants.ADMIN_USER)) {
 					continue;
 				}
 	
 				try {
-					ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息","admin",entry.getKey(), "title:"+adTitle+";content:"+adContent);
+					ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息",CommonConstants.ADMIN_USER,entry.getKey(), "title:"+adTitle+";content:"+adContent);
 					entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 					receiveList.add(entry.getKey());
 				} catch (IOException e) {

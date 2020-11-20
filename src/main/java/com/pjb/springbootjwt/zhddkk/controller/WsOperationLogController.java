@@ -8,6 +8,7 @@ import java.util.List;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
@@ -63,7 +64,7 @@ public class WsOperationLogController extends AdminBaseController {
 	//@RequiresPermissions("zhddkk:wsOperationLog:wsOperationLog")
     public String wsOperationLog(Model model){
 		//用户列表
-		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", "admin")
+		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER)
 				.orderBy("name"));
 		model.addAttribute("allUserList", allUserList);
 

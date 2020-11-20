@@ -7,6 +7,7 @@ import java.util.*;
 import com.baomidou.mybatisplus.enums.SqlLike;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
@@ -142,12 +143,12 @@ public class WsAdsController extends AdminBaseController {
 			String curTime = sdf.format(new Date());
 			Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
 			for (Map.Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
-				if (entry.getKey().equals("admin")) {
+				if (entry.getKey().equals(CommonConstants.ADMIN_USER)) {
 					continue;
 				}
 
 				try {
-					ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息","admin",entry.getKey(), "title:"+title+";content:"+content);
+					ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息",CommonConstants.ADMIN_USER,entry.getKey(), "title:"+title+";content:"+content);
 					entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 					receiveList.add(entry.getKey());
 				} catch (IOException e) {

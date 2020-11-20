@@ -257,7 +257,7 @@ public class WsUsersController extends AdminBaseController {
 			wrapper.eq("t1.speak", wsUsersDTO.getSpeak());
 		}
 
-		wrapper.ne("t1.name", "admin");
+		wrapper.ne("t1.name", CommonConstants.ADMIN_USER);
         Page<WsUsersDO> page = getPage(WsUsersDO.class);
         List<WsUsersDO> userList = wsUsersService.queryUserPage(page, wrapper);
         page.setRecords(userList);
@@ -353,7 +353,7 @@ public class WsUsersController extends AdminBaseController {
 	@RequestMapping(value = "exportUser.do", method = RequestMethod.GET)
 	public void exportUser(HttpServletResponse response){
 		logger.debug("开始导出用户信息");
-		List<WsUsersDO> list = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", "admin"));
+		List<WsUsersDO> list = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER));
 		if (null != list && list.size()>0) {
 			for (WsUsersDO wu : list) {
 				String password = wu.getPassword();

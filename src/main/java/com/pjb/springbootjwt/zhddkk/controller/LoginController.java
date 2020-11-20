@@ -87,7 +87,7 @@ public class LoginController {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(CommonConstants.S_USER) && cookie.getMaxAge() != 0) {
                     model.addAttribute(CommonConstants.S_USER, cookie.getValue());
-                    if (cookie.getValue().equals("admin")){
+                    if (cookie.getValue().equals(CommonConstants.ADMIN_USER)){
                         isAdmin = true;
                     }
                 }else if (cookie.getName().equals(CommonConstants.S_PASS) && cookie.getMaxAge() != 0) {
@@ -223,7 +223,7 @@ public class LoginController {
         Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP, webserverip);
         Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT, webserverPort);
         // 客户端的JSESSIONID
-        Cookie jsessionIdCookie = new Cookie("JSESSIONID", sessionId);
+        Cookie jsessionIdCookie = new Cookie(CommonConstants.JSESSIONID, sessionId);
         userCookie.setPath("/");
         userCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);//用户名30分钟
         passCookie.setPath("/");

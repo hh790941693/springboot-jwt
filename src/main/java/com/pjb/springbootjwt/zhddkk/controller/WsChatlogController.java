@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
@@ -57,7 +58,7 @@ public class WsChatlogController extends AdminBaseController {
 	@GetMapping()
 	//@RequiresPermissions("zhddkk:wsChatlog:wsChatlog")
     public String wsChatlog(Model model){
-		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", "admin")
+		List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER)
 			.orderBy("name"));
 	    model.addAttribute("allUserList", allUserList);
 	    model.addAttribute("chatLogDO", new WsChatlogDO());
