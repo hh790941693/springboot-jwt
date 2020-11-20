@@ -123,12 +123,12 @@
                     if (app.playStatus == -1 || app.playStatus == 1){
                         app.playStatus = 0; //播放中
 						$("#player")[0].play();
-                        $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-stop");
+                        $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
 					}else{
                        app.playStatus = 1; //暂停中
 						app.playTips = "暂停中";
 						$("#player")[0].pause();
-                        $("#btnPlay span").removeClass("glyphicon-stop").addClass("glyphicon-play");
+                        $("#btnPlay span").removeClass("glyphicon-pause").addClass("glyphicon-play");
 					}
 				},
 				nextMusic:function(){
@@ -175,7 +175,7 @@
                     $("#statusSpan").text("正在播放:");
 
                     $("#player")[0].play();
-                    $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-stop");
+                    $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
                 },
 				randomMusic:function(){
 					// 随机播放
