@@ -184,7 +184,7 @@
                     app.playByIndex();
 				},
 				changePlayMode:function(){
-					if (app.playMode >= Object.keys(app.playModeMap).length-1){
+					if (app.playMode >= Object.keys(app.playModeClass).length-1){
 						app.playMode = 0;
 					}else{
 						app.playMode = app.playMode+1;
