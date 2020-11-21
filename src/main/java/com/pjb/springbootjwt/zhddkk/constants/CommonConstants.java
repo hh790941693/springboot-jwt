@@ -40,4 +40,9 @@ public class CommonConstants
 	// admin管理员账号密码
 	public static final String ADMIN_USER = "admin";
 	public static final String ADMIN_PASSWORD = "admin";
+
+	// 语言
+    public static final String LANG_ZH = "zh_cn";
+    public static final String LANG_EN = "en_us";
+    public static final String LANG_KR = "ko_kr";
 }

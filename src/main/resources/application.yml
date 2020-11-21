@@ -27,7 +27,7 @@ debug: true
 
 spring:
   thymeleaf:
-    mode: HTML5
+    mode: HTML
     cache: false
   resources:
     static-locations:
@@ -41,6 +41,9 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size:  120MB
+  messages:
+    encoding: UTF-8
+    basename: static/i18n/messages
 
 #阿里云上传
 alioss:

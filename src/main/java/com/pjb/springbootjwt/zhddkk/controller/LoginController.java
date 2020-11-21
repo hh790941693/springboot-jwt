@@ -25,10 +25,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -66,6 +69,9 @@ public class LoginController {
 
     @Autowired
     private WsChatlogService wsChatlogService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Value("${server.address}")
     private String serverAddress;
@@ -117,6 +123,14 @@ public class LoginController {
             model.addAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
             return "ws/wsclientIndex";
         }
+
+        Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        if (null == locale){
+            // 设置默认语言
+            locale = new Locale("zh","CN");
+            request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+        }
+        model.addAttribute("locale", locale.getLanguage()+"_"+locale.getCountry().toLowerCase());
         return "ws/login";
     }
 
@@ -609,6 +623,21 @@ public class LoginController {
         return Result.ok(base64String);
     }
 
+    @RequestMapping("/i18n")
+    public String changeSessionLanauage(HttpServletRequest request, String lang){
+        Locale locale = new Locale("zh","CN");
+        if(CommonConstants.LANG_ZH.equals(lang)){
+            //代码中即可通过以下方法进行语言设置
+            locale = new Locale("zh","CN");
+        } else if(CommonConstants.LANG_EN.equals(lang)){
+            locale = new Locale("en","US");
+        } else if(CommonConstants.LANG_KR.equals(lang)){
+            locale = new Locale("ko","KR");
+        }
+        request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+        return "redirect:/";
+    }
+
     private Map<String,List<WsCommonDO>> buildCommonData() {
         Map<String,List<WsCommonDO>> commonMap = new HashMap<String,List<WsCommonDO>>();
         List<WsCommonDO> commonList = wsCommonService.selectList(null);
@@ -630,7 +659,17 @@ public class LoginController {
                 commonMap.put(type, tmpDicList);
             }
         }
-
         return commonMap;
+    }
+
+    /**
+     * 根据messageId获取对应的国际化
+     * @param messageId
+     * @param request
+     * @return
+     */
+    private  String getLocaleMessage(String messageId, HttpServletRequest request){
+        Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        return messageSource.getMessage("login", null, locale);
     }
 }
