@@ -39,6 +39,7 @@
 
 	#copyrightDiv li{
 		cursor: pointer;
+		margin-right: 8px;
 	}
 </style>
 </head>
@@ -56,19 +57,19 @@
 			<div id="copyrightDiv" style="float:right;color:blue;">
 				<ul>
 					<li onclick="showSessionInfo()">
-						<span class="glyphicon glyphicon-info-sign"></span>会话信息&nbsp;&nbsp;|&nbsp;&nbsp;
+						<span class="glyphicon glyphicon-info-sign" th:text="#{a.sessioninfo.label}"></span>
 					</li>
 					<li onclick="contactAuthor()">
-                        <span class="glyphicon glyphicon-phone-alt"></span>联系作者&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <span class="glyphicon glyphicon-phone-alt" th:text="#{a.contactauthor.label}"></span>
                     </li>
 					<li onclick="donate()">
-                        <span class="glyphicon glyphicon-usd"></span>捐赠&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <span class="glyphicon glyphicon-usd" th:text="#{a.donate.label}"></span>
                     </li>
 					<li onclick="feedbackUs()">
-                        <span class="glyphicon glyphicon-question-sign"></span>反馈建议&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <span class="glyphicon glyphicon-question-sign" th:text="#{a.feedback.label}"></span>
                     </li>
 					<li onclick="aboutUs()">
-                        <span class="glyphicon glyphicon-user"></span>关于我们&nbsp;&nbsp;
+                        <span class="glyphicon glyphicon-user" th:text="#{a.aboutus.label}"></span>
                     </li>
 				</ul>
 			</div>
