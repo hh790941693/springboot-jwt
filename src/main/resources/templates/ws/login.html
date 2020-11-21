@@ -117,6 +117,7 @@
 <script type="text/javascript">
 	var user = "";
 	var checkBeforeLogin = true;
+	var backgroundAnimation = true;
 	$("#user").blur(function(){
 		user = $("#user").val();
 		if (user == ""){
@@ -239,12 +240,12 @@
 	//关闭/开启动画
 	function openGame(thisObj){
 		var text=$(thisObj).text();
-		if (text == "开启动画"){
-			$("#iframePage").attr("src", rootUrl+"canvas/snow.page");
-			$(thisObj).text("隐藏动画");
+		if (backgroundAnimation){
+            $("#iframePage").attr("src", "");
+            backgroundAnimation = false;
 		}else{
-			$("#iframePage").attr("src", "");
-			$(thisObj).text("开启动画");
+            $("#iframePage").attr("src", rootUrl+"canvas/snow.page");
+            backgroundAnimation = true;
 		}
 	}
 
