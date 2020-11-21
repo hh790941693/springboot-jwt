@@ -53,22 +53,22 @@
     <img id="leftNavBackgroundImg" src="../img/headerY.jpg" hidden>
     <ul>
         <!--<li id="wsserverUser.page" class="mouseleftclick">用户管理</li>-->
-        <li id="/zhddkk/wsUsers/wsUsersForAdmin" class="mouseleftclick">用户管理</li>
-        <li id="../file/musicPlayer.page">音乐播放</li>
-        <li id="/ws/wsserverChartMonitor.page">聊天监控<span id="unreadCountSpan"></span></li>
-        <li id="/ws/wsclientCircle.page">朋友圈</li>
+        <li id="/zhddkk/wsUsers/wsUsersForAdmin" class="mouseleftclick" th:text="#{li.usermanage.label}">用户管理</li>
+        <li id="../file/musicPlayer.page" th:text="#{li.music.label}">音乐播放</li>
+        <li id="/ws/wsserverChartMonitor.page" th:text="#{li.chatmonitor.label}">聊天监控<span id="unreadCountSpan"></span></li>
+        <li id="/ws/wsclientCircle.page" th:text="#{li.circle.label}">朋友圈</li>
         <!--<li id="wsserverChartLog.page">聊天记录管理</li>-->
-        <li id="/zhddkk/wsChatlog">聊天记录管理</li>
+        <li id="/zhddkk/wsChatlog" th:text="#{li.chatlogmanage.label}">聊天记录管理</li>
         <!--<li id="wsserverOperationLog.page">操作日志管理</li>-->
-        <li id="/zhddkk/wsOperationLog">操作日志管理</li>
-        <li id="configurationLi">常用配置>></li>
+        <li id="/zhddkk/wsOperationLog" th:text="#{li.operlogmanage.label}">操作日志管理</li>
+        <li id="configurationLi" th:text="#{li.commoncfg.label}">常用配置>></li>
         <!--<li id="ad.page">广告发布</li>-->
-        <li id="/zhddkk/wsAds">广告发布</li>
-        <li id="/zhddkk/wsFeedback/adminFeedback">反馈建议</li>
-        <li id="/ws/wsserverChart.page">领导驾驶舱</li>
-        <li id="/common/generator">生成代码</li>
-        <li id="../game/gameIndex.page">游戏娱乐</li>
-        <li id="../canvas/canvasIndex.page">h5游戏</li>
+        <li id="/zhddkk/wsAds" th:text="#{li.publishad.label}">广告发布</li>
+        <li id="/zhddkk/wsFeedback/adminFeedback" th:text="#{li.feedback.label}">反馈建议</li>
+        <li id="/ws/wsserverChart.page" th:text="#{li.leaderchart.label}">领导驾驶舱</li>
+        <li id="/common/generator" th:text="#{li.generatecode.label}">生成代码</li>
+        <li id="../game/gameIndex.page" th:text="#{li.game.label}">游戏娱乐</li>
+        <li id="../canvas/canvasIndex.page" th:text="#{li.h5.label}">h5游戏</li>
     </ul>
 
     <div id='configurationDiv' style='display:none;position:absolute;left:43px;top:133px;height:184px;background-color:#d8d9e6;border:2px solid green;z-index:99;'>
