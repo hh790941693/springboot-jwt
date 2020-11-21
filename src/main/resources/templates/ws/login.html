@@ -71,15 +71,15 @@
 	<form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
 		<div style="height:25px;">
             <span class="glyphicon glyphicon-user" style="font-size: 20px;" for="user"></span>
-			<input id="user" name="user" type="text" th:value="${user}" placeholder="请输入用户名" autocomplete="off" style="width:178px;margin-left:20px;">
+			<input id="user" name="user" type="text" th:value="${user}" th:placeholder="#{input.user.helper}" autocomplete="off" style="width:178px;margin-left:20px;">
 		</div>
 		<div style="height:25px;margin-top:10px;">
             <span class="glyphicon glyphicon-lock" style="font-size: 20px;" for="pass"></span>
-			<input id="pass" name="pass" type="password" th:value="${pass}" placeholder="请输入密码" autocomplete="off"  style="width:178px;margin-left:20px;">
+			<input id="pass" name="pass" type="password" th:value="${pass}" th:placeholder="#{input.password.helper}" autocomplete="off"  style="width:178px;margin-left:20px;">
 		</div>
         <div style="height:50px;margin-top:10px;">
             <span class="glyphicon glyphicon-briefcase" style="font-size: 20px;" for="pass"></span>
-            <input id="verifyCode" name="verifyCode" type="text" th:value="${verifyCode}" placeholder="请输入验证码" autocomplete="off"  style="width:178px;margin-left:20px;">
+            <input id="verifyCode" name="verifyCode" type="text" th:value="${verifyCode}" th:placeholder="#{input.code.helper}" autocomplete="off"  style="width:178px;margin-left:20px;">
             <div style="margin-left: 121px;margin-top:5px;">
                 <img id="verifyCodeImg"/>
             </div>
@@ -92,7 +92,9 @@
 		</div>
 
 		<div align="center" style="margin-top:10px;margin-left:-30px;">
-			<button id="btnlogin" class='btn btn-success btn-large'  type="submit" style="width:100px;" th:text="#{btn.login}"></button>
+			<button id="btnlogin" class='btn btn-success btn-large'  type="submit" style="width:100px;">
+                <span class="glyphicon glyphicon-log-in"> [[#{btn.login}]]</span>
+            </button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" value="" checked="checked" id="checkFlag" th:text="#{checkbox.check.label}"></label>
 		</div>
 	</form>
@@ -114,7 +116,7 @@
 <div th:include="common::footer"></div>
 </body>
 
-<script type="text/javascript">
+<script th:inline="javascript">
 	var user = "";
 	var checkBeforeLogin = true;
 	var backgroundAnimation = true;
