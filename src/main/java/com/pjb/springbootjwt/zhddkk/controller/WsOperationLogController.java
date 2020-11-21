@@ -83,7 +83,7 @@ public class WsOperationLogController extends AdminBaseController {
     /**
      * 获取操作日志,主要记录增删改的日志列表数据
      */
-    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.OPERATION_LOG_MANAGE,subModule="",describe="操作日志列表")
+    //@OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.OPERATION_LOG_MANAGE,subModule="",describe="操作日志列表")
 	@ResponseBody
 	@GetMapping("/list")
 	//@RequiresPermissions("zhddkk:wsOperationLog:wsOperationLog")

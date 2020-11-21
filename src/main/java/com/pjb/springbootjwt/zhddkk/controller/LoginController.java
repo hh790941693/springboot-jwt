@@ -581,6 +581,7 @@ public class LoginController {
      * @return
      * @throws Exception
      */
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.LOGIN,subModule="",describe="获取验证码")
     @GetMapping("/generateVerifyCode.do")
     @ResponseBody
     public Result<String> getCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
