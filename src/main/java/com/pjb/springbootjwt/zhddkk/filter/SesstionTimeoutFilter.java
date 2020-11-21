@@ -39,7 +39,8 @@ public class SesstionTimeoutFilter implements Filter {
             "/updatePassword.do",
             "/loginfail.page",
             "/sessionInfo",
-            "/sessionInfo.page"));
+            "/sessionInfo.page",
+            "/generateVerifyCode.do"));
 
     // 忽略的URL前缀列表
     private static final List<String> IGNORE_URL_PREFIX_LIST = new ArrayList<>(Arrays.asList(

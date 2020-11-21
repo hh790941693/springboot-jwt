@@ -18,6 +18,8 @@ import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
+import com.wf.captcha.ArithmeticCaptcha;
+import com.wf.captcha.ChineseGifCaptcha;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -126,6 +129,7 @@ public class LoginController {
     @OperationLogAnnotation(type= OperationEnum.UPDATE,module= ModuleEnum.LOGIN,subModule="",describe="登录")
     @RequestMapping(value = "wslogin.do", method = RequestMethod.POST)
     public void wsclient(Model model, @RequestParam("user")String user, @RequestParam("pass")String pass,
+                         @RequestParam("verifyCode")String verifyCodeInput,
                            HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 检查当前用户是否已经登录过
         Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
@@ -188,12 +192,23 @@ public class LoginController {
             return;
         }
 
+        // 校验验证码
+        String verifyCode = (String)request.getSession().getAttribute(CommonConstants.VERIFY_CODE);
+        if (!verifyCodeInput.equals(verifyCode)){
+            request.setAttribute("user", user);
+            request.setAttribute("detail", "验证码不对!");
+            request.getRequestDispatcher("loginfail.page").forward(request, response);
+            return;
+        }
+
+        // websocket聊天用的服务器ip和端口
         String webserverip = webSocketConfig.getAddress();
         String webserverPort = webSocketConfig.getPort();
         logger.info("webserverip:{} webserverPort:{}",webserverip, webserverPort);
         configMap.put(CommonConstants.S_WEBSERVERIP, webserverip);
         configMap.put(CommonConstants.S_WEBSERVERPORT, webserverPort);
 
+        // 客户端浏览器类型
         String userAgent = request.getHeader("User-Agent");
         logger.info("userAgent:"+userAgent);
         String shortAgent = "unknown device";
@@ -211,7 +226,6 @@ public class LoginController {
         }
 
         //session
-        //request.getSession().invalidate();
         HttpSession httpSession = request.getSession();
         String sessionId = httpSession.getId();
         System.out.println("创建SESSION:" + sessionId);
@@ -556,8 +570,42 @@ public class LoginController {
         if (userCount>0){
             return Result.fail();
         }
-
         return Result.ok();
+    }
+
+    /**
+     * 生成验证码
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/generateVerifyCode.do")
+    @ResponseBody
+    public Result<String> getCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        //算术验证码 数字加减乘除. 建议2位运算就行:captcha.setLen(2);
+        ArithmeticCaptcha captcha = new ArithmeticCaptcha(100, 23);
+        // 几位数运算，默认是两位
+        captcha.setLen(2);
+
+        // 中文验证码
+        //ChineseCaptcha captcha = new ChineseCaptcha(120, 40);
+
+        // 英文与数字验证码
+        //SpecCaptcha captcha = new SpecCaptcha(120, 40);
+
+        // 英文与数字动态验证码
+        //GifCaptcha captcha = new GifCaptcha(120, 40);
+
+        // 中文动态验证码
+        //ChineseGifCaptcha captcha = new ChineseGifCaptcha(120, 40);
+
+        // 获取运算的结果
+        String verifyCode = captcha.text();
+        request.getSession().setAttribute(CommonConstants.VERIFY_CODE, verifyCode);
+        String base64String = captcha.toBase64("data:image/png;base64,");
+        return Result.ok(base64String);
     }
 
     private Map<String,List<WsCommonDO>> buildCommonData() {

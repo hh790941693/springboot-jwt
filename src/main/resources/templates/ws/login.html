@@ -19,7 +19,7 @@
 
 	#mainDiv{
 		width:400px;
-		height:255px;
+		height:310px;
 		margin:0 auto;
 		box-shadow: grey 10px 6px 10px;
 		border:1px solid grey;
@@ -42,7 +42,7 @@
 		text-indent: 0.5em;
 	}
 
-	button{
+	#btnlogin{
 		box-shadow: grey 5px 5px 10px;
 	}
 </style>
@@ -54,27 +54,34 @@
 			<p>WebSocket</p>
 		</div>
 	</div>
-	<button id="phonelogin" class='btn btn-success btn-large' style="position:absolute;top:8px;left:350px;">
+	<button id="phonelogin" class='btn btn-info btn-large' style="position:absolute;top:3px;left:343px;font-size: 21px;">
         <span class="glyphicon glyphicon-qrcode"></span>
     </button>
 	<img id="backgroundImg" src="../img/fengjing/fj10.jpg" hidden>
 	<form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
 		<div style="height:25px;">
-            <span class="glyphicon glyphicon-user" for="user"></span>
+            <span class="glyphicon glyphicon-user" style="font-size: 20px;" for="user"></span>
 			<input id="user" name="user" type="text" th:value="${user}" placeholder="请输入用户名" autocomplete="off" style="width:178px;margin-left:20px;">
 		</div>
 		<div style="height:25px;margin-top:10px;">
-            <span class="glyphicon glyphicon-briefcase" for="pass"></span>
+            <span class="glyphicon glyphicon-lock" style="font-size: 20px;" for="pass"></span>
 			<input id="pass" name="pass" type="password" th:value="${pass}" placeholder="请输入密码" autocomplete="off"  style="width:178px;margin-left:20px;">
 		</div>
-		<div style="height:25px;margin-top:10px;">
+        <div style="height:50px;margin-top:10px;">
+            <span class="glyphicon glyphicon-briefcase" style="font-size: 20px;" for="pass"></span>
+            <input id="verifyCode" name="verifyCode" type="text" th:value="${verifyCode}" placeholder="请输入验证码" autocomplete="off"  style="width:178px;margin-left:20px;">
+            <div style="margin-left: 121px;margin-top:5px;">
+                <img id="verifyCodeImg"/>
+            </div>
+        </div>
+		<div style="height:25px;margin-top:15px;">
 			<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:50px;">注&nbsp;&nbsp;&nbsp;&nbsp;册</a>
 			<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;">忘记密码</a>
 			<a href="javascript:void(0)" onclick="openGame(this)" style="text-decoration:none;margin-left:20px;">隐藏动画</a>
 			<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;">玩游戏</a>
 		</div>
 
-		<div align="center" style="margin-top:20px;margin-left:-30px;">
+		<div align="center" style="margin-top:10px;margin-left:-30px;">
 			<button id="btnlogin" class='btn btn-success btn-large'  type="submit" style="width:100px;" >
                 <span class="glyphicon glyphicon-log-in">&nbsp;登&nbsp;录&nbsp;</span>
             </button>
@@ -120,37 +127,60 @@
 				tips: [2, '#78BA32']
 			});
 		}
-	})
+	});
+
+    var verifyCode = "";
+    $("#verifyCode").blur(function(){
+        verifyCode = $("#verifyCode").val();
+        if (verifyCode == "")
+        {
+            layer.tips('验证码不能为空!', '#verifyCode', {
+                tips: [2, '#78BA32']
+            });
+        }
+    });
 
 	//提交校验
 	$("#loginForm").validate({
 		rules: {
 			user:
-					{
-						required: true,
-						minlength: 2,
-						maxlength: 10
-					},
+                {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 10
+                },
 			pass:
-					{
-						required: true,
-						minlength: 3,
-						maxlength: 12
-					}
+                {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 12
+                },
+            verifyCode:
+                {
+                    required: true,
+                    minlength: 1,
+                    maxlength: 12
+                }
 		},
 		messages:{
 			user:
-					{
-						required: "请输入用户名",
-						minlength: "至少包含2个字符",
-						maxlength:"最多包含10位字符"
-					},
+                {
+                    required: "请输入用户名",
+                    minlength: "至少包含2个字符",
+                    maxlength:"最多包含10位字符"
+                },
 			pass:
-					{
-						required: "请输入密码",
-						minlength: "至少包含3个字符",
-						maxlength:"最多包含12位字符"
-					}
+                {
+                    required: "请输入密码",
+                    minlength: "至少包含3个字符",
+                    maxlength:"最多包含12位字符"
+                },
+            verifyCode:
+                {
+                    required: "请输入验证码",
+                    minlength: "至少包含3个字符",
+                    maxlength:"最多包含12位字符"
+                },
 		}
 	});
 
@@ -291,6 +321,23 @@
 	}
 	$(window).resize(resizeWindows);
 
+	// 获取验证码
+    generateVerifyCode();
+    $("#verifyCodeImg").click(generateVerifyCode);
+    function generateVerifyCode() {
+        $.ajax({
+            type: 'GET',
+            url: rootUrl + 'generateVerifyCode.do',
+            async: false,
+            success: function (result) {
+                if (result.code == 1) {
+                    $("#verifyCodeImg").attr("src", result.data);
+                }
+            }
+        });
+    }
+
+	// 勾选登陆前检查事件
     $("#checkFlag").click(function(){
         var isChecked = $(this).attr("checked");
         if (isChecked){

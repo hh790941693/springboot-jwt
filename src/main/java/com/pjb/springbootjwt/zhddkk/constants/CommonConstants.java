@@ -21,6 +21,9 @@ public class CommonConstants
 	public static final String S_IMG = "selfimg";           //个人头像
 	public static final String S_USER_AGENT = "useragent"; //设备信息
 
+    // 登陆验证码
+	public static final String VERIFY_CODE = "verifyCode";
+
 	//cookie过期时间(单位:秒) 30分钟
 	public static final int COOKIE_TIMEOUT = 1800;
 
