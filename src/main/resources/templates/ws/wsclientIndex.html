@@ -164,6 +164,10 @@
 </body>
 
     <script type="text/javascript">
+        // 加载国际化
+        $.ws.i18nInit("[[${#locale.language}]]", "[[${#locale.country}]]");
+        console.log($.ws.i18n("btn.login"));
+
         var s_user=$('#user').val();
         var s_pass=$('#pass').val();
         var s_webserverip = $('#webserverip').val();
@@ -290,7 +294,8 @@
         //连接成功
         function onOpen(event){
             connectStatus = "1";
-			updateChatMsg("已连上服务器!", "green", 10);
+            var msg = $.ws.i18n("label.connected");
+			updateChatMsg(msg, "green", 10);
         }
 
         //连接失败
