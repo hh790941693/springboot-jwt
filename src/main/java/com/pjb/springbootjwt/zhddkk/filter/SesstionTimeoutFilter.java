@@ -40,15 +40,15 @@ public class SesstionTimeoutFilter implements Filter {
             "/loginfail.page",
             "/sessionInfo",
             "/sessionInfo.page",
-            "/generateVerifyCode.do",
-            "/i18n"));
+            "/generateVerifyCode.do"));
 
     // 忽略的URL前缀列表
     private static final List<String> IGNORE_URL_PREFIX_LIST = new ArrayList<>(Arrays.asList(
             "/js/",
             "/canvas/",
             "/zhddWebSocket/",
-            "/game/"));
+            "/game/",
+            "/i18n"));
 
     // 忽略的URL后缀列表
     private static final List<String> IGNORE_URL_SUFFIX_LIST = new ArrayList<>(Arrays.asList(

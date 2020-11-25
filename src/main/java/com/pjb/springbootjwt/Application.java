@@ -110,11 +110,11 @@ public class Application {
         return factory.createMultipartConfig();
     }
 
-    @Bean
-    public LocaleResolver localeResolver() {
-        SessionLocaleResolver slr = new SessionLocaleResolver();
-        //设置默认区域,
-        slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
-        return slr;
-    }
+//    @Bean
+//    public LocaleResolver localeResolver() {
+//        SessionLocaleResolver slr = new SessionLocaleResolver();
+//        //设置默认区域,
+//        slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
+//        return slr;
+//    }
 }

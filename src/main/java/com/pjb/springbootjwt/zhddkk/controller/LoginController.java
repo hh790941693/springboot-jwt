@@ -667,6 +667,6 @@ public class LoginController {
      */
     private  String getLocaleMessage(String messageId, HttpServletRequest request){
         Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
-        return messageSource.getMessage("login", null, locale);
+        return messageSource.getMessage(messageId, null, locale);
     }
 }

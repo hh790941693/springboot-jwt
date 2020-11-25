@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="common :: header"></head>
-<title>登录</title>
+<title>[[#{btn.login}]]</title>
 <style type="text/css">
 	a{
 		font-size:13px;
@@ -117,6 +117,10 @@
 </body>
 
 <script th:inline="javascript">
+	// 加载国际化
+	$.ws.i18nInit([[${#locale.language}]], [[${#locale.country}]]);
+	console.log($.ws.i18n("btn.login"));
+
 	var user = "";
 	var checkBeforeLogin = true;
 	var backgroundAnimation = true;

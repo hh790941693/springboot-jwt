@@ -15,6 +15,14 @@ $.ws = {
         $.fancybox.open('<img src = "' + imgUrl + '" />');
     },
 
+    i18nInit : function(lang, country){
+        i18nInit(lang, country);
+    },
+
+    i18n : function(labelKey) {
+        return i18n(labelKey);
+    },
+
     //背景图片动画
     backgroundImgAnimation : function(imgId, divId, direction, frequency) {
         var imgWidth = $("#" + imgId).width();
@@ -278,4 +286,19 @@ function compareTwoTime(time1,time2){
 		var tmp = Math.round(interval/86400);
 		return tmp+"天前";
 	}
+}
+
+//初始化i18n插件
+function i18nInit(lang, country){
+    $.i18n.properties({
+        path: '/i18n/',
+        name: 'messages',
+        language: lang +'_' + country,
+        mode: "both"
+    });
+}
+
+//初始化i18n方法
+function i18n(labelKey) {
+    return $.i18n.prop(labelKey);
 }
