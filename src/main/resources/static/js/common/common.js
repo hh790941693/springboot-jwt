@@ -290,12 +290,16 @@ function compareTwoTime(time1,time2){
 
 //初始化i18n插件
 function i18nInit(lang, country){
-    $.i18n.properties({
-        path: '/i18n/',
-        name: 'messages',
-        language: lang +'_' + country,
-        mode: "both"
-    });
+    try {
+        $.i18n.properties({
+            path: '/i18n/',
+            name: 'messages',
+            language: lang + '_' + country,
+            mode: "both"
+        });
+    } catch (e) {
+        console.log("load i18n properties error");
+    }
 }
 
 //初始化i18n方法
