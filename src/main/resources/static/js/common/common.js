@@ -302,7 +302,7 @@ function i18nInit(lang, country){
     }
 }
 
-//初始化i18n方法
+//根据key获取国际化的值
 function i18n(labelKey) {
     return $.i18n.prop(labelKey);
 }
