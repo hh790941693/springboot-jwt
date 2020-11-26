@@ -28,6 +28,10 @@
 				text-align:center;
 			}
 
+			#playModeDiv input{
+				margin-right: 8px;
+			}
+
 			#addMusic{
 				width:100%;
 				height:5%;
@@ -76,25 +80,25 @@
 
 					<div style="float:right;margin-top:10px;width:60%;">
 						<div style="float:left;margin-left:10px;height:40px;">
-							<button id="btnPre" class='btn btn-primary' @click="preMusic()">
+							<button id="btnPre" class='btn btn-primary' @click="preMusic()" th:title="#{btn.last.tips}">
                                 <span class="glyphicon glyphicon-step-backward"></span>
                             </button>
-							<button id="btnPlay" class='btn btn-success' @click="play()">
+							<button id="btnPlay" class='btn btn-success' @click="play()" th:title="#{btn.play.tips}">
                                 <span class="glyphicon glyphicon-play"></span>
                             </button>
-							<button id="btnNext" class='btn btn-primary' @click="nextMusic()">
+							<button id="btnNext" class='btn btn-primary' @click="nextMusic()" th:title="#{btn.next.tips}">
                                 <span class="glyphicon glyphicon-step-forward"></span>
                             </button>
-							<button id="btnRefresh" class='btn btn-info' @click="refreash()">
+							<button id="btnRefresh" class='btn btn-info' @click="refreash()" th:title="#{btn.refreash.tips}">
                                 <span class="glyphicon glyphicon-refresh"></span>
                             </button>
                             <button id="btnShowList" class='btn btn-warning' onclick="showList(this)">关闭列表</button>
 						</div>
 						<div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
-							<input type="radio" name="playmode" value="-1" checked="checked">&nbsp;无&nbsp;&nbsp;
-							<input type="radio" name="playmode" value="0">&nbsp;单曲循环&nbsp;&nbsp;
-							<input type="radio" name="playmode" value="1" >&nbsp;顺序播放&nbsp;&nbsp;
-							<input type="radio" name="playmode" value="2">&nbsp;随机播放
+							<input type="radio" name="playmode" value="-1" checked="checked" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]
+							<input type="radio" name="playmode" value="0" th:title="#{radio.loop.tips}">[[#{radio.loop.tips}]]
+							<input type="radio" name="playmode" value="1" th:title="#{radio.order.tips}">[[#{radio.order.tips}]]
+							<input type="radio" name="playmode" value="2" th:title="#{radio.random.tips}">[[#{radio.random.tips}]]
 						</div>
 					</div>
 				</div>
