@@ -59,8 +59,8 @@
 			<form action="/upload/app/uploadMusic" method="post" enctype="multipart/form-data" onsubmit="return verify()" target="hidden_frame">
 				<input type="text" id="user" name="user" th:value="${user}" hidden="true">
 				<input type="hidden" name="folder" value="music">
-				文件:<input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg" style="display: inline-block;">
-                <input type="submit" value="上传歌曲">
+				文件:<input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg" style="display: inline-block;" th:title="#{btn.choosesong.label}">
+                <input type="submit" th:value="#{btn.uploadsong.label}">
 			</form>
 		</div>		
 		<div id="playerDiv">
@@ -87,7 +87,7 @@
 							<button id="btnRefresh" class='btn btn-info' @click="refreash()" th:title="#{btn.refreash.tips}">
                                 <span class="glyphicon glyphicon-refresh"></span>
                             </button>
-                            <button id="btnShowList" class='btn btn-warning' onclick="showList(this)">关闭列表</button>
+                            <button id="btnShowList" class='btn btn-warning' @click="showList()">[[#{btn.hidelist.label}]]</button>
 						</div>
 						<div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
 							<input type="radio" name="playmode" value="-1" checked="checked" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
@@ -140,6 +140,9 @@
 	</body>
 
 	<script type="text/javascript">
+		// 加载国际化
+		$.ws.i18nInit("[[${#locale.language}]]", "[[${#locale.country}]]");
+
 		//播放模式 0:单曲循环 1:顺序播放 2:随机播放
 		var playMode = -1;
 
@@ -150,6 +153,7 @@
 				curSelectedIndex: 0,
 				hoverIndex: -1,
                 playStatus: -1,  //播放状态 -1:初始化  0:播放中 1:暂停中
+				showMode:1, //播放列表显示/隐藏  0:隐藏 1:显示
 			},
 			methods: {
 				queryMusicList:function () {
@@ -303,7 +307,18 @@
                 },
                 mouseLeave:function (music, index) {
                     // 鼠标离开事件  do nothing
-                }
+                },
+				showList: function (){
+					if (app.showMode == 0){
+						$("#musicList").slideDown(500);
+						$("#btnShowList").text($.ws.i18n("btn.hidelist.label"));
+						app.showMode = 1;
+					}else{
+						$("#musicList").slideUp(500);
+						$("#btnShowList").text($.ws.i18n("btn.showlist.label"));
+						app.showMode = 0;
+					}
+				}
 			},
 			created: function () {
 				this.queryMusicList();
@@ -317,16 +332,6 @@
 				console.log("playMode:"+playMode);
 			})
 		})
-
-		function showList(obj){
-			if ($(obj).text() == "关闭列表"){
-				$("#musicList").slideUp(500);
-				$(obj).text("显示列表");
-			}else{
-				$("#musicList").slideDown(500);
-				$(obj).text("关闭列表");
-			}
-		}
 
 		// 刷新音乐列表
 		function refreash(){
