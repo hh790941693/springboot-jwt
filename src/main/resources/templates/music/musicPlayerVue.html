@@ -27,11 +27,6 @@
 			#musicTable td{
 				text-align:center;
 			}
-
-			#playModeDiv input{
-				margin-right: 8px;
-			}
-
 			#addMusic{
 				width:100%;
 				height:5%;
@@ -95,9 +90,9 @@
                             <button id="btnShowList" class='btn btn-warning' onclick="showList(this)">关闭列表</button>
 						</div>
 						<div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
-							<input type="radio" name="playmode" value="-1" checked="checked" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]
-							<input type="radio" name="playmode" value="0" th:title="#{radio.loop.tips}">[[#{radio.loop.tips}]]
-							<input type="radio" name="playmode" value="1" th:title="#{radio.order.tips}">[[#{radio.order.tips}]]
+							<input type="radio" name="playmode" value="-1" checked="checked" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
+							<input type="radio" name="playmode" value="0" th:title="#{radio.loop.tips}">[[#{radio.loop.tips}]]&nbsp;&nbsp;
+							<input type="radio" name="playmode" value="1" th:title="#{radio.order.tips}">[[#{radio.order.tips}]]&nbsp;&nbsp;
 							<input type="radio" name="playmode" value="2" th:title="#{radio.random.tips}">[[#{radio.random.tips}]]
 						</div>
 					</div>
