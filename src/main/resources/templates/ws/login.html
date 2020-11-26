@@ -87,7 +87,7 @@
 		<div style="height:25px;margin-top:15px;">
 			<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:50px;" th:text="#{a.register.label}"></a>
 			<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;" th:text="#{a.forgetpassword.label}"></a>
-			<a href="javascript:void(0)" onclick="openGame(this)" style="text-decoration:none;margin-left:20px;" th:text="#{a.hideh5.label}"></a>
+			<a href="javascript:void(0)" onclick="showBackgroundAnimation()" style="text-decoration:none;margin-left:20px;" th:text="#{a.hideh5.label}"></a>
 			<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;" th:text="#{a.playgame.label}"></a>
 		</div>
 
@@ -95,7 +95,7 @@
 			<button id="btnlogin" class='btn btn-success btn-large'  type="submit" style="width:100px;">
                 <span class="glyphicon glyphicon-log-in"> [[#{page.login.title}]]</span>
             </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" value="" checked="checked" id="checkFlag" th:text="#{checkbox.check.label}"></label>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" value="" id="checkFlag" th:text="#{checkbox.check.label}"></label>
 		</div>
 	</form>
 
@@ -122,7 +122,7 @@
 	console.log($.ws.i18n("page.login.title"));
 
 	var user = "";
-	var checkBeforeLogin = true;
+	var checkBeforeLogin = false;
 	var backgroundAnimation = true;
 	$("#user").blur(function(){
 		user = $("#user").val();
@@ -244,8 +244,8 @@
 	})
 
 	//关闭/开启动画
-	function openGame(thisObj){
-		var text=$(thisObj).text();
+    showBackgroundAnimation();
+	function showBackgroundAnimation(){
 		if (backgroundAnimation){
             $("#iframePage").attr("src", "");
             backgroundAnimation = false;
