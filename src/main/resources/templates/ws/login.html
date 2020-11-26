@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="common :: header"></head>
-<title>[[#{btn.login}]]</title>
+<title>[[#{page.login.title}]]</title>
 <style type="text/css">
 	a{
 		font-size:13px;
@@ -93,7 +93,7 @@
 
 		<div align="center" style="margin-top:10px;margin-left:-30px;">
 			<button id="btnlogin" class='btn btn-success btn-large'  type="submit" style="width:100px;">
-                <span class="glyphicon glyphicon-log-in"> [[#{btn.login}]]</span>
+                <span class="glyphicon glyphicon-log-in"> [[#{page.login.title}]]</span>
             </button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" value="" checked="checked" id="checkFlag" th:text="#{checkbox.check.label}"></label>
 		</div>
@@ -119,7 +119,7 @@
 <script th:inline="javascript">
 	// 加载国际化
 	$.ws.i18nInit([[${#locale.language}]], [[${#locale.country}]]);
-	console.log($.ws.i18n("btn.login"));
+	console.log($.ws.i18n("page.login.title"));
 
 	var user = "";
 	var checkBeforeLogin = true;
