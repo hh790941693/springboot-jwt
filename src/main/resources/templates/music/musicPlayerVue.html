@@ -87,7 +87,7 @@
 							<button id="btnRefresh" class='btn btn-info' @click="refreash()" th:title="#{btn.refreash.tips}">
                                 <span class="glyphicon glyphicon-refresh"></span>
                             </button>
-                            <button id="btnShowList" class='btn btn-warning' @click="showList()">[[#{btn.hidelist.label}]]</button>
+                            <button id="btnShowList" class='btn btn-warning' @click="showList($event)">[[#{btn.hidelist.label}]]</button>
 						</div>
 						<div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
 							<input type="radio" name="playmode" value="-1" checked="checked" @click="changePlayMode($event)" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
@@ -147,11 +147,11 @@
 			el: '#playerDiv',
 			data: {
 				musicData: {},        // 歌曲列表数据
-				playMode: -1,         //播放模式 0:单曲循环 1:顺序播放 2:随机播放
+				playMode: -1,         // 播放模式 0:单曲循环 1:顺序播放 2:随机播放
 				curSelectedIndex: 0,  // 当前播放歌曲的行号
 				hoverIndex: -1,       // 当前鼠标划过的行号
-                playStatus: -1,       //播放状态 -1:初始化  0:播放中 1:暂停中
-				showMode:1,           //播放列表显示/隐藏  0:隐藏 1:显示
+                playStatus: -1,       // 播放状态   -1:初始化  0:播放中 1:暂停中
+				showMode:1,           // 播放列表显示与隐藏  0:隐藏 1:显示
 			},
 			methods: {
 				queryMusicList:function () {
@@ -171,14 +171,12 @@
 				},
 				doublePlay:function(musicIndex){
 					//双击播放
-					console.log("双击播放:"+musicIndex);
 					app.curSelectedIndex = musicIndex;
 					var selectedTr = $("table tr").get(app.curSelectedIndex+1);
 					app.playByIndex(selectedTr);
 				},
 				play:function(){
 					//播放
-					console.log("开始播放音乐");
 					var checkedInput=$("table tr").find("input[checked='checked']");
 					var checkedTr=$(checkedInput).parent().parent().parent();
 					var selectedMusicInfo = app.musicData[app.curSelectedIndex];
@@ -307,15 +305,16 @@
                 mouseLeave:function (music, index) {
                     // 鼠标离开事件  do nothing
                 },
-				showList: function (){
+				showList: function (event){
 					// 显示/隐藏播放列表
+					let target = event.currentTarget;
 					if (app.showMode == 0){
 						$("#musicList").slideDown(500);
-						$("#btnShowList").text($.ws.i18n("btn.hidelist.label"));
+						$(target).text($.ws.i18n("btn.hidelist.label"));
 						app.showMode = 1;
 					}else{
 						$("#musicList").slideUp(500);
-						$("#btnShowList").text($.ws.i18n("btn.showlist.label"));
+						$(target).text($.ws.i18n("btn.showlist.label"));
 						app.showMode = 0;
 					}
 				},
@@ -324,7 +323,6 @@
 					let target = event.currentTarget;
 					var modeVar = $(target).val();
 					app.playMode = modeVar;
-
 				},
 			},
 			created: function () {
@@ -360,7 +358,7 @@
 					showText += "<p><span style='width:82%;'>"+filename+"</span><span style='width:15%;color:blue;font-weight: bold;'>上传失败</span></p>";
                 }
             });
-			showText+="</div>";
+			showText += "</div>";
             layer.closeAll();
 			layer.open({
 				type: 1,
@@ -371,7 +369,6 @@
 				area: ['530px', '60%'],
 				content: showText
 			});
-            //layer.alert(showText);
             setTimeout(refreash,3000);
         });
 
@@ -382,17 +379,13 @@
 	            if (e == "ended"){
 	            	if (app.playMode == 0){
 	            		// 单曲循环
-						console.log("单曲循环");
-						//$("#btnPlay").text("播放");
                         app.playStatus = 1;
 	            		app.play();
 	            	}else if (app.playMode == 1){
 	            		//顺序播放
-						console.log("顺序播放");
 	            		app.nextMusic();
 	            	}else if (app.playMode == 2){
 	            		//随机播放
-						console.log("随机播放");
 	            		app.randomMusic();
 	            	}
 	            }else if (e == "error"){
