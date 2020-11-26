@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="common :: header"></head>
 		<meta charset="utf-8">
-		<title>音乐播放器</title>
+		<title>[[#{music.page.title}]]</title>
 
 		<style type="text/css">
 			.selectRowClass{
@@ -59,14 +59,14 @@
 			<form action="/upload/app/uploadMusic" method="post" enctype="multipart/form-data" onsubmit="return verify()" target="hidden_frame">
 				<input type="text" id="user" name="user" th:value="${user}" hidden="true">
 				<input type="hidden" name="folder" value="music">
-				文件:<input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg" style="display: inline-block;" th:title="#{btn.choosesong.label}">
+				<input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg" style="display: inline-block;" th:title="#{btn.choosesong.label}">
                 <input type="submit" th:value="#{btn.uploadsong.label}">
 			</form>
 		</div>		
 		<div id="playerDiv">
 			<div id="buttons" style="height:15%;border-bottom: 1px solid grey;">
-				<div id="songNameDiv" align="center" style="background-color:yellow;height:35%;border-bottom:2px solid green;padding-top:7px;">
-					<span id="statusSpan">初始化:</span><label id="songName"></label>
+				<div id="songNameDiv" align="center" style="background-color:yellow;height:35%;border-bottom:2px solid green;padding-top:3px;">
+					<span id="statusSpan" style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span><span> : </span><label id="songName"></label>
 				</div>
 				<div style="height:67%;">
 					<div style="float:left;width:37%;height:46px;margin-top:5px;margin-left: 5px;">
@@ -78,7 +78,7 @@
 							<button id="btnPre" class='btn btn-primary' @click="preMusic()" th:title="#{btn.last.tips}">
                                 <span class="glyphicon glyphicon-step-backward"></span>
                             </button>
-							<button id="btnPlay" class='btn btn-success' @click="play()" th:title="#{btn.play.tips}">
+							<button id="btnPlay" class='btn btn-success' @click="play()" th:title="#{btn.playpause.tips}">
                                 <span class="glyphicon glyphicon-play"></span>
                             </button>
 							<button id="btnNext" class='btn btn-primary' @click="nextMusic()" th:title="#{btn.next.tips}">
@@ -125,10 +125,10 @@
 						<td>{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
 						<td>
 							<button class='delBtn btn btn-sm btn-success' @click="playMusic(music.id)">
-                                <span class="glyphicon glyphicon-play"></span>
+                                <span class="glyphicon glyphicon-play">[[#{btn.play.label}]]</span>
                             </button>
 							<button class='delBtn btn btn-sm btn-danger' @click="deleteMusic(music.id)">
-                                <span class="glyphicon glyphicon-remove"></span>
+                                <span class="glyphicon glyphicon-remove">[[#{btn.delete.label}]]</span>
                             </button>
 						</td>
 					</tr>
@@ -190,7 +190,7 @@
 					$(checkedTr).addClass("selectRowClass");
 					$("#player").attr("src",url);
 
-					$("#statusSpan").text("正在播放:");
+					$("#statusSpan").text($.ws.i18n("span.palystatus.playing"));
 					$("#songName").html(filename);
 					if (app.playStatus == -1 || app.playStatus == 1){
                         app.playStatus = 0; //播放中
@@ -198,7 +198,7 @@
 						$("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
 					}else{
                         app.playStatus = 1; //暂停中
-						$("#statusSpan").text("暂停中:");
+						$("#statusSpan").text($.ws.i18n("span.palystatus.paused"));
 						$("#player")[0].pause();
                         $("#btnPlay span").removeClass("glyphicon-pause").addClass("glyphicon-play");
 					}
@@ -250,7 +250,7 @@
 					var url = selectedMusicInfo.url;
 
 					$("#player").attr("src", url);
-					$("#statusSpan").text("正在播放:");
+					$("#statusSpan").text($.ws.i18n("span.palystatus.playing"));
 					$("#songName").html(filename);
 
 					$("#player")[0].play();
