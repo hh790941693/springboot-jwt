@@ -99,6 +99,9 @@
             } else {
                 fileNames = [defaultFileName, shortFileName];
             }
+
+            // modify by hch 2020-11-27 21:47
+            fileNames = [defaultFileName, longFileName];
             loadAndParseFiles(fileNames, settings);
         });
 
