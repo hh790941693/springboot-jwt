@@ -87,7 +87,7 @@
 		<div style="height:25px;margin-top:15px;">
 			<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:50px;" th:text="#{a.register.label}"></a>
 			<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;" th:text="#{a.forgetpassword.label}"></a>
-			<a href="javascript:void(0)" onclick="showBackgroundAnimation()" style="text-decoration:none;margin-left:20px;" th:text="#{a.hideh5.label}"></a>
+			<a id="showBg" href="javascript:void(0)" onclick="showBackgroundAnimation()" style="text-decoration:none;margin-left:20px;" th:text="#{a.showh5.label}"></a>
 			<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;" th:text="#{a.playgame.label}"></a>
 		</div>
 
@@ -248,9 +248,11 @@
 	function showBackgroundAnimation(){
 		if (backgroundAnimation){
             $("#iframePage").attr("src", "");
+            $("#showBg").text($.ws.i18n("a.showh5.label"));
             backgroundAnimation = false;
 		}else{
             $("#iframePage").attr("src", rootUrl+"canvas/snow.page");
+			$("#showBg").text($.ws.i18n("a.hideh5.label"));
             backgroundAnimation = true;
 		}
 	}
