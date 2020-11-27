@@ -71,14 +71,16 @@ public class SessionController {
 		HttpSession httpSession = request.getSession(false);
 		SessionInfoBean sessionInfoBean = (SessionInfoBean)httpSession.getAttribute(CommonConstants.SESSION_INFO);
 
-        SessionInfoBean copyBean = new SessionInfoBean();
-        BeanUtils.copyProperties(sessionInfoBean, copyBean);
 		if (null != sessionInfoBean) {
+			SessionInfoBean copyBean = new SessionInfoBean();
+			BeanUtils.copyProperties(sessionInfoBean, copyBean);
 			String encryPassword = hidePassword(sessionInfoBean.getPassword());
-            copyBean.setPassword(encryPassword);
+			copyBean.setPassword(encryPassword);
+			model.addAttribute(CommonConstants.SESSION_INFO, JsonUtil.javaobject2Jsonobject(copyBean));
+			return "ws/sessionInfo";
 		}
-		model.addAttribute(CommonConstants.SESSION_INFO, JsonUtil.javaobject2Jsonobject(copyBean));
-		return "ws/sessionInfo";
+
+		return "redirect:/";
 	}
 
 	/**
