@@ -96,13 +96,13 @@ public class LoginController {
                     if (cookie.getValue().equals(CommonConstants.ADMIN_USER)){
                         isAdmin = true;
                     }
-                }else if (cookie.getName().equals(CommonConstants.S_PASS) && cookie.getMaxAge() != 0) {
-                    if (isAdmin){
+                } else if (cookie.getName().equals(CommonConstants.S_PASS) && cookie.getMaxAge() != 0) {
+                    if (isAdmin) {
                         //不保存admin密码
                         model.addAttribute(CommonConstants.S_PASS, "");
                         cookie.setMaxAge(0);
                         response.addCookie(cookie);
-                    }else {
+                    } else {
                         //对密码进行解密
                         String passDecrypt = SecurityAESUtil.decryptAES(cookie.getValue(), CommonConstants.AES_PASSWORD);
                         model.addAttribute(CommonConstants.S_PASS, passDecrypt);
@@ -145,33 +145,11 @@ public class LoginController {
         // 检查当前用户是否已经登录过
         Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
 
-        // 是否已登录
-        boolean isLogin = false;
-        // 是否已注册  true:已注册
-        boolean isRegister = false;
-        // 是否被禁用   0:已禁用
-        String isEnable = "1";
-        String dbPass = "";          //数据库密文密码
-        String dbPassDecrypted = ""; //数据库明文密码
+        // 获取用户信息
+        WsUsersDO curUserObj = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
 
-        WsUsersDO curUserObj = null;
-        List<WsUsersDO> userList = wsUsersService.selectList(null);
-        for (WsUsersDO u : userList){
-            if (u.getName().equals(user)) {
-                curUserObj = u;
-                isRegister = true;
-                dbPass = u.getPassword();
-                dbPassDecrypted = SecurityAESUtil.decryptAES(dbPass, CommonConstants.AES_PASSWORD);
-                isEnable = u.getEnable();
-                break;
-            }
-        }
-
-        if (socketMap.containsKey(user)){
-            isLogin = true;
-        }
-
-        if (!isRegister){
+        // 如果用户信息不存在,提示用户去注册
+        if (null == curUserObj){
             // 用户未注册
             request.setAttribute("user", user);
             request.setAttribute("detail", "当前用户未注册,请先注册!");
@@ -179,6 +157,8 @@ public class LoginController {
             return;
         }
 
+        // 是否被禁用   0:已禁用
+        String isEnable = curUserObj.getEnable();
         if (isEnable.equals("0")){
             // 此账号已被禁用
             request.setAttribute("user", user);
@@ -187,7 +167,8 @@ public class LoginController {
             return;
         }
 
-        if (isLogin){
+        // 是否已登录
+        if (socketMap.containsKey(user)){
             // 如果已登录
             request.setAttribute("user", user);
             request.setAttribute("detail", "当前用户已经登录了,请不要重复登录!");
@@ -195,6 +176,8 @@ public class LoginController {
             return;
         }
 
+        //数据库明文密码
+        String dbPassDecrypted = SecurityAESUtil.decryptAES(curUserObj.getPassword(), CommonConstants.AES_PASSWORD);
         // 如果密码不对
         if (!pass.equals(dbPassDecrypted)){
             request.setAttribute("user", user);
@@ -221,7 +204,7 @@ public class LoginController {
 
         // 客户端浏览器类型
         String userAgent = request.getHeader("User-Agent");
-        logger.info("userAgent:"+userAgent);
+        logger.info("userAgent:{}", userAgent);
         String shortAgent = "unknown device";
         try {
             shortAgent = userAgent.split("\\(")[1].split("\\)")[0].replaceAll("\\(", "").replaceAll("\\)", "");
@@ -243,8 +226,8 @@ public class LoginController {
         logger.info("创建SESSION: {}", sessionId);
 
         //记录cookie
-        Cookie userCookie = new Cookie(CommonConstants.S_USER,user);
-        Cookie passCookie = new Cookie(CommonConstants.S_PASS,dbPass);
+        Cookie userCookie = new Cookie(CommonConstants.S_USER, user);
+        Cookie passCookie = new Cookie(CommonConstants.S_PASS, curUserObj.getPassword());
         Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP, webserverip);
         Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT, webserverPort);
         // 客户端的JSESSIONID
@@ -273,7 +256,7 @@ public class LoginController {
             userType = CommonConstants.USER_TYPE_MANAGER;
         }
         // 往session中存储用户信息
-        SessionInfoBean sessionInfoBean = new SessionInfoBean(sessionId, user, dbPass, webserverip, webserverPort, selfImg, shortAgent, userType);
+        SessionInfoBean sessionInfoBean = new SessionInfoBean(sessionId, user, curUserObj.getPassword(), webserverip, webserverPort, selfImg, shortAgent, userType);
         request.getSession().setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
         // 往redis中存储用户信息
