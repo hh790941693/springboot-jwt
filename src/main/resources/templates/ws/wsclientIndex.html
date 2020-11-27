@@ -99,6 +99,7 @@
             <input type="hidden" id="webserverport" name="webserverport" th:value="${sessionInfo.webserverPort}">
             <input type="hidden" id="selfimg" name="selfimg" th:value="${sessionInfo.selfImg}">
             <input type="hidden" id="useragent" name="useragent" th:value="${sessionInfo.userAgent}">
+            <input type="hidden" id="usertype" name="usertype" th:value="${sessionInfo.userType}">
 
             <!--滚动消息-->
             <div id="recentNewsDiv">
@@ -108,10 +109,10 @@
             <div id="leftAndRightIframeDiv">
                 <!--左侧导航栏-->
                 <div id="leftNaviDiv">
-                    <div th:if="${sessionInfo.user == 'admin'}">
+                    <div th:if="${sessionInfo.userType == '0'}">
                         <iframe id="leftNaviIframePage" src="ws/serverLeftNavi.page" width="100%" height="100%"></iframe>
                     </div>
-                    <div th:if="${sessionInfo.user != 'admin'}">
+                    <div th:if="${sessionInfo.userType != '0'}">
                         <iframe id="leftNaviIframePage" src="ws/clientLeftNavi.page" width="100%" height="100%"></iframe>
                     </div>
                 </div>
@@ -170,8 +171,9 @@
         var s_pass=$('#pass').val();
         var s_webserverip = $('#webserverip').val();
         var s_webserverport = $('#webserverport').val();
-        var s_userAgent = $('#useragent').val();
         var s_selfimg = $('#selfimg').val();
+        var s_userAgent = $('#useragent').val();
+        var s_usertype = $('#usertype').val();
         //窗口大小发生变化时,是否动态放大或者缩小布局
         var resizeFlag = false;
 
@@ -199,7 +201,7 @@
 
         // 默认显示页:聊天窗口首页
         var curPageid = "ws/wsclientChat.page";
-        if (s_user == 'admin'){
+        if (s_usertype == '0'){
 			curPageid = "/zhddkk/wsUsers/wsUsersForAdmin";
 		}
         showPage(curPageid);
@@ -559,7 +561,7 @@
         setPageTitle();
         function setPageTitle(){
             let title = "";
-            if (s_user == "admin") {
+            if (s_usertype == "0") {
                 title = "page.serverindex.title";
             } else {
                 title = "page.clientindex.title";

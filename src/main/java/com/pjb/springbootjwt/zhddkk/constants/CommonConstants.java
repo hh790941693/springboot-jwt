@@ -19,7 +19,8 @@ public class CommonConstants
 	public static final String S_WEBSERVERIP = "webserverip";
 	public static final String S_WEBSERVERPORT = "webserverport";
 	public static final String S_IMG = "selfimg";           //个人头像
-	public static final String S_USER_AGENT = "useragent"; //设备信息
+	public static final String S_USER_AGENT = "useragent";  // 设备信息
+	public static final String S_USER_TYPE = "usertype";    // 用户类型
 
     // 登陆验证码
 	public static final String VERIFY_CODE = "verifyCode";
@@ -39,10 +40,15 @@ public class CommonConstants
 
 	// admin管理员账号密码
 	public static final String ADMIN_USER = "admin";
-	public static final String ADMIN_PASSWORD = "admin";
 
 	// 语言
     public static final String LANG_ZH = "zh_cn";
     public static final String LANG_EN = "en_us";
     public static final String LANG_KR = "ko_kr";
+
+    // 用户类型
+	// 管理员用户
+	public static final String USER_TYPE_MANAGER = "0";
+	// 普通用户
+	public static final String USER_TYPE_COMMON = "1";
 }

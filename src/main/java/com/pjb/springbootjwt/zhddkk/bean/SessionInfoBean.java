@@ -22,11 +22,13 @@ public class SessionInfoBean {
 
     private String userAgent;
 
+    private String userType;
+
     public SessionInfoBean(){
 
     }
 
-    public SessionInfoBean(String id, String user, String password, String webserverIp, String webserverPort, String selfImg, String userAgent) {
+    public SessionInfoBean(String id, String user, String password, String webserverIp, String webserverPort, String selfImg, String userAgent, String userType) {
         this.id = id;
         this.user = user;
         this.password = password;
@@ -34,5 +36,6 @@ public class SessionInfoBean {
         this.webserverPort = webserverPort;
         this.selfImg = selfImg;
         this.userAgent = userAgent;
+        this.userType = userType;
     }
 }
