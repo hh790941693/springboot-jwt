@@ -87,6 +87,14 @@ public class LoginController {
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.LOGIN,subModule="",describe="登陆首页页面")
     @RequestMapping({"","/","/index"})
     public String v_home(Model model, HttpServletRequest request, HttpServletResponse response) {
+
+        // 如果用户已登陆过，则直接跳转登陆成功首页
+        SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
+        if (null != sessionInfoBean){
+            model.addAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
+            return "ws/wsclientIndex";
+        }
+
         Cookie[] cookies = request.getCookies();
         if (null != cookies) {
             boolean isAdmin = false;
@@ -107,18 +115,14 @@ public class LoginController {
                         String passDecrypt = SecurityAESUtil.decryptAES(cookie.getValue(), CommonConstants.AES_PASSWORD);
                         model.addAttribute(CommonConstants.S_PASS, passDecrypt);
                     }
+                } else if (cookie.getName().equals(CommonConstants.C_LANG) && cookie.getMaxAge() != 0) {
+                    model.addAttribute(CommonConstants.C_LANG, cookie.getValue());
                 }
             }
         }else{
             model.addAttribute(CommonConstants.S_USER, "");
             model.addAttribute(CommonConstants.S_PASS, "");
-        }
-
-        // 如果用户已登陆过，则直接跳转登陆成功首页
-        SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
-        if (null != sessionInfoBean){
-            model.addAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
-            return "ws/wsclientIndex";
+            model.addAttribute(CommonConstants.C_LANG, "");
         }
 
         Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
@@ -127,7 +131,7 @@ public class LoginController {
             locale = new Locale("zh","CN");
             request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
         }
-        model.addAttribute("locale", locale.getLanguage()+"_"+locale.getCountry().toLowerCase());
+        model.addAttribute("locale", locale.getLanguage() + "_" + locale.getCountry().toLowerCase());
         return "ws/login";
     }
 
@@ -226,27 +230,7 @@ public class LoginController {
         logger.info("创建SESSION: {}", sessionId);
 
         //记录cookie
-        Cookie userCookie = new Cookie(CommonConstants.S_USER, user);
-        Cookie passCookie = new Cookie(CommonConstants.S_PASS, curUserObj.getPassword());
-        Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP, webserverip);
-        Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT, webserverPort);
-        // 客户端的JSESSIONID
-        Cookie jsessionIdCookie = new Cookie(CommonConstants.JSESSIONID, sessionId);
-        userCookie.setPath("/");
-        userCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);//用户名30分钟
-        passCookie.setPath("/");
-        passCookie.setMaxAge(600);//密码10分钟
-        webserveripCookie.setPath("/");
-        webserveripCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
-        webserverportCookie.setPath("/");
-        webserverportCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
-        jsessionIdCookie.setPath("/");
-        jsessionIdCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT); // 客户端的JSESSIONID保存30分钟
-        response.addCookie(userCookie);
-        response.addCookie(passCookie);
-        response.addCookie(webserveripCookie);
-        response.addCookie(webserverportCookie);
-        response.addCookie(jsessionIdCookie);
+        saveCookie(request, response, curUserObj, sessionId);
 
         // 设置session非活动失效时间
         httpSession.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT); //session不活动失效时间
@@ -656,5 +640,46 @@ public class LoginController {
     private  String getLocaleMessage(String messageId, HttpServletRequest request){
         Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         return messageSource.getMessage(messageId, null, locale);
+    }
+
+    /**
+     * 保存cookie
+     * @param request 请求体
+     * @param response 响应体
+     * @param curUserObj 当前登陆用户
+     * @param sessionId 会话id
+     */
+    private void saveCookie(HttpServletRequest request, HttpServletResponse response, WsUsersDO curUserObj, String sessionId){
+        //记录cookie
+        Cookie userCookie = new Cookie(CommonConstants.S_USER, curUserObj.getName());
+        Cookie passCookie = new Cookie(CommonConstants.S_PASS, curUserObj.getPassword());
+        Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP, webSocketConfig.getAddress());
+        Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT, webSocketConfig.getPort());
+        String lang = "";
+        Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        if (null != locale){
+            lang = locale.getLanguage() + "_" + locale.getCountry().toLowerCase();
+        }
+        Cookie localeCookie = new Cookie(CommonConstants.C_LANG, lang);
+        // 客户端的JSESSIONID
+        Cookie jsessionIdCookie = new Cookie(CommonConstants.JSESSIONID, sessionId);
+        userCookie.setPath("/");
+        userCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);//用户名30分钟
+        passCookie.setPath("/");
+        passCookie.setMaxAge(600);//密码10分钟
+        webserveripCookie.setPath("/");
+        webserveripCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
+        webserverportCookie.setPath("/");
+        webserverportCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
+        jsessionIdCookie.setPath("/");
+        jsessionIdCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT); // 客户端的JSESSIONID保存30分钟
+        localeCookie.setPath("/");
+        localeCookie.setMaxAge(20*365*24*60*60);
+        response.addCookie(userCookie);
+        response.addCookie(passCookie);
+        response.addCookie(webserveripCookie);
+        response.addCookie(webserverportCookie);
+        response.addCookie(jsessionIdCookie);
+        response.addCookie(localeCookie);
     }
 }

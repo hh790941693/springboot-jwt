@@ -22,6 +22,9 @@ public class CommonConstants
 	public static final String S_USER_AGENT = "useragent";  // 设备信息
 	public static final String S_USER_TYPE = "usertype";    // 用户类型
 
+	// cookie中存储的KV键值对
+    public static final String C_LANG = "lang";  // 语言
+
     // 登陆验证码
 	public static final String VERIFY_CODE = "verifyCode";
 
