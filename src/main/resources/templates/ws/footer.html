@@ -41,6 +41,10 @@
 		cursor: pointer;
 		margin-right: 8px;
 	}
+
+	#copyrightDiv li span{
+		margin-right: 2px;
+	}
 </style>
 </head>
 <body>
@@ -57,19 +61,19 @@
 			<div id="copyrightDiv" style="float:right;color:blue;">
 				<ul>
 					<li onclick="showSessionInfo()">
-						<span class="glyphicon glyphicon-info-sign" th:text="#{a.sessioninfo.label}"></span>
+						<a href="#"><span class="glyphicon glyphicon-info-sign"></span>[[#{a.sessioninfo.label}]]</a>
 					</li>
 					<li onclick="contactAuthor()">
-                        <span class="glyphicon glyphicon-phone-alt" th:text="#{a.contactauthor.label}"></span>
+						<a href="#"><span class="glyphicon glyphicon-phone-alt"></span>[[#{a.contactauthor.label}]]</a>
                     </li>
 					<li onclick="donate()">
-                        <span class="glyphicon glyphicon-usd" th:text="#{a.donate.label}"></span>
+						<a href="#"><span class="glyphicon glyphicon-usd"></span>[[#{a.donate.label}]]</a>
                     </li>
 					<li onclick="feedbackUs()">
-                        <span class="glyphicon glyphicon-question-sign" th:text="#{a.feedback.label}"></span>
+						<a href="#"><span class="glyphicon glyphicon-question-sign"></span>[[#{a.feedback.label}]]</a>
                     </li>
 					<li onclick="aboutUs()">
-                        <span class="glyphicon glyphicon-user" th:text="#{a.aboutus.label}"></span>
+						<a href="#"><span class="glyphicon glyphicon-user"></span>[[#{a.aboutus.label}]]</a>
                     </li>
 				</ul>
 			</div>
