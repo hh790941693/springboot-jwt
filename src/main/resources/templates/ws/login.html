@@ -19,7 +19,7 @@
 
 	#mainDiv{
 		width:400px;
-		height:310px;
+		height:340px;
 		margin:0 auto;
 		box-shadow: grey 10px 6px 10px;
 		border:1px solid grey;
@@ -31,7 +31,7 @@
 	}
 
 	#loginForm{
-		padding-left: 40px;
+		padding-left: 30px;
 		padding-top: 30px;
 	}
 
@@ -45,6 +45,11 @@
 	#btnlogin{
 		box-shadow: grey 5px 5px 10px;
 	}
+
+    .input-group-addon{
+        background-color:#eeeeee;
+        border:1px solid #cccccc;
+    }
 </style>
 </head>
 <body>
@@ -69,21 +74,22 @@
     </div>
 	<img id="backgroundImg" src="../img/fengjing/fj9.jpg" hidden>
 	<form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
-		<div style="height:25px;">
-            <span class="glyphicon glyphicon-user" style="font-size: 20px;" for="user"></span>
-			<input id="user" name="user" type="text" th:value="${user}" th:placeholder="#{input.user.helper}" autocomplete="off" style="width:178px;margin-left:20px;">
+		<div class="input-group margin-bottom-sm">
+			<span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+			<input id="user" name="user" type="text" class="form-control" th:value="${user}" th:placeholder="#{input.user.helper}" autocomplete="off" style="width:200px;">
 		</div>
-		<div style="height:25px;margin-top:10px;">
-            <span class="glyphicon glyphicon-lock" style="font-size: 20px;" for="pass"></span>
-			<input id="pass" name="pass" type="password" th:value="${pass}" th:placeholder="#{input.password.helper}" autocomplete="off"  style="width:178px;margin-left:20px;">
+		<div class="input-group" style="margin-top: 5px;">
+			<span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+			<input id="pass" name="pass" type="password" class="form-control" th:value="${pass}" th:placeholder="#{input.password.helper}" autocomplete="off"  style="width:200px;">
 		</div>
-        <div style="height:50px;margin-top:10px;">
-            <span class="glyphicon glyphicon-briefcase" style="font-size: 20px;" for="pass"></span>
-            <input id="verifyCode" name="verifyCode" type="text" th:value="${verifyCode}" th:placeholder="#{input.code.helper}" autocomplete="off"  style="width:178px;margin-left:20px;">
-            <div style="margin-left: 121px;margin-top:5px;">
-                <img id="verifyCodeImg"/>
-            </div>
+		<div class="input-group" style="margin-top: 5px;">
+			<span class="input-group-addon"><i class="fa fa-briefcase fa-fw"></i></span>
+			<input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}" th:placeholder="#{input.code.helper}" autocomplete="off"  style="width:200px;">
+		</div>
+        <div style="margin-left: 143px;margin-top:5px;">
+            <img id="verifyCodeImg"/>
         </div>
+
 		<div style="height:25px;margin-top:15px;">
 			<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:50px;" th:text="#{a.register.label}"></a>
 			<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;" th:text="#{a.forgetpassword.label}"></a>
