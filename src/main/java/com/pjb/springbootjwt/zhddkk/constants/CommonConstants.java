@@ -54,4 +54,6 @@ public class CommonConstants
 	public static final String USER_TYPE_MANAGER = "0";
 	// 普通用户
 	public static final String USER_TYPE_COMMON = "1";
+
+	public static final int LOCALE_COOKIE_EXPIRE = 20*365*24*60*60;
 }

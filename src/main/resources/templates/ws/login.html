@@ -62,9 +62,9 @@
     <!--选择语言-->
     <div style="position:absolute;top:6px;left:323px;">
         <select id="localesSelect" style="height:32px;">
-            <option value="zh_cn" th:text="中文" th:selected="${locale == 'zh_cn'}"></option>
-            <option value="en_us" th:text="English" th:selected="${locale == 'en_us'}"></option>
-            <option value="ko_kr" th:text="한국어" th:selected="${locale == 'ko_kr'}"></option>
+            <option value="zh_cn" th:text="中文" th:selected="${lang == 'zh_cn'}"></option>
+            <option value="en_us" th:text="English" th:selected="${lang == 'en_us'}"></option>
+            <option value="ko_kr" th:text="한국어" th:selected="${lang == 'ko_kr'}"></option>
         </select>
     </div>
 	<img id="backgroundImg" src="../img/fengjing/fj9.jpg" hidden>
@@ -370,7 +370,7 @@
     $("#localesSelect").change(function() {
         var lang = $("#localesSelect").val();
         if (lang != "") {
-            $("#locale").val(lang);
+            //$("#locale").val(lang);
             window.location.replace("/i18n?lang=" + lang);
         }
     });

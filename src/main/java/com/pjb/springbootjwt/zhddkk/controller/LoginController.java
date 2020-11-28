@@ -95,7 +95,9 @@ public class LoginController {
             return "ws/wsclientIndex";
         }
 
+        // 检查cookie
         Cookie[] cookies = request.getCookies();
+        Locale locale = null;
         if (null != cookies) {
             boolean isAdmin = false;
             for (Cookie cookie : cookies) {
@@ -117,21 +119,19 @@ public class LoginController {
                     }
                 } else if (cookie.getName().equals(CommonConstants.C_LANG) && cookie.getMaxAge() != 0) {
                     model.addAttribute(CommonConstants.C_LANG, cookie.getValue());
+                    String language = cookie.getValue().split("_")[0];
+                    String country = cookie.getValue().split("_")[1].toUpperCase();
+                    locale = new Locale(language,country);
                 }
             }
-        }else{
-            model.addAttribute(CommonConstants.S_USER, "");
-            model.addAttribute(CommonConstants.S_PASS, "");
-            model.addAttribute(CommonConstants.C_LANG, "");
         }
 
-        Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         if (null == locale){
-            // 设置默认语言
+            model.addAttribute(CommonConstants.C_LANG, CommonConstants.LANG_ZH);
             locale = new Locale("zh","CN");
-            request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
         }
-        model.addAttribute("locale", locale.getLanguage() + "_" + locale.getCountry().toLowerCase());
+
+        request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
         return "ws/login";
     }
 
@@ -593,7 +593,7 @@ public class LoginController {
     }
 
     @RequestMapping("/i18n")
-    public String changeSessionLanauage(HttpServletRequest request, String lang){
+    public String changeSessionLanauage(HttpServletRequest request, HttpServletResponse response, String lang){
         Locale locale = new Locale("zh","CN");
         if(CommonConstants.LANG_ZH.equals(lang)){
             //代码中即可通过以下方法进行语言设置
@@ -604,6 +604,13 @@ public class LoginController {
             locale = new Locale("ko","KR");
         }
         request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+
+        // 设置cookie
+        Cookie localeCookie = new Cookie(CommonConstants.C_LANG, lang);
+        localeCookie.setPath("/");
+        localeCookie.setMaxAge(CommonConstants.LOCALE_COOKIE_EXPIRE);
+        response.addCookie(localeCookie);
+
         return "redirect:/";
     }
 
@@ -655,12 +662,6 @@ public class LoginController {
         Cookie passCookie = new Cookie(CommonConstants.S_PASS, curUserObj.getPassword());
         Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP, webSocketConfig.getAddress());
         Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT, webSocketConfig.getPort());
-        String lang = "";
-        Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
-        if (null != locale){
-            lang = locale.getLanguage() + "_" + locale.getCountry().toLowerCase();
-        }
-        Cookie localeCookie = new Cookie(CommonConstants.C_LANG, lang);
         // 客户端的JSESSIONID
         Cookie jsessionIdCookie = new Cookie(CommonConstants.JSESSIONID, sessionId);
         userCookie.setPath("/");
@@ -673,13 +674,21 @@ public class LoginController {
         webserverportCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
         jsessionIdCookie.setPath("/");
         jsessionIdCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT); // 客户端的JSESSIONID保存30分钟
-        localeCookie.setPath("/");
-        localeCookie.setMaxAge(20*365*24*60*60);
         response.addCookie(userCookie);
         response.addCookie(passCookie);
         response.addCookie(webserveripCookie);
         response.addCookie(webserverportCookie);
         response.addCookie(jsessionIdCookie);
-        response.addCookie(localeCookie);
+
+        // 设置语言cookie
+        Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        if (null != locale){
+            String language = locale.getLanguage();
+            String country = locale.getCountry().toLowerCase();
+            Cookie localeCookie = new Cookie(CommonConstants.C_LANG, language+"_"+country);
+            localeCookie.setPath("/");
+            localeCookie.setMaxAge(CommonConstants.LOCALE_COOKIE_EXPIRE);
+            response.addCookie(localeCookie);
+        }
     }
 }
