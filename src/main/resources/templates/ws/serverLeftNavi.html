@@ -106,11 +106,6 @@
 
     <div id='configurationDiv' style='display:none;position:absolute;left:43px;top:133px;height:184px;background-color:#d8d9e6;border:2px solid green;z-index:99;'>
         <ul>
-            <!--<li id="wsserverCommon.page?type=mgc">敏感词配置</li>
-            <li id="wsserverCommon.page?type=zh" >脏话配置</li>
-            <li id="wsserverCommon.page?type=cyy">常用语配置</li>
-            <li id="wsserverCommon.page?type=zcwt">注册问题配置</li>
-            -->
             <li id="/zhddkk/wsCommon/mgc" th:text="#{li.sensitiveword.label}">敏感词配置</li>
             <li id="/zhddkk/wsCommon/zh" th:text="#{li.badword.label}">脏话配置</li>
             <li id="/zhddkk/wsCommon/cyy" th:text="#{li.chatword.label}">常用语配置</li>
@@ -123,6 +118,12 @@
 </body>
 
 <script type="text/javascript">
+    $("a").hover(function(){
+        $("a").css("color","black");
+    },function(){
+        $("a").css("color","black");
+    });
+
     //左侧导航栏点击事件
     $("#leftNavi ul li").click(function (){
         var curPageid=this.id;
@@ -144,17 +145,6 @@
             $("#configurationDiv").slideUp();
         }
     })
-
-    //左侧导航栏鼠标滑过事件
-    $("#leftNavi ul li").hover(function(){
-        $(this).removeClass("mousemoveout");
-        $(this).removeClass("mousemoveon");
-        $(this).addClass("mousemoveon");
-    },function(){
-        $(this).removeClass("mousemoveout");
-        $(this).removeClass("mousemoveon");
-        $(this).addClass("mousemoveout");
-    });
 
     //定时滚动左侧导航栏背景图片
     $.ws.backgroundImgAnimation("leftNavBackgroundImg","leftNavi", 2, 10);

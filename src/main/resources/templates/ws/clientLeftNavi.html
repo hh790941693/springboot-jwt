@@ -96,6 +96,12 @@
     </body>
 
     <script type="text/javascript">
+        $("a").hover(function(){
+            $("a").css("color","black");
+        },function(){
+            $("a").css("color","black");
+        });
+
         //左侧导航栏点击事件
         $("#leftNavi ul li").click(function (){
             var curPageid = this.id;
@@ -107,17 +113,6 @@
             $("#leftNavi ul li").removeClass("mouseleftclick");
             $(this).addClass("mouseleftclick");
         })
-
-        //左侧导航栏鼠标滑过事件
-        $("#leftNavi ul li").hover(function(){
-            $(this).removeClass("mousemoveout");
-            $(this).removeClass("mousemoveon");
-            $(this).addClass("mousemoveon");
-        },function(){
-            $(this).removeClass("mousemoveout");
-            $(this).removeClass("mousemoveon");
-            $(this).addClass("mousemoveout");
-        });
 
         //定时滚动左侧导航栏背景图片
         $.ws.backgroundImgAnimation("leftNavBackgroundImg","leftNavi", 2, 10);
