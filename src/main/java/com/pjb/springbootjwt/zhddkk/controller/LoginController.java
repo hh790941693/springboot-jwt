@@ -120,8 +120,8 @@ public class LoginController {
                 } else if (cookie.getName().equals(CommonConstants.C_LANG) && cookie.getMaxAge() != 0) {
                     model.addAttribute(CommonConstants.C_LANG, cookie.getValue());
                     String language = cookie.getValue().split("_")[0];
-                    String country = cookie.getValue().split("_")[1].toUpperCase();
-                    locale = new Locale(language,country);
+                    String country = cookie.getValue().split("_")[1];
+                    locale = new Locale(language, country);
                 }
             }
         }
@@ -594,15 +594,10 @@ public class LoginController {
 
     @RequestMapping("/i18n")
     public String changeSessionLanauage(HttpServletRequest request, HttpServletResponse response, String lang){
-        Locale locale = new Locale("zh","CN");
-        if(CommonConstants.LANG_ZH.equals(lang)){
-            //代码中即可通过以下方法进行语言设置
-            locale = new Locale("zh","CN");
-        } else if(CommonConstants.LANG_EN.equals(lang)){
-            locale = new Locale("en","US");
-        } else if(CommonConstants.LANG_KR.equals(lang)){
-            locale = new Locale("ko","KR");
-        }
+
+        String language = lang.split("_")[0];
+        String country = lang.split("_")[1];
+        Locale locale = new Locale(language, country);
         request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
 
         // 设置cookie
@@ -683,9 +678,7 @@ public class LoginController {
         // 设置语言cookie
         Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         if (null != locale){
-            String language = locale.getLanguage();
-            String country = locale.getCountry().toLowerCase();
-            Cookie localeCookie = new Cookie(CommonConstants.C_LANG, language+"_"+country);
+            Cookie localeCookie = new Cookie(CommonConstants.C_LANG, locale.toString());
             localeCookie.setPath("/");
             localeCookie.setMaxAge(CommonConstants.LOCALE_COOKIE_EXPIRE);
             response.addCookie(localeCookie);

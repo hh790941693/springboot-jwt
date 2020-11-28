@@ -45,9 +45,9 @@ public class CommonConstants
 	public static final String ADMIN_USER = "admin";
 
 	// 语言
-    public static final String LANG_ZH = "zh_cn";
-    public static final String LANG_EN = "en_us";
-    public static final String LANG_KR = "ko_kr";
+    public static final String LANG_ZH = "zh_CN";
+    public static final String LANG_EN = "en_US";
+    public static final String LANG_KR = "ko_KR";
 
     // 用户类型
 	// 管理员用户
