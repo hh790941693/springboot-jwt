@@ -167,6 +167,9 @@
         $.ws.i18nInit("[[${#locale.language}]]", "[[${#locale.country}]]");
         console.log($.ws.i18n("page.login.title"));
 
+        // 修改地址栏地址,不显示多余的参数或者页面信息
+        history.replaceState(null, null, "/");
+
         var s_user=$('#user').val();
         var s_pass=$('#pass').val();
         var s_webserverip = $('#webserverip').val();
