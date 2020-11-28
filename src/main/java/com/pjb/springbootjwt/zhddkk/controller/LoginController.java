@@ -242,6 +242,7 @@ public class LoginController {
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(sessionId, user, curUserObj.getPassword(), webserverip, webserverPort, selfImg, shortAgent, userType);
         request.getSession().setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
+        model.addAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
         // 往redis中存储用户信息
         String redisKey = REDIS_KEY_PREFIX + user;
