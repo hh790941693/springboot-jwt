@@ -98,26 +98,21 @@ public class LoginController {
         // 检查cookie
         Cookie[] cookies = request.getCookies();
         Locale locale = null;
+        boolean hasUserCookie = false;
+        boolean hasPassCookie = false;
+        boolean hasLangCookie = false;
         if (null != cookies) {
-            boolean isAdmin = false;
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(CommonConstants.S_USER) && cookie.getMaxAge() != 0) {
+                    hasUserCookie = true;
                     model.addAttribute(CommonConstants.S_USER, cookie.getValue());
-                    if (cookie.getValue().equals(CommonConstants.ADMIN_USER)){
-                        isAdmin = true;
-                    }
                 } else if (cookie.getName().equals(CommonConstants.S_PASS) && cookie.getMaxAge() != 0) {
-                    if (isAdmin) {
-                        //不保存admin密码
-                        model.addAttribute(CommonConstants.S_PASS, "");
-                        cookie.setMaxAge(0);
-                        response.addCookie(cookie);
-                    } else {
-                        //对密码进行解密
-                        String passDecrypt = SecurityAESUtil.decryptAES(cookie.getValue(), CommonConstants.AES_PASSWORD);
-                        model.addAttribute(CommonConstants.S_PASS, passDecrypt);
-                    }
+                    hasPassCookie = true;
+                    //对密码进行解密
+                    String passDecrypt = SecurityAESUtil.decryptAES(cookie.getValue(), CommonConstants.AES_PASSWORD);
+                    model.addAttribute(CommonConstants.S_PASS, passDecrypt);
                 } else if (cookie.getName().equals(CommonConstants.C_LANG) && cookie.getMaxAge() != 0) {
+                    hasLangCookie = true;
                     model.addAttribute(CommonConstants.C_LANG, cookie.getValue());
                     String language = cookie.getValue().split("_")[0];
                     String country = cookie.getValue().split("_")[1];
@@ -125,8 +120,14 @@ public class LoginController {
                 }
             }
         }
+        if (!hasUserCookie) {
+            model.addAttribute(CommonConstants.S_USER, "");
+        }
+        if (!hasPassCookie) {
+            model.addAttribute(CommonConstants.S_PASS, "");
+        }
 
-        if (null == locale){
+        if (!hasLangCookie){
             model.addAttribute(CommonConstants.C_LANG, CommonConstants.LANG_ZH);
             locale = new Locale("zh","CN");
         }
