@@ -100,7 +100,7 @@
 			<button id="btnlogin" class='btn btn-success btn-large' type="submit" style="width:100px;">
 				<a href="#" style="font-size: 15px;"><span class="glyphicon glyphicon-log-in"></span> [[#{page.login.title}]]</a>
             </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" value="" id="checkFlag" th:text="#{checkbox.check.label}"></label>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="securityCheck" href="#"><span class="fa fa-toggle-off" style="font-size: 18px;"></span> [[#{checkbox.check.label}]]</a>
 		</div>
 	</form>
 
@@ -360,14 +360,13 @@
     }
 
 	// 勾选登陆前检查事件
-    $("#checkFlag").click(function(){
-        var isChecked = $(this).attr("checked");
-        if (isChecked){
+    $("#securityCheck").click(function(){
+        if (checkBeforeLogin){
             checkBeforeLogin = false;
-            $(this).removeAttr("checked");
+            $(this).children("span:first-child").removeClass().addClass("fa fa-toggle-off");
         }else{
             checkBeforeLogin = true;
-            $(this).attr("checked","checked");
+            $(this).children("span:first-child").removeClass().addClass("fa fa-toggle-on");
         }
     });
 

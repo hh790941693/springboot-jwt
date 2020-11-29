@@ -55,7 +55,7 @@ a:focus {
     outline: none;
 }
 
-button,li a:hover{
+a:hover{
     color:black;
 }
 
