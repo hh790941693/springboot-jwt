@@ -3,11 +3,11 @@
 <head th:include="common :: header"></head>
 <title>[[#{page.login.title}]]</title>
 <style type="text/css">
-	a{
+    #helpDiv a{
 		font-size:13px;
 	}
 
-	a:hover
+	#helpDiv a:hover
 	{
 		font-weight: bold;
 		color: #1e88e5;
@@ -60,7 +60,7 @@
 		</div>
 	</div>
     <!--二维码登陆-->
-	<button id="phonelogin" class='btn btn-info btn-large' style="position:absolute;top:6px;left:6px;font-size: 17px;">
+	<button id="phonelogin" class='btn btn-info btn-large' style="position:absolute;top:6px;left:6px;font-size: 15px;">
         <span class="glyphicon glyphicon-qrcode"></span>
     </button>
     <!--选择语言-->
@@ -89,7 +89,7 @@
             <img id="verifyCodeImg"/>
         </div>
 
-		<div style="height:25px;margin-top:15px;">
+		<div id="helpDiv" style="height:25px;margin-top:15px;">
 			<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:50px;" th:text="#{a.register.label}"></a>
 			<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;" th:text="#{a.forgetpassword.label}"></a>
 			<a id="showBg" href="javascript:void(0)" onclick="showBackgroundAnimation()" style="text-decoration:none;margin-left:20px;" th:text="#{a.showh5.label}"></a>
