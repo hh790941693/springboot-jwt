@@ -65,7 +65,7 @@
     </button>
     <!--选择语言-->
     <div style="position:absolute;top:6px;left:323px;">
-        <select id="localesSelect" style="height:32px;">
+        <select id="localesSelect" class="selectpicker" data-style="btn-info" data-width="72px" >
             <option value="zh_CN" th:text="中文" th:selected="${lang == 'zh_CN'}"></option>
             <option value="en_US" th:text="English" th:selected="${lang == 'en_US'}"></option>
             <option value="ko_KR" th:text="한국어" th:selected="${lang == 'ko_KR'}"></option>
