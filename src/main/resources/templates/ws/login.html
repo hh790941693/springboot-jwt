@@ -65,7 +65,7 @@
     </button>
     <!--选择语言-->
     <div style="position:absolute;top:6px;left:323px;">
-        <select id="localesSelect" class="selectpicker" data-style="btn-info" data-width="72px" >
+        <select class="selectpicker" data-style="btn-info" data-width="72px" >
             <option value="zh_CN" th:text="中文" th:selected="${lang == 'zh_CN'}"></option>
             <option value="en_US" th:text="English" th:selected="${lang == 'en_US'}"></option>
             <option value="ko_KR" th:text="한국어" th:selected="${lang == 'ko_KR'}"></option>
@@ -371,12 +371,10 @@
     });
 
     // 切换语言
-    $("#localesSelect").change(function() {
-        var lang = $("#localesSelect").val();
-        if (lang != "") {
-            //$("#locale").val(lang);
-            window.location.replace("/i18n?lang=" + lang);
-        }
+    $('.selectpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+        var lang = e.currentTarget.value;
+        console.log(lang);
+        window.location.replace("/i18n?lang=" + lang);
     });
 </script>
 </html>
