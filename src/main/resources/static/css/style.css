@@ -47,7 +47,7 @@ h3, h4, h5 {
     margin-top: 5px;
     font-weight: 600;
 }
-a{
+button,li a{
     color:black;
 }
 
@@ -55,7 +55,7 @@ a:focus {
     outline: none;
 }
 
-a:hover{
+button,li a:hover{
     color:black;
 }
 

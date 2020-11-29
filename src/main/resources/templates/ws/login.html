@@ -39,7 +39,6 @@
 		border: 0;
 		outline: none;
 		height: 22px;
-		text-indent: 0.5em;
 	}
 
 	#btnlogin{
@@ -98,8 +97,8 @@
 		</div>
 
 		<div align="center" style="margin-top:10px;margin-left:-30px;">
-			<button id="btnlogin" class='btn btn-success btn-large'  type="submit" style="width:100px;">
-                <span class="glyphicon glyphicon-log-in"> [[#{page.login.title}]]</span>
+			<button id="btnlogin" class='btn btn-success btn-large' type="submit" style="width:100px;">
+				<a href="#" style="font-size: 15px;"><span class="glyphicon glyphicon-log-in"></span> [[#{page.login.title}]]</a>
             </button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" value="" id="checkFlag" th:text="#{checkbox.check.label}"></label>
 		</div>
