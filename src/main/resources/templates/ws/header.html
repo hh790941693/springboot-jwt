@@ -92,17 +92,20 @@
 	<div th:include="common::footer"></div>
 </body>
 	<script type="text/javascript">
+        // 加载国际化
+        $.ws.i18nInit("[[${#locale.language}]]", "[[${#locale.country}]]");
+
 		//头部头像
         var headerTitle = "";
 		if (parent.s_user == "admin"){
-            headerTitle = "websocket服务端";
+            headerTitle = $.ws.i18n("page.serverindex.title")
 			if (parent.s_selfimg == ""){
 				$("#myImg").attr("src",rootUrl+"img/headimg/admin.jpg");
 			}else{
 				$("#myImg").attr("src", parent.s_selfimg);
 			}
 		}else{
-            headerTitle = "websocket客户端";
+            headerTitle = $.ws.i18n("page.clientindex.title")
             if (parent.s_selfimg == "" || parent.s_selfimg == null) {
                 var errorImgUrl = rootUrl+"../img/"+$.ws.errorImageName;
                 $("#myImg").attr("src",errorImgUrl);
@@ -124,7 +127,6 @@
         $("input[name='showmode']").each(function(index, val){
             $(val).click(function(){
                 var showMode = $(val).val();
-                console.log("showMode:"+showMode);
                 if (showMode == 0){
                     parent.resizeFlag = false;
                     parent.setDefaultWindowSize();
