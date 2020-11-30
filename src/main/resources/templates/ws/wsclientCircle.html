@@ -182,7 +182,7 @@
 				//contentType:"application/json",
 				async:false,
 				success: function(result) {
-					if (result.code == 0){
+					if (result.code != 1){
 						return;
 					}
 					var resultData = result.data;

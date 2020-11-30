@@ -127,7 +127,7 @@
 				//dataType: 'json',
 				async:false,
 				success: function(result){
-					if (result.code == 0){
+					if (result.code != 1){
 						$("#btnregist").attr("disabled",true);
 						layer.msg('该用户已经注册过了,请直接登录!');
 						$("#user").val("");

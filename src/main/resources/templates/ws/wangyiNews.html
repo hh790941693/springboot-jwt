@@ -93,12 +93,10 @@
                         type: "GET",
                         url: rootUrl+'ws/queryWangyiNewsType',
                         success: function (result) {
-                            if (result.code == 0){
-                                return;
+                            if (result.code == 1) {
+                                app.typeList = result.data;
+                                app.listNews(app.selectedIndex);
                             }
-                            app.typeList = result.data;
-
-                            app.listNews(app.selectedIndex);
                         }
                     });
                 },

@@ -188,7 +188,7 @@
 						url: 'getOnlineInfo.json',
 						data: {"user": parent.s_user},
 						success: function (result) {
-							if (result.code == 0) {
+							if (result.code != 1) {
 								return;
 							}
 							var jsonObj = result.data;

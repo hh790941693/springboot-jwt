@@ -256,7 +256,7 @@
 						url: rootUrl+'ws/queryCircleByPage.do',
 						data: {'curPage':curPagePara, 'numPerPage':numPerPagePara},
 						success: function (result) {
-							if (result.code == 0){
+							if (result.code != 1){
 								return;
 							}
 							var resultData = result.data;
