@@ -27,6 +27,7 @@
 
     #leftNavi ul li span{
         margin-right: 3px;
+        font-weight: bold;
     }
 
     #leftNavi ul a{
@@ -37,6 +38,11 @@
         background-color:blue;
         color:white;
     }
+
+    .mouseleftclick span{
+        color:white;
+    }
+
     #unreadCountSpan{
         color: red;
         font-weight: bold;
@@ -60,47 +66,47 @@
     <ul>
         <!--<li id="wsserverUser.page" class="mouseleftclick">用户管理</li>-->
         <li id="/zhddkk/wsUsers/wsUsersForAdmin" class="mouseleftclick" >
-            <a href="#"><span class="fa fa-address-book"></span>[[#{li.usermanage.label}]]</a>
+            <span class="fa fa-address-book"></span>[[#{li.usermanage.label}]]
         </li>
         <li id="../file/musicPlayer.page">
-            <a href="#"><span class="glyphicon glyphicon-music"></span>[[#{li.music.label}]]</a>
+            <span class="glyphicon glyphicon-music"></span>[[#{li.music.label}]]
         </li>
         <li id="/ws/wsserverChartMonitor.page">
-            <a href="#"><span class="glyphicon glyphicon-camera"></span>[[#{li.chatmonitor.label}]]</a>
+            <span class="glyphicon glyphicon-camera"></span>[[#{li.chatmonitor.label}]]
             <span id="unreadCountSpan"></span>
         </li>
         <li id="/ws/wsclientCircle.page">
-            <a href="#"><span class="glyphicon glyphicon-globe"></span>[[#{li.circle.label}]]</a>
+            <span class="glyphicon glyphicon-globe"></span>[[#{li.circle.label}]]
         </li>
         <!--<li id="wsserverChartLog.page">聊天记录管理</li>-->
         <li id="/zhddkk/wsChatlog">
-            <a href="#"><span class="glyphicon glyphicon-list-alt"></span>[[#{li.chatlogmanage.label}]]</a>
+            <span class="glyphicon glyphicon-list-alt"></span>[[#{li.chatlogmanage.label}]]
         </li>
         <!--<li id="wsserverOperationLog.page">操作日志管理</li>-->
         <li id="/zhddkk/wsOperationLog">
-            <a href="#"><span class="glyphicon glyphicon-list"></span>[[#{li.operlogmanage.label}]]</a>
+            <span class="glyphicon glyphicon-list"></span>[[#{li.operlogmanage.label}]]
         </li>
         <li id="configurationLi">
-            <a href="#"><span class="fa fa-cogs"></span>[[#{li.commoncfg.label}]] &gt;&gt;</a>
+            <span class="fa fa-cogs"></span>[[#{li.commoncfg.label}]] &gt;&gt;
         </li>
         <!--<li id="ad.page">广告发布</li>-->
         <li id="/zhddkk/wsAds">
-            <a href="#"><span class="glyphicon glyphicon-edit"></span>[[#{li.publishad.label}]]</a>
+            <span class="glyphicon glyphicon-edit"></span>[[#{li.publishad.label}]]
         </li>
         <li id="/zhddkk/wsFeedback/adminFeedback">
-            <a href="#"><span class="fa fa-commenting"></span>[[#{li.feedback.label}]]</a>
+            <span class="fa fa-commenting"></span>[[#{li.feedback.label}]]
         </li>
         <li id="/ws/wsserverChart.page">
-            <a href="#"><span class="fa fa-bar-chart"></span>[[#{li.leaderchart.label}]]</a>
+            <span class="fa fa-bar-chart"></span>[[#{li.leaderchart.label}]]
         </li>
         <li id="/common/generator">
-            <a href="#"><span class="glyphicon glyphicon-file"></span>[[#{li.generatecode.label}]]</a>
+            <span class="glyphicon glyphicon-file"></span>[[#{li.generatecode.label}]]
         </li>
         <li id="../game/gameIndex.page">
-            <a href="#"><span class="glyphicon glyphicon-subtitles"></span>[[#{li.game.label}]]</a>
+            <span class="glyphicon glyphicon-subtitles"></span>[[#{li.game.label}]]
         </li>
         <li id="../canvas/canvasIndex.page">
-            <a href="#"><span class="fa fa-gamepad"></span>[[#{li.h5.label}]]</a>
+            <span class="fa fa-gamepad"></span>[[#{li.h5.label}]]
         </li>
     </ul>
 
