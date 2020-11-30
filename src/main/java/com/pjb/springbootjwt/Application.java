@@ -20,13 +20,10 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.servlet.MultipartConfigElement;
 import java.io.File;
 import java.net.InetAddress;
-import java.util.Locale;
 import java.util.Properties;
 
 //自动扫描与当前类的同包以及子包
@@ -39,7 +36,7 @@ import java.util.Properties;
 @MapperScan({"com.pjb.springbootjwt.**.dao"})
 public class Application {
 
-    private static Logger log = LoggerFactory.getLogger(Application.class);
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
 
     private static final String SPRING_TOMCAT_TEMP_LIUNX = "/opt/springBootTomcatTemp";
 
@@ -109,12 +106,4 @@ public class Application {
         }
         return factory.createMultipartConfig();
     }
-
-//    @Bean
-//    public LocaleResolver localeResolver() {
-//        SessionLocaleResolver slr = new SessionLocaleResolver();
-//        //设置默认区域,
-//        slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
-//        return slr;
-//    }
 }
