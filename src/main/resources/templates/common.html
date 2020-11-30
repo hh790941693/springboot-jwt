@@ -39,6 +39,39 @@
         <script type="text/javascript" th:src="@{/js/bootstrap-select/js/i18n/defaults-zh_CN.min.js}"></script>
 	</div>
 
+	<!-- session信息 -->
+	<div th:fragment="sessionInfo">
+		<input type="hidden" id="sessionUser" th:value="${sessionInfo.user}">
+		<input type="hidden" id="sessionPassword" th:value="${sessionInfo.password}">
+		<input type="hidden" id="sessionWebserverIp" th:value="${sessionInfo.webserverIp}">
+		<input type="hidden" id="sessionWebserverport" th:value="${sessionInfo.webserverPort}">
+		<input type="hidden" id="sessionSelfimg" th:value="${sessionInfo.selfImg}">
+		<input type="hidden" id="sessionUseragent" th:value="${sessionInfo.userAgent}">
+		<input type="hidden" id="sessionUsertype" th:value="${sessionInfo.userType}">
+		<script>
+			let sessionUser = $("#sessionUser").val();
+			let sessionPassword = $("#sessionPassword").val();
+			let sessionWebserverIp = $("#sessionWebserverIp").val();
+			let sessionWebserverport = $("#sessionWebserverport").val();
+			let sessionSelfimg = $("#sessionSelfimg").val();
+			let sessionUseragent = $("#sessionUseragent").val();
+			let sessionUsertype = $("#sessionUsertype").val();
+		</script>
+	</div>
+
+	<!-- 子页面session信息 -->
+	<div th:fragment="subPageSessionInfo">
+		<script>
+			let sessionUser = window.parent.$("#sessionUser").val();
+			let sessionPassword = window.parent.$("#sessionPassword").val();
+			let sessionWebserverIp = window.parent.$("#sessionWebserverIp").val();
+			let sessionWebserverport = window.parent.$("#sessionWebserverport").val();
+			let sessionSelfimg = window.parent.$("#sessionSelfimg").val();
+			let sessionUseragent = window.parent.$("#sessionUseragent").val();
+			let sessionUsertype = window.parent.$("#sessionUsertype").val();
+		</script>
+	</div>
+
 	<!-- canvas游戏专用JS -->
 	<div th:fragment="gameHeader">
 		<script type="text/javascript" th:src="@{/js/jquery/jquery-1.4.4.min.js}"></script>
