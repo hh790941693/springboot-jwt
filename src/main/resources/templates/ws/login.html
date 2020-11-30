@@ -81,8 +81,8 @@
 		<div class="errorMsgDiv"></div>
 		<div class="input-group">
 			<span class="input-group-addon"><i class="fa fa-briefcase fa-fw"></i></span>
-			<input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}" th:placeholder="#{input.code.helper}" autocomplete="off"  style="width:128px;">
-			<img id="verifyCodeImg" style="cursor: pointer;"/>
+			<input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}" th:placeholder="#{input.code.helper}" autocomplete="off"  style="width:126px;">
+			<img id="verifyCodeImg" style="margin-left:2px;cursor: pointer;"/>
 		</div>
 		<div class="errorMsgDiv"></div>
 		<div id="helpDiv" style="height:25px;margin-top:15px;">
@@ -137,8 +137,7 @@
 	var pass = "";
 	$("#pass").blur(function(){
 		pass = $("#pass").val();
-		if (pass == "")
-		{
+		if (pass == "") {
 			layer.tips('密码不能为空!', '#pass', {
 				tips: [2, '#78BA32']
 			});
@@ -148,9 +147,8 @@
     var verifyCode = "";
     $("#verifyCode").blur(function(){
         verifyCode = $("#verifyCode").val();
-        if (verifyCode == "")
-        {
-            layer.tips('验证码不能为空!', '#verifyCode', {
+        if (verifyCode == "") {
+            layer.tips('验证码不能为空!', '#verifyCodeImg', {
                 tips: [2, '#78BA32']
             });
         }
