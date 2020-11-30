@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head>
+<th:block th:include="common :: header"></th:block>
 <title>[[#{page.login.title}]]</title>
 <style type="text/css">
 	#mainDiv{
@@ -47,73 +48,73 @@
 </style>
 </head>
 <body>
-<div id="mainDiv">
-    <input id="locale" type="hidden" th:value="${locale}">
-	<div style="height:50px;background-color: #428BCA;padding-top: 5px;">
-		<div style="text-align: center;font-size: 30px;color:white;">
-			<p>WebSocket</p>
+	<div id="mainDiv">
+		<input id="locale" type="hidden" th:value="${locale}">
+		<div style="height:50px;background-color: #428BCA;padding-top: 5px;">
+			<div style="text-align: center;font-size: 30px;color:white;">
+				<p>WebSocket</p>
+			</div>
+		</div>
+		<!--二维码登陆-->
+		<div id="phonelogin" style="position:absolute;top:3px;left:2px;font-size: 15px;cursor: pointer;">
+			<span class="fa fa-qrcode fa-3x" th:title="#{btn.qrcode.tips}"></span>
+		</div>
+		<!--选择语言-->
+		<div style="position:absolute;top:6px;right:2px;" th:title="#{select.choose.language}">
+			<select class="selectpicker" data-style="btn-info" data-width="80px">
+				<option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${lang == 'zh_CN'}"></option>
+				<option value="en_US" data-icon="fa fa-dollar" th:text="English" th:selected="${lang == 'en_US'}"></option>
+				<option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${lang == 'ko_KR'}"></option>
+			</select>
+		</div>
+		<img id="backgroundImg" src="../img/fengjing/fj9.jpg" hidden>
+		<form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
+			<div class="input-group margin-bottom-sm">
+				<span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+				<input id="user" name="user" type="text" class="form-control" th:value="${user}" th:placeholder="#{input.user.helper}" autocomplete="off" style="width:227px;">
+			</div>
+			<div class="errorMsgDiv"></div>
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+				<input id="pass" name="pass" type="password" class="form-control" th:value="${pass}" th:placeholder="#{input.password.helper}" autocomplete="off"  style="width:227px;">
+			</div>
+			<div class="errorMsgDiv"></div>
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-briefcase fa-fw"></i></span>
+				<input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}" th:placeholder="#{input.code.helper}" autocomplete="off"  style="width:126px;">
+				<img id="verifyCodeImg" style="margin-left:2px;cursor: pointer;"/>
+			</div>
+			<div class="errorMsgDiv"></div>
+			<div id="helpDiv" style="height:25px;margin-top:10px;">
+				<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:0;" th:text="#{a.register.label}"></a>
+				<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;" th:text="#{a.forgetpassword.label}"></a>
+				<a id="showBg" href="javascript:void(0)" onclick="showBackgroundAnimation()" style="text-decoration:none;margin-left:20px;" th:text="#{a.showh5.label}"></a>
+				<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;" th:text="#{a.playgame.label}"></a>
+			</div>
+
+			<div align="center" style="margin-top:10px;">
+				<button id="btnlogin" class='btn btn-success btn-large' type="submit" style="width:130px;">
+					<span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;[[#{page.login.title}]]
+				</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="securityCheck"><span class="fa fa-toggle-off" style="font-size: 18px;"></span> [[#{checkbox.check.label}]]</a>
+			</div>
+		</form>
+
+		<div style="position:absolute;width:180px;height:180px;left:360px;top:1px;">
+			<img id="qrImg" style="width:160px;height:160px;display:none">
 		</div>
 	</div>
-    <!--二维码登陆-->
-	<div id="phonelogin" style="position:absolute;top:3px;left:2px;font-size: 15px;cursor: pointer;">
-        <span class="fa fa-qrcode fa-3x" th:title="#{btn.qrcode.tips}"></span>
-    </div>
-    <!--选择语言-->
-    <div style="position:absolute;top:6px;right:2px;" th:title="#{select.choose.language}">
-        <select class="selectpicker" data-style="btn-info" data-width="80px">
-            <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${lang == 'zh_CN'}"></option>
-            <option value="en_US" data-icon="fa fa-dollar" th:text="English" th:selected="${lang == 'en_US'}"></option>
-            <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${lang == 'ko_KR'}"></option>
-        </select>
-    </div>
-	<img id="backgroundImg" src="../img/fengjing/fj9.jpg" hidden>
-	<form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
-		<div class="input-group margin-bottom-sm">
-			<span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-			<input id="user" name="user" type="text" class="form-control" th:value="${user}" th:placeholder="#{input.user.helper}" autocomplete="off" style="width:227px;">
-		</div>
-		<div class="errorMsgDiv"></div>
-		<div class="input-group">
-			<span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-			<input id="pass" name="pass" type="password" class="form-control" th:value="${pass}" th:placeholder="#{input.password.helper}" autocomplete="off"  style="width:227px;">
-		</div>
-		<div class="errorMsgDiv"></div>
-		<div class="input-group">
-			<span class="input-group-addon"><i class="fa fa-briefcase fa-fw"></i></span>
-			<input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}" th:placeholder="#{input.code.helper}" autocomplete="off"  style="width:126px;">
-			<img id="verifyCodeImg" style="margin-left:2px;cursor: pointer;"/>
-		</div>
-		<div class="errorMsgDiv"></div>
-		<div id="helpDiv" style="height:25px;margin-top:10px;">
-			<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:0;" th:text="#{a.register.label}"></a>
-			<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;" th:text="#{a.forgetpassword.label}"></a>
-			<a id="showBg" href="javascript:void(0)" onclick="showBackgroundAnimation()" style="text-decoration:none;margin-left:20px;" th:text="#{a.showh5.label}"></a>
-			<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;" th:text="#{a.playgame.label}"></a>
-		</div>
 
-		<div align="center" style="margin-top:10px;">
-			<button id="btnlogin" class='btn btn-success btn-large' type="submit" style="width:130px;">
-				<span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;[[#{page.login.title}]]
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="securityCheck"><span class="fa fa-toggle-off" style="font-size: 18px;"></span> [[#{checkbox.check.label}]]</a>
+	<div id="checkDiv" style="width:200px;height:400px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
+		<div id="checkContentDiv" style="width:100%;height:auto;border:1px solid grey;background-color: #0C0C0C;padding: 5px 0 5px 10px;">
 		</div>
-	</form>
-
-	<div style="position:absolute;width:180px;height:180px;left:360px;top:1px;">
-		<img id="qrImg" style="width:160px;height:160px;display:none">
 	</div>
-</div>
 
-<div id="checkDiv" style="width:200px;height:400px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
-	<div id="checkContentDiv" style="width:100%;height:auto;border:1px solid grey;background-color: #0C0C0C;padding: 5px 0 5px 10px;">
+	<div id='canvasDiv' style='position:fixed;left:1px;top:1px;width:100%;height:100%;z-index:-1;'>
+		<iframe id="iframePage" width="100%" height="100%"></iframe>
 	</div>
-</div>
 
-<div id='canvasDiv' style='position:fixed;left:1px;top:1px;width:100%;height:100%;z-index:-1;'>
-	<iframe id="iframePage" width="100%" height="100%"></iframe>
-</div>
-
-<div th:include="common::footer"></div>
+	<th:block th:include="common :: footer"></th:block>
 </body>
 
 <script th:inline="javascript">
