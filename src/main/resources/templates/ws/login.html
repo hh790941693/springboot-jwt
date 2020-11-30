@@ -3,18 +3,8 @@
 <head th:include="common :: header"></head>
 <title>[[#{page.login.title}]]</title>
 <style type="text/css">
-    #helpDiv a{
-		font-size:13px;
-	}
-
-	#helpDiv a:hover
-	{
-		font-weight: bold;
-		color: #1e88e5;
-	}
-
 	#mainDiv{
-        width:400px;
+        width:350px;
         height:340px;
         position: relative;
         background-color: aqua;
@@ -25,7 +15,7 @@
 	}
 
 	#loginForm{
-		padding-left: 30px;
+		padding-left: 38px;
 		padding-top: 30px;
 	}
 
@@ -35,31 +25,43 @@
 		height: 22px;
 	}
 
-	#btnlogin{
-		box-shadow: grey 5px 5px 10px;
-	}
-
     .input-group-addon{
         background-color:#eeeeee;
         border:1px solid #cccccc;
     }
+
+	#helpDiv a{
+		font-size:13px;
+	}
+
+	#helpDiv a:hover
+	{
+		font-weight: bold;
+		color: #1e88e5;
+	}
+
+	.errorMsgDiv{
+		width:270px;
+		height:18px;
+		text-align: right;
+	}
 </style>
 </head>
 <body>
 <div id="mainDiv">
     <input id="locale" type="hidden" th:value="${locale}">
 	<div style="height:50px;background-color: #428BCA;padding-top: 5px;">
-		<div style="text-align: center;font-size: 35px;color:white;">
+		<div style="text-align: center;font-size: 30px;color:white;">
 			<p>WebSocket</p>
 		</div>
 	</div>
     <!--二维码登陆-->
-	<button id="phonelogin" class='btn btn-info btn-large' style="position:absolute;top:6px;left:6px;font-size: 15px;">
+	<button id="phonelogin" class='btn btn-info btn-large' style="position:absolute;top:6px;left:2px;font-size: 15px;">
         <span class="glyphicon glyphicon-qrcode"></span>
     </button>
     <!--选择语言-->
-    <div style="position:absolute;top:6px;left:295px;">
-        <select class="selectpicker" data-style="btn-info" data-width="100px">
+    <div style="position:absolute;top:6px;right:2px;">
+        <select class="selectpicker" data-style="btn-info" data-width="80px">
             <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${lang == 'zh_CN'}"></option>
             <option value="en_US" data-icon="fa fa-dollar" th:text="English" th:selected="${lang == 'en_US'}"></option>
             <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${lang == 'ko_KR'}"></option>
@@ -69,30 +71,30 @@
 	<form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
 		<div class="input-group margin-bottom-sm">
 			<span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-			<input id="user" name="user" type="text" class="form-control" th:value="${user}" th:placeholder="#{input.user.helper}" autocomplete="off" style="width:200px;">
+			<input id="user" name="user" type="text" class="form-control" th:value="${user}" th:placeholder="#{input.user.helper}" autocomplete="off" style="width:227px;">
 		</div>
-		<div class="input-group" style="margin-top: 5px;">
+		<div class="errorMsgDiv"></div>
+		<div class="input-group">
 			<span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-			<input id="pass" name="pass" type="password" class="form-control" th:value="${pass}" th:placeholder="#{input.password.helper}" autocomplete="off"  style="width:200px;">
+			<input id="pass" name="pass" type="password" class="form-control" th:value="${pass}" th:placeholder="#{input.password.helper}" autocomplete="off"  style="width:227px;">
 		</div>
-		<div class="input-group" style="margin-top: 5px;">
+		<div class="errorMsgDiv"></div>
+		<div class="input-group">
 			<span class="input-group-addon"><i class="fa fa-briefcase fa-fw"></i></span>
-			<input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}" th:placeholder="#{input.code.helper}" autocomplete="off"  style="width:200px;">
+			<input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}" th:placeholder="#{input.code.helper}" autocomplete="off"  style="width:128px;">
+			<img id="verifyCodeImg" style="cursor: pointer;"/>
 		</div>
-        <div style="margin-left: 143px;margin-top:5px;">
-            <img id="verifyCodeImg" style="cursor: pointer;"/>
-        </div>
-
+		<div class="errorMsgDiv"></div>
 		<div id="helpDiv" style="height:25px;margin-top:15px;">
-			<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:50px;" th:text="#{a.register.label}"></a>
+			<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:0;" th:text="#{a.register.label}"></a>
 			<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;" th:text="#{a.forgetpassword.label}"></a>
 			<a id="showBg" href="javascript:void(0)" onclick="showBackgroundAnimation()" style="text-decoration:none;margin-left:20px;" th:text="#{a.showh5.label}"></a>
 			<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;" th:text="#{a.playgame.label}"></a>
 		</div>
 
-		<div align="center" style="margin-top:10px;margin-left:-30px;">
-			<button id="btnlogin" class='btn btn-success btn-large' type="submit" style="width:100px;">
-				<a style="font-size: 15px;"><span class="glyphicon glyphicon-log-in"></span> [[#{page.login.title}]]</a>
+		<div align="center" style="margin-top:10px;">
+			<button id="btnlogin" class='btn btn-success btn-large' type="submit" style="width:130px;">
+				<a style="font-size: 15px;"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;[[#{page.login.title}]]</a>
             </button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="securityCheck"><span class="fa fa-toggle-off" style="font-size: 18px;"></span> [[#{checkbox.check.label}]]</a>
 		</div>
@@ -195,6 +197,14 @@
                     minlength: "至少包含3个字符",
                     maxlength:"最多包含12位字符"
                 },
+		},
+		errorPlacement:  function (error, element){
+			var inputName = $(element).attr("name");
+			if (inputName == "verifyCode"){
+				error.appendTo(element.parent().next());
+			} else {
+				error.appendTo(element.parent().next());
+			}
 		}
 	});
 

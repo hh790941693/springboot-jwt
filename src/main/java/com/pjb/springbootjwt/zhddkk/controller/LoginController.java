@@ -571,7 +571,7 @@ public class LoginController {
     @ResponseBody
     public Result<String> getCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
         //算术验证码 数字加减乘除. 建议2位运算就行:captcha.setLen(2);
-        ArithmeticCaptcha captcha = new ArithmeticCaptcha(100, 23);
+        ArithmeticCaptcha captcha = new ArithmeticCaptcha(100, 34);
         // 几位数运算，默认是两位
         captcha.setLen(2);
 

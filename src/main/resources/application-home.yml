@@ -1,5 +1,5 @@
 server:
-  address: 192.168.31.94
+  address: localhost
   port: 8100
   tomcat:
     basedir: c:\\tomcatTemp
