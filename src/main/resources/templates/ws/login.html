@@ -8,6 +8,7 @@
         width:350px;
         height:330px;
         position: relative;
+		margin: 0 auto;
         background-color: aqua;
 		box-shadow: grey 10px 6px 10px;
 		border:1px solid grey;
@@ -34,8 +35,7 @@
 		font-size:13px;
 	}
 
-	#helpDiv a:hover
-	{
+	#helpDiv a:hover {
 		font-weight: bold;
 		color: #1e88e5;
 	}
@@ -335,12 +335,10 @@
         winInnerHeight = window.innerHeight;
         var mainDivWidth = $("#mainDiv").width();
         var mainDivHeight = $("#mainDiv").height();
-        if (winInnerWidth>=mainDivWidth) {
-            $("#mainDiv").css("left", (winInnerWidth - mainDivWidth) / 2 + "px");
-        }
-        if (winInnerHeight>=mainDivHeight) {
-            $("#mainDiv").css("top", (winInnerHeight - mainDivHeight) / 2 + "px");
-        }
+        var leftPix = Math.abs(winInnerWidth - mainDivWidth)/2;
+        var topPix = Math.abs(winInnerHeight - mainDivHeight)/2;
+		//$("#mainDiv").css("left", leftPix + "px");
+		$("#mainDiv").css("top", topPix + "px");
 	}
 	$(window).resize(resizeWindows);
 
