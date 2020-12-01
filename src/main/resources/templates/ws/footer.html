@@ -3,7 +3,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<th:block th:include="common :: header"></th:block>
-	<th:block th:include="common :: subPageSessionInfo"></th:block>
 	<title>WebSocket服务端</title>
 
 <style type="text/css">
@@ -87,6 +86,7 @@
 		</div>
 	</div>
 	<th:block th:include="common :: footer"></th:block>
+	<th:block th:include="common :: sessionInfo"></th:block>
 </body>
 	<script type="text/javascript">
 		//当前版本号

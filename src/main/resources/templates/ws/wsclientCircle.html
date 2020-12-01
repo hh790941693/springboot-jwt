@@ -136,9 +136,12 @@
 	</div>
 
 	<th:block th:include="common :: footer"></th:block>
+	<th:block th:include="common :: sessionInfo"></th:block>
 </body>
 
 	<script type="text/javascript">
+		console.log("circle页面获取session数据:"+sessionUser);
+
 		var curUser=parent.s_user;
 		var curPage = 1;
 		var numPerPage = 5;

@@ -94,13 +94,13 @@
         <!--中间部分-->
         <div id='centerDiv' class="divShadow">
             <!--用户登录相关信息-->
-            <input type="hidden" id="user" name="user" th:value="${sessionInfo.user}">
-            <input type="hidden" id="pass" name="pass" th:value="${sessionInfo.password}">
-            <input type="hidden" id="webserverip" name="webserverip" th:value="${sessionInfo.webserverIp}">
-            <input type="hidden" id="webserverport" name="webserverport" th:value="${sessionInfo.webserverPort}">
-            <input type="hidden" id="selfimg" name="selfimg" th:value="${sessionInfo.selfImg}">
-            <input type="hidden" id="useragent" name="useragent" th:value="${sessionInfo.userAgent}">
-            <input type="hidden" id="usertype" name="usertype" th:value="${sessionInfo.userType}">
+            <input type="hidden" id="user" name="user" th:value="${session.sessionInfo.user}">
+            <input type="hidden" id="pass" name="pass" th:value="${session.sessionInfo.password}">
+            <input type="hidden" id="webserverip" name="webserverip" th:value="${session.sessionInfo.webserverIp}">
+            <input type="hidden" id="webserverport" name="webserverport" th:value="${session.sessionInfo.webserverPort}">
+            <input type="hidden" id="selfimg" name="selfimg" th:value="${session.sessionInfo.selfImg}">
+            <input type="hidden" id="useragent" name="useragent" th:value="${session.sessionInfo.userAgent}">
+            <input type="hidden" id="usertype" name="usertype" th:value="${session.sessionInfo.userType}">
 
             <!--滚动消息-->
             <div id="recentNewsDiv">

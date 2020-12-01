@@ -19,6 +19,7 @@ import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import com.wf.captcha.ArithmeticCaptcha;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -242,8 +243,12 @@ public class LoginController {
         }
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(sessionId, user, curUserObj.getPassword(), webserverip, webserverPort, selfImg, shortAgent, userType);
+        String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
+        JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
+        sessionInfoBean.setJsonStr(jsonStr);
+        sessionInfoBean.setJsonObject(jsonObj);
         request.getSession().setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
-        model.addAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
+        //model.addAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
         // 往redis中存储用户信息
         String redisKey = REDIS_KEY_PREFIX + user;

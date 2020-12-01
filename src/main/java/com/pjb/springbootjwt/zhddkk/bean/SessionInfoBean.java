@@ -1,6 +1,8 @@
 package com.pjb.springbootjwt.zhddkk.bean;
 
+import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import lombok.Data;
+import net.sf.json.JSONObject;
 
 /**
  * session信息
@@ -23,6 +25,10 @@ public class SessionInfoBean {
     private String userAgent;
 
     private String userType;
+
+    private JSONObject jsonObject;
+
+    private String jsonStr;
 
     public SessionInfoBean(){
 
