@@ -10,6 +10,9 @@ $.ws = {
     //图片显示异常时,显示该图片
     errorImageName : "imgerror_default.jpg",
 
+    // 图片显示异常时的默认图片url
+    errorImgUrl : rootUrl + "img/imgerror_default.jpg",
+
     //显示图片
     gShowImg : function(imgUrl) {
         $.fancybox.open('<img src = "' + imgUrl + '" />');
