@@ -102,10 +102,10 @@
             <div id="leftAndRightIframeDiv">
                 <!--左侧导航栏-->
                 <div id="leftNaviDiv">
-                    <div th:if="${sessionInfo.userType == '0'}">
+                    <div th:if="${session.sessionInfo.userType == '0'}">
                         <iframe id="leftNaviIframePage" src="ws/serverLeftNavi.page" width="100%" height="100%"></iframe>
                     </div>
-                    <div th:if="${sessionInfo.userType != '0'}">
+                    <div th:if="${session.sessionInfo.userType != '0'}">
                         <iframe id="leftNaviIframePage" src="ws/clientLeftNavi.page" width="100%" height="100%"></iframe>
                     </div>
                 </div>

@@ -275,11 +275,8 @@ public class LoginController {
      */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.REGISTER,subModule="",describe="登录成功页面")
     @RequestMapping(value = "wsclientIndex.page")
-    public String wsclientIndex(HttpServletRequest request, Model model) {
+    public String wsclientIndex() {
         logger.debug("访问wsclientIndex.page");
-
-        SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
-        model.addAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
         return "ws/wsclientIndex";
     }
 
