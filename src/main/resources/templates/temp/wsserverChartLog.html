@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head>
+	<th:block th:include="common :: header"></th:block>
 <title>聊天记录</title>
 <style type="text/css">
 
@@ -90,7 +91,7 @@
 			<span style="margin-left:10px">跳转至</span><input id="toPage" onblur="getChatLogByPage(parseInt($(this).val()),parseInt($('#numPerPage').val()))" style="width:20px;"></input><span>页</span>
 		</div>
 	</div>
-	<div th:include="common :: footer"></div>
+	<th:block th:include="common :: footer"></th:block>
 </body>
 
 	<script type="text/javascript">

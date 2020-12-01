@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8">
-<head th:include="common :: header"></head>
+<head>
+<th:block th:include="common :: header"></th:block>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content ">
 		<div class="row">
@@ -112,7 +113,7 @@
 			</div>
 		</div>
 	</div>
-	<div th:include="common::footer"></div>
+	<th:block th:include="common :: footer"></th:block>
 </body>
 <script type="text/javascript" th:src="@{/js/appjs/zhddkk/wsUsers/wsUsersForm.js}"></script>
 </html>

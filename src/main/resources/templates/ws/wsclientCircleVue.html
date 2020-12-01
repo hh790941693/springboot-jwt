@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head>
+	<th:block th:include="common :: header"></th:block>
 	<title>朋友圈</title>
 
 <style type="text/css">
@@ -230,7 +231,7 @@
 		</div>		
 	</div>
 
-	<div th:include="common::footer"></div>
+	<th:block th:include="common :: footer"></th:block>
 </body>
 
 	<script type="text/javascript">

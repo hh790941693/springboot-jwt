@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head>
+	<th:block th:include="common :: header"></th:block>
 	<title>登录失败</title>
 
 	<style type="text/css">
@@ -48,7 +49,7 @@
 			<button onclick="toIndex()" class='btn btn-sm btn-primary'>返回登录</button>
 		</div>
 
-		<div th:include="common::footer"></div>
+		<th:block th:include="common :: footer"></th:block>
 	</div>
 </body>
 	<script type="text/javascript">

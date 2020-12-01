@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head>
+	<th:block th:include="common :: header"></th:block>
 	<title>登录失败</title>
 </head>
 <body>
@@ -7,6 +8,6 @@
 		用户<span th:text="${user}"></span>注册成功!
 	</h1>
 	<a href="login.page?user=${user}">返回登录页面</a>
-	<div th:include="common :: footer"></div>
+	<th:block th:include="common :: footer"></th:block>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head>
+    <th:block th:include="common :: header"></th:block>
     <meta charset="UTF-8">
     <title>捐赠作者</title>
     <style>
@@ -42,7 +43,7 @@
         <p>扫一扫，支付宝支付</p>
     </div>
 
-    <div th:include="common::footer"></div>
+    <th:block th:include="common :: footer"></th:block>
 </body>
     <script>
         function donate() {

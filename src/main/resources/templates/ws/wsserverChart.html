@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head>
+    <th:block th:include="common :: header"></th:block>
     <meta charset="UTF-8">
     <title>领导驾驶舱</title>
     <script type="text/javascript" th:src="@{/js/echarts/echarts.common.min.js}"></script>
@@ -43,7 +44,7 @@
             </div>
         </div>
     </div>
-    <div th:include="common::footer"></div>
+    <th:block th:include="common :: footer"></th:block>
 </body>
     <script>
 

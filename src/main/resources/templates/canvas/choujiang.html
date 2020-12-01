@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: gameHeader">
+<head>
+	<th:block th:include="common :: gameHeader"></th:block>
 	<meta charset="utf-8">
 	<title>拼图游戏</title>
 
@@ -246,9 +247,6 @@
                 }
             }
         }
-        
         animate();
-  
 	</script>
-	
 </html>

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
-<head th:include="common :: header"></head>
+<head>
+<th:block th:include="common :: header"></th:block>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content ">
 		<!-- 搜索栏 -->
@@ -49,7 +50,7 @@
         </div>
 	</div>
 	<!--以下区域不可见，用于shiro控制bootstraptable显示行内按钮 -->
-	<div th:include="common :: footer"></div>
+    <th:block th:include="common :: footer"></th:block>
 </body>
 <script type="text/javascript" th:src="@{/js/appjs/zhddkk/wsFriends/wsFriends.js}"></script>
 </html>

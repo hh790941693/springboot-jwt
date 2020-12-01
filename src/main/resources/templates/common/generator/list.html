@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="common :: header"></head>
+<head>
+<th:block th:include="common :: header"></th:block>
 <meta charset="utf-8">
 <body class="gray-bg">
 	<div class="wrapper wrapper-content ">
@@ -23,7 +24,7 @@
 			</div>
 		</div>
 	</div>
-	<div th:include="common::footer"></div>
+	<th:block th:include="common :: footer"></th:block>
 	<script type="text/javascript" src="/js/appjs/common/generator/list.js"></script>
 </body>
 </html>
