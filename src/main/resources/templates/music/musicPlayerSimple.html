@@ -71,12 +71,10 @@
 		</div>
 
 		<th:block th:include="common :: footer"></th:block>
+		<th:block th:include="common :: sessionInfo"></th:block>
 	</body>
 
 	<script type="text/javascript">
-		//当前用户
-		var loginUser = parent.s_user;
-
 		var app = new Vue({
 			el: '#mainDiv',
 			data: {
@@ -97,7 +95,7 @@
 					$.ajax({
 						type: "POST",
 						url: rootUrl + "file/showFiles.do",
-						data: {'user': loginUser, 'fileType': "music"},
+						data: {'user': sessionUser, 'fileType': "music"},
 						success: function (result) {
 							if (result.code == 1) {
 								app.musicData = result.data;

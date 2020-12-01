@@ -87,16 +87,16 @@
 	</div>
 
 	<th:block th:include="common :: footer"></th:block>
+	<th:block th:include="common :: sessionInfo"></th:block>
 </body>
 
 	<script type="text/javascript">
-        var curUser=parent.s_user;
 		getOnlineUsersByPage(1,10);
 		function getOnlineUsersByPage(curPage,numPerPage) {
 			var data = {};
 			data.curPage=curPage;  //当前页
 			data.numPerPage=numPerPage;  //每页显示条数
-			data.name = curUser;
+			data.name = sessionUser;
 			$.ajax({
 				type: 'POST',
 				url: rootUrl+'ws/showAllUser.json',
@@ -155,7 +155,7 @@
 						list.forEach(function(i,index){
 							var id = i.id;
 							var user = i.name;
-							if (user == curUser){
+							if (user == sessionUser){
 								return true;
 							}
 							var stateTmp = i.state;
@@ -216,7 +216,7 @@
 			$.ajax({
 				type: 'POST',
 				url: rootUrl+'ws/addFriend.do',
-				data:{fromUserName:curUser,toUserId:recordId},
+				data:{fromUserName:sessionUser,toUserId:recordId},
 				//dataType: 'json',
 				success: function(result) {
 					console.log("申请成功!!!!!")

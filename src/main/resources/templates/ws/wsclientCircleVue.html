@@ -238,7 +238,7 @@
 	<script type="text/javascript">
 		console.log("circle页面获取session数据:"+sessionUser);
 
-        var curUser = parent.s_user;
+        var curUser = sessionUser;
 		$("#preBtn").hide();
 		$("#nextBtn").hide();
 		var app = new Vue({
@@ -249,7 +249,7 @@
 				numPerPage:5,
                 totalCount:0,
                 totalPage:0,
-                curUser:parent.s_user,
+                curUser:sessionUser,
                 defaultImg:'this.src="../img/imgerror_default.jpg"',
 			},
 			methods: {

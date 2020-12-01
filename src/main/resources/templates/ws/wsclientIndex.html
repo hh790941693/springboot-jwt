@@ -94,15 +94,6 @@
 
         <!--中间部分-->
         <div id='centerDiv' class="divShadow">
-            <!--用户登录相关信息-->
-            <input type="hidden" id="user" name="user" th:value="${session.sessionInfo.user}">
-            <input type="hidden" id="pass" name="pass" th:value="${session.sessionInfo.password}">
-            <input type="hidden" id="webserverip" name="webserverip" th:value="${session.sessionInfo.webserverIp}">
-            <input type="hidden" id="webserverport" name="webserverport" th:value="${session.sessionInfo.webserverPort}">
-            <input type="hidden" id="selfimg" name="selfimg" th:value="${session.sessionInfo.selfImg}">
-            <input type="hidden" id="useragent" name="useragent" th:value="${session.sessionInfo.userAgent}">
-            <input type="hidden" id="usertype" name="usertype" th:value="${session.sessionInfo.userType}">
-
             <!--滚动消息-->
             <div id="recentNewsDiv">
                 <marquee direction="left" scrolldelay="10" scrollamount="7"><span id="adsSpan"></span></marquee>
@@ -174,13 +165,6 @@
         // 修改地址栏地址,不显示多余的参数或者页面信息
         history.replaceState(null, null, "/");
 
-        var s_user=$('#user').val();
-        var s_pass=$('#pass').val();
-        var s_webserverip = $('#webserverip').val();
-        var s_webserverport = $('#webserverport').val();
-        var s_selfimg = $('#selfimg').val();
-        var s_userAgent = $('#useragent').val();
-        var s_usertype = $('#usertype').val();
         //窗口大小发生变化时,是否动态放大或者缩小布局
         var resizeFlag = false;
 
@@ -208,13 +192,13 @@
 
         // 默认显示页:聊天窗口首页
         var curPageid = "ws/wsclientChat.page";
-        if (s_usertype == '0'){
+        if (sessionUsertype == '0'){
 			curPageid = "/zhddkk/wsUsers/wsUsersForAdmin";
 		}
         showPage(curPageid);
         function showPage(pageId) {
 			curPageid = pageId;
-			var url = pageId + "?user="+s_user;
+			var url = pageId + "?user="+sessionUser;
 			if (pageId.indexOf("gameIndex.page") != -1){
 				window.location.href = pageId;
 			}else if (pageId.indexOf("canvasIndex.page") != -1) {
@@ -260,7 +244,7 @@
                         clearInterval(checkTimer);
                     }
                 }
-				updateChatMsg("正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等..., ", "red", 10);
+				updateChatMsg("正在连接服务器" +sessionWebserverIp+":"+sessionWebserverport + " [ "+checkCount +" ]"+ "次 请稍等..., ", "red", 10);
                 checkCount++;
             }else{
                 if (checkTimer != null && checkTimer != "" && checkTimer != undefined) {
@@ -281,7 +265,7 @@
 
         function loginServer() {
             if (webSocket == null) {
-                var socketUrl = "ws://"+s_webserverip+":"+s_webserverport+"/zhddWebSocket/" + s_user+"/"+s_pass+"/"+s_userAgent;
+                var socketUrl = "ws://"+sessionWebserverIp+":"+sessionWebserverport+"/zhddWebSocket/" + sessionUser+"/"+sessionPassword+"/"+sessionUseragent;
                 webSocket = new WebSocket(socketUrl);
                 webSocket.onerror = function(event){
                     onError(event);
@@ -349,9 +333,9 @@
                 var title = msg.split("title:")[1].split(";")[0];
                 var content = msg.split("content:")[1];
                 showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+"广告标题:"+title+" 广告内容:"+content;
-            }else if (msgTo==s_user){
+            }else if (msgTo==sessionUser){
                 defaultCss = "color:green;font-size:10px;line-height:14px;";
-            }else if (msgFrom==s_user){
+            }else if (msgFrom==sessionUser){
                 defaultCss = "color:blue;font-size:10px;line-height:14px;";
             }
 
@@ -461,7 +445,7 @@
 				shadeClose: true,
 				shade: 0.2,
 				area: ['390px', '500px'],
-				content: '/zhddkk/wsUsers/setPersonalInfo.page?user='+s_user
+				content: '/zhddkk/wsUsers/setPersonalInfo.page?user='+sessionUser
 			});
 		};
 
@@ -470,7 +454,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/zhddkk/wsSign/sign',
-                data:{"user":s_user},
+                data:{"user":sessionUser},
                 async:false,
                 success: function(result) {
                     layer.msg(result.msg);
@@ -483,7 +467,7 @@
             $.ajax({
                 type: 'POST',
                 url: rootUrl+'ws/logout.do',
-                data:{"user":s_user},
+                data:{"user":sessionUser},
                 async:false,
                 success: function(result) {
                     top.location.href = rootUrl;
@@ -568,7 +552,7 @@
         setPageTitle();
         function setPageTitle(){
             let title = "";
-            if (s_usertype == "0") {
+            if (sessionUsertype == "0") {
                 title = "page.serverindex.title";
             } else {
                 title = "page.clientindex.title";

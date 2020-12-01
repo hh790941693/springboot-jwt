@@ -87,15 +87,15 @@
 	</div>
 
 	<th:block th:include="common :: footer"></th:block>
+	<th:block th:include="common :: sessionInfo"></th:block>
 </body>
 	<script type="text/javascript">
-		var curUser=parent.s_user;
 		getOnlineUsersByPage(1,10);
 		function getOnlineUsersByPage(curPage,numPerPage) {
 			$.ajax({
 				type: 'GET',
 				url: rootUrl+'ws/getMyFriendsList.json',
-				data:{curUser:curUser,curPage:curPage,numPerPage:numPerPage},
+				data:{curUser:sessionUser,curPage:curPage,numPerPage:numPerPage},
 				//dataType: 'json',
 				async:false,
 				success: function(result) {

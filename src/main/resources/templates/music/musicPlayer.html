@@ -99,13 +99,12 @@
 		</div>
 		<iframe name="hidden_frame" id="hidden_frame" style='display: none'></iframe>
 		<th:block th:include="common :: footer"></th:block>
+		<th:block th:include="common :: sessionInfo"></th:block>
 	</body>
 
 	<script type="text/javascript">
 		// 全局变量
 		var playMode = -1; //播放模式   默认为顺序播放
-		//当前用户
-		var loginUser = parent.s_user;
 		//播放器对象
 		var player = $("#player")[0];
 
@@ -294,7 +293,7 @@
 						if (dataList[i].accessStatus == "1"){
 							accessStatusTxt = "可用";
 						}
-						url = url.replace(url.substring(url.indexOf("//")+2,url.lastIndexOf(":")),parent.s_webserverip);
+						url = url.replace(url.substring(url.indexOf("//")+2,url.lastIndexOf(":")),sessionWebserverIp);
 						if (i==0){
 							var trStr = "<tr id='"+id+"'><td><input type='radio' name='selectMusic' checked='checked'/></td><td>"+fileName+"</td><td>"+trackLength+"</td><td>"+fileSize+" M</td><td>"+modifyTime+"</td><td>"+accessStatusTxt+"</td><td><button class='delBtn btn btn-sm btn-danger'>删除</button></td><td style='display:none'>"+url+"</td></tr>";
 						}else{

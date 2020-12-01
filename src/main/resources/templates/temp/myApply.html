@@ -85,16 +85,16 @@
 		</div>
 	</div>
 	<th:block th:include="common :: footer"></th:block>
+	<th:block th:include="common :: sessionInfo"></th:block>
 </body>
 	<script type="text/javascript">
-		var curUser=parent.s_user;
 		var userLike="";
 		getOnlineUsersByPage(1,10);
 		function getOnlineUsersByPage(curPage,numPerPage) {
 			$.ajax({
 				type: 'GET',
 				url: rootUrl+'ws/getMyApplyList.json',
-				data:{curUser:curUser,userLike:userLike,curPage:curPage,numPerPage:numPerPage},
+				data:{curUser:sessionUser,userLike:userLike,curPage:curPage,numPerPage:numPerPage},
 				//dataType: 'json',
 				async:false,
 				success: function(result) {

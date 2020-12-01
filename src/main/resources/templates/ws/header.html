@@ -91,6 +91,7 @@
 		</div>
 	</div>
 	<th:block th:include="common :: footer"></th:block>
+	<th:block th:include="common :: sessionInfo"></th:block>
 </body>
 	<script type="text/javascript">
         // 加载国际化
@@ -98,21 +99,21 @@
 
 		//头部头像
         var headerTitle = "";
-		if (parent.s_user == "admin"){
+		if (sessionUser == "admin"){
             headerTitle = $.ws.i18n("page.serverindex.title")
-			if (parent.s_selfimg == ""){
+			if (sessionSelfimg == ""){
 				$("#myImg").attr("src",rootUrl+"img/headimg/admin.jpg");
 			}else{
-				$("#myImg").attr("src", parent.s_selfimg);
+				$("#myImg").attr("src", sessionSelfimg);
 			}
 		}else{
             headerTitle = $.ws.i18n("page.clientindex.title")
-            if (parent.s_selfimg == "" || parent.s_selfimg == null) {
+            if (sessionSelfimg == "" || sessionSelfimg == null) {
                 var errorImgUrl = rootUrl+"../img/"+$.ws.errorImageName;
                 $("#myImg").attr("src",errorImgUrl);
             }
 		}
-		$("#curUser").text(parent.s_user);
+		$("#curUser").text(sessionUser);
 
 		//当前时间
 		var curTimeTemp = getCurrentTime();
@@ -165,7 +166,7 @@
             $.ajax({
                 type: 'GET',
                 url: 'getOnlineInfo.json',
-                data: {"user": parent.s_user},
+                data: {"user": sessionUser},
                 //dataType: 'json',
                 success: function (result) {
 					if (result.code != 1){

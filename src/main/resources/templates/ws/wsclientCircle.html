@@ -142,7 +142,6 @@
 	<script type="text/javascript">
 		console.log("circle页面获取session数据:"+sessionUser);
 
-		var curUser=parent.s_user;
 		var curPage = 1;
 		var numPerPage = 5;
 		var totalPage = 0;
@@ -239,7 +238,7 @@
 							htmlData += "            <div class='nameDivClass'>";
 							htmlData += "                 <div style='display:inline-block;height:100%;width:540px;'><img alt='' src='"+headImg+"' width='30' height='30' onerror='imgerror(this)'>";
 							var compareTwotimeResult = compareTwoTime(new Date(createTime).getTime(),new Date().getTime());
-							if (curUser == userName || curUser == 'admin'){
+							if (sessionUser == userName || sessionUser == 'admin'){
 								htmlData += "             <span class='myselfUserSpanClass' onclick='queryPersonInfo(this)'>"+userName+"</span></div><span class='likeNumSpanClass'>已有"+likeNum+"人点赞</span><span class='buttonGroupSpan'><button onclick='toComment("+circleId+")' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;<button onclick='toLike("+circleId+")' class='btn btn-sm btn-info'>点赞</button>&nbsp;&nbsp;&nbsp;<button onclick='deleteCircle("+circleId+")' class='btn btn-sm btn-danger'>删除</button></span><span class='timeSpanClass'>发表于"+compareTwotimeResult+"</span>";
 							}else{
 								htmlData += "             <span class='userSpanClass' onclick='queryPersonInfo(this)'>"+userName+"</span></div><span class='likeNumSpanClass'>已有"+likeNum+"人点赞</span><span class='buttonGroupSpan'><button onclick='toComment("+circleId+")' class='btn btn-sm btn-primary'>评论</button>&nbsp;&nbsp;&nbsp;<button onclick='toLike("+circleId+")' class='btn btn-sm btn-info'>点赞</button></span><span class='timeSpanClass'>发表于"+compareTwotimeResult+"</span>";
@@ -267,7 +266,7 @@
 									var commentText = commentObj.comment;
 									var commentCreateTime = commentObj.createTime;
 									var commentTimeResult = compareTwoTime(new Date(commentCreateTime).getTime(),new Date().getTime());
-									if (curUser == commentUserName || curUser == 'admin'){
+									if (sessionUser == commentUserName || sessionUser == 'admin'){
 										htmlData += "<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>"+commentUserName+":</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>"+commentText+"</span><a href='javascript:void(0)' onclick='deleteComment("+commentId+")'>删除</a><span class='commentTimeSpanClass'>发表于"+commentTimeResult+"</span></p>";
 									}else{
 										htmlData += "<p><span class='commentNameSpanClass' onclick='queryPersonInfo(this)'>"+commentUserName+":</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='commentSpanClass'>"+commentText+"</span><span class='commentTimeSpanClass' style='margin-left:55px;'>发表于"+commentTimeResult+"</span></p>";
@@ -299,7 +298,7 @@
 						type: 'POST',
 						url: rootUrl+'ws/toComment.do',
 						//dataType: 'json',
-						data:{user:curUser,circleId:circleId,comment:comment},
+						data:{user:sessionUser,circleId:circleId,comment:comment},
 						async:false,
 						success: function(result) {
 							if (result.code == 1) {
@@ -319,7 +318,7 @@
 				type: 'POST',
 				url: rootUrl+'ws/toLike.do',
 				//dataType: 'json',
-				data:{user:curUser,circleId:circleId},
+				data:{user:sessionUser,circleId:circleId},
 				async:false,
 				success: function(result) {
 					if (result.code == 1) {
@@ -381,7 +380,7 @@
 				shadeClose: true,
 				shade: 0.2,
 				area: ['484px', '490px'],
-				content: 'wsclientAddCircle.page?user='+curUser
+				content: 'wsclientAddCircle.page?user='+sessionUser
 			});
 		}
 

@@ -110,9 +110,9 @@
 		<iframe name="hidden_frame" id="hidden_frame" style='display: none'></iframe>
 	</div>
 	<th:block th:include="common :: footer"></th:block>
+	<th:block th:include="common :: sessionInfo"></th:block>
 </body>
 	<script>
-		var user = parent.s_user;
 		initUpload();
 
 		function setHiddenText(selectObj,hiddenId){
@@ -121,10 +121,10 @@
 		}
 
 		//查询个人信息
-		queryPersonInfo(user);
+		queryPersonInfo(sessionUser);
 
 		function beforeSumbit(){
-			$("#userNameHidden").val(user);
+			$("#userNameHidden").val(sessionUser);
 
 			var sexText=$("#sexSelect").find("option:selected").text();
 			$("#sexTextHidden").val(sexText);
@@ -142,7 +142,7 @@
 			$.ajax({
 				type: 'POST',
 				url: '/zhddkk/wsUsers/queryPersonInfo.json',
-				data:{user:user},
+				data:{'user':user},
 				//dataType: 'json',
 				success: function(result) {
 					if (result.code == 1){
@@ -201,7 +201,7 @@
 				size: 10240,//单位为KB
 				accept: 'images',
 				data: {
-					"user": user,
+					"user": sessionUser,
 					"folder": "headImg"
 				},
 				before: function () {

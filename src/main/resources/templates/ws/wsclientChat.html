@@ -162,6 +162,7 @@
 	</div>
 
 	<th:block th:include="common :: footer"></th:block>
+	<th:block th:include="common :: sessionInfo"></th:block>
 </body>
 
 	<script type="text/javascript">
@@ -178,7 +179,7 @@
 			data: {
 				friendList:{},
 				cyyList:{},
-                loginUser:parent.s_user,
+                loginUser:sessionUser,
                 onlineFriendCount:0,
                 offlineFriendCount:0,
 			},
@@ -187,7 +188,7 @@
 					$.ajax({
 						type: 'GET',
 						url: 'getOnlineInfo.json',
-						data: {"user": parent.s_user},
+						data: {"user": sessionUser},
 						success: function (result) {
 							if (result.code != 1) {
 								return;
@@ -262,7 +263,7 @@
 
 			var toUser = $("#selectUser").val();
 			if (parent.webSocket != null) {
-				if (parent.s_user == toUser) {
+				if (sessionUser == toUser) {
 					updateChatMsg("<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 自己不能给自己发消息!</p>");
 					return false;
 				}
@@ -282,7 +283,7 @@
 				}else{
 					var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;'>["+getCurrentTime() + "] [在线消息]  [我 -->" + toUser +"] "+ msgToServer +"</p>";
 					updateChatMsg(htmlData);
-					sendMsgToServer(parent.s_user, toUser, msgToServer);
+					sendMsgToServer(sessionUser, toUser, msgToServer);
 					$("#msgToServer").val("");
 				}
 			}else{

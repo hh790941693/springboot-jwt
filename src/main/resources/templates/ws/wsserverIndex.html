@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="common :: header"></th:block>
@@ -162,22 +163,16 @@
 	</div>
 
     <th:block th:include="common :: footer"></th:block>
+    <th:block th:include="common :: sessionInfo"></th:block>
 </body>
     <script type="text/javascript">
-        var s_user=$('#user').val();
-        var s_pass=$('#pass').val();
-        var s_webserverip = $('#webserverip').val();
-        var s_webserverport = $('#webserverport').val();
-        var s_userAgent = $('#useragent').val();
-        var s_selfimg = $('#selfimg').val();
-
         //退出(返回登录页)
         function toIndex(){
             //window.location.href = rootUrl+"ws";
 			$.ajax({
 				type: 'POST',
 				url: rootUrl+'ws/logout.do',
-				data:{"user":s_user},
+				data:{"user":sessionUser},
 				async:false,
 				success: function(result) {
 				    top.location.href = rootUrl;
@@ -189,7 +184,7 @@
 		showPage(curPageid);
         function showPage(pageId){
 			curPageid = pageId;
-			var url = pageId + "?user="+s_user;
+			var url = pageId + "?user="+sessionUser;
 			if (pageId.indexOf("gameIndex.page") != -1){
 				window.location.href = pageId;
 			}else if (pageId.indexOf("canvasIndex.page") != -1) {
@@ -235,7 +230,7 @@
                         clearInterval(checkTimer);
                     }
                 }
-				updateChatMsg("正在连接服务器" +s_webserverip+":"+s_webserverport + " [ "+checkCount +" ]"+ "次 请稍等..., ", "red", 10);
+				updateChatMsg("正在连接服务器" +sessionWebserverIp+":"+sessionWebserverport + " [ "+checkCount +" ]"+ "次 请稍等..., ", "red", 10);
                 checkCount++;
             }else{
                 if (checkTimer != null && checkTimer != "" && checkTimer != undefined) {
@@ -256,7 +251,7 @@
 
         function loginServer() {
             if (webSocket == null) {
-                var socketUrl = "ws://"+s_webserverip+":"+s_webserverport+"/zhddWebSocket/" + s_user+"/"+s_pass+"/"+s_userAgent;
+                var socketUrl = "ws://"+sessionWebserverIp+":"+sessionWebserverport+"/zhddWebSocket/" + sessionUser+"/"+sessionPassword+"/"+sessionUseragent;
                 webSocket = new WebSocket(socketUrl);
                 webSocket.onerror = function(event){
                     onError(event);
@@ -323,9 +318,9 @@
                 var title = msg.split("title:")[1].split(";")[0];
                 var content = msg.split("content:")[1];
                 showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+"广告标题:"+title+" 广告内容:"+content;
-            }else if (msgTo==s_user){
+            }else if (msgTo==sessionUser){
                 defaultCss = "color:green;font-size:10px;line-height:14px;";
-            }else if (msgFrom==s_user){
+            }else if (msgFrom==sessionUser){
                 defaultCss = "color:blue;font-size:10px;line-height:14px;";
             }
 
@@ -432,7 +427,7 @@
 				shadeClose: true,
 				shade: 0.2,
 				area: ['390px', '500px'],
-				content: '/zhddkk/wsUsers/setPersonalInfo.page?user='+s_user
+				content: '/zhddkk/wsUsers/setPersonalInfo.page?user='+sessionUser
 			});
 		};
 
@@ -441,7 +436,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/zhddkk/wsSign/sign',
-                data:{"user":s_user},
+                data:{"user":sessionUser},
                 async:false,
                 success: function(result) {
                     layer.msg(result.msg);
