@@ -13,7 +13,7 @@
 	}
 
 	#curTimeSpan{
-		margin-left:20px;
+		margin-left:10px;
 		font-size:15px;
 	}
 
@@ -21,6 +21,11 @@
         margin:0;
         padding:0;
     }
+
+	#percentInput {
+		display: inline-block;
+		width:80px;
+	}
 </style>
 </head>
 <body>
@@ -67,8 +72,7 @@
 			<!--当前时间-->
 			<div style="text-align:right;height:30%;">
                 <span>窗口变化:</span>&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="radio" name="showmode" value="0" checked="checked">无&nbsp;&nbsp;
-                <input type="radio" name="showmode" value="1">有&nbsp;&nbsp;
+				<input id="percentInput" class="wheelInputClass" type="range" value=100 min=85 max=150 step=3 onchange="windowChange()">
 				<span id="curTimeSpan">0000-00-00 00:00:00</span>
 			</div>
 			<div style="height:69%;padding-top:6px;">
@@ -126,18 +130,9 @@
 		},1000);
 
         // 播放模式监听
-        $("input[name='showmode']").each(function(index, val){
-            $(val).click(function(){
-                var showMode = $(val).val();
-                if (showMode == 0){
-                    parent.resizeFlag = false;
-                    parent.setDefaultWindowSize();
-                    parent.adjustMusicWindowPosition();
-                }else{
-                    parent.resizeFlag = true;
-                }
-            })
-        })
+        function windowChange(){
+			parent.manualResizWindow($("#percentInput").val());
+        }
 
 		//定时获取天气
 		grapWeatherInfo();

@@ -165,29 +165,33 @@
         // 修改地址栏地址,不显示多余的参数或者页面信息
         history.replaceState(null, null, "/");
 
-        //窗口大小发生变化时,是否动态放大或者缩小布局
-        var resizeFlag = false;
+        var DEFAULT_WIDTH = 1318;
+        var DEFAULT_HEIGHT = 720;
 
-        //获取当前窗口大小
-        var winInnerWidth = window.innerWidth;
-        var winInnerHeight = window.innerHeight;
-        //当浏览器大小变化时
-        $(window).resize(function () {
-            if (resizeFlag) {
-                winInnerWidth = window.innerWidth;
-                winInnerHeight = window.innerHeight;
-                $("#mainDiv").width(winInnerWidth+"px");
-                $("#mainDiv").height(winInnerHeight+"px");
-            }else{
-                //设置默认的窗口大小
-                setDefaultWindowSize();
+        // 窗口大小动态变化
+        function autoResizWindow(){
+            $("#mainDiv").width(window.innerWidth+"px");
+            $("#mainDiv").height(window.innerHeight+"px");
+        }
+        $(window).resize(autoResizWindow);
+
+        // 手动修改窗口大小
+        function manualResizWindow(percent){
+            //设置默认的窗口大小
+            var newWidth = DEFAULT_WIDTH * percent / 100;
+            var newHeight = DEFAULT_HEIGHT;
+            if (percent > 100) {
+                newHeight = DEFAULT_HEIGHT * percent / 100;
             }
-        });
-
-        //设置默认的窗口大小
-        function setDefaultWindowSize(){
-            $("#mainDiv").width("1318px");
-            $("#mainDiv").height("720px");
+            if (newWidth > window.innerWidth){
+                newWidth = window.innerWidth;
+            }
+            if (newHeight > window.innerHeight){
+                newHeight = window.innerHeight;
+            }
+            $("#mainDiv").width(newWidth+"px");
+            $("#mainDiv").height(newHeight+"px");
+            adjustMusicWindowPosition();
         }
 
         // 默认显示页:聊天窗口首页
