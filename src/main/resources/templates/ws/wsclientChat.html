@@ -127,7 +127,7 @@
 				<div style="width:100%;height:413px;overflow-y: scroll;padding:3px;">
 					<div v-for="row in friendList" style="width:100%;height:50px;margin-bottom: 8px;">
 						<div style="width:26%;height:50px;float: left;">
-							<img :src="row.headImage" width="100%" height="100%">
+							<img :src="row.headImage" width="100%" height="100%" onerror="this.onerror='';this.src=$.ws.errorImgUrl">
 						</div>
 						<div style="width:67%;height:50px;float:left;margin-left: 5px;">
 							<div>
