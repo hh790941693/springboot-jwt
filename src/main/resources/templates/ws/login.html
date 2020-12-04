@@ -304,6 +304,7 @@
 			async:false,
 			success: function(result) {
 				if (result.code == 1){
+					var data = result.data;
 					textArr = new Array("正在检查系统版本.....",data.osName,
 							"正在检查java版本.....",data.javaVersion,
 							"正在检查java家目录.....",data.javaHome,
