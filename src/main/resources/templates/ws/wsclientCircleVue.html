@@ -173,19 +173,25 @@
 							<template v-else>
 								<span class='userSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
 							</template>
-							<span class='likeNumSpanClass'>{{item.likeNum}}人点赞</span>
 							<span class='buttonGroupSpan'>
 								<button @click='toComment(item.id)' class='label label-primary'>
                                     <span class="glyphicon glyphicon-comment"></span>
-                                </button>&nbsp;&nbsp;&nbsp;
+                                </button>&nbsp;
 								<button @click='toLike(item.id)' class='label label-info'>
                                     <span class="glyphicon glyphicon-thumbs-up"></span>
-                                </button>&nbsp;&nbsp;&nbsp;
+                                </button>&nbsp;
+								<button @click='toDislike(item.id)' class='label label-info'>
+                                    <span class="glyphicon glyphicon-thumbs-down"></span>
+                                </button>&nbsp;
 								<template v-if="curUser == 'admin' || curUser == item.userName">
 									<button @click='deleteCircle(item.id)' class='label label-danger'>
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </button>
 								</template>
+							</span>
+							<span>
+								<span class="fa fa-thumbs-up" style="margin-right: 5px;">{{item.likeNum}}</span>
+								<span class="fa fa-thumbs-down">0</span>
 							</span>
 							<span class='timeSpanClass'>{{compareTwoTime(new Date(item.createTime).getTime(),new Date().getTime())}}</span>
 						</div>
@@ -323,6 +329,20 @@
                         }
                     });
                 },
+				toDislike:function (id) {
+					//点赞
+					$.ajax({
+						type: 'POST',
+						url: rootUrl+'ws/toDislike.do',
+						data:{'user':app.curUser,'circleId':id},
+						success: function(result) {
+							if (result.code == 1) {
+								layer.msg("踩成功");
+								app.queryCircleList(app.curPage, app.numPerPage);
+							}
+						}
+					});
+				},
                 deleteCircle:function (id) {
                     //删除朋友圈
                     layer.confirm('确认要删除？', {btn: ['确定','取消']},
