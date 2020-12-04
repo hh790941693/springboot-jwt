@@ -226,27 +226,26 @@ public class LoginController {
         }
 
         //session
-        HttpSession httpSession = request.getSession();
-        String sessionId = httpSession.getId();
-        System.out.println("创建SESSION:" + sessionId);
-        logger.info("创建SESSION: {}", sessionId);
+        System.out.println("创建SESSION:" + request.getSession().getId());
+        logger.info("创建SESSION: {}", request.getSession().getId());
 
         //记录cookie
-        saveCookie(request, response, curUserObj, sessionId);
+        saveCookie(request, response, curUserObj);
 
         // 设置session非活动失效时间
-        httpSession.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT); //session不活动失效时间
+        request.getSession().setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT); //session不活动失效时间
         // 用户类型
         String userType = CommonConstants.USER_TYPE_COMMON;
         if (user.equals(CommonConstants.ADMIN_USER)) {
             userType = CommonConstants.USER_TYPE_MANAGER;
         }
         // 往session中存储用户信息
-        SessionInfoBean sessionInfoBean = new SessionInfoBean(sessionId, user, curUserObj.getPassword(), webserverip, webserverPort, selfImg, shortAgent, userType);
+        SessionInfoBean sessionInfoBean = new SessionInfoBean(request.getSession().getId(), user, curUserObj.getPassword(), webserverip, webserverPort, selfImg, shortAgent, userType);
         String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
         JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
         sessionInfoBean.setJsonStr(jsonStr);
         sessionInfoBean.setJsonObject(jsonObj);
+        // 页面通过th:value="${session.sessionInfo.jsonStr}"来获取session信息
         request.getSession().setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
         //model.addAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
@@ -269,8 +268,6 @@ public class LoginController {
     /**
      * 登陆成功首页
      *
-     * @param request
-     * @param model
      * @return
      */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.REGISTER,subModule="",describe="登录成功页面")
@@ -653,16 +650,15 @@ public class LoginController {
      * @param request 请求体
      * @param response 响应体
      * @param curUserObj 当前登陆用户
-     * @param sessionId 会话id
      */
-    private void saveCookie(HttpServletRequest request, HttpServletResponse response, WsUsersDO curUserObj, String sessionId){
+    private void saveCookie(HttpServletRequest request, HttpServletResponse response, WsUsersDO curUserObj){
         //记录cookie
         Cookie userCookie = new Cookie(CommonConstants.S_USER, curUserObj.getName());
         Cookie passCookie = new Cookie(CommonConstants.S_PASS, curUserObj.getPassword());
         Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP, webSocketConfig.getAddress());
         Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT, webSocketConfig.getPort());
         // 客户端的JSESSIONID
-        Cookie jsessionIdCookie = new Cookie(CommonConstants.JSESSIONID, sessionId);
+        Cookie jsessionIdCookie = new Cookie(CommonConstants.JSESSIONID, request.getSession().getId());
         userCookie.setPath("/");
         userCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);//用户名30分钟
         passCookie.setPath("/");
