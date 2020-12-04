@@ -94,6 +94,18 @@ public class WsAdsController extends AdminBaseController {
 		return Result.fail();
 	}
 
+	/**
+	 * 根据id查询广告详情
+	 * @param id 广告id
+	 * @return
+	 */
+	@ResponseBody
+	@GetMapping("/selectById")
+	public Result<WsAdsDO> selectById(String id){
+		WsAdsDO wsAdsDO = wsAdsService.selectById(id);
+		return Result.ok(wsAdsDO);
+	}
+
     /**
      * 跳转到广告表添加页面
      */
@@ -192,5 +204,10 @@ public class WsAdsController extends AdminBaseController {
 		wsAdsService.deleteBatchIds(Arrays.asList(ids));
 		return Result.ok();
 	}
-	
+
+	@GetMapping("/adsDetail.page")
+	public String adsDetail(@RequestParam("id") String id, Model model){
+		model.addAttribute("id", id);
+		return "zhddkk/wsAds/wsAdsDetail";
+	}
 }
