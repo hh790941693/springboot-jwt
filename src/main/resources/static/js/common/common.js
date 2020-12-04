@@ -7,6 +7,8 @@ $.ws = {
     //上传文件接口地址
     uploadUrl:protocol+"//"+host+"/upload/app",
 
+    uploadByFroalaUrl:protocol+"//"+host+"/upload/app/uploadByFroala",
+
     //图片显示异常时,显示该图片
     errorImageName : "imgerror_default.jpg",
 

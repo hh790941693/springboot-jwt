@@ -1,9 +1,27 @@
 $(function(){
     validateRule();
+
+    $('#content').editable({
+        inlineMode: false,
+        alwaysBlank: true,
+        height:'300px',
+        language: "zh_cn",
+        imageUploadURL:$.ws.uploadByFroalaUrl,
+        imageUploadParams: {folder: "pic"}
+    }).on('editable.afterRemoveImage', function (e, editor, $img) {
+        // Set the image source to the image delete params.
+        editor.options.imageDeleteParams = {src: $img.attr('src')}
+    });
+    var markupStr = $('#contentInput').val();
+    console.log(markupStr);
+    $('#content')[0].childNodes[1].innerHTML = markupStr;
 });
 
 //保存数据
 function save() {
+    var markupStr = $('#content')[0].childNodes[1].innerHTML;
+    $('#contentInput').val(markupStr);
+
     var action = "save";
     if($("#id").val()){
         action = "update";
@@ -58,5 +76,5 @@ function validateRule() {
                 required : icon + "请输入内容"
             },
                     }
-    })
+    });
 }

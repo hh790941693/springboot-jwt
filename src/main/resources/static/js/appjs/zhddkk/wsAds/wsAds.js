@@ -107,7 +107,7 @@ function add() {
 		title : '发布公告',
 		maxmin : true,
 		shadeClose : false,//点击遮罩关闭层
-		area : [ '650px', '340px' ],
+		area : [ '850px', '540px' ],
 		content : prefix + '/add'
 	});
 }

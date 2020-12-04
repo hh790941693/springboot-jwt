@@ -111,4 +111,43 @@ public class UploadController {
         }
         return map;
     }
+
+    /**
+     * 上传资源文件(供新的文本编辑器Froala使用)
+     *
+     * @param file   文件
+     * @param folder 要存放的路径，如果为空，则默认存放temp文件夹
+     * @param user 用戶ID
+     * @return 上传文件的完整访问路径
+     */
+    @PostMapping("/uploadByFroala")
+    public Map<String, Object> uploadByFroala(
+            @RequestParam(required = true)MultipartFile file,
+            @RequestParam(required = false)String folder,
+            @RequestParam(required = false)String user
+    ) {
+        logger.info("进入上传文件控制层, 目录名:{} 用户ID:{}", folder, user);
+        Map<String, Object> map = new HashMap<>();
+        String url = "";
+        try {
+            if (null != file){
+                logger.info("开始上传文件");
+                if (!file.isEmpty()){
+                    logger.info("开始上传文件:{}", file.getOriginalFilename());
+                    url = uploadService.uploadFile(file, folder, user);
+                    logger.info("返回的文件url:{}", url);
+                    map.put("code", "1");
+                    map.put("msg", "操作成功");
+                    map.put("link", url);
+                }
+            }
+        } catch (Exception e) {
+            logger.info("上传出现异常:{}",e.getMessage());
+            e.printStackTrace();
+            map.put("code", "0");
+            map.put("msg", "操作失败");
+            map.put("link", "");
+        }
+        return map;
+    }
 }
