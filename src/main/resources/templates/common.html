@@ -50,7 +50,7 @@
 		<input type="hidden" id="sessionUsertype" th:value="${session.sessionInfo.userType}">
 		<input type="hidden" id="sessionJsonStr" th:value="${session.sessionInfo.jsonStr}">
 		<input type="hidden" id="sessionJsonObject" th:value="${session.sessionInfo.jsonObject}">
-		<script>
+		<script th:inline="javascript">
 			let sessionUser = $("#sessionUser").val();
 			let sessionPassword = $("#sessionPassword").val();
 			let sessionWebserverIp = $("#sessionWebserverIp").val();
@@ -60,6 +60,14 @@
 			let sessionUsertype = $("#sessionUsertype").val();
 			let sessionJsonStr = $("#sessionJsonStr").val();
 			let sessionJsonObject = eval('(' + $("#sessionJsonObject").val() + ')');
+
+			try {
+				let language = [[${#locale.language}]];
+				let counrty = [[${#locale.country}]];
+				$.ws.i18nInit(language, counrty);
+			}catch (e) {
+				console.log("加载国际化信息异常:"+e);
+			}
 		</script>
 	</div>
 

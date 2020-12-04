@@ -23,3 +23,7 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+/log.path_IS_UNDEFINED/debug.log
+/log.path_IS_UNDEFINED/error.log
+/log.path_IS_UNDEFINED/info.log
+/log.path_IS_UNDEFINED/warn.log

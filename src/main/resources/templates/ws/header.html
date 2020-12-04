@@ -98,9 +98,6 @@
 	<th:block th:include="common :: sessionInfo"></th:block>
 </body>
 	<script type="text/javascript">
-        // 加载国际化
-        $.ws.i18nInit("[[${#locale.language}]]", "[[${#locale.country}]]");
-
 		//头部头像
         var headerTitle = "";
 		if (sessionUser == "admin"){
