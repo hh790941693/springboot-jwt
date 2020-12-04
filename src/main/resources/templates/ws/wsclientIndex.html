@@ -538,7 +538,7 @@
                             totalAds = "<span style='font-weight: bold;font-size:14px;color:red;'>暂无消息</span>";
                         }else {
                             $.each(data, function (i, val) {
-                                totalAds += "<span style='font-weight: bold;font-size:14px;'>" + val.title + "</span>"+"<a onclick='showAdsDetail("+val.id+")'>查看详情</a>"+"&nbsp;&nbsp;<span style='font-size:10px;'>" + val.createTime + "</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                totalAds += "<span style='font-weight: bold;font-size:14px;'>" + val.title + "</span>"+"<a style='color:blue;font-weight: bold;' onclick='showAdsDetail("+val.id+")'>【查看详情】</a>"+"&nbsp;&nbsp;<span style='font-size:10px;'>" + val.createTime + "</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                             });
                         }
                         $("#adsSpan").html(totalAds);
@@ -561,6 +561,10 @@
             $("title").text($.ws.i18n(title));
         }
 
+        /**
+         * 查看广告详情页
+         * @param adId
+         */
         function showAdsDetail(adId){
             window.open("./zhddkk/wsAds/adsDetail.page?id="+adId);
         }

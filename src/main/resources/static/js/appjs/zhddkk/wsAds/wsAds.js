@@ -63,8 +63,9 @@ function load() {
 						{
 				field : 'content',
 				title : '内容',
-				formatter:function (value) {
-					return $.ws.subStringText(value, 30);
+				formatter:function (value,row) {
+					var url = rootUrl + "/zhddkk/wsAds/adsDetail.page?id=" + row.id;
+					return "<a href='"+url+"' target='_blank' style='color:blue;font-weight: bold;'>查看详情</a>";
 				}
 			},
 						{
