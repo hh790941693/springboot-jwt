@@ -346,19 +346,6 @@
 		return isCheckFinish;
 	}
 
-	//当浏览器大小变化时
-	function resizeWindows(){
-        winInnerWidth = window.innerWidth;
-        winInnerHeight = window.innerHeight;
-        var mainDivWidth = $("#mainDiv").width();
-        var mainDivHeight = $("#mainDiv").height();
-        var leftPix = Math.abs(winInnerWidth - mainDivWidth)/2;
-        var topPix = Math.abs(winInnerHeight - mainDivHeight)/2;
-		//$("#mainDiv").css("left", leftPix + "px");
-		$("#mainDiv").css("top", topPix + "px");
-	}
-	$(window).resize(resizeWindows);
-
 	// 获取验证码
     generateVerifyCode();
     $("#verifyCodeImg").click(generateVerifyCode);
