@@ -160,7 +160,7 @@ public class WsAdsController extends AdminBaseController {
 				}
 
 				try {
-					ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息",CommonConstants.ADMIN_USER,entry.getKey(), "title:"+title+";content:"+content);
+					ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息",CommonConstants.ADMIN_USER,entry.getKey(), "title:"+title+";content:");
 					entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
 					receiveList.add(entry.getKey());
 				} catch (IOException e) {
