@@ -143,7 +143,7 @@ INSERT INTO `t_user_role` (`id`, `user_id`, `username`, `role_id`, `role_name`, 
 CREATE TABLE IF NOT EXISTS `ws_ads` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `title` varchar(100) NOT NULL COMMENT '标题',
-  `content` TEXT NOT NULL COMMENT '内容',
+  `content` LONGTEXT NOT NULL COMMENT '内容',
   `receive_list` varchar(1000) NOT NULL DEFAULT '' COMMENT '接收人列表',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
