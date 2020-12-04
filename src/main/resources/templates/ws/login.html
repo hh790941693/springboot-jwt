@@ -304,19 +304,12 @@
 			async:false,
 			success: function(result) {
 				if (result.code == 1){
-					var data = result.data;
-					var osName = data.osName;
-					var javaHome = data.javaHome;
-					var javaVersion = data.javaVersion;
-					var dbVersion = data.dbVersion;
-					var nginxFlag = data.nginxFlag;
-					var shareDir = data.shareDir;
-					textArr = new Array("正在检查系统版本.....",osName,
-							"正在检查java版本.....",javaVersion,
-							"正在检查java家目录.....",javaHome,
-							"正在检查数据库版本.....",dbVersion,
-							"正在检查nginx进程状态.....", nginxFlag,
-							"正在检查共享目录权限.....",shareDir,
+					textArr = new Array("正在检查系统版本.....",data.osName,
+							"正在检查java版本.....",data.javaVersion,
+							"正在检查java家目录.....",data.javaHome,
+							"正在检查数据库版本.....",data.dbVersion,
+							"正在检查nginx进程状态.....", data.nginxFlag,
+							"正在检查共享目录权限.....",data.shareDir,
 							"正在检查其他事项....","检查完毕",
 							"登录中.........","","","");
 				}
@@ -331,7 +324,6 @@
 					isCheckFinish = true;
 					if (null != checkEnvTimer) {
 						checkEnvTimer = null;
-						console.log("清理定时器")
 						clearInterval(checkEnvTimer);
 						$("#checkDiv").css("display", "none");
 						$("#loginForm").submit();
@@ -376,7 +368,6 @@
     // 切换语言
     $('.selectpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
         var lang = e.currentTarget.value;
-        console.log(lang);
         window.location.replace("/i18n?lang=" + lang);
     });
 </script>
