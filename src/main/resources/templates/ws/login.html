@@ -26,7 +26,7 @@
         position: relative;
         top: 50%;
         margin-top:-175px;
-        background-color: aqua;
+        background-color: #506b7b;
 		box-shadow: grey 10px 6px 10px;
 		border:1px solid grey;
 		background-repeat: no-repeat;
@@ -49,13 +49,17 @@
         background-color:#eeeeee;
     }
 
+    a{
+        color:white;
+    }
+
+    a:hover {
+        font-weight: bold;
+        color:white;
+    }
+
 	#helpDiv a{
 		font-size:13px;
-	}
-
-	#helpDiv a:hover {
-		font-weight: bold;
-		color: #1e88e5;
 	}
 
 	.errorMsgDiv{
@@ -111,10 +115,10 @@
 			</div>
 
 			<div align="center" style="margin-top:10px;">
-				<button id="btnlogin" class='btn btn-success btn-large' type="submit" style="width:130px;">
-					<span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;[[#{page.login.title}]]
+				<button id="btnlogin" class='btn btn-success btn-large' type="submit" style="width:130px;margin-right: 15px;">
+					<span class="glyphicon glyphicon-log-in"></span> [[#{page.login.title}]]
 				</button>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="securityCheck"><span class="fa fa-toggle-off" style="font-size: 18px;"></span> [[#{checkbox.check.label}]]</a>
+				<a id="securityCheck"><span class="fa fa-toggle-off" style="font-size: 18px;"></span>[[#{checkbox.check.label}]]</a>
 			</div>
 		</form>
 
