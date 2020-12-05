@@ -99,18 +99,16 @@
 </body>
 	<script type="text/javascript">
 		//头部头像
-        var headerTitle = "";
+        var headerTitle = $.ws.i18n("web.title");
 		if (sessionUser == "admin"){
-            headerTitle = $.ws.i18n("page.serverindex.title")
 			if (sessionSelfimg == ""){
 				$("#myImg").attr("src",rootUrl+"img/headimg/admin.jpg");
 			}else{
 				$("#myImg").attr("src", sessionSelfimg);
 			}
 		}else{
-            headerTitle = $.ws.i18n("page.clientindex.title")
             if (sessionSelfimg == "" || sessionSelfimg == null) {
-                var errorImgUrl = rootUrl+"../img/"+$.ws.errorImageName;
+                var errorImgUrl = $.ws.errorImgUrl;
                 $("#myImg").attr("src",errorImgUrl);
             }
 		}
