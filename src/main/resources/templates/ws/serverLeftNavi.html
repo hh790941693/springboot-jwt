@@ -49,15 +49,26 @@
         font-weight: bold;
         margin-left: 10px;
         font-size: 18px;
-        margin-left: 45px;
     }
 
-    #configurationDiv ul li{
-        font-size: 18px;
+    #configurationDiv{
+        display:none;
+        width:128px;
+        height:184px;
+        position:absolute;
+        left:47px;
+        top:133px;
+        background-color:#d8d9e6;
+        border:2px solid green;
+        z-index:99;
     }
 
     #configurationDiv>ul{
         height:100%;
+    }
+
+    #configurationDiv ul li{
+        font-size: 18px;
     }
 </style>
 </head>
@@ -111,7 +122,7 @@
         </li>
     </ul>
 
-    <div id='configurationDiv' style='display:none;position:absolute;left:43px;top:133px;height:184px;background-color:#d8d9e6;border:2px solid green;z-index:99;'>
+    <div id='configurationDiv'>
         <ul>
             <li id="/zhddkk/wsCommon/mgc" th:text="#{li.sensitiveword.label}">敏感词配置</li>
             <li id="/zhddkk/wsCommon/zh" th:text="#{li.badword.label}">脏话配置</li>
