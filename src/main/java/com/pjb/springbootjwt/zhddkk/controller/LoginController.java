@@ -231,8 +231,8 @@ public class LoginController {
         //记录cookie
         saveCookie(request, response, curUserObj);
 
-        // 设置session非活动失效时间
-        request.getSession().setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT); //session不活动失效时间
+        // 设置session非活动失效时间(10分钟)
+        request.getSession().setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
         // 用户类型
         String userType = CommonConstants.USER_TYPE_COMMON;
         if (user.equals(CommonConstants.ADMIN_USER)) {
@@ -656,8 +656,6 @@ public class LoginController {
         Cookie passCookie = new Cookie(CommonConstants.S_PASS, curUserObj.getPassword());
         Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP, webSocketConfig.getAddress());
         Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT, webSocketConfig.getPort());
-        // 客户端的JSESSIONID
-        Cookie jsessionIdCookie = new Cookie(CommonConstants.JSESSIONID, request.getSession().getId());
         userCookie.setPath("/");
         userCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);//用户名30分钟
         passCookie.setPath("/");
@@ -666,13 +664,10 @@ public class LoginController {
         webserveripCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
         webserverportCookie.setPath("/");
         webserverportCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
-        jsessionIdCookie.setPath("/");
-        jsessionIdCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT); // 客户端的JSESSIONID保存30分钟
         response.addCookie(userCookie);
         response.addCookie(passCookie);
         response.addCookie(webserveripCookie);
         response.addCookie(webserverportCookie);
-        response.addCookie(jsessionIdCookie);
 
         // 设置语言cookie
         Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);

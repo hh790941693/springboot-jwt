@@ -3,15 +3,12 @@ package com.pjb.springbootjwt.zhddkk.constants;
 /**
  * 常量
  */
-public class CommonConstants 
-{
-	public static final String UPLOAD_PATH_SUFFIX = "/WEB-INF/upload";
+public class CommonConstants {
+    public static final String UPLOAD_PATH_SUFFIX = "/WEB-INF/upload";
 	public static final String UPLOAD_TEMP_SUFFIX = "/WEB-INF/temp";
 
 	// session信息
 	public static final String SESSION_INFO = "sessionInfo";
-	// cookie中存储session的id名称
-	public static final String JSESSIONID = "JSESSIONID";
 
 	// session中存储的KV键值对
 	public static final String S_USER = "user";
@@ -37,14 +34,14 @@ public class CommonConstants
 	// 请求结果常量
 	public static final String SUCCESS = "success";
 	public static final String FAIL = "failed";
-	
+
 	//加密秘钥
 	public static final String AES_PASSWORD = "hch";
 
 	// admin管理员账号密码
 	public static final String ADMIN_USER = "admin";
 
-	// 语言
+    //语言
     public static final String LANG_ZH = "zh_CN";
     public static final String LANG_EN = "en_US";
     public static final String LANG_KR = "ko_KR";
@@ -55,5 +52,5 @@ public class CommonConstants
 	// 普通用户
 	public static final String USER_TYPE_COMMON = "1";
 
-	public static final int LOCALE_COOKIE_EXPIRE = 20*365*24*60*60;
+    public static final int LOCALE_COOKIE_EXPIRE = 20 * 365 * 24 * 60 * 60;
 }
