@@ -1,15 +1,19 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
+import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
+import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
+import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
+import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
+import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -19,7 +23,6 @@ import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.bean.WangyiNewsBean;
 import com.pjb.springbootjwt.zhddkk.domain.*;
-
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.service.*;
@@ -33,28 +36,20 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
-import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
-import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
-import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
-import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
-import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
-
 /**
- * webSocket控制器
+ * webSocket控制器.
  * 
  * @author Administrator
  *
  */
 @Controller
 @RequestMapping("ws")
-public class WebSocketClientController extends AdminBaseController
-{
+public class WebSocketClientController extends AdminBaseController {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketClientController.class);
 
-    private static Map<String,String> configMap = WsInterceptor.getConfigMap();
+    private static final Map<String, String> configMap = WsInterceptor.getConfigMap();
 
-    private static Map<String,String> chatMappingMap = WsInterceptor.getChatMappingMap();
+    private static final Map<String, String> chatMappingMap = WsInterceptor.getChatMappingMap();
 
     @Autowired
     private RedisUtil redisUtil;
@@ -81,13 +76,13 @@ public class WebSocketClientController extends AdminBaseController
     private WsCommonService wsCommonService;
 
     /**
-     * 退出
+     * 退出.
      *
      */
-    @OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.LOGOUT,subModule="",describe="退出")
-    @RequestMapping(value = "logout.do",method=RequestMethod.POST)
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGOUT, subModule = "", describe = "退出")
+    @RequestMapping(value = "logout.do",method = RequestMethod.POST)
     @ResponseBody
-    public String logout(@RequestParam("user")String user,HttpServletRequest request) {
+    public String logout(@RequestParam("user")String user, HttpServletRequest request) {
         HttpSession httpSession = request.getSession(false);
         System.out.println("退出前SESSION:"+ httpSession.getId());
         httpSession.invalidate();
@@ -95,11 +90,11 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     *聊天页面
+     *聊天页面.
      *
-     * @return
+     * @return 聊天页面
      */
-    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.CHAT,subModule="",describe="聊天首页")
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.CHAT, subModule = "", describe = "聊天首页")
     @RequestMapping(value = "wsclientChat.page")
     public String wsclientChat() {
         logger.debug("访问wsclientChat.page");
@@ -107,7 +102,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 添加好友页面
+     * 添加好友页面.
      *
      * @return
      */
@@ -118,7 +113,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 头部页面
+     * 头部页面.
      *
      * @return
      */
@@ -129,7 +124,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 底部页面
+     * 底部页面.
      *
      * @return
      */
@@ -140,7 +135,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 客户端左侧导航栏页面
+     * 客户端左侧导航栏页面.
      *
      * @return
      */
@@ -151,7 +146,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 服务端左侧导航栏页面
+     * 服务端左侧导航栏页面.
      *
      * @return
      */
@@ -162,7 +157,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 好友列表
+     * 好友列表.
      *
      * @return
      */
@@ -173,11 +168,11 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 我的申请好友页面
+     * 我的申请好友页面.
      *
      * @return
      */
-    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FRIENDS,subModule="",describe="我的申请首页")
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.FRIENDS, subModule = "", describe = "我的申请首页")
     @RequestMapping(value = "myApply.page")
     public String myApply() {
         logger.debug("访问myApply.page");
@@ -185,11 +180,11 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 好友申请列表
+     * 好友申请列表.
      *
      * @return
      */
-    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FRIENDS,subModule="",describe="我好友申请首页")
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.FRIENDS, subModule = "", describe = "我好友申请首页")
     @RequestMapping(value = "friendsApply.page")
     public String friendsApply() {
         logger.debug("访问friendsApply.page");
@@ -197,7 +192,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 朋友圈首页
+     * 朋友圈首页.
      *
      * @return
      */
@@ -209,55 +204,55 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 添加朋友圈
+     * 添加朋友圈.
      *
-     * @param model
-     * @param user
+     * @param model 模型
+     * @param user 用户id
      * @return
      */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.CIRCLE,subModule="",describe="添加朋友圈首页")
     @RequestMapping(value = "wsclientAddCircle.page")
-    public String wsclientAddCircle(Model model,@RequestParam("user")String user) {
+    public String wsclientAddCircle(Model model, @RequestParam("user")String user) {
         logger.debug("访问wsclientAddCircle.page");
         model.addAttribute("user", user);
         return "ws/wsclientAddCircle";
     }
 
     /**
-     * 设置个人信息
+     * 设置个人信息.
      *
      * @return
      */
     @RequestMapping(value = "setPersonalInfo.page")
-    public String setPersonalInfo(Model model,@RequestParam("user")String user) {
+    public String setPersonalInfo(Model model, @RequestParam("user")String user) {
         logger.debug("访问setPersonalInfo.page");
         model.addAttribute("user", user);
         return "ws/setPersonalInfo";
     }
 
     /**
-     * 显示用户信息
+     * 显示用户信息.
      *
-     * @param model
-     * @param user
+     * @param model 模型
+     * @param user 用户id
      * @return
      */
     @RequestMapping(value = "showPersonalInfo.page")
-    public String showPersonalInfo(Model model,@RequestParam("user")String user) {
+    public String showPersonalInfo(Model model, @RequestParam("user")String user) {
         logger.debug("访问showPersonalInfo.page");
         model.addAttribute("user", user);
         return "ws/showPersonalInfo";
     }
 
     /**
-     * 获取在线人数信息
+     * 获取在线人数信息.
      *
      * @return
      */
     @RequestMapping(value = "getOnlineInfo.json")
     @ResponseBody
-    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value="user",required=true)String user) {
-        if (StringUtils.isBlank(user)){
+    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value="user", required=true)String user) {
+        if (StringUtils.isBlank(user)) {
             return Result.fail(new WsOnlineInfo());
         }
         Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
@@ -288,8 +283,8 @@ public class WebSocketClientController extends AdminBaseController
 
         //我的好友列表
         List<WsUsersDO> friendsUserList = wsUsersService.queryMyFriendList(currentOnlineUserInfo.getId());
-        List<WsUsersDO> offLineFriendList = friendsUserList.stream().filter(wu->wu !=null && wu.getState().equals("0")).collect(Collectors.toList());
-        List<WsUsersDO> onineFriendList = friendsUserList.stream().filter(wu->wu !=null && wu.getState().equals("1")).collect(Collectors.toList());
+        List<WsUsersDO> offLineFriendList = friendsUserList.stream().filter(wu -> wu != null && wu.getState().equals("0")).collect(Collectors.toList());
+        List<WsUsersDO> onineFriendList = friendsUserList.stream().filter(wu -> wu != null && wu.getState().equals("1")).collect(Collectors.toList());
 
         WsOnlineInfo woi = new WsOnlineInfo();
         woi.setOfflineCount(offlineUserList.size());
@@ -321,10 +316,10 @@ public class WebSocketClientController extends AdminBaseController
         int curPage = 1;
         String curUser = params.getName();
         int totalPage = 1;
-        if (totalCount % numPerPage != 0){
-            totalPage = totalCount/numPerPage+1;
-        }else{
-            totalPage = totalCount/numPerPage;
+        if (totalCount % numPerPage != 0) {
+            totalPage = totalCount / numPerPage + 1;
+        } else {
+            totalPage = totalCount / numPerPage;
         }
         if (totalPage == 0) {
             totalPage = 1;
@@ -335,7 +330,7 @@ public class WebSocketClientController extends AdminBaseController
         Page<WsUsersDO> userPage = wsUsersService.selectPage(queryPage,
                     new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER).orderBy("last_login_time", false));
 
-        if (null != userPage){
+        if (null != userPage) {
             userlist = userPage.getRecords();
         }
         if (null != userlist && userlist.size()>0) {
@@ -348,26 +343,26 @@ public class WebSocketClientController extends AdminBaseController
                 int isMyFriend = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>()
                     .eq("uname", curUser).eq("fname", wu.getName()));
                 if (isMyFriend>0) {
-                    wu.setIsFriend(3);//已是好友
-                }else {
+                    wu.setIsFriend(3); //已是好友
+                } else {
                     // 0:不是  1:申请中 2:被拒绝 3:申请成功
                     WsFriendsApplyDO wfa = new WsFriendsApplyDO();
                     wfa.setFromName(curUser);
                     wfa.setToName(wu.getName());
                     List<WsFriendsApplyDO> applyList = new ArrayList<>();
-                    Page<WsFriendsApplyDO> wsFriendsApplyDOPage = wsFriendsApplyService.selectPage(new Page<>(curPage, numPerPage),
+                    Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(new Page<>(curPage, numPerPage),
                         new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUser)
                         .eq("to_name", wu.getName()));
-                    if (null != wsFriendsApplyDOPage){
-                        applyList = wsFriendsApplyDOPage.getRecords();
+                    if (null != wsFriendsApplyDoPage) {
+                        applyList = wsFriendsApplyDoPage.getRecords();
                     }
                     //List<WsFriendsApply> applyList = wsService.queryFriendsApplyList(wfa);
                     if (null == applyList || applyList.size() == 0) {
                         wu.setIsFriend(0);//去申请
-                    }else if (applyList.size() == 1) {
+                    } else if (applyList.size() == 1) {
                         Integer processStatus = applyList.get(0).getProcessStatus();
-                        wu.setIsFriend(processStatus);// 1:申请中 2:被拒绝 3:申请成功
-                    }else if (applyList.size() > 1) {
+                        wu.setIsFriend(processStatus); // 1:申请中 2:被拒绝 3:申请成功
+                    } else {
                         // 过滤掉被驳回的记录
                         for (WsFriendsApplyDO temp :  applyList) {
                             if (temp.getProcessStatus() == 2) {
@@ -388,17 +383,17 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     *分页 获取好友申请列表
+     *分页 获取好友申请列表.
      *
      * true:存在  false:不存在
      */
     @RequestMapping(value="getFriendsApplyList.json",method=RequestMethod.GET)
     @ResponseBody
-    public Object getFriendsApplyList(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage,@RequestParam("curUser") String curUser) {
+    public Object getFriendsApplyList(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage, @RequestParam("curUser") String curUser) {
         int totalCount = wsFriendsApplyService.selectCount(new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
         int totalPage = 1;
         if (totalCount % numPerPage != 0) {
-            totalPage = totalCount/numPerPage + 1;
+            totalPage = totalCount / numPerPage + 1;
         } else {
             totalPage = totalCount / numPerPage;
         }
@@ -415,10 +410,10 @@ public class WebSocketClientController extends AdminBaseController
         }
 
         List<WsFriendsApplyDO> userlist = new ArrayList<>();
-        Page<WsFriendsApplyDO> wsFriendsApplyDOPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
+        Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
                 new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
-        if (null != wsFriendsApplyDOPage){
-            userlist = wsFriendsApplyDOPage.getRecords();
+        if (null != wsFriendsApplyDoPage) {
+            userlist = wsFriendsApplyDoPage.getRecords();
         }
 
         PageResponseEntity rqe = new PageResponseEntity();
@@ -431,17 +426,17 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     *分页 我的申请记录
+     *分页 我的申请记录.
      *
      * true:存在  false:不存在
      */
-    @RequestMapping(value="getMyApplyList.json",method=RequestMethod.GET)
+    @RequestMapping(value="getMyApplyList.json", method=RequestMethod.GET)
     @ResponseBody
     public Object getMyApplyList(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage,@RequestParam("curUser") String curUser) {
         int totalCount = wsFriendsApplyService.selectCount(new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
         int totalPage = 1;
         if (totalCount % numPerPage != 0) {
-            totalPage = totalCount/numPerPage + 1;
+            totalPage = totalCount / numPerPage + 1;
         } else {
             totalPage = totalCount / numPerPage;
         }
@@ -458,10 +453,10 @@ public class WebSocketClientController extends AdminBaseController
         }
 
         List<WsFriendsApplyDO> userlist = new ArrayList<>();
-        Page<WsFriendsApplyDO> wsFriendsApplyDOPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
+        Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
                 new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUser));
-        if (null != wsFriendsApplyDOPage){
-            userlist = wsFriendsApplyDOPage.getRecords();
+        if (null != wsFriendsApplyDoPage) {
+            userlist = wsFriendsApplyDoPage.getRecords();
         }
 
         PageResponseEntity rqe = new PageResponseEntity();
@@ -474,20 +469,20 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 添加好友申请
+     * 添加好友申请.
      *
      */
-    @RequestMapping(value = "addFriend.do",method=RequestMethod.POST)
+    @RequestMapping(value = "addFriend.do", method=RequestMethod.POST)
     @ResponseBody
     public String addFriend(Model model,@RequestParam("fromUserName")String fromUserName,
                                         @RequestParam("toUserId")Integer toUserId) {
         Integer fromUserId = querySpecityUserName(fromUserName).getId();
         String toUserName = querySpecityUserId(toUserId).getName();
 
-        logger.info(fromUserName+"申请添加"+toUserName+"为好友");
+        logger.info(fromUserName + "申请添加" + toUserName + "为好友");
         int existCount = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", fromUserName)
                 .eq("fname", toUserName));
-        if (existCount<=0) {
+        if (existCount <= 0) {
             WsFriendsApplyDO wfa = new WsFriendsApplyDO();
             wfa.setFromId(fromUserId);
             wfa.setFromName(fromUserName);
@@ -495,25 +490,25 @@ public class WebSocketClientController extends AdminBaseController
             wfa.setToName(toUserName);
             wfa.setProcessStatus(1);
             wsFriendsApplyService.insert(wfa);
-        }else{
-            logger.info(toUserName+"已是你的好友了,无需再次申请");
+        } else {
+            logger.info(toUserName + "已是你的好友了,无需再次申请");
         }
         return CommonConstants.SUCCESS;
     }
 
     /**
-     * 同意好友申请
+     * 同意好友申请.
      *
      */
-    @RequestMapping(value = "agreeFriend.do",method=RequestMethod.POST)
+    @RequestMapping(value = "agreeFriend.do",method = RequestMethod.POST)
     @ResponseBody
     @Transactional
     public String agreeFriend(@RequestParam("recordId")Integer recordId) {
         WsFriendsApplyDO wfa = wsFriendsApplyService.selectById(recordId);
-        if (null == wfa){
+        if (null == wfa) {
             return CommonConstants.FAIL;
         }
-        if (wfa.getProcessStatus().intValue() != 1){
+        if (wfa.getProcessStatus().intValue() != 1) {
             return CommonConstants.FAIL;
         }
 
@@ -527,7 +522,7 @@ public class WebSocketClientController extends AdminBaseController
             wf1.setFname(wfa.getToName());
             int isExist1 = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>()
                 .eq("uname", wfa.getFromName()).eq("fname", wfa.getToName()));
-            if (isExist1<=0) {
+            if (isExist1 <= 0) {
                 wsFriendsService.insert(wf1);
             }
 
@@ -538,7 +533,7 @@ public class WebSocketClientController extends AdminBaseController
             wf2.setFname(wfa.getFromName());
             int isExist2 = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>()
                     .eq("uname", wfa.getToName()).eq("fname", wfa.getFromName()));
-            if (isExist2<=0) {
+            if (isExist2 <= 0) {
                 wsFriendsService.insert(wf2);
             }
         }
@@ -549,20 +544,20 @@ public class WebSocketClientController extends AdminBaseController
      * 拒绝好友申请
      *
      */
-    @RequestMapping(value = "deagreeFriend.do",method=RequestMethod.POST)
+    @RequestMapping(value = "deagreeFriend.do",method = RequestMethod.POST)
     @ResponseBody
     public String deagreeFriend(Model model,@RequestParam("recordId")Integer recordId) {
         WsFriendsApplyDO wfa = wsFriendsApplyService.selectById(recordId);
-        if (null == wfa){
+        if (null == wfa) {
             return CommonConstants.FAIL;
         }
-        if (wfa.getProcessStatus().intValue() != 1){
+        if (wfa.getProcessStatus().intValue() != 1) {
             return CommonConstants.FAIL;
         }
 
         wfa.setProcessStatus(2);
         boolean updateFlag = wsFriendsApplyService.updateById(wfa);
-        if (updateFlag){
+        if (updateFlag) {
             return CommonConstants.SUCCESS;
         }
 
@@ -573,18 +568,18 @@ public class WebSocketClientController extends AdminBaseController
      * 删除好友
      *
      */
-    @RequestMapping(value = "deleteFriend.do",method=RequestMethod.POST)
+    @RequestMapping(value = "deleteFriend.do",method = RequestMethod.POST)
     @ResponseBody
     public String deleteFriend(@RequestParam("id")Integer id) {
         WsFriendsDO wsFriendsDO = wsFriendsService.selectById(id);
-        if (null == wsFriendsDO){
+        if (null == wsFriendsDO) {
             return CommonConstants.FAIL;
         }
 
         String uname = wsFriendsDO.getUname();
         String fname = wsFriendsDO.getFname();
 
-        logger.info("uname:"+uname+"   fname:"+fname);
+        logger.info("uname:" + uname + "   fname:" + fname);
         if (StringUtils.isNotEmpty(uname) && StringUtils.isNotEmpty(fname)) {
             wsFriendsService.delete(new EntityWrapper<WsFriendsDO>().eq("uname", uname).eq("fname", fname));
             wsFriendsService.delete(new EntityWrapper<WsFriendsDO>().eq("uname", fname).eq("fname", uname));
@@ -599,7 +594,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 查看朋友圈列表
+     * 查看朋友圈列表.
      *
      */
     @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.CIRCLE,subModule="",describe="查看朋友圈列表")
@@ -613,7 +608,7 @@ public class WebSocketClientController extends AdminBaseController
         Map<Integer, String> headImgMap = new HashMap<>();
         if (null != circleList && circleList.size()>0) {
             for (WsCircleDO wc : circleList) {
-                if (!headImgMap.containsKey(wc.getUserId())){
+                if (!headImgMap.containsKey(wc.getUserId())) {
                     WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", wc.getUserId()));
                     if (null != wsUserProfileDO) {
                         headImgMap.put(wc.getUserId(), wsUserProfileDO.getImg());
@@ -636,20 +631,20 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 评论朋友圈
+     * 评论朋友圈.
      *
      */
     @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.CIRCLE,subModule="",describe="评论朋友圈")
-    @RequestMapping(value = "toComment.do",method=RequestMethod.POST)
+    @RequestMapping(value = "toComment.do", method=RequestMethod.POST)
     @ResponseBody
     public Result<String> toComment(@RequestParam("user")String user,@RequestParam("circleId")Integer circleId,@RequestParam("comment")String comment) {
         WsCircleDO wsCircleDO = wsCircleService.selectById(circleId);
-        if (null == wsCircleDO){
+        if (null == wsCircleDO) {
             return Result.fail();
         }
 
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-        if (null == wsUsersDO){
+        if (null == wsUsersDO) {
             return Result.fail();
         }
 
@@ -660,28 +655,28 @@ public class WebSocketClientController extends AdminBaseController
         wcc.setComment(comment);
         wcc.setCreateTime(new Date());
         boolean insertFlag = wsCircleCommentService.insert(wcc);
-        if (insertFlag){
+        if (insertFlag) {
             return Result.ok();
         }
         return Result.fail();
     }
 
     /**
-     * 新增朋友圈
+     * 新增朋友圈.
      *
      */
     @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.CIRCLE,subModule="",describe="新增朋友圈")
-    @RequestMapping(value = "addCircle.do",method=RequestMethod.POST)
+    @RequestMapping(value = "addCircle.do", method=RequestMethod.POST)
     @ResponseBody
     @Transactional
     public Result<String> addCircle(@RequestParam("user")String user,
                             @RequestParam("content")String content,
-                            @RequestParam(value="circleImgFile1",required=false) String circleImgFile1,
-                            @RequestParam(value="circleImgFile2",required=false) String circleImgFile2,
-                            @RequestParam(value="circleImgFile3",required=false) String circleImgFile3,
-                            @RequestParam(value="circleImgFile4",required=false) String circleImgFile4) {
+                            @RequestParam(value = "circleImgFile1", required = false) String circleImgFile1,
+                            @RequestParam(value = "circleImgFile2", required = false) String circleImgFile2,
+                            @RequestParam(value = "circleImgFile3", required = false) String circleImgFile3,
+                            @RequestParam(value = "circleImgFile4", required = false) String circleImgFile4) {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-        if (null == wsUsersDO){
+        if (null == wsUsersDO) {
             return Result.fail();
         }
         //增加积分
@@ -689,7 +684,7 @@ public class WebSocketClientController extends AdminBaseController
         Date dayEnd = TimeUtil.getDayEnd(new Date());
         int circleCnt = wsCircleService.selectCount(new EntityWrapper<WsCircleDO>().eq("user_id", wsUsersDO.getId())
                 .ge("create_time", dayStart).le("create_time", dayEnd));
-        if (circleCnt == 0){
+        if (circleCnt == 0) {
             wsUsersDO.setCoinNum(wsUsersDO.getCoinNum()+15);
             wsUsersService.updateById(wsUsersDO);
         }
@@ -705,89 +700,89 @@ public class WebSocketClientController extends AdminBaseController
         wc.setPic3(circleImgFile3);
         wc.setPic4(circleImgFile4);
         boolean insertFlag = wsCircleService.insert(wc);
-        if (insertFlag){
+        if (insertFlag) {
             return Result.ok();
         }
         return Result.fail();
     }
 
     /**
-     * 点赞朋友圈
+     * 点赞朋友圈.
      *
      */
-    @OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.CIRCLE,subModule="",describe="点赞朋友圈")
-    @RequestMapping(value = "toLike.do",method=RequestMethod.POST)
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.CIRCLE, subModule = "", describe = "点赞朋友圈")
+    @RequestMapping(value = "toLike.do", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> toLike(@RequestParam("user")String user,@RequestParam("circleId")Integer circleId) {
+    public Result<String> toLike(@RequestParam("user")String user, @RequestParam("circleId")Integer circleId) {
         WsCircleDO wsCircleDO = wsCircleService.selectById(circleId);
-        if (null == wsCircleDO){
+        if (null == wsCircleDO) {
             return Result.fail();
         }
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-        if (null == wsUsersDO){
+        if (null == wsUsersDO) {
             return Result.fail();
         }
         int likeNum = wsCircleDO.getLikeNum();
-        wsCircleDO.setLikeNum(likeNum+1);
+        wsCircleDO.setLikeNum(likeNum + 1);
         boolean updateFlag = wsCircleService.updateById(wsCircleDO);
-        if (updateFlag){
+        if (updateFlag) {
             return Result.ok();
         }
         return Result.fail();
     }
 
     /**
-     * 删除朋友圈
+     * 删除朋友圈.
      *
      */
-    @OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.CIRCLE,subModule="",describe="删除朋友圈")
+    @OperationLogAnnotation(type = OperationEnum.DELETE, module = ModuleEnum.CIRCLE, subModule = "", describe = "删除朋友圈")
     @RequestMapping(value = "toDeleteCircle.do",method=RequestMethod.POST)
     @ResponseBody
     public Result<String> toDeleteCircle(@RequestParam("id")Integer id) {
         WsCircleDO wsCircleDO = wsCircleService.selectById(id);
-        if (null == wsCircleDO){
+        if (null == wsCircleDO) {
             return Result.fail();
         }
         boolean deleteFlag = wsCircleService.deleteById(id);
-        if (deleteFlag){
+        if (deleteFlag) {
             return Result.ok();
         }
         return Result.fail();
     }
 
     /**
-     * 删除评论
+     * 删除评论.
      *
      */
     @OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.CIRCLE,subModule="",describe="删除朋友圈评论")
-    @RequestMapping(value = "toDeleteComment.do",method=RequestMethod.POST)
+    @RequestMapping(value = "toDeleteComment.do", method=RequestMethod.POST)
     @ResponseBody
     public Result<String> toDeleteComment(@RequestParam("id")Integer id) {
         WsCircleCommentDO wsCircleCommentDO = wsCircleCommentService.selectById(id);
-        if (null == wsCircleCommentDO){
+        if (null == wsCircleCommentDO) {
             return Result.fail();
         }
         boolean deleteFlag = wsCircleCommentService.deleteById(id);
-        if (deleteFlag){
+        if (deleteFlag) {
             return Result.ok();
         }
         return Result.fail();
     }
 
     /**
-     * 获取我的好友列表
+     * 获取我的好友列表.
      *
      * true:存在  false:不存在
      */
     @RequestMapping(value="getMyFriendsList.json",method=RequestMethod.GET)
     @ResponseBody
-    public Object getMyFriendsList(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage,@RequestParam("curUser") String curUser) {
+    public Object getMyFriendsList(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage, @RequestParam("curUser") String curUser) {
         int totalCount = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", curUser));
         int totalPage = 1;
         if (totalCount % numPerPage != 0) {
-            totalPage = totalCount/numPerPage+1;
-        }else {
-            totalPage = totalCount/numPerPage;
+            totalPage = totalCount / numPerPage+1;
+        } else {
+            totalPage = totalCount / numPerPage;
         }
         if (totalPage == 0) {
             totalPage = 1;
@@ -798,13 +793,13 @@ public class WebSocketClientController extends AdminBaseController
         if (curPage == 1) {
             start = 0;
         } else {
-            start = (curPage-1) * numPerPage;
+            start = (curPage - 1) * numPerPage;
         }
 
         List<WsFriendsDO> userlist = new ArrayList<>();
         Page<WsFriendsDO> friendsPage = wsFriendsService.selectPage(new Page<>(curPage, numPerPage),
                     new EntityWrapper<WsFriendsDO>().eq("uname", curUser).orderBy("create_time",false));
-        if (null != friendsPage){
+        if (null != friendsPage) {
             userlist = friendsPage.getRecords();
         }
         PageResponseEntity rqe = new PageResponseEntity();
@@ -817,24 +812,24 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 设置个人信息
+     * 设置个人信息.
      *
      */
-    @RequestMapping(value = "setPersonInfo.do",method=RequestMethod.POST)
+    @RequestMapping(value = "setPersonInfo.do", method=RequestMethod.POST)
     @ResponseBody
-    public String setPersonInfo(@RequestParam(value="userName",required=true) String userName,
-                                @RequestParam(value="realName",required=false) String realName,
-                                @RequestParam(value="headImg",required=false) String headImg,
-                                @RequestParam(value="sign",required=false) String sign,
-                                @RequestParam(value="age",required=false) Integer age,
-                                @RequestParam(value="sex",required=false) Integer sex,
-                                @RequestParam(value="sexText",required=false) String sexText,
-                                @RequestParam(value="tel",required=false) String tel,
-                                @RequestParam(value="address",required=false) String address,
-                                @RequestParam(value="profession",required=false) Integer profession,
-                                @RequestParam(value="professionText",required=false) String professionText,
-                                @RequestParam(value="hobby",required=false) Integer hobby,
-                                @RequestParam(value="hobbyText",required=false) String hobbyText
+    public String setPersonInfo(@RequestParam(value = "userName") String userName,
+                                @RequestParam(value = "realName", required = false) String realName,
+                                @RequestParam(value = "headImg", required = false) String headImg,
+                                @RequestParam(value = "sign", required = false) String sign,
+                                @RequestParam(value = "age", required = false) Integer age,
+                                @RequestParam(value = "sex", required = false) Integer sex,
+                                @RequestParam(value = "sexText", required = false) String sexText,
+                                @RequestParam(value = "tel", required = false) String tel,
+                                @RequestParam(value = "address", required = false) String address,
+                                @RequestParam(value = "profession", required = false) Integer profession,
+                                @RequestParam(value = "professionText", required = false) String professionText,
+                                @RequestParam(value = "hobby", required = false) Integer hobby,
+                                @RequestParam(value = "hobbyText", required = false) String hobbyText
     ) {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
         try {
@@ -858,7 +853,7 @@ public class WebSocketClientController extends AdminBaseController
                 wup.setHobby(hobby);
                 wup.setHobbyText(hobbyText);
                 wsUserProfileService.insert(wup);
-            }else {
+            } else {
                 logger.info("更新个人信息");
                 wsUserProfileDO.setUserName(userName);
                 wsUserProfileDO.setRealName(realName);
@@ -875,7 +870,7 @@ public class WebSocketClientController extends AdminBaseController
                 wsUserProfileDO.setHobbyText(hobbyText);
                 wsUserProfileService.updateById(wsUserProfileDO);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("更新个人信息失败!"+e.getMessage());
             return CommonConstants.FAIL;
         }
@@ -883,11 +878,11 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 查询个人信息
+     * 查询个人信息.
      *
      * @return
      */
-    @RequestMapping(value="queryPersonInfo.json",method=RequestMethod.POST)
+    @RequestMapping(value="queryPersonInfo.json", method=RequestMethod.POST)
     @ResponseBody
     public Object queryPersonInfo(@RequestParam("user") String user) {
         WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>()
@@ -900,50 +895,49 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 查询软件版本
+     * 查询软件版本.
      *
      * @return
      */
     @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.OTHER,subModule="",describe="查询软件版本")
-    @RequestMapping(value="queryVersion.json",method=RequestMethod.GET)
+    @RequestMapping(value="queryVersion.json", method=RequestMethod.GET)
     @ResponseBody
     public Object queryVersion() {
         return configMap.get("version");
     }
 
     /**
-     * 检查版本更新
+     * 检查版本更新.
      * @return
      */
     @OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.OTHER,subModule="",describe="检查版本更新")
-    @RequestMapping(value = "checkUpdate.do",method=RequestMethod.GET)
+    @RequestMapping(value = "checkUpdate.do", method=RequestMethod.GET)
     @ResponseBody
-    public Object checkUpdate(@RequestParam("version")String curVersion,@RequestParam("cmd")String cmd) {
+    public Object checkUpdate(@RequestParam("version")String curVersion, @RequestParam("cmd")String cmd) {
         String shellRootPath = "/root/update/checkupdate.sh";
 
         String result = "";
         try {
-            Process ps = Runtime.getRuntime().exec(shellRootPath+" "+curVersion+" "+cmd);
+            Process ps = Runtime.getRuntime().exec(shellRootPath + " " + curVersion + " " + cmd);
             ps.waitFor();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             String line;
             while ((line = br.readLine()) != null) {
-              sb.append(line).append("\n");
+                sb.append(line).append("\n");
             }
             result = sb.toString();
             System.out.println(result);
             return result;
-          }
-          catch (Exception e) {
-            logger.error("检查/升级版本失败:"+e.getMessage());
+        } catch (Exception e) {
+            logger.error("检查/升级版本失败:" + e.getMessage());
             return "操作失败!可能当前系统是非linux系统";
-          }
+        }
     }
 
     private Map<String,List<WsCommonDO>> buildCommonData() {
-        Map<String,List<WsCommonDO>> commonMap = new HashMap<String,List<WsCommonDO>>();
+        Map<String,List<WsCommonDO>> commonMap = new HashMap<>();
         List<WsCommonDO> commonList = wsCommonService.selectList(null);
 
         for (WsCommonDO common : commonList) {
@@ -957,7 +951,7 @@ public class WebSocketClientController extends AdminBaseController
             if (commonMap.containsKey(type)) {
                 List<WsCommonDO> tmpCommonList = commonMap.get(type);
                 tmpCommonList.add(common);
-            }else {
+            } else {
                 List<WsCommonDO> tmpDicList = new ArrayList<WsCommonDO>();
                 tmpDicList.add(common);
                 commonMap.put(type, tmpDicList);
@@ -968,7 +962,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 根据用户名称查询用户信息
+     * 根据用户名称查询用户信息.
      *
      * @param name
      * @return
@@ -978,7 +972,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 根据用户名称查询用户id
+     * 根据用户名称查询用户id.
      *
      * @return
      */
@@ -987,7 +981,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 移除kookie
+     * 移除kookie.
      * @param request
      */
     @SuppressWarnings("unused")
@@ -1006,22 +1000,22 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 跳转到好友列表页面
+     * 跳转到好友列表页面.
      */
     @GetMapping("myFriends.page")
-    String myFriendsPage(Model model, String user){
+    String myFriendsPage(Model model, String user) {
         model.addAttribute("user", user);
         return "ws/myFriends";
     }
 
     /**
-     * 获取好友列表列表数据
+     * 获取好友列表列表数据.
      */
     @ResponseBody
     @GetMapping("/myFriendsList")
-    public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDTO){
+    public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDTO) {
         Wrapper<WsFriendsDO> wrapper = new EntityWrapper<WsFriendsDO>();
-        if (StringUtils.isNotBlank(wsFriendsDTO.getUname())){
+        if (StringUtils.isNotBlank(wsFriendsDTO.getUname())) {
             wrapper.eq("uname", wsFriendsDTO.getUname());
         }
         Page<WsFriendsDO> qryPage = getPage(WsFriendsDO.class);
@@ -1031,21 +1025,21 @@ public class WebSocketClientController extends AdminBaseController
 
     @ResponseBody
     @GetMapping("/querySessionData")
-    public String querySessionData(String user, HttpServletRequest request){
-        logger.info("查询session数据, user:{}",user);
+    public String querySessionData(String user, HttpServletRequest request) {
+        logger.info("查询session数据, user:{}", user);
         Object sessionUser = "";
         Object sessionPass = "";
         try {
-            SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
+            SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession().getAttribute(CommonConstants.SESSION_INFO);
             sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
             sessionPass = sessionInfoBean == null ? "" : sessionInfoBean.getPassword();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        logger.info("sessionUser:"+sessionUser);
-        logger.info("sessionPass:"+sessionPass);
+        logger.info("sessionUser:" + sessionUser);
+        logger.info("sessionPass:" + sessionPass);
 
-        return sessionUser+":"+sessionPass;
+        return sessionUser + ":" + sessionPass;
     }
 
     /**
@@ -1058,7 +1052,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 与机器人聊天
+     * 与机器人聊天.
      *
      * @param request
      * @param text 人类聊天内容
@@ -1069,7 +1063,7 @@ public class WebSocketClientController extends AdminBaseController
     public String robotChat(HttpServletRequest request, String text) throws InterruptedException {
         for (Map.Entry<String, String> entry: chatMappingMap.entrySet()) {
             String key = entry.getKey();
-            if (key.contains(text) || text.contains(key)){
+            if (key.contains(text) || text.contains(key)) {
                 long sleepTimes = (long) (Math.random() * 150 + 20);
                 System.out.println(sleepTimes);
                 Thread.sleep(sleepTimes);
@@ -1080,7 +1074,7 @@ public class WebSocketClientController extends AdminBaseController
     }
 
     /**
-     * 网易新闻
+     * 网易新闻.
      * @return
      */
     @RequestMapping("/wangyiNews.page")
@@ -1108,9 +1102,9 @@ public class WebSocketClientController extends AdminBaseController
      */
     @RequestMapping("/queryWangyiNewsType")
     @ResponseBody
-    public Result<List<WangyiNewsBean>> queryWangyiNewsType(){
+    public Result<List<WangyiNewsBean>> queryWangyiNewsType() {
         String baseUrl = "https://3g.163.com";
-        String branchUrlFormat = baseUrl+"/touch/reconstruct/article/list/%s";
+        String branchUrlFormat = baseUrl + "/touch/reconstruct/article/list/%s";
         List<WangyiNewsBean> list = new ArrayList<>();
         WangyiNewsBean wyBean1 = new WangyiNewsBean("新闻", "BBM54PGAwangning", String.format(branchUrlFormat, "BBM54PGAwangning"));
         WangyiNewsBean wyBean2 = new WangyiNewsBean("娱乐", "BA10TA81wangning", String.format(branchUrlFormat, "BA10TA81wangning"));
