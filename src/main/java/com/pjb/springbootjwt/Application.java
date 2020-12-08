@@ -1,9 +1,13 @@
 package com.pjb.springbootjwt;
 
+import com.pjb.springbootjwt.common.springbootListener.ClosedListener;
 import com.pjb.springbootjwt.common.springbootListener.FailedListener;
 import com.pjb.springbootjwt.common.springbootListener.StartedListener;
-import com.pjb.springbootjwt.common.springbootListener.ClosedListener;
 import com.pjb.springbootjwt.common.utils.SpringContextHolder;
+import java.io.File;
+import java.net.InetAddress;
+import java.util.Properties;
+import javax.servlet.MultipartConfigElement;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
@@ -21,11 +25,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.MultipartConfigElement;
-import java.io.File;
-import java.net.InetAddress;
-import java.util.Properties;
-
 //自动扫描与当前类的同包以及子包
 @ServletComponentScan
 @EnableTransactionManagement
@@ -42,6 +41,10 @@ public class Application {
 
     private static final String SPRING_TOMCAT_TEMP_WINDOW = "C:\\tomcatTemp";
 
+    /**
+     * main方法.
+     * @param args 參數
+     */
     public static void main(String[] args) {
         SpringApplication sa = new SpringApplication(Application.class);
         sa.addListeners(new StartedListener());
@@ -59,30 +62,29 @@ public class Application {
         InetAddress inetAddress = serverProperties.getAddress();
         String hostAddress = inetAddress.getHostAddress();
         String contextPath = (serverProperties.getServlet().getContextPath() == null ? "" : serverProperties.getServlet().getContextPath());
-        log.info("==================> run at http://"+hostAddress+":" + serverProperties.getPort() + contextPath + "  <==================");
+        log.info("==================> run at http://" + hostAddress + ":" + serverProperties.getPort() + contextPath + "  <==================");
     }
 
     @Bean
-    RestTemplate restTemplate(){
+    RestTemplate restTemplate() {
         return new RestTemplate();
     }
 
     /**
-     * 解决文件上传,临时文件夹被程序自动删除问题
-     *
+     * 解决文件上传,临时文件夹被程序自动删除问题.
      * 文件上传时自定义临时路径
-     * @return
+     * @return MultipartConfigElement
      */
     @Bean
     MultipartConfigElement multipartConfigElement() {
         Properties props = System.getProperties();
         String osName = props.getProperty("os.name");
-        log.info("操作系统的名称:{}",osName);
+        log.info("操作系统的名称:{}", osName);
 
         MultipartConfigFactory factory = new MultipartConfigFactory();
         String tomcatTmpPath = SPRING_TOMCAT_TEMP_LIUNX;
         //2.该处就是指定的路径(需要提前创建好目录，否则上传时会抛出异常)
-        if (osName.contains("windows") || osName.contains("Windows")){
+        if (osName.contains("windows") || osName.contains("Windows")) {
             tomcatTmpPath = SPRING_TOMCAT_TEMP_WINDOW;
         }
 
@@ -93,14 +95,14 @@ public class Application {
             try {
                 File file = new File(tomcatTmpPath);
                 if (!file.exists()) {
-                    if (file.mkdirs()){
+                    if (file.mkdirs()) {
                         log.info("创建临时目录成功");
                         //System.out.println("创建临时目录成功");
                     }
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
-                log.info("创建临时目录异常:{}",e.getMessage());
+                log.info("创建临时目录异常:{}", e.getMessage());
                 //System.out.println("创建临时目录异常:"+e.getMessage());
             }
         }
