@@ -1,25 +1,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="common :: gameHeader"></th:block>
-		<meta charset="utf-8">
-		<title>拼图游戏</title>
-		
-		<style type="text/css">
-			body{
-				margin:0;
+        <meta charset="utf-8">
+        <title>拼图游戏</title>
+
+        <style type="text/css">
+            body{
+                margin:0;
                 padding:0;
-			}
+            }
             
-			span{
-				display:inline-block;
-				margin-left:5px;
-				font-size:15px;
-				width:80px;
-			}
-		</style>
-	</head> 
-	<body>
-		<div id="mainDiv" style="width:985px;height:504px;margin:5px auto;overflow:hidden;border:2px solid green;">
+            span{
+                display:inline-block;
+                margin-left:5px;
+                font-size:15px;
+                width:80px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="mainDiv" style="width:985px;height:504px;margin:5px auto;overflow:hidden;border:2px solid green;">
                 <canvas id="canvas" style="background-color:black;float:left;margin:2px;">
                 </canvas>
                 
@@ -59,9 +59,9 @@
                     </div>
                 </div>
         </div>
-	</body>
-	
-	<script type="text/javascript">
+    </body>
+
+    <script type="text/javascript">
         // 主画布
         var canvas = document.getElementById("canvas");
         canvas.width = 800;
@@ -618,15 +618,15 @@
         
         // 显示帮助
         $("#helpInput").click(function(){
-			var isChecked = $(this).attr("checked");
-			if (isChecked){
-				SHOW_HELP = true;
+            var isChecked = $(this).attr("checked");
+            if (isChecked){
+                SHOW_HELP = true;
                 helpCtx.drawImage(IMAGE,0,0,helpCanvas.width,helpCanvas.height);
-			}else{
+            }else{
                 //helpCtx.clearRect(0,0,helpCanvas.width,helpCanvas.height);
-				SHOW_HELP = false;
-			}
+                SHOW_HELP = false;
+            }
              $("#helpDiv").slideToggle();
         });
-	</script>
+    </script>
 </html>

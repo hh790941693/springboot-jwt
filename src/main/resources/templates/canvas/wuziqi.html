@@ -1,27 +1,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="common :: gameHeader"></th:block>
-		<meta charset="utf-8">
-		<title>五子棋游戏</title>
-		<script type="text/javascript" th:src="@{/js/jquery/newtool.js}"></script>
-	
-		<style type="text/css">
-			body{
-				margin:0;
-                padding:0;
-			}
+    <th:block th:include="common :: gameHeader"></th:block>
+        <meta charset="utf-8">
+        <title>五子棋游戏</title>
+        <script type="text/javascript" th:src="@{/js/jquery/newtool.js}"></script>
 
-			button{
+        <style type="text/css">
+            body{
+                margin:0;
+                padding:0;
+            }
+
+            button{
                 color:white;
-				background-color:green;
-				border-radius:10px 10px;
-			}
-			
-		</style>
-		
-	</head> 
-	<body>
-		<div id="mainDiv" style="width:99%;height:690px;margin:0 auto;overflow:hidden;">
+                background-color:green;
+                border-radius:10px 10px;
+            }
+
+        </style>
+
+    </head>
+    <body>
+        <div id="mainDiv" style="width:99%;height:690px;margin:0 auto;overflow:hidden;">
             <canvas id="canvas" style="background-color:grey;margin:1px;float:left">
             </canvas>
             
@@ -32,24 +32,24 @@
                 </canvas>
             </div>
         </div>
-	</body>
-	
-	<script type="text/javascript">
-		var canvas = document.getElementById("canvas");
-		canvas.width = 860;
-		canvas.height = 660;
-		var ctx = canvas.getContext("2d");
+    </body>
+
+    <script type="text/javascript">
+        var canvas = document.getElementById("canvas");
+        canvas.width = 860;
+        canvas.height = 660;
+        var ctx = canvas.getContext("2d");
         
-		var rightCanvas = document.getElementById("rightCanvas");
-		rightCanvas.width = 220;
-		rightCanvas.height = 620;
-		var rightCtx = rightCanvas.getContext("2d");
+        var rightCanvas = document.getElementById("rightCanvas");
+        rightCanvas.width = 220;
+        rightCanvas.height = 620;
+        var rightCtx = rightCanvas.getContext("2d");
         
         // 缓冲画布
         var bufferCanvas = document.createElement("canvas");
-		bufferCanvas.width = canvas.width;
-		bufferCanvas.height = canvas.height;
-		var bufferCxt = bufferCanvas.getContext("2d");
+        bufferCanvas.width = canvas.width;
+        bufferCanvas.height = canvas.height;
+        var bufferCxt = bufferCanvas.getContext("2d");
 
         var BORDER = 30;
         var DIV_SIZE = 42;
@@ -340,7 +340,7 @@
         }
         
         // 鼠标移动事件
-		$("#canvas").mousemove(function(event){
+        $("#canvas").mousemove(function(event){
             if (!IS_START || IS_GAME_OVER){
                 return;
             }
@@ -372,7 +372,7 @@
                     }
                 }
             }                          
-		})
+        })
         
         // 检查指定位置是否可以放棋
         function checkChessExist(x,y){
@@ -743,11 +743,11 @@
         // 初始化棋盘
         initPanel();
         loadingAnimate();
-		var G_CYCLE=1;
-		function animate(){
-			ctx.clearRect(0,0,canvas.width,canvas.height);
+        var G_CYCLE=1;
+        function animate(){
+            ctx.clearRect(0,0,canvas.width,canvas.height);
             rightCtx.clearRect(0,0,rightCanvas.width,rightCanvas.height);
-			requestAnimationFrame(animate);
+            requestAnimationFrame(animate);
 
             // 绘制棋盘
             ctx.drawImage(bufferCanvas,0,0,canvas.width,canvas.height);
@@ -791,10 +791,10 @@
                 }
             }
             
-			G_CYCLE++;
-		}
-		animate();
-		
+            G_CYCLE++;
+        }
+        animate();
+
         $("#startBtn").click(function(){
             if (!IS_START){
                 IS_START = true;
@@ -807,5 +807,5 @@
             init();
         })
 
-	</script>
+    </script>
 </html>

@@ -1,8 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="common :: header"></th:block>
-	<title></title>
-	<style type="text/css">
+    <title></title>
+    <style type="text/css">
         #mainDiv{
             width:1318px;
             height:720px;
@@ -16,10 +16,10 @@
             border:2px solid green;
         }
 
-		#centerDiv{
-			width:100%;
-			height:85.07%;
-		}
+        #centerDiv{
+            width:100%;
+            height:85.07%;
+        }
 
         #recentNewsDiv{
             width:100%;
@@ -54,35 +54,35 @@
             border:2px solid green;
         }
 
-		#qrDiv{
-			position: fixed;
-			right: 5px;
-			top: 40px;
-			width: 180px;
-			height: 180px;
-		}
-		#qrcodeImg{
-			width: 160px;
-			height: 160px;
-		}
+        #qrDiv{
+            position: fixed;
+            right: 5px;
+            top: 40px;
+            width: 180px;
+            height: 180px;
+        }
+        #qrcodeImg{
+            width: 160px;
+            height: 160px;
+        }
 
-		#musicIframeDiv {
-			position: absolute;
-			width:178px;
-			height:118px;
-			background: black;
-			color: rgb(255%,255%,255%);
-			display: none;
-		}
-		#musicIframeHeader {
-			background: #ddd;
-			cursor: move;
-			font-size:10px;
-		}
+        #musicIframeDiv {
+            position: absolute;
+            width:178px;
+            height:118px;
+            background: black;
+            color: rgb(255%,255%,255%);
+            display: none;
+        }
+        #musicIframeHeader {
+            background: #ddd;
+            cursor: move;
+            font-size:10px;
+        }
 
-		.divShadow{
-			box-shadow: grey 0 0 10px;
-		}
+        .divShadow{
+            box-shadow: grey 0 0 10px;
+        }
     </style>
 </head>
 <body>
@@ -123,34 +123,34 @@
         </div>
     </div>
 
-	<!--右上角 二维码-->
-	<div id="qrDiv" style="display:none">
-		<img id="qrcodeImg">
-	</div>
+    <!--右上角 二维码-->
+    <div id="qrDiv" style="display:none">
+        <img id="qrcodeImg">
+    </div>
 
-	<!--左下角 迷你音乐播放器-->
-	<div id='musicIframeDiv'>
-		<div id='musicIframeHeader'>
-			<span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
-			<button id='resetMusicIframeDivPosBtn' style='display:inline-block;width:30%;color:black;'>复位</button>
-		</div>
-		<iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
-	</div>
+    <!--左下角 迷你音乐播放器-->
+    <div id='musicIframeDiv'>
+        <div id='musicIframeHeader'>
+            <span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
+            <button id='resetMusicIframeDivPosBtn' style='display:inline-block;width:30%;color:black;'>复位</button>
+        </div>
+        <iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
+    </div>
 
-	<!--右下角 广告页面(隐藏) -->
-	<div id="adDiv" style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display: none;">
-		<div id="adBtn" style="style:1px solid red;background-color:#5082b9;padding-left:290px">
-			<button id="closeAd" class='btn btn-sm btn-primary' onclick="closeAd()">关&nbsp;&nbsp;闭</button>
-		</div>
-		<div id="adTitle" style="height:30px;text-align:center;font-size:20px;">
-		</div>
+    <!--右下角 广告页面(隐藏) -->
+    <div id="adDiv" style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display: none;">
+        <div id="adBtn" style="style:1px solid red;background-color:#5082b9;padding-left:290px">
+            <button id="closeAd" class='btn btn-sm btn-primary' onclick="closeAd()">关&nbsp;&nbsp;闭</button>
+        </div>
+        <div id="adTitle" style="height:30px;text-align:center;font-size:20px;">
+        </div>
 
-		<div id="adContent" style="height:auto;text-indent:2em;">
-		</div>
+        <div id="adContent" style="height:auto;text-indent:2em;">
+        </div>
 
-		<div id="adTime" style="height:15px;font-size: 16px;font-weight: bold;position: absolute;right:2px;bottom: 3px;">
-		</div>
-	</div>
+        <div id="adTime" style="height:15px;font-size: 16px;font-weight: bold;position: absolute;right:2px;bottom: 3px;">
+        </div>
+    </div>
 
     <th:block th:include="common :: footer"></th:block>
     <th:block th:include="common :: sessionInfo"></th:block>
@@ -194,21 +194,21 @@
         // 默认显示页:聊天窗口首页
         var curPageid = "ws/wsclientChat.page";
         if (sessionUsertype == '0'){
-			curPageid = "/zhddkk/wsUsers/wsUsersForAdmin";
-		}
+            curPageid = "/zhddkk/wsUsers/wsUsersForAdmin";
+        }
         showPage(curPageid);
         function showPage(pageId) {
-			curPageid = pageId;
-			var url = pageId + "?user="+sessionUser;
-			if (pageId.indexOf("gameIndex.page") != -1){
-				window.location.href = pageId;
-			}else if (pageId.indexOf("canvasIndex.page") != -1) {
-				window.location.href = pageId;
-			}else if (pageId.indexOf("configurationLi") != -1) {
-				$("#configurationDiv").slideDown();
-			}else{
-				$("#iframePage").attr("src", url);
-			}
+            curPageid = pageId;
+            var url = pageId + "?user="+sessionUser;
+            if (pageId.indexOf("gameIndex.page") != -1){
+                window.location.href = pageId;
+            }else if (pageId.indexOf("canvasIndex.page") != -1) {
+                window.location.href = pageId;
+            }else if (pageId.indexOf("configurationLi") != -1) {
+                $("#configurationDiv").slideDown();
+            }else{
+                $("#iframePage").attr("src", url);
+            }
         }
 
         // ---------------------------------以下是供聊天用的全局变量-----------------------
@@ -216,7 +216,7 @@
 
         // 连接状态
         var connectStatus = "0"
-		//重试连接服务器次数
+        //重试连接服务器次数
         var checkCount = 1;
         //最大连接次数
         var checkMaxCount = 20;
@@ -229,11 +229,11 @@
         var unreadCount=0;
 
         function updateChatMsg(msg,color,fontSize){
-        	var newMsg = "<p style='color:"+color+";font-size:"+fontSize+"px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] "+msg+"</p>";
-			var msgFromServerObj = getIframeElement("msgFromServer");
-			var textArea = $(msgFromServerObj).append(newMsg);
-			chatRecord = chatRecord + newMsg;
-			showTips(msg, color);
+            var newMsg = "<p style='color:"+color+";font-size:"+fontSize+"px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] "+msg+"</p>";
+            var msgFromServerObj = getIframeElement("msgFromServer");
+            var textArea = $(msgFromServerObj).append(newMsg);
+            chatRecord = chatRecord + newMsg;
+            showTips(msg, color);
         }
 
         //连接服务器
@@ -241,11 +241,11 @@
             if (connectStatus == "0") {
                 if (checkCount >= checkMaxCount) {
                     if (checkTimer != null && checkTimer != "" && checkTimer != undefined) {
-                    	//达到最大连接数后关闭定时器
+                        //达到最大连接数后关闭定时器
                         clearInterval(checkTimer);
                     }
                 }
-				updateChatMsg("正在连接服务器" +sessionWebserverIp+":"+sessionWebserverport + " [ "+checkCount +" ]"+ "次 请稍等..., ", "red", 10);
+                updateChatMsg("正在连接服务器" +sessionWebserverIp+":"+sessionWebserverport + " [ "+checkCount +" ]"+ "次 请稍等..., ", "red", 10);
                 checkCount++;
             }else{
                 if (checkTimer != null && checkTimer != "" && checkTimer != undefined) {
@@ -287,32 +287,32 @@
         function onOpen(event){
             connectStatus = "1";
             var msg = $.ws.i18n("label.connected");
-			updateChatMsg(msg, "green", 10);
+            updateChatMsg(msg, "green", 10);
         }
 
         //连接失败
         function onError(event){
-			updateChatMsg("连接服务器异常!", "red", 10);
+            updateChatMsg("连接服务器异常!", "red", 10);
             connectStatus = "0";
             webSocket = null;
         }
 
         //连接关闭
         function OnClose(event){
-			updateChatMsg("客户端已断开!", "red", 10);
+            updateChatMsg("客户端已断开!", "red", 10);
             connectStatus = "0";
             stop();
         }
 
         //接收消息
         function onMessage(event){
-			var jsonObj = JSON.parse(event.data);
-			var curTime = jsonObj.curTime;
-			var msgFrom = jsonObj.from;
-			var msgTo = jsonObj.to;
-			var typeId = jsonObj.typeId;
-			var typeDesc = jsonObj.typeDesc;
-			var msg = jsonObj.msg;
+            var jsonObj = JSON.parse(event.data);
+            var curTime = jsonObj.curTime;
+            var msgFrom = jsonObj.from;
+            var msgTo = jsonObj.to;
+            var typeId = jsonObj.typeId;
+            var typeDesc = jsonObj.typeDesc;
+            var msg = jsonObj.msg;
 
             var showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+msg;
             var defaultCss = "color:red;font-size:10px;line-height:14px;"
@@ -344,7 +344,7 @@
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 chatRecord = chatRecord + htmlData;
                 unreadCount = unreadCount+1;
-				$("#leftNaviIframePage").contents().find("#unreadCountSpan").text(unreadCount);
+                $("#leftNaviIframePage").contents().find("#unreadCountSpan").text(unreadCount);
             }else{
                 var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
                 var msgFromServerObj = getIframeElement("msgFromServer");
@@ -403,7 +403,7 @@
 
         adjustMusicWindowPosition();
         //音乐播放器可拖动代码
-		$.ws.dragPanelMove("#musicIframeHeader","#musicIframeDiv");
+        $.ws.dragPanelMove("#musicIframeHeader","#musicIframeDiv");
 
         //窗口大小变化事件
         $(window).resize(function () {
@@ -411,46 +411,46 @@
         });
 
         //footer内的提示语
-		function showTips(msg,color){
-			$("#footerIframePage").contents().find("#statusTips").css("color",color);
-			$("#footerIframePage").contents().find("#statusTips").html(msg);
-		}
+        function showTips(msg,color){
+            $("#footerIframePage").contents().find("#statusTips").css("color",color);
+            $("#footerIframePage").contents().find("#statusTips").html(msg);
+        }
 
-		//扫码登录
-		function showQRCode(){
-			var imgSrc = $("#qrcodeImg").attr("src");
-			if (imgSrc == "" || imgSrc == undefined){
-				$.ajax({
-					type: 'POST',
-					url: rootUrl+'/showQRCode.do',
-					//dataType: 'json',
-					async:false,
-					success: function(result) {
-						$("#qrDiv").css("display","block");
-						$("#qrcodeImg").css("display","block");
-						$("#qrcodeImg").attr("src",result);
-					}
-				});
-			}else{
-				$("#qrcodeImg").attr("src","");
-				$("#qrDiv").css("display","none");
-				$("#qrcodeImg").css("display","none");
-			}
-		};
+        //扫码登录
+        function showQRCode(){
+            var imgSrc = $("#qrcodeImg").attr("src");
+            if (imgSrc == "" || imgSrc == undefined){
+                $.ajax({
+                    type: 'POST',
+                    url: rootUrl+'/showQRCode.do',
+                    //dataType: 'json',
+                    async:false,
+                    success: function(result) {
+                        $("#qrDiv").css("display","block");
+                        $("#qrcodeImg").css("display","block");
+                        $("#qrcodeImg").attr("src",result);
+                    }
+                });
+            }else{
+                $("#qrcodeImg").attr("src","");
+                $("#qrDiv").css("display","none");
+                $("#qrcodeImg").css("display","none");
+            }
+        };
 
-		//设置个人信息
-		function setPersonInfoBtn(){
-			layer.open({
-				type: 2,
-				title: '设置个人信息',
-				shadeClose: true,
-				shade: 0.2,
-				area: ['390px', '500px'],
-				content: '/zhddkk/wsUsers/setPersonalInfo.page?user='+sessionUser
-			});
-		};
+        //设置个人信息
+        function setPersonInfoBtn(){
+            layer.open({
+                type: 2,
+                title: '设置个人信息',
+                shadeClose: true,
+                shade: 0.2,
+                area: ['390px', '500px'],
+                content: '/zhddkk/wsUsers/setPersonalInfo.page?user='+sessionUser
+            });
+        };
 
-		//签到
+        //签到
         function sign(){
             $.ajax({
                 type: 'POST',
@@ -476,52 +476,52 @@
             });
         }
 
-		//显示简易音乐播放器(供子iframe调用)
-		function showSimpleMusicPlayer(){
-			var displayStatus = $("#musicIframeDiv").css("display");
-			var leftNaviWidth=$("#leftNaviDiv").width();
-			if (displayStatus == "none"){
-				$("#musicIframeDiv").css("display", "block");
+        //显示简易音乐播放器(供子iframe调用)
+        function showSimpleMusicPlayer(){
+            var displayStatus = $("#musicIframeDiv").css("display");
+            var leftNaviWidth=$("#leftNaviDiv").width();
+            if (displayStatus == "none"){
+                $("#musicIframeDiv").css("display", "block");
                 $("#musicIframeDiv").css("width", leftNaviWidth+"px");
                 $("#musicIframeDiv").css("height", "118px");
-			}else{
-				$("#musicIframeDiv").css("display", "none");
-			}
-		}
+            }else{
+                $("#musicIframeDiv").css("display", "none");
+            }
+        }
 
-		//首页窗口阴影调整
-		var clock = 0;
-		var hPos = 0;
-		var vPos = 0;
-		var setpIntevel = 12;
-		var shadowColor = "grey";
-		setInterval(function () {
-			if (clock>=0 && clock<setpIntevel){
-				//右
-				hPos++;
-				$(".divShadow").css("box-shadow",shadowColor+" "+hPos+"px 0 6px");
-			}else if (clock>=setpIntevel && clock<setpIntevel*2){
-				//下
-				hPos--;
-				vPos++;
-				$(".divShadow").css("box-shadow",shadowColor+" "+hPos+"px "+vPos+"px 6px");
-			}else if (clock>=setpIntevel*2 && clock<setpIntevel*3){
-				//左
-				hPos--;
-				vPos--;
-				$(".divShadow").css("box-shadow",shadowColor+" "+hPos+"px "+vPos+"px 6px");
-			}else if (clock>=setpIntevel*3 && clock<setpIntevel*4){
-				//上
-				hPos++;
-				vPos--;
-				$(".divShadow").css("box-shadow",shadowColor+" "+hPos+"px "+vPos+"px 6px");
-			}else if (clock>=setpIntevel*4){
-				clock=0;
-				hPos=0;
-				vPos=0;
-			}
-			clock++;
-		},100);
+        //首页窗口阴影调整
+        var clock = 0;
+        var hPos = 0;
+        var vPos = 0;
+        var setpIntevel = 12;
+        var shadowColor = "grey";
+        setInterval(function () {
+            if (clock>=0 && clock<setpIntevel){
+                //右
+                hPos++;
+                $(".divShadow").css("box-shadow",shadowColor+" "+hPos+"px 0 6px");
+            }else if (clock>=setpIntevel && clock<setpIntevel*2){
+                //下
+                hPos--;
+                vPos++;
+                $(".divShadow").css("box-shadow",shadowColor+" "+hPos+"px "+vPos+"px 6px");
+            }else if (clock>=setpIntevel*2 && clock<setpIntevel*3){
+                //左
+                hPos--;
+                vPos--;
+                $(".divShadow").css("box-shadow",shadowColor+" "+hPos+"px "+vPos+"px 6px");
+            }else if (clock>=setpIntevel*3 && clock<setpIntevel*4){
+                //上
+                hPos++;
+                vPos--;
+                $(".divShadow").css("box-shadow",shadowColor+" "+hPos+"px "+vPos+"px 6px");
+            }else if (clock>=setpIntevel*4){
+                clock=0;
+                hPos=0;
+                vPos=0;
+            }
+            clock++;
+        },100);
 
         //获取最新广告
         queryRecentAdsList();

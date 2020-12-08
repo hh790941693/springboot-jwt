@@ -1,174 +1,174 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="common :: header"></th:block>
-	<title>添加朋友圈</title>
+    <th:block th:include="common :: header"></th:block>
+    <title>添加朋友圈</title>
 
 <style type="text/css">
-	#mainDiv{
-		width:98%;
-		height:420px;
-		border:2px solid green;
-		margin:0 auto;
-		padding:5px;
-	}
-	
-	#form span{
-		width:100px;
-		display:inline-block;
-	}
-	
-	.inputImgClass{
-	
-	}
-	
-	.imgClass{
-	    margin-left:30px;
-	}
-	
-	.imgDiv{
-		padding-left:110px;
-		margin-top:-22px;
-	}
-	
-	hr{
-		margin:6px;
-	}
-	
+    #mainDiv{
+        width:98%;
+        height:420px;
+        border:2px solid green;
+        margin:0 auto;
+        padding:5px;
+    }
+
+    #form span{
+        width:100px;
+        display:inline-block;
+    }
+
+    .inputImgClass{
+
+    }
+
+    .imgClass{
+        margin-left:30px;
+    }
+
+    .imgDiv{
+        padding-left:110px;
+        margin-top:-22px;
+    }
+
+    hr{
+        margin:6px;
+    }
+
 </style>
 </head>
 <body>
-	<div id="mainDiv">
-		<form id="form" method="post" action="/ws/addCircle.do" enctype="multipart/form-data" onsubmit="return beforeSumbit()" target="hidden_frame">
-			<div>
-				<input id="userNameHidden" name="user" th:value="${user}" hidden="hidden">
-			</div>
-			<div>
-				<span>内&nbsp;&nbsp;&nbsp;&nbsp;容:</span>
+    <div id="mainDiv">
+        <form id="form" method="post" action="/ws/addCircle.do" enctype="multipart/form-data" onsubmit="return beforeSumbit()" target="hidden_frame">
+            <div>
+                <input id="userNameHidden" name="user" th:value="${user}" hidden="hidden">
+            </div>
+            <div>
+                <span>内&nbsp;&nbsp;&nbsp;&nbsp;容:</span>
                 <textarea id="contentTa" style="margin-left:10px;" name="content" rows="4" cols="30" placeholder="请输入内容"></textarea>
-			</div>
-			<hr/>
-			<div>
-				<span>图&nbsp;&nbsp;&nbsp;&nbsp;片1:</span>
-			</div>
-			<div class='imgDiv'>
-				<input id="circleImgFile1" name="circleImgFile1" class="inputImgClass" type="hidden">
-				<button type="button" id="imageBtn1" class="layui-btn">
-					<i class="layui-icon">&#xe67c;</i>上传图片
-				</button>
-				<img id="circleImg1" class="imgClass" alt="" width="78px" height="60px" hidden="hidden">
-			</div>
-			<hr/>
-			<div>
-				<span>图&nbsp;&nbsp;&nbsp;&nbsp;片2:</span>
-			</div>
-			<div class='imgDiv'>
-				<input id="circleImgFile2" name="circleImgFile2" class="inputImgClass" type="hidden">
+            </div>
+            <hr/>
+            <div>
+                <span>图&nbsp;&nbsp;&nbsp;&nbsp;片1:</span>
+            </div>
+            <div class='imgDiv'>
+                <input id="circleImgFile1" name="circleImgFile1" class="inputImgClass" type="hidden">
+                <button type="button" id="imageBtn1" class="layui-btn">
+                    <i class="layui-icon">&#xe67c;</i>上传图片
+                </button>
+                <img id="circleImg1" class="imgClass" alt="" width="78px" height="60px" hidden="hidden">
+            </div>
+            <hr/>
+            <div>
+                <span>图&nbsp;&nbsp;&nbsp;&nbsp;片2:</span>
+            </div>
+            <div class='imgDiv'>
+                <input id="circleImgFile2" name="circleImgFile2" class="inputImgClass" type="hidden">
                 <button type="button" id="imageBtn2" class="layui-btn">
                     <i class="layui-icon">&#xe67c;</i>上传图片
                 </button>
-				<img id="circleImg2" class="imgClass" alt="" width="78px" height="60px" hidden="hidden">
-			</div>
-			<hr/>
-			<div>
-				<span>图&nbsp;&nbsp;&nbsp;&nbsp;片3:</span>
-			</div>
-			<div class='imgDiv'>
-				<input id="circleImgFile3" name="circleImgFile3" class="inputImgClass" type="hidden">
+                <img id="circleImg2" class="imgClass" alt="" width="78px" height="60px" hidden="hidden">
+            </div>
+            <hr/>
+            <div>
+                <span>图&nbsp;&nbsp;&nbsp;&nbsp;片3:</span>
+            </div>
+            <div class='imgDiv'>
+                <input id="circleImgFile3" name="circleImgFile3" class="inputImgClass" type="hidden">
                 <button type="button" id="imageBtn3" class="layui-btn">
                     <i class="layui-icon">&#xe67c;</i>上传图片
                 </button>
-				<img id="circleImg3" class="imgClass" alt="" width="78px" height="60px" hidden="hidden">
-			</div>
-			<hr/>
-			<div>
-				<span>图&nbsp;&nbsp;&nbsp;&nbsp;片4:</span>
-			</div>
-			<div class='imgDiv'>
-				<input id="circleImgFile4" name="circleImgFile4" class="inputImgClass" type="hidden">
+                <img id="circleImg3" class="imgClass" alt="" width="78px" height="60px" hidden="hidden">
+            </div>
+            <hr/>
+            <div>
+                <span>图&nbsp;&nbsp;&nbsp;&nbsp;片4:</span>
+            </div>
+            <div class='imgDiv'>
+                <input id="circleImgFile4" name="circleImgFile4" class="inputImgClass" type="hidden">
                 <button type="button" id="imageBtn4" class="layui-btn">
                     <i class="layui-icon">&#xe67c;</i>上传图片
                 </button>
-				<img id="circleImg4" class="imgClass" alt="" width="78px" height="60px" hidden="hidden">
-			</div>
-			<hr/>
-			<div align="center" style='margin-top:20px;'>
-				<button type="submit" class='btn btn-sm btn-success'>提&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交</button>
-			</div>
-		</form>
-		<iframe name="hidden_frame" id="hidden_frame" style='display: none'></iframe>
-	</div>
+                <img id="circleImg4" class="imgClass" alt="" width="78px" height="60px" hidden="hidden">
+            </div>
+            <hr/>
+            <div align="center" style='margin-top:20px;'>
+                <button type="submit" class='btn btn-sm btn-success'>提&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交</button>
+            </div>
+        </form>
+        <iframe name="hidden_frame" id="hidden_frame" style='display: none'></iframe>
+    </div>
 
-	<th:block th:include="common :: footer"></th:block>
-	<th:block th:include="common :: sessionInfo"></th:block>
+    <th:block th:include="common :: footer"></th:block>
+    <th:block th:include="common :: sessionInfo"></th:block>
 </body>
 
-	<script type="text/javascript">
-		var curUser=$('#userNameHidden').val();
-		initUpload();
-		$(".inputImgClass").change(function(){
-			//获取对应的img对象
-			var imgObj = $(this).prev();
-			$(imgObj).attr("src",URL.createObjectURL($(this)[0].files[0]));
-		})
+    <script type="text/javascript">
+        var curUser=$('#userNameHidden').val();
+        initUpload();
+        $(".inputImgClass").change(function(){
+            //获取对应的img对象
+            var imgObj = $(this).prev();
+            $(imgObj).attr("src",URL.createObjectURL($(this)[0].files[0]));
+        })
 
-		function beforeSumbit(){
-			$("#userNameHidden").val(curUser);
-			var content = $("#contentTa").val();
-			if (content == ""){
-				return false;
-			}
-			return true;
-		}
+        function beforeSumbit(){
+            $("#userNameHidden").val(curUser);
+            var content = $("#contentTa").val();
+            if (content == ""){
+                return false;
+            }
+            return true;
+        }
 
-		$("#hidden_frame").load(function(){
-			var text=$(this).contents().find("body").text();
-			if (text.indexOf("操作成功") != -1){
-				layer.msg('新增朋友圈成功');
-				var timeout = 0.7;
-				var index = parent.layer.getFrameIndex(window.name);
-				setTimeout(function(){
-					parent.layer.close(index);
-					parent.refresh();
-				},timeout*1000)
+        $("#hidden_frame").load(function(){
+            var text=$(this).contents().find("body").text();
+            if (text.indexOf("操作成功") != -1){
+                layer.msg('新增朋友圈成功');
+                var timeout = 0.7;
+                var index = parent.layer.getFrameIndex(window.name);
+                setTimeout(function(){
+                    parent.layer.close(index);
+                    parent.refresh();
+                },timeout*1000)
 
-			}else{
-				layer.msg('新增朋友圈失败');
-			}
-		});
+            }else{
+                layer.msg('新增朋友圈失败');
+            }
+        });
 
-		function renderImg(btnName, imgName, inputName){
-			layui.upload.render({
-				elem: '#'+btnName,
-				url: $.ws.uploadUrl,
-				size: 10240,//单位为KB
-				accept: 'images',
-				data: {
-					"user": curUser,
-					"folder": "circle"
-				},
-				before: function () {
-					layer.load();
-				},
-				done: function (r) {
-					layer.closeAll('loading');
-					if (r.code == "1") {
-						$("#"+imgName).attr("src", r.data);
-						$("#"+imgName).show();
-						$("#"+inputName).val(r.data);
-					}
-				},
-				error: function () {
-					layer.closeAll('loading');
-				}
-			});
-		}
+        function renderImg(btnName, imgName, inputName){
+            layui.upload.render({
+                elem: '#'+btnName,
+                url: $.ws.uploadUrl,
+                size: 10240,//单位为KB
+                accept: 'images',
+                data: {
+                    "user": curUser,
+                    "folder": "circle"
+                },
+                before: function () {
+                    layer.load();
+                },
+                done: function (r) {
+                    layer.closeAll('loading');
+                    if (r.code == "1") {
+                        $("#"+imgName).attr("src", r.data);
+                        $("#"+imgName).show();
+                        $("#"+inputName).val(r.data);
+                    }
+                },
+                error: function () {
+                    layer.closeAll('loading');
+                }
+            });
+        }
 
-		function initUpload() {
-			renderImg("imageBtn1", "circleImg1", "circleImgFile1");
-			renderImg("imageBtn2", "circleImg2", "circleImgFile2");
-			renderImg("imageBtn3", "circleImg3", "circleImgFile3");
-			renderImg("imageBtn4", "circleImg4", "circleImgFile4");
-		}
-	</script>
+        function initUpload() {
+            renderImg("imageBtn1", "circleImg1", "circleImgFile1");
+            renderImg("imageBtn2", "circleImg2", "circleImgFile2");
+            renderImg("imageBtn3", "circleImg3", "circleImgFile3");
+            renderImg("imageBtn4", "circleImg4", "circleImgFile4");
+        }
+    </script>
 </html>

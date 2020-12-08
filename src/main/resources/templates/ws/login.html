@@ -12,13 +12,13 @@
         padding: 0;
     }
 
-	#mainDiv{
+    #mainDiv{
         width:350px;
         height:330px;
         /**
          * 水平居中
          */
-		margin: 0 auto;
+        margin: 0 auto;
 
         /**
          *  垂直居中
@@ -27,23 +27,23 @@
         top: 50%;
         margin-top:-175px;
         background-color: #506b7b;
-		box-shadow: grey 10px 6px 10px;
-		border:1px solid grey;
-		background-repeat: no-repeat;
-		background-position: 0px 0px;
-		/**background-image:url("../img/fengjing/fj9.jpg");*/
-	}
+        box-shadow: grey 10px 6px 10px;
+        border:1px solid grey;
+        background-repeat: no-repeat;
+        background-position: 0px 0px;
+        /**background-image:url("../img/fengjing/fj9.jpg");*/
+    }
 
-	#loginForm{
-		padding-left: 38px;
-		padding-top: 30px;
-	}
+    #loginForm{
+        padding-left: 38px;
+        padding-top: 30px;
+    }
 
-	input{
-		border: 0;
-		outline: none;
-		height: 22px;
-	}
+    input{
+        border: 0;
+        outline: none;
+        height: 22px;
+    }
 
     .input-group-addon{
         background-color:#eeeeee;
@@ -58,112 +58,112 @@
         color:white;
     }
 
-	#helpDiv a{
-		font-size:13px;
-	}
+    #helpDiv a{
+        font-size:13px;
+    }
 
-	.errorMsgDiv{
-		width:270px;
-		height:18px;
-		text-align: right;
-	}
+    .errorMsgDiv{
+        width:270px;
+        height:18px;
+        text-align: right;
+    }
 </style>
 </head>
 <body>
-	<div id="mainDiv">
-		<input id="locale" type="hidden" th:value="${locale}">
-		<div style="height:50px;background-color: #428BCA;padding-top: 5px;">
-			<div style="text-align: center;font-size: 30px;color:white;">
-				<p>[[#{web.title}]]</p>
-			</div>
-		</div>
-		<!--二维码登陆-->
-		<div id="phonelogin" style="position:absolute;top:3px;left:2px;font-size: 15px;cursor: pointer;">
-			<span class="fa fa-qrcode fa-3x" th:title="#{btn.qrcode.tips}"></span>
-		</div>
-		<!--选择语言-->
-		<div style="position:absolute;top:6px;right:2px;" th:title="#{select.choose.language}">
-			<select class="selectpicker" data-style="btn-info" data-width="80px">
-				<option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${lang == 'zh_CN'}"></option>
-				<option value="en_US" data-icon="fa fa-dollar" th:text="English" th:selected="${lang == 'en_US'}"></option>
-				<option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${lang == 'ko_KR'}"></option>
-			</select>
-		</div>
-		<img id="backgroundImg" src="../img/fengjing/fj9.jpg" hidden>
-		<form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
-			<div class="input-group margin-bottom-sm">
-				<span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-				<input id="user" name="user" type="text" class="form-control" th:value="${user}" th:placeholder="#{input.user.helper}" autocomplete="off" style="width:227px;">
-			</div>
-			<div class="errorMsgDiv"></div>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-				<input id="pass" name="pass" type="password" class="form-control" th:value="${pass}" th:placeholder="#{input.password.helper}" autocomplete="off"  style="width:227px;">
-			</div>
-			<div class="errorMsgDiv"></div>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="fa fa-briefcase fa-fw"></i></span>
-				<input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}" th:placeholder="#{input.code.helper}" autocomplete="off"  style="width:126px;">
-				<img id="verifyCodeImg" style="margin-left:2px;cursor: pointer;"/>
-			</div>
-			<div class="errorMsgDiv"></div>
-			<div id="helpDiv" style="height:25px;margin-top:10px;">
-				<a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:0;" th:text="#{a.register.label}"></a>
-				<a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;" th:text="#{a.forgetpassword.label}"></a>
-				<a id="showBg" href="javascript:void(0)" onclick="showBackgroundAnimation()" style="text-decoration:none;margin-left:20px;" th:text="#{a.showh5.label}"></a>
-				<a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;" th:text="#{a.playgame.label}"></a>
-			</div>
+    <div id="mainDiv">
+        <input id="locale" type="hidden" th:value="${locale}">
+        <div style="height:50px;background-color: #428BCA;padding-top: 5px;">
+            <div style="text-align: center;font-size: 30px;color:white;">
+                <p>[[#{web.title}]]</p>
+            </div>
+        </div>
+        <!--二维码登陆-->
+        <div id="phonelogin" style="position:absolute;top:3px;left:2px;font-size: 15px;cursor: pointer;">
+            <span class="fa fa-qrcode fa-3x" th:title="#{btn.qrcode.tips}"></span>
+        </div>
+        <!--选择语言-->
+        <div style="position:absolute;top:6px;right:2px;" th:title="#{select.choose.language}">
+            <select class="selectpicker" data-style="btn-info" data-width="80px">
+                <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${lang == 'zh_CN'}"></option>
+                <option value="en_US" data-icon="fa fa-dollar" th:text="English" th:selected="${lang == 'en_US'}"></option>
+                <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${lang == 'ko_KR'}"></option>
+            </select>
+        </div>
+        <img id="backgroundImg" src="../img/fengjing/fj9.jpg" hidden>
+        <form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
+            <div class="input-group margin-bottom-sm">
+                <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                <input id="user" name="user" type="text" class="form-control" th:value="${user}" th:placeholder="#{input.user.helper}" autocomplete="off" style="width:227px;">
+            </div>
+            <div class="errorMsgDiv"></div>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+                <input id="pass" name="pass" type="password" class="form-control" th:value="${pass}" th:placeholder="#{input.password.helper}" autocomplete="off"  style="width:227px;">
+            </div>
+            <div class="errorMsgDiv"></div>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-briefcase fa-fw"></i></span>
+                <input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}" th:placeholder="#{input.code.helper}" autocomplete="off"  style="width:126px;">
+                <img id="verifyCodeImg" style="margin-left:2px;cursor: pointer;"/>
+            </div>
+            <div class="errorMsgDiv"></div>
+            <div id="helpDiv" style="height:25px;margin-top:10px;">
+                <a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:0;" th:text="#{a.register.label}"></a>
+                <a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;" th:text="#{a.forgetpassword.label}"></a>
+                <a id="showBg" href="javascript:void(0)" onclick="showBackgroundAnimation()" style="text-decoration:none;margin-left:20px;" th:text="#{a.showh5.label}"></a>
+                <a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;" th:text="#{a.playgame.label}"></a>
+            </div>
 
-			<div align="center" style="margin-top:10px;">
-				<button id="btnlogin" class='btn btn-success btn-large' type="submit" style="width:130px;margin-right: 15px;">
-					<span class="glyphicon glyphicon-log-in"></span> [[#{page.login.title}]]
-				</button>
-				<a id="securityCheck"><span class="fa fa-toggle-off" style="font-size: 18px;"></span> [[#{checkbox.check.label}]]</a>
-			</div>
-		</form>
+            <div align="center" style="margin-top:10px;">
+                <button id="btnlogin" class='btn btn-success btn-large' type="submit" style="width:130px;margin-right: 15px;">
+                    <span class="glyphicon glyphicon-log-in"></span> [[#{page.login.title}]]
+                </button>
+                <a id="securityCheck"><span class="fa fa-toggle-off" style="font-size: 18px;"></span> [[#{checkbox.check.label}]]</a>
+            </div>
+        </form>
 
-		<div style="position:absolute;width:180px;height:180px;left:360px;top:1px;">
-			<img id="qrImg" style="width:160px;height:160px;display:none;">
-		</div>
-	</div>
+        <div style="position:absolute;width:180px;height:180px;left:360px;top:1px;">
+            <img id="qrImg" style="width:160px;height:160px;display:none;">
+        </div>
+    </div>
 
-	<div id="checkDiv" style="width:200px;height:400px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
-		<div id="checkContentDiv" style="width:100%;height:auto;border:1px solid grey;background-color: #0C0C0C;padding: 5px 0 5px 10px;">
-		</div>
-	</div>
+    <div id="checkDiv" style="width:200px;height:400px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
+        <div id="checkContentDiv" style="width:100%;height:auto;border:1px solid grey;background-color: #0C0C0C;padding: 5px 0 5px 10px;">
+        </div>
+    </div>
 
-	<div id='canvasDiv' style='position:fixed;left:1px;top:1px;width:100%;height:100%;z-index:-1;'>
-		<iframe id="iframePage" width="100%" height="100%"></iframe>
-	</div>
+    <div id='canvasDiv' style='position:fixed;left:1px;top:1px;width:100%;height:100%;z-index:-1;'>
+        <iframe id="iframePage" width="100%" height="100%"></iframe>
+    </div>
 
-	<th:block th:include="common :: footer"></th:block>
+    <th:block th:include="common :: footer"></th:block>
 </body>
 
 <script th:inline="javascript">
-	// 加载国际化
-	$.ws.i18nInit([[${#locale.language}]], [[${#locale.country}]]);
+    // 加载国际化
+    $.ws.i18nInit([[${#locale.language}]], [[${#locale.country}]]);
 
-	var user = "";
-	var checkBeforeLogin = false;
-	var backgroundAnimation = true;
-	$("#user").blur(function(){
-		user = $("#user").val();
-		if (user == ""){
-			layer.tips('用户名不能为空!', '#user', {
-				tips: [2, '#78BA32']
-			});
-		}
-	})
+    var user = "";
+    var checkBeforeLogin = false;
+    var backgroundAnimation = true;
+    $("#user").blur(function(){
+        user = $("#user").val();
+        if (user == ""){
+            layer.tips('用户名不能为空!', '#user', {
+                tips: [2, '#78BA32']
+            });
+        }
+    })
 
-	var pass = "";
-	$("#pass").blur(function(){
-		pass = $("#pass").val();
-		if (pass == "") {
-			layer.tips('密码不能为空!', '#pass', {
-				tips: [2, '#78BA32']
-			});
-		}
-	});
+    var pass = "";
+    $("#pass").blur(function(){
+        pass = $("#pass").val();
+        if (pass == "") {
+            layer.tips('密码不能为空!', '#pass', {
+                tips: [2, '#78BA32']
+            });
+        }
+    });
 
     var verifyCode = "";
     $("#verifyCode").blur(function(){
@@ -175,16 +175,16 @@
         }
     });
 
-	//提交校验
-	$("#loginForm").validate({
-		rules: {
-			user:
+    //提交校验
+    $("#loginForm").validate({
+        rules: {
+            user:
                 {
                     required: true,
                     minlength: 2,
                     maxlength: 10
                 },
-			pass:
+            pass:
                 {
                     required: true,
                     minlength: 3,
@@ -196,15 +196,15 @@
                     minlength: 1,
                     maxlength: 12
                 }
-		},
-		messages:{
-			user:
+        },
+        messages:{
+            user:
                 {
                     required: "请输入用户名",
                     minlength: "至少包含2个字符",
                     maxlength:"最多包含10位字符"
                 },
-			pass:
+            pass:
                 {
                     required: "请输入密码",
                     minlength: "至少包含3个字符",
@@ -216,134 +216,134 @@
                     minlength: "至少包含3个字符",
                     maxlength:"最多包含12位字符"
                 },
-		},
-		errorPlacement:  function (error, element){
-			var inputName = $(element).attr("name");
-			if (inputName == "verifyCode"){
-				error.appendTo(element.parent().next());
-			} else {
-				error.appendTo(element.parent().next());
-			}
-		}
-	});
+        },
+        errorPlacement:  function (error, element){
+            var inputName = $(element).attr("name");
+            if (inputName == "verifyCode"){
+                error.appendTo(element.parent().next());
+            } else {
+                error.appendTo(element.parent().next());
+            }
+        }
+    });
 
-	//注册账号
-	function regist(){
-		layer.open({
-			type: 2,
-			title: '注册账号',
-			shadeClose: true,
-			shade: 0.2,
-			area: ['488px', '439px'],
-			content: 'register.page'
-		});
-	}
+    //注册账号
+    function regist(){
+        layer.open({
+            type: 2,
+            title: '注册账号',
+            shadeClose: true,
+            shade: 0.2,
+            area: ['488px', '439px'],
+            content: 'register.page'
+        });
+    }
 
-	//忘记密码
-	function forgetPassword(){
-		layer.open({
-			type: 2,
-			title: '忘记密码',
-			shadeClose: true,
-			shade: 0.2,
-			area: ['490px', '318px'],
-			content: 'forgetPassword.page?user='+user
-		});
-	}
+    //忘记密码
+    function forgetPassword(){
+        layer.open({
+            type: 2,
+            title: '忘记密码',
+            shadeClose: true,
+            shade: 0.2,
+            area: ['490px', '318px'],
+            content: 'forgetPassword.page?user='+user
+        });
+    }
 
-	//手机登录
-	$("#phonelogin").click(function(){
-		var imgSrc = $("#qrImg").attr("src");
-		if (imgSrc == "" || imgSrc == undefined){
-			$.ajax({
-				type: 'POST',
-				url: rootUrl+'showQRCode.do',
-				//dataType:'json',
-				async:false,
-				success: function(result) {
-					$("#qrImg").css("display","block");
-					$("#qrImg").attr("src",result);
-				}
-			});
-		}else{
-			$("#qrImg").attr("src","");
-			$("#qrImg").css("display","none");
-		}
-	})
+    //手机登录
+    $("#phonelogin").click(function(){
+        var imgSrc = $("#qrImg").attr("src");
+        if (imgSrc == "" || imgSrc == undefined){
+            $.ajax({
+                type: 'POST',
+                url: rootUrl+'showQRCode.do',
+                //dataType:'json',
+                async:false,
+                success: function(result) {
+                    $("#qrImg").css("display","block");
+                    $("#qrImg").attr("src",result);
+                }
+            });
+        }else{
+            $("#qrImg").attr("src","");
+            $("#qrImg").css("display","none");
+        }
+    })
 
-	//关闭/开启动画
+    //关闭/开启动画
     showBackgroundAnimation();
-	function showBackgroundAnimation(){
-		if (backgroundAnimation){
+    function showBackgroundAnimation(){
+        if (backgroundAnimation){
             $("#iframePage").attr("src", "");
             $("#showBg").text($.ws.i18n("a.showh5.label"));
             backgroundAnimation = false;
-		}else{
+        }else{
             $("#iframePage").attr("src", rootUrl+"canvas/snow.page");
-			$("#showBg").text($.ws.i18n("a.hideh5.label"));
+            $("#showBg").text($.ws.i18n("a.hideh5.label"));
             backgroundAnimation = true;
-		}
-	}
-
-	//玩游戏
-	function playGame(){
-		window.location.href = rootUrl + "canvas/canvasIndex.page";
-	}
-
-	//定时滚动登陆页背景图片
-	//$.ws.backgroundImgAnimation("backgroundImg","mainDiv", 3, 10);
-
-	//模拟登录前的检查操作
-	var checkEnvTimer = null;
-	var isCheckFinish = false;
-	var textArr = new Array();
-	function checkEnvironment(){
-		console.log("触发登录前的点击事件");
-		if (!checkBeforeLogin){
-		    return true;
         }
-		$.ajax({
-			type: 'GET',
-			url: rootUrl+'querySystemInfo',
-			async:false,
-			success: function(result) {
-				if (result.code == 1){
-					var data = result.data;
-					textArr = new Array("正在检查系统版本.....",data.osName,
-							"正在检查java版本.....",data.javaVersion,
-							"正在检查java家目录.....",data.javaHome,
-							"正在检查数据库版本.....",data.dbVersion,
-							"正在检查nginx进程状态.....", data.nginxFlag,
-							"正在检查共享目录权限.....",data.shareDir,
-							"正在检查其他事项....","检查完毕",
-							"登录中.........","","","");
-				}
-			}
-		});
-		var text = "";
-		var i = 0;
-		if (null == checkEnvTimer && !isCheckFinish && textArr.length>0) {
-			$("#checkDiv").css("display", "block");
-			checkEnvTimer = setInterval(function () {
-				if (i >= textArr.length) {
-					isCheckFinish = true;
-					if (null != checkEnvTimer) {
-						checkEnvTimer = null;
-						clearInterval(checkEnvTimer);
-						$("#checkDiv").css("display", "none");
-						$("#loginForm").submit();
-					}
-				}else{
-					text += "<span style='height:20px;color:white;display:inline-block;margin-bottom: 5px;'>" + textArr[i] + "</span><br/>";
-					$("#checkContentDiv").html(text);
-				}
-				i++;
-			}, 200);
-		}
-		return isCheckFinish;
-	}
+    }
 
-	// 获取验证码
+    //玩游戏
+    function playGame(){
+        window.location.href = rootUrl + "canvas/canvasIndex.page";
+    }
+
+    //定时滚动登陆页背景图片
+    //$.ws.backgroundImgAnimation("backgroundImg","mainDiv", 3, 10);
+
+    //模拟登录前的检查操作
+    var checkEnvTimer = null;
+    var isCheckFinish = false;
+    var textArr = new Array();
+    function checkEnvironment(){
+        console.log("触发登录前的点击事件");
+        if (!checkBeforeLogin){
+            return true;
+        }
+        $.ajax({
+            type: 'GET',
+            url: rootUrl+'querySystemInfo',
+            async:false,
+            success: function(result) {
+                if (result.code == 1){
+                    var data = result.data;
+                    textArr = new Array("正在检查系统版本.....",data.osName,
+                            "正在检查java版本.....",data.javaVersion,
+                            "正在检查java家目录.....",data.javaHome,
+                            "正在检查数据库版本.....",data.dbVersion,
+                            "正在检查nginx进程状态.....", data.nginxFlag,
+                            "正在检查共享目录权限.....",data.shareDir,
+                            "正在检查其他事项....","检查完毕",
+                            "登录中.........","","","");
+                }
+            }
+        });
+        var text = "";
+        var i = 0;
+        if (null == checkEnvTimer && !isCheckFinish && textArr.length>0) {
+            $("#checkDiv").css("display", "block");
+            checkEnvTimer = setInterval(function () {
+                if (i >= textArr.length) {
+                    isCheckFinish = true;
+                    if (null != checkEnvTimer) {
+                        checkEnvTimer = null;
+                        clearInterval(checkEnvTimer);
+                        $("#checkDiv").css("display", "none");
+                        $("#loginForm").submit();
+                    }
+                }else{
+                    text += "<span style='height:20px;color:white;display:inline-block;margin-bottom: 5px;'>" + textArr[i] + "</span><br/>";
+                    $("#checkContentDiv").html(text);
+                }
+                i++;
+            }, 200);
+        }
+        return isCheckFinish;
+    }
+
+    // 获取验证码
     generateVerifyCode();
     $("#verifyCodeImg").click(generateVerifyCode);
     function generateVerifyCode() {
@@ -359,7 +359,7 @@
         });
     }
 
-	// 勾选登陆前检查事件
+    // 勾选登陆前检查事件
     $("#securityCheck").click(function(){
         if (checkBeforeLogin){
             checkBeforeLogin = false;

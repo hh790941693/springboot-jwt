@@ -1,521 +1,521 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-		<meta charset="utf-8">
-		<title></title>
-		<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js?v=2.1.4}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
-		<script type="text/javascript" th:src="@{/js/jquery/tool.js}"></script>
-		<script type="text/javascript" th:src="@{/js/common/ball.js}"></script>
-		<style type="text/css">
-			.snakeBodyClass{
-				background-color:green;
-			}
-			.snakeHeadClass{
-				background-color:red;
-			}
+        <meta charset="utf-8">
+        <title></title>
+        <script type="text/javascript" th:src="@{/js/jquery/jquery.min.js?v=2.1.4}"></script>
+        <script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
+        <script type="text/javascript" th:src="@{/js/jquery/tool.js}"></script>
+        <script type="text/javascript" th:src="@{/js/common/ball.js}"></script>
+        <style type="text/css">
+            .snakeBodyClass{
+                background-color:green;
+            }
+            .snakeHeadClass{
+                background-color:red;
+            }
             .foodClass{
-				background-color:yellow;
-			}
-			
-			.zidanClass1,.zidanClass2,.zidanClass3,.zidanClass4,.zidanClass5{
-				background-color:black;
-			}
-			
-			.enemyWall{
-				background-color:blue;
-			}
-			
-			.topWallClass{
-			}
-			.rightWallClass{
-			}
-			.bottomWallClass{
-			}
-			.leftWallClass{
-			}
-		</style>
-	</head> 
-	<body>
-		<div id="gameMainDiv" style="width:760px;height:570px;border:2px solid green;margin:5px auto;padding:10px;">
-			<div id="borderDiv" style="width:465px;height:564px;float:left">
-				
-			</div>
-			<div id="controlDiv" style="width:250px;height:544px;border:2px solid grey;float:right">
-				<div id="buttonDiv">
-					<div id="modeDiv" style="padding-left:30px">
-						<input type="radio" value="1" name="mode" checked="checked">简单
-						<input type="radio" value="2" name="mode">中等
-						<input type="radio" value="3" name="mode">困难
-					</div>
-					<br/>
-					<div style="height:23px;padding-left:86px">
-						<button id="btnUp" onclick="up()">上(w)</button>
-					</div>
-					<div style="height:23px;padding-left:50px">
-						<button id="btnLeft" onclick="left()">左(a)</button>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<button id="btnRight" onclick="right()">右(d)</button>
-					</div>
-					<div style="padding-left:86px">
-						<button id="btnDown" onclick="down()">下(s)</button>
-					</div>
-					
-					<br/>
-					<div style="padding-left:10px">
-						<button id="btnShoot" onclick="shoot()">发射(space)</button>
-						
-						<button id="btnKaigua" onclick="kaigua()">开挂(g)</button>
-					</div>
-					
-					<br/>
-					<div style="padding-left:15px">
-						<button id="btnStart" onclick="start()">开始(k)</button>
-						<button id="btnStop" onclick="pause()">暂停(z)</button>
-						<button id="btnRestart" onclick="restart()">重新开始(c)</button>
-					</div>
-					
-					<br/>
-					<div style="padding-left:5px">
-							手机用户点击我进行控制<input type="text">
-					</div>
-				</div>
-			</div>
-		</div>
-	</body>
-	<script type="text/javascript">	
-		// 初始化网格
-		var rowMax = 18;
-		var colMax = 11;
-		var direction = 1; //初始运动方法  1:top  2:right  3:bottom 4:left
-		
-		var maxZidanNum = 3;
-		var curZidanNum = 0;
-		
-		
-		var runTimer = null;
-		
-		// 初始化运动轨迹
-		var moveGpsArr = new Array();
-		var snakeGpsArr = new Array();
-		// 蛇的长度
-		var snakeLength = 0;
-		
-		var isStart = false;
-		var isPause = true;
-		
-		// 游戏模式
-		var gameMode = 1;
-		$("#modeDiv input").each(function (index,obj){
-			$(obj).click(function(){
-				gameMode = $(this).val();
-			})
-		});
-		
-		// 绑定键盘事件
-		$(document).keyup(function(event){
-			var keyCode = event.keyCode;
-			if (keyCode == 75){
-				start();
-			}else if (keyCode == 90){
-				pause();
-			}else if (keyCode == 67){
-				restart();
-			}
-			else if (keyCode == 87 || keyCode == 38){
-				up();
-			}else if (keyCode == 83 || keyCode == 40){
-				down();
-			}else if (keyCode == 65 || keyCode == 37){
-				left();
-			}else if (keyCode == 68 || keyCode == 39){
-				right();
-			}else if (keyCode == 32){
-				shoot();
-			}
-		});
+                background-color:yellow;
+            }
 
-		// 初始化面板,以及蛇的位置和方向
-		initPanel();
-		
-		function initPanel()
-		{
-			for (var k=1;k<=(rowMax*colMax);k++)
-			{
-				var divId = k.toString();
-				var divCon = "<div id='" +divId+ "' style='float:left;width:40px;height:30px;border:1px solid grey;'></div>";
-				$("#borderDiv").append(divCon);
-				//$("#"+divId).text(divId);
-				
-				// 如果是第一行
-				if (k>=1 && k<=colMax){
-					// 第一行
-					$("#"+divId).addClass("topWallClass");
-				}else if (k>=colMax*rowMax-colMax+1 && k<=colMax*rowMax){
-					// 最后一行
-					$("#"+divId).addClass("bottomWallClass");
-				}
-				
-				if (k%colMax==1){
-					// 第一列
-					$("#"+divId).addClass("leftWallClass");
-				}else if (k%colMax==0){
-					// 最后一列
-					$("#"+divId).addClass("rightWallClass");
-				}
-			}
-			// 初始化坦克位置
-			repaitSnake(182);
-		}
+            .zidanClass1,.zidanClass2,.zidanClass3,.zidanClass4,.zidanClass5{
+                background-color:black;
+            }
 
-		function shoot(){
-			// 获取当前子弹数
-			var runZidanNum = $("#borderDiv div[class^='zidanClass']").length;
-			if (runZidanNum >= maxZidanNum){
-				return;
-			}
-			
-			var shootSpeed=100;
-			// 游戏模式
-			if (gameMode==1){
-				shootSpeed = 100;
-			}else if (gameMode==2){
-				speed = 50;
-			}else if (gameMode==3){
-				shootSpeed = 20;
-			}
-			
-			// 获取当前发射头位置
-			//var headDiv = $("#borderDiv div[class='snakeHeadClass']");
-			
-			var zidanGps = getSnakeHeadPosition();
-			var nextZidanGps = null;
-			var ziDanTimer = null;
-			ziDanTimer = setInterval(function(){
-				if ($("#"+zidanGps).hasClass("topWallClass")){
-					if (ziDanTimer != null){
-						clearInterval(ziDanTimer);
-						//console.log("撞墙了,子弹消失:"+zidanGps);
-						
-						// 获取当前子弹的class,并移除它
-						var classStr = $("#"+zidanGps).attr("class");
-						var classArr = classStr.split(" ");
-						for (var i=0;i<classArr.length;i++){
-							if (classArr[i].startsWith("zidanClass")){
-								$("#"+zidanGps).removeClass(classArr[i]);
-							}
-						}
-						return;
-					}
-				}
-				
-				var nextZidanGps = (parseInt(zidanGps) - colMax).toString();
-				if ($("#"+nextZidanGps).hasClass("enemyWall")){
-					
-					$("#"+nextZidanGps).removeClass("enemyWall");
-					if (ziDanTimer != null){
-						clearInterval(ziDanTimer);
-						//console.log("下个位置有敌人,子弹和敌人消失,下个位置为:"+nextZidanGps);
-						
-						// 获取当前子弹的class,并移除它
-						var classStr = $("#"+zidanGps).attr("class");
-						var classArr = classStr.split(" ");
-						for (var i=0;i<classArr.length;i++){
-							if (classArr[i].startsWith("zidanClass")){
-								$("#"+zidanGps).removeClass(classArr[i]);
-							}
-						}
-						return;
-					}
-				}
+            .enemyWall{
+                background-color:blue;
+            }
 
-				var className = "zidanClass"+ (runZidanNum+1).toString();
-				
-				//console.log(className);
-				//$("#borderDiv div").removeClass(className);
-				$("#"+zidanGps).removeClass(className);
-				$("#"+nextZidanGps).addClass(className);
-				
-				zidanGps = nextZidanGps;
-			},shootSpeed);
-		}
-		
+            .topWallClass{
+            }
+            .rightWallClass{
+            }
+            .bottomWallClass{
+            }
+            .leftWallClass{
+            }
+        </style>
+    </head>
+    <body>
+        <div id="gameMainDiv" style="width:760px;height:570px;border:2px solid green;margin:5px auto;padding:10px;">
+            <div id="borderDiv" style="width:465px;height:564px;float:left">
 
-		function isInArray(arr,val){
-			for (var i=0;i<arr.length;i++){
-				if (val == arr[i]){
-					return true;
-				}
-			}
-			
-			return false;
-		}
-		
-		function isInArrayFirst(arr,val){
-			for (var i=0;i<arr.length;i++){
-				if (i==0 && val == arr[i]){
-					return true;
-				}
-			}
-			
-			return false;
-		}
-		
-		function isInArrayLast(arr,val){
-			for (var i=0;i<arr.length;i++){
-				if (i==arr.length-1 && val == arr[i]){
-					return true;
-				}
-			}
-			
-			return false;
-		}
-	
-		// row从1开始
-		function getRowStartNo(row){
-			return colMax*(row-1)+1;
-		}
-		
-		function getRowEndNo(row){
-			return row*colMax;
-		}
-		
-		function getColumnStartNo(col){
-			return col % colMax;
-		}
-		
-		function getColumnEndNo(col){
-			return colMax*(rowMax-1)+col;
-		}
-		
-		function showColor(gps,type){
-			if (type == '' || type == null || type == undefined || type=="body"){
-				$("#" + gps).addClass("snakeBodyClass");
-			}else{
-				$("#" + gps).addClass("snakeHeadClass");
-			}
-		}
-	
-		// 获取蛇头位置
-		function getSnakeHeadPosition(){
-			//var headDiv = $("#borderDiv div[class='snakeHeadClass']");
-			var divObjs = $("#borderDiv div");
-			for (var i=0;i<divObjs.length;i++){
-				if ($(divObjs[i]).hasClass("snakeHeadClass")){
-					var headId = $(divObjs[i]).attr("id");
-					//console.log(headId);
-					
-					return headId;
-				}
-			}
-		}
-		
-		// 重新绘制坦克 headGps头的位置
-		function repaitSnake(headGps){
-			$("#borderDiv div").removeClass("snakeHeadClass").removeClass("snakeBodyClass");
-			$("#"+headGps).addClass("snakeHeadClass");
-			
-			// 坦克身体位置
-			var bodyPosCenter = parseInt(headGps)+colMax;
-			var bodyPosRight = null;
-			var bodyPosLeft = null;
-			if (bodyPosCenter % colMax == 1){
-				bodyPosRight = bodyPosCenter+1;
-			}else if (bodyPosCenter % colMax == 0){
-				bodyPosLeft = bodyPosCenter-1;
-			}else{
-				bodyPosRight = bodyPosCenter+1;
-				bodyPosLeft = bodyPosCenter-1;
-			}
-			$("#"+bodyPosCenter).addClass("snakeBodyClass");
-			if (bodyPosRight != null){
-				$("#"+bodyPosRight).addClass("snakeBodyClass");
-			}
-			if (bodyPosLeft != null){
-				$("#"+bodyPosLeft).addClass("snakeBodyClass");
-			}
-		}
-		
-		// 判断是否撞墙了  1:top  2:right  3:bottom 4:left
-		function isCloseWall(gps){
-			var gpsInt = parseInt(gps);
-			if (direction == 1){
-				if (gpsInt>=1 && gpsInt<=colMax){
-					return true;
-				}
-			}else if (direction == 2){
-				if (gpsInt %colMax == 0){
-					return true;
-				}
-			}else if (direction == 3){
-				var startNo = getRowStartNo(rowMax-1);
-				var endNo = getRowEndNo(rowMax-1);
-				if (gpsInt>=startNo && gpsInt<=endNo){
-					return true;
-				}
-			}else{
-				if (gpsInt % colMax == 1){
-					return true;
-				}
-			}
-			
-			return false;
-		}
-		
-		//初始运动方法  1:top  2:right  3:bottom 4:left
-		function left(){
-			
-			direction = 4;
-			
-			// 判断当前蛇头是不是在最左边的墙
-			var headGps = getSnakeHeadPosition();
-			if (isCloseWall(headGps)){
-				console.log("撞到了左边墙");
-				return;
-			}
-			
-			var nextHeadGps = (parseInt(headGps)-1);
-			repaitSnake(nextHeadGps);
-		}
-		
-		function right(){
-			direction = 2;
-			
-			// 判断当前蛇头是不是在最左边的墙
-			var headGps = getSnakeHeadPosition();
-			if (isCloseWall(headGps)){
-				console.log("撞到了右边墙");
-				return;
-			}
-			
-			var nextHeadGps = (parseInt(headGps)+1);
-			repaitSnake(nextHeadGps);
-		}
-		
-		//初始运动方法  1:top  2:right  3:bottom 4:left
-		function up(){
-			direction = 1;
-			
-			// 判断当前蛇头是不是在最左边的墙
-			var headGps = getSnakeHeadPosition();
-			if (isCloseWall(headGps)){
-				console.log("撞到了上边墙");
-				return;
-			}
-			
-			var nextHeadGps = (parseInt(headGps)-colMax);
-			repaitSnake(nextHeadGps);
+            </div>
+            <div id="controlDiv" style="width:250px;height:544px;border:2px solid grey;float:right">
+                <div id="buttonDiv">
+                    <div id="modeDiv" style="padding-left:30px">
+                        <input type="radio" value="1" name="mode" checked="checked">简单
+                        <input type="radio" value="2" name="mode">中等
+                        <input type="radio" value="3" name="mode">困难
+                    </div>
+                    <br/>
+                    <div style="height:23px;padding-left:86px">
+                        <button id="btnUp" onclick="up()">上(w)</button>
+                    </div>
+                    <div style="height:23px;padding-left:50px">
+                        <button id="btnLeft" onclick="left()">左(a)</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button id="btnRight" onclick="right()">右(d)</button>
+                    </div>
+                    <div style="padding-left:86px">
+                        <button id="btnDown" onclick="down()">下(s)</button>
+                    </div>
 
-		}
-		
-		//初始运动方法  1:top  2:right  3:bottom 4:left
-		function down(){
-			direction = 3;
-			
-			// 判断当前蛇头是不是在最左边的墙
-			var headGps = getSnakeHeadPosition();
-			if (isCloseWall(headGps)){
-				console.log("撞到了下边墙");
-				return;
-			}
-			
-			var nextHeadGps = (parseInt(headGps)+colMax);
-			repaitSnake(nextHeadGps);
-		}
-		
-		function randomNumber(start,end){
-			var w = end-start-1;
-			return Math.round(Math.random()*w+start+1);
-		}
+                    <br/>
+                    <div style="padding-left:10px">
+                        <button id="btnShoot" onclick="shoot()">发射(space)</button>
 
-		// 初始化敌人炸弹
-		var enemyWallTimer = null;
-		function start(){
-			//enemyWall
-			if (enemyWallTimer!=null){
-				return;
-			}
-			var speed=3000;
-			// 游戏模式
-			if (gameMode==1){
-				speed = 2000;
-			}else if (gameMode==2){
-				speed = 1000;
-			}else if (gameMode==3){
-				speed = 400;
-			}
-			
-			enemyWallTimer = setInterval(function(){
-				for (var i=colMax*rowMax;i>=1;i--){
-					if ($("#"+i).hasClass("enemyWall")){
-						if ($("#"+i).hasClass("bottomWallClass") || $("#"+i).hasClass("snakeHeadClass") || $("#"+i).hasClass("snakeBodyClass")){
-							//游戏结束
-							alert("游戏结束");
-							if (enemyWallTimer != null){
-								clearInterval(enemyWallTimer);
-								return;
-							}
-						}
-	
-						var nextEnemyIndex = i+colMax;
-						$("#"+nextEnemyIndex).addClass("enemyWall");
-						$("#"+i).removeClass("enemyWall");
-					}
-				}
-				
-				//随机生成炸弹数
-				var enemyRowNo = randomNumber(colMax/2+1,colMax);
-				while (enemyRowNo>0){
-					var divIdIndex = randomNumber(0,colMax);
-					if ($("#"+divIdIndex).hasClass("enemyWall")){
-						continue;	
-					}else{
-						$("#"+divIdIndex).addClass("enemyWall");
-						enemyRowNo--;
-					}
-				}
-				//for (var x=1;x<=enemyRowNo;x++){
-				//	if ($("#"+x).hasClass("enemyWall")){
-				//		x--;	
-				//	}else{
-				//		$("#"+x).addClass("enemyWall");
-				//	}
-				//}
-			},speed);
-		}
-		
-		function kaigua(){
-			start();
-			
-			var kgTimer = setInterval(function(){
-				for (var i=colMax*rowMax;i>=1;i--){
-					if ($("#"+i).hasClass("enemyWall")){
-						var a = i % colMax;
-						if (a==0){
-							a=colMax;
-						}
-						var b = colMax*(rowMax-1)-colMax;
-						var headGps = a+b;
-						repaitSnake(headGps);
-						shoot();
-						break;
-					}
-				}
-				
-			},30);
-		}
-		
-		// 游戏暂停
-		function pause(){
-			if (enemyWallTimer != null){
-				clearInterval(enemyWallTimer);
-				enemyWallTimer=null;
-			}
-		}
-		
-		// 重新开始
-		function restart(){
-			window.location.href = window.location.href;
-		}
-	</script>
+                        <button id="btnKaigua" onclick="kaigua()">开挂(g)</button>
+                    </div>
+
+                    <br/>
+                    <div style="padding-left:15px">
+                        <button id="btnStart" onclick="start()">开始(k)</button>
+                        <button id="btnStop" onclick="pause()">暂停(z)</button>
+                        <button id="btnRestart" onclick="restart()">重新开始(c)</button>
+                    </div>
+
+                    <br/>
+                    <div style="padding-left:5px">
+                            手机用户点击我进行控制<input type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        // 初始化网格
+        var rowMax = 18;
+        var colMax = 11;
+        var direction = 1; //初始运动方法  1:top  2:right  3:bottom 4:left
+
+        var maxZidanNum = 3;
+        var curZidanNum = 0;
+
+
+        var runTimer = null;
+
+        // 初始化运动轨迹
+        var moveGpsArr = new Array();
+        var snakeGpsArr = new Array();
+        // 蛇的长度
+        var snakeLength = 0;
+
+        var isStart = false;
+        var isPause = true;
+
+        // 游戏模式
+        var gameMode = 1;
+        $("#modeDiv input").each(function (index,obj){
+            $(obj).click(function(){
+                gameMode = $(this).val();
+            })
+        });
+
+        // 绑定键盘事件
+        $(document).keyup(function(event){
+            var keyCode = event.keyCode;
+            if (keyCode == 75){
+                start();
+            }else if (keyCode == 90){
+                pause();
+            }else if (keyCode == 67){
+                restart();
+            }
+            else if (keyCode == 87 || keyCode == 38){
+                up();
+            }else if (keyCode == 83 || keyCode == 40){
+                down();
+            }else if (keyCode == 65 || keyCode == 37){
+                left();
+            }else if (keyCode == 68 || keyCode == 39){
+                right();
+            }else if (keyCode == 32){
+                shoot();
+            }
+        });
+
+        // 初始化面板,以及蛇的位置和方向
+        initPanel();
+
+        function initPanel()
+        {
+            for (var k=1;k<=(rowMax*colMax);k++)
+            {
+                var divId = k.toString();
+                var divCon = "<div id='" +divId+ "' style='float:left;width:40px;height:30px;border:1px solid grey;'></div>";
+                $("#borderDiv").append(divCon);
+                //$("#"+divId).text(divId);
+
+                // 如果是第一行
+                if (k>=1 && k<=colMax){
+                    // 第一行
+                    $("#"+divId).addClass("topWallClass");
+                }else if (k>=colMax*rowMax-colMax+1 && k<=colMax*rowMax){
+                    // 最后一行
+                    $("#"+divId).addClass("bottomWallClass");
+                }
+
+                if (k%colMax==1){
+                    // 第一列
+                    $("#"+divId).addClass("leftWallClass");
+                }else if (k%colMax==0){
+                    // 最后一列
+                    $("#"+divId).addClass("rightWallClass");
+                }
+            }
+            // 初始化坦克位置
+            repaitSnake(182);
+        }
+
+        function shoot(){
+            // 获取当前子弹数
+            var runZidanNum = $("#borderDiv div[class^='zidanClass']").length;
+            if (runZidanNum >= maxZidanNum){
+                return;
+            }
+
+            var shootSpeed=100;
+            // 游戏模式
+            if (gameMode==1){
+                shootSpeed = 100;
+            }else if (gameMode==2){
+                speed = 50;
+            }else if (gameMode==3){
+                shootSpeed = 20;
+            }
+
+            // 获取当前发射头位置
+            //var headDiv = $("#borderDiv div[class='snakeHeadClass']");
+
+            var zidanGps = getSnakeHeadPosition();
+            var nextZidanGps = null;
+            var ziDanTimer = null;
+            ziDanTimer = setInterval(function(){
+                if ($("#"+zidanGps).hasClass("topWallClass")){
+                    if (ziDanTimer != null){
+                        clearInterval(ziDanTimer);
+                        //console.log("撞墙了,子弹消失:"+zidanGps);
+
+                        // 获取当前子弹的class,并移除它
+                        var classStr = $("#"+zidanGps).attr("class");
+                        var classArr = classStr.split(" ");
+                        for (var i=0;i<classArr.length;i++){
+                            if (classArr[i].startsWith("zidanClass")){
+                                $("#"+zidanGps).removeClass(classArr[i]);
+                            }
+                        }
+                        return;
+                    }
+                }
+
+                var nextZidanGps = (parseInt(zidanGps) - colMax).toString();
+                if ($("#"+nextZidanGps).hasClass("enemyWall")){
+
+                    $("#"+nextZidanGps).removeClass("enemyWall");
+                    if (ziDanTimer != null){
+                        clearInterval(ziDanTimer);
+                        //console.log("下个位置有敌人,子弹和敌人消失,下个位置为:"+nextZidanGps);
+
+                        // 获取当前子弹的class,并移除它
+                        var classStr = $("#"+zidanGps).attr("class");
+                        var classArr = classStr.split(" ");
+                        for (var i=0;i<classArr.length;i++){
+                            if (classArr[i].startsWith("zidanClass")){
+                                $("#"+zidanGps).removeClass(classArr[i]);
+                            }
+                        }
+                        return;
+                    }
+                }
+
+                var className = "zidanClass"+ (runZidanNum+1).toString();
+
+                //console.log(className);
+                //$("#borderDiv div").removeClass(className);
+                $("#"+zidanGps).removeClass(className);
+                $("#"+nextZidanGps).addClass(className);
+
+                zidanGps = nextZidanGps;
+            },shootSpeed);
+        }
+
+
+        function isInArray(arr,val){
+            for (var i=0;i<arr.length;i++){
+                if (val == arr[i]){
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isInArrayFirst(arr,val){
+            for (var i=0;i<arr.length;i++){
+                if (i==0 && val == arr[i]){
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isInArrayLast(arr,val){
+            for (var i=0;i<arr.length;i++){
+                if (i==arr.length-1 && val == arr[i]){
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // row从1开始
+        function getRowStartNo(row){
+            return colMax*(row-1)+1;
+        }
+
+        function getRowEndNo(row){
+            return row*colMax;
+        }
+
+        function getColumnStartNo(col){
+            return col % colMax;
+        }
+
+        function getColumnEndNo(col){
+            return colMax*(rowMax-1)+col;
+        }
+
+        function showColor(gps,type){
+            if (type == '' || type == null || type == undefined || type=="body"){
+                $("#" + gps).addClass("snakeBodyClass");
+            }else{
+                $("#" + gps).addClass("snakeHeadClass");
+            }
+        }
+
+        // 获取蛇头位置
+        function getSnakeHeadPosition(){
+            //var headDiv = $("#borderDiv div[class='snakeHeadClass']");
+            var divObjs = $("#borderDiv div");
+            for (var i=0;i<divObjs.length;i++){
+                if ($(divObjs[i]).hasClass("snakeHeadClass")){
+                    var headId = $(divObjs[i]).attr("id");
+                    //console.log(headId);
+
+                    return headId;
+                }
+            }
+        }
+
+        // 重新绘制坦克 headGps头的位置
+        function repaitSnake(headGps){
+            $("#borderDiv div").removeClass("snakeHeadClass").removeClass("snakeBodyClass");
+            $("#"+headGps).addClass("snakeHeadClass");
+
+            // 坦克身体位置
+            var bodyPosCenter = parseInt(headGps)+colMax;
+            var bodyPosRight = null;
+            var bodyPosLeft = null;
+            if (bodyPosCenter % colMax == 1){
+                bodyPosRight = bodyPosCenter+1;
+            }else if (bodyPosCenter % colMax == 0){
+                bodyPosLeft = bodyPosCenter-1;
+            }else{
+                bodyPosRight = bodyPosCenter+1;
+                bodyPosLeft = bodyPosCenter-1;
+            }
+            $("#"+bodyPosCenter).addClass("snakeBodyClass");
+            if (bodyPosRight != null){
+                $("#"+bodyPosRight).addClass("snakeBodyClass");
+            }
+            if (bodyPosLeft != null){
+                $("#"+bodyPosLeft).addClass("snakeBodyClass");
+            }
+        }
+
+        // 判断是否撞墙了  1:top  2:right  3:bottom 4:left
+        function isCloseWall(gps){
+            var gpsInt = parseInt(gps);
+            if (direction == 1){
+                if (gpsInt>=1 && gpsInt<=colMax){
+                    return true;
+                }
+            }else if (direction == 2){
+                if (gpsInt %colMax == 0){
+                    return true;
+                }
+            }else if (direction == 3){
+                var startNo = getRowStartNo(rowMax-1);
+                var endNo = getRowEndNo(rowMax-1);
+                if (gpsInt>=startNo && gpsInt<=endNo){
+                    return true;
+                }
+            }else{
+                if (gpsInt % colMax == 1){
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        //初始运动方法  1:top  2:right  3:bottom 4:left
+        function left(){
+
+            direction = 4;
+
+            // 判断当前蛇头是不是在最左边的墙
+            var headGps = getSnakeHeadPosition();
+            if (isCloseWall(headGps)){
+                console.log("撞到了左边墙");
+                return;
+            }
+
+            var nextHeadGps = (parseInt(headGps)-1);
+            repaitSnake(nextHeadGps);
+        }
+
+        function right(){
+            direction = 2;
+
+            // 判断当前蛇头是不是在最左边的墙
+            var headGps = getSnakeHeadPosition();
+            if (isCloseWall(headGps)){
+                console.log("撞到了右边墙");
+                return;
+            }
+
+            var nextHeadGps = (parseInt(headGps)+1);
+            repaitSnake(nextHeadGps);
+        }
+
+        //初始运动方法  1:top  2:right  3:bottom 4:left
+        function up(){
+            direction = 1;
+
+            // 判断当前蛇头是不是在最左边的墙
+            var headGps = getSnakeHeadPosition();
+            if (isCloseWall(headGps)){
+                console.log("撞到了上边墙");
+                return;
+            }
+
+            var nextHeadGps = (parseInt(headGps)-colMax);
+            repaitSnake(nextHeadGps);
+
+        }
+
+        //初始运动方法  1:top  2:right  3:bottom 4:left
+        function down(){
+            direction = 3;
+
+            // 判断当前蛇头是不是在最左边的墙
+            var headGps = getSnakeHeadPosition();
+            if (isCloseWall(headGps)){
+                console.log("撞到了下边墙");
+                return;
+            }
+
+            var nextHeadGps = (parseInt(headGps)+colMax);
+            repaitSnake(nextHeadGps);
+        }
+
+        function randomNumber(start,end){
+            var w = end-start-1;
+            return Math.round(Math.random()*w+start+1);
+        }
+
+        // 初始化敌人炸弹
+        var enemyWallTimer = null;
+        function start(){
+            //enemyWall
+            if (enemyWallTimer!=null){
+                return;
+            }
+            var speed=3000;
+            // 游戏模式
+            if (gameMode==1){
+                speed = 2000;
+            }else if (gameMode==2){
+                speed = 1000;
+            }else if (gameMode==3){
+                speed = 400;
+            }
+
+            enemyWallTimer = setInterval(function(){
+                for (var i=colMax*rowMax;i>=1;i--){
+                    if ($("#"+i).hasClass("enemyWall")){
+                        if ($("#"+i).hasClass("bottomWallClass") || $("#"+i).hasClass("snakeHeadClass") || $("#"+i).hasClass("snakeBodyClass")){
+                            //游戏结束
+                            alert("游戏结束");
+                            if (enemyWallTimer != null){
+                                clearInterval(enemyWallTimer);
+                                return;
+                            }
+                        }
+
+                        var nextEnemyIndex = i+colMax;
+                        $("#"+nextEnemyIndex).addClass("enemyWall");
+                        $("#"+i).removeClass("enemyWall");
+                    }
+                }
+
+                //随机生成炸弹数
+                var enemyRowNo = randomNumber(colMax/2+1,colMax);
+                while (enemyRowNo>0){
+                    var divIdIndex = randomNumber(0,colMax);
+                    if ($("#"+divIdIndex).hasClass("enemyWall")){
+                        continue;
+                    }else{
+                        $("#"+divIdIndex).addClass("enemyWall");
+                        enemyRowNo--;
+                    }
+                }
+                //for (var x=1;x<=enemyRowNo;x++){
+                //    if ($("#"+x).hasClass("enemyWall")){
+                //        x--;
+                //    }else{
+                //        $("#"+x).addClass("enemyWall");
+                //    }
+                //}
+            },speed);
+        }
+
+        function kaigua(){
+            start();
+
+            var kgTimer = setInterval(function(){
+                for (var i=colMax*rowMax;i>=1;i--){
+                    if ($("#"+i).hasClass("enemyWall")){
+                        var a = i % colMax;
+                        if (a==0){
+                            a=colMax;
+                        }
+                        var b = colMax*(rowMax-1)-colMax;
+                        var headGps = a+b;
+                        repaitSnake(headGps);
+                        shoot();
+                        break;
+                    }
+                }
+
+            },30);
+        }
+
+        // 游戏暂停
+        function pause(){
+            if (enemyWallTimer != null){
+                clearInterval(enemyWallTimer);
+                enemyWallTimer=null;
+            }
+        }
+
+        // 重新开始
+        function restart(){
+            window.location.href = window.location.href;
+        }
+    </script>
 </html>

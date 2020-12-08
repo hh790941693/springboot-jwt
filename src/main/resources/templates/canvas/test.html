@@ -129,11 +129,11 @@
       }, 30);
     }
     
-	function getTwoCircleDistance(x1,y1,x2,y2){
-		var xDistance = x1 - x2;
-		var yDistance = y1 - y2;
-		return Math.sqrt(Math.pow(xDistance,2) + Math.pow(yDistance,2));
-	}
+    function getTwoCircleDistance(x1,y1,x2,y2){
+        var xDistance = x1 - x2;
+        var yDistance = y1 - y2;
+        return Math.sqrt(Math.pow(xDistance,2) + Math.pow(yDistance,2));
+    }
     
     var x1, y1, x2, y2;
     //碰撞函数
@@ -150,7 +150,7 @@
           var distance = getTwoCircleDistance(x1,y1,x2,y2);
           //if (Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + 800 <= Math.pow(ballObj.offsetWidth + balls[i].offsetWidth, 2)) {
           if (distance <= ballObj.offsetWidth){ 
-        	//判断传过来的小球对象，相对于碰撞小球的哪个方位
+            //判断传过来的小球对象，相对于碰撞小球的哪个方位
             if (ballObj.x < balls[i].x) {
               if (ballObj.y < balls[i].y) {
                 //小球对象在被碰小球的左上角

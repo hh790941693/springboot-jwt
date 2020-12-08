@@ -1,278 +1,278 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="common :: header"></th:block>
-	<title>朋友圈</title>
+    <th:block th:include="common :: header"></th:block>
+    <title>朋友圈</title>
 
 <style type="text/css">
-	*{
-		margin:0px;
-		padding:0px;
-	}
+    *{
+        margin:0px;
+        padding:0px;
+    }
 
-	body{
-		padding:20px 0 10px 0;
-	}
+    body{
+        padding:20px 0 10px 0;
+    }
 
-	span{
-		display:inline-block;
-		height:100%;
-	}
-	
-	#mainDiv{
-	    width: 60%;
-	    height: 100%;
-	    padding:5px;
-		margin:0 auto;
-		border:1px solid green;
-	    background-color:#aaeca812;
-	}
+    span{
+        display:inline-block;
+        height:100%;
+    }
 
-	#addCircleDiv{
-		padding-bottom:5px;
-		margin-top:-4px;
-		height:6.3%;
-		border-bottom: 1px solid grey;
+    #mainDiv{
+        width: 60%;
+        height: 100%;
+        padding:5px;
+        margin:0 auto;
+        border:1px solid green;
+        background-color:#aaeca812;
+    }
+
+    #addCircleDiv{
+        padding-bottom:5px;
+        margin-top:-4px;
+        height:6.3%;
+        border-bottom: 1px solid grey;
         background-color: white;
-	}
+    }
 
-	#bodyCircleDiv{
-		height:94%;
-		margin-top:2px;
-		overflow-y: scroll;
-		background-color: white;
-	}
+    #bodyCircleDiv{
+        height:94%;
+        margin-top:2px;
+        overflow-y: scroll;
+        background-color: white;
+    }
 
-	#naviDiv{
-	    width: 130px;
-	    height: 30px;
-	    position: fixed;
-	    bottom: 5px;
-	    right: 5px;
-	}
+    #naviDiv{
+        width: 130px;
+        height: 30px;
+        position: fixed;
+        bottom: 5px;
+        right: 5px;
+    }
 
-	.circleDivClass{
-		margin-bottom: 15px;
-		border-top: 1px solid grey;
-		border-left:1px solid grey;
-		border-right:1px solid grey;
-	}
+    .circleDivClass{
+        margin-bottom: 15px;
+        border-top: 1px solid grey;
+        border-left:1px solid grey;
+        border-right:1px solid grey;
+    }
 
-	.nameDivClass{
-		background-color:#b3d7ff;
-		height:28px;
-	}
-	
-	.userSpanClass{
-		width:46%;
-		font-size:16px;
-		font-weight:bold;
-		color:green;
-		cursor:pointer;
-	}
-	
-	.myselfUserSpanClass{
-		width:46%;
-		font-size:16px;
-		font-weight:bold;
-		color:blue;
-		cursor:pointer;
-	}
+    .nameDivClass{
+        background-color:#b3d7ff;
+        height:28px;
+    }
 
-	.commentNameSpanClass{
-		color:blue;
-		width:8%;
-		margin-left:40px;
-		cursor:pointer;
-		text-align: left;
-	}
-	
-	.commentDivClass{
-		margin-bottom:1px;
-	}
+    .userSpanClass{
+        width:46%;
+        font-size:16px;
+        font-weight:bold;
+        color:green;
+        cursor:pointer;
+    }
+
+    .myselfUserSpanClass{
+        width:46%;
+        font-size:16px;
+        font-weight:bold;
+        color:blue;
+        cursor:pointer;
+    }
+
+    .commentNameSpanClass{
+        color:blue;
+        width:8%;
+        margin-left:40px;
+        cursor:pointer;
+        text-align: left;
+    }
+
+    .commentDivClass{
+        margin-bottom:1px;
+    }
 
     .contentSpanClass{
         text-indent: 2em;
-		font-size: 17px;
+        font-size: 17px;
     }
 
-	.picDivClass{
-		margin-bottom: 5px;
-	}
+    .picDivClass{
+        margin-bottom: 5px;
+    }
 
-	.commentDivClass p{
-		background-color:#f0f3f038;
-	}
-	
-	.contentDivClass{
-		letter-spacing:3px;
-		font-size:20px;
-		margin-bottom:2px;
-	}
+    .commentDivClass p{
+        background-color:#f0f3f038;
+    }
 
-	.timeSpanClass{
-	    width: 10%;
-    	font-size:13px;
-    	color:grey;
-		float:right;
-		margin-top:5px;
-	}
-	
-	.likeNumSpanClass{
-		color:green;
-	    width: 11%;
-    	font-size:15px;
-	}
-	
-	.commentSpanClass{
-		font-size:13px;
-    	width: 68%;
-	}
-	
-	.commentTimeSpanClass{
-		color:grey;
-		width:60px;
-		font-size:13px;
-		float:right;
-	}
+    .contentDivClass{
+        letter-spacing:3px;
+        font-size:20px;
+        margin-bottom:2px;
+    }
 
-	.buttonGroupSpan{
-		width:170px;
-		padding-top: 3px;
-	}
-	
-	.btnDisabledClass{
-		background-color:grey;
-		color:black;
-	}
+    .timeSpanClass{
+        width: 10%;
+        font-size:13px;
+        color:grey;
+        float:right;
+        margin-top:5px;
+    }
+
+    .likeNumSpanClass{
+        color:green;
+        width: 11%;
+        font-size:15px;
+    }
+
+    .commentSpanClass{
+        font-size:13px;
+        width: 68%;
+    }
+
+    .commentTimeSpanClass{
+        color:grey;
+        width:60px;
+        font-size:13px;
+        float:right;
+    }
+
+    .buttonGroupSpan{
+        width:170px;
+        padding-top: 3px;
+    }
+
+    .btnDisabledClass{
+        background-color:grey;
+        color:black;
+    }
 </style>
 </head>
 <body>
-	<div id="mainDiv">
-		<div id='addCircleDiv' align='right'>
-			<span>总条数:{{totalCount}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>当前第{{curPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{totalPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;
-			<button @click='toPrePage()' class='btn btn-sm btn-primary' >
+    <div id="mainDiv">
+        <div id='addCircleDiv' align='right'>
+            <span>总条数:{{totalCount}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>当前第{{curPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{totalPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button @click='toPrePage()' class='btn btn-sm btn-primary' >
                 <span class="glyphicon glyphicon-arrow-left"></span>
-			</button>&nbsp;&nbsp;
-			<button @click='toNextPage()' class='btn btn-sm btn-primary' >
+            </button>&nbsp;&nbsp;
+            <button @click='toNextPage()' class='btn btn-sm btn-primary' >
                 <span class="glyphicon glyphicon-arrow-right"></span>
             </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button @click='addCircle()' class='btn btn-sm btn-success'>
+            <button @click='addCircle()' class='btn btn-sm btn-success'>
                 <span class="glyphicon glyphicon-edit"> 发布</span>&nbsp;&nbsp;
             </button>
-		</div>
-		<div id="bodyCircleDiv">
-			<div class="circleDivClass" v-for="(item,index) in circleList">
-				<div class='bodyDivClass'>
-					<div class='nameDivClass'>
-						<div style='display:inline-block;height:100%;width:100%;'>
-							<img :src="item.headImg" width='25' height='25' :onerror="defaultImg">
-							<template v-if="curUser == item.userName">
-								<span class='myselfUserSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
-							</template>
-							<template v-else>
-								<span class='userSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
-							</template>
-							<span class='buttonGroupSpan'>
-								<button @click='toComment(item.id)' class='label label-primary'>
+        </div>
+        <div id="bodyCircleDiv">
+            <div class="circleDivClass" v-for="(item,index) in circleList">
+                <div class='bodyDivClass'>
+                    <div class='nameDivClass'>
+                        <div style='display:inline-block;height:100%;width:100%;'>
+                            <img :src="item.headImg" width='25' height='25' :onerror="defaultImg">
+                            <template v-if="curUser == item.userName">
+                                <span class='myselfUserSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
+                            </template>
+                            <template v-else>
+                                <span class='userSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
+                            </template>
+                            <span class='buttonGroupSpan'>
+                                <button @click='toComment(item.id)' class='label label-primary'>
                                     <span class="glyphicon glyphicon-comment"></span>
                                 </button>&nbsp;
-								<button @click='toLike(item.id)' class='label label-info'>
+                                <button @click='toLike(item.id)' class='label label-info'>
                                     <span class="glyphicon glyphicon-thumbs-up"></span>
                                 </button>&nbsp;
-								<button @click='toDislike(item.id)' class='label label-info'>
+                                <button @click='toDislike(item.id)' class='label label-info'>
                                     <span class="glyphicon glyphicon-thumbs-down"></span>
                                 </button>&nbsp;
-								<template v-if="curUser == 'admin' || curUser == item.userName">
-									<button @click='deleteCircle(item.id)' class='label label-danger'>
+                                <template v-if="curUser == 'admin' || curUser == item.userName">
+                                    <button @click='deleteCircle(item.id)' class='label label-danger'>
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </button>
-								</template>
-							</span>
-							<span>
-								<span class="fa fa-thumbs-up" style="margin-right: 5px;">{{item.likeNum}}</span>
-								<span class="fa fa-thumbs-down">0</span>
-							</span>
-							<span class='timeSpanClass'>{{compareTwoTime(new Date(item.createTime).getTime(),new Date().getTime())}}</span>
-						</div>
-					</div>
-					<div class='contentDivClass'>
-						<span class="contentSpanClass">{{item.content}}</span>
-					</div>
-				</div>
-				<div class='picDivClass' align='center'>
-					<template v-if="item.pic1 != null && item.pic1 != ''">
-						<img :src='item.pic1' width='100px' height='100px' @click="showPic(item.pic1)" :onerror="defaultImg" style='margin-left:20px;'>
-					</template>
-					<template v-if="item.pic2 != null && item.pic2 != ''">
-						<img :src='item.pic2' width='100px' height='100px' @click="showPic(item.pic2)" :onerror="defaultImg" style='margin-left:20px;'>
-					</template>
-					<template v-if="item.pic3 != null && item.pic3 != ''">
-						<img :src='item.pic3' width='100px' height='100px' @click="showPic(item.pic3)" :onerror="defaultImg" style='margin-left:20px;'>
-					</template>
-					<template v-if="item.pic4 != null && item.pic4 != ''">
-						<img :src='item.pic4' width='100px' height='100px' @click="showPic(item.pic4)" :onerror="defaultImg" style='margin-left:20px;'>
-					</template>
-				</div>
+                                </template>
+                            </span>
+                            <span>
+                                <span class="fa fa-thumbs-up" style="margin-right: 5px;">{{item.likeNum}}</span>
+                                <span class="fa fa-thumbs-down">0</span>
+                            </span>
+                            <span class='timeSpanClass'>{{compareTwoTime(new Date(item.createTime).getTime(),new Date().getTime())}}</span>
+                        </div>
+                    </div>
+                    <div class='contentDivClass'>
+                        <span class="contentSpanClass">{{item.content}}</span>
+                    </div>
+                </div>
+                <div class='picDivClass' align='center'>
+                    <template v-if="item.pic1 != null && item.pic1 != ''">
+                        <img :src='item.pic1' width='100px' height='100px' @click="showPic(item.pic1)" :onerror="defaultImg" style='margin-left:20px;'>
+                    </template>
+                    <template v-if="item.pic2 != null && item.pic2 != ''">
+                        <img :src='item.pic2' width='100px' height='100px' @click="showPic(item.pic2)" :onerror="defaultImg" style='margin-left:20px;'>
+                    </template>
+                    <template v-if="item.pic3 != null && item.pic3 != ''">
+                        <img :src='item.pic3' width='100px' height='100px' @click="showPic(item.pic3)" :onerror="defaultImg" style='margin-left:20px;'>
+                    </template>
+                    <template v-if="item.pic4 != null && item.pic4 != ''">
+                        <img :src='item.pic4' width='100px' height='100px' @click="showPic(item.pic4)" :onerror="defaultImg" style='margin-left:20px;'>
+                    </template>
+                </div>
 
-				<div class='commentDivClass' v-for="commentItem in item.commentList">
-					<p>
-						<span class='commentNameSpanClass' @click='queryPersonInfo(commentItem.userName)'>{{commentItem.userName}}:</span>
-						<span class='commentSpanClass'>{{commentItem.comment}}</span>
-						<template v-if="curUser == 'admin' || curUser == commentItem.userName">
-							<a href='javascript:void(0)' @click='deleteComment(commentItem.id)' style="color:blue;cursor:pointer;">删除</a>
-						</template>
-						<span class='commentTimeSpanClass'>{{compareTwoTime(new Date(commentItem.createTime).getTime(),new Date().getTime())}}</span></p>
-				</div>
-			</div>
-		</div>
-		
-		<div id="naviDiv" align="center">
-			<button id='preBtn' @click='toPrePage()' class='btn btn-sm btn-primary' >
+                <div class='commentDivClass' v-for="commentItem in item.commentList">
+                    <p>
+                        <span class='commentNameSpanClass' @click='queryPersonInfo(commentItem.userName)'>{{commentItem.userName}}:</span>
+                        <span class='commentSpanClass'>{{commentItem.comment}}</span>
+                        <template v-if="curUser == 'admin' || curUser == commentItem.userName">
+                            <a href='javascript:void(0)' @click='deleteComment(commentItem.id)' style="color:blue;cursor:pointer;">删除</a>
+                        </template>
+                        <span class='commentTimeSpanClass'>{{compareTwoTime(new Date(commentItem.createTime).getTime(),new Date().getTime())}}</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="naviDiv" align="center">
+            <button id='preBtn' @click='toPrePage()' class='btn btn-sm btn-primary' >
                 <span class="glyphicon glyphicon-arrow-left"></span>
             </button>
-			<button id='nextBtn' @click='toNextPage()' class='btn btn-sm btn-primary' >
+            <button id='nextBtn' @click='toNextPage()' class='btn btn-sm btn-primary' >
                 <span class="glyphicon glyphicon-arrow-right"></span>
             </button>
-		</div>		
-	</div>
+        </div>
+    </div>
 
-	<th:block th:include="common :: footer"></th:block>
-	<th:block th:include="common :: sessionInfo"></th:block>
+    <th:block th:include="common :: footer"></th:block>
+    <th:block th:include="common :: sessionInfo"></th:block>
 </body>
 
-	<script type="text/javascript">
-		console.log("circle页面获取session数据:"+sessionUser);
+    <script type="text/javascript">
+        console.log("circle页面获取session数据:"+sessionUser);
 
         var curUser = sessionUser;
-		$("#preBtn").hide();
-		$("#nextBtn").hide();
-		var app = new Vue({
-			el: '#mainDiv',
-			data: {
-				circleList:{},
-				curPage:1,
-				numPerPage:5,
+        $("#preBtn").hide();
+        $("#nextBtn").hide();
+        var app = new Vue({
+            el: '#mainDiv',
+            data: {
+                circleList:{},
+                curPage:1,
+                numPerPage:5,
                 totalCount:0,
                 totalPage:0,
                 curUser:sessionUser,
                 defaultImg:'this.src="../img/imgerror_default.jpg"',
-			},
-			methods: {
-				queryCircleList:function (curPagePara,numPerPagePara) {
-				    //查询朋友圈列表
-					$.ajax({
-						type: "POST",
-						url: rootUrl+'ws/queryCircleByPage.do',
-						data: {'curPage':curPagePara, 'numPerPage':numPerPagePara},
-						success: function (result) {
-							if (result.code != 1){
-								return;
-							}
-							var resultData = result.data;
-							app.circleList = resultData.records;
-							app.totalPage = resultData.pages;
-							app.totalCount = resultData.total;
+            },
+            methods: {
+                queryCircleList:function (curPagePara,numPerPagePara) {
+                    //查询朋友圈列表
+                    $.ajax({
+                        type: "POST",
+                        url: rootUrl+'ws/queryCircleByPage.do',
+                        data: {'curPage':curPagePara, 'numPerPage':numPerPagePara},
+                        success: function (result) {
+                            if (result.code != 1){
+                                return;
+                            }
+                            var resultData = result.data;
+                            app.circleList = resultData.records;
+                            app.totalPage = resultData.pages;
+                            app.totalCount = resultData.total;
 
                             if (app.curPage >= app.totalPage){
                                 $("#nextBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled",true);
@@ -285,9 +285,9 @@
                             }else{
                                 $("#preBtn").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled",false);
                             }
-						}
-					});
-				},
+                        }
+                    });
+                },
                 toComment:function (id) {
                     //评论
                     layer.prompt({
@@ -316,7 +316,7 @@
                     });
                 },
                 toLike:function (id) {
-				    //点赞
+                    //点赞
                     $.ajax({
                         type: 'POST',
                         url: rootUrl+'ws/toLike.do',
@@ -329,20 +329,20 @@
                         }
                     });
                 },
-				toDislike:function (id) {
-					//点赞
-					$.ajax({
-						type: 'POST',
-						url: rootUrl+'ws/toDislike.do',
-						data:{'user':app.curUser,'circleId':id},
-						success: function(result) {
-							if (result.code == 1) {
-								layer.msg("踩成功");
-								app.queryCircleList(app.curPage, app.numPerPage);
-							}
-						}
-					});
-				},
+                toDislike:function (id) {
+                    //点赞
+                    $.ajax({
+                        type: 'POST',
+                        url: rootUrl+'ws/toDislike.do',
+                        data:{'user':app.curUser,'circleId':id},
+                        success: function(result) {
+                            if (result.code == 1) {
+                                layer.msg("踩成功");
+                                app.queryCircleList(app.curPage, app.numPerPage);
+                            }
+                        }
+                    });
+                },
                 deleteCircle:function (id) {
                     //删除朋友圈
                     layer.confirm('确认要删除？', {btn: ['确定','取消']},
@@ -412,7 +412,7 @@
                     $.ws.gShowImg(imgUrl);
                 },
                 queryPersonInfo:function(username){
-					//查看个人信息
+                    //查看个人信息
                     layer.open({
                         type: 2,
                         title: '用户个人信息',
@@ -422,22 +422,22 @@
                         content: '/zhddkk/wsUsers/showPersonalInfo.page?user='+username
                     });
                 },
-			},
-			created: function () {
-				this.queryCircleList(1, 5);
-			}
-		});
+            },
+            created: function () {
+                this.queryCircleList(1, 5);
+            }
+        });
 
-		$("#naviDiv").hover(function(){
-			$("#preBtn,#nextBtn").show();
-		},function(){
-			$("#preBtn,#nextBtn").hide();
-		})
+        $("#naviDiv").hover(function(){
+            $("#preBtn,#nextBtn").show();
+        },function(){
+            $("#preBtn,#nextBtn").hide();
+        })
 
-		//刷新
-		function refresh(){
-			window.location.href = window.location.href;
-		};
+        //刷新
+        function refresh(){
+            window.location.href = window.location.href;
+        };
 
-	</script>
+    </script>
 </html>

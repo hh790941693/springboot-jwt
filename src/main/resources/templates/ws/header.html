@@ -1,157 +1,157 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="common :: header"></th:block>
-	<title>头部</title>
+    <th:block th:include="common :: header"></th:block>
+    <title>头部</title>
 
 <style type="text/css">
-	#headerDiv{
-		width:100%;
-		height:100%;
-		font-weight:bold;
-		background-repeat: repeat-x;
-		background-position: 0px -230px;
-	}
+    #headerDiv{
+        width:100%;
+        height:100%;
+        font-weight:bold;
+        background-repeat: repeat-x;
+        background-position: 0px -230px;
+    }
 
-	#curTimeSpan{
-		margin-left:10px;
-		font-size:15px;
-	}
+    #curTimeSpan{
+        margin-left:10px;
+        font-size:15px;
+    }
 
     label{
         margin:0;
         padding:0;
     }
 
-	#percentInput {
-		display: inline-block;
-		width:80px;
-	}
+    #percentInput {
+        display: inline-block;
+        width:80px;
+    }
 </style>
 </head>
 <body>
-	<!--头部-->
-	<div id="headerDiv" align="center">
-		<img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
-		<div style="float:left;">
+    <!--头部-->
+    <div id="headerDiv" align="center">
+        <img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
+        <div style="float:left;">
             <div style="float:left;">
-			    <img id='myImg' alt=""  width="60" height="100%">
+                <img id='myImg' alt=""  width="60" height="100%">
             </div>
             <div style="float:left;margin-left:3px;margin-right: 3px;">
                 <div style="height:65%;text-align: left;">
-			         <label id="curUser" style="color:blue;font-size:23px;"></label>
+                     <label id="curUser" style="color:blue;font-size:23px;"></label>
                 </div>
                 <div style="height:34%;text-align: left;">
                     <span class="glyphicon glyphicon-user" th:title="#{span.onlinecount.tips}"></span><label id="onlineNum">0</label>&nbsp;&nbsp;
                     <span class="glyphicon glyphicon-tree-deciduous" th:title="#{span.coinnum.tips}"></span><label id="coinNum">0</label>
                 </div>
             </div>
-		</div>
+        </div>
 
-		<!--头部标题-->
-		<div id="headerTitleDiv" style="float:left;font-size:20px;width:54%;height:100%;padding-top:13px;display: none;">
-			<label id="titleLabel" style="color:black;">websocket客户端</label>
-		</div>
+        <!--头部标题-->
+        <div id="headerTitleDiv" style="float:left;font-size:20px;width:54%;height:100%;padding-top:13px;display: none;">
+            <label id="titleLabel" style="color:black;">websocket客户端</label>
+        </div>
 
-		<!--天气-->
-		<div id="weatherDiv" style="float:left;font-size:18px;width:54%;height:100%;padding-top:13px;display: block;">
-			<label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
-			<label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
-			<label id="location" style="color:black;"></label>
-		</div>
+        <!--天气-->
+        <div id="weatherDiv" style="float:left;font-size:18px;width:54%;height:100%;padding-top:13px;display: block;">
+            <label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
+            <label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
+            <label id="location" style="color:black;"></label>
+        </div>
 
-		<!--滚动新闻-->
-		<div id="scrollAdDiv" style="float:left;height:100%;overflow:hidden;width:29%;margin-left: 3px;display: none;">
-			<div id="adContentOutDiv" style="height:200%;text-align: left;">
-				<div id="adContentDiv"></div>
-				<div id="adNoContentDiv"></div>
-			</div>
-		</div>
+        <!--滚动新闻-->
+        <div id="scrollAdDiv" style="float:left;height:100%;overflow:hidden;width:29%;margin-left: 3px;display: none;">
+            <div id="adContentOutDiv" style="height:200%;text-align: left;">
+                <div id="adContentDiv"></div>
+                <div id="adNoContentDiv"></div>
+            </div>
+        </div>
 
-		<!--右侧按钮组-->
-		<div id="btnDiv" align="right" style="float:right;margin-right:5px;height:100%;">
-			<!--当前时间-->
-			<div style="text-align:right;height:30%;">
+        <!--右侧按钮组-->
+        <div id="btnDiv" align="right" style="float:right;margin-right:5px;height:100%;">
+            <!--当前时间-->
+            <div style="text-align:right;height:30%;">
                 <span>窗口变化:</span>&nbsp;&nbsp;&nbsp;&nbsp;
-				<input id="percentInput" class="wheelInputClass" type="range" value=100 min=85 max=150 step=3 onchange="windowChange()">
-				<span id="curTimeSpan">0000-00-00 00:00:00</span>
-			</div>
-			<div style="height:69%;padding-top:6px;">
+                <input id="percentInput" class="wheelInputClass" type="range" value=100 min=85 max=150 step=3 onchange="windowChange()">
+                <span id="curTimeSpan">0000-00-00 00:00:00</span>
+            </div>
+            <div style="height:69%;padding-top:6px;">
                 <button id="simpleMusicBtn" onclick="parent.showSimpleMusicPlayer()" class='btn btn-large btn-warning' th:title="#{btn.music.tips}">
                     <span class="glyphicon glyphicon-music"></span>
                 </button>&nbsp;&nbsp;
                 <button id="signBtn" onclick="parent.sign()" class='btn btn-large btn-info' th:title="#{btn.signin.tips}">
                     <span class="glyphicon glyphicon-check"></span>
                 </button>&nbsp;&nbsp;
-				<button id="showQRCodeBtn" onclick="parent.showQRCode()" class='btn btn-large btn-success' th:title="#{btn.qrcode.tips}">
+                <button id="showQRCodeBtn" onclick="parent.showQRCode()" class='btn btn-large btn-success' th:title="#{btn.qrcode.tips}">
                     <span class="glyphicon glyphicon-qrcode"></span>
                 </button>&nbsp;&nbsp;
-				<button id="setPersonInfoBtn" onclick="parent.setPersonInfoBtn()" class="btn btn-large btn-primary" th:title="#{btn.setting.tips}">
+                <button id="setPersonInfoBtn" onclick="parent.setPersonInfoBtn()" class="btn btn-large btn-primary" th:title="#{btn.setting.tips}">
                     <span class="fa fa-cog"></span>
                 </button>&nbsp;&nbsp;
-				<button id="exitBtn" class='btn btn-large btn-danger' onclick="parent.toIndex()" th:title="#{btn.logout.tips}">
+                <button id="exitBtn" class='btn btn-large btn-danger' onclick="parent.toIndex()" th:title="#{btn.logout.tips}">
                     <span class="glyphicon glyphicon-log-out"></span>
                 </button>
-			</div>
-		</div>
-	</div>
-	<th:block th:include="common :: footer"></th:block>
-	<th:block th:include="common :: sessionInfo"></th:block>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="common :: footer"></th:block>
+    <th:block th:include="common :: sessionInfo"></th:block>
 </body>
-	<script type="text/javascript">
-		//头部头像
+    <script type="text/javascript">
+        //头部头像
         var headerTitle = $.ws.i18n("web.title");
-		if (sessionUser == "admin"){
-			if (sessionSelfimg == ""){
-				$("#myImg").attr("src",rootUrl+"img/headimg/admin.jpg");
-			}else{
-				$("#myImg").attr("src", sessionSelfimg);
-			}
-		}else{
+        if (sessionUser == "admin"){
+            if (sessionSelfimg == ""){
+                $("#myImg").attr("src",rootUrl+"img/headimg/admin.jpg");
+            }else{
+                $("#myImg").attr("src", sessionSelfimg);
+            }
+        }else{
             if (sessionSelfimg == "" || sessionSelfimg == null) {
                 var errorImgUrl = $.ws.errorImgUrl;
                 $("#myImg").attr("src",errorImgUrl);
             }
-		}
-		$("#curUser").text(sessionUser);
+        }
+        $("#curUser").text(sessionUser);
 
-		//当前时间
-		var curTimeTemp = getCurrentTime();
-		$("#curTimeSpan").text(curTimeTemp);
+        //当前时间
+        var curTimeTemp = getCurrentTime();
+        $("#curTimeSpan").text(curTimeTemp);
 
-		//定时更新时间
-		setInterval(function(){
-			var curTime = getCurrentTime();
-			$("#curTimeSpan").text(curTime);
-		},1000);
+        //定时更新时间
+        setInterval(function(){
+            var curTime = getCurrentTime();
+            $("#curTimeSpan").text(curTime);
+        },1000);
 
         // 播放模式监听
         function windowChange(){
-			parent.manualResizWindow($("#percentInput").val());
+            parent.manualResizWindow($("#percentInput").val());
         }
 
-		//定时获取天气
-		grapWeatherInfo();
-		setInterval(function(){
-			grapWeatherInfo();
-		},600000);
-		function grapWeatherInfo(){
-			$.ajax({
-				type: 'GET',
-				url: rootUrl+'index/grapWetherInfo',
-				async:false,
-				success: function(result) {
-					if (result.code == 1){
-						$("#weatherInfo").text(result.data.remark);
-						$("#lastUpdateTime").text(result.data.lastUpdateTime);
-						$("#location").text(result.data.location);
-					}
-				}
-			});
-		}
+        //定时获取天气
+        grapWeatherInfo();
+        setInterval(function(){
+            grapWeatherInfo();
+        },600000);
+        function grapWeatherInfo(){
+            $.ajax({
+                type: 'GET',
+                url: rootUrl+'index/grapWetherInfo',
+                async:false,
+                success: function(result) {
+                    if (result.code == 1){
+                        $("#weatherInfo").text(result.data.remark);
+                        $("#lastUpdateTime").text(result.data.lastUpdateTime);
+                        $("#location").text(result.data.location);
+                    }
+                }
+            });
+        }
 
-		//定时刷新在线人数和积分数量
+        //定时刷新在线人数和积分数量
         getOnlineInfo();
-		//setInterval(getOnlineInfo, 15000);
+        //setInterval(getOnlineInfo, 15000);
         function getOnlineInfo() {
             $.ajax({
                 type: 'GET',
@@ -159,9 +159,9 @@
                 data: {"user": sessionUser},
                 //dataType: 'json',
                 success: function (result) {
-					if (result.code != 1){
-						return;
-					}
+                    if (result.code != 1){
+                        return;
+                    }
                     var jsonObj = result.data;
                     var currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
                     var coinNum = currentUserOnlineInfo.coinNum;
@@ -179,58 +179,58 @@
             });
         }
 
-		//定时切换header标题
-		setInterval(function () {
-			var titleStatus = $("#headerTitleDiv").css("display");
-			if (titleStatus == "none"){
+        //定时切换header标题
+        setInterval(function () {
+            var titleStatus = $("#headerTitleDiv").css("display");
+            if (titleStatus == "none"){
                 $("#titleLabel").text(headerTitle);
-				$("#headerTitleDiv").css("display", "block");
-				$("#weatherDiv").css("display", "none");
-			}else{
-				$("#headerTitleDiv").css("display", "none");
-				$("#weatherDiv").css("display", "block");
-			}
-		},8000);
+                $("#headerTitleDiv").css("display", "block");
+                $("#weatherDiv").css("display", "none");
+            }else{
+                $("#headerTitleDiv").css("display", "none");
+                $("#weatherDiv").css("display", "block");
+            }
+        },8000);
 
-		//定时滚动header背景图片
-		$.ws.backgroundImgAnimation("headBackgroundImg","headerDiv", 1, 10);
+        //定时滚动header背景图片
+        $.ws.backgroundImgAnimation("headBackgroundImg","headerDiv", 1, 10);
 
-		//头部滚动广告
-		var scrollAdDiv = document.getElementById("scrollAdDiv");
-		var adContentDiv = document.getElementById("adContentDiv");
-		var adNoContentDiv = document.getElementById("adNoContentDiv");
-		scrollAdDiv.scrollTop = adContentDiv.offsetHeight;
-		function Marquee(){
-			adNoContentDiv.innerHTML = adContentDiv.innerHTML;
-			if (scrollAdDiv.scrollTop >= adContentDiv.offsetHeight) {
-				scrollAdDiv.scrollTop -= adNoContentDiv.offsetHeight;
-			}else{
-				scrollAdDiv.scrollTop += 1;
-			}
-		}
-		setInterval(Marquee, 100);
+        //头部滚动广告
+        var scrollAdDiv = document.getElementById("scrollAdDiv");
+        var adContentDiv = document.getElementById("adContentDiv");
+        var adNoContentDiv = document.getElementById("adNoContentDiv");
+        scrollAdDiv.scrollTop = adContentDiv.offsetHeight;
+        function Marquee(){
+            adNoContentDiv.innerHTML = adContentDiv.innerHTML;
+            if (scrollAdDiv.scrollTop >= adContentDiv.offsetHeight) {
+                scrollAdDiv.scrollTop -= adNoContentDiv.offsetHeight;
+            }else{
+                scrollAdDiv.scrollTop += 1;
+            }
+        }
+        setInterval(Marquee, 100);
 
-		//获取最新广告
-		//queryRecentAdsList();
-		function queryRecentAdsList(){
-			$.ajax({
-				type: 'GET',
-				url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
-				async:false,
-				success: function(result) {
-					if (result.code == 1){
-						var data = result.data;
-						var totalAds = "";
-						$.each(data,function(i,val){
-							totalAds += "<span style='font-weight: bold;'>"+val.content+"</span>"+"&nbsp;&nbsp;&nbsp;"+val.createTime+"<br/>";
-						});
-						$("#adContentDiv").html(totalAds);
-					}
-				}
-			});
-		}
+        //获取最新广告
+        //queryRecentAdsList();
+        function queryRecentAdsList(){
+            $.ajax({
+                type: 'GET',
+                url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
+                async:false,
+                success: function(result) {
+                    if (result.code == 1){
+                        var data = result.data;
+                        var totalAds = "";
+                        $.each(data,function(i,val){
+                            totalAds += "<span style='font-weight: bold;'>"+val.content+"</span>"+"&nbsp;&nbsp;&nbsp;"+val.createTime+"<br/>";
+                        });
+                        $("#adContentDiv").html(totalAds);
+                    }
+                }
+            });
+        }
 
-		//定时获取最新广告
-		//setInterval(queryRecentAdsList, 60000);
-	</script>
+        //定时获取最新广告
+        //setInterval(queryRecentAdsList, 60000);
+    </script>
 </html>

@@ -1,24 +1,24 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="common :: gameHeader"></th:block>
-	<meta charset="utf-8">
-	<title>拼图游戏</title>
+    <th:block th:include="common :: gameHeader"></th:block>
+    <meta charset="utf-8">
+    <title>拼图游戏</title>
 
-	<style type="text/css">
-		body{
-			margin:0;
-		}
-	</style>
-		
-	</head> 
-	<body>
-		<div id="mainDiv" style="width:870px;height:630px;margin:5px auto;overflow:hidden;border:2px solid green">
+    <style type="text/css">
+        body{
+            margin:0;
+        }
+    </style>
+
+    </head>
+    <body>
+        <div id="mainDiv" style="width:870px;height:630px;margin:5px auto;overflow:hidden;border:2px solid green">
                 <canvas id="canvas" style="background-color:black">
                 </canvas>
         </div>
-	</body>
-	
-	<script type="text/javascript">	
+    </body>
+
+    <script type="text/javascript">
         var canvas = document.getElementById("canvas");
         canvas.width = 860;
         canvas.height = 620;
@@ -30,30 +30,30 @@
         
         var BLOCK_ARR = new Array();
         var COLOR_ARR = new Array(
-			"rgba(47,138,251,0.7)",
-			"rgba(31,254,177,0.3)",
-			"rgba(136,160,40,0.7)",
-			"rgba(214,36,198,1)",
-			"rgba(167,9,177,1)",
-			"rgba(210,245,44,0.3)",
-			"rgba(191,93,233,0.5)",
-			"rgba(10,100,200,1)",
-			"rgba(148,203,102,1)",
-			"rgba(135,249,104,1)",
-			"rgba(55,115,28,1)",
-			"rgba(127,145,130,0.7)",
-			"rgba(254,98,87,1)",
-			"rgba(96,129,229,0.9)",
-			"rgba(85,32,204,1)",
-			"rgba(177,144,202,1)",
-			"rgba(121,217,23,0.3)",
-			"rgba(223,201,172,1)",
-			"rgba(235,114,238,1)",
-			"rgba(164,173,250,1)"
+            "rgba(47,138,251,0.7)",
+            "rgba(31,254,177,0.3)",
+            "rgba(136,160,40,0.7)",
+            "rgba(214,36,198,1)",
+            "rgba(167,9,177,1)",
+            "rgba(210,245,44,0.3)",
+            "rgba(191,93,233,0.5)",
+            "rgba(10,100,200,1)",
+            "rgba(148,203,102,1)",
+            "rgba(135,249,104,1)",
+            "rgba(55,115,28,1)",
+            "rgba(127,145,130,0.7)",
+            "rgba(254,98,87,1)",
+            "rgba(96,129,229,0.9)",
+            "rgba(85,32,204,1)",
+            "rgba(177,144,202,1)",
+            "rgba(121,217,23,0.3)",
+            "rgba(223,201,172,1)",
+            "rgba(235,114,238,1)",
+            "rgba(164,173,250,1)"
         )
         
         var IMAGE = new Image();
-		IMAGE.id="mypic";
+        IMAGE.id="mypic";
         IMAGE.src = rootUrl+"/img/start.png";
         var RUN = false;
 
@@ -115,26 +115,26 @@
             }
 
             this.update = function(){
-				if (this.tempId == 1){
-					this.w =110;
-					this.h =110;
-				}else{
-					this.w =100;
-					this.h =100;					
-				}
-			
+                if (this.tempId == 1){
+                    this.w =110;
+                    this.h =110;
+                }else{
+                    this.w =100;
+                    this.h =100;
+                }
+
                 this.draw();
             }
         }
         
-		function getBlockById(tempId){
+        function getBlockById(tempId){
             for (var i=0;i<BLOCK_ARR.length;i+=1){
-				if (tempId == BLOCK_ARR[i].tempId){
-					return BLOCK_ARR[i];
-				}
-			}	
-		}
-		
+                if (tempId == BLOCK_ARR[i].tempId){
+                    return BLOCK_ARR[i];
+                }
+            }
+        }
+
         function drawButton(){
             ctx.beginPath();
             ctx.drawImage(IMAGE,canvas.width/2-70,canvas.height/2-50,140,100);
@@ -153,7 +153,7 @@
             // 获取鼠标点击时的坐标位置
             if (mouseX >= canvas.width/2-70 && mouseX <= canvas.width/2-70+140
                && mouseY >= canvas.height/2-50 && mouseY <= canvas.height/2-50+100){
-					//$(this).css("cursor","pointer");
+                    //$(this).css("cursor","pointer");
                     if (!RUN){
                         RUN = true;
                     }
@@ -217,7 +217,7 @@
             }
         }
         
-		initBoard();
+        initBoard();
         var G_CYCLE = 0;
         var interval = 1;
 
@@ -241,12 +241,12 @@
                 interval+=randomNumber(1,5);
                 if (interval >= 25){
                     RUN = true;
-					interval = 1;
-					
-					var blockObj = getBlockById(1);
+                    interval = 1;
+
+                    var blockObj = getBlockById(1);
                 }
             }
         }
         animate();
-	</script>
+    </script>
 </html>

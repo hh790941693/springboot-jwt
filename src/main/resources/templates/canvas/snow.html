@@ -5,25 +5,25 @@
     <th:block th:include="common :: header"></th:block>
     <title>雪花</title>
     <style>
-		* {
-			margin:0;
-			padding:0
-		}
-		html,body {
-			width:100%;
-			height:100%;
-			overflow:hidden;
-			background-color:#222;
-		}
-		#canvas {
-			position:absolute;
-			top:0;
-			left:0;
-		}
+        * {
+            margin:0;
+            padding:0
+        }
+        html,body {
+            width:100%;
+            height:100%;
+            overflow:hidden;
+            background-color:#222;
+        }
+        #canvas {
+            position:absolute;
+            top:0;
+            left:0;
+        }
         #bgSnow{
             background-repeat: no-repeat;
         }
-	</style>
+    </style>
 </head>
 
 <body>
@@ -34,7 +34,7 @@
 </body>
 
     <script type="text/javascript">
-		var canvas = document.getElementById("canvas");
+        var canvas = document.getElementById("canvas");
         var imgSnow = document.getElementById("imgSnow");
         var bgSnow = document.getElementById("bgSnow");
         var ctx = canvas.getContext('2d');
@@ -136,5 +136,5 @@
             g_cycle++;
         }
         animate();
-	</script>
+    </script>
 </html>
