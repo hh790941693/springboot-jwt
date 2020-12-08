@@ -48,166 +48,166 @@ public class WsAdsController extends AdminBaseController {
     }
 
     @Autowired
-	private WsAdsService wsAdsService;
+    private WsAdsService wsAdsService;
 
     /**
     * 跳转到广告表页面
-	*/
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="广告列表页面")
-	@GetMapping()
+    */
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="广告列表页面")
+    @GetMapping()
     public String wsAds(){
-	    return "zhddkk/wsAds/wsAds";
-	}
+        return "zhddkk/wsAds/wsAds";
+    }
 
     /**
      * 获取广告表列表数据
      */
     @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.AD_PUBLISH,subModule="",describe="广告列表")
-	@ResponseBody
-	@GetMapping("/list")
-	public Result<Page<WsAdsDO>> list(WsAdsDO wsAdsDTO){
+    @ResponseBody
+    @GetMapping("/list")
+    public Result<Page<WsAdsDO>> list(WsAdsDO wsAdsDTO){
         Wrapper<WsAdsDO> wrapper = new EntityWrapper<WsAdsDO>();
         if (StringUtils.isNotBlank(wsAdsDTO.getTitle())){
-        	wrapper.like("title", wsAdsDTO.getTitle(), SqlLike.DEFAULT);
-		}
-		if (StringUtils.isNotBlank(wsAdsDTO.getContent())){
-			wrapper.like("content", wsAdsDTO.getContent(), SqlLike.DEFAULT);
-		}
-		wrapper.orderBy("create_time", false);
+            wrapper.like("title", wsAdsDTO.getTitle(), SqlLike.DEFAULT);
+        }
+        if (StringUtils.isNotBlank(wsAdsDTO.getContent())){
+            wrapper.like("content", wsAdsDTO.getContent(), SqlLike.DEFAULT);
+        }
+        wrapper.orderBy("create_time", false);
         Page<WsAdsDO> page = wsAdsService.selectPage(getPage(WsAdsDO.class), wrapper);
         return Result.ok(page);
-	}
+    }
 
-	@ResponseBody
-	@GetMapping("/queryRecentAdsList")
-	public Result<List<WsAdsDO>> queryRecentAdsList(Integer count){
-		if (null == count || count.intValue() <= 0){
-			count = 4;
-		}
-		Page<WsAdsDO> page = wsAdsService.selectPage(new Page<>(1,count), new EntityWrapper<WsAdsDO>()
-			.orderBy("create_time", false));
-		List<WsAdsDO> list = page.getRecords();
-		if (null != list){
-			return Result.ok(list);
-		}
+    @ResponseBody
+    @GetMapping("/queryRecentAdsList")
+    public Result<List<WsAdsDO>> queryRecentAdsList(Integer count){
+        if (null == count || count.intValue() <= 0){
+            count = 4;
+        }
+        Page<WsAdsDO> page = wsAdsService.selectPage(new Page<>(1,count), new EntityWrapper<WsAdsDO>()
+            .orderBy("create_time", false));
+        List<WsAdsDO> list = page.getRecords();
+        if (null != list){
+            return Result.ok(list);
+        }
 
-		return Result.fail();
-	}
+        return Result.fail();
+    }
 
-	/**
-	 * 根据id查询广告详情
-	 * @param id 广告id
-	 * @return
-	 */
-	@ResponseBody
-	@GetMapping("/selectById")
-	public Result<WsAdsDO> selectById(String id){
-		WsAdsDO wsAdsDO = wsAdsService.selectById(id);
-		return Result.ok(wsAdsDO);
-	}
+    /**
+     * 根据id查询广告详情
+     * @param id 广告id
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/selectById")
+    public Result<WsAdsDO> selectById(String id){
+        WsAdsDO wsAdsDO = wsAdsService.selectById(id);
+        return Result.ok(wsAdsDO);
+    }
 
     /**
      * 跳转到广告表添加页面
      */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="添加广告页面")
-	@GetMapping("/add")
+    @GetMapping("/add")
     public String add(Model model){
-		WsAdsDO wsAds = new WsAdsDO();
+        WsAdsDO wsAds = new WsAdsDO();
         model.addAttribute("wsAds", wsAds);
-	    return "zhddkk/wsAds/wsAdsForm";
-	}
+        return "zhddkk/wsAds/wsAdsForm";
+    }
 
     /**
      * 跳转到广告表编辑页面
      * @param id 广告表ID
      * @param model 广告表实体
      */
-	@GetMapping("/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id,Model model){
-		WsAdsDO wsAds = wsAdsService.selectById(id);
-		model.addAttribute("wsAds", wsAds);
-	    return "zhddkk/wsAds/wsAdsForm";
-	}
-	
-	/**
-	 * 保存广告表
-	 */
+        WsAdsDO wsAds = wsAdsService.selectById(id);
+        model.addAttribute("wsAds", wsAds);
+        return "zhddkk/wsAds/wsAdsForm";
+    }
+
+    /**
+     * 保存广告表
+     */
     @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.AD_PUBLISH,subModule="",describe="保存广告")
-	@ResponseBody
-	@PostMapping("/save")
-	@Transactional
-	public Result<String> save( WsAdsDO wsAds){
-		// 接收人列表
-		List<String> receiveList = new ArrayList<String>();
-		String title = wsAds.getTitle();
-		String content = wsAds.getContent();
-		if (StringUtils.isBlank(title) || StringUtils.isBlank(content)){
-			return Result.fail("参数不能为空");
-		}
+    @ResponseBody
+    @PostMapping("/save")
+    @Transactional
+    public Result<String> save( WsAdsDO wsAds){
+        // 接收人列表
+        List<String> receiveList = new ArrayList<String>();
+        String title = wsAds.getTitle();
+        String content = wsAds.getContent();
+        if (StringUtils.isBlank(title) || StringUtils.isBlank(content)){
+            return Result.fail("参数不能为空");
+        }
 
-		// 插入广告记录
-		WsAdsDO wsAdsDO = new WsAdsDO();
-		wsAdsDO.setTitle(title);
-		wsAdsDO.setContent(content);
-		boolean insertFlag = wsAdsService.insert(wsAdsDO);
-		if (insertFlag){
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String curTime = sdf.format(new Date());
-			Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-			for (Map.Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
-				if (entry.getKey().equals(CommonConstants.ADMIN_USER)) {
-					continue;
-				}
+        // 插入广告记录
+        WsAdsDO wsAdsDO = new WsAdsDO();
+        wsAdsDO.setTitle(title);
+        wsAdsDO.setContent(content);
+        boolean insertFlag = wsAdsService.insert(wsAdsDO);
+        if (insertFlag){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String curTime = sdf.format(new Date());
+            Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
+            for (Map.Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
+                if (entry.getKey().equals(CommonConstants.ADMIN_USER)) {
+                    continue;
+                }
 
-				try {
-					ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息",CommonConstants.ADMIN_USER,entry.getKey(), "title:"+title+";content:");
-					entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
-					receiveList.add(entry.getKey());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			wsAdsDO.setReceiveList(receiveList.toString());
-			wsAdsService.updateById(wsAdsDO);
-			return Result.ok();
-		}
-		return Result.fail();
-	}
+                try {
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息",CommonConstants.ADMIN_USER,entry.getKey(), "title:"+title+";content:");
+                    entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                    receiveList.add(entry.getKey());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            wsAdsDO.setReceiveList(receiveList.toString());
+            wsAdsService.updateById(wsAdsDO);
+            return Result.ok();
+        }
+        return Result.fail();
+    }
 
-	/**
-	 * 编辑广告表
-	 */
-	@ResponseBody
-	@RequestMapping("/update")
-	public Result<String> update( WsAdsDO wsAds){
-		wsAdsService.updateById(wsAds);
-		return Result.ok();
-	}
-	
-	/**
-	 * 删除广告表
-	 */
-    @OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="删除广告")
-	@PostMapping("/remove")
-	@ResponseBody
-	public Result<String> remove( Integer id){
-		wsAdsService.deleteById(id);
+    /**
+     * 编辑广告表
+     */
+    @ResponseBody
+    @RequestMapping("/update")
+    public Result<String> update( WsAdsDO wsAds){
+        wsAdsService.updateById(wsAds);
         return Result.ok();
-	}
-	
-	/**
-	 * 批量删除广告表
-	 */
-	@PostMapping("/batchRemove")
-	@ResponseBody
-	public Result<String> remove(@RequestParam("ids[]") Integer[] ids){
-		wsAdsService.deleteBatchIds(Arrays.asList(ids));
-		return Result.ok();
-	}
+    }
 
-	@GetMapping("/adsDetail.page")
-	public String adsDetail(@RequestParam("id") String id, Model model){
-		model.addAttribute("id", id);
-		return "zhddkk/wsAds/wsAdsDetail";
-	}
+    /**
+     * 删除广告表
+     */
+    @OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="删除广告")
+    @PostMapping("/remove")
+    @ResponseBody
+    public Result<String> remove( Integer id){
+        wsAdsService.deleteById(id);
+        return Result.ok();
+    }
+
+    /**
+     * 批量删除广告表
+     */
+    @PostMapping("/batchRemove")
+    @ResponseBody
+    public Result<String> remove(@RequestParam("ids[]") Integer[] ids){
+        wsAdsService.deleteBatchIds(Arrays.asList(ids));
+        return Result.ok();
+    }
+
+    @GetMapping("/adsDetail.page")
+    public String adsDetail(@RequestParam("id") String id, Model model){
+        model.addAttribute("id", id);
+        return "zhddkk/wsAds/wsAdsDetail";
+    }
 }

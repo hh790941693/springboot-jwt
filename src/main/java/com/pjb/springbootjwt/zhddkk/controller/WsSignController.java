@@ -46,39 +46,39 @@ public class WsSignController extends AdminBaseController {
     }
 
     @Autowired
-	private WsSignService wsSignService;
+    private WsSignService wsSignService;
 
     @Autowired
     private WsUsersService wsUsersService;
 
     /**
     * 跳转到用户签到表页面
-	*/
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.SIGN,subModule="",describe="用户签到页面")
-	@GetMapping()
-	//@RequiresPermissions("zhddkk:wsSign:wsSign")
+    */
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.SIGN,subModule="",describe="用户签到页面")
+    @GetMapping()
+    //@RequiresPermissions("zhddkk:wsSign:wsSign")
     public String wsSign(Model model, String user){
-	    model.addAttribute("user", user);
-	    return "zhddkk/wsSign/wsSign";
-	}
+        model.addAttribute("user", user);
+        return "zhddkk/wsSign/wsSign";
+    }
 
     /**
      * 获取用户签到表列表数据
      */
-	@ResponseBody
-	@GetMapping("/list")
-	//@RequiresPermissions("zhddkk:wsSign:wsSign")
-	public Result<Page<WsSignDO>> list(String userName){
+    @ResponseBody
+    @GetMapping("/list")
+    //@RequiresPermissions("zhddkk:wsSign:wsSign")
+    public Result<Page<WsSignDO>> list(String userName){
         Wrapper<WsSignDO> wrapper = new EntityWrapper<WsSignDO>();
         wrapper.eq("user_name", userName).orderBy("create_time", false);
         Page<WsSignDO> page = wsSignService.selectPage(getPage(WsSignDO.class), wrapper);
         return Result.ok(page);
-	}
+    }
 
     @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.SIGN,subModule="",describe="用户签到")
-	@ResponseBody
+    @ResponseBody
     @PostMapping("/sign")
-	public Result<String> sign(String user){
+    public Result<String> sign(String user){
         if (StringUtils.isBlank(user)){
             return Result.fail();
         }
@@ -90,8 +90,8 @@ public class WsSignController extends AdminBaseController {
         Date dayEnd = TimeUtil.getDayEnd(new Date());
         int signCnt = wsSignService.selectCount(new EntityWrapper<WsSignDO>().eq("user_id", wsUsersDO.getId()).
                 ge("create_time", dayStart).lt("create_time", dayEnd));
-	    if (signCnt>0){
-	        return Result.build(Result.CODE_FAIL, "已经签到过呐");
+        if (signCnt>0){
+            return Result.build(Result.CODE_FAIL, "已经签到过呐");
         }
         WsSignDO wsSignDO = new WsSignDO();
         wsSignDO.setUserId(wsUsersDO.getId());
@@ -109,69 +109,69 @@ public class WsSignController extends AdminBaseController {
     /**
      * 跳转到用户签到表添加页面
      */
-	@GetMapping("/add")
-	//@RequiresPermissions("zhddkk:wsSign:add")
+    @GetMapping("/add")
+    //@RequiresPermissions("zhddkk:wsSign:add")
     public String add(Model model){
-		WsSignDO wsSign = new WsSignDO();
+        WsSignDO wsSign = new WsSignDO();
         model.addAttribute("wsSign", wsSign);
-	    return "zhddkk/wsSign/wsSignForm";
-	}
+        return "zhddkk/wsSign/wsSignForm";
+    }
 
     /**
      * 跳转到用户签到表编辑页面
      * @param id 用户签到表ID
      * @param model 用户签到表实体
      */
-	@GetMapping("/edit/{id}")
-	//@RequiresPermissions("zhddkk:wsSign:edit")
+    @GetMapping("/edit/{id}")
+    //@RequiresPermissions("zhddkk:wsSign:edit")
     public String edit(@PathVariable("id") Integer id,Model model){
-		WsSignDO wsSign = wsSignService.selectById(id);
-		model.addAttribute("wsSign", wsSign);
-	    return "zhddkk/wsSign/wsSignForm";
-	}
-	
-	/**
-	 * 保存用户签到表
-	 */
-	@ResponseBody
-	@PostMapping("/save")
-	//@RequiresPermissions("zhddkk:wsSign:add")
-	public Result<String> save( WsSignDO wsSign){
-		wsSignService.insert(wsSign);
-        return Result.ok();
-	}
+        WsSignDO wsSign = wsSignService.selectById(id);
+        model.addAttribute("wsSign", wsSign);
+        return "zhddkk/wsSign/wsSignForm";
+    }
 
-	/**
-	 * 编辑用户签到表
-	 */
-	@ResponseBody
-	@RequestMapping("/update")
-	//@RequiresPermissions("zhddkk:wsSign:edit")
-	public Result<String> update( WsSignDO wsSign){
-		wsSignService.updateById(wsSign);
-		return Result.ok();
-	}
-	
-	/**
-	 * 删除用户签到表
-	 */
-	@PostMapping("/remove")
-	@ResponseBody
-	//@RequiresPermissions("zhddkk:wsSign:remove")
-	public Result<String> remove( Integer id){
-		wsSignService.deleteById(id);
+    /**
+     * 保存用户签到表
+     */
+    @ResponseBody
+    @PostMapping("/save")
+    //@RequiresPermissions("zhddkk:wsSign:add")
+    public Result<String> save( WsSignDO wsSign){
+        wsSignService.insert(wsSign);
         return Result.ok();
-	}
-	
-	/**
-	 * 批量删除用户签到表
-	 */
-	@PostMapping("/batchRemove")
-	@ResponseBody
-	//@RequiresPermissions("zhddkk:wsSign:batchRemove")
-	public Result<String> remove(@RequestParam("ids[]") Integer[] ids){
-		wsSignService.deleteBatchIds(Arrays.asList(ids));
-		return Result.ok();
-	}
-	
+    }
+
+    /**
+     * 编辑用户签到表
+     */
+    @ResponseBody
+    @RequestMapping("/update")
+    //@RequiresPermissions("zhddkk:wsSign:edit")
+    public Result<String> update( WsSignDO wsSign){
+        wsSignService.updateById(wsSign);
+        return Result.ok();
+    }
+
+    /**
+     * 删除用户签到表
+     */
+    @PostMapping("/remove")
+    @ResponseBody
+    //@RequiresPermissions("zhddkk:wsSign:remove")
+    public Result<String> remove( Integer id){
+        wsSignService.deleteById(id);
+        return Result.ok();
+    }
+
+    /**
+     * 批量删除用户签到表
+     */
+    @PostMapping("/batchRemove")
+    @ResponseBody
+    //@RequiresPermissions("zhddkk:wsSign:batchRemove")
+    public Result<String> remove(@RequestParam("ids[]") Integer[] ids){
+        wsSignService.deleteBatchIds(Arrays.asList(ids));
+        return Result.ok();
+    }
+
 }

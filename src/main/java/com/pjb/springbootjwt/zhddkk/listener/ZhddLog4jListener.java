@@ -15,23 +15,23 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ZhddLog4jListener implements ServletContextListener
 {
-	private static final Log logger = LogFactory.getLog(ZhddLog4jListener.class);
-	
-	public static final String log4jDirKey = "webAppRootPath";
-	
-	
-	@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
-		System.getProperties().remove(log4jDirKey);
-		
-	}
+    private static final Log logger = LogFactory.getLog(ZhddLog4jListener.class);
 
-	@Override
-	public void contextInitialized(ServletContextEvent arg0) {
-		String contextPath = arg0.getServletContext().getRealPath("/");
-		logger.debug("contextPath:" + contextPath);
-		//System.out.println("contextPath:"+contextPath);
-		System.setProperty(log4jDirKey, contextPath);
-	}
+    public static final String log4jDirKey = "webAppRootPath";
+
+
+    @Override
+    public void contextDestroyed(ServletContextEvent arg0) {
+        System.getProperties().remove(log4jDirKey);
+
+    }
+
+    @Override
+    public void contextInitialized(ServletContextEvent arg0) {
+        String contextPath = arg0.getServletContext().getRealPath("/");
+        logger.debug("contextPath:" + contextPath);
+        //System.out.println("contextPath:"+contextPath);
+        System.setProperty(log4jDirKey, contextPath);
+    }
 
 }

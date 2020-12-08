@@ -16,10 +16,10 @@ public class MpGenerator {
      * @param args
      */
     public static void main(String[] args) {
-    	
-    	//要生成的表名称  all表示生成所有的表
-    	String generateTableName = "ws_operation_log";
-    	
+
+        //要生成的表名称  all表示生成所有的表
+        String generateTableName = "ws_operation_log";
+
         AutoGenerator mpg = new AutoGenerator();
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
@@ -64,7 +64,7 @@ public class MpGenerator {
         //strategy.setInclude(new String[]{"sys_order"});//生成指定表
         strategy.setTablePrefix("t_");//去除表名前缀t_
         if (!generateTableName.equalsIgnoreCase("all")) {
-        	strategy.setInclude(generateTableName);//指定要生成的表
+            strategy.setInclude(generateTableName);//指定要生成的表
         }
         mpg.setStrategy(strategy);
 

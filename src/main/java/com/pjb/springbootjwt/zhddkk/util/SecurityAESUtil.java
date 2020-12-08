@@ -44,17 +44,17 @@ public class SecurityAESUtil {
     }
     
     public static void main(String[] args) {
-    	String miwen = encryptAES("test","hch");
-    	String mingwen = decryptAES(miwen,"hch");
-    	System.out.println("test:"+miwen);
-    	System.out.println("test:"+mingwen);
+        String miwen = encryptAES("test","hch");
+        String mingwen = decryptAES(miwen,"hch");
+        System.out.println("test:"+miwen);
+        System.out.println("test:"+mingwen);
     }
 
     /**
      * 加密字符串
      */
     public static String ebotongEncrypto(String str) {
-		BASE64Encoder base64encoder = new BASE64Encoder();
+        BASE64Encoder base64encoder = new BASE64Encoder();
         String result = str;
         if (str != null && str.length() > 0) {
                 try {

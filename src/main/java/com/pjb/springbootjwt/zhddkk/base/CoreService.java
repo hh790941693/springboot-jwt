@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.IService;
 
 public interface CoreService<T> extends IService<T> {
-	
+
     List<T> findByKv(Object... param);
 
     T findOneByKv(Object... param);

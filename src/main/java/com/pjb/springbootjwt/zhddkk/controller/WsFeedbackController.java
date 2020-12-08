@@ -46,21 +46,21 @@ public class WsFeedbackController extends AdminBaseController {
     }
 
     @Autowired
-	private WsFeedbackService wsFeedbackService;
+    private WsFeedbackService wsFeedbackService;
 
     @Autowired
     private WsUsersService wsUsersService;
 
     /**
     * 跳转到问题反馈页面
-	*/
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FEED_BACK,subModule="",describe="我的反馈建议页面")
-	@GetMapping("/myFeedback")
-	//@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
+    */
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FEED_BACK,subModule="",describe="我的反馈建议页面")
+    @GetMapping("/myFeedback")
+    //@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
     public String wsFeedback(Model model, String user){
-		model.addAttribute("username", user);
-	    return "zhddkk/wsFeedback/wsFeedback";
-	}
+        model.addAttribute("username", user);
+        return "zhddkk/wsFeedback/wsFeedback";
+    }
 
     /**
      * 跳转到问题反馈页面
@@ -76,10 +76,10 @@ public class WsFeedbackController extends AdminBaseController {
      * 获取问题反馈列表数据
      */
     @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.FEED_BACK,subModule="",describe="我的反馈建议列表")
-	@ResponseBody
-	@GetMapping("/myFeedbackList")
-	//@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
-	public Result<Page<WsFeedbackDO>> myFeedbackList(WsFeedbackDO wsFeedbackDTO){
+    @ResponseBody
+    @GetMapping("/myFeedbackList")
+    //@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
+    public Result<Page<WsFeedbackDO>> myFeedbackList(WsFeedbackDO wsFeedbackDTO){
         Wrapper<WsFeedbackDO> wrapper = new EntityWrapper<WsFeedbackDO>();
         if (StringUtils.isNotBlank(wsFeedbackDTO.getUserName())){
             wrapper.eq("user_name", wsFeedbackDTO.getUserName());
@@ -90,7 +90,7 @@ public class WsFeedbackController extends AdminBaseController {
         wrapper.ne("status", "0").orderBy("create_time",false);
         Page<WsFeedbackDO> page = wsFeedbackService.selectPage(getPage(WsFeedbackDO.class), wrapper);
         return Result.ok(page);
-	}
+    }
 
     /**
      * 获取问题反馈列表数据
@@ -116,106 +116,106 @@ public class WsFeedbackController extends AdminBaseController {
      * 跳转到问题反馈添加页面
      */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FEED_BACK,subModule="",describe="添加反馈建议页面")
-	@GetMapping("/add")
-	//@RequiresPermissions("zhddkk:wsFeedback:add")
+    @GetMapping("/add")
+    //@RequiresPermissions("zhddkk:wsFeedback:add")
     public String add(Model model, String user){
-		WsFeedbackDO wsFeedback = new WsFeedbackDO();
+        WsFeedbackDO wsFeedback = new WsFeedbackDO();
         wsFeedback.setUserName(user);
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         wsFeedback.setUserId(wsUsersDO.getId());
         wsFeedback.setStatus(1);
         wsFeedback.setCreateTime(new Date());
         model.addAttribute("wsFeedback", wsFeedback);
-	    return "zhddkk/wsFeedback/wsFeedbackForm";
-	}
+        return "zhddkk/wsFeedback/wsFeedbackForm";
+    }
 
     /**
      * 跳转到问题反馈编辑页面
      * @param id 问题反馈ID
      * @param model 问题反馈实体
      */
-	@GetMapping("/edit/{id}")
-	//@RequiresPermissions("zhddkk:wsFeedback:edit")
+    @GetMapping("/edit/{id}")
+    //@RequiresPermissions("zhddkk:wsFeedback:edit")
     public String edit(@PathVariable("id") Integer id,Model model){
-		WsFeedbackDO wsFeedback = wsFeedbackService.selectById(id);
-		model.addAttribute("wsFeedback", wsFeedback);
-	    return "zhddkk/wsFeedback/wsFeedbackForm";
-	}
-	
-	/**
-	 * 保存问题反馈
-	 */
-    @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.FEED_BACK,subModule="",describe="保存反馈建议")
-	@ResponseBody
-	@PostMapping("/save")
-	//@RequiresPermissions("zhddkk:wsFeedback:add")
-	public Result<String> save( WsFeedbackDO wsFeedback){
-		wsFeedbackService.insert(wsFeedback);
-        return Result.ok();
-	}
+        WsFeedbackDO wsFeedback = wsFeedbackService.selectById(id);
+        model.addAttribute("wsFeedback", wsFeedback);
+        return "zhddkk/wsFeedback/wsFeedbackForm";
+    }
 
-	/**
-	 * 编辑问题反馈
-	 */
-	@ResponseBody
-	@RequestMapping("/update")
-	//@RequiresPermissions("zhddkk:wsFeedback:edit")
-	public Result<String> update( WsFeedbackDO wsFeedback){
-		wsFeedbackService.updateById(wsFeedback);
-		return Result.ok();
-	}
-	
-	/**
-	 * 删除问题反馈
-	 */
+    /**
+     * 保存问题反馈
+     */
+    @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.FEED_BACK,subModule="",describe="保存反馈建议")
+    @ResponseBody
+    @PostMapping("/save")
+    //@RequiresPermissions("zhddkk:wsFeedback:add")
+    public Result<String> save( WsFeedbackDO wsFeedback){
+        wsFeedbackService.insert(wsFeedback);
+        return Result.ok();
+    }
+
+    /**
+     * 编辑问题反馈
+     */
+    @ResponseBody
+    @RequestMapping("/update")
+    //@RequiresPermissions("zhddkk:wsFeedback:edit")
+    public Result<String> update( WsFeedbackDO wsFeedback){
+        wsFeedbackService.updateById(wsFeedback);
+        return Result.ok();
+    }
+
+    /**
+     * 删除问题反馈
+     */
     @OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.FEED_BACK,subModule="",describe="删除反馈建议")
-	@PostMapping("/remove")
-	@ResponseBody
-	//@RequiresPermissions("zhddkk:wsFeedback:remove")
-	public Result<String> remove( Integer id){
-	    WsFeedbackDO wsFeedbackDO = wsFeedbackService.selectById(id);
-	    if (null != wsFeedbackDO) {
+    @PostMapping("/remove")
+    @ResponseBody
+    //@RequiresPermissions("zhddkk:wsFeedback:remove")
+    public Result<String> remove( Integer id){
+        WsFeedbackDO wsFeedbackDO = wsFeedbackService.selectById(id);
+        if (null != wsFeedbackDO) {
             wsFeedbackDO.setStatus(0);
             wsFeedbackService.updateById(wsFeedbackDO);
             return Result.ok();
         }
         return Result.fail();
-	}
-	
-	/**
-	 * 批量删除问题反馈
-	 */
-	@PostMapping("/batchRemove")
-	@ResponseBody
-	//@RequiresPermissions("zhddkk:wsFeedback:batchRemove")
-	public Result<String> remove(@RequestParam("ids[]") Integer[] ids){
-		wsFeedbackService.deleteBatchIds(Arrays.asList(ids));
-		return Result.ok();
-	}
+    }
+
+    /**
+     * 批量删除问题反馈
+     */
+    @PostMapping("/batchRemove")
+    @ResponseBody
+    //@RequiresPermissions("zhddkk:wsFeedback:batchRemove")
+    public Result<String> remove(@RequestParam("ids[]") Integer[] ids){
+        wsFeedbackService.deleteBatchIds(Arrays.asList(ids));
+        return Result.ok();
+    }
 
     @OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.FEED_BACK,subModule="",describe="回复反馈建议(管理员)")
-	@ResponseBody
+    @ResponseBody
     @PostMapping("/replyFeedback")
-	public Result<String> replyFeedback(Integer id, String replyContext){
-	    WsFeedbackDO wsFeedbackDO = wsFeedbackService.selectById(id);
-	    if (null == wsFeedbackDO){
-	        return Result.fail("记录不存在");
+    public Result<String> replyFeedback(Integer id, String replyContext){
+        WsFeedbackDO wsFeedbackDO = wsFeedbackService.selectById(id);
+        if (null == wsFeedbackDO){
+            return Result.fail("记录不存在");
         }
 
         if (wsFeedbackDO.getStatus().intValue() != 1){
-	        return Result.fail("记录不是待答复状态");
+            return Result.fail("记录不是待答复状态");
         }
 
         wsFeedbackDO.setStatus(2);
-	    wsFeedbackDO.setReplyTime(new Date());
-	    wsFeedbackDO.setReplyContent(replyContext);
+        wsFeedbackDO.setReplyTime(new Date());
+        wsFeedbackDO.setReplyContent(replyContext);
 
-	    boolean updateFlag = wsFeedbackService.updateById(wsFeedbackDO);
-	    if (updateFlag){
-	        return Result.ok();
+        boolean updateFlag = wsFeedbackService.updateById(wsFeedbackDO);
+        if (updateFlag){
+            return Result.ok();
         }
 
         return Result.fail();
     }
-	
+
 }

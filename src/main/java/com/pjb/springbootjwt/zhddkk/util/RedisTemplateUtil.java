@@ -12,12 +12,12 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ValueOperations;
 
 public class RedisTemplateUtil {
-	
-	@Autowired
-	private RedisTemplate<String,Object> redisTemplate;
+
+    @Autowired
+    private RedisTemplate<String,Object> redisTemplate;
  
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	public RedisTemplateUtil(RedisTemplate redisTemplate) {
+    public RedisTemplateUtil(RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
  

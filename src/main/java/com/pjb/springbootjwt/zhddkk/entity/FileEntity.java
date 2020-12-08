@@ -1,73 +1,73 @@
 package com.pjb.springbootjwt.zhddkk.entity;
 
 public class FileEntity {
-	private String fileName;
-	
-	private String fileAbsName;
-	
-	private String author;
-	
-	private String modifyTime;
-	
-	private long fileSize; 
-	
-	private String trackLength;
-	
-	private String remark;
+    private String fileName;
 
-	public String getFileName() {
-		return fileName;
-	}
+    private String fileAbsName;
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    private String author;
 
-	public String getFileAbsName() {
-		return fileAbsName;
-	}
+    private String modifyTime;
 
-	public void setFileAbsName(String fileAbsName) {
-		this.fileAbsName = fileAbsName;
-	}
+    private long fileSize;
 
-	public String getAuthor() {
-		return author;
-	}
+    private String trackLength;
 
-	public void setAuthor(String author) {
-		this.author = author;
-	}
+    private String remark;
 
-	public String getModifyTime() {
-		return modifyTime;
-	}
+    public String getFileName() {
+        return fileName;
+    }
 
-	public void setModifyTime(String modifyTime) {
-		this.modifyTime = modifyTime;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	public String getRemark() {
-		return remark;
-	}
+    public String getFileAbsName() {
+        return fileAbsName;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public void setFileAbsName(String fileAbsName) {
+        this.fileAbsName = fileAbsName;
+    }
 
-	public long getFileSize() {
-		return fileSize;
-	}
+    public String getAuthor() {
+        return author;
+    }
 
-	public void setFileSize(long fileSize) {
-		this.fileSize = fileSize;
-	}
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
-	public String getTrackLength() {
-		return trackLength;
-	}
+    public String getModifyTime() {
+        return modifyTime;
+    }
 
-	public void setTrackLength(String trackLength) {
-		this.trackLength = trackLength;
-	}
+    public void setModifyTime(String modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public String getTrackLength() {
+        return trackLength;
+    }
+
+    public void setTrackLength(String trackLength) {
+        this.trackLength = trackLength;
+    }
 }

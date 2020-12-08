@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 
 public abstract class CoreServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements CoreService<T> {
-	
-	@Override
+
+    @Override
     public List<T> findByKv(Object... params) {
         if (params == null) {
             return new ArrayList<>();

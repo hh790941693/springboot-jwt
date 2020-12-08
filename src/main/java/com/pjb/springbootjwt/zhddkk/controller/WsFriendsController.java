@@ -46,77 +46,77 @@ public class WsFriendsController extends AdminBaseController {
     }
 
     @Autowired
-	private WsFriendsService wsFriendsService;
+    private WsFriendsService wsFriendsService;
 
     @Autowired
     private WsFriendsApplyService wsFriendsApplyService;
 
     /**
     * 跳转到好友列表页面
-	*/
-	@OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FRIENDS,subModule="",describe="好友列表页面")
-	@GetMapping()
+    */
+    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FRIENDS,subModule="",describe="好友列表页面")
+    @GetMapping()
     public String wsFriends(Model model, String user){
-		model.addAttribute("user", user);
-	    return "zhddkk/wsFriends/wsFriends";
-	}
+        model.addAttribute("user", user);
+        return "zhddkk/wsFriends/wsFriends";
+    }
 
     /**
      * 获取好友列表列表数据
      */
     @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.FRIENDS,subModule="",describe="好友列表")
-	@ResponseBody
-	@GetMapping("/list")
-	public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDTO){
-		Wrapper<WsFriendsDO> wrapper = new EntityWrapper<WsFriendsDO>();
-		if (StringUtils.isNotBlank(wsFriendsDTO.getUname())){
-			wrapper.eq("t1.uname", wsFriendsDTO.getUname());
-		}
-		if (StringUtils.isNotBlank(wsFriendsDTO.getFname())){
-			wrapper.like("t1.fname", wsFriendsDTO.getFname());
-		}
-		wrapper.orderBy("t2.state", false).orderBy("t1.create_time", false);
-		Page<WsFriendsDO> qryPage = getPage(WsFriendsDO.class);
-		List<WsFriendsDO> list = wsFriendsService.queryFriendsPage(qryPage, wrapper);
-		qryPage.setRecords(list);
-		return Result.ok(qryPage);
-	}
+    @ResponseBody
+    @GetMapping("/list")
+    public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDTO){
+        Wrapper<WsFriendsDO> wrapper = new EntityWrapper<WsFriendsDO>();
+        if (StringUtils.isNotBlank(wsFriendsDTO.getUname())){
+            wrapper.eq("t1.uname", wsFriendsDTO.getUname());
+        }
+        if (StringUtils.isNotBlank(wsFriendsDTO.getFname())){
+            wrapper.like("t1.fname", wsFriendsDTO.getFname());
+        }
+        wrapper.orderBy("t2.state", false).orderBy("t1.create_time", false);
+        Page<WsFriendsDO> qryPage = getPage(WsFriendsDO.class);
+        List<WsFriendsDO> list = wsFriendsService.queryFriendsPage(qryPage, wrapper);
+        qryPage.setRecords(list);
+        return Result.ok(qryPage);
+    }
 
-	/**
-	 * 删除好友列表
-	 */
+    /**
+     * 删除好友列表
+     */
     @OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.FRIENDS,subModule="",describe="删除好友")
-	@PostMapping("/remove")
-	@ResponseBody
-	@Transactional
-	public Result<String> remove( Integer id){
-		WsFriendsDO wsFriendsDO = wsFriendsService.selectById(id);
-		if (null == wsFriendsDO){
-			return Result.fail();
-		}
+    @PostMapping("/remove")
+    @ResponseBody
+    @Transactional
+    public Result<String> remove( Integer id){
+        WsFriendsDO wsFriendsDO = wsFriendsService.selectById(id);
+        if (null == wsFriendsDO){
+            return Result.fail();
+        }
 
-		String uname = wsFriendsDO.getUname();
-		String fname = wsFriendsDO.getFname();
-		logger.info("uname:"+uname+"   fname:"+fname);
-		if (StringUtils.isNotEmpty(uname) && StringUtils.isNotEmpty(fname)) {
-			wsFriendsService.delete(new EntityWrapper<WsFriendsDO>().eq("uname", uname).eq("fname", fname));
-			wsFriendsService.delete(new EntityWrapper<WsFriendsDO>().eq("uname", fname).eq("fname", uname));
-			wsFriendsApplyService.delete(new EntityWrapper<WsFriendsApplyDO>().eq("from_name", fname)
-					.eq("to_name", uname));
-			wsFriendsApplyService.delete(new EntityWrapper<WsFriendsApplyDO>().eq("from_name", uname)
-					.eq("to_name", fname));
-		}
+        String uname = wsFriendsDO.getUname();
+        String fname = wsFriendsDO.getFname();
+        logger.info("uname:"+uname+"   fname:"+fname);
+        if (StringUtils.isNotEmpty(uname) && StringUtils.isNotEmpty(fname)) {
+            wsFriendsService.delete(new EntityWrapper<WsFriendsDO>().eq("uname", uname).eq("fname", fname));
+            wsFriendsService.delete(new EntityWrapper<WsFriendsDO>().eq("uname", fname).eq("fname", uname));
+            wsFriendsApplyService.delete(new EntityWrapper<WsFriendsApplyDO>().eq("from_name", fname)
+                    .eq("to_name", uname));
+            wsFriendsApplyService.delete(new EntityWrapper<WsFriendsApplyDO>().eq("from_name", uname)
+                    .eq("to_name", fname));
+        }
 
         return Result.ok();
-	}
-	
-	/**
-	 * 批量删除好友列表
-	 */
-	@PostMapping("/batchRemove")
-	@ResponseBody
-	public Result<String> remove(@RequestParam("ids[]") Integer[] ids){
-		wsFriendsService.deleteBatchIds(Arrays.asList(ids));
-		return Result.ok();
-	}
+    }
+
+    /**
+     * 批量删除好友列表
+     */
+    @PostMapping("/batchRemove")
+    @ResponseBody
+    public Result<String> remove(@RequestParam("ids[]") Integer[] ids){
+        wsFriendsService.deleteBatchIds(Arrays.asList(ids));
+        return Result.ok();
+    }
 }

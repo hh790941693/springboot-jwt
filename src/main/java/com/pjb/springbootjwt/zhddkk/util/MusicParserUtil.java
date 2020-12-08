@@ -41,37 +41,37 @@ public class MusicParserUtil {
     }
     
     public static String getMusicTrackTime(String filePosition) {
-    	String res = "00:00";
-    	int trackLength = getDuration(filePosition);
-    	if (trackLength < 60) {
-    		if (trackLength<10) {
-    			res = "00:0" + trackLength;
-    		}else {
-    			res = "00:" + trackLength;
-    		}
-    	}else if (trackLength >=60 && trackLength<=3600) {
-    		int minutes = trackLength / 60;
-    		int seconds = trackLength % 60;
-    		
-    		String minutesStr = String.valueOf(minutes);
-    		if (minutes < 10) {
-    			minutesStr = "0" + minutes;
-    		}
-    		
-    		String secondsStr = String.valueOf(seconds);
-    		if (seconds < 10) {
-    			secondsStr = "0" + seconds;
-    		}
-    		
-    		res = minutesStr + ":" + secondsStr;
-    	}
-    	
-    	return res;
+        String res = "00:00";
+        int trackLength = getDuration(filePosition);
+        if (trackLength < 60) {
+            if (trackLength<10) {
+                res = "00:0" + trackLength;
+            }else {
+                res = "00:" + trackLength;
+            }
+        }else if (trackLength >=60 && trackLength<=3600) {
+            int minutes = trackLength / 60;
+            int seconds = trackLength % 60;
+
+            String minutesStr = String.valueOf(minutes);
+            if (minutes < 10) {
+                minutesStr = "0" + minutes;
+            }
+
+            String secondsStr = String.valueOf(seconds);
+            if (seconds < 10) {
+                secondsStr = "0" + seconds;
+            }
+
+            res = minutesStr + ":" + secondsStr;
+        }
+
+        return res;
     }
     
     public static void main(String[] args) {
         String position = "D:\\CloudMusic\\fsaf.mp3";
         play(position);
-    	System.out.println(getMusicTrackTime(position));
+        System.out.println(getMusicTrackTime(position));
     }
 }

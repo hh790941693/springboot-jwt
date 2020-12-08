@@ -33,199 +33,199 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 @Configuration
 public class WsInterceptor extends HandlerInterceptorAdapter implements InitializingBean {
 
-	private Logger logger = LoggerFactory.getLogger(WsInterceptor.class);
+    private Logger logger = LoggerFactory.getLogger(WsInterceptor.class);
 
-	@Autowired
-	private WsDicService wsDicService;
+    @Autowired
+    private WsDicService wsDicService;
 
-	// 字典表
-	public static List<WsDicDO> dicList = new ArrayList<WsDicDO>();
-	
-	public static Map<String,List<WsDicDO>> dicMap = new HashMap<String,List<WsDicDO>>();
-	
-	// config.properties中的记录
-	public static Map<String, String> configMap = new HashMap<String, String>();
+    // 字典表
+    public static List<WsDicDO> dicList = new ArrayList<WsDicDO>();
 
-	public static Map<String, String> chatMappingMap = new HashMap<>();
-	
-	public static List<WsDicDO> getDicList() {
-		return dicList;
-	}
+    public static Map<String,List<WsDicDO>> dicMap = new HashMap<String,List<WsDicDO>>();
 
-	public static void setDicList(List<WsDicDO> dicList) {
-		WsInterceptor.dicList = dicList;
-	}
+    // config.properties中的记录
+    public static Map<String, String> configMap = new HashMap<String, String>();
 
-	public static Map<String, List<WsDicDO>> getDicMap() {
-		return dicMap;
-	}
+    public static Map<String, String> chatMappingMap = new HashMap<>();
 
-	public static void setDicMap(Map<String, List<WsDicDO>> dicMap) {
-		WsInterceptor.dicMap = dicMap;
-	}
+    public static List<WsDicDO> getDicList() {
+        return dicList;
+    }
 
-	public static Map<String, String> getConfigMap() {
-		return configMap;
-	}
+    public static void setDicList(List<WsDicDO> dicList) {
+        WsInterceptor.dicList = dicList;
+    }
 
-	public static void setConfigMap(Map<String, String> configMap) {
-		WsInterceptor.configMap = configMap;
-	}
+    public static Map<String, List<WsDicDO>> getDicMap() {
+        return dicMap;
+    }
 
-	public static Map<String, String> getChatMappingMap() {
-		return chatMappingMap;
-	}
+    public static void setDicMap(Map<String, List<WsDicDO>> dicMap) {
+        WsInterceptor.dicMap = dicMap;
+    }
 
-	public static void setChatMappingMap(Map<String, String> chatMappingMap) {
-		WsInterceptor.chatMappingMap = chatMappingMap;
-	}
+    public static Map<String, String> getConfigMap() {
+        return configMap;
+    }
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		logger.info("WsInterceptor call afterPropertiesSet()");
-		loadData();
-	}
-	
-	public boolean preHandle(HttpServletRequest request) {
-		System.out.println("-------------------preHandle------------------");
-		logger.info("WsInterceptor call preHandle()");
-		return true;
-	}
-	
-	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-		System.out.println("-------------------postHandle------------------");
-		logger.info("WsInterceptor call postHandle()");
-	}
-	
-	public void afterCompletion(
-			HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-			throws Exception {
-		System.out.println("-------------------afterCompletion------------------");
-		logger.info("WsInterceptor call afterCompletion()");
-	}
-	
-	private void loadData() {
-		dicMap.clear();
-		dicList.clear();
-		configMap.clear();
-		chatMappingMap.clear();
-		try {
-			loadDicData();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("初始化表dic数据失败!" + e.getMessage());
-		}
+    public static void setConfigMap(Map<String, String> configMap) {
+        WsInterceptor.configMap = configMap;
+    }
 
-		try {
-			loadConfigPropertiesData("config.properties", configMap);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("初始化config.properties失败!" + e.getMessage());
-		}
+    public static Map<String, String> getChatMappingMap() {
+        return chatMappingMap;
+    }
 
-		try {
-			loadConfigPropertiesData("chatmapping.properties", chatMappingMap);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("初始化chatmapping.properties失败!" + e.getMessage());
-		}
-	}
-	
-	private void loadDicData() {
-		logger.info("call loadDicData");
-		List<WsDicDO> dicListTmp = wsDicService.selectList(null);
-		dicList.addAll(dicListTmp);
-		for (WsDicDO dic : dicListTmp) {
-			String type = dic.getType();
-			String key = dic.getKey();
-			String value = dic.getValue();
-			
-			if (CommonUtil.validateEmpty(type) || CommonUtil.validateEmpty(key)
-					|| CommonUtil.validateEmpty(value)) {
-				continue;
-			}
+    public static void setChatMappingMap(Map<String, String> chatMappingMap) {
+        WsInterceptor.chatMappingMap = chatMappingMap;
+    }
 
-			if (dicMap.containsKey(type)) {
-				List<WsDicDO> tmpDicList = dicMap.get(type);
-				tmpDicList.add(dic);
-			} else {
-				List<WsDicDO> tmpDicList = new ArrayList<WsDicDO>();
-				tmpDicList.add(dic);
-				dicMap.put(type, tmpDicList);
-			}
-		}
-	}
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        logger.info("WsInterceptor call afterPropertiesSet()");
+        loadData();
+    }
 
-	/**
-	 * 加载指定的配置文件内容到内存中去
-	 */
-	private void loadConfigPropertiesData(String filename, Map<String, String> map) {
-		if (StringUtils.isBlank(filename)){
-			return;
-		}
-		logger.info("call load data from:"+filename);
+    public boolean preHandle(HttpServletRequest request) {
+        System.out.println("-------------------preHandle------------------");
+        logger.info("WsInterceptor call preHandle()");
+        return true;
+    }
 
-		InputStream stream = null;
-		InputStreamReader reader = null;
-		BufferedReader br = null;
-		try {
-			stream = getClass().getClassLoader().getResourceAsStream(filename);
-			reader = new InputStreamReader(stream,"UTF-8");
-			br = new BufferedReader(reader);
-			String data = null;
-			while ((data = br.readLine()) != null) {
-				if (data.startsWith("#")) {
-					continue;
-				}
-				if (data.trim().equals("")) {
-					continue;
-				}
-				String key = data.split("=")[0].trim();
-				key = UnicodeUtil.unicode2String(key);
-				String value = "";
-				if (data.split("=").length > 1) {
-					value = data.split("=")[1].trim();
-					value = UnicodeUtil.unicode2String(value);
-				}
-				if (!map.containsKey(key)) {
-					map.put(key, value);
-				}
-			}
-		} catch (Exception e) {
-			logger.info("查找文件"+filename+"失败! 改从ServiceConstants中加载配置");
-			System.out.println("查找文件"+filename+"失败! 改从ServiceConstants中加载配置");
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+        System.out.println("-------------------postHandle------------------");
+        logger.info("WsInterceptor call postHandle()");
+    }
 
-			loadDefaultConfigData();
-			return;
-		}finally{
-			if (br != null) {
-				try {
-					br.close();
-				} catch (Exception e2) {
-				}
-			}
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (Exception e1) {
-				}
-			}
-			if (stream != null) {
-				try {
-					stream.close();
-				} catch (Exception e3) {
-				}
-			}
-		}
-		System.out.println(filename+"配置:" + map);
-	}
+    public void afterCompletion(
+            HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+            throws Exception {
+        System.out.println("-------------------afterCompletion------------------");
+        logger.info("WsInterceptor call afterCompletion()");
+    }
 
-	private void loadDefaultConfigData() {
-		// 版本号
-		configMap.put("author", "huangchaohui");
-		configMap.put("contact", "547495788@qq.com");
-		configMap.put("address", "Flower Gaden#5,Freedom street,Da Ye,Huang Shi,Wu Han,Hu Bei province");
-		configMap.put("copyRight", "All Rights reserved@2018-2035");
-		configMap.put("version", "1.0-Snapshot");
-	}
+    private void loadData() {
+        dicMap.clear();
+        dicList.clear();
+        configMap.clear();
+        chatMappingMap.clear();
+        try {
+            loadDicData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("初始化表dic数据失败!" + e.getMessage());
+        }
+
+        try {
+            loadConfigPropertiesData("config.properties", configMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("初始化config.properties失败!" + e.getMessage());
+        }
+
+        try {
+            loadConfigPropertiesData("chatmapping.properties", chatMappingMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("初始化chatmapping.properties失败!" + e.getMessage());
+        }
+    }
+
+    private void loadDicData() {
+        logger.info("call loadDicData");
+        List<WsDicDO> dicListTmp = wsDicService.selectList(null);
+        dicList.addAll(dicListTmp);
+        for (WsDicDO dic : dicListTmp) {
+            String type = dic.getType();
+            String key = dic.getKey();
+            String value = dic.getValue();
+
+            if (CommonUtil.validateEmpty(type) || CommonUtil.validateEmpty(key)
+                    || CommonUtil.validateEmpty(value)) {
+                continue;
+            }
+
+            if (dicMap.containsKey(type)) {
+                List<WsDicDO> tmpDicList = dicMap.get(type);
+                tmpDicList.add(dic);
+            } else {
+                List<WsDicDO> tmpDicList = new ArrayList<WsDicDO>();
+                tmpDicList.add(dic);
+                dicMap.put(type, tmpDicList);
+            }
+        }
+    }
+
+    /**
+     * 加载指定的配置文件内容到内存中去
+     */
+    private void loadConfigPropertiesData(String filename, Map<String, String> map) {
+        if (StringUtils.isBlank(filename)){
+            return;
+        }
+        logger.info("call load data from:"+filename);
+
+        InputStream stream = null;
+        InputStreamReader reader = null;
+        BufferedReader br = null;
+        try {
+            stream = getClass().getClassLoader().getResourceAsStream(filename);
+            reader = new InputStreamReader(stream,"UTF-8");
+            br = new BufferedReader(reader);
+            String data = null;
+            while ((data = br.readLine()) != null) {
+                if (data.startsWith("#")) {
+                    continue;
+                }
+                if (data.trim().equals("")) {
+                    continue;
+                }
+                String key = data.split("=")[0].trim();
+                key = UnicodeUtil.unicode2String(key);
+                String value = "";
+                if (data.split("=").length > 1) {
+                    value = data.split("=")[1].trim();
+                    value = UnicodeUtil.unicode2String(value);
+                }
+                if (!map.containsKey(key)) {
+                    map.put(key, value);
+                }
+            }
+        } catch (Exception e) {
+            logger.info("查找文件"+filename+"失败! 改从ServiceConstants中加载配置");
+            System.out.println("查找文件"+filename+"失败! 改从ServiceConstants中加载配置");
+
+            loadDefaultConfigData();
+            return;
+        }finally{
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (Exception e2) {
+                }
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (Exception e1) {
+                }
+            }
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (Exception e3) {
+                }
+            }
+        }
+        System.out.println(filename+"配置:" + map);
+    }
+
+    private void loadDefaultConfigData() {
+        // 版本号
+        configMap.put("author", "huangchaohui");
+        configMap.put("contact", "547495788@qq.com");
+        configMap.put("address", "Flower Gaden#5,Freedom street,Da Ye,Huang Shi,Wu Han,Hu Bei province");
+        configMap.put("copyRight", "All Rights reserved@2018-2035");
+        configMap.put("version", "1.0-Snapshot");
+    }
 }

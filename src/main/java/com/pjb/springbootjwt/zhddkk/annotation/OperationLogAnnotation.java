@@ -13,11 +13,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OperationLogAnnotation {
 
-	//操作类型
-	OperationEnum type();
+    //操作类型
+    OperationEnum type();
 
     //模块
-	ModuleEnum module() ;
+    ModuleEnum module() ;
 
     //子模块
     String subModule();

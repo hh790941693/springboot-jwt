@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public interface GeneratorService {
 
-	List<TableDO> list();
+    List<TableDO> list();
 
-	byte[] generatorCode(String[] tableNameArr);
+    byte[] generatorCode(String[] tableNameArr);
 }

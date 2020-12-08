@@ -12,17 +12,17 @@ import javax.servlet.http.HttpSessionListener;
 @Component
 public class MySessionListener implements HttpSessionListener{
 
-	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	
-	@Override
-	public void sessionCreated(HttpSessionEvent se) {
-		HttpSession session = se.getSession();
-		System.out.println("session created........id:"+session.getId()+" createTime:"+SDF.format(new Date()));
-	}
+    private static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	@Override
-	public void sessionDestroyed(HttpSessionEvent se) {
+    @Override
+    public void sessionCreated(HttpSessionEvent se) {
+        HttpSession session = se.getSession();
+        System.out.println("session created........id:"+session.getId()+" createTime:"+SDF.format(new Date()));
+    }
+
+    @Override
+    public void sessionDestroyed(HttpSessionEvent se) {
         HttpSession session = se.getSession();
         System.out.println("session destroyed........id:"+session.getId()+" createTime:"+SDF.format(new Date()));
-	}
+    }
 }
