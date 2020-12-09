@@ -1,10 +1,5 @@
 package com.pjb.springbootjwt.zhddkk.aspect;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.Date;
-import javax.servlet.http.HttpServletRequest;
-
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
@@ -13,6 +8,10 @@ import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsOperationLogService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -26,6 +25,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+/**
+ * 操作日志切面.
+ */
 @Aspect
 @Order(1)
 @Component
@@ -41,9 +43,14 @@ public class OperationLogAspect {
 
     @Pointcut("@annotation(com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation)")
     public void operationLogPointcut() {
-
     }
-    
+
+    /**
+     * 环切.
+     * @param joinPoint 切入点
+     * @return 结果
+     * @throws Throwable 异常
+     */
     @Around("operationLogPointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         WsOperationLogDO wol = new WsOperationLogDO();
@@ -58,7 +65,7 @@ public class OperationLogAspect {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String requestUrl = request.getRequestURL().toString();
-        SessionInfoBean sessionInfoBean = (SessionInfoBean)request.getSession().getAttribute(CommonConstants.SESSION_INFO);
+        SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession().getAttribute(CommonConstants.SESSION_INFO);
         String userName = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
 
         if (StringUtils.isNotBlank(userName)) {
@@ -76,7 +83,7 @@ public class OperationLogAspect {
         String resultString = "";
         if (null != result) {
             resultString = result.toString();
-            if (resultString.length()>60000) {
+            if (resultString.length() > 60000) {
                 resultString = resultString.substring(0, 60000);
             }
         }
@@ -97,7 +104,7 @@ public class OperationLogAspect {
                 if (params.length == classArr.length) { //判断参数长度是否一样
                     //获得日志注解
                     OperationLogAnnotation operationLog = method.getAnnotation(OperationLogAnnotation.class);
-                    if (null == operationLog){
+                    if (null == operationLog) {
                         continue;
                     }
                     wol.setOperModule(operationLog.module().getValue());
@@ -108,12 +115,12 @@ public class OperationLogAspect {
 
                     Parameter[] parameters = method.getParameters();
                     StringBuilder sb = new StringBuilder();
-                    for (int i=0;i<parameters.length;i++) {
+                    for (int i = 0; i < parameters.length; i++) {
                         Parameter p = parameters[i];
                         String paraterName = p.getName();
                         Class<?> paraterType = p.getType();
                         if (paraterType == org.springframework.ui.Model.class || paraterType == HttpServletRequest.class
-                                                                              || paraterType == javax.servlet.http.HttpServletResponse.class) {
+                                    || paraterType == javax.servlet.http.HttpServletResponse.class) {
                             continue;
                         }
 
@@ -125,7 +132,7 @@ public class OperationLogAspect {
                         if (paraterName.contains(CommonConstants.S_PASS)) {
                             parameterValueStr = "******";
                         }
-                        if (parameterValueStr.length()>=300) {
+                        if (parameterValueStr.length() >= 300) {
                             parameterValueStr = parameterValueStr.substring(0, 298);
                         }
                         sb.append(paraterName).append(":").append(parameterValueStr).append(" ");
@@ -139,11 +146,11 @@ public class OperationLogAspect {
         try {
             wol.setCreateTime(new Date());
             boolean insertFlag = wsOperationLogService.insert(wol);
-            if (insertFlag){
-                logger.info("新增操作日志成功:"+wol.getOperDescribe()+" 操作人:"+userName);
+            if (insertFlag) {
+                logger.info("新增操作日志成功:" + wol.getOperDescribe() + " 操作人:" + userName);
             }
-        }catch (Exception e) {
-            logger.error("记录操作日志失败:"+e.getMessage());
+        } catch (Exception e) {
+            logger.error("记录操作日志失败:" + e.getMessage());
             e.printStackTrace();
         }
         

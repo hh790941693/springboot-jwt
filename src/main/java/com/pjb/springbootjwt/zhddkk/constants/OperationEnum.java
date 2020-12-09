@@ -19,11 +19,11 @@ public enum OperationEnum {
 
     String value;
 
-    OperationEnum(String value){
+    OperationEnum(String value) {
         this.value = value;
     }
 
-    public String getValue(){
+    public String getValue() {
         return this.value;
     }
 }

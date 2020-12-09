@@ -28,11 +28,11 @@ public enum ModuleEnum {
     TWOD_GAME("2D画图");
 
     String value;
-    ModuleEnum(String value){
+    ModuleEnum(String value) {
         this.value = value;
     }
 
-    public String getValue(){
+    public String getValue() {
         return this.value;
     }
 }
