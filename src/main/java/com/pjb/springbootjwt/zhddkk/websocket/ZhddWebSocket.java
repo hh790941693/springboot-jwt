@@ -275,7 +275,7 @@ public class ZhddWebSocket {
      * 连接异常.
      */
     @OnError
-    public void onError() {
+    public void onError(Throwable throwable) {
         logger.info("用户{}: 连接服务器异常", this.user);
         clients.remove(this.user);
     }
