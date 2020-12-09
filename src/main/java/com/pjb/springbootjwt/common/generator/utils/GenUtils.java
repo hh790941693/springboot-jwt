@@ -1,5 +1,12 @@
 package com.pjb.springbootjwt.common.generator.utils;
 
+import com.pjb.springbootjwt.common.exception.ApplicationException;
+import com.pjb.springbootjwt.common.generator.domain.ColumnDO;
+import com.pjb.springbootjwt.common.generator.domain.TableDO;
+import com.pjb.springbootjwt.common.generator.type.EnumGen;
+import com.pjb.springbootjwt.common.utils.SpringContextHolder;
+import com.pjb.springbootjwt.sys.domain.ConfigDO;
+import com.pjb.springbootjwt.sys.service.impl.ConfigService;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -8,14 +15,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import com.pjb.springbootjwt.common.exception.ApplicationException;
-import com.pjb.springbootjwt.common.generator.domain.ColumnDO;
-import com.pjb.springbootjwt.common.generator.domain.TableDO;
-import com.pjb.springbootjwt.common.generator.type.EnumGen;
-import com.pjb.springbootjwt.common.utils.SpringContextHolder;
-import com.pjb.springbootjwt.sys.domain.ConfigDO;
-import com.pjb.springbootjwt.sys.service.impl.ConfigService;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
@@ -26,16 +25,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 代码生成器 工具类
+ * 代码生成器 工具类.
  */
 public class GenUtils {
 
     public static String STR_DELIMITER = "_";
 
-    private static Logger log = LoggerFactory.getLogger(GenUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(GenUtils.class);
 
     /**
-     * 生成代码
+     * 生成代码.
      */
     public static void generatorCode(TableDO tableDO, List<ColumnDO> columnList, ZipOutputStream zip) {
         // 配置信息 读取表sys_config
@@ -56,7 +55,7 @@ public class GenUtils {
             String columnName = columnDO.getColumnName();
             columnNameList.add(columnName);
             dataTypeList.add(columnDO.getDataType());
-            if(baseColumnNames.contains(columnName)) {
+            if (baseColumnNames.contains(columnName)) {
                 continue;
             }
 
@@ -124,22 +123,24 @@ public class GenUtils {
 
             try {
                 // 添加到zip
-                String outputFilePath =getFileName(template, tableDO.getClassname(), tableDO.getClassName(),
+                String outputFilePath = getFileName(template, tableDO.getClassname(), tableDO.getClassName(),
                         pack.substring(pack.lastIndexOf(".") + 1));
-                zip.putNextEntry(new ZipEntry(outputFilePath));
-                IOUtils.write(sw.toString(), zip, "UTF-8");
-                IOUtils.closeQuietly(sw);
-                zip.closeEntry();
+                if (StringUtils.isNotBlank(outputFilePath)) {
+                    zip.putNextEntry(new ZipEntry(outputFilePath));
+                    IOUtils.write(sw.toString(), zip, "UTF-8");
+                    IOUtils.closeQuietly(sw);
+                    zip.closeEntry();
+                }
             } catch (IOException e) {
                 log.warn(e.getMessage());
                 log.info("渲染模板失败，表名：" + tableDO.getTableName());
-                throw new ApplicationException("999","生成代码失败");
+                throw new ApplicationException("999", "生成代码失败");
             }
         }
     }
 
     /**
-     * 表名转换成Java类名
+     * 表名转换成Java类名.
      */
     public static String tableToJava(String tableName, String tablePrefix, String autoRemovePre) {
 
@@ -160,18 +161,18 @@ public class GenUtils {
     }
 
     /**
-     * 列名转换成Java属性名
+     * 列名转换成Java属性名.
      */
     public static String columnToJava(String columnName) {
-        if(columnName.contains(STR_DELIMITER)){
+        if (columnName.contains(STR_DELIMITER)) {
             return WordUtils.capitalize(columnName, new char[] {'_'}).replace(STR_DELIMITER, "");
-        }else {
+        } else {
             return WordUtils.capitalize(columnName);
         }
     }
 
     /**
-     * 获取配置信息
+     * 获取配置信息.
      */
     public static Map<String, String> getConfig() {
         ConfigService configService = SpringContextHolder.getBean(ConfigService.class);
@@ -182,8 +183,12 @@ public class GenUtils {
         return config;
     }
 
+    /**
+     * 获取模板文件路径.
+     * @return 模板文件路径列表
+     */
     public static List<String> getTemplateList() {
-        List<String> templates = new ArrayList<String>();
+        List<String> templates = new ArrayList<>();
         templates.add("templates/common/generator/domain.java.vm");
         templates.add("templates/common/generator/Dao.java.vm");
         templates.add("templates/common/generator/Mapper.xml.vm");
@@ -203,7 +208,7 @@ public class GenUtils {
     }
 
     /**
-     * 获取文件名
+     * 获取文件名.
      */
     public static String getFileName(String template, String classname, String className, String packageName) {
         String packagePath = "main" + File.separator + "java" + File.separator;
@@ -213,46 +218,46 @@ public class GenUtils {
 
         if (template.contains("domain.java.vm")) {
             return packagePath + "domain" + File.separator + className + "DO.java";
-        }else if (template.contains("Dao.java.vm")) {
+        } else if (template.contains("Dao.java.vm")) {
             return packagePath + "dao" + File.separator + className + "Dao.java";
-        }else if (template.contains("Service.java.vm")) {
+        } else if (template.contains("Service.java.vm")) {
             return packagePath + "service" + File.separator + className + "Service.java";
-        }else if (template.contains("ServiceImpl.java.vm")) {
+        } else if (template.contains("ServiceImpl.java.vm")) {
             return packagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
-        }else if (template.contains("Controller.java.vm")) {
+        } else if (template.contains("Controller.java.vm")) {
             return packagePath + "controller" + File.separator + className + "Controller.java";
-        }else if (template.contains("Mapper.xml.vm")) {
+        } else if (template.contains("Mapper.xml.vm")) {
             return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + packageName
                     + File.separator + className + "Mapper.xml";
-        }else if (template.contains("list.html.vm")) {
+        } else if (template.contains("list.html.vm")) {
             return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
                     + File.separator + classname + File.separator + classname + ".html";
-        }else if (template.contains("add.html.vm")) {
+        } else if (template.contains("add.html.vm")) {
             return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
                     + File.separator + classname + File.separator + "Add.html";
-        }else if (template.contains("edit.html.vm")) {
+        } else if (template.contains("edit.html.vm")) {
             return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
                     + File.separator + classname + File.separator + classname + "Edit.html";
-        }else if (template.contains("form.html.vm")) {
+        } else if (template.contains("form.html.vm")) {
             return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
                     + File.separator + classname + File.separator + classname + "Form.html";
-        }else if (template.contains("list.js.vm")) {
+        } else if (template.contains("list.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
                     + File.separator + classname + ".js";
-        }else if (template.contains("add.js.vm")) {
+        } else if (template.contains("add.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
                     + File.separator + "Add.js";
-        }else if (template.contains("edit.js.vm")) {
+        } else if (template.contains("edit.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
                     + File.separator + "Edit.js";
-        }else if (template.contains("form.js.vm")) {
+        } else if (template.contains("form.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
-                    + File.separator + classname +"Form.js";
-        }else if (template.contains("menu.sql.vm")) {
+                    + File.separator + classname + "Form.js";
+        } else if (template.contains("menu.sql.vm")) {
             return className.toLowerCase() + "_menu.sql";
         }
 
