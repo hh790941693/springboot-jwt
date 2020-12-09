@@ -6,7 +6,7 @@ import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.ServerEndpointConfig;
 
 /**
-* 用于从websocket中获取用户session
+* 用于从websocket中获取用户session.
 */
 public class HttpSessionConfigurator extends ServerEndpointConfig.Configurator {
 

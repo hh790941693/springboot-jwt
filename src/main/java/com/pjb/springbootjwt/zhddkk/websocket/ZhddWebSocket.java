@@ -1,23 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.websocket;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.http.HttpSession;
-import javax.websocket.EndpointConfig;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsChatlogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
@@ -26,12 +10,25 @@ import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
 import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.servlet.http.HttpSession;
+import javax.websocket.EndpointConfig;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.Session;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import org.springframework.stereotype.Component;
 
 @ServerEndpoint(value = "/zhddWebSocket/{user}/{pass}/{userAgent}", configurator = HttpSessionConfigurator.class)
@@ -39,7 +36,7 @@ import org.springframework.stereotype.Component;
 public class ZhddWebSocket {
     private static final Logger logger = LoggerFactory.getLogger(ZhddWebSocket.class);
 
-    private static Map<String,ZhddWebSocket> clients = new ConcurrentHashMap<String,ZhddWebSocket>();
+    private static Map<String, ZhddWebSocket> clients = new ConcurrentHashMap<String, ZhddWebSocket>();
 
     private Session session;
 
@@ -59,6 +56,13 @@ public class ZhddWebSocket {
 
     public static WsCommonService wsCommonService;
 
+    /**
+     * 接受消息.
+     * @param message 消息
+     * @param session 会话
+     * @throws IOException 异常
+     * @throws InterruptedException 异常
+     */
     @OnMessage
     public void onMessage(String message, Session session) throws IOException, InterruptedException {
         if (StringUtils.isBlank(message) || this.user == null || this.session == null) {
@@ -126,18 +130,29 @@ public class ZhddWebSocket {
                     adminSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
 
-                WsChatlogDO wcl_1 = new WsChatlogDO();
-                wcl_1.setTime(sdfx.format(new Date()));
-                wcl_1.setUser(msgFrom);
-                wcl_1.setToUser(msgTo);
-                wcl_1.setMsg(msgStr);
-                wsChatlogService.insert(wcl_1);
+                WsChatlogDO wcl1 = new WsChatlogDO();
+                wcl1.setTime(sdfx.format(new Date()));
+                wcl1.setUser(msgFrom);
+                wcl1.setToUser(msgTo);
+                wcl1.setMsg(msgStr);
+                wsChatlogService.insert(wcl1);
             }
         }
     }
 
+    /**
+     * 连接服务器.
+     * @param user 用户名
+     * @param pass 密码
+     * @param userAgent 浏览器类型
+     * @param session 会话
+     * @param endpointConfig endpointConfig
+     */
     @javax.websocket.OnOpen
-    public void OnOpen(@PathParam("user") String user, @PathParam("pass") String pass, @PathParam("userAgent") String userAgent, Session session, EndpointConfig endpointConfig) {
+    public void OnOpen(@PathParam("user") String user,
+                       @PathParam("pass") String pass,
+                       @PathParam("userAgent") String userAgent,
+                       Session session, EndpointConfig endpointConfig) {
         if (endpointConfig.getUserProperties().containsKey(HttpSession.class.getName())) {
             HttpSession httpSession = (HttpSession) endpointConfig.getUserProperties().get(HttpSession.class.getName());
             String sessionUser = (String) httpSession.getAttribute(CommonConstants.S_USER + "_" + user);
@@ -179,10 +194,11 @@ public class ZhddWebSocket {
         String curTime = sdfx.format(new Date());
         String msg = user + "已上线";
         logger.debug(msg);
-        for (Entry<String,ZhddWebSocket> entry : clients.entrySet()) {
+        for (Entry<String, ZhddWebSocket> entry : clients.entrySet()) {
             if (!entry.getKey().equals(user)) {
                 try {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime,"1","系统消息",CommonConstants.ADMIN_USER,entry.getKey(),msg);
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息",
+                            CommonConstants.ADMIN_USER, entry.getKey(), msg);
                     entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -202,8 +218,8 @@ public class ZhddWebSocket {
         if (null != chatLogHistoryList && chatLogHistoryList.size() > 0) {
             for (WsChatlogDO wcl : chatLogHistoryList) {
                 String time = wcl.getTime();
-                String sendmsg = wcl.getUser()+"-->我 " + wcl.getMsg();
-                ChatMessageBean chatBean = new ChatMessageBean(time,"1","系统消息",CommonConstants.ADMIN_USER,user,sendmsg);
+                String sendmsg = wcl.getUser() + "-->我 " + wcl.getMsg();
+                ChatMessageBean chatBean = new ChatMessageBean(time, "1", "系统消息", CommonConstants.ADMIN_USER, user, sendmsg);
                 try {
                     this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     Thread.sleep(50);
@@ -214,6 +230,9 @@ public class ZhddWebSocket {
         }
     }
 
+    /**
+     * 关闭.
+     */
     @javax.websocket.OnClose
     public void OnClose() {
         logger.info("用户:{} 已断开服务器", this.user);
@@ -223,10 +242,11 @@ public class ZhddWebSocket {
         String curTime = sdfx.format(new Date());
         String msg = user + "已下线!";
         logger.debug(msg);
-        for (Entry<String,ZhddWebSocket> entry : clients.entrySet()) {
+        for (Entry<String, ZhddWebSocket> entry : clients.entrySet()) {
             if (!entry.getKey().equals(user)) {
                 try {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime,"1","系统消息",CommonConstants.ADMIN_USER,entry.getKey(),msg);
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息",
+                            CommonConstants.ADMIN_USER, entry.getKey(), msg);
                     entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -251,9 +271,12 @@ public class ZhddWebSocket {
         }
     }
 
+    /**
+     * 连接异常.
+     */
     @OnError
-    public void onError(Throwable throwable) {
-        logger.info("用户{}: 连接服务器异常",this.user);
+    public void onError() {
+        logger.info("用户{}: 连接服务器异常", this.user);
         clients.remove(this.user);
     }
 
@@ -261,7 +284,7 @@ public class ZhddWebSocket {
         ZhddWebSocket.onLineCount++;
     }
 
-    public static synchronized void subOnLineCount(){
+    public static synchronized void subOnLineCount() {
         ZhddWebSocket.onLineCount--;
     }
 
@@ -281,6 +304,11 @@ public class ZhddWebSocket {
         return ZhddWebSocket.clients;
     }
 
+    /**
+     * 查询会话信息.
+     * @param username 用户id
+     * @return 会话信息
+     */
     public static Session querySession(String username) {
         Session session = null;
         for (Entry<String, ZhddWebSocket> entry : clients.entrySet()) {

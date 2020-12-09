@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 /**
- * 开启WebSocket支持
+ * 开启WebSocket支持.
  * @author zhengkai.blog.csdn.net
  */
 @Configuration
@@ -43,17 +43,17 @@ public class WebSocketConfig {
     }
 
     @Autowired
-    public void setWsUsersService(WsUsersService wsUsersService){
+    public void setWsUsersService(WsUsersService wsUsersService) {
         ZhddWebSocket.wsUsersService = wsUsersService;
     }
 
     @Autowired
-    public void setWsChatlogService(WsChatlogService wsChatlogService){
+    public void setWsChatlogService(WsChatlogService wsChatlogService) {
         ZhddWebSocket.wsChatlogService = wsChatlogService;
     }
 
     @Autowired
-    public void setWsCommonService(WsCommonService wsCommonService){
+    public void setWsCommonService(WsCommonService wsCommonService) {
         ZhddWebSocket.wsCommonService = wsCommonService;
     }
 }
