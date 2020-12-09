@@ -23,15 +23,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * ${comments}
+ * ${comments}.
  */
 @Controller
 @RequestMapping("/${pathName}/${classname}")
 public class ${className}Controller extends AdminBaseController {
 
-    private static Logger logger = LoggerFactory.getLogger(${className}Controller.class);
+    private static final Logger logger = LoggerFactory.getLogger(${className}Controller.class);
 
-    @InitBinder
+	/**
+    * binder.
+	* @param binder binder
+	*/
+	@InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.setLenient(false);
@@ -42,7 +46,7 @@ public class ${className}Controller extends AdminBaseController {
 	private ${className}Service ${classname}Service;
 
     /**
-    * 跳转到${comments}页面
+    * 跳转到${comments}页面.
 	*/
 	@GetMapping()
 	//@RequiresPermissions("${pathName}:${classname}:${classname}")
@@ -51,81 +55,81 @@ public class ${className}Controller extends AdminBaseController {
 	}
 
     /**
-     * 获取${comments}列表数据
+     * 获取${comments}列表数据.
      */
 	@ResponseBody
 	@GetMapping("/list")
 	//@RequiresPermissions("${pathName}:${classname}:${classname}")
-	public Result<Page<${className}DO>> list(${className}DO ${classname}DTO){
+	public Result<Page<${className}DO>> list(${className}DO ${classname}DTO) {
         Wrapper<${className}DO> wrapper = new EntityWrapper<${className}DO>(${classname}DTO);
         Page<${className}DO> page = ${classname}Service.selectPage(getPage(${className}DO.class), wrapper);
         return Result.ok(page);
 	}
 
     /**
-     * 跳转到${comments}添加页面
+     * 跳转到${comments}添加页面.
      */
 	@GetMapping("/add")
 	//@RequiresPermissions("${pathName}:${classname}:add")
-    public String add(Model model){
+    public String add(Model model) {
 		${className}DO ${classname} = new ${className}DO();
         model.addAttribute("${classname}", ${classname});
 	    return "${pathName}/${classname}/${classname}Form";
 	}
 
     /**
-     * 跳转到${comments}编辑页面
+     * 跳转到${comments}编辑页面.
      * @param id ${comments}ID
      * @param model ${comments}实体
      */
 	@GetMapping("/edit/{${pk.attrname}}")
 	//@RequiresPermissions("${pathName}:${classname}:edit")
-    public String edit(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname},Model model){
+    public String edit(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname}, Model model) {
 		${className}DO ${classname} = ${classname}Service.selectById(${pk.attrname});
 		model.addAttribute("${classname}", ${classname});
 	    return "${pathName}/${classname}/${classname}Form";
 	}
 	
 	/**
-	 * 保存${comments}
+	 * 保存${comments}.
 	 */
 	@ResponseBody
 	@PostMapping("/save")
 	//@RequiresPermissions("${pathName}:${classname}:add")
-	public Result<String> save( ${className}DO ${classname}){
+	public Result<String> save(${className}DO ${classname}) {
 		${classname}Service.insert(${classname});
         return Result.ok();
 	}
 
 	/**
-	 * 编辑${comments}
+	 * 编辑${comments}.
 	 */
 	@ResponseBody
 	@RequestMapping("/update")
 	//@RequiresPermissions("${pathName}:${classname}:edit")
-	public Result<String> update( ${className}DO ${classname}){
+	public Result<String> update(${className}DO ${classname}) {
 		${classname}Service.updateById(${classname});
 		return Result.ok();
 	}
 	
 	/**
-	 * 删除${comments}
+	 * 删除${comments}.
 	 */
 	@PostMapping("/remove")
 	@ResponseBody
 	//@RequiresPermissions("${pathName}:${classname}:remove")
-	public Result<String> remove( ${pk.attrType} ${pk.attrname}){
+	public Result<String> remove(${pk.attrType} ${pk.attrname}) {
 		${classname}Service.deleteById(${pk.attrname});
         return Result.ok();
 	}
 	
 	/**
-	 * 批量删除${comments}
+	 * 批量删除${comments}.
 	 */
 	@PostMapping("/batchRemove")
 	@ResponseBody
 	//@RequiresPermissions("${pathName}:${classname}:batchRemove")
-	public Result<String> remove(@RequestParam("ids[]") ${pk.attrType}[] ${pk.attrname}s){
+	public Result<String> remove(@RequestParam("ids[]") ${pk.attrType}[] ${pk.attrname}s) {
 		${classname}Service.deleteBatchIds(Arrays.asList(${pk.attrname}s));
 		return Result.ok();
 	}

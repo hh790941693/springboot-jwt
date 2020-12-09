@@ -15,5 +15,5 @@ import org.slf4j.LoggerFactory;
 @Service
 public class ${className}ServiceImpl extends CoreServiceImpl<${className}Dao, ${className}DO> implements ${className}Service {
 
-    private static Logger logger = LoggerFactory.getLogger(${className}ServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(${className}ServiceImpl.class);
 }
