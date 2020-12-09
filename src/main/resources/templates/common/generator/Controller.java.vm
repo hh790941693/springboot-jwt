@@ -60,8 +60,8 @@ public class ${className}Controller extends AdminBaseController {
 	@ResponseBody
 	@GetMapping("/list")
 	//@RequiresPermissions("${pathName}:${classname}:${classname}")
-	public Result<Page<${className}DO>> list(${className}DO ${classname}DtO) {
-        Wrapper<${className}DO> wrapper = new EntityWrapper<${className}DO>(${classname}DtO);
+	public Result<Page<${className}DO>> list(${className}DO ${classname}Dto) {
+        Wrapper<${className}DO> wrapper = new EntityWrapper<${className}DO>(${classname}Dto);
         Page<${className}DO> page = ${classname}Service.selectPage(getPage(${className}DO.class), wrapper);
         return Result.ok(page);
 	}
