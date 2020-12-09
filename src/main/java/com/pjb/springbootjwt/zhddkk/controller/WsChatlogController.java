@@ -78,19 +78,19 @@ public class WsChatlogController extends AdminBaseController {
     @ResponseBody
     @GetMapping("/list")
     //@RequiresPermissions("zhddkk:wsChatlog:wsChatlog")
-    public Result<Page<WsChatlogDO>> list(WsChatlogDO wsChatlogDtO) {
+    public Result<Page<WsChatlogDO>> list(WsChatlogDO wsChatlogDto) {
         Wrapper<WsChatlogDO> wrapper = new EntityWrapper<WsChatlogDO>();
-        if (StringUtils.isNotBlank(wsChatlogDtO.getUser())) {
-            wrapper.eq("user", wsChatlogDtO.getUser());
+        if (StringUtils.isNotBlank(wsChatlogDto.getUser())) {
+            wrapper.eq("user", wsChatlogDto.getUser());
         }
-        if (StringUtils.isNotBlank(wsChatlogDtO.getToUser())) {
-            wrapper.eq("to_user", wsChatlogDtO.getToUser());
+        if (StringUtils.isNotBlank(wsChatlogDto.getToUser())) {
+            wrapper.eq("to_user", wsChatlogDto.getToUser());
         }
-        if (StringUtils.isNotBlank(wsChatlogDtO.getBeginTime())) {
-            wrapper.ge("time", wsChatlogDtO.getBeginTime());
+        if (StringUtils.isNotBlank(wsChatlogDto.getBeginTime())) {
+            wrapper.ge("time", wsChatlogDto.getBeginTime());
         }
-        if (StringUtils.isNotBlank(wsChatlogDtO.getEndTime())) {
-            wrapper.le("time", wsChatlogDtO.getEndTime());
+        if (StringUtils.isNotBlank(wsChatlogDto.getEndTime())) {
+            wrapper.le("time", wsChatlogDto.getEndTime());
         }
         wrapper.isNotNull("to_user").ne("to_user", "").orderBy("time", false).orderBy("user");
         Page<WsChatlogDO> page = wsChatlogService.selectPage(getPage(WsChatlogDO.class), wrapper);

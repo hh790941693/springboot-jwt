@@ -100,13 +100,13 @@ public class WsFeedbackController extends AdminBaseController {
     @ResponseBody
     @GetMapping("/adminFeedbackList")
     //@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
-    public Result<Page<WsFeedbackDO>> adminFeedbackList(WsFeedbackDO wsFeedbackDtO) {
+    public Result<Page<WsFeedbackDO>> adminFeedbackList(WsFeedbackDO wsFeedbackDto) {
         Wrapper<WsFeedbackDO> wrapper = new EntityWrapper<WsFeedbackDO>();
-        if (StringUtils.isNotBlank(wsFeedbackDtO.getUserName())) {
-            wrapper.like("user_name", wsFeedbackDtO.getUserName(), SqlLike.DEFAULT);
+        if (StringUtils.isNotBlank(wsFeedbackDto.getUserName())) {
+            wrapper.like("user_name", wsFeedbackDto.getUserName(), SqlLike.DEFAULT);
         }
-        if (null != wsFeedbackDtO.getStatus()) {
-            wrapper.eq("status", wsFeedbackDtO.getStatus());
+        if (null != wsFeedbackDto.getStatus()) {
+            wrapper.eq("status", wsFeedbackDto.getStatus());
         }
         wrapper.ne("status", "0").orderBy("status").orderBy("create_time", false);
         Page<WsFeedbackDO> page = wsFeedbackService.selectPage(getPage(WsFeedbackDO.class), wrapper);

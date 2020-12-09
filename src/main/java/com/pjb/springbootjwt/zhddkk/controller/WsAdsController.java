@@ -67,13 +67,13 @@ public class WsAdsController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.AD_PUBLISH, subModule = "", describe = "广告列表")
     @ResponseBody
     @GetMapping("/list")
-    public Result<Page<WsAdsDO>> list(WsAdsDO wsAdsDtO) {
+    public Result<Page<WsAdsDO>> list(WsAdsDO wsAdsDto) {
         Wrapper<WsAdsDO> wrapper = new EntityWrapper<WsAdsDO>();
-        if (StringUtils.isNotBlank(wsAdsDtO.getTitle())) {
-            wrapper.like("title", wsAdsDtO.getTitle(), SqlLike.DEFAULT);
+        if (StringUtils.isNotBlank(wsAdsDto.getTitle())) {
+            wrapper.like("title", wsAdsDto.getTitle(), SqlLike.DEFAULT);
         }
-        if (StringUtils.isNotBlank(wsAdsDtO.getContent())) {
-            wrapper.like("content", wsAdsDtO.getContent(), SqlLike.DEFAULT);
+        if (StringUtils.isNotBlank(wsAdsDto.getContent())) {
+            wrapper.like("content", wsAdsDto.getContent(), SqlLike.DEFAULT);
         }
         wrapper.orderBy("create_time", false);
         Page<WsAdsDO> page = wsAdsService.selectPage(getPage(WsAdsDO.class), wrapper);

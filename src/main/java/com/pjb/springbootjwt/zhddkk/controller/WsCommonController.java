@@ -67,13 +67,13 @@ public class WsCommonController extends AdminBaseController {
     @ResponseBody
     @GetMapping("/list")
     //@RequiresPermissions("zhddkk:wsCommon:wsCommon")
-    public Result<Page<WsCommonDO>> list(WsCommonDO wsCommonDtO) {
+    public Result<Page<WsCommonDO>> list(WsCommonDO wsCommonDto) {
         Wrapper<WsCommonDO> wrapper = new EntityWrapper<WsCommonDO>();
-        if (StringUtils.isNotBlank(wsCommonDtO.getType())) {
-            wrapper.eq("type", wsCommonDtO.getType());
+        if (StringUtils.isNotBlank(wsCommonDto.getType())) {
+            wrapper.eq("type", wsCommonDto.getType());
         }
-        if (StringUtils.isNotBlank(wsCommonDtO.getName())) {
-            wrapper.like("name", wsCommonDtO.getName(), SqlLike.DEFAULT);
+        if (StringUtils.isNotBlank(wsCommonDto.getName())) {
+            wrapper.like("name", wsCommonDto.getName(), SqlLike.DEFAULT);
         }
         wrapper.orderBy("orderby");
         Page<WsCommonDO> page = wsCommonService.selectPage(getPage(WsCommonDO.class), wrapper);

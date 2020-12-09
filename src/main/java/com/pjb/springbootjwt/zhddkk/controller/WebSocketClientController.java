@@ -921,10 +921,10 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @ResponseBody
     @GetMapping("/myFriendsList")
-    public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDtO) {
+    public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDto) {
         Wrapper<WsFriendsDO> wrapper = new EntityWrapper<>();
-        if (StringUtils.isNotBlank(wsFriendsDtO.getUname())) {
-            wrapper.eq("uname", wsFriendsDtO.getUname());
+        if (StringUtils.isNotBlank(wsFriendsDto.getUname())) {
+            wrapper.eq("uname", wsFriendsDto.getUname());
         }
         Page<WsFriendsDO> qryPage = getPage(WsFriendsDO.class);
         Page<WsFriendsDO> page = wsFriendsService.selectPage(qryPage, wrapper);
