@@ -1,18 +1,26 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import com.baomidou.mybatisplus.enums.SqlLike;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.pjb.springbootjwt.common.base.AdminBaseController;
+import com.pjb.springbootjwt.common.vo.Result;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
+import com.pjb.springbootjwt.zhddkk.domain.WsAdsDO;
+import com.pjb.springbootjwt.zhddkk.service.WsAdsService;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -21,25 +29,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.pjb.springbootjwt.common.base.AdminBaseController;
-import com.pjb.springbootjwt.zhddkk.domain.WsAdsDO;
-import com.pjb.springbootjwt.zhddkk.service.WsAdsService;
-import com.pjb.springbootjwt.common.vo.Result;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
- * 广告表
+ * 广告表.
  */
 @Controller
 @RequestMapping("/zhddkk/wsAds")
 public class WsAdsController extends AdminBaseController {
 
-    private static Logger logger = LoggerFactory.getLogger(WsAdsController.class);
+    private static final Logger logger = LoggerFactory.getLogger(WsAdsController.class);
 
+    /**
+     * 初始化用.
+     * @param binder binder
+     */
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -51,43 +53,48 @@ public class WsAdsController extends AdminBaseController {
     private WsAdsService wsAdsService;
 
     /**
-    * 跳转到广告表页面
+    * 跳转到广告表页面.
     */
-    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="广告列表页面")
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.AD_PUBLISH, subModule = "", describe = "广告列表页面")
     @GetMapping()
-    public String wsAds(){
+    public String wsAds() {
         return "zhddkk/wsAds/wsAds";
     }
 
     /**
-     * 获取广告表列表数据
+     * 获取广告表列表数据.
      */
-    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.AD_PUBLISH,subModule="",describe="广告列表")
+    @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.AD_PUBLISH, subModule = "", describe = "广告列表")
     @ResponseBody
     @GetMapping("/list")
-    public Result<Page<WsAdsDO>> list(WsAdsDO wsAdsDTO){
+    public Result<Page<WsAdsDO>> list(WsAdsDO wsAdsDtO) {
         Wrapper<WsAdsDO> wrapper = new EntityWrapper<WsAdsDO>();
-        if (StringUtils.isNotBlank(wsAdsDTO.getTitle())){
-            wrapper.like("title", wsAdsDTO.getTitle(), SqlLike.DEFAULT);
+        if (StringUtils.isNotBlank(wsAdsDtO.getTitle())) {
+            wrapper.like("title", wsAdsDtO.getTitle(), SqlLike.DEFAULT);
         }
-        if (StringUtils.isNotBlank(wsAdsDTO.getContent())){
-            wrapper.like("content", wsAdsDTO.getContent(), SqlLike.DEFAULT);
+        if (StringUtils.isNotBlank(wsAdsDtO.getContent())) {
+            wrapper.like("content", wsAdsDtO.getContent(), SqlLike.DEFAULT);
         }
         wrapper.orderBy("create_time", false);
         Page<WsAdsDO> page = wsAdsService.selectPage(getPage(WsAdsDO.class), wrapper);
         return Result.ok(page);
     }
 
+    /**
+     * 查询最新广告数据.
+     * @param count 显示条数
+     * @return 最新广告数据
+     */
     @ResponseBody
     @GetMapping("/queryRecentAdsList")
-    public Result<List<WsAdsDO>> queryRecentAdsList(Integer count){
-        if (null == count || count.intValue() <= 0){
+    public Result<List<WsAdsDO>> queryRecentAdsList(Integer count) {
+        if (null == count || count.intValue() <= 0) {
             count = 4;
         }
-        Page<WsAdsDO> page = wsAdsService.selectPage(new Page<>(1,count), new EntityWrapper<WsAdsDO>()
+        Page<WsAdsDO> page = wsAdsService.selectPage(new Page<>(1, count), new EntityWrapper<WsAdsDO>()
             .orderBy("create_time", false));
         List<WsAdsDO> list = page.getRecords();
-        if (null != list){
+        if (null != list) {
             return Result.ok(list);
         }
 
@@ -95,53 +102,54 @@ public class WsAdsController extends AdminBaseController {
     }
 
     /**
-     * 根据id查询广告详情
+     * 根据id查询广告详情.
      * @param id 广告id
-     * @return
+     * @return 查询指定的广告信息
      */
     @ResponseBody
     @GetMapping("/selectById")
-    public Result<WsAdsDO> selectById(String id){
+    public Result<WsAdsDO> selectById(String id) {
         WsAdsDO wsAdsDO = wsAdsService.selectById(id);
         return Result.ok(wsAdsDO);
     }
 
     /**
-     * 跳转到广告表添加页面
+     * 跳转到广告表添加页面.
      */
-    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="添加广告页面")
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.AD_PUBLISH, subModule = "", describe = "添加广告页面")
     @GetMapping("/add")
-    public String add(Model model){
+    public String add(Model model) {
         WsAdsDO wsAds = new WsAdsDO();
         model.addAttribute("wsAds", wsAds);
         return "zhddkk/wsAds/wsAdsForm";
     }
 
     /**
-     * 跳转到广告表编辑页面
+     * 跳转到广告表编辑页面.
      * @param id 广告表ID
      * @param model 广告表实体
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id, Model model) {
         WsAdsDO wsAds = wsAdsService.selectById(id);
         model.addAttribute("wsAds", wsAds);
         return "zhddkk/wsAds/wsAdsForm";
     }
 
     /**
-     * 保存广告表
+     * 保存广告表.
      */
-    @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.AD_PUBLISH,subModule="",describe="保存广告")
+    @OperationLogAnnotation(type = OperationEnum.INSERT, module = ModuleEnum.AD_PUBLISH, subModule = "", describe = "保存广告")
     @ResponseBody
     @PostMapping("/save")
     @Transactional
-    public Result<String> save( WsAdsDO wsAds){
+    public Result<String> save(WsAdsDO wsAds) {
+        logger.info("进入保存广告信息");
         // 接收人列表
-        List<String> receiveList = new ArrayList<String>();
+        List<String> receiveList = new ArrayList<>();
         String title = wsAds.getTitle();
         String content = wsAds.getContent();
-        if (StringUtils.isBlank(title) || StringUtils.isBlank(content)){
+        if (StringUtils.isBlank(title) || StringUtils.isBlank(content)) {
             return Result.fail("参数不能为空");
         }
 
@@ -150,17 +158,18 @@ public class WsAdsController extends AdminBaseController {
         wsAdsDO.setTitle(title);
         wsAdsDO.setContent(content);
         boolean insertFlag = wsAdsService.insert(wsAdsDO);
-        if (insertFlag){
+        if (insertFlag) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String curTime = sdf.format(new Date());
             Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-            for (Map.Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
+            for (Map.Entry<String, ZhddWebSocket> entry : socketMap.entrySet()) {
                 if (entry.getKey().equals(CommonConstants.ADMIN_USER)) {
                     continue;
                 }
 
                 try {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息",CommonConstants.ADMIN_USER,entry.getKey(), "title:"+title+";content:");
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "4", "广告消息",
+                            CommonConstants.ADMIN_USER, entry.getKey(),  "title:" + title + ";content:");
                     entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     receiveList.add(entry.getKey());
                 } catch (IOException e) {
@@ -175,38 +184,38 @@ public class WsAdsController extends AdminBaseController {
     }
 
     /**
-     * 编辑广告表
+     * 编辑广告表.
      */
     @ResponseBody
     @RequestMapping("/update")
-    public Result<String> update( WsAdsDO wsAds){
+    public Result<String> update(WsAdsDO wsAds) {
         wsAdsService.updateById(wsAds);
         return Result.ok();
     }
 
     /**
-     * 删除广告表
+     * 删除广告表.
      */
-    @OperationLogAnnotation(type=OperationEnum.DELETE,module=ModuleEnum.AD_PUBLISH,subModule="",describe="删除广告")
+    @OperationLogAnnotation(type = OperationEnum.DELETE, module = ModuleEnum.AD_PUBLISH, subModule = "", describe = "删除广告")
     @PostMapping("/remove")
     @ResponseBody
-    public Result<String> remove( Integer id){
+    public Result<String> remove(Integer id) {
         wsAdsService.deleteById(id);
         return Result.ok();
     }
 
     /**
-     * 批量删除广告表
+     * 批量删除广告表.
      */
     @PostMapping("/batchRemove")
     @ResponseBody
-    public Result<String> remove(@RequestParam("ids[]") Integer[] ids){
+    public Result<String> remove(@RequestParam("ids[]") Integer[] ids) {
         wsAdsService.deleteBatchIds(Arrays.asList(ids));
         return Result.ok();
     }
 
     @GetMapping("/adsDetail.page")
-    public String adsDetail(@RequestParam("id") String id, Model model){
+    public String adsDetail(@RequestParam("id") String id, Model model) {
         model.addAttribute("id", id);
         return "zhddkk/wsAds/wsAdsDetail";
     }
