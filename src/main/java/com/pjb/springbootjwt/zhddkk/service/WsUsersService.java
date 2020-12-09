@@ -8,7 +8,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import java.util.List;
 
 /**
- * 用户账号表
+ * 用户账号表.
  */
 public interface WsUsersService extends CoreService<WsUsersDO> {
 

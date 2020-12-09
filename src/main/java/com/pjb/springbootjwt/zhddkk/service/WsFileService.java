@@ -4,7 +4,7 @@ import com.pjb.springbootjwt.zhddkk.base.CoreService;
 import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 
 /**
- * 文件表
+ * 文件表.
  */
 public interface WsFileService extends CoreService<WsFileDO> {
     

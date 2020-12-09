@@ -8,7 +8,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsFriendsDO;
 import java.util.List;
 
 /**
- * 好友列表
+ * 好友列表.
  */
 public interface WsFriendsService extends CoreService<WsFriendsDO> {
     List<WsFriendsDO> queryFriendsPage(Page<WsFriendsDO> page, Wrapper<WsFriendsDO> wrapper);
