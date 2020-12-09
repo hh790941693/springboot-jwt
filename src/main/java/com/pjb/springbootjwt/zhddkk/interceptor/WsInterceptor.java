@@ -1,18 +1,16 @@
 package com.pjb.springbootjwt.zhddkk.interceptor;
 
+import com.pjb.springbootjwt.zhddkk.domain.WsDicDO;
+import com.pjb.springbootjwt.zhddkk.service.WsDicService;
+import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
+import com.pjb.springbootjwt.zhddkk.util.UnicodeUtil;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.pjb.springbootjwt.zhddkk.domain.WsDicDO;
-import com.pjb.springbootjwt.zhddkk.service.WsDicService;
-import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
-import com.pjb.springbootjwt.zhddkk.util.UnicodeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,17 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
- * 拦截器
- * 
- * 初始化数据用
- * 
- * @author Administrator
- *
+ * 初始化数据用.
  */
 @Configuration
 public class WsInterceptor extends HandlerInterceptorAdapter implements InitializingBean {
 
-    private Logger logger = LoggerFactory.getLogger(WsInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(WsInterceptor.class);
 
     @Autowired
     private WsDicService wsDicService;
@@ -41,7 +34,7 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
     // 字典表
     public static List<WsDicDO> dicList = new ArrayList<WsDicDO>();
 
-    public static Map<String,List<WsDicDO>> dicMap = new HashMap<String,List<WsDicDO>>();
+    public static Map<String, List<WsDicDO>> dicMap = new HashMap<String, List<WsDicDO>>();
 
     // config.properties中的记录
     public static Map<String, String> configMap = new HashMap<String, String>();
@@ -81,12 +74,16 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         logger.info("WsInterceptor call afterPropertiesSet()");
         loadData();
     }
 
-    public boolean preHandle(HttpServletRequest request) {
+    /**
+     * 前处理.
+     * @return bool
+     */
+    public boolean preHandle() {
         System.out.println("-------------------preHandle------------------");
         logger.info("WsInterceptor call preHandle()");
         return true;
@@ -98,8 +95,7 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
     }
 
     public void afterCompletion(
-            HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-            throws Exception {
+            HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         System.out.println("-------------------afterCompletion------------------");
         logger.info("WsInterceptor call afterCompletion()");
     }
@@ -157,22 +153,22 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
     }
 
     /**
-     * 加载指定的配置文件内容到内存中去
+     * 加载指定的配置文件内容到内存中去.
      */
     private void loadConfigPropertiesData(String filename, Map<String, String> map) {
-        if (StringUtils.isBlank(filename)){
+        if (StringUtils.isBlank(filename)) {
             return;
         }
-        logger.info("call load data from:"+filename);
+        logger.info("call load data from:" + filename);
 
         InputStream stream = null;
         InputStreamReader reader = null;
         BufferedReader br = null;
         try {
             stream = getClass().getClassLoader().getResourceAsStream(filename);
-            reader = new InputStreamReader(stream,"UTF-8");
+            reader = new InputStreamReader(stream, "UTF-8");
             br = new BufferedReader(reader);
-            String data = null;
+            String data;
             while ((data = br.readLine()) != null) {
                 if (data.startsWith("#")) {
                     continue;
@@ -192,32 +188,35 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
                 }
             }
         } catch (Exception e) {
-            logger.info("查找文件"+filename+"失败! 改从ServiceConstants中加载配置");
-            System.out.println("查找文件"+filename+"失败! 改从ServiceConstants中加载配置");
+            logger.info("查找文件" + filename + "失败! 改从ServiceConstants中加载配置");
+            System.out.println("查找文件" + filename + "失败! 改从ServiceConstants中加载配置");
 
             loadDefaultConfigData();
             return;
-        }finally{
+        } finally {
             if (br != null) {
                 try {
                     br.close();
-                } catch (Exception e2) {
+                } catch (Exception e1) {
+                    e1.printStackTrace();
                 }
             }
             if (reader != null) {
                 try {
                     reader.close();
-                } catch (Exception e1) {
+                } catch (Exception e2) {
+                    e2.printStackTrace();
                 }
             }
             if (stream != null) {
                 try {
                     stream.close();
                 } catch (Exception e3) {
+                    e3.printStackTrace();
                 }
             }
         }
-        System.out.println(filename+"配置:" + map);
+        System.out.println(filename + "配置:" + map);
     }
 
     private void loadDefaultConfigData() {
