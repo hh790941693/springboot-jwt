@@ -5,7 +5,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsDicDO;
 import org.springframework.stereotype.Repository;
 
 /**
- * 字典表
+ * 字典表.
  */
 @Repository
 public interface WsDicDao extends BaseDao<WsDicDO> {

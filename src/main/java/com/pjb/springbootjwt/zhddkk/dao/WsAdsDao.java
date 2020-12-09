@@ -5,7 +5,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsAdsDO;
 import org.springframework.stereotype.Repository;
 
 /**
- * 广告表
+ * 广告表.
  */
 @Repository
 public interface WsAdsDao extends BaseDao<WsAdsDO> {

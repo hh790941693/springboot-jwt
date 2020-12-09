@@ -5,7 +5,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsCircleCommentDO;
 import org.springframework.stereotype.Repository;
 
 /**
- * 
+ * 朋友圈评论.
  */
 @Repository
 public interface WsCircleCommentDao extends BaseDao<WsCircleCommentDO> {

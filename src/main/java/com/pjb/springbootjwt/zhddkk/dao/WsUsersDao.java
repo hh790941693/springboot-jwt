@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 用户账号表
+ * 用户账号表.
  */
 @Repository
 public interface WsUsersDao extends BaseDao<WsUsersDO> {

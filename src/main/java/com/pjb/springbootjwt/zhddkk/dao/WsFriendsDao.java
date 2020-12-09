@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 好友列表
+ * 好友列表.
  */
 @Repository
 public interface WsFriendsDao extends BaseDao<WsFriendsDO> {

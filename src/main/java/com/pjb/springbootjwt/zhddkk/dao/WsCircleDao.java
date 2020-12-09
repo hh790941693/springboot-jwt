@@ -5,7 +5,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsCircleDO;
 import org.springframework.stereotype.Repository;
 
 /**
- * 
+ * 朋友圈.
  */
 @Repository
 public interface WsCircleDao extends BaseDao<WsCircleDO> {

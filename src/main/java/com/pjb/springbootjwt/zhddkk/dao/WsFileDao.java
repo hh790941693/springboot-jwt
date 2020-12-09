@@ -5,7 +5,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import org.springframework.stereotype.Repository;
 
 /**
- * 文件表
+ * 文件表.
  */
 @Repository
 public interface WsFileDao extends BaseDao<WsFileDO> {
