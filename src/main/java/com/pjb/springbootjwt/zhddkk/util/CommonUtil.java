@@ -1,7 +1,5 @@
 package com.pjb.springbootjwt.zhddkk.util;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -9,20 +7,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
+import org.apache.commons.lang.StringUtils;
 
-public class CommonUtil 
-{
+public class CommonUtil {
     /**
-     * 获取xml中某个节点中的值
+     * 获取xml中某个节点中的值.
      *
-     * @param xmlStr
-     * @param name
-     * @return
+     * @param xmlStr 字符串
+     * @param name 节点名
+     * @return 结果
      */
-    public static String getVarFromXml(String xmlStr, String name)
-    {
+    public static String getVarFromXml(String xmlStr, String name) {
         String result = null;
 
         if (xmlStr.contains(name)) {
@@ -35,29 +32,23 @@ public class CommonUtil
     }
 
     /**
-     * 判断一个字符串是否为空
+     * 判断一个字符串是否为空.
      * true:空  false:非空
      *
-     * @param str
-     * @return boolean
+     * @param str 字符串
+     * @return boolean 结果
      */
-    public static boolean validateEmpty(String str)
-    {
-        if (StringUtils.isBlank(str)) {
-            return true;
-        }
-
-        return false;
+    public static boolean validateEmpty(String str) {
+        return StringUtils.isBlank(str);
     }
 
     /**
-     * 转义xml中的特殊字符
+     * 转义xml中的特殊字符.
      *
-     * @param str
-     * @return
+     * @param str 字符串
+     * @return 结果
      */
-    public static String changeStrToXml(String str)
-    {
+    public static String changeStrToXml(String str) {
         Map<String, String> map = new HashMap<String, String>();
         map.put("&lt;", "<");
         map.put("&gt;", ">");
@@ -75,106 +66,93 @@ public class CommonUtil
     }
 
     /**
-     * 获取前几个小时时间
+     * 获取前几个小时时间.
      *
      * @param curDate 当前时间
      * @param hour   前几个小时
      *
-     * @return
+     * @return 结果
      */
-    public static Date queryPreHour(Date curDate, int hour)
-    {
+    public static Date queryPreHour(Date curDate, int hour) {
         Calendar c = Calendar.getInstance();
         c.setTime(curDate);
-
         c.add(Calendar.HOUR, -hour);
-
-        Date d = c.getTime();
-
-        return d;
+        return c.getTime();
     }
 
     /**
-     * 获取前几分钟时间
+     * 获取前几分钟时间.
      *
      * @param curDate 当前时间
      * @param minutes 前几分钟
-     * @return
+     * @return 结果
      */
     public static Date queryPreMinutes(Date curDate, int minutes) {
         Calendar c = Calendar.getInstance();
         c.setTime(curDate);
-
         c.add(Calendar.MINUTE, -minutes);
-
-        Date d = c.getTime();
-
-        return d;
+        return c.getTime();
     }
 
     /**
-     * 获取2个时间的间隔  单位:分钟
+     * 获取2个时间的间隔  单位:分钟.
      * 注意:date1比date2大
      *
-     * @param date1
-     * @param date2
-     * @return
+     * @param date1 时间1
+     * @param date2 时间2
+     * @return 结果
      */
     public static long getTwoDateInterval(Date date1, Date date2) {
-        long misec = date1.getTime()-date2.getTime();
-        long sec = misec/1000/60;
-
-        return sec;
+        long misec = date1.getTime() - date2.getTime();
+        return misec / 1000 / 60;
     }
 
     /**
-     * 随机获取两个整型数字之间的数
+     * 随机获取两个整型数字之间的数.
      * 起始数字要大于结束数字
      *
      * @param start 起始数字
      * @param end  结束数字
-     * @return
+     * @return 结果
      */
-    public static int randomNumber(int start,int end) {
+    public static int randomNumber(int start, int end) {
         int result = 0;
         if (end > start) {
-            int interval = end-start;
+            int interval = end - start;
             Random rand = new Random();
 
-            result = rand.nextInt(interval)+start;
+            result = rand.nextInt(interval) + start;
         }
 
         return result;
     }
 
     /**
-     * 随机获取两个double数字之间的数
+     * 随机获取两个double数字之间的数.
      * 起始数字要大于结束数字
      *
      * @param d1 起始数字
      * @param d2  结束数字
-     * @return
+     * @return 结果
      */
-    public static double randomDouble(double d1,double d2)
-    {
+    public static double randomDouble(double d1, double d2) {
         double result = 0d;
         if (d2 > d1) {
-            result = Math.random()*(d2-d1) + d1;
+            result = Math.random() * (d2 - d1) + d1;
         }
 
         return result;
     }
 
     /**
-     * 让double型保留几位小数
+     * 让double型保留几位小数.
      *
-     * @param d
-     * @param scale
-     * @return
+     * @param d double数据
+     * @param scale 保留位数
+     * @return 结果
      */
-    public static double changeDouble(double d, int scale)
-    {
-        double result = 0d;
+    public static double changeDouble(double d, int scale) {
+        double result;
         BigDecimal bd = new BigDecimal(d);
         result = bd.setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
 
@@ -182,40 +160,42 @@ public class CommonUtil
     }
 
     /**
-     * 比较2个string是否一样
+     * 比较2个string是否一样.
      * true:一样
      * false:不一样
      *
-     * @param s1
-     * @param s2
+     * @param s1 字符串1
+     * @param s2 字符串2
      */
-    public static boolean compareToObj(String s1, String s2)
-    {
+    public static boolean compareToObj(String s1, String s2) {
         boolean res = false;
         if (s1 == null && s2 == null) {
             res = true;
-        }else if (s1 != null && s2 != null) {
-            if (s1.equals(s2)){
+        } else if (s1 != null && s2 != null) {
+            if (s1.equals(s2)) {
                 res = true;
             }
         }
         return res;
     }
 
-    //检查url是否可访问
-    public static boolean testUrl(String urlString){
+    /**
+     * 检查url是否可访问.
+     */
+    public static boolean testUrl(String urlString) {
         InputStream inputStream = null;
         try {
             URL url = new URL(urlString);
             inputStream = url.openStream();
             return true;
         } catch (Exception e1) {
+            e1.printStackTrace();
         } finally {
-            if (null != inputStream){
+            if (null != inputStream) {
                 try {
                     inputStream.close();
-                }catch (Exception e){
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
