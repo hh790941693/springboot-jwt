@@ -4,7 +4,7 @@ import ${package}.domain.${className}DO;
 import com.pjb.springbootjwt.zhddkk.base.CoreService;
 
 /**
- * ${comments}
+ * ${comments}.
  */
 public interface ${className}Service extends CoreService<${className}DO> {
     
