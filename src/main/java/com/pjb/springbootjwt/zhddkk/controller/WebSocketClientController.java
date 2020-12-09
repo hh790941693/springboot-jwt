@@ -1,10 +1,23 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.pjb.springbootjwt.common.base.AdminBaseController;
+import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.base.Result;
+import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
+import com.pjb.springbootjwt.zhddkk.bean.WangyiNewsBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
+import com.pjb.springbootjwt.zhddkk.domain.*;
+import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
+import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
+import com.pjb.springbootjwt.zhddkk.service.*;
+import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,19 +27,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.pjb.springbootjwt.common.base.AdminBaseController;
-import com.pjb.springbootjwt.common.redis.RedisUtil;
-import com.pjb.springbootjwt.zhddkk.base.Result;
-import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
-import com.pjb.springbootjwt.zhddkk.bean.WangyiNewsBean;
-import com.pjb.springbootjwt.zhddkk.domain.*;
-import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
-import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
-import com.pjb.springbootjwt.zhddkk.service.*;
-import com.pjb.springbootjwt.zhddkk.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -173,48 +173,23 @@ public class WebSocketClientController extends AdminBaseController {
     }
 
     /**
-     * 设置个人信息.
-     *
-     * @return 设置个人信息页面
-     */
-    @RequestMapping(value = "setPersonalInfo.page")
-    public String setPersonalInfo(Model model, @RequestParam("user")String user) {
-        logger.debug("访问setPersonalInfo.page");
-        model.addAttribute("user", user);
-        return "ws/setPersonalInfo";
-    }
-
-    /**
-     * 显示用户信息.
-     *
-     * @param model 模型
-     * @param user 用户id
-     * @return 显示用户信息页面
-     */
-    @RequestMapping(value = "showPersonalInfo.page")
-    public String showPersonalInfo(Model model, @RequestParam("user")String user) {
-        logger.debug("访问showPersonalInfo.page");
-        model.addAttribute("user", user);
-        return "ws/showPersonalInfo";
-    }
-
-    /**
      * 获取在线人数信息.
      *
      * @return 在线用户信息
      */
     @RequestMapping(value = "getOnlineInfo.json")
     @ResponseBody
-    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value = "user", required = true) String user) {
+    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value = "user") String user) {
         if (StringUtils.isBlank(user)) {
             return Result.fail(new WsOnlineInfo());
         }
         Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
 
         //所有用户
-        List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER));
+        List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>()
+                .ne("name", CommonConstants.ADMIN_USER));
         //在线用户
-        List<WsUsersDO> onlineUserList = new ArrayList<WsUsersDO>();
+        List<WsUsersDO> onlineUserList = new ArrayList<>();
         //离线用户
         List<WsUsersDO> offlineUserList = new ArrayList<WsUsersDO>();
 
@@ -230,15 +205,11 @@ public class WebSocketClientController extends AdminBaseController {
 
         //当前用户信息
         WsUsersDO currentOnlineUserInfo = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-        WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", currentOnlineUserInfo.getId()));
+        WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>()
+                .eq("user_id", currentOnlineUserInfo.getId()));
         if (null != wsUserProfileDO) {
             currentOnlineUserInfo.setHeadImage(wsUserProfileDO.getImg());
         }
-
-        //我的好友列表
-        List<WsUsersDO> friendsUserList = wsUsersService.queryMyFriendList(currentOnlineUserInfo.getId());
-        List<WsUsersDO> offLineFriendList = friendsUserList.stream().filter(wu -> wu != null && wu.getState().equals("0")).collect(Collectors.toList());
-        List<WsUsersDO> onineFriendList = friendsUserList.stream().filter(wu -> wu != null && wu.getState().equals("1")).collect(Collectors.toList());
 
         WsOnlineInfo woi = new WsOnlineInfo();
         woi.setOfflineCount(offlineUserList.size());
@@ -247,8 +218,14 @@ public class WebSocketClientController extends AdminBaseController {
         woi.setUserInfoList(allUserList);
         woi.setOnlineUserList(onlineUserList);
         woi.setOfflineUserList(offlineUserList);
+        //我的好友列表
+        List<WsUsersDO> friendsUserList = wsUsersService.queryMyFriendList(currentOnlineUserInfo.getId());
         woi.setFriendsList(friendsUserList);
+        List<WsUsersDO> onineFriendList = friendsUserList.stream().filter(wu -> wu != null
+                && wu.getState().equals("1")).collect(Collectors.toList());
         woi.setOnlineFriendCount(onineFriendList.size());
+        List<WsUsersDO> offLineFriendList = friendsUserList.stream().filter(wu -> wu != null
+                && wu.getState().equals("0")).collect(Collectors.toList());
         woi.setOfflineFriendCount(offLineFriendList.size());
         woi.setCommonMap(buildCommonData());
         woi.setCurrentOnlineUserInfo(currentOnlineUserInfo);
@@ -303,7 +280,8 @@ public class WebSocketClientController extends AdminBaseController {
                     wfa.setFromName(curUser);
                     wfa.setToName(wu.getName());
                     List<WsFriendsApplyDO> applyList = new ArrayList<>();
-                    Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(new Page<>(curPage, numPerPage),
+                    Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(new Page<>(curPage,
+                                    numPerPage),
                         new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUser)
                         .eq("to_name", wu.getName()));
                     if (null != wsFriendsApplyDoPage) {
@@ -341,9 +319,11 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "getFriendsApplyList.json", method = RequestMethod.GET)
     @ResponseBody
-    public Object getFriendsApplyList(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage, @RequestParam("curUser") String curUser) {
+    public Object getFriendsApplyList(@RequestParam("curPage") int curPage,
+                                      @RequestParam("numPerPage") int numPerPage,
+                                      @RequestParam("curUser") String curUser) {
         int totalCount = wsFriendsApplyService.selectCount(new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
-        int totalPage = 1;
+        int totalPage;
         if (totalCount % numPerPage != 0) {
             totalPage = totalCount / numPerPage + 1;
         } else {
@@ -353,16 +333,9 @@ public class WebSocketClientController extends AdminBaseController {
             totalPage = 1;
         }
 
-        int start = 0;
-        int limit = numPerPage;
-        if (curPage == 1) {
-            start = 0;
-        } else {
-            start = (curPage - 1) * numPerPage;
-        }
-
         List<WsFriendsApplyDO> userlist = new ArrayList<>();
-        Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
+        Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(
+                new Page<WsFriendsApplyDO>(curPage, numPerPage),
                 new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
         if (null != wsFriendsApplyDoPage) {
             userlist = wsFriendsApplyDoPage.getRecords();
@@ -383,9 +356,11 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "getMyApplyList.json", method = RequestMethod.GET)
     @ResponseBody
-    public Object getMyApplyList(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage, @RequestParam("curUser") String curUser) {
+    public Object getMyApplyList(@RequestParam("curPage") int curPage,
+                                 @RequestParam("numPerPage") int numPerPage,
+                                 @RequestParam("curUser") String curUser) {
         int totalCount = wsFriendsApplyService.selectCount(new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
-        int totalPage = 1;
+        int totalPage;
         if (totalCount % numPerPage != 0) {
             totalPage = totalCount / numPerPage + 1;
         } else {
@@ -395,16 +370,9 @@ public class WebSocketClientController extends AdminBaseController {
             totalPage = 1;
         }
 
-        int start = 0;
-        int limit = numPerPage;
-        if (curPage == 1) {
-            start = 0;
-        } else {
-            start = (curPage - 1) * numPerPage;
-        }
-
         List<WsFriendsApplyDO> userlist = new ArrayList<>();
-        Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(new Page<WsFriendsApplyDO>(curPage, numPerPage),
+        Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(
+                new Page<WsFriendsApplyDO>(curPage, numPerPage),
                  new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUser));
         if (null != wsFriendsApplyDoPage) {
             userlist = wsFriendsApplyDoPage.getRecords();
@@ -425,7 +393,7 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "addFriend.do", method = RequestMethod.POST)
     @ResponseBody
-    public String addFriend(Model model, @RequestParam("fromUserName")String fromUserName,
+    public String addFriend(@RequestParam("fromUserName")String fromUserName,
                                          @RequestParam("toUserId")Integer toUserId) {
         Integer fromUserId = querySpecityUserName(fromUserName).getId();
         String toUserName = querySpecityUserId(toUserId).getName();
@@ -497,7 +465,7 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "deagreeFriend.do", method = RequestMethod.POST)
     @ResponseBody
-    public String deagreeFriend(Model model, @RequestParam("recordId")Integer recordId) {
+    public String deagreeFriend(@RequestParam("recordId")Integer recordId) {
         WsFriendsApplyDO wfa = wsFriendsApplyService.selectById(recordId);
         if (null == wfa) {
             return CommonConstants.FAIL;
@@ -560,7 +528,8 @@ public class WebSocketClientController extends AdminBaseController {
         if (null != circleList && circleList.size() > 0) {
             for (WsCircleDO wc : circleList) {
                 if (!headImgMap.containsKey(wc.getUserId())) {
-                    WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", wc.getUserId()));
+                    WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>()
+                            .eq("user_id", wc.getUserId()));
                     if (null != wsUserProfileDO) {
                         headImgMap.put(wc.getUserId(), wsUserProfileDO.getImg());
                     }
@@ -568,10 +537,11 @@ public class WebSocketClientController extends AdminBaseController {
 
                 //头像
                 wc.setHeadImg(headImgMap.get(wc.getUserId()));
-                List<WsCircleCommentDO> commentList = wsCircleCommentService.selectList(new EntityWrapper<WsCircleCommentDO>().eq("circle_id", wc.getId())
+                List<WsCircleCommentDO> commentList = wsCircleCommentService.selectList(new EntityWrapper<WsCircleCommentDO>()
+                        .eq("circle_id", wc.getId())
                         .orderBy("create_time", false));
                 if (null == commentList) {
-                    wc.setCommentList(new ArrayList<WsCircleCommentDO>());
+                    wc.setCommentList(new ArrayList<>());
                 } else {
                     wc.setCommentList(commentList);
                 }
@@ -588,7 +558,9 @@ public class WebSocketClientController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.INSERT, module = ModuleEnum.CIRCLE, subModule = "", describe = "评论朋友圈")
     @RequestMapping(value = "toComment.do", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> toComment(@RequestParam("user")String user, @RequestParam("circleId")Integer circleId, @RequestParam("comment")String comment) {
+    public Result<String> toComment(@RequestParam("user")String user,
+                                    @RequestParam("circleId")Integer circleId,
+                                    @RequestParam("comment")String comment) {
         WsCircleDO wsCircleDO = wsCircleService.selectById(circleId);
         if (null == wsCircleDO) {
             return Result.fail();
@@ -726,9 +698,11 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "getMyFriendsList.json", method = RequestMethod.GET)
     @ResponseBody
-    public Object getMyFriendsList(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage, @RequestParam("curUser") String curUser) {
+    public Object getMyFriendsList(@RequestParam("curPage") int curPage,
+                                   @RequestParam("numPerPage") int numPerPage,
+                                   @RequestParam("curUser") String curUser) {
         int totalCount = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", curUser));
-        int totalPage = 1;
+        int totalPage;
         if (totalCount % numPerPage != 0) {
             totalPage = totalCount / numPerPage + 1;
         } else {
@@ -736,14 +710,6 @@ public class WebSocketClientController extends AdminBaseController {
         }
         if (totalPage == 0) {
             totalPage = 1;
-        }
-
-        int start = 0;
-        int limit = numPerPage;
-        if (curPage == 1) {
-            start = 0;
-        } else {
-            start = (curPage - 1) * numPerPage;
         }
 
         List<WsFriendsDO> userlist = new ArrayList<>();
@@ -784,7 +750,8 @@ public class WebSocketClientController extends AdminBaseController {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
         try {
             // 检查表中是否有个人信息记录
-            WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", wsUsersDO.getId()));
+            WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>()
+                    .eq("user_id", wsUsersDO.getId()));
             if (null == wsUserProfileDO) {
                 logger.info("插入个人信息");
                 WsUserProfileDO wup = new WsUserProfileDO();
@@ -866,7 +833,6 @@ public class WebSocketClientController extends AdminBaseController {
     public Object checkUpdate(@RequestParam("version")String curVersion, @RequestParam("cmd")String cmd) {
         String shellRootPath = "/root/update/checkupdate.sh";
 
-        String result = "";
         try {
             Process ps = Runtime.getRuntime().exec(shellRootPath + " " + curVersion + " " + cmd);
             ps.waitFor();
@@ -877,7 +843,7 @@ public class WebSocketClientController extends AdminBaseController {
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");
             }
-            result = sb.toString();
+            String result = sb.toString();
             System.out.println(result);
             return result;
         } catch (Exception e) {
@@ -902,7 +868,7 @@ public class WebSocketClientController extends AdminBaseController {
                 List<WsCommonDO> tmpCommonList = commonMap.get(type);
                 tmpCommonList.add(common);
             } else {
-                List<WsCommonDO> tmpDicList = new ArrayList<WsCommonDO>();
+                List<WsCommonDO> tmpDicList = new ArrayList<>();
                 tmpDicList.add(common);
                 commonMap.put(type, tmpDicList);
             }
@@ -951,21 +917,12 @@ public class WebSocketClientController extends AdminBaseController {
     }
 
     /**
-     * 跳转到好友列表页面.
-     */
-    @GetMapping("myFriends.page")
-    String myFriendsPage(Model model, String user) {
-        model.addAttribute("user", user);
-        return "ws/myFriends";
-    }
-
-    /**
      * 获取好友列表列表数据.
      */
     @ResponseBody
     @GetMapping("/myFriendsList")
     public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDtO) {
-        Wrapper<WsFriendsDO> wrapper = new EntityWrapper<WsFriendsDO>();
+        Wrapper<WsFriendsDO> wrapper = new EntityWrapper<>();
         if (StringUtils.isNotBlank(wsFriendsDtO.getUname())) {
             wrapper.eq("uname", wsFriendsDtO.getUname());
         }
@@ -1011,13 +968,12 @@ public class WebSocketClientController extends AdminBaseController {
     /**
      * 与机器人聊天.
      *
-     * @param request 请求
      * @param text 人类聊天内容
      * @return 回复内容
      */
     @ResponseBody
     @GetMapping("/robotChat")
-    public String robotChat(HttpServletRequest request, String text) throws InterruptedException {
+    public String robotChat(String text) throws InterruptedException {
         for (Map.Entry<String, String> entry: chatMappingMap.entrySet()) {
             String key = entry.getKey();
             if (key.contains(text) || text.contains(key)) {
@@ -1063,32 +1019,32 @@ public class WebSocketClientController extends AdminBaseController {
         String baseUrl = "https://3g.163.com";
         String branchUrlFormat = baseUrl + "/touch/reconstruct/article/list/%s";
         List<WangyiNewsBean> list = new ArrayList<>();
-        WangyiNewsBean wyBean1 = new WangyiNewsBean("新闻", "BBM54PGAwangning", String.format(branchUrlFormat, "BBM54PGAwangning"));
-        WangyiNewsBean wyBean2 = new WangyiNewsBean("娱乐", "BA10TA81wangning", String.format(branchUrlFormat, "BA10TA81wangning"));
-        WangyiNewsBean wyBean3 = new WangyiNewsBean("体育", "BA8E6OEOwangning", String.format(branchUrlFormat, "BA8E6OEOwangning"));
-        WangyiNewsBean wyBean4 = new WangyiNewsBean("财经", "BA8EE5GMwangning", String.format(branchUrlFormat, "BA8EE5GMwangning"));
-        WangyiNewsBean wyBean5 = new WangyiNewsBean("军事", "BAI67OGGwangning", String.format(branchUrlFormat, "BAI67OGGwangning"));
-        WangyiNewsBean wyBean6 = new WangyiNewsBean("科技", "BA8D4A3Rwangning", String.format(branchUrlFormat, "BA8D4A3Rwangning"));
-        WangyiNewsBean wyBean7 = new WangyiNewsBean("手机", "BAI6I0O5wangning", String.format(branchUrlFormat, "BAI6I0O5wangning"));
-        WangyiNewsBean wyBean8 = new WangyiNewsBean("数码", "BAI6JOD9wangning", String.format(branchUrlFormat, "BAI6JOD9wangning"));
-        WangyiNewsBean wyBean9 = new WangyiNewsBean("时尚", "BA8F6ICNwangning", String.format(branchUrlFormat, "BA8F6ICNwangning"));
-        WangyiNewsBean wyBean10 = new WangyiNewsBean("游戏", "BAI6RHDKwangning", String.format(branchUrlFormat, "BAI6RHDKwangning"));
-        WangyiNewsBean wyBean11 = new WangyiNewsBean("教育", "BA8FF5PRwangning", String.format(branchUrlFormat, "BA8FF5PRwangning"));
-        WangyiNewsBean wyBean12 = new WangyiNewsBean("健康", "BDC4QSV3wangning", String.format(branchUrlFormat, "BDC4QSV3wangning"));
-        WangyiNewsBean wyBean13 = new WangyiNewsBean("旅游", "BEO4GINLwangning", String.format(branchUrlFormat, "BEO4GINLwangning"));
-        list.add(wyBean1);
-        list.add(wyBean2);
-        list.add(wyBean3);
-        list.add(wyBean4);
-        list.add(wyBean5);
-        list.add(wyBean6);
-        list.add(wyBean7);
-        list.add(wyBean8);
-        list.add(wyBean9);
-        list.add(wyBean10);
-        list.add(wyBean11);
-        list.add(wyBean12);
-        list.add(wyBean13);
+        WangyiNewsBean wnb1 = new WangyiNewsBean("新闻", "BBM54PGAwangning", String.format(branchUrlFormat, "BBM54PGAwangning"));
+        WangyiNewsBean wnb2 = new WangyiNewsBean("娱乐", "BA10TA81wangning", String.format(branchUrlFormat, "BA10TA81wangning"));
+        WangyiNewsBean wnb3 = new WangyiNewsBean("体育", "BA8E6OEOwangning", String.format(branchUrlFormat, "BA8E6OEOwangning"));
+        WangyiNewsBean wnb4 = new WangyiNewsBean("财经", "BA8EE5GMwangning", String.format(branchUrlFormat, "BA8EE5GMwangning"));
+        WangyiNewsBean wnb5 = new WangyiNewsBean("军事", "BAI67OGGwangning", String.format(branchUrlFormat, "BAI67OGGwangning"));
+        WangyiNewsBean wnb6 = new WangyiNewsBean("科技", "BA8D4A3Rwangning", String.format(branchUrlFormat, "BA8D4A3Rwangning"));
+        WangyiNewsBean wnb7 = new WangyiNewsBean("手机", "BAI6I0O5wangning", String.format(branchUrlFormat, "BAI6I0O5wangning"));
+        WangyiNewsBean wnb8 = new WangyiNewsBean("数码", "BAI6JOD9wangning", String.format(branchUrlFormat, "BAI6JOD9wangning"));
+        WangyiNewsBean wnb9 = new WangyiNewsBean("时尚", "BA8F6ICNwangning", String.format(branchUrlFormat, "BA8F6ICNwangning"));
+        WangyiNewsBean wnb10 = new WangyiNewsBean("游戏", "BAI6RHDKwangning", String.format(branchUrlFormat, "BAI6RHDKwangning"));
+        WangyiNewsBean wnb11 = new WangyiNewsBean("教育", "BA8FF5PRwangning", String.format(branchUrlFormat, "BA8FF5PRwangning"));
+        WangyiNewsBean wnb12 = new WangyiNewsBean("健康", "BDC4QSV3wangning", String.format(branchUrlFormat, "BDC4QSV3wangning"));
+        WangyiNewsBean wnb13 = new WangyiNewsBean("旅游", "BEO4GINLwangning", String.format(branchUrlFormat, "BEO4GINLwangning"));
+        list.add(wnb1);
+        list.add(wnb2);
+        list.add(wnb3);
+        list.add(wnb4);
+        list.add(wnb5);
+        list.add(wnb6);
+        list.add(wnb7);
+        list.add(wnb8);
+        list.add(wnb9);
+        list.add(wnb10);
+        list.add(wnb11);
+        list.add(wnb12);
+        list.add(wnb13);
 
         return Result.ok(list);
     }
