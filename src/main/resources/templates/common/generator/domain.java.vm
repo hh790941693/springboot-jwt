@@ -27,7 +27,7 @@ public class ${className}DO implements Serializable {
 #if ($column.attrname == $pk.attrname)
     @TableId(type = IdType.AUTO)
 #end
-    @ApiModelProperty(value = "$column.attrname",name = "$column.comments")
+    @ApiModelProperty(value = "$column.attrname", name = "$column.comments")
     private $column.attrType $column.attrname;
 #end
 
