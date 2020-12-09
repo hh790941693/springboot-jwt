@@ -1,13 +1,5 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.Map.Entry;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -15,14 +7,18 @@ import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.bean.JsonResult;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
-
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
-import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,21 +27,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import net.sf.json.JSONArray;
-
 /**
- * websocket服务端控制器
+ * websocket服务端控制器.
  * 
  * @author Administrator
  *
  */
 @Controller
 @RequestMapping("ws")
-public class WebSocketServerController extends AdminBaseController
-{
+public class WebSocketServerController extends AdminBaseController {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketServerController.class);
 
-    private static Map<String,String> configMap = WsInterceptor.getConfigMap();
+    private static final Map<String, String> configMap = WsInterceptor.getConfigMap();
 
     @Autowired
     private WsOperLogService wsOperLogService;
@@ -72,16 +65,15 @@ public class WebSocketServerController extends AdminBaseController
     private WsFileService wsFileService;
 
     /**
-     * 让某用户下线
-     * @param user
-     * @return
+     * 让某用户下线.
+     * @param user 用户id
+     * @return 结果
      */
     @RequestMapping(value = "offlineUser.do")
     @ResponseBody
-    public String offlineUser(@RequestParam("user") String user)
-    {
+    public String offlineUser(@RequestParam("user") String user) {
         Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-        for (Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
+        for (Entry<String, ZhddWebSocket> entry : socketMap.entrySet()) {
             if (entry.getKey().equals(user)) {
                 try {
                     entry.getValue().getSession().close();
@@ -104,14 +96,13 @@ public class WebSocketServerController extends AdminBaseController
     }
 
     /**
-     * 让某用户禁用/启用
-     * @param user
-     * @return
+     * 让某用户禁用/启用.
+     * @param user 用户id
+     * @return 结果
      */
     @RequestMapping(value = "enableUser.do")
     @ResponseBody
-    public String enableUser(@RequestParam("user") String user,@RequestParam("enable") String enable)
-    {
+    public String enableUser(@RequestParam("user") String user, @RequestParam("enable") String enable) {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {
             wsUsersDO.setEnable(enable);
@@ -122,14 +113,13 @@ public class WebSocketServerController extends AdminBaseController
     }
 
     /**
-     * 让某用户禁言/开言
-     * @param user
-     * @return
+     * 让某用户禁言/开言.
+     * @param user 用户id
+     * @return 结果
      */
     @RequestMapping(value = "enableSpeak.do")
     @ResponseBody
-    public String enableSpeak(@RequestParam("user") String user,@RequestParam("speak") String speak)
-    {
+    public String enableSpeak(@RequestParam("user") String user, @RequestParam("speak") String speak) {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {
             wsUsersDO.setSpeak(speak);
@@ -140,14 +130,13 @@ public class WebSocketServerController extends AdminBaseController
     }
 
     /**
-     * 给指定用户的发送信息
-     * @param user
-     * @return
+     * 给指定用户的发送信息.
+     * @param user 用户id
+     * @return 结果
      */
     @RequestMapping(value = "sendText.do")
     @ResponseBody
-    public String sendText(@RequestParam("user") String user, @RequestParam("msg") String message)
-    {
+    public String sendText(@RequestParam("user") String user, @RequestParam("msg") String message) {
         String result = "offline";
 
         String msgFrom = message.split("from:")[1].split(";")[0].trim();
@@ -161,8 +150,7 @@ public class WebSocketServerController extends AdminBaseController
 
         // 在线人数
         Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-        if (socketMap.containsKey(user))
-        {
+        if (socketMap.containsKey(user)) {
             try {
                 socketMap.get(user).getSession().getBasicRemote().sendText(chatBean.toString());
             } catch (IOException e) {
@@ -175,93 +163,13 @@ public class WebSocketServerController extends AdminBaseController
         return result;
     }
 
-    /**
-     * 用户管理页面
-     *
-     */
-    @RequestMapping(value = "wsserverUser.page", method = RequestMethod.GET)
-    public String userManage(Model model)
-    {
-        logger.debug("访问wsserverUser.page");
-        return "ws/wsserverUser";
-    }
 
     /**
-     * 聊天记录管理页面
-     *
-     */
-    @RequestMapping(value = "wsserverChartLog.page", method = RequestMethod.GET)
-    public String chatLogManage(Model model)
-    {
-        logger.debug("访问wsserverChartLog.page");
-        List<WsUsersDO> userList = wsUsersService.selectList(null);
-        List<String> list = new ArrayList<String>();
-        for (WsUsersDO wu : userList) {
-            list.add(wu.getName());
-        }
-        model.addAttribute("users", JSONArray.fromObject(list));
-        return "ws/wsserverChartLog";
-    }
-
-    /**
-     * 操作日志管理页面
-     *
-     */
-    @RequestMapping(value = "wsserverOperationLog.page", method = RequestMethod.GET)
-    public String operationLog(Model model)
-    {
-        logger.debug("访问wsserverOperationLog.page");
-
-        //模块列表
-        ModuleEnum[] values = ModuleEnum.values();
-        List<String> moduleList = new ArrayList<String>();
-        for (ModuleEnum me : values) {
-            moduleList.add(me.getValue());
-        }
-        model.addAttribute("modules", JSONArray.fromObject(moduleList));
-
-        List<WsUsersDO> userList = wsUsersService.selectList(null);
-        List<String> list = new ArrayList<String>();
-        for (WsUsersDO wu : userList){
-            list.add(wu.getName());
-        }
-        model.addAttribute("users", JSONArray.fromObject(list));
-        return "ws/wsserverOperationLog";
-    }
-
-    /**
-     * 操作日志管理页面
-     *
-     */
-    @RequestMapping(value = "wsserverOperationLogByBootstrap.page", method = RequestMethod.GET)
-    public String operationLogByBootstrap(Model model)
-    {
-        logger.debug("访问wsserverOperationLogByBootstrap.page");
-
-        //模块列表
-        ModuleEnum[] values = ModuleEnum.values();
-        List<String> moduleList = new ArrayList<String>();
-        for (ModuleEnum me : values) {
-            moduleList.add(me.getValue());
-        }
-        model.addAttribute("modules", JSONArray.fromObject(moduleList));
-
-        List<WsUsersDO> userList = wsUsersService.selectList(null);
-        List<String> list = new ArrayList<String>();
-        for (WsUsersDO wu : userList){
-            list.add(wu.getName());
-        }
-        model.addAttribute("users", JSONArray.fromObject(list));
-        return "ws/wsserverOperationLogByBootstrap";
-    }
-
-    /**
-     * 聊天记录监控页面
+     * 聊天记录监控页面.
      *
      */
     @RequestMapping(value = "wsserverChartMonitor.page", method = RequestMethod.GET)
-    public String chatLogMonitor(Model model,HttpServletRequest request)
-    {
+    public String chatLogMonitor(Model model) {
         logger.debug("访问wsserverChartMonitor.page");
         model.addAttribute("webserverip", configMap.get(CommonConstants.S_WEBSERVERIP));
         model.addAttribute("webserverport", configMap.get(CommonConstants.S_WEBSERVERPORT));
@@ -269,84 +177,39 @@ public class WebSocketServerController extends AdminBaseController
     }
 
     /**
-     * 常用字典项配置页面
+     * 发布广告.
      *
+     * @param adTitle 标题
+     * @param adContent 内容
+     * @param req 请求
      */
-    @RequestMapping(value = "wsserverCommon.page", method = RequestMethod.GET)
-    public String commonManager(Model model,@RequestParam("type") String type)
-    {
-        logger.debug("访问wsserverCommon.page,type="+type);
-        model.addAttribute("type", type);
-        String title="";
-        if (type.equals("mgc")) {
-            title="敏感词";
-        }else if (type.equals("zh")){
-            title="脏话";
-        }else if (type.equals("cyy")){
-            title="常用语";
-        }else if (type.equals("zcwt")){
-            title="注册问题";
-        }
-        model.addAttribute("title", title);
-        return "ws/wsserverCommon";
-    }
-
-    /**
-     * 广告首页
-     *
-     */
-    @RequestMapping(value = "ad.page")
-    public String adIndex()
-    {
-        logger.debug("访问ad.page");
-        return "ws/wsserverAd";
-    }
-
-    /**
-     * 添加广告
-     * @return
-     */
-    @RequestMapping(value = "addAd.page")
-    public String addAd()
-    {
-        logger.debug("访问addAd.page");
-        return "ws/wsserverAddAd";
-    }
-
-    /**
-     * 发布广告
-     *
-     * @param adTitle
-     * @param adContent
-     * @param req
-     * @param resp
-     */
-    @RequestMapping(value="addAd.do",method=RequestMethod.POST)
+    @RequestMapping(value = "addAd.do", method = RequestMethod.POST)
     @ResponseBody
-    public String addAd(@RequestParam(value="adTitle",required=true) String adTitle,@RequestParam(value="adContent",required=true) String adContent,HttpServletRequest req,HttpServletResponse resp) {
+    public String addAd(@RequestParam("adTitle") String adTitle,
+                        @RequestParam("adContent") String adContent,
+                        HttpServletRequest req) {
 
         // 接收人列表
-        List<String> receiveList = new ArrayList<String>();
-        boolean res = true;
+        List<String> receiveList = new ArrayList<>();
+        boolean result = true;
         if (CommonUtil.validateEmpty(adTitle) && CommonUtil.validateEmpty(adContent)) {
             req.setAttribute("result", false);
-            res = false;
-        }else {
+            result = false;
+        } else {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String curTime = sdf.format(new Date());
 
             Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-            for (Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
+            for (Entry<String, ZhddWebSocket> entry : socketMap.entrySet()) {
                 if (entry.getKey().equals(CommonConstants.ADMIN_USER)) {
                     continue;
                 }
-
                 try {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime,"4","广告消息",CommonConstants.ADMIN_USER,entry.getKey(), "title:"+adTitle+";content:"+adContent);
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "4", "广告消息",
+                            CommonConstants.ADMIN_USER, entry.getKey(), "title:" + adTitle + ";content:" + adContent);
                     entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     receiveList.add(entry.getKey());
                 } catch (IOException e) {
-                    res = false;
                     e.printStackTrace();
                 }
             }
@@ -356,40 +219,37 @@ public class WebSocketServerController extends AdminBaseController
             wsAdsDO.setTitle(adTitle);
             wsAdsDO.setContent(adContent);
             wsAdsDO.setReceiveList(receiveList.toString());
-            res = wsAdsService.insert(wsAdsDO);
+            result = wsAdsService.insert(wsAdsDO);
         }
-        if (res) {
+        if (result) {
             return CommonConstants.SUCCESS;
-        }else {
+        } else {
             return CommonConstants.FAIL;
         }
     }
 
     /**
-     * 分页查询公告列表
-     *
+     * 分页查询公告列表.
      * true:存在  false:不存在
      */
-    @RequestMapping(value="getAdsListByPage.json",method=RequestMethod.GET)
+    @RequestMapping(value = "getAdsListByPage.json", method = RequestMethod.GET)
     @ResponseBody
-    public Object getAdsListByPage(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage)
-    {
+    public Object getAdsListByPage(@RequestParam("curPage") int curPage, @RequestParam("numPerPage") int numPerPage) {
         int totalCount = wsAdsService.selectCount(null);
-        int totalPage = 0;
+        int totalPage;
         if (totalCount % numPerPage != 0) {
-            totalPage = totalCount/numPerPage + 1;
-        }else{
+            totalPage = totalCount / numPerPage + 1;
+        } else {
             totalPage = totalCount / numPerPage;
         }
 
-        int start = 0;
-        int limit = numPerPage;
-        if (curPage == 1){
+        int start;
+        if (curPage == 1) {
             start = 0;
-        }else{
-            start = (curPage-1) * numPerPage;
+        } else {
+            start = (curPage - 1) * numPerPage;
         }
-        List<WsAdsDO> adslist = wsAdsService.selectPage(new Page<>(start, limit)).getRecords();
+        List<WsAdsDO> adslist = wsAdsService.selectPage(new Page<>(start, numPerPage)).getRecords();
         PageResponseEntity rqe = new PageResponseEntity();
         rqe.setTotalCount(totalCount);
         rqe.setTotalPage(totalPage);
@@ -398,31 +258,29 @@ public class WebSocketServerController extends AdminBaseController
     }
 
     /**
-     * 分页查询用户信息
-     *
+     * 分页查询用户信息.
      * true:存在  false:不存在
      */
-    @RequestMapping(value="getOnlineUsersByPage.json",method=RequestMethod.POST,produces="application/json")
+    @RequestMapping(value = "getOnlineUsersByPage.json", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public Object getOnlineUsersByPage(@RequestBody WsUsersDO params) {
+    public Object getOnlineUsersByPage() {
         int totalCount = wsUsersService.selectCount(null);
-        int totalPage = 0;
+        int totalPage;
         int numPerPage = 15;
         int curPage = 1;
-        if (totalCount % numPerPage != 0){
-            totalPage = totalCount/numPerPage + 1;
-        }else{
+        if (totalCount % numPerPage != 0) {
+            totalPage = totalCount / numPerPage + 1;
+        } else {
             totalPage = totalCount / numPerPage;
         }
 
-        int start = 0;
-        int limit = numPerPage;
-        if (curPage == 1){
+        int start;
+        if (curPage == 1) {
             start = 0;
-        }else{
-            start = (curPage-1) * numPerPage;
+        } else {
+            start = (curPage - 1) * numPerPage;
         }
-        List<WsUsersDO> userList = wsUsersService.selectPage(new Page<>(start, limit)).getRecords();
+        List<WsUsersDO> userList = wsUsersService.selectPage(new Page<>(start, numPerPage)).getRecords();
         PageResponseEntity rqe = new PageResponseEntity();
         rqe.setTotalCount(totalCount);
         rqe.setTotalPage(totalPage);
@@ -433,15 +291,13 @@ public class WebSocketServerController extends AdminBaseController
     }
 
     /**
-     * 获取用户聊天记录  分页查询
-     *
+     * 获取用户聊天记录  分页查询.
      * getChatLogByPage.json
      */
-    @RequestMapping(value = "getChatLogByPage.json", method = RequestMethod.POST,produces="application/json")
+    @RequestMapping(value = "getChatLogByPage.json", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public Object getChatLogByPage(@RequestBody WsChatlogDO params)
-    {
-        Page<WsChatlogDO> page = wsChatlogService.selectPage(new Page<>(1,15), null);
+    public Object getChatLogByPage() {
+        Page<WsChatlogDO> page = wsChatlogService.selectPage(new Page<>(1, 15), null);
         int totalCount = wsChatlogService.selectCount(null);
         PageResponseEntity rqe = new PageResponseEntity();
         rqe.setTotalCount(totalCount);
@@ -452,14 +308,12 @@ public class WebSocketServerController extends AdminBaseController
     }
 
     /**
-     * 获取操作日志列表  分页查询
-     *
+     * 获取操作日志列表  分页查询.
      * getOperationLogByPage.json
      */
-    @RequestMapping(value = "getOperationLogByPage.json", method = RequestMethod.POST,produces="application/json")
+    @RequestMapping(value = "getOperationLogByPage.json", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public Object getOperationLogByPage(@RequestBody WsOperationLogDO params)
-    {
+    public Object getOperationLogByPage() {
         Page<WsOperationLogDO> page = wsOperationLogService.selectPage(new Page<>(1, 15), null);
         int totalCount = wsOperationLogService.selectCount(null);
         PageResponseEntity rqe = new PageResponseEntity();
@@ -471,14 +325,12 @@ public class WebSocketServerController extends AdminBaseController
     }
 
     /**
-     * 获取操作日志列表  分页查询
-     *
+     * 获取操作日志列表  分页查询.
      * getOperationLogByPage.json
      */
     @RequestMapping(value = "getOperationLogByPageByBootstrap.json", method = RequestMethod.POST)
     @ResponseBody
-    public Object getOperationLogByPageByBootstrap(WsOperationLogDO params)
-    {
+    public Object getOperationLogByPageByBootstrap() {
         Page<WsOperationLogDO> page = wsOperationLogService.selectPage(new Page<>(1, 15), null);
         int totalCount = wsOperationLogService.selectCount(null);
         JsonResult jr = new JsonResult();
@@ -488,67 +340,66 @@ public class WebSocketServerController extends AdminBaseController
     }
 
     /**
-     * 清空操作日志
-     * @return
+     * 清空操作日志.
+     * @return 清理结果
      */
     @PostMapping("clearOperationLog.do")
     @ResponseBody
-    public String clearOperationLog(){
+    public String clearOperationLog() {
         wsOperLogService.delete(null);
         return CommonConstants.SUCCESS;
     }
 
     /**
-     * 敏感词/脏话  分页查询
-     *
+     * 敏感词/脏话  分页查询.
      * getChatLogByPage.json
      */
-    @RequestMapping(value = "getCommonByPage.json", method = RequestMethod.POST,produces="application/json")
+    @RequestMapping(value = "getCommonByPage.json", method = RequestMethod.POST,
+            produces = "application/json")
     @ResponseBody
-    public Object getCommonByPage(@RequestBody WsCommonDO params)
-    {
-        Page<WsCommonDO> page = wsCommonService.selectPage(new Page<WsCommonDO>(1,15), new EntityWrapper<WsCommonDO>().eq("type", params.getType()));
+    public Object getCommonByPage(@RequestBody WsCommonDO params) {
+        Page<WsCommonDO> page = wsCommonService.selectPage(
+                new Page<WsCommonDO>(1, 15),
+                new EntityWrapper<WsCommonDO>().eq("type", params.getType()));
         List<WsCommonDO> wsCommonList = new ArrayList<>();
-        if (null != page){
+        if (null != page) {
             wsCommonList = page.getRecords();
         }
         return wsCommonList;
     }
 
-    @RequestMapping(value = "addCommonItem.do", method = RequestMethod.POST,produces="application/json")
+    @RequestMapping(value = "addCommonItem.do",
+            method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public String addCommonItem(@RequestBody WsCommonDO params)
-    {
+    public String addCommonItem(@RequestBody WsCommonDO params) {
         wsCommonService.insert(params);
         return CommonConstants.SUCCESS;
     }
 
-    @RequestMapping(value = "deleteCommonItem.do", method = RequestMethod.POST,produces="application/json")
+    @RequestMapping(value = "deleteCommonItem.do", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public String deleteCommonItem(@RequestBody WsCommonDO params)
-    {
+    public String deleteCommonItem(@RequestBody WsCommonDO params) {
         wsCommonService.deleteById(params.getId());
         return CommonConstants.SUCCESS;
     }
 
-    @RequestMapping(value = "updateCommonItem.do", method = RequestMethod.POST,produces="application/json")
+    @RequestMapping(value = "updateCommonItem.do", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public String updateCommonItem(@RequestBody WsCommonDO params)
-    {
+    public String updateCommonItem(@RequestBody WsCommonDO params) {
         wsCommonService.updateById(params);
         return CommonConstants.SUCCESS;
     }
 
     /**
-     * 导出用户信息
+     * 导出用户信息.
      *
-     * @param response
+     * @param response 响应
      */
     @RequestMapping(value = "exportUser.do", method = RequestMethod.GET)
-    public void exportUser(HttpServletResponse response){
+    public void exportUser(HttpServletResponse response) {
         logger.debug("开始导出用户信息");
         List<WsUsersDO> list = wsUsersService.selectList(null);
-        if (null != list && list.size()>0) {
+        if (null != list && list.size() > 0) {
             for (WsUsersDO wu : list) {
                 String password = wu.getPassword();
                 if (StringUtils.isNotEmpty(password)) {
@@ -560,19 +411,19 @@ public class WebSocketServerController extends AdminBaseController
             String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
             String fileName = "wsUser".concat("_").concat(time).concat(".xls");
             ExcelUtil.exportExcel(list, "用户信息", "用户", WsUsersDO.class, fileName, response);
-        }else {
+        } else {
             logger.debug("无需导出用户信息");
         }
         logger.debug("结束导出用户信息");
     }
 
     /**
-     * 导出操作日志信息
+     * 导出操作日志信息.
      *
-     * @param response
+     * @param response 响应
      */
     @RequestMapping(value = "exportOperateLog.do", method = RequestMethod.GET)
-    public void exportOperateLog(String userName, String operModule, HttpServletResponse response){
+    public void exportOperateLog(String userName, String operModule, HttpServletResponse response) {
         logger.debug("开始导出操作日志");
         Wrapper<WsOperationLogDO> wrapper = new EntityWrapper<>();
         if (StringUtils.isNotEmpty(userName)) {
@@ -583,9 +434,9 @@ public class WebSocketServerController extends AdminBaseController
         }
 
         List<WsOperationLogDO> list = wsOperationLogService.selectList(wrapper);
-        if (null != list && list.size()>0) {
+        if (null != list && list.size() > 0) {
             for (WsOperationLogDO woltmp : list) {
-                if (woltmp.getOperResult().length()>32000) {
+                if (woltmp.getOperResult().length() > 32000) {
                     woltmp.setOperResult(woltmp.getOperResult().substring(0, 32000));
                 }
             }
@@ -593,31 +444,31 @@ public class WebSocketServerController extends AdminBaseController
             String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
             String fileName = "wsOperationLog".concat("_").concat(time).concat(".xls");
             ExcelUtil.exportExcel(list, "操作日志", "操作日志", WsOperationLogDO.class, fileName, response);
-        }else {
+        } else {
             logger.debug("无需导出操作日志");
         }
         logger.debug("结束导出操作日志");
     }
 
     /**
-     * 领导驾驶舱
-     * @return
+     * 领导驾驶舱.
+     * @return 领导驾驶舱页面
      */
     @RequestMapping("/wsserverChart.page")
-    public String wsserverChat(){
+    public String wsserverChat() {
         return "ws/wsserverChart";
     }
 
     /**
-     * 每日签到人数
-     * @return
+     * 每日签到人数.
+     * @return 签到人数信息
      */
     @RequestMapping("/querySignData.do")
     @ResponseBody
-    public Map<String, Integer> querySignData(){
+    public Map<String, Integer> querySignData() {
         Map<String, Integer> map = new LinkedHashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-        for (int i=6;i>=0;i--){
+        for (int i = 6; i >= 0; i--) {
             Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
             Date dayBeginDate = DateUtil.dayBeginDate(date);
             Date dayEndDate = DateUtil.dayEndDate(date);
@@ -632,16 +483,16 @@ public class WebSocketServerController extends AdminBaseController
     }
 
     /**
-     * 每日在线人数
-     * @return
+     * 每日在线人数.
+     * @return 每日在线人数信息
      */
     @RequestMapping("/queryOnlineUserData.do")
     @ResponseBody
-    public Map<String, Integer> queryOnlineUserData(){
+    public Map<String, Integer> queryOnlineUserData() {
         Map<String, Integer> map = new LinkedHashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
         SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        for (int i=30;i>=0;i--){
+        for (int i = 30; i >= 0; i--) {
             Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
             Date dayBeginDate = DateUtil.dayBeginDate(date);
             Date dayEndDate = DateUtil.dayEndDate(date);
@@ -658,16 +509,15 @@ public class WebSocketServerController extends AdminBaseController
     }
 
     /**
-     * 每日文件上传大小
-     * @return
+     * 每日文件上传大小.
+     * @return 每日文件上传大小信息
      */
     @RequestMapping("/queryUploadFileData.do")
     @ResponseBody
-    public Map<String, Long> queryUploadFileData(){
+    public Map<String, Long> queryUploadFileData() {
         Map<String, Long> map = new LinkedHashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-        SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        for (int i=6;i>=0;i--){
+        for (int i = 6; i >= 0; i--) {
             Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
             Date dayBeginDate = DateUtil.dayBeginDate(date);
             Date dayEndDate = DateUtil.dayEndDate(date);
@@ -677,12 +527,11 @@ public class WebSocketServerController extends AdminBaseController
                     .ge("create_time", dayBeginDate)
                     .le("create_time", dayEndDate));
             long fileSize = 0;
-            for (WsFileDO wsFileDO : wsFileList){
+            for (WsFileDO wsFileDO : wsFileList) {
                 fileSize += wsFileDO.getFileSize();
             }
             map.put(timeName, fileSize);
         }
-
         return map;
     }
 }
