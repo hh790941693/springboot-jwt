@@ -1,24 +1,28 @@
 package com.pjb.springbootjwt.zhddkk.base;
 
 /**
- * 响应结构
- * @param <T>
+ * 响应结构.
+ * @param <T> 返回数据类型
  */
 public class Result<T> {
 
-    public final static Integer CODE_SUCCESS = 1;
+    public static final Integer CODE_SUCCESS = 1;
 
-    public final static Integer CODE_FAIL = 0;
+    public static final Integer CODE_FAIL = 0;
 
-    public final static String MSG_SUCCESS = "操作成功";
+    public static final String MSG_SUCCESS = "操作成功";
 
-    public final static String MSG_FAIL = "操作失败";
+    public static final String MSG_FAIL = "操作失败";
 
     private Integer code;
 
     private String msg;
 
     private T data;
+
+    public static <T> Result<T> build(Integer status, String msg) {
+        return new Result<T>(status, msg, null);
+    }
 
     public static <T> Result<T> build(Integer status, String msg, T data) {
         return new Result<T>(status, msg, data);
@@ -41,24 +45,28 @@ public class Result<T> {
     }
 
     public Result() {
-
-    }
-
-    public static <T> Result<T> build(Integer status, String msg) {
-        return new Result<T>(status, msg, null);
     }
 
     public static <T> Result<T> getResult(T t) {
-        Result<T> result = new Result<>(t);
-        return result;
+        return new Result<>(t);
     }
 
+    /**
+     * 构造函数.
+     * @param status 返回码
+     * @param msg 消息
+     * @param data 返回内容
+     */
     public Result(Integer status, String msg, T data) {
         this.code = status;
         this.msg = msg;
         this.data = data;
     }
 
+    /**
+     * 构造函数.
+     * @param data 返回的数据
+     */
     public Result(T data) {
         this.code = 1;
         this.msg = MSG_SUCCESS;

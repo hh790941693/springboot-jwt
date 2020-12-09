@@ -1,14 +1,18 @@
 package com.pjb.springbootjwt.zhddkk.base;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-
+/**
+ * service实现层.
+ * @param <M> dao层
+ * @param <T> 实体
+ */
 public abstract class CoreServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements CoreService<T> {
 
     @Override
@@ -37,6 +41,7 @@ public abstract class CoreServiceImpl<M extends BaseMapper<T>, T> extends Servic
         }
         return map;
     }
+
     @Override
     public EntityWrapper<T> convertToEntityWrapper(Object... params) {
         EntityWrapper<T> ew = new EntityWrapper<>();
