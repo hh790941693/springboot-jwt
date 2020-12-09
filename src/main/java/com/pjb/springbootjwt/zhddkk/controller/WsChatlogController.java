@@ -67,7 +67,7 @@ public class WsChatlogController extends AdminBaseController {
                 .orderBy("name"));
         model.addAttribute("allUserList", allUserList);
         model.addAttribute("chatLogDO", new WsChatlogDO());
-        return "/zhddkk/wsChatlog/wsChatlog";
+        return "zhddkk/wsChatlog/wsChatlog";
     }
 
     /**
@@ -105,7 +105,7 @@ public class WsChatlogController extends AdminBaseController {
     public String add(Model model) {
         WsChatlogDO wsChatlog = new WsChatlogDO();
         model.addAttribute("wsChatlog", wsChatlog);
-        return "/zhddkk/wsChatlog/wsChatlogform";
+        return "zhddkk/wsChatlog/wsChatlogform";
     }
 
     /**
@@ -118,7 +118,7 @@ public class WsChatlogController extends AdminBaseController {
     public String edit(@PathVariable("id") Long id, Model model) {
         WsChatlogDO wsChatlog = wsChatlogService.selectById(id);
         model.addAttribute("wsChatlog", wsChatlog);
-        return "/zhddkk/wsChatlog/wsChatlogform";
+        return "zhddkk/wsChatlog/wsChatlogform";
     }
 
     /**
