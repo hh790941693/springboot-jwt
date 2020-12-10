@@ -1,5 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.util;
 
+import cn.afterturn.easypoi.excel.export.styler.AbstractExcelExportStyler;
+import cn.afterturn.easypoi.excel.export.styler.IExcelExportStyler;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -9,11 +11,8 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import cn.afterturn.easypoi.excel.export.styler.AbstractExcelExportStyler;
-import cn.afterturn.easypoi.excel.export.styler.IExcelExportStyler;
-
 /**
- * excel 通用样式
+ * excel 通用样式.
  * 
  * @author Administrator
  *
