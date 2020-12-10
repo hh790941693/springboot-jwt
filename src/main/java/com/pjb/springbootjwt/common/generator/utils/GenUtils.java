@@ -234,7 +234,7 @@ public class GenUtils {
                     + File.separator + classname + File.separator + classname + ".html";
         } else if (template.contains("add.html.vm")) {
             return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
-                    + File.separator + classname + File.separator + "Add.html";
+                    + File.separator + classname + File.separator + classname + "Add.html";
         } else if (template.contains("edit.html.vm")) {
             return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
                     + File.separator + classname + File.separator + classname + "Edit.html";
