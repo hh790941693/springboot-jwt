@@ -1,14 +1,13 @@
 package com.pjb.springbootjwt.zhddkk.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 
 public class UnicodeUtil {
-
+    
     /**
-     * 字符串转换unicode
+     * 字符串转换unicode.
      */
     public static String string2Unicode(String string) {
         StringBuffer unicode = new StringBuffer();
@@ -24,12 +23,13 @@ public class UnicodeUtil {
                 }
             }
         }
-
+        
         return unicode.toString();
     }
-
+    
     /**
-     * unicode转字符串
+     * unicode转字符串.
+     * 
      * @param str
      * @return
      */

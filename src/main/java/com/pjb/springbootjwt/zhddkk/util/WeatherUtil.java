@@ -1,6 +1,8 @@
 package com.pjb.springbootjwt.zhddkk.util;
 
 import com.pjb.springbootjwt.zhddkk.bean.WeatherBean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -10,16 +12,19 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class WeatherUtil {
-    //江都天气
-    private static String weatherUrl = "http://www.weather.com.cn/weather1d/101190605.shtml";
+    // 江都天气
+    private static final String weatherUrl = "http://www.weather.com.cn/weather1d/101190605.shtml";
+    
+    private static final Logger logger = LoggerFactory.getLogger(WeatherUtil.class);
 
-    private static Logger logger = LoggerFactory.getLogger(WeatherUtil.class);
-
-    public static WeatherBean grapWeatherInfo() throws Exception{
+    /**
+     * 获取天气信息.
+     * @return 天气信息
+     * @throws Exception 异常
+     */
+    public static WeatherBean grapWeatherInfo()
+        throws Exception {
         logger.info("调用查询天气接口");
         String weatherInfo = "";
         String lastUpdateTime = "";
@@ -28,7 +33,7 @@ public class WeatherUtil {
         try {
             Connection connection = Jsoup.connect(weatherUrl).timeout(10000);
             Document doc = connection.get();
-            //获取天气
+            // 获取天气
             Elements todayElements = doc.getElementsByClass("today");
             for (Element todayEle : todayElements) {
                 if (todayEle.hasAttr("id") && todayEle.attr("id").equals("today")) {
@@ -37,9 +42,9 @@ public class WeatherUtil {
                     for (Element inputEle : inputElements) {
                         if (!inputEle.attr("type").equals("button") && inputEle.hasAttr("value")) {
                             if (inputEle.attr("id").equals("hidden_title")) {
-                                //05月20日08时 周三  多云  30/16°C
+                                // 05月20日08时 周三 多云 30/16°C
                                 weatherInfo = inputEle.attr("value");
-                            }else if (inputEle.attr("id").equals("update_time")) {
+                            } else if (inputEle.attr("id").equals("update_time")) {
                                 lastUpdateTime = inputEle.attr("value");
                             }
                         }
@@ -47,8 +52,8 @@ public class WeatherUtil {
                     break;
                 }
             }
-
-            //获取地区
+            
+            // 获取地区
             Elements placeElements = doc.getElementsByClass("crumbs");
             for (Element placeEle : placeElements) {
                 if (placeEle.hasClass("fl")) {
@@ -61,23 +66,23 @@ public class WeatherUtil {
                     break;
                 }
             }
-
+            
         } catch (Exception e) {
             throw new Exception(e);
         }
-
-        if (StringUtils.isNotBlank(location)){
+        
+        if (StringUtils.isNotBlank(location)) {
             weatherBean.setLocation(location);
         }
-        if (StringUtils.isNotBlank(lastUpdateTime)){
+        if (StringUtils.isNotBlank(lastUpdateTime)) {
             weatherBean.setLastUpdateTime(lastUpdateTime);
         }
-        if (StringUtils.isNotBlank(weatherInfo)){
-            //05月20日08时 周三  多云  30/16°C
+        if (StringUtils.isNotBlank(weatherInfo)) {
+            // 05月20日08时 周三 多云 30/16°C
             Pattern p = Pattern.compile("\\s+");
             Matcher m = p.matcher(weatherInfo);
             weatherInfo = m.replaceAll(" ");
-
+            
             String[] wehtherArr = weatherInfo.split(" ");
             weatherBean.setTime(wehtherArr[0]);
             weatherBean.setWeekName(wehtherArr[1]);
