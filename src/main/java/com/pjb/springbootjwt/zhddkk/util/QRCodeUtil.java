@@ -9,13 +9,13 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
- 
+
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
- 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
- 
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Binarizer;
 import com.google.zxing.BinaryBitmap;
@@ -28,31 +28,39 @@ import com.google.zxing.Result;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
- 
+
 /**
- * <p>Title:QRCodeUtil </p>
- * <p>Description: 二维码生成工具类</p>
+ * <p>
+ * Title:QRCodeUtil.
+ * </p>
+ * <p>
+ * Description: 二维码生成工具类
+ * </p>
+ * 
  * @author hch
- * @version 
- * @since 
+ * @version
+ * @since
  */
 public class QRCodeUtil extends LuminanceSource {
- 
+    
     private static final Logger logger = LoggerFactory.getLogger(QRCodeUtil.class);
- 
+    
     // 二维码颜色
     private static final int BLACK = 0xFF000000;
+    
     // 二维码颜色
     private static final int WHITE = 0xFFFFFFFF;
- 
+    
     private final BufferedImage image;
+    
     private final int left;
+    
     private final int top;
- 
+    
     public QRCodeUtil(BufferedImage image) {
         this(image, 0, 0, image.getWidth(), image.getHeight());
     }
- 
+    
     public QRCodeUtil(BufferedImage image, int left, int top, int width, int height) {
         super(width, height);
         int sourceWidth = image.getWidth();
@@ -72,7 +80,7 @@ public class QRCodeUtil extends LuminanceSource {
         this.left = left;
         this.top = top;
     }
- 
+    
     @Override
     public byte[] getRow(int y, byte[] row) {
         if (y < 0 || y >= getHeight()) {
@@ -85,7 +93,7 @@ public class QRCodeUtil extends LuminanceSource {
         image.getRaster().getDataElements(left, top + y, width, 1, row);
         return row;
     }
- 
+    
     @Override
     public byte[] getMatrix() {
         int width = getWidth();
@@ -95,22 +103,22 @@ public class QRCodeUtil extends LuminanceSource {
         image.getRaster().getDataElements(left, top, width, height, matrix);
         return matrix;
     }
- 
+    
     @Override
     public boolean isCropSupported() {
         return true;
     }
- 
+    
     @Override
     public LuminanceSource crop(int left, int top, int width, int height) {
         return new QRCodeUtil(image, this.left + left, this.top + top, width, height);
     }
- 
+    
     @Override
     public boolean isRotateSupported() {
         return true;
     }
- 
+    
     @Override
     public LuminanceSource rotateCounterClockwise() {
         int sourceWidth = image.getWidth();
@@ -123,8 +131,9 @@ public class QRCodeUtil extends LuminanceSource {
         int width = getWidth();
         return new QRCodeUtil(rotatedImage, top, sourceWidth - (left + width), getHeight(), width);
     }
- 
+    
     /**
+     * 图形转换.
      * @param matrix
      * @return
      */
@@ -139,49 +148,51 @@ public class QRCodeUtil extends LuminanceSource {
         }
         return image;
     }
- 
+    
     /**
-     * 生成二维码图片
+     * 生成二维码图片.
      * 
      * @param matrix
      * @param format
      * @param file
      * @throws IOException
      */
-    public static void writeToFile(BitMatrix matrix, String format, File file) throws IOException {
+    public static void writeToFile(BitMatrix matrix, String format, File file)
+        throws IOException {
         BufferedImage image = toBufferedImage(matrix);
         if (!ImageIO.write(image, format, file)) {
             throw new IOException("Could not write an image of format " + format + " to " + file);
         }
     }
- 
+    
     /**
-     * 生成二维码图片流
+     * 生成二维码图片流.
      * 
      * @param matrix
      * @param format
      * @param stream
      * @throws IOException
      */
-    public static void writeToStream(BitMatrix matrix, String format, OutputStream stream) throws IOException {
+    public static void writeToStream(BitMatrix matrix, String format, OutputStream stream)
+        throws IOException {
         BufferedImage image = toBufferedImage(matrix);
         if (!ImageIO.write(image, format, stream)) {
             throw new IOException("Could not write an image of format " + format);
         }
     }
- 
+    
     /**
-     * 根据内容，生成指定宽高、指定格式的二维码图片
+     * 根据内容，生成指定宽高、指定格式的二维码图片.
      *
-     * @param text   内容
-     * @param width  宽
+     * @param text 内容
+     * @param width 宽
      * @param height 高
      * @param format 图片格式
      * @return 生成的二维码图片路径
      * @throws Exception
      */
     public static String generateQRCode(String text, int width, int height, String format, String pathName)
-            throws Exception {
+        throws Exception {
         Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");// 指定编码格式
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);// 指定纠错等级
@@ -191,9 +202,9 @@ public class QRCodeUtil extends LuminanceSource {
         writeToFile(bitMatrix, format, outputFile);
         return pathName;
     }
- 
+    
     /**
-     * 输出二维码图片流
+     * 输出二维码图片流.
      * 
      * @param text 二维码内容
      * @param width 二维码宽
@@ -203,7 +214,7 @@ public class QRCodeUtil extends LuminanceSource {
      * @throws Exception
      */
     public static void generateQRCode(String text, int width, int height, String format, HttpServletResponse response)
-            throws Exception {
+        throws Exception {
         Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");// 指定编码格式
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);// 指定纠错等级
@@ -211,9 +222,9 @@ public class QRCodeUtil extends LuminanceSource {
         BitMatrix bitMatrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, width, height, hints);
         writeToStream(bitMatrix, format, response.getOutputStream());
     }
- 
+    
     /**
-     * 解析指定路径下的二维码图片
+     * 解析指定路径下的二维码图片.
      *
      * @param filePath 二维码图片路径
      * @return
@@ -230,7 +241,7 @@ public class QRCodeUtil extends LuminanceSource {
             hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
             MultiFormatReader formatReader = new MultiFormatReader();
             Result result = formatReader.decode(binaryBitmap, hints);
- 
+            
             logger.info("result 为：" + result.toString());
             logger.info("resultFormat 为：" + result.getBarcodeFormat());
             logger.info("resultText 为：" + result.getText());
@@ -241,19 +252,19 @@ public class QRCodeUtil extends LuminanceSource {
         }
         return content;
     }
- 
+    
     public static void main(String[] args) {
         String text = "http://192.168.31.180:8080/zhddkk/ws/login.page"; // 随机生成验证码
         System.out.println("随机码： " + text);
         int width = 300; // 二维码图片的宽
         int height = 300; // 二维码图片的高
         String format = "png"; // 二维码图片的格式
- 
+        
         try {
             // 生成二维码图片，并返回图片路径
             String pathName = generateQRCode(text, width, height, format, "D:/new.png");
             System.out.println("生成二维码的图片路径： " + pathName);
- 
+            
             String content = parseQRCode(pathName);
             System.out.println("解析出二维码的图片的内容为： " + content);
         } catch (Exception e) {
