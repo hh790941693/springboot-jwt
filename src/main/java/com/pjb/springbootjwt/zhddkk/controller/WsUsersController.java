@@ -487,4 +487,38 @@ public class WsUsersController extends AdminBaseController {
 
         return Result.fail();
     }
+
+    /**
+     * 更新密码
+     *
+     */
+    @OperationLogAnnotation(type=OperationEnum.UPDATE, module=ModuleEnum.UPDATE_PASSWORD, subModule="", describe="修改密码")
+    @RequestMapping(value = "updatePassword.do",method=RequestMethod.POST)
+    @ResponseBody
+    public Result<String> updatePassword(@RequestParam(value="user") String user,
+                                 @RequestParam(value="oldPass") String oldPass,
+                                 @RequestParam(value="newPass") String newPass,
+                                 @RequestParam(value="confirmPass") String confirmPass){
+        if (!newPass.equals(confirmPass)){
+            return Result.fail("两次密码不一致");
+        }
+        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+        if (null != wsUsersDO){
+            String passwordDecode = SecurityAESUtil.decryptAES(wsUsersDO.getPassword(), CommonConstants.AES_PASSWORD);
+            if (!passwordDecode.equals(oldPass)){
+                return Result.fail("旧密码不正确");
+            }
+
+            if (passwordDecode.equals(newPass)){
+                return Result.fail("新密码不能是旧密码");
+            }
+
+            String passwordEncode = SecurityAESUtil.encryptAES(newPass, CommonConstants.AES_PASSWORD);
+            wsUsersDO.setPassword(passwordEncode);
+            wsUsersService.updateById(wsUsersDO);
+            return Result.ok();
+        }
+
+        return Result.fail();
+    }
 }

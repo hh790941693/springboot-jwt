@@ -25,6 +25,7 @@ public enum ModuleEnum {
     CHAT_MONITOR("聊天监控"),
     CONFIGURATION("配置"),
     AD_PUBLISH("广告发布"),
+    UPDATE_PASSWORD("修改密码"),
     TWOD_GAME("2D画图");
 
     String value;

@@ -7,11 +7,10 @@
 <title>设置个人信息</title>
 
 <style>
-    #mainDiv {
-        width: 360px;
-        height: auto;
-        border: 2px solid green;
-        margin: 0 auto;
+    #personInfoDiv {
+        width:100%;
+        height:100%;
+        display: block;
     }
 
     #formDiv {
@@ -28,97 +27,174 @@
         margin-top: 10px;
         margin-left: 5px;
     }
+
+    #mainDiv > ul {
+        height: 100%;
+        margin-top: 10px;
+    }
+
+    #mainDiv ul li {
+        list-style: none;
+        height: 43px;
+        width: 100%;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 8px;
+        cursor: pointer;
+    }
+
+    modifyPwdDiv span {
+        display: inline-block;
+        width: 90px;
+    }
+
+    modifyPwdDiv select {
+        width: 175px;
+    }
+
+    modifyPwdDiv input {
+        width: 175px;
+    }
+
+    modifyPwdDiv label {
+        margin-bottom: 0px;
+    }
+    
+    .selected {
+        background-color:blue;
+        color:white;
+    }
+    
+    .unSelected {
+        background-color: white;
+        color:black;
+    }
 </style>
 </head>
 <body>
-    <div id="mainDiv" align="center">
-        <div id="formDiv" align="left">
-            <form method="post" action="/zhddkk/wsUsers/setPersonInfo.do" enctype="multipart/form-data"
-                  onsubmit="return beforeSumbit()" target="hidden_frame">
-                <input id="userNameHidden" name="userName" type="hidden">
-                <div>
-                    <label id="realNameLabel" for="realName">真实姓名:</label>
-                    <input id="realName" name="realName" type="text" style="width:208px;margin-left:10px;"></input>
-                </div>
-
-                <div>
-                    <label id="headImgLabel" for="headImg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
-                    <input type="hidden" id="headImgInput" name="headImg" style="width:208px;margin-left:10px;">
-                    <button type="button" id="imageBtn" class="layui-btn" style="margin-left: 15px;">
-                        <i class="layui-icon">&#xe67c;</i>上传图片
-                    </button>
-                </div>
-                <div style='padding-left:80px;'>
-                    <img id="headImg" onclick="showImg()" alt="" width="60px" height="60px" onerror="imgerror(this)">
-                </div>
-
-                <div>
-                    <label for="sign">个性签名:</label><input id="sign" name="sign" type="text"
-                                                          style="width:208px;margin-left:10px;"></input>
-                </div>
-
-                <div>
-                    <label for="age">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</label><input id="age" name="age"
-                                                                                                 type="text"
-                                                                                                 style="width:208px;margin-left:10px;"></input>
-                </div>
-
-                <div>
-                    <label for="sexSelect">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</label>
-                    <select id="sexSelect" name="sex" onchange="setHiddenText(this,'professionTextHidden')">
-                        <option value="1" selected="selected">男</option>
-                        <option value="2">女</option>
-                        <option value="3">未知</option>
-                    </select>
-                    <input id="sexTextHidden" name="sexText" hidden="hidden"></input>
-                </div>
-
-                <div>
-                    <label for="tel">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话:</label><input id="tel" name="tel"
-                                                                                                 type="text"
-                                                                                                 style="width:208px;margin-left:10px;"></input>
-                </div>
-
-                <div>
-                    <label for="address">住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址:</label><input id="address"
-                                                                                                     name="address"
-                                                                                                     type="text"
-                                                                                                     style="width:208px;margin-left:10px;"></input>
-                </div>
-
-                <div>
-                    <label for="professionSelect">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业:</label>
-                    <select id="professionSelect" name="profession"
-                            onchange="setHiddenText(this,'professionTextHidden')">
-                        <option value="1">IT</option>
-                        <option value="2">建筑</option>
-                        <option value="3">金融</option>
-                        <option value="4">个体商户</option>
-                        <option value="5">旅游</option>
-                        <option value="6" selected="selected">其他</option>
-                    </select>
-                    <input id="professionTextHidden" name="professionText" hidden="hidden"></input>
-                </div>
-
-                <div>
-                    <label for="hobbySelect">爱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;好:</label>
-                    <select id="hobbySelect" name="hobby" onchange="setHiddenText(this,'hobbyTextHidden')">
-                        <option value="1">篮球</option>
-                        <option value="2">足球</option>
-                        <option value="3">爬山</option>
-                        <option value="4">旅游</option>
-                        <option value="5">网游</option>
-                        <option value="6" selected="selected">其他</option>
-                    </select>
-                    <input id="hobbyTextHidden" name="hobbyText" hidden="hidden"></input>
-                </div>
-                <div align="center" style='margin-bottom: 5px;'>
-                    <button type='submit' class='btn btn-sm btn-success' id="updatePersonInfoBtn">提&nbsp;&nbsp;&nbsp;&nbsp;交</button>
-                </div>
-            </form>
+    <div id="mainDiv" style="width:100%;height:98%;border:1px solid green;">
+        <div id="leftDiv" style="float:left;width:30%;height:100%;border:1px solid green;">
+            <ul>
+                <li id="personInfo" class="selected">基本信息</li>
+                <li id="modifyPwd">修改密码</li>
+            </ul>
         </div>
-        <iframe name="hidden_frame" id="hidden_frame" style='display: none'></iframe>
+        <div id="rightDiv" style="float:right;width:69%;height:100%;border:1px solid green;">
+            <div id="personInfoDiv">
+                <div id="formDiv" align="left">
+                    <form method="post" action="/zhddkk/wsUsers/setPersonInfo.do" enctype="multipart/form-data"
+                          onsubmit="return beforeSumbit()" target="hidden_frame1">
+                        <input id="userNameHidden" name="userName" type="hidden">
+                        <div>
+                            <label id="realNameLabel" for="realName">真实姓名:</label>
+                            <input id="realName" name="realName" type="text" style="width:208px;margin-left:10px;"></input>
+                        </div>
+
+                        <div>
+                            <label id="headImgLabel" for="headImg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
+                            <input type="hidden" id="headImgInput" name="headImg" style="width:208px;margin-left:10px;">
+                            <button type="button" id="imageBtn" class="layui-btn" style="margin-left: 15px;">
+                                <i class="layui-icon">&#xe67c;</i>上传图片
+                            </button>
+                        </div>
+                        <div style='padding-left:80px;'>
+                            <img id="headImg" onclick="showImg()" alt="" width="60px" height="60px"
+                                 onerror="imgerror(this)">
+                        </div>
+
+                        <div>
+                            <label for="sign">个性签名:</label>
+                            <input id="sign" name="sign" type="text" style="width:208px;margin-left:10px;"></input>
+                        </div>
+
+                        <div>
+                            <label for="age">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</label>
+                            <input id="age" name="age" type="text" style="width:208px;margin-left:10px;"></input>
+                        </div>
+
+                        <div>
+                            <label for="sexSelect">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</label>
+                            <select id="sexSelect" name="sex" onchange="setHiddenText(this,'professionTextHidden')">
+                                <option value="1" selected="selected">男</option>
+                                <option value="2">女</option>
+                                <option value="3">未知</option>
+                            </select>
+                            <input id="sexTextHidden" name="sexText" hidden="hidden"></input>
+                        </div>
+
+                        <div>
+                            <label for="tel">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话:</label>
+                            <input id="tel" name="tel" type="text" style="width:208px;margin-left:10px;"></input>
+                        </div>
+
+                        <div>
+                            <label for="address">住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址:</label>
+                            <input id="address" name="address" type="text" style="width:208px;margin-left:10px;"></input>
+                        </div>
+
+                        <div>
+                            <label for="professionSelect">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业:</label>
+                            <select id="professionSelect" name="profession"
+                                    onchange="setHiddenText(this,'professionTextHidden')">
+                                <option value="1">IT</option>
+                                <option value="2">建筑</option>
+                                <option value="3">金融</option>
+                                <option value="4">个体商户</option>
+                                <option value="5">旅游</option>
+                                <option value="6" selected="selected">其他</option>
+                            </select>
+                            <input id="professionTextHidden" name="professionText" hidden="hidden"></input>
+                        </div>
+
+                        <div>
+                            <label for="hobbySelect">爱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;好:</label>
+                            <select id="hobbySelect" name="hobby" onchange="setHiddenText(this,'hobbyTextHidden')">
+                                <option value="1">篮球</option>
+                                <option value="2">足球</option>
+                                <option value="3">爬山</option>
+                                <option value="4">旅游</option>
+                                <option value="5">网游</option>
+                                <option value="6" selected="selected">其他</option>
+                            </select>
+                            <input id="hobbyTextHidden" name="hobbyText" hidden="hidden"></input>
+                        </div>
+                        <div align="center" style='margin-bottom: 5px;'>
+                            <button type='submit' class='btn btn-sm btn-success' id="updatePersonInfoBtn">提&nbsp;&nbsp;&nbsp;&nbsp;交</button>
+                        </div>
+                    </form>
+                </div>
+                <iframe name="hidden_frame1" id="hidden_frame1" style='display: none'></iframe>
+                <iframe name="hidden_frame2" id="hidden_frame2" style='display: none'></iframe>
+            </div>
+
+            <div id="modifyPwdDiv" style="width:100%;height:100%;display: none;">
+                <form style="margin:10px 5px;" id="forgetPassForm" action="/zhddkk/wsUsers/updatePassword.do" method="post"
+                      target="hidden_frame2">
+                      <div>
+                          <label for="user">用户名：</label>
+                          <input id="user" name="user" type="text" autocomplete="off" readonly th:value="${session.sessionInfo.user}" style="width:208px;margin-left:12px;">
+                      </div>
+                      <div>
+                          <label for="oldPass">旧密码：</label>
+                          <input id="oldPass" name="oldPass" type="password" autocomplete="off" style="width:208px;margin-left:12px;">
+                      </div>
+                      <div>
+                          <label for="newPass">新密码：</label>
+                          <input id="newPass" name="newPass" type="password" autocomplete="off" style="width:208px;margin-left:12px;">
+                      </div>
+                      <div>
+                          <label for="confirmPass">确认密码：</label>
+                          <input id="confirmPass" name="confirmPass" type="password" autocomplete="off" style="width:208px;">
+                      </div>
+
+                    <div align="left" style="margin-top:10px;margin-left:130px;">
+                        <button id="btnregist" class='btn btn-sm btn-success' type="submit" style="width:80px;">提交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+
     <th:block th:include="common :: footer"></th:block>
     <th:block th:include="common :: sessionInfo"></th:block>
 </body>
@@ -129,6 +205,16 @@
             var checkText = $(selectObj).find("option:selected").text();
             $("#" + hiddenId).val(checkText);
         }
+
+        $("#leftDiv ul li").click(function () {
+            var liId = $(this).attr("id");
+            var showDivIf = liId + "Div";
+            $("#rightDiv").children("div[id='" + showDivIf + "']").show();
+            $("#rightDiv").children("div[id!='" + showDivIf + "']").hide();
+            
+            $(this).removeClass().addClass("selected");
+            $("#leftDiv ul").children().not(this).removeClass().addClass("unSelected");
+        });
 
         //查询个人信息
         queryPersonInfo(sessionUser);
@@ -181,11 +267,10 @@
 
         // 加载图片失败
         function imgerror(imgObj) {
-            var scrVar = $(imgObj).attr("src");
             $(imgObj).attr("src", rootUrl + "img/" + $.ws.errorImageName);
         }
 
-        $("#hidden_frame").load(function () {
+        $("#hidden_frame1").load(function () {
             var text = $(this).contents().find("body").text();
             if (text.indexOf("操作成功") != -1) {
                 layer.msg('更新个人信息成功');
@@ -194,9 +279,23 @@
                     parent.layer.close(index);
                     refresh();
                 }, 2000)
-
             } else {
                 layer.msg('更新个人信息失败');
+            }
+        });
+
+        $("#hidden_frame2").load(function () {
+            var text = $(this).contents().find("body").text();
+            console.log(text);
+            if (text.indexOf("操作成功") != -1) {
+                layer.msg('修改密码成功');
+                var index = parent.layer.getFrameIndex(window.name);
+                setTimeout(function () {
+                    parent.layer.close(index);
+                    refresh();
+                }, 2000)
+            } else {
+                layer.msg('修改密码失败');
             }
         });
 
