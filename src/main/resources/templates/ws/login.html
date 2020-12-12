@@ -376,7 +376,6 @@
         var i = 0;
         var percent = 0;
         if (null == checkEnvTimer && !isCheckFinish && textArr.length > 0) {
-            //active.loading($("button[data-type='loading']"));
             $("#checkDiv").css("display", "block");
             checkEnvTimer = setInterval(function () {
                 if (i >= textArr.length) {
@@ -391,11 +390,11 @@
                     text += "<span style='height:20px;color:white;display:inline-block;margin-bottom: 5px;'>" + textArr[i] + "</span><br/>";
                     $("#checkContentDiv").html(text);
 
-                    percent += 100/textArr.length;
+                    percent += 100/(textArr.length-3);
                     active.setPercent(percent);
                 }
                 i++;
-            }, 200);
+            }, 150+Math.random()*150);
         }
         return isCheckFinish;
     }
