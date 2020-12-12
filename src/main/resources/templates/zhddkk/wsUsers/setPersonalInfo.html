@@ -59,6 +59,11 @@
     modifyPwdDiv label {
         margin-bottom: 0px;
     }
+
+    #forgetPassForm div {
+        margin-top: 10px;
+        margin-left: 5px;
+    }
     
     .selected {
         background-color:blue;
@@ -272,7 +277,8 @@
 
         $("#hidden_frame1").load(function () {
             var text = $(this).contents().find("body").text();
-            if (text.indexOf("操作成功") != -1) {
+            var jsonObj = JSON.parse(text);
+            if (jsonObj.code == 1) {
                 layer.msg('更新个人信息成功');
                 var index = parent.layer.getFrameIndex(window.name);
                 setTimeout(function () {
@@ -286,8 +292,8 @@
 
         $("#hidden_frame2").load(function () {
             var text = $(this).contents().find("body").text();
-            console.log(text);
-            if (text.indexOf("操作成功") != -1) {
+            var jsonObj = JSON.parse(text);
+            if (jsonObj.code == 1) {
                 layer.msg('修改密码成功');
                 var index = parent.layer.getFrameIndex(window.name);
                 setTimeout(function () {
@@ -295,7 +301,7 @@
                     refresh();
                 }, 2000)
             } else {
-                layer.msg('修改密码失败');
+                layer.msg(jsonObj.data);
             }
         });
 
