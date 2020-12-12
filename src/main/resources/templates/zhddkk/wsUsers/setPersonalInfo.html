@@ -174,7 +174,7 @@
 
             <div id="modifyPwdDiv" style="width:100%;height:100%;display: none;">
                 <form style="margin:10px 5px;" id="forgetPassForm" action="/zhddkk/wsUsers/updatePassword.do" method="post"
-                      target="hidden_frame2">
+                      target="hidden_frame2" onsubmit="return beforeUpdatePass()">
                       <div>
                           <label for="user">用户名：</label>
                           <input id="user" name="user" type="text" autocomplete="off" readonly th:value="${session.sessionInfo.user}" style="width:208px;margin-left:12px;">
@@ -233,6 +233,31 @@
 
             var hobbyText = $("#hobbySelect").find("option:selected").text();
             $("#hobbyTextHidden").val(hobbyText);
+            return true;
+        }
+        
+        function beforeUpdatePass(){
+            var oldPass = $("input[name='oldPass']").val();
+            var newPass = $("input[name='newPass']").val();
+            var confirmPass = $("input[name='confirmPass']").val();
+            if (oldPass == ""){
+                layer.msg("旧密码不能为空");
+                return false;
+            }
+            if (newPass == ""){
+                layer.msg("新密码不能为空");
+                return false;
+            }
+            if (confirmPass == ""){
+                layer.msg("确认密码不能为空");
+                return false;
+            }
+            
+            if (mewPass != confirmPass){
+                layer.msg("新密码与确认密码不一致");
+                return false;
+            }
+            
             return true;
         }
 
