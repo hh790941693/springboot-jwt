@@ -252,6 +252,11 @@
                 layer.msg("确认密码不能为空");
                 return false;
             }
+
+            if (mewPass == oldPass){
+                layer.msg("新密码不能是旧密码");
+                return false;
+            }
             
             if (mewPass != confirmPass){
                 layer.msg("新密码与确认密码不一致");
