@@ -5,31 +5,31 @@ host = window.location.host;
 $.ws = {
 
     //上传文件接口地址
-    uploadUrl:protocol+"//"+host+"/upload/app",
+    uploadUrl: protocol + "//" + host + "/upload/app",
 
-    uploadByFroalaUrl:protocol+"//"+host+"/upload/app/uploadByFroala",
+    uploadByFroalaUrl: protocol + "//" + host + "/upload/app/uploadByFroala",
 
     //图片显示异常时,显示该图片
-    errorImageName : "imgerror_default.jpg",
+    errorImageName: "imgerror_default.jpg",
 
     // 图片显示异常时的默认图片url
-    errorImgUrl : rootUrl + "img/imgerror_default.jpg",
+    errorImgUrl: rootUrl + "img/imgerror_default.jpg",
 
     //显示图片
-    gShowImg : function(imgUrl) {
+    gShowImg: function (imgUrl) {
         $.fancybox.open('<img src = "' + imgUrl + '" />');
     },
 
-    i18nInit : function(lang, country){
+    i18nInit: function (lang, country) {
         i18nInit(lang, country);
     },
 
-    i18n : function(labelKey) {
+    i18n: function (labelKey) {
         return i18n(labelKey);
     },
 
     //背景图片动画
-    backgroundImgAnimation : function(imgId, divId, direction, frequency) {
+    backgroundImgAnimation: function (imgId, divId, direction, frequency) {
         var imgWidth = $("#" + imgId).width();
         var imgHeight = $("#" + imgId).height();
         var imgUrl = $("#" + imgId).attr("src");
@@ -37,12 +37,12 @@ $.ws = {
         var divWidth = $("#" + divId).width();
         var divHeight = $("#" + divId).height();
 
-        if (frequency == null || frequency == "" || frequency == undefined){
+        if (frequency == null || frequency == "" || frequency == undefined) {
             frequency = 5;
         }
 
         var divBackSizeX = 0;
-        var  divBackSizeY = 0;
+        var divBackSizeY = 0;
         if (imgWidth <= divWidth) {
             divBackSizeX = divWidth;
         } else {
@@ -64,7 +64,7 @@ $.ws = {
             var posY = 0;  //max -690
             var downFlag = true;
             setInterval(function () {
-                if (imgHeight == 0 || imgWidth ==0 || divWidth ==0 || divHeight == 0){
+                if (imgHeight == 0 || imgWidth == 0 || divWidth == 0 || divHeight == 0) {
                     imgWidth = $("#" + imgId).width();
                     imgHeight = $("#" + imgId).height();
 
@@ -105,7 +105,7 @@ $.ws = {
             var posX = 0;
             var leftFlag = true;
             setInterval(function () {
-                if (imgHeight == 0 || imgWidth ==0 || divWidth ==0 || divHeight == 0){
+                if (imgHeight == 0 || imgWidth == 0 || divWidth == 0 || divHeight == 0) {
                     imgWidth = $("#" + imgId).width();
                     imgHeight = $("#" + imgId).height();
 
@@ -148,7 +148,7 @@ $.ws = {
             // 1 右  2下 3 左  4上
             var direct = 1;
             setInterval(function () {
-                if (imgHeight == 0 || imgWidth ==0 || divWidth ==0 || divHeight == 0){
+                if (imgHeight == 0 || imgWidth == 0 || divWidth == 0 || divHeight == 0) {
                     imgWidth = $("#" + imgId).width();
                     imgHeight = $("#" + imgId).height();
 
@@ -197,14 +197,14 @@ $.ws = {
     },
 
     //拖动窗口  downDiv:子div  moveDiv:父div
-    dragPanelMove: function(downDiv,moveDiv){
+    dragPanelMove: function (downDiv, moveDiv) {
         var position = $(moveDiv).css("position");
         var cursor = $(downDiv).css("cursor");
-        if (position != "fixed"){
+        if (position != "fixed") {
             $(moveDiv).css("position", "fixed");
         }
-        if (cursor != "move"){
-            $(downDiv).css("cursor","move");
+        if (cursor != "move") {
+            $(downDiv).css("cursor", "move");
         }
         $(downDiv).mousedown(function (e) {
             var isMove = true;
@@ -213,16 +213,16 @@ $.ws = {
             $(document).mousemove(function (e) {
                 if (isMove) {
                     var obj = $(moveDiv)
-                    var left = e.pageX-div_x;
-                    var top = e.pageY-div_y;
-                    if (left<0){
+                    var left = e.pageX - div_x;
+                    var top = e.pageY - div_y;
+                    if (left < 0) {
                         left = 0;
                     }
-                    if (top<0){
+                    if (top < 0) {
                         top = 0;
                     }
                     //console.log("left:"+left+",top:"+top);
-                    obj.css({"left":left, "top":top});
+                    obj.css({"left": left, "top": top});
                 }
             }).mouseup(
                 function () {
@@ -230,71 +230,71 @@ $.ws = {
                 });
         });
     },
-    subStringText:function (content, maxLength) {
+    subStringText: function (content, maxLength) {
         var res = "";
-        if (content.length <= maxLength){
+        if (content.length <= maxLength) {
             res = content;
-        }else{
+        } else {
             res = content.substring(0, maxLength);
-            res += "&nbsp;&nbsp;<a style='color:blue;cursor:pointer;' onclick=\"layer.alert('"+content+"')\">详情</a>";
+            res += "&nbsp;&nbsp;<a style='color:blue;cursor:pointer;' onclick=\"layer.alert('" + content + "')\">详情</a>";
         }
         return res;
     }
 }
 
 function getCurrentTime() {
-	var date = new Date();
-	var year = date.getFullYear();
-	var month = date.getMonth()+1;
-	var day = date.getDate();
-	var h = date.getHours();
-	var m = date.getMinutes();
-	var s = date.getSeconds();
-	
-	if (month<10){
-		month = "0"+month;
-	}
-	if (day<10) {
-		day = "0"+day;
-	}	
-	if (h<10) {
-		h = "0"+h;
-	}
-	if (m<10) {
-		m = "0"+m;
-	}
-	if (s<10) {
-		s = "0" + s;
-	}
-	
-	return year+"-"+month+"-"+day + " "+h+":"+m+":"+s;
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var h = date.getHours();
+    var m = date.getMinutes();
+    var s = date.getSeconds();
+
+    if (month < 10) {
+        month = "0" + month;
+    }
+    if (day < 10) {
+        day = "0" + day;
+    }
+    if (h < 10) {
+        h = "0" + h;
+    }
+    if (m < 10) {
+        m = "0" + m;
+    }
+    if (s < 10) {
+        s = "0" + s;
+    }
+
+    return year + "-" + month + "-" + day + " " + h + ":" + m + ":" + s;
 }
 
-function randomNumber(start,end){
-	var w = end-start-1;
-	var randomNum = Math.round(Math.random()*w+start+1);
-	return randomNum;
+function randomNumber(start, end) {
+    var w = end - start - 1;
+    var randomNum = Math.round(Math.random() * w + start + 1);
+    return randomNum;
 }
 
 //比较两个时间戳
-function compareTwoTime(time1,time2){
-	var interval = Math.round(Math.abs(time1-time2)/1000);
-	if (interval<60){
-		return interval+"秒前";
-	}else if (interval>=60 && interval<3600){
-		var tmp = Math.round(interval/60);
-        return tmp+"分前";
-	}else if (interval>=3600 && interval<86400){
-		var tmp = Math.round(interval/3600);
-		return tmp+"小时前";
-	}else{
-		var tmp = Math.round(interval/86400);
-		return tmp+"天前";
-	}
+function compareTwoTime(time1, time2) {
+    var interval = Math.round(Math.abs(time1 - time2) / 1000);
+    if (interval < 60) {
+        return interval + "秒前";
+    } else if (interval >= 60 && interval < 3600) {
+        var tmp = Math.round(interval / 60);
+        return tmp + "分前";
+    } else if (interval >= 3600 && interval < 86400) {
+        var tmp = Math.round(interval / 3600);
+        return tmp + "小时前";
+    } else {
+        var tmp = Math.round(interval / 86400);
+        return tmp + "天前";
+    }
 }
 
 //初始化i18n插件
-function i18nInit(lang, country){
+function i18nInit(lang, country) {
     try {
         $.i18n.properties({
             path: '/i18n/',

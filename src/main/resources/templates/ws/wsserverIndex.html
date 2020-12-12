@@ -6,83 +6,85 @@
 
     <style type="text/css">
 
-        #mainDiv{
-            width:1318px;
-            height:737px;
-            margin:0 auto;
+        #mainDiv {
+            width: 1318px;
+            height: 737px;
+            margin: 0 auto;
         }
 
-        #headerPage{
-            width:100%;
-            height:7.87%;
-            border:2px solid green;
+        #headerPage {
+            width: 100%;
+            height: 7.87%;
+            border: 2px solid green;
         }
 
-        #centerDiv{
-            width:100%;
-            height:85.07%;
+        #centerDiv {
+            width: 100%;
+            height: 85.07%;
         }
 
-        #recentNewsDiv{
-            width:100%;
-            height:3.5%;
-            border:2px solid green;
-            background-color:#97eab0;
+        #recentNewsDiv {
+            width: 100%;
+            height: 3.5%;
+            border: 2px solid green;
+            background-color: #97eab0;
         }
 
-        #leftAndRightIframeDiv{
-            width:100%;
-            height:96.5%;
+        #leftAndRightIframeDiv {
+            width: 100%;
+            height: 96.5%;
         }
 
-        #leftNaviDiv{
-            width:14%;
-            height:100%;
-            float:left;
-            border:2px solid green;
+        #leftNaviDiv {
+            width: 14%;
+            height: 100%;
+            float: left;
+            border: 2px solid green;
         }
 
-        #rightIframeDiv{
-            width:86%;
-            height:100%;
-            float:left;
-            border:2px solid green;
+        #rightIframeDiv {
+            width: 86%;
+            height: 100%;
+            float: left;
+            border: 2px solid green;
             overflow: hidden;
         }
 
-        #footerDiv{
-            width:100%;
-            height:7.05%;
-            border:2px solid green;
+        #footerDiv {
+            width: 100%;
+            height: 7.05%;
+            border: 2px solid green;
         }
 
-        #qrDiv{
+        #qrDiv {
             position: fixed;
             right: 5px;
             top: 40px;
             width: 180px;
             height: 180px;
         }
-        #qrcodeImg{
+
+        #qrcodeImg {
             width: 160px;
             height: 160px;
         }
 
         #musicIframeDiv {
             position: absolute;
-            width:178px;
-            height:97px;
+            width: 178px;
+            height: 97px;
             background: black;
-            color: rgb(255%,255%,255%);
+            color: rgb(255%, 255%, 255%);
             display: none;
         }
+
         #musicIframeHeader {
             background: #ddd;
             cursor: move;
-            font-size:10px;
+            font-size: 10px;
         }
 
-        .divShadow{
+        .divShadow {
             box-shadow: grey 0 0 10px;
         }
     </style>
@@ -93,7 +95,7 @@
         <div id="headerPage" class="divShadow" align="center">
             <iframe id="headerIframePage" src="header.page" width="100%" height="100%"></iframe>
         </div>
-
+    
         <!--中间部分-->
         <div id='centerDiv' class="divShadow">
             <!--用户登录相关信息-->
@@ -103,7 +105,7 @@
             <input type="hidden" id="webserverport" name="webserverport" th:value="${webserverport}">
             <input type="hidden" id="selfimg" name="selfimg" th:value="${selfimg}">
             <input type="hidden" id="useragent" name="useragent" th:value="${useragent}">
-
+    
             <!--滚动消息-->
             <div id="recentNewsDiv">
                 <marquee direction="left" scrolldelay="10" scrollamount="10"><span id="adsSpan"></span></marquee>
@@ -119,25 +121,25 @@
                         <iframe id="leftNaviIframePage" src="clientLeftNavi.page" width="100%" height="100%"></iframe>
                     </div>
                 </div>
-
+    
                 <!--右侧子页面-->
                 <div id="rightIframeDiv" align="center">
                     <iframe id="iframePage" width="100%" height="100%"></iframe>
                 </div>
             </div>
         </div>
-
+    
         <!--底部-->
         <div id="footerDiv" class="divShadow" align="center">
             <iframe id="footerIframePage" src="footer.page" width="100%" height="100%"></iframe>
         </div>
     </div>
-
+    
     <!--右上角 二维码-->
     <div id="qrDiv" style="display:none">
         <img id="qrcodeImg">
     </div>
-
+    
     <!--左下角 迷你音乐播放器-->
     <div id='musicIframeDiv'>
         <div id='musicIframeHeader'>
@@ -146,9 +148,10 @@
         </div>
         <iframe id="musicIframePage" width="100%" height="100%" src="../file/musicPlayerSimple.page"></iframe>
     </div>
-
+    
     <!--右下角 广告页面(隐藏) -->
-    <div id="adDiv" style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display: none;">
+    <div id="adDiv"
+         style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display: none;">
         <div id="adBtn" style="style:1px solid red;background-color:#5082b9;padding-left:290px">
             <button id="closeAd" class='btn btn-sm btn-primary' onclick="closeAd()">关&nbsp;&nbsp;闭</button>
         </div>
@@ -158,7 +161,8 @@
         <div id="adContent" style="height:auto;text-indent:2em;">
         </div>
 
-        <div id="adTime" style="height:15px;font-size: 16px;font-weight: bold;position: absolute;right:2px;bottom: 3px;">
+        <div id="adTime"
+             style="height:15px;font-size: 16px;font-weight: bold;position: absolute;right:2px;bottom: 3px;">
         </div>
     </div>
 
@@ -167,14 +171,14 @@
 </body>
     <script type="text/javascript">
         //退出(返回登录页)
-        function toIndex(){
+        function toIndex() {
             //window.location.href = rootUrl+"ws";
             $.ajax({
                 type: 'POST',
-                url: rootUrl+'ws/logout.do',
-                data:{"user":sessionUser},
-                async:false,
-                success: function(result) {
+                url: rootUrl + 'ws/logout.do',
+                data: {"user": sessionUser},
+                async: false,
+                success: function (result) {
                     top.location.href = rootUrl;
                 }
             });
@@ -182,16 +186,16 @@
 
         var curPageid = "/zhddkk/wsUsers/wsUsersForAdmin";
         showPage(curPageid);
-        function showPage(pageId){
+        function showPage(pageId) {
             curPageid = pageId;
-            var url = pageId + "?user="+sessionUser;
-            if (pageId.indexOf("gameIndex.page") != -1){
+            var url = pageId + "?user=" + sessionUser;
+            if (pageId.indexOf("gameIndex.page") != -1) {
                 window.location.href = pageId;
-            }else if (pageId.indexOf("canvasIndex.page") != -1) {
+            } else if (pageId.indexOf("canvasIndex.page") != -1) {
                 window.location.href = pageId;
-            }else if (pageId.indexOf("configurationLi") != -1) {
+            } else if (pageId.indexOf("configurationLi") != -1) {
                 $("#configurationDiv").slideDown();
-            }else{
+            } else {
                 $("#iframePage").attr("src", url);
             }
         }
@@ -209,12 +213,12 @@
         var checkTimer = undefined;
 
         //所有聊天记录
-        var chatRecord="";
+        var chatRecord = "";
         //未读消息条数
-        var unreadCount=0;
+        var unreadCount = 0;
 
-        function updateChatMsg(msg,color,fontSize){
-            var newMsg = "<p style='color:"+color+";font-size:"+fontSize+"px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] "+msg+"</p>";
+        function updateChatMsg(msg, color, fontSize) {
+            var newMsg = "<p style='color:" + color + ";font-size:" + fontSize + "px;line-height:14px;'>[" + getCurrentTime() + "] [系统信息] " + msg + "</p>";
             var msgFromServerObj = getIframeElement("msgFromServer");
             var textArea = $(msgFromServerObj).append(newMsg);
             chatRecord = chatRecord + newMsg;
@@ -230,9 +234,9 @@
                         clearInterval(checkTimer);
                     }
                 }
-                updateChatMsg("正在连接服务器" +sessionWebserverIp+":"+sessionWebserverport + " [ "+checkCount +" ]"+ "次 请稍等..., ", "red", 10);
+                updateChatMsg("正在连接服务器" + sessionWebserverIp + ":" + sessionWebserverport + " [ " + checkCount + " ]" + "次 请稍等..., ", "red", 10);
                 checkCount++;
-            }else{
+            } else {
                 if (checkTimer != null && checkTimer != "" && checkTimer != undefined) {
                     clearInterval(checkTimer);
                 }
@@ -240,9 +244,9 @@
         }
 
         //定时检查连接
-        checkTimer = setInterval(function(){
+        checkTimer = setInterval(function () {
             checkConnection();
-        },1000);
+        }, 1000);
 
         //检查连接
         checkConnection();
@@ -251,45 +255,45 @@
 
         function loginServer() {
             if (webSocket == null) {
-                var socketUrl = "ws://"+sessionWebserverIp+":"+sessionWebserverport+"/zhddWebSocket/" + sessionUser+"/"+sessionPassword+"/"+sessionUseragent;
+                var socketUrl = "ws://" + sessionWebserverIp + ":" + sessionWebserverport + "/zhddWebSocket/" + sessionUser + "/" + sessionPassword + "/" + sessionUseragent;
                 webSocket = new WebSocket(socketUrl);
-                webSocket.onerror = function(event){
+                webSocket.onerror = function (event) {
                     onError(event);
                 };
-                webSocket.onclose = function(event){
+                webSocket.onclose = function (event) {
                     OnClose(event);
                 };
-                webSocket.onopen = function(event){
+                webSocket.onopen = function (event) {
                     onOpen(event);
                 };
-                webSocket.onmessage = function(event){
+                webSocket.onmessage = function (event) {
                     onMessage(event);
                 };
             }
         }
 
         //连接成功
-        function onOpen(event){
+        function onOpen(event) {
             connectStatus = "1";
             updateChatMsg("已连上服务器!", "green", 10);
         }
 
         //连接失败
-        function onError(event){
+        function onError(event) {
             updateChatMsg("连接服务器异常!", "red", 10);
             connectStatus = "0";
             webSocket = null;
         }
 
         //连接关闭
-        function OnClose(event){
+        function OnClose(event) {
             updateChatMsg("客户端已断开!", "red", 10);
             connectStatus = "0";
             stop();
         }
 
         //接收消息
-        function onMessage(event){
+        function onMessage(event) {
             var jsonObj = JSON.parse(event.data);
             var curTime = jsonObj.curTime;
             var msgFrom = jsonObj.from;
@@ -298,46 +302,46 @@
             var typeDesc = jsonObj.typeDesc;
             var msg = jsonObj.msg;
 
-            var showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+msg;
+            var showStr = "[" + curTime + "] [" + typeDesc + "] [" + msgFrom + "-->" + msgTo + "] " + msg;
             var defaultCss = "color:red;font-size:10px;line-height:14px;"
             if (typeId == 1) {
                 //系统消息
                 defaultCss = "color:red;font-size:10px;line-height:14px;";
-                showStr="["+curTime+"] ["+typeDesc+"] " +msg;
-            }else if (typeId == 2){
+                showStr = "[" + curTime + "] [" + typeDesc + "] " + msg;
+            } else if (typeId == 2) {
                 //在线消息
                 defaultCss = "color:green;font-size:10px;line-height:14px;";
-                showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] " +msg;
-            }else if (typeId == 3){
+                showStr = "[" + curTime + "] [" + typeDesc + "] [" + msgFrom + "-->" + msgTo + "] " + msg;
+            } else if (typeId == 3) {
                 //离线消息
                 defaultCss = "color:grey;font-size:10px;line-height:14px;";
-                showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] " +msg;
-            }else if (typeId == 4){
+                showStr = "[" + curTime + "] [" + typeDesc + "] [" + msgFrom + "-->" + msgTo + "] " + msg;
+            } else if (typeId == 4) {
                 //广告消息
                 defaultCss = "color:blue;font-size:10px;line-height:14px;";
                 var title = msg.split("title:")[1].split(";")[0];
                 var content = msg.split("content:")[1];
-                showStr="["+curTime+"] ["+typeDesc+"] ["+msgFrom+"-->"+msgTo+"] "+"广告标题:"+title+" 广告内容:"+content;
-            }else if (msgTo==sessionUser){
+                showStr = "[" + curTime + "] [" + typeDesc + "] [" + msgFrom + "-->" + msgTo + "] " + "广告标题:" + title + " 广告内容:" + content;
+            } else if (msgTo == sessionUser) {
                 defaultCss = "color:green;font-size:10px;line-height:14px;";
-            }else if (msgFrom==sessionUser){
+            } else if (msgFrom == sessionUser) {
                 defaultCss = "color:blue;font-size:10px;line-height:14px;";
             }
 
-            if (curPageid.indexOf("wsserverChartMonitor.page") == -1){
-                var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
+            if (curPageid.indexOf("wsserverChartMonitor.page") == -1) {
+                var htmlData = "<p style='" + defaultCss + "'>" + showStr + "</p>";
                 chatRecord = chatRecord + htmlData;
-                unreadCount = unreadCount+1;
+                unreadCount = unreadCount + 1;
                 $("#leftNaviIframePage").contents().find("#unreadCountSpan").text(unreadCount);
-            }else{
-                var htmlData = "<p style='" + defaultCss + "'>"+showStr +"</p>";
+            } else {
+                var htmlData = "<p style='" + defaultCss + "'>" + showStr + "</p>";
                 var msgFromServerObj = getIframeElement("msgFromServer");
                 chatRecord = chatRecord + htmlData;
                 var textArea = $(msgFromServerObj).append(htmlData);
                 textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
             }
 
-            if (typeId == 4){
+            if (typeId == 4) {
                 var title = msg.split("title:")[1].split(";")[0];
                 var content = msg.split("content:")[1];
 
@@ -349,13 +353,13 @@
         }
 
         //获取iframe中的元素
-        function getIframeElement(eleName){
-            var obj = $("#iframePage").contents().find("#"+eleName);
+        function getIframeElement(eleName) {
+            var obj = $("#iframePage").contents().find("#" + eleName);
             return obj;
         }
 
-        function stop(){
-            if (webSocket != null){
+        function stop() {
+            if (webSocket != null) {
                 webSocket.close();
                 webSocket = null;
                 connectStatus = "0";
@@ -363,28 +367,28 @@
         }
 
         //关闭广告窗
-        function closeAd(){
+        function closeAd() {
             $("#adDiv").slideUp(500);
         }
 
-        function refrshMusic(){
+        function refrshMusic() {
             document.getElementById("musicIframePage").contentWindow.showMusic();
         }
 
         $("#resetMusicIframeDivPosBtn").click(adjustMusicWindowPosition);
 
-        function adjustMusicWindowPosition(){
+        function adjustMusicWindowPosition() {
             var headDivHeight = $("#headerPage").height();
             var mainDivHeight = $("#centerDiv").height();
             var mainDivLeft = $("#centerDiv").offset().left;
-            var musicIframeDivHeight=$("#musicIframeDiv").height();
-            $("#musicIframeDiv").css("top",headDivHeight+mainDivHeight-musicIframeDivHeight-16);
-            $("#musicIframeDiv").css("left",mainDivLeft+3);
+            var musicIframeDivHeight = $("#musicIframeDiv").height();
+            $("#musicIframeDiv").css("top", headDivHeight + mainDivHeight - musicIframeDivHeight - 16);
+            $("#musicIframeDiv").css("left", mainDivLeft + 3);
         }
 
         adjustMusicWindowPosition();
         //音乐播放器可拖动代码
-        $.ws.dragPanelMove("#musicIframeHeader","#musicIframeDiv");
+        $.ws.dragPanelMove("#musicIframeHeader", "#musicIframeDiv");
 
         //窗口大小变化事件
         $(window).resize(function () {
@@ -392,64 +396,64 @@
         });
 
         //footer内的提示语
-        function showTips(msg,color){
-            $("#footerIframePage").contents().find("#statusTips").css("color",color);
+        function showTips(msg, color) {
+            $("#footerIframePage").contents().find("#statusTips").css("color", color);
             $("#footerIframePage").contents().find("#statusTips").html(msg);
         }
 
         //扫码登录
-        function showQRCode(){
+        function showQRCode() {
             var imgSrc = $("#qrcodeImg").attr("src");
-            if (imgSrc == "" || imgSrc == undefined){
+            if (imgSrc == "" || imgSrc == undefined) {
                 $.ajax({
                     type: 'POST',
-                    url: rootUrl+'/showQRCode.do',
+                    url: rootUrl + '/showQRCode.do',
                     //dataType: 'json',
-                    async:false,
-                    success: function(result) {
-                        $("#qrDiv").css("display","block");
-                        $("#qrcodeImg").css("display","block");
-                        $("#qrcodeImg").attr("src",result);
+                    async: false,
+                    success: function (result) {
+                        $("#qrDiv").css("display", "block");
+                        $("#qrcodeImg").css("display", "block");
+                        $("#qrcodeImg").attr("src", result);
                     }
                 });
-            }else{
-                $("#qrcodeImg").attr("src","");
-                $("#qrDiv").css("display","none");
-                $("#qrcodeImg").css("display","none");
+            } else {
+                $("#qrcodeImg").attr("src", "");
+                $("#qrDiv").css("display", "none");
+                $("#qrcodeImg").css("display", "none");
             }
         };
 
         //设置个人信息
-        function setPersonInfoBtn(){
+        function setPersonInfoBtn() {
             layer.open({
                 type: 2,
                 title: '设置个人信息',
                 shadeClose: true,
                 shade: 0.2,
                 area: ['390px', '500px'],
-                content: '/zhddkk/wsUsers/setPersonalInfo.page?user='+sessionUser
+                content: '/zhddkk/wsUsers/setPersonalInfo.page?user=' + sessionUser
             });
         };
 
         //签到
-        function sign(){
+        function sign() {
             $.ajax({
                 type: 'POST',
                 url: '/zhddkk/wsSign/sign',
-                data:{"user":sessionUser},
-                async:false,
-                success: function(result) {
+                data: {"user": sessionUser},
+                async: false,
+                success: function (result) {
                     layer.msg(result.msg);
                 }
             });
         }
 
         //显示简易音乐播放器(供子iframe调用)
-        function showSimpleMusicPlayer(){
+        function showSimpleMusicPlayer() {
             var displayStatus = $("#musicIframeDiv").css("display");
-            if (displayStatus == "none"){
+            if (displayStatus == "none") {
                 $("#musicIframeDiv").css("display", "block");
-            }else{
+            } else {
                 $("#musicIframeDiv").css("display", "none");
             }
         }
@@ -460,47 +464,47 @@
         var vPos = 0;
         var setpIntevel = 15;
         setInterval(function () {
-            if (clock>=0 && clock<setpIntevel){
+            if (clock >= 0 && clock < setpIntevel) {
                 //右
                 hPos++;
-                $(".divShadow").css("box-shadow","grey "+hPos+"px 0 10px");
-            }else if (clock>=setpIntevel && clock<setpIntevel*2){
+                $(".divShadow").css("box-shadow", "grey " + hPos + "px 0 10px");
+            } else if (clock >= setpIntevel && clock < setpIntevel * 2) {
                 //下
                 hPos--;
                 vPos++;
-                $(".divShadow").css("box-shadow","grey "+hPos+"px "+vPos+"px 10px");
-            }else if (clock>=setpIntevel*2 && clock<setpIntevel*3){
+                $(".divShadow").css("box-shadow", "grey " + hPos + "px " + vPos + "px 10px");
+            } else if (clock >= setpIntevel * 2 && clock < setpIntevel * 3) {
                 //左
                 hPos--;
                 vPos--;
-                $(".divShadow").css("box-shadow","grey "+hPos+"px "+vPos+"px 10px");
-            }else if (clock>=setpIntevel*3 && clock<setpIntevel*4){
+                $(".divShadow").css("box-shadow", "grey " + hPos + "px " + vPos + "px 10px");
+            } else if (clock >= setpIntevel * 3 && clock < setpIntevel * 4) {
                 //上
                 hPos++;
                 vPos--;
-                $(".divShadow").css("box-shadow","grey "+hPos+"px "+vPos+"px 10px");
-            }else if (clock>=setpIntevel*4){
-                clock=0;
-                hPos=0;
-                vPos=0;
+                $(".divShadow").css("box-shadow", "grey " + hPos + "px " + vPos + "px 10px");
+            } else if (clock >= setpIntevel * 4) {
+                clock = 0;
+                hPos = 0;
+                vPos = 0;
             }
             clock++;
-        },100);
+        }, 100);
 
         //获取最新广告
         queryRecentAdsList();
-        function queryRecentAdsList(){
+        function queryRecentAdsList() {
             $.ajax({
                 type: 'GET',
                 url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
-                async:false,
-                success: function(result) {
-                    if (result.code == 1){
+                async: false,
+                success: function (result) {
+                    if (result.code == 1) {
                         var totalAds = "";
                         var data = result.data;
-                        if (data.length == 0){
+                        if (data.length == 0) {
                             totalAds = "<span style='font-weight: bold;font-size:14px;color:red;'>暂无消息</span>";
-                        }else {
+                        } else {
                             $.each(data, function (i, val) {
                                 totalAds += "<span style='font-weight: bold;font-size:14px;'>" + val.content + "</span>&nbsp;&nbsp;<span style='font-size:10px;'>" + val.createTime + "</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                             });

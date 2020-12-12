@@ -6,8 +6,8 @@
         <title></title>
 
         <style type="text/css">
-            body{
-                margin:0;
+            body {
+                margin: 0;
             }
         </style>
 
@@ -31,76 +31,67 @@
 
         // 初始化bufferCtx
 
-        function initBuffer(){
-            for (var x=0,y=bufferCanvas.height-10;x<1600;x+=20,y-=6){
+        function initBuffer() {
+            for (var x = 0, y = bufferCanvas.height - 10; x < 1600; x += 20, y -= 6) {
                 //for (var y=bufferCanvas.height-10;y>10;y-=8){
-                    bufferCtx.beginPath();
-                    bufferCtx.rect(x,0,10,y);
-                    bufferCtx.fillStyle = "white";
-                    bufferCtx.fill();
-                    bufferCtx.closePath();
+                bufferCtx.beginPath();
+                bufferCtx.rect(x, 0, 10, y);
+                bufferCtx.fillStyle = "white";
+                bufferCtx.fill();
+                bufferCtx.closePath();
                 //}
             }
         }
 
-
-
-
-
-
-
-
-
-
-        var bird = new Bird(100, canvas.height/2, 15, "yellow");
-        window.addEventListener('click',function(event){
+        var bird = new Bird(100, canvas.height / 2, 15, "yellow");
+        window.addEventListener('click', function (event) {
             bird.up();
         });
 
-        $(document).keydown(function(event){
+        $(document).keydown(function (event) {
             var keyCode = event.keyCode;
             //console.log(keyCode);
-            if (keyCode == 68){
+            if (keyCode == 68) {
                 moveRight();
-            }else if (keyCode == 65){
+            } else if (keyCode == 65) {
                 moveLeft();
             }
         });
 
-        $(document).keyup(function(event){
+        $(document).keyup(function (event) {
             var keyCode = event.keyCode;
             //console.log(keyCode);
-            if (keyCode == 87){
+            if (keyCode == 87) {
                 bird.up();
                 console.log("-----------");
             }
         });
 
-        function Bird(x,y,r,color){
+        function Bird(x, y, r, color) {
             this.x = x;
             this.y = y;
-            this.r =r;
+            this.r = r;
             this.color = color;
 
             this.gravity = 0.1;
             this.lift = 10;
             this.opcity = 0;
 
-            this.draw = function(){
+            this.draw = function () {
                 ctx.beginPath();
-                ctx.arc(this.x,this.y,this.r,0,Math.PI*2,false);
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
                 ctx.fillStyle = this.color;
                 ctx.fill();
                 ctx.closePath();
             };
 
-            this.update = function(){
-                if (this.y + this.r > canvas.height){
+            this.update = function () {
+                if (this.y + this.r > canvas.height) {
                     this.gravity = 0;
                     this.y = canvas.height - this.r;
                 }
 
-                if (this.y < this.r){
+                if (this.y < this.r) {
                     this.y = this.r;
                 }
 
@@ -111,43 +102,43 @@
                 this.draw();
             }
 
-            this.up = function(){
-                this.opcity -= this.gravity*this.lift;
+            this.up = function () {
+                this.opcity -= this.gravity * this.lift;
             }
         }
 
-
-        function Pipe(color){
-            this.x = canvas.width-100;;
+        function Pipe(color) {
+            this.x = canvas.width - 100;
+            ;
             this.y = 0;
             this.w = 50;
-            this.top = randomNumber(1,canvas.height/2);
-            this.bottom = randomNumber(1,canvas.height/2);
-            this.color=color;
+            this.top = randomNumber(1, canvas.height / 2);
+            this.bottom = randomNumber(1, canvas.height / 2);
+            this.color = color;
 
-            this.hightLight= false;
+            this.hightLight = false;
 
-            this.draw = function(){
+            this.draw = function () {
                 ctx.beginPath();
-                ctx.rect(this.x,0,this.w,this.top);
+                ctx.rect(this.x, 0, this.w, this.top);
 
-                ctx.rect(this.x,canvas.height-this.bottom,this.w,this.bottom);
+                ctx.rect(this.x, canvas.height - this.bottom, this.w, this.bottom);
                 ctx.fillStyle = this.color;
-                if (this.hightLight){
+                if (this.hightLight) {
                     ctx.fillStyle = "red";
                 }
                 ctx.fill();
                 ctx.closePath();
             }
 
-            this.update = function(){
-                this.x -=1.5;
+            this.update = function () {
+                this.x -= 1.5;
                 this.draw();
             }
 
-            this.hits = function(bird){
-                if (bird.y < this.top || bird.y > canvas.height-this.bottom){
-                    if (bird.x+bird.r > this.x && bird.x-bird.r <this.x+this.w){
+            this.hits = function (bird) {
+                if (bird.y < this.top || bird.y > canvas.height - this.bottom) {
+                    if (bird.x + bird.r > this.x && bird.x - bird.r < this.x + this.w) {
 
                         this.hightLight = true;
                         return true;
@@ -159,42 +150,41 @@
             }
         }
 
-        var t=0;
+        var t = 0;
 
-        function moveRight(){
-            if (t>bufferCanvas.width/2){
+        function moveRight() {
+            if (t > bufferCanvas.width / 2) {
 
                 console.log(t);
             }
 
-            if (t*3>=bufferCanvas.width){
-                t=0;
+            if (t * 3 >= bufferCanvas.width) {
+                t = 0;
             }
-            t+=3;
+            t += 3;
         }
 
-        function moveLeft(){
-            if (t<0){
-                t=0;
+        function moveLeft() {
+            if (t < 0) {
+                t = 0;
             }
-            t-=3;
+            t -= 3;
         }
-
 
         initBuffer();
-        function animate(){
+        function animate() {
             requestAnimationFrame(animate);
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.drawImage(bufferCanvas,t,0,800,500,0,0,800,500);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(bufferCanvas, t, 0, 800, 500, 0, 0, 800, 500);
         }
 
         animate();
         //setInterval(animate,10);
 
-        function randomNumber(start,end){
-            var range = end-start;
+        function randomNumber(start, end) {
+            var range = end - start;
             var rand = Math.random();
-            var num = start + Math.round(rand*range);
+            var num = start + Math.round(rand * range);
 
             return num;
         }

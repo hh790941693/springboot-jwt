@@ -5,45 +5,45 @@
     <title>朋友圈</title>
 
 <style type="text/css">
-    *{
-        margin:0px;
-        padding:0px;
+    * {
+        margin: 0px;
+        padding: 0px;
     }
 
-    body{
-        padding:20px 0 10px 0;
+    body {
+        padding: 20px 0 10px 0;
     }
 
-    span{
-        display:inline-block;
-        height:100%;
+    span {
+        display: inline-block;
+        height: 100%;
     }
 
-    #mainDiv{
+    #mainDiv {
         width: 60%;
         height: 100%;
-        padding:5px;
-        margin:0 auto;
-        border:1px solid green;
-        background-color:#aaeca812;
+        padding: 5px;
+        margin: 0 auto;
+        border: 1px solid green;
+        background-color: #aaeca812;
     }
 
-    #addCircleDiv{
-        padding-bottom:5px;
-        margin-top:-4px;
-        height:6.3%;
+    #addCircleDiv {
+        padding-bottom: 5px;
+        margin-top: -4px;
+        height: 6.3%;
         border-bottom: 1px solid grey;
         background-color: white;
     }
 
-    #bodyCircleDiv{
-        height:94%;
-        margin-top:2px;
+    #bodyCircleDiv {
+        height: 94%;
+        margin-top: 2px;
         overflow-y: scroll;
         background-color: white;
     }
 
-    #naviDiv{
+    #naviDiv {
         width: 130px;
         height: 30px;
         position: fixed;
@@ -51,99 +51,99 @@
         right: 5px;
     }
 
-    .circleDivClass{
+    .circleDivClass {
         margin-bottom: 15px;
         border-top: 1px solid grey;
-        border-left:1px solid grey;
-        border-right:1px solid grey;
+        border-left: 1px solid grey;
+        border-right: 1px solid grey;
     }
 
-    .nameDivClass{
-        background-color:#b3d7ff;
-        height:28px;
+    .nameDivClass {
+        background-color: #b3d7ff;
+        height: 28px;
     }
 
-    .userSpanClass{
-        width:46%;
-        font-size:16px;
-        font-weight:bold;
-        color:green;
-        cursor:pointer;
+    .userSpanClass {
+        width: 46%;
+        font-size: 16px;
+        font-weight: bold;
+        color: green;
+        cursor: pointer;
     }
 
-    .myselfUserSpanClass{
-        width:46%;
-        font-size:16px;
-        font-weight:bold;
-        color:blue;
-        cursor:pointer;
+    .myselfUserSpanClass {
+        width: 46%;
+        font-size: 16px;
+        font-weight: bold;
+        color: blue;
+        cursor: pointer;
     }
 
-    .commentNameSpanClass{
-        color:blue;
-        width:8%;
-        margin-left:40px;
-        cursor:pointer;
+    .commentNameSpanClass {
+        color: blue;
+        width: 8%;
+        margin-left: 40px;
+        cursor: pointer;
         text-align: left;
     }
 
-    .commentDivClass{
-        margin-bottom:1px;
+    .commentDivClass {
+        margin-bottom: 1px;
     }
 
-    .contentSpanClass{
+    .contentSpanClass {
         text-indent: 2em;
         font-size: 17px;
     }
 
-    .picDivClass{
+    .picDivClass {
         margin-bottom: 5px;
     }
 
-    .commentDivClass p{
-        background-color:#f0f3f038;
+    .commentDivClass p {
+        background-color: #f0f3f038;
     }
 
-    .contentDivClass{
-        letter-spacing:3px;
-        font-size:20px;
-        margin-bottom:2px;
+    .contentDivClass {
+        letter-spacing: 3px;
+        font-size: 20px;
+        margin-bottom: 2px;
     }
 
-    .timeSpanClass{
+    .timeSpanClass {
         width: 10%;
-        font-size:13px;
-        color:grey;
-        float:right;
-        margin-top:5px;
+        font-size: 13px;
+        color: grey;
+        float: right;
+        margin-top: 5px;
     }
 
-    .likeNumSpanClass{
-        color:green;
+    .likeNumSpanClass {
+        color: green;
         width: 11%;
-        font-size:15px;
+        font-size: 15px;
     }
 
-    .commentSpanClass{
-        font-size:13px;
+    .commentSpanClass {
+        font-size: 13px;
         width: 68%;
     }
 
-    .commentTimeSpanClass{
-        color:grey;
-        width:60px;
-        font-size:13px;
-        float:right;
+    .commentTimeSpanClass {
+        color: grey;
+        width: 60px;
+        font-size: 13px;
+        float: right;
     }
 
-    .buttonGroupSpan{
-        width:170px;
+    .buttonGroupSpan {
+        width: 170px;
         padding-top: 3px;
     }
 
-    .btnDisabledClass{
-        background-color:grey;
-        color:black;
+    .btnDisabledClass {
+        background-color: grey;
+        color: black;
     }
 </style>
 </head>
@@ -151,10 +151,10 @@
     <div id="mainDiv">
         <div id='addCircleDiv' align='right'>
             <span>总条数:{{totalCount}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>当前第{{curPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{totalPage}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;
-            <button @click='toPrePage()' class='btn btn-sm btn-primary' >
+            <button @click='toPrePage()' class='btn btn-sm btn-primary'>
                 <span class="glyphicon glyphicon-arrow-left"></span>
             </button>&nbsp;&nbsp;
-            <button @click='toNextPage()' class='btn btn-sm btn-primary' >
+            <button @click='toNextPage()' class='btn btn-sm btn-primary'>
                 <span class="glyphicon glyphicon-arrow-right"></span>
             </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button @click='addCircle()' class='btn btn-sm btn-success'>
@@ -171,7 +171,8 @@
                                 <span class='myselfUserSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
                             </template>
                             <template v-else>
-                                <span class='userSpanClass' @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
+                                <span class='userSpanClass'
+                                      @click='queryPersonInfo(item.userName)'>{{item.userName}}</span>
                             </template>
                             <span class='buttonGroupSpan'>
                                 <button @click='toComment(item.id)' class='label label-primary'>
@@ -202,16 +203,20 @@
                 </div>
                 <div class='picDivClass' align='center'>
                     <template v-if="item.pic1 != null && item.pic1 != ''">
-                        <img :src='item.pic1' width='100px' height='100px' @click="showPic(item.pic1)" :onerror="defaultImg" style='margin-left:20px;'>
+                        <img :src='item.pic1' width='100px' height='100px' @click="showPic(item.pic1)"
+                             :onerror="defaultImg" style='margin-left:20px;'>
                     </template>
                     <template v-if="item.pic2 != null && item.pic2 != ''">
-                        <img :src='item.pic2' width='100px' height='100px' @click="showPic(item.pic2)" :onerror="defaultImg" style='margin-left:20px;'>
+                        <img :src='item.pic2' width='100px' height='100px' @click="showPic(item.pic2)"
+                             :onerror="defaultImg" style='margin-left:20px;'>
                     </template>
                     <template v-if="item.pic3 != null && item.pic3 != ''">
-                        <img :src='item.pic3' width='100px' height='100px' @click="showPic(item.pic3)" :onerror="defaultImg" style='margin-left:20px;'>
+                        <img :src='item.pic3' width='100px' height='100px' @click="showPic(item.pic3)"
+                             :onerror="defaultImg" style='margin-left:20px;'>
                     </template>
                     <template v-if="item.pic4 != null && item.pic4 != ''">
-                        <img :src='item.pic4' width='100px' height='100px' @click="showPic(item.pic4)" :onerror="defaultImg" style='margin-left:20px;'>
+                        <img :src='item.pic4' width='100px' height='100px' @click="showPic(item.pic4)"
+                             :onerror="defaultImg" style='margin-left:20px;'>
                     </template>
                 </div>
 
@@ -220,7 +225,8 @@
                         <span class='commentNameSpanClass' @click='queryPersonInfo(commentItem.userName)'>{{commentItem.userName}}:</span>
                         <span class='commentSpanClass'>{{commentItem.comment}}</span>
                         <template v-if="curUser == 'admin' || curUser == commentItem.userName">
-                            <a href='javascript:void(0)' @click='deleteComment(commentItem.id)' style="color:blue;cursor:pointer;">删除</a>
+                            <a href='javascript:void(0)' @click='deleteComment(commentItem.id)'
+                               style="color:blue;cursor:pointer;">删除</a>
                         </template>
                         <span class='commentTimeSpanClass'>{{compareTwoTime(new Date(commentItem.createTime).getTime(),new Date().getTime())}}</span></p>
                 </div>
@@ -228,10 +234,10 @@
         </div>
 
         <div id="naviDiv" align="center">
-            <button id='preBtn' @click='toPrePage()' class='btn btn-sm btn-primary' >
+            <button id='preBtn' @click='toPrePage()' class='btn btn-sm btn-primary'>
                 <span class="glyphicon glyphicon-arrow-left"></span>
             </button>
-            <button id='nextBtn' @click='toNextPage()' class='btn btn-sm btn-primary' >
+            <button id='nextBtn' @click='toNextPage()' class='btn btn-sm btn-primary'>
                 <span class="glyphicon glyphicon-arrow-right"></span>
             </button>
         </div>
@@ -242,7 +248,7 @@
 </body>
 
     <script type="text/javascript">
-        console.log("circle页面获取session数据:"+sessionUser);
+        console.log("circle页面获取session数据:" + sessionUser);
 
         var curUser = sessionUser;
         $("#preBtn").hide();
@@ -250,23 +256,23 @@
         var app = new Vue({
             el: '#mainDiv',
             data: {
-                circleList:{},
-                curPage:1,
-                numPerPage:5,
-                totalCount:0,
-                totalPage:0,
-                curUser:sessionUser,
-                defaultImg:'this.src="../img/imgerror_default.jpg"',
+                circleList: {},
+                curPage: 1,
+                numPerPage: 5,
+                totalCount: 0,
+                totalPage: 0,
+                curUser: sessionUser,
+                defaultImg: 'this.src="../img/imgerror_default.jpg"'
             },
             methods: {
-                queryCircleList:function (curPagePara,numPerPagePara) {
+                queryCircleList: function (curPagePara, numPerPagePara) {
                     //查询朋友圈列表
                     $.ajax({
                         type: "POST",
-                        url: rootUrl+'ws/queryCircleByPage.do',
-                        data: {'curPage':curPagePara, 'numPerPage':numPerPagePara},
+                        url: rootUrl + 'ws/queryCircleByPage.do',
+                        data: {'curPage': curPagePara, 'numPerPage': numPerPagePara},
                         success: function (result) {
-                            if (result.code != 1){
+                            if (result.code != 1) {
                                 return;
                             }
                             var resultData = result.data;
@@ -274,54 +280,54 @@
                             app.totalPage = resultData.pages;
                             app.totalCount = resultData.total;
 
-                            if (app.curPage >= app.totalPage){
-                                $("#nextBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled",true);
-                            }else{
-                                $("#nextBtn").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled",false);
+                            if (app.curPage >= app.totalPage) {
+                                $("#nextBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled", true);
+                            } else {
+                                $("#nextBtn").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled", false);
                             }
 
-                            if (app.curPage <= 1){
-                                $("#preBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled",true);
-                            }else{
-                                $("#preBtn").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled",false);
+                            if (app.curPage <= 1) {
+                                $("#preBtn").removeClass("btn-primary").addClass("btnDisabledClass").attr("disabled", true);
+                            } else {
+                                $("#preBtn").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled", false);
                             }
                         }
                     });
                 },
-                toComment:function (id) {
+                toComment: function (id) {
                     //评论
                     layer.prompt({
                         formType: 2,
                         value: '',
                         title: '请输入评论内容'
-                    }, function(value,index){
+                    }, function (value, index) {
                         layer.close(index);
-                        if (value != ""){
+                        if (value != "") {
                             $.ajax({
                                 type: 'POST',
-                                url: rootUrl+'ws/toComment.do',
+                                url: rootUrl + 'ws/toComment.do',
                                 //dataType: 'json',
-                                data:{'user':app.curUser,'circleId':id,'comment':value},
-                                async:false,
-                                success: function(result) {
+                                data: {'user': app.curUser, 'circleId': id, 'comment': value},
+                                async: false,
+                                success: function (result) {
                                     if (result.code == 1) {
                                         layer.msg("评论成功");
                                         setTimeout(refresh, 300);
                                     }
                                 }
                             });
-                        }else{
+                        } else {
                             alert("评论内容不能为空!");
                         }
                     });
                 },
-                toLike:function (id) {
+                toLike: function (id) {
                     //点赞
                     $.ajax({
                         type: 'POST',
-                        url: rootUrl+'ws/toLike.do',
-                        data:{'user':app.curUser,'circleId':id},
-                        success: function(result) {
+                        url: rootUrl + 'ws/toLike.do',
+                        data: {'user': app.curUser, 'circleId': id},
+                        success: function (result) {
                             if (result.code == 1) {
                                 layer.msg("点赞成功");
                                 app.queryCircleList(app.curPage, app.numPerPage);
@@ -329,13 +335,13 @@
                         }
                     });
                 },
-                toDislike:function (id) {
+                toDislike: function (id) {
                     //点赞
                     $.ajax({
                         type: 'POST',
-                        url: rootUrl+'ws/toDislike.do',
-                        data:{'user':app.curUser,'circleId':id},
-                        success: function(result) {
+                        url: rootUrl + 'ws/toDislike.do',
+                        data: {'user': app.curUser, 'circleId': id},
+                        success: function (result) {
                             if (result.code == 1) {
                                 layer.msg("踩成功");
                                 app.queryCircleList(app.curPage, app.numPerPage);
@@ -343,16 +349,16 @@
                         }
                     });
                 },
-                deleteCircle:function (id) {
+                deleteCircle: function (id) {
                     //删除朋友圈
-                    layer.confirm('确认要删除？', {btn: ['确定','取消']},
-                        function(){
+                    layer.confirm('确认要删除？', {btn: ['确定', '取消']},
+                        function () {
                             $.ajax({
                                 type: 'POST',
-                                url: rootUrl+'ws/toDeleteCircle.do',
+                                url: rootUrl + 'ws/toDeleteCircle.do',
                                 //dataType: 'json',
-                                data:{'id':id},
-                                success: function(result) {
+                                data: {'id': id},
+                                success: function (result) {
                                     if (result.code == 1) {
                                         layer.msg("删除成功");
                                         app.queryCircleList(app.curPage, app.numPerPage);
@@ -360,18 +366,20 @@
                                 }
                             });
                         },
-                        function(){layer.close();}
+                        function () {
+                            layer.close();
+                        }
                     );
                 },
-                deleteComment:function (id) {
+                deleteComment: function (id) {
                     //删除评论
-                    layer.confirm('确认要删除？', {btn: ['确定','取消']},
-                        function(){
+                    layer.confirm('确认要删除？', {btn: ['确定', '取消']},
+                        function () {
                             $.ajax({
                                 type: 'POST',
-                                url: rootUrl+'ws/toDeleteComment.do',
-                                data:{'id':id},
-                                success: function(result) {
+                                url: rootUrl + 'ws/toDeleteComment.do',
+                                data: {'id': id},
+                                success: function (result) {
                                     if (result.code == 1) {
                                         layer.msg("删除成功");
                                         app.queryCircleList(app.curPage, app.numPerPage);
@@ -379,24 +387,26 @@
                                 }
                             });
                         },
-                        function(){layer.close();}
+                        function () {
+                            layer.close();
+                        }
                     );
                 },
-                toPrePage:function () {
+                toPrePage: function () {
                     //上一页
-                    if (app.curPage>1){
-                        app.curPage = app.curPage-1;
-                        app.queryCircleList(app.curPage,app.numPerPage);
+                    if (app.curPage > 1) {
+                        app.curPage = app.curPage - 1;
+                        app.queryCircleList(app.curPage, app.numPerPage);
                     }
                 },
-                toNextPage:function () {
+                toNextPage: function () {
                     //下一页
-                    if (app.curPage<app.totalPage){
-                        app.curPage = app.curPage+1;
-                        app.queryCircleList(app.curPage,app.numPerPage);
+                    if (app.curPage < app.totalPage) {
+                        app.curPage = app.curPage + 1;
+                        app.queryCircleList(app.curPage, app.numPerPage);
                     }
                 },
-                addCircle:function () {
+                addCircle: function () {
                     //新增朋友圈
                     layer.open({
                         type: 2,
@@ -404,14 +414,14 @@
                         shadeClose: true,
                         shade: 0.2,
                         area: ['484px', '490px'],
-                        content: rootUrl+'ws/wsclientAddCircle.page?user='+app.curUser
+                        content: rootUrl + 'ws/wsclientAddCircle.page?user=' + app.curUser
                     });
                 },
-                showPic:function(imgUrl){
+                showPic: function (imgUrl) {
                     //图片点击事件
                     $.ws.gShowImg(imgUrl);
                 },
-                queryPersonInfo:function(username){
+                queryPersonInfo: function (username) {
                     //查看个人信息
                     layer.open({
                         type: 2,
@@ -419,23 +429,23 @@
                         shadeClose: true,
                         shade: 0.2,
                         area: ['384px', '415px'],
-                        content: '/zhddkk/wsUsers/showPersonalInfo.page?user='+username
+                        content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + username
                     });
-                },
+                }
             },
             created: function () {
                 this.queryCircleList(1, 5);
             }
         });
 
-        $("#naviDiv").hover(function(){
+        $("#naviDiv").hover(function () {
             $("#preBtn,#nextBtn").show();
-        },function(){
+        }, function () {
             $("#preBtn,#nextBtn").hide();
         })
 
         //刷新
-        function refresh(){
+        function refresh() {
             window.location.href = window.location.href;
         };
 

@@ -3,20 +3,20 @@
     <th:block th:include="common :: header"></th:block>
 <title>服务端左侧导航栏</title>
 <style type="text/css">
-    #leftNavi{
-        width:100%;
-        height:100%;
-        float:left;
+    #leftNavi {
+        width: 100%;
+        height: 100%;
+        float: left;
         background-repeat: repeat-x;
         background-position: -10px -222px;
     }
 
-    #leftNavi>ul{
-        height:495px;
+    #leftNavi > ul {
+        height: 495px;
         margin-top: 10px;
     }
 
-    #leftNavi ul li{
+    #leftNavi ul li {
         list-style: none;
         height: 40px;
         width: 100%;
@@ -26,48 +26,48 @@
         cursor: pointer;
     }
 
-    #leftNavi ul li span{
+    #leftNavi ul li span {
         margin-right: 3px;
         font-weight: bold;
     }
 
-    #leftNavi ul a{
-        text-decoration:none;
+    #leftNavi ul a {
+        text-decoration: none;
     }
 
-    .mouseleftclick{
-        background-color:blue;
-        color:white;
+    .mouseleftclick {
+        background-color: blue;
+        color: white;
     }
 
-    .mouseleftclick span{
-        color:white;
+    .mouseleftclick span {
+        color: white;
     }
 
-    #unreadCountSpan{
+    #unreadCountSpan {
         color: red;
         font-weight: bold;
         margin-left: 10px;
         font-size: 18px;
     }
 
-    #configurationDiv{
-        display:none;
-        width:133px;
-        height:168px;
-        position:absolute;
-        left:43px;
-        top:133px;
-        background-color:#d8d9e6;
-        border:2px solid green;
-        z-index:99;
+    #configurationDiv {
+        display: none;
+        width: 133px;
+        height: 168px;
+        position: absolute;
+        left: 43px;
+        top: 133px;
+        background-color: #d8d9e6;
+        border: 2px solid green;
+        z-index: 99;
     }
 
-    #configurationDiv>ul{
-        height:100%;
+    #configurationDiv > ul {
+        height: 100%;
     }
 
-    #configurationDiv ul li{
+    #configurationDiv ul li {
         font-size: 18px;
     }
 </style>
@@ -106,7 +106,8 @@
             <span class="glyphicon glyphicon-edit"></span><span style="display: none;margin-left:54px;">[[#{li.publishad.label}]]</span>
         </li>
         <li id="/zhddkk/wsFeedback/adminFeedback">
-            <span class="fa fa-commenting"></span><span style="display: none;margin-left:54px;">[[#{li.feedback.label}]]</span>
+            <span class="fa fa-commenting"></span><span
+                style="display: none;margin-left:54px;">[[#{li.feedback.label}]]</span>
         </li>
         <li id="/ws/wsserverChart.page">
             <span class="fa fa-bar-chart"></span><span style="display: none;margin-left:24px;">[[#{li.leaderchart.label}]]</span>
@@ -138,39 +139,39 @@
 
 <script type="text/javascript">
     //左侧导航栏点击事件
-    $("#leftNavi ul li").click(function (){
-        var curPageid=this.id;
-        if (curPageid.indexOf("configurationLi") != -1){
+    $("#leftNavi ul li").click(function () {
+        var curPageid = this.id;
+        if (curPageid.indexOf("configurationLi") != -1) {
             $("#configurationDiv").slideDown();
-        }else {
+        } else {
             parent.showPage(curPageid);
         }
-        if (curPageid.indexOf("wsserverChartMonitor.page") != -1){
+        if (curPageid.indexOf("wsserverChartMonitor.page") != -1) {
             parent.unreadCount = "";
             $("#unreadCountSpan").text("");
         }
         $("#leftNavi ul li").removeClass("mouseleftclick");
         $(this).addClass("mouseleftclick");
 
-        var parentObj=$(this).parent().parent();
-        var parentDivId=$(parentObj).attr("id");
-        if (curPageid.indexOf("configurationLi") == -1 && parentDivId == "leftNavi"){
+        var parentObj = $(this).parent().parent();
+        var parentDivId = $(parentObj).attr("id");
+        if (curPageid.indexOf("configurationLi") == -1 && parentDivId == "leftNavi") {
             $("#configurationDiv").slideUp();
         }
     })
 
-    $("#leftNavi ul li").hover(function (){
-        $(this).children("span:first").animate({"margin-left":"0"});
-        $(this).children("span:last").show().animate({"margin-left":"0"});
-    },function (){
-        $("#leftNavi ul li").children("span:last").not(this).animate({"margin-left":"54px"});
+    $("#leftNavi ul li").hover(function () {
+        $(this).children("span:first").animate({"margin-left": "0"});
+        $(this).children("span:last").show().animate({"margin-left": "0"});
+    }, function () {
+        $("#leftNavi ul li").children("span:last").not(this).animate({"margin-left": "54px"});
         $("#leftNavi ul li").children("span:last").not(this).hide();
 
-        $(this).children("span:last").animate({"margin-left":"54px"});
+        $(this).children("span:last").animate({"margin-left": "54px"});
         $(this).children("span:last").hide();
     });
 
     //定时滚动左侧导航栏背景图片
-    $.ws.backgroundImgAnimation("leftNavBackgroundImg","leftNavi", 2, 10);
+    $.ws.backgroundImgAnimation("leftNavBackgroundImg", "leftNavi", 2, 10);
 </script>
 </html>

@@ -7,67 +7,76 @@
         <title>[[#{page.music.title}]]</title>
 
         <style type="text/css">
-            .selectRowClass{
-                background-color:grey;
-                color:white;
+            .selectRowClass {
+                background-color: grey;
+                color: white;
             }
-            .thClass{
-                background-color:green;
+
+            .thClass {
+                background-color: green;
                 height: 28px;
             }
 
-            .mouseonClass{
-                background-color:#ffc107;
+            .mouseonClass {
+                background-color: #ffc107;
             }
 
-            #musicTable th{
-                color:white;
-                text-align:center;
+            #musicTable th {
+                color: white;
+                text-align: center;
             }
 
-            #musicTable td{
-                text-align:center;
+            #musicTable td {
+                text-align: center;
             }
-            #addMusic{
-                width:100%;
-                height:5%;
-                margin:0 auto;
-                border-bottom:1px solid grey;
+
+            #addMusic {
+                width: 100%;
+                height: 5%;
+                margin: 0 auto;
+                border-bottom: 1px solid grey;
                 padding-top: 2px;
             }
 
-            #playerDiv{
+            #playerDiv {
                 width: 100%;
                 height: 93.4%;
                 margin: 0px auto;
             }
 
-            #uploadResultDiv{
+            #uploadResultDiv {
                 padding-left: 10px;
                 padding-top: 5px;
             }
-            #uploadResultDiv p{
+
+            #uploadResultDiv p {
                 border-bottom: 1px solid grey;
-                height:25px;
+                height: 25px;
             }
-            #uploadResultDiv span{
+
+            #uploadResultDiv span {
                 display: inline-block;
             }
         </style>
     </head>
     <body>
         <div id="addMusic" align="center">
-            <form action="/upload/app/uploadMusic" method="post" enctype="multipart/form-data" onsubmit="return verify()" target="hidden_frame">
+            <form action="/upload/app/uploadMusic" method="post" enctype="multipart/form-data"
+                  onsubmit="return verify()" target="hidden_frame">
                 <input type="text" id="user" name="user" th:value="${user}" hidden="true">
                 <input type="hidden" name="folder" value="music">
-                <input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg" style="display: inline-block;" th:title="#{btn.choosesong.label}">
+                <input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg"
+                       style="display: inline-block;" th:title="#{btn.choosesong.label}">
                 <input type="submit" th:value="#{btn.uploadsong.label}">
             </form>
         </div>
         <div id="playerDiv">
             <div id="buttons" style="height:15%;border-bottom: 1px solid grey;">
-                <div id="songNameDiv" align="center" style="background-color:yellow;height:35%;border-bottom:2px solid green;padding-top:3px;">
-                    <span id="statusSpan" style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span><span> : </span><label id="songName"></label>
+                <div id="songNameDiv" align="center"
+                     style="background-color:yellow;height:35%;border-bottom:2px solid green;padding-top:3px;">
+                    <span id="statusSpan"
+                          style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span><span> : </span><label
+                        id="songName"></label>
                 </div>
                 <div style="height:67%;">
                     <div style="float:left;width:37%;height:46px;margin-top:5px;margin-left: 5px;">
@@ -79,22 +88,29 @@
                             <button id="btnPre" class='btn btn-primary' @click="preMusic()" th:title="#{btn.last.tips}">
                                 <span class="glyphicon glyphicon-step-backward"></span>
                             </button>
-                            <button id="btnPlay" class='btn btn-success' @click="play()" th:title="#{btn.playpause.tips}">
+                            <button id="btnPlay" class='btn btn-success' @click="play()"
+                                    th:title="#{btn.playpause.tips}">
                                 <span class="glyphicon glyphicon-play"></span>
                             </button>
-                            <button id="btnNext" class='btn btn-primary' @click="nextMusic()" th:title="#{btn.next.tips}">
+                            <button id="btnNext" class='btn btn-primary' @click="nextMusic()"
+                                    th:title="#{btn.next.tips}">
                                 <span class="glyphicon glyphicon-step-forward"></span>
                             </button>
-                            <button id="btnRefresh" class='btn btn-info' @click="refreash()" th:title="#{btn.refreash.tips}">
+                            <button id="btnRefresh" class='btn btn-info' @click="refreash()"
+                                    th:title="#{btn.refreash.tips}">
                                 <span class="glyphicon glyphicon-repeat"></span>
                             </button>
                             <button id="btnShowList" class='btn btn-warning' @click="showList($event)">[[#{btn.hidelist.label}]]</button>
                         </div>
                         <div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
-                            <input type="radio" name="playmode" value="-1" checked="checked" @click="changePlayMode($event)" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
-                            <input type="radio" name="playmode" value="0" @click="changePlayMode($event)" th:title="#{radio.loop.tips}">[[#{radio.loop.tips}]]&nbsp;&nbsp;
-                            <input type="radio" name="playmode" value="1" @click="changePlayMode($event)" th:title="#{radio.order.tips}">[[#{radio.order.tips}]]&nbsp;&nbsp;
-                            <input type="radio" name="playmode" value="2" @click="changePlayMode($event)" th:title="#{radio.random.tips}">[[#{radio.random.tips}]]
+                            <input type="radio" name="playmode" value="-1" checked="checked"
+                                   @click="changePlayMode($event)" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
+                            <input type="radio" name="playmode" value="0" @click="changePlayMode($event)"
+                                   th:title="#{radio.loop.tips}">[[#{radio.loop.tips}]]&nbsp;&nbsp;
+                            <input type="radio" name="playmode" value="1" @click="changePlayMode($event)"
+                                   th:title="#{radio.order.tips}">[[#{radio.order.tips}]]&nbsp;&nbsp;
+                            <input type="radio" name="playmode" value="2" @click="changePlayMode($event)"
+                                   th:title="#{radio.random.tips}">[[#{radio.random.tips}]]
                         </div>
                     </div>
                 </div>
@@ -111,7 +127,8 @@
                         <th style="display:none;">url</th>
                         <th style="width:40px;">操作</th>
                     </tr>
-                    <tr v-for="(music,index) in musicData" :key="index" @mouseenter="mouseEnter(music, index)" @mouseleave="mouseLeave(music, index)">
+                    <tr v-for="(music,index) in musicData" :key="index" @mouseenter="mouseEnter(music, index)"
+                        @mouseleave="mouseLeave(music, index)">
                         <td>
                             <div v-if="index==0">
                                 <input type='radio' name='selectMusic' checked="checked"/>
@@ -150,10 +167,10 @@
                 curSelectedIndex: 0,  // 当前播放歌曲的行号
                 hoverIndex: -1,       // 当前鼠标划过的行号
                 playStatus: -1,       // 播放状态   -1:初始化  0:播放中 1:暂停中
-                showMode:1,           // 播放列表显示与隐藏  0:隐藏 1:显示
+                showMode: 1           // 播放列表显示与隐藏  0:隐藏 1:显示
             },
             methods: {
-                queryMusicList:function () {
+                queryMusicList: function () {
                     // 查询歌曲列表
                     var fileType = ".mp3";
                     var user = $('#user').val();
@@ -168,41 +185,41 @@
                         }
                     });
                 },
-                doublePlay:function(musicIndex){
+                doublePlay: function (musicIndex) {
                     //双击播放
                     app.curSelectedIndex = musicIndex;
-                    var selectedTr = $("table tr").get(app.curSelectedIndex+1);
+                    var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
                     app.playByIndex(selectedTr);
                 },
-                play:function(){
+                play: function () {
                     //播放
-                    var checkedInput=$("table tr").find("input[checked='checked']");
-                    var checkedTr=$(checkedInput).parent().parent().parent();
+                    var checkedInput = $("table tr").find("input[checked='checked']");
+                    var checkedTr = $(checkedInput).parent().parent().parent();
                     var selectedMusicInfo = app.musicData[app.curSelectedIndex];
                     var filename = selectedMusicInfo.filename;
                     var url = selectedMusicInfo.url;
 
                     $("table input").removeAttr("checked");
-                    $(checkedInput).prop("checked",true);
-                    $(checkedInput).attr("checked","checked");
+                    $(checkedInput).prop("checked", true);
+                    $(checkedInput).attr("checked", "checked");
                     $("table tr").removeClass("selectRowClass");
                     $(checkedTr).addClass("selectRowClass");
-                    $("#player").attr("src",url);
+                    $("#player").attr("src", url);
 
                     $("#statusSpan").text($.ws.i18n("span.palystatus.playing"));
                     $("#songName").html(filename);
-                    if (app.playStatus == -1 || app.playStatus == 1){
+                    if (app.playStatus == -1 || app.playStatus == 1) {
                         app.playStatus = 0; //播放中
                         $("#player")[0].play();
                         $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
-                    }else{
+                    } else {
                         app.playStatus = 1; //暂停中
                         $("#statusSpan").text($.ws.i18n("span.palystatus.paused"));
                         $("#player")[0].pause();
                         $("#btnPlay span").removeClass("glyphicon-pause").addClass("glyphicon-play");
                     }
                 },
-                nextMusic:function(){
+                nextMusic: function () {
                     //下一首
                     if (app.playMode == -1 || app.playMode == 1) {
                         if (app.curSelectedIndex >= app.musicData.length - 1) {
@@ -212,14 +229,14 @@
                         }
                         var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
                         app.playByIndex(selectedTr);
-                    } else if (app.playMode == 0){
+                    } else if (app.playMode == 0) {
                         app.play();
-                    } else if (app.playMode == 2){
+                    } else if (app.playMode == 2) {
                         app.randomMusic();
                     }
                     app.playStatus = 0;
                 },
-                preMusic:function(){
+                preMusic: function () {
                     //上一首
                     if (app.playMode == -1 || app.playMode == 1) {
                         if (app.curSelectedIndex == 0) {
@@ -229,17 +246,17 @@
                         }
                         var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
                         app.playByIndex(selectedTr);
-                    } else if (app.playMode == 0){
+                    } else if (app.playMode == 0) {
                         app.playStatus = 1;
                         app.play();
-                    } else if (app.playMode == 2){
+                    } else if (app.playMode == 2) {
                         app.randomMusic();
                     }
                 },
-                playByIndex:function(trObj){
+                playByIndex: function (trObj) {
                     var selectedInput = $(trObj).find("input");
                     $("table input").removeAttr("checked");
-                    $(selectedInput).prop("checked",true);
+                    $(selectedInput).prop("checked", true);
                     $(selectedInput).attr("checked", "checked");
                     $("table tr").removeClass("selectRowClass");
                     $(trObj).addClass("selectRowClass");
@@ -255,74 +272,76 @@
                     $("#player")[0].play();
                     $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
                 },
-                randomMusic:function(){
+                randomMusic: function () {
                     // 随机播放
-                    var randomNum = randomNumber(0,app.musicData.length-1);
+                    var randomNum = randomNumber(0, app.musicData.length - 1);
                     app.curSelectedIndex = randomNum;
-                    var selectedTr = $("table tr").get(app.curSelectedIndex+1);
+                    var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
                     app.playByIndex(selectedTr);
                 },
-                playMusic:function(id){
-                    $.each(app.musicData, function (i,row) {
-                        if (row.id == id){
+                playMusic: function (id) {
+                    $.each(app.musicData, function (i, row) {
+                        if (row.id == id) {
                             app.curSelectedIndex = i;
-                            var selectedTr = $("table tr").get(app.curSelectedIndex+1);
+                            var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
                             app.playByIndex(selectedTr);
                         }
                     })
                 },
-                deleteMusic:function(id) {
+                deleteMusic: function (id) {
                     //删除音乐
                     layer.confirm("确定删除吗?", {btn: ['确定', '取消'], title: "提示"},
-                        function (){
+                        function () {
                             $.ajax({
-                                type:"POST",
-                                url:rootUrl + "file/delFile.do",
-                                data:{id:id},
-                                success:function(result){
-                                    if (result == "success"){
+                                type: "POST",
+                                url: rootUrl + "file/delFile.do",
+                                data: {id: id},
+                                success: function (result) {
+                                    if (result == "success") {
                                         layer.msg("删除成功");
                                         app.queryMusicList();
                                     }
                                 }
                             });
                         }
-                        ,function (){layer.close()}
+                        , function () {
+                            layer.close()
+                        }
                     );
                 },
-                mouseEnter:function (music, index) {
+                mouseEnter: function (music, index) {
                     // 鼠标进入事件
-                    $.each($("#musicTable tr"), function(i,item){
+                    $.each($("#musicTable tr"), function (i, item) {
                         var itemId = $(item).children().eq(1).text();
-                        if (itemId == music.id && !$(item).hasClass("thClass") && !$(item).hasClass("selectRowClass")){
+                        if (itemId == music.id && !$(item).hasClass("thClass") && !$(item).hasClass("selectRowClass")) {
                             $(item).addClass("mouseonClass");
-                        }else {
+                        } else {
                             $(item).removeClass("mouseonClass");
                         }
                     });
                 },
-                mouseLeave:function (music, index) {
+                mouseLeave: function (music, index) {
                     // 鼠标离开事件  do nothing
                 },
-                showList: function (event){
+                showList: function (event) {
                     // 显示/隐藏播放列表
                     let target = event.currentTarget;
-                    if (app.showMode == 0){
+                    if (app.showMode == 0) {
                         $("#musicList").slideDown(500);
                         $(target).text($.ws.i18n("btn.hidelist.label"));
                         app.showMode = 1;
-                    }else{
+                    } else {
                         $("#musicList").slideUp(500);
                         $(target).text($.ws.i18n("btn.showlist.label"));
                         app.showMode = 0;
                     }
                 },
-                changePlayMode: function(event){
+                changePlayMode: function (event) {
                     // 改变播放模式
                     let target = event.currentTarget;
                     var modeVar = $(target).val();
                     app.playMode = modeVar;
-                },
+                }
             },
             created: function () {
                 this.queryMusicList();
@@ -330,31 +349,31 @@
         });
 
         // 刷新音乐列表
-        function refreash(){
+        function refreash() {
             window.location.href = window.location.href;
         }
 
         //上传文件校验
-        function verify(){
-            var uploadFiles=$("#fileInput").val();
-            if (uploadFiles == ""){
+        function verify() {
+            var uploadFiles = $("#fileInput").val();
+            if (uploadFiles == "") {
                 return false;
             }
-            layer.msg('正在上传文件，请稍候……', { icon: 16, shade: 0.2,shadeClose:false,time:300000 });
+            layer.msg('正在上传文件，请稍候……', {icon: 16, shade: 0.2, shadeClose: false, time: 300000});
             return true;
         }
 
-        $("#hidden_frame").load(function(){
-            var bodyText=$(this).contents().find("body").text();
+        $("#hidden_frame").load(function () {
+            var bodyText = $(this).contents().find("body").text();
             var uploadRes = JSON.parse(bodyText);
             var showText = "<div id='uploadResultDiv'>";
-            $.each(uploadRes,function(i,val) {
+            $.each(uploadRes, function (i, val) {
                 var filename = val.filename;
                 var uploadFlag = val.uploadFlag;
-                if (uploadFlag){
-                    showText += "<p><span style='width:82%;'>"+filename+"</span><span style='width:15%;color:blue;font-weight: bold;'>上传成功</span></p>";
-                }else{
-                    showText += "<p><span style='width:82%;'>"+filename+"</span><span style='width:15%;color:blue;font-weight: bold;'>上传失败</span></p>";
+                if (uploadFlag) {
+                    showText += "<p><span style='width:82%;'>" + filename + "</span><span style='width:15%;color:blue;font-weight: bold;'>上传成功</span></p>";
+                } else {
+                    showText += "<p><span style='width:82%;'>" + filename + "</span><span style='width:15%;color:blue;font-weight: bold;'>上传失败</span></p>";
                 }
             });
             showText += "</div>";
@@ -368,27 +387,27 @@
                 area: ['530px', '60%'],
                 content: showText
             });
-            setTimeout(refreash,3000);
+            setTimeout(refreash, 3000);
         });
 
         // 绑定事件
         Media = document.getElementById("player");
-        var eventTester = function(e){
-            Media.addEventListener(e,function(){
-                if (e == "ended"){
-                    if (app.playMode == 0){
+        var eventTester = function (e) {
+            Media.addEventListener(e, function () {
+                if (e == "ended") {
+                    if (app.playMode == 0) {
                         // 单曲循环
                         app.playStatus = 1;
                         app.play();
-                    }else if (app.playMode == 1){
+                    } else if (app.playMode == 1) {
                         //顺序播放
                         app.nextMusic();
-                    }else if (app.playMode == 2){
+                    } else if (app.playMode == 2) {
                         //随机播放
                         app.randomMusic();
                     }
-                }else if (e == "error"){
-                    if (app.playMode == 1 || app.playMode == 2){
+                } else if (e == "error") {
+                    if (app.playMode == 1 || app.playMode == 2) {
                         app.nextMusic();
                     }
                 }

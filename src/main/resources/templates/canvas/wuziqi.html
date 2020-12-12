@@ -6,15 +6,15 @@
         <script type="text/javascript" th:src="@{/js/jquery/newtool.js}"></script>
 
         <style type="text/css">
-            body{
-                margin:0;
-                padding:0;
+            body {
+                margin: 0;
+                padding: 0;
             }
 
-            button{
-                color:white;
-                background-color:green;
-                border-radius:10px 10px;
+            button {
+                color: white;
+                background-color: green;
+                border-radius: 10px 10px;
             }
 
         </style>
@@ -39,12 +39,12 @@
         canvas.width = 860;
         canvas.height = 660;
         var ctx = canvas.getContext("2d");
-        
+
         var rightCanvas = document.getElementById("rightCanvas");
         rightCanvas.width = 220;
         rightCanvas.height = 620;
         var rightCtx = rightCanvas.getContext("2d");
-        
+
         // 缓冲画布
         var bufferCanvas = document.createElement("canvas");
         bufferCanvas.width = canvas.width;
@@ -53,89 +53,89 @@
 
         var BORDER = 30;
         var DIV_SIZE = 42;
-        
+
         // 五子棋半径
-        var CHESS_R = DIV_SIZE/2-5;
-        
+        var CHESS_R = DIV_SIZE / 2 - 5;
+
         // 最大行,最大列
-        var MAX_ROW = (canvas.height-BORDER*2)/DIV_SIZE+1;
-        var MAX_COL = (canvas.width-BORDER*2)/DIV_SIZE+1;
-        
+        var MAX_ROW = (canvas.height - BORDER * 2) / DIV_SIZE + 1;
+        var MAX_COL = (canvas.width - BORDER * 2) / DIV_SIZE + 1;
+
         // 五子棋数组
         var FIVE_CHESS_ARR = new Array();
-        
+
         // 用于显示玩家可以放棋的位置
         var FIVE_CHESS_TEMP_ARR = new Array();
-        
+
         var LOADING_CHESS_ARR = new Array();
-        
+
         var LOADING_BALL_ARR = new Array();
-        
+
         // 上次下棋时间
         var LAST_CLICK_TIME = 0;
 
         // 游戏是否开始
-        var  IS_START = false;
+        var IS_START = false;
         // 游戏是否结束
         var IS_GAME_OVER = false;
         // 是否处于待机模式
         var IS_LOADING = true;
-        
+
         // 是否自动下棋
         var IS_AUTO_PLAY = false;
-        
+
         // 当前鼠标位置
         var CUR_POS = "(0,0)";
-        
+
         // 玩家ID
         var PLAYER1_ID = "1";
         var PLAYER2_ID = "2";
-        
+
         var PLAYER_CFG = {
-            "1":{
-                "name":"黄棋方",
-                "color":"yellow"
+            "1": {
+                "name": "黄棋方",
+                "color": "yellow"
             },
-            "2":{
-                "name":"蓝棋方",
-                "color":"blue"
+            "2": {
+                "name": "蓝棋方",
+                "color": "blue"
             }
         }
- 
+
         // 当前出棋方
-        var CUR_TURN = randomSpecifyNumber(PLAYER1_ID,PLAYER2_ID);
-        
+        var CUR_TURN = randomSpecifyNumber(PLAYER1_ID, PLAYER2_ID);
+
         // 用于玩家胜利时显示的棋子
         var WINNER_CHESS_ARR = new Array();
-        
-        function init(){
+
+        function init() {
             // 五子棋数组
             FIVE_CHESS_ARR = new Array();
-            
+
             // 用于显示玩家可以放棋的位置
             FIVE_CHESS_TEMP_ARR = new Array();
 
             // 游戏是否结束
             IS_GAME_OVER = false;
             IS_LOADING = false;
-            
+
             // 是否处于待机模式
             var IS_LOADING = false;
-            
+
             // 当前出棋方
-            CUR_TURN = randomSpecifyNumber(PLAYER1_ID,PLAYER2_ID);
-            
+            CUR_TURN = randomSpecifyNumber(PLAYER1_ID, PLAYER2_ID);
+
             // 上次下棋时间
             LAST_CLICK_TIME = 0;
-            
+
             LOADING_BALL_ARR = new Array();
-            
+
             // 用于玩家胜利时显示的棋子
-            WINNER_CHESS_ARR = new Array();        
+            WINNER_CHESS_ARR = new Array();
         }
-        
+
         // 棋类
-        function Chess(id,x,y,r,vx,vy,color,transparent,isSelected){
+        function Chess(id, x, y, r, vx, vy, color, transparent, isSelected) {
             this.id = id;
             this.x = x;
             this.y = y;
@@ -143,75 +143,75 @@
             this.vx = vx;
             this.vy = vy;
             this.color = color;
-            this.transparent = transparent||1;
-            this.isSelected = isSelected||false;
-            
+            this.transparent = transparent || 1;
+            this.isSelected = isSelected || false;
+
             this.t = 0;
-            
-            this.draw = function(){
+
+            this.draw = function () {
                 ctx.beginPath();
                 ctx.save();
                 ctx.globalAlpha = this.transparent;
                 ctx.strokeStyle = "black";
                 ctx.fillStyle = this.color;
-                ctx.arc(this.x,this.y,this.r,0,2*Math.PI,false);
+                ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
                 ctx.fill();
                 ctx.stroke();
                 ctx.restore();
                 ctx.closePath();
-                
-                if (this.isSelected){
-                
+
+                if (this.isSelected) {
+
                     ctx.beginPath();
                     ctx.strokeStyle = "red";
-                    ctx.rect(x-r-5,y-r-5,2*r+10,2*r+10);
-                    if (this.t % 2 == 0){
+                    ctx.rect(x - r - 5, y - r - 5, 2 * r + 10, 2 * r + 10);
+                    if (this.t % 2 == 0) {
                         ctx.stroke();
                     }
                     ctx.closePath();
-                    
-                    if (G_CYCLE % 40 == 0){
+
+                    if (G_CYCLE % 40 == 0) {
                         this.t++;
                     }
                 }
             }
 
-            this.update = function(){
+            this.update = function () {
                 this.x += this.vx;
                 this.y += this.vy;
-                if (this.x < BORDER){
+                if (this.x < BORDER) {
                     this.x = BORDER;
                     this.vx = -this.vx;
                     this.color = randomRgb();
                 }
-                if (this.x > canvas.width-BORDER){
-                    this.x = canvas.width-BORDER;
+                if (this.x > canvas.width - BORDER) {
+                    this.x = canvas.width - BORDER;
                     this.vx = -this.vx;
                     this.color = randomRgb();
                 }
-                
-                if (this.y < BORDER){
+
+                if (this.y < BORDER) {
                     this.y = BORDER;
                     this.vy = -this.vy;
                     this.color = randomRgb();
                 }
-                
-                if (this.y > canvas.height-BORDER){
-                    this.y = canvas.height-BORDER;
+
+                if (this.y > canvas.height - BORDER) {
+                    this.y = canvas.height - BORDER;
                     this.vy = -this.vy;
                     this.color = randomRgb();
                 }
                 this.draw();
             }
         }
-        
-        function Point(x,y){
+
+        function Point(x, y) {
             this.x = x;
             this.y = y;
         }
-        
+
         // 正弦运动的球
-        function Ball(r,sAngle,dAngle,srcX,srcY,width,height,color){
+        function Ball(r, sAngle, dAngle, srcX, srcY, width, height, color) {
             this.r = r;
             this.sAngle = sAngle;
             this.dAngle = dAngle;
@@ -220,41 +220,41 @@
             this.width = width;
             this.height = height;
             this.color = color;
-            
+
             this.x = 0;
             this.y = 0;
-            
-            this.lastX=srcX;
-            this.lastY=srcY;
+
+            this.lastX = srcX;
+            this.lastY = srcY;
             this.pointArr = new Array();
-            this.draw = function(){
+            this.draw = function () {
                 ctx.beginPath();
                 ctx.strokeStyle = this.color;
                 ctx.fillStyle = this.color;
-                ctx.arc(this.x+this.srcX,this.y+this.srcY,this.r,0,2*Math.PI,false);
+                ctx.arc(this.x + this.srcX, this.y + this.srcY, this.r, 0, 2 * Math.PI, false);
                 ctx.fill();
-                
-                if (this.pointArr.length >= 2){
-                    ctx.lineWidth=2;
-                    for (var i=0;i<this.pointArr.length-1;i++){
-                        ctx.moveTo(this.pointArr[i].x,this.pointArr[i].y);
-                        ctx.lineTo(this.pointArr[i+1].x,this.pointArr[i+1].y);
+
+                if (this.pointArr.length >= 2) {
+                    ctx.lineWidth = 2;
+                    for (var i = 0; i < this.pointArr.length - 1; i++) {
+                        ctx.moveTo(this.pointArr[i].x, this.pointArr[i].y);
+                        ctx.lineTo(this.pointArr[i + 1].x, this.pointArr[i + 1].y);
                     }
                 }
                 ctx.stroke();
                 ctx.closePath();
             }
-            
-            this.update = function(){
-                this.lastX = this.x+this.srcX;
-                this.lastY = this.y+this.srcY;
-                this.pointArr.push(new Point(this.lastX,this.lastY));
-                
+
+            this.update = function () {
+                this.lastX = this.x + this.srcX;
+                this.lastY = this.y + this.srcY;
+                this.pointArr.push(new Point(this.lastX, this.lastY));
+
                 this.sAngle += this.dAngle;
-                this.x = this.sAngle*this.width;
-                this.y = Math.sin(this.sAngle)*this.height;
-                
-                if (this.x+this.srcX <0 || this.x+this.srcX > canvas.width || this.y+this.srcY <0 || this.y+this.srcY > canvas.height){
+                this.x = this.sAngle * this.width;
+                this.y = Math.sin(this.sAngle) * this.height;
+
+                if (this.x + this.srcX < 0 || this.x + this.srcX > canvas.width || this.y + this.srcY < 0 || this.y + this.srcY > canvas.height) {
                     LOADING_BALL_ARR.removeArrElement(this);
                 }
                 this.draw();
@@ -262,23 +262,23 @@
         }
 
         // 绑定画布的点击事件
-        canvas.onclick = function(event){
-            if (!IS_START || IS_GAME_OVER){
+        canvas.onclick = function (event) {
+            if (!IS_START || IS_GAME_OVER) {
                 return;
             }
 
-            if (FIVE_CHESS_TEMP_ARR.length > 0 && !checkChessExist(FIVE_CHESS_TEMP_ARR[0].x,FIVE_CHESS_TEMP_ARR[0].y) ){
+            if (FIVE_CHESS_TEMP_ARR.length > 0 && !checkChessExist(FIVE_CHESS_TEMP_ARR[0].x, FIVE_CHESS_TEMP_ARR[0].y)) {
                 LAST_CLICK_TIME = G_CYCLE;
                 IS_LOADING = false;
-                FIVE_CHESS_ARR.push(new Chess(CUR_TURN,FIVE_CHESS_TEMP_ARR[0].x,FIVE_CHESS_TEMP_ARR[0].y,CHESS_R,0,0,PLAYER_CFG[CUR_TURN].color,1));
+                FIVE_CHESS_ARR.push(new Chess(CUR_TURN, FIVE_CHESS_TEMP_ARR[0].x, FIVE_CHESS_TEMP_ARR[0].y, CHESS_R, 0, 0, PLAYER_CFG[CUR_TURN].color, 1));
                 // 对棋子进行排序
                 sortChess();
-                
+
                 // 检查玩家是否赢了
                 var isVictory = checkChessIsFive();
-                if (isVictory){
-                    console.log("玩家"+CUR_TURN + "赢了!");
-                    for (var g=0;g<WINNER_CHESS_ARR.length;g++){
+                if (isVictory) {
+                    console.log("玩家" + CUR_TURN + "赢了!");
+                    for (var g = 0; g < WINNER_CHESS_ARR.length; g++) {
                         WINNER_CHESS_ARR[g].isSelected = true;
                     }
                     IS_START = false;
@@ -286,103 +286,103 @@
                     IS_LOADING = false;
                 }
 
-                if (CUR_TURN == PLAYER1_ID){
+                if (CUR_TURN == PLAYER1_ID) {
                     CUR_TURN = PLAYER2_ID;
-                }else{
+                } else {
                     CUR_TURN = PLAYER1_ID;
                 }
             }
         }
-        
-        function autoPlay(){
-            if (!IS_START || IS_GAME_OVER || !IS_AUTO_PLAY){
+
+        function autoPlay() {
+            if (!IS_START || IS_GAME_OVER || !IS_AUTO_PLAY) {
                 return;
             }
 
-            while (true){
-                var r = randomNumber(0,MAX_ROW);
-                var c = randomNumber(0,MAX_COL);
-                var x = BORDER + c*DIV_SIZE;
-                var y = BORDER + r*DIV_SIZE;
-                
-                if (!checkChessExist(x,y)){
-                    FIVE_CHESS_ARR.push(new Chess(CUR_TURN,x,y,CHESS_R,0,0,PLAYER_CFG[CUR_TURN].color,1));
-                    
+            while (true) {
+                var r = randomNumber(0, MAX_ROW);
+                var c = randomNumber(0, MAX_COL);
+                var x = BORDER + c * DIV_SIZE;
+                var y = BORDER + r * DIV_SIZE;
+
+                if (!checkChessExist(x, y)) {
+                    FIVE_CHESS_ARR.push(new Chess(CUR_TURN, x, y, CHESS_R, 0, 0, PLAYER_CFG[CUR_TURN].color, 1));
+
                     // 对棋子进行排序
                     sortChess();
-                    
+
                     // 检查玩家是否赢了
                     var isVictory = checkChessIsFive();
-                    if (isVictory){
-                        console.log("玩家"+CUR_TURN + "赢了!");
-                        for (var g=0;g<WINNER_CHESS_ARR.length;g++){
+                    if (isVictory) {
+                        console.log("玩家" + CUR_TURN + "赢了!");
+                        for (var g = 0; g < WINNER_CHESS_ARR.length; g++) {
                             WINNER_CHESS_ARR[g].isSelected = true;
                         }
                         IS_START = false;
                         IS_GAME_OVER = true;
                     }
 
-                    if (CUR_TURN == PLAYER1_ID){
+                    if (CUR_TURN == PLAYER1_ID) {
                         CUR_TURN = PLAYER2_ID;
-                    }else{
+                    } else {
                         CUR_TURN = PLAYER1_ID;
                     }
-                    
+
                     break;
                 }
             }
-            
-            if (IS_GAME_OVER){
-                setTimeout(function(){
+
+            if (IS_GAME_OVER) {
+                setTimeout(function () {
                     $("#startBtn").click();
-                },2000);
+                }, 2000);
             }
         }
-        
+
         // 鼠标移动事件
-        $("#canvas").mousemove(function(event){
-            if (!IS_START || IS_GAME_OVER){
+        $("#canvas").mousemove(function (event) {
+            if (!IS_START || IS_GAME_OVER) {
                 return;
             }
             IS_LOADING = false;
             var canvasObj = document.getElementById("canvas");
             var offleft = canvasObj.offsetLeft;
             var offtop = canvasObj.offsetTop;
-            
+
             var clientX = event.clientX;
             var clientY = event.clientY;
-            
-            var mouseX = clientX-offleft;
-            var mouseY = clientY-offtop;
 
-            for (var r=0;r<MAX_ROW;r++){
-                for (var c=0;c<MAX_COL;c++){
-                    var x = BORDER + c*DIV_SIZE;
-                    var y =  BORDER+r*DIV_SIZE;
-                    
-                    var distance = getTwoPointDistance(mouseX,mouseY,x,y);
-                    if (distance <= CHESS_R){
+            var mouseX = clientX - offleft;
+            var mouseY = clientY - offtop;
+
+            for (var r = 0; r < MAX_ROW; r++) {
+                for (var c = 0; c < MAX_COL; c++) {
+                    var x = BORDER + c * DIV_SIZE;
+                    var y = BORDER + r * DIV_SIZE;
+
+                    var distance = getTwoPointDistance(mouseX, mouseY, x, y);
+                    if (distance <= CHESS_R) {
                         LAST_CLICK_TIME = G_CYCLE;
-                        CUR_POS = "("+x+","+y+")";
-                        if (!checkChessExist(x,y)){
+                        CUR_POS = "(" + x + "," + y + ")";
+                        if (!checkChessExist(x, y)) {
                             FIVE_CHESS_TEMP_ARR = new Array();
-                            FIVE_CHESS_TEMP_ARR.push(new Chess(CUR_TURN,x,y,CHESS_R,0,0,PLAYER_CFG[CUR_TURN].color,0.3));
+                            FIVE_CHESS_TEMP_ARR.push(new Chess(CUR_TURN, x, y, CHESS_R, 0, 0, PLAYER_CFG[CUR_TURN].color, 0.3));
                         }
                         break;
                     }
                 }
-            }                          
+            }
         })
-        
+
         // 检查指定位置是否可以放棋
-        function checkChessExist(x,y){
+        function checkChessExist(x, y) {
             var isExist = false;
-            for (var i=0;i<FIVE_CHESS_ARR.length;i++){
-                if (FIVE_CHESS_ARR[i].x < BORDER || FIVE_CHESS_ARR[i].x > canvas.width-BORDER || FIVE_CHESS_ARR[i].y<BORDER || FIVE_CHESS_ARR[i].y>canvas.height-BORDER){
+            for (var i = 0; i < FIVE_CHESS_ARR.length; i++) {
+                if (FIVE_CHESS_ARR[i].x < BORDER || FIVE_CHESS_ARR[i].x > canvas.width - BORDER || FIVE_CHESS_ARR[i].y < BORDER || FIVE_CHESS_ARR[i].y > canvas.height - BORDER) {
                     break;
                 }
 
-                if (FIVE_CHESS_ARR[i].x == x && FIVE_CHESS_ARR[i].y == y){
+                if (FIVE_CHESS_ARR[i].x == x && FIVE_CHESS_ARR[i].y == y) {
                     isExist = true;
                     break;
                 }
@@ -390,419 +390,418 @@
 
             return isExist;
         }
-        
+
         // 检查指定玩家是否存在指定位置的棋子
-        function checkChessExistExt(id,x,y){
+        function checkChessExistExt(id, x, y) {
             var isExist = false;
-            for (var i=0;i<FIVE_CHESS_ARR.length;i++){
-                if (FIVE_CHESS_ARR[i].id == id){
-                    if (FIVE_CHESS_ARR[i].x < BORDER || FIVE_CHESS_ARR[i].x > canvas.width-BORDER || FIVE_CHESS_ARR[i].y<BORDER || FIVE_CHESS_ARR[i].y>canvas.height-BORDER){
+            for (var i = 0; i < FIVE_CHESS_ARR.length; i++) {
+                if (FIVE_CHESS_ARR[i].id == id) {
+                    if (FIVE_CHESS_ARR[i].x < BORDER || FIVE_CHESS_ARR[i].x > canvas.width - BORDER || FIVE_CHESS_ARR[i].y < BORDER || FIVE_CHESS_ARR[i].y > canvas.height - BORDER) {
                         break;
                     }
                 }
-                
-                if (FIVE_CHESS_ARR[i].id == id && FIVE_CHESS_ARR[i].x == x && FIVE_CHESS_ARR[i].y == y){
+
+                if (FIVE_CHESS_ARR[i].id == id && FIVE_CHESS_ARR[i].x == x && FIVE_CHESS_ARR[i].y == y) {
                     isExist = true;
                     break;
                 }
             }
-            
+
             return isExist;
         }
-        
+
         // 显示当前出棋方
-        function showCurPlayer(){
+        function showCurPlayer() {
             var playerName;
-            if (IS_START){
+            if (IS_START) {
                 playerName = PLAYER_CFG[CUR_TURN].name;
             }
-            
+
             $("#curPlayer").text(playerName);
         }
-        
+
         // 对棋子排序
-        function sortChess(){
-            FIVE_CHESS_ARR.sort(function(a,b){
-                return (a.x-b.x)&&(a.y-b.y);
+        function sortChess() {
+            FIVE_CHESS_ARR.sort(function (a, b) {
+                return (a.x - b.x) && (a.y - b.y);
             });
         }
-        
+
         // 获取指定位置的棋子对象
-        function getChessByXY(id,x,y){
-            for (var i=0;i<FIVE_CHESS_ARR.length;i++){
-                if (FIVE_CHESS_ARR[i].id == id && FIVE_CHESS_ARR[i].x == x && FIVE_CHESS_ARR[i].y == y){
+        function getChessByXY(id, x, y) {
+            for (var i = 0; i < FIVE_CHESS_ARR.length; i++) {
+                if (FIVE_CHESS_ARR[i].id == id && FIVE_CHESS_ARR[i].x == x && FIVE_CHESS_ARR[i].y == y) {
                     return FIVE_CHESS_ARR[i];
                 }
             }
         }
-        
+
         // 检查玩家是否赢了
-        function checkChessIsFive(){
+        function checkChessIsFive() {
             var isVictory = false;
-            for (var i=0;i<FIVE_CHESS_ARR.length;i++){
-                if (FIVE_CHESS_ARR[i].id == CUR_TURN){
+            for (var i = 0; i < FIVE_CHESS_ARR.length; i++) {
+                if (FIVE_CHESS_ARR[i].id == CUR_TURN) {
                     // 检查左边四个
                     var cnt = 0;
-                    for (var x=FIVE_CHESS_ARR[i].x-4*DIV_SIZE;x<FIVE_CHESS_ARR[i].x;x+=DIV_SIZE){
-                        if (!checkChessExistExt(CUR_TURN,x,FIVE_CHESS_ARR[i].y)){
+                    for (var x = FIVE_CHESS_ARR[i].x - 4 * DIV_SIZE; x < FIVE_CHESS_ARR[i].x; x += DIV_SIZE) {
+                        if (!checkChessExistExt(CUR_TURN, x, FIVE_CHESS_ARR[i].y)) {
                             break;
                         }
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,x,FIVE_CHESS_ARR[i].y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, x, FIVE_CHESS_ARR[i].y));
                         cnt++;
                     }
-                    if (cnt == 4){
+                    if (cnt == 4) {
                         isVictory = true;
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,FIVE_CHESS_ARR[i].x,FIVE_CHESS_ARR[i].y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, FIVE_CHESS_ARR[i].x, FIVE_CHESS_ARR[i].y));
                         console.log("左边4个");
                         break;
                     }
-                    
+
                     // 检查右边四个
                     cnt = 0;
                     WINNER_CHESS_ARR = new Array();
-                    for (var x=FIVE_CHESS_ARR[i].x+DIV_SIZE;x<=FIVE_CHESS_ARR[i].x+4*DIV_SIZE;x+=DIV_SIZE){
-                        if (!checkChessExistExt(CUR_TURN,x,FIVE_CHESS_ARR[i].y)){
+                    for (var x = FIVE_CHESS_ARR[i].x + DIV_SIZE; x <= FIVE_CHESS_ARR[i].x + 4 * DIV_SIZE; x += DIV_SIZE) {
+                        if (!checkChessExistExt(CUR_TURN, x, FIVE_CHESS_ARR[i].y)) {
                             break;
                         }
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,x,FIVE_CHESS_ARR[i].y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, x, FIVE_CHESS_ARR[i].y));
                         cnt++;
                     }
-                    if (cnt == 4){
+                    if (cnt == 4) {
                         isVictory = true;
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,FIVE_CHESS_ARR[i].x,FIVE_CHESS_ARR[i].y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, FIVE_CHESS_ARR[i].x, FIVE_CHESS_ARR[i].y));
                         console.log("右边4个");
                         break;
                     }
-                    
+
                     // 检查上面四个
                     cnt = 0;
                     WINNER_CHESS_ARR = new Array();
-                    for (var y=FIVE_CHESS_ARR[i].x-4*DIV_SIZE;y<FIVE_CHESS_ARR[i].y;y+=DIV_SIZE){
-                        if (!checkChessExistExt(CUR_TURN,FIVE_CHESS_ARR[i].x,y)){
+                    for (var y = FIVE_CHESS_ARR[i].x - 4 * DIV_SIZE; y < FIVE_CHESS_ARR[i].y; y += DIV_SIZE) {
+                        if (!checkChessExistExt(CUR_TURN, FIVE_CHESS_ARR[i].x, y)) {
                             break;
                         }
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,FIVE_CHESS_ARR[i].x,y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, FIVE_CHESS_ARR[i].x, y));
                         cnt++;
                     }
-                    if (cnt == 4){
+                    if (cnt == 4) {
                         isVictory = true;
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,FIVE_CHESS_ARR[i].x,FIVE_CHESS_ARR[i].y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, FIVE_CHESS_ARR[i].x, FIVE_CHESS_ARR[i].y));
                         console.log("上边4个");
                         break;
                     }
-                    
+
                     // 检查下面四个
                     cnt = 0;
                     WINNER_CHESS_ARR = new Array();
-                    for (var y=FIVE_CHESS_ARR[i].y+DIV_SIZE;y<=FIVE_CHESS_ARR[i].y+4*DIV_SIZE;y+=DIV_SIZE){
-                        if (!checkChessExistExt(CUR_TURN,FIVE_CHESS_ARR[i].x,y)){
+                    for (var y = FIVE_CHESS_ARR[i].y + DIV_SIZE; y <= FIVE_CHESS_ARR[i].y + 4 * DIV_SIZE; y += DIV_SIZE) {
+                        if (!checkChessExistExt(CUR_TURN, FIVE_CHESS_ARR[i].x, y)) {
                             break;
                         }
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,FIVE_CHESS_ARR[i].x,y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, FIVE_CHESS_ARR[i].x, y));
                         cnt++;
                     }
-                    if (cnt == 4){
+                    if (cnt == 4) {
                         isVictory = true;
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,FIVE_CHESS_ARR[i].x,FIVE_CHESS_ARR[i].y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, FIVE_CHESS_ARR[i].x, FIVE_CHESS_ARR[i].y));
                         console.log("下边4个");
                         break;
                     }
-                    
+
                     // 检查左上角四个
                     cnt = 0;
                     WINNER_CHESS_ARR = new Array();
-                    for (var k=0;k<4;k++){
-                        var tempX = FIVE_CHESS_ARR[i].x-(k+1)*DIV_SIZE;
-                        var tempY = FIVE_CHESS_ARR[i].y-(k+1)*DIV_SIZE;
-                        
-                        if (!checkChessExistExt(CUR_TURN,tempX,tempY)){
+                    for (var k = 0; k < 4; k++) {
+                        var tempX = FIVE_CHESS_ARR[i].x - (k + 1) * DIV_SIZE;
+                        var tempY = FIVE_CHESS_ARR[i].y - (k + 1) * DIV_SIZE;
+
+                        if (!checkChessExistExt(CUR_TURN, tempX, tempY)) {
                             break;
                         }
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,tempX,tempY));
-                        cnt++; 
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, tempX, tempY));
+                        cnt++;
                     }
-                    if (cnt == 4){
+                    if (cnt == 4) {
                         isVictory = true;
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,FIVE_CHESS_ARR[i].x,FIVE_CHESS_ARR[i].y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, FIVE_CHESS_ARR[i].x, FIVE_CHESS_ARR[i].y));
                         console.log("左上角4个");
                         break;
-                    }                    
-                    
+                    }
+
                     // 检查右上角四个
                     cnt = 0;
                     WINNER_CHESS_ARR = new Array();
-                    for (var k=0;k<4;k++){
-                        var tempX = FIVE_CHESS_ARR[i].x+(k+1)*DIV_SIZE;
-                        var tempY = FIVE_CHESS_ARR[i].y-(k+1)*DIV_SIZE;
-                        
-                        if (!checkChessExistExt(CUR_TURN,tempX,tempY)){
+                    for (var k = 0; k < 4; k++) {
+                        var tempX = FIVE_CHESS_ARR[i].x + (k + 1) * DIV_SIZE;
+                        var tempY = FIVE_CHESS_ARR[i].y - (k + 1) * DIV_SIZE;
+
+                        if (!checkChessExistExt(CUR_TURN, tempX, tempY)) {
                             break;
                         }
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,tempX,tempY));
-                        cnt++; 
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, tempX, tempY));
+                        cnt++;
                     }
-                    if (cnt == 4){
+                    if (cnt == 4) {
                         isVictory = true;
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,FIVE_CHESS_ARR[i].x,FIVE_CHESS_ARR[i].y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, FIVE_CHESS_ARR[i].x, FIVE_CHESS_ARR[i].y));
                         console.log("右上角4个");
                         break;
-                    }  
-                    
+                    }
+
                     // 检查左下角四个
                     cnt = 0;
                     WINNER_CHESS_ARR = new Array();
-                    for (var k=0;k<4;k++){
-                        var tempX = FIVE_CHESS_ARR[i].x-(k+1)*DIV_SIZE;
-                        var tempY = FIVE_CHESS_ARR[i].y+(k+1)*DIV_SIZE;
-                        
-                        if (!checkChessExistExt(CUR_TURN,tempX,tempY)){
+                    for (var k = 0; k < 4; k++) {
+                        var tempX = FIVE_CHESS_ARR[i].x - (k + 1) * DIV_SIZE;
+                        var tempY = FIVE_CHESS_ARR[i].y + (k + 1) * DIV_SIZE;
+
+                        if (!checkChessExistExt(CUR_TURN, tempX, tempY)) {
                             break;
                         }
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,tempX,tempY));
-                        cnt++; 
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, tempX, tempY));
+                        cnt++;
                     }
-                    if (cnt == 4){
+                    if (cnt == 4) {
                         isVictory = true;
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,FIVE_CHESS_ARR[i].x,FIVE_CHESS_ARR[i].y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, FIVE_CHESS_ARR[i].x, FIVE_CHESS_ARR[i].y));
                         console.log("左下角4个");
                         break;
-                    }  
-                    
+                    }
+
                     // 检查右下角四个
                     cnt = 0;
                     WINNER_CHESS_ARR = new Array();
-                    for (var k=0;k<4;k++){
-                        var tempX = FIVE_CHESS_ARR[i].x+(k+1)*DIV_SIZE;
-                        var tempY = FIVE_CHESS_ARR[i].y+(k+1)*DIV_SIZE;
-                        
-                        if (!checkChessExistExt(CUR_TURN,tempX,tempY)){
+                    for (var k = 0; k < 4; k++) {
+                        var tempX = FIVE_CHESS_ARR[i].x + (k + 1) * DIV_SIZE;
+                        var tempY = FIVE_CHESS_ARR[i].y + (k + 1) * DIV_SIZE;
+
+                        if (!checkChessExistExt(CUR_TURN, tempX, tempY)) {
                             break;
                         }
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,tempX,tempY));
-                        cnt++; 
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, tempX, tempY));
+                        cnt++;
                     }
-                    if (cnt == 4){
+                    if (cnt == 4) {
                         isVictory = true;
-                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN,FIVE_CHESS_ARR[i].x,FIVE_CHESS_ARR[i].y));
+                        WINNER_CHESS_ARR.push(getChessByXY(CUR_TURN, FIVE_CHESS_ARR[i].x, FIVE_CHESS_ARR[i].y));
                         console.log("右下角4个");
                         break;
                     }
                 }
             }
-            
+
             return isVictory;
         }
-        
+
         // 初始化面板
-        function initPanel(){
-            for (var r=0;r<MAX_ROW;r++){
+        function initPanel() {
+            for (var r = 0; r < MAX_ROW; r++) {
                 var startX = BORDER;
-                var startY = BORDER+r*DIV_SIZE;
+                var startY = BORDER + r * DIV_SIZE;
                 bufferCxt.beginPath();
                 bufferCxt.strokeStyle = "white";
-                bufferCxt.moveTo(startX,startY);
-                bufferCxt.lineTo(bufferCanvas.width-BORDER,startY);
+                bufferCxt.moveTo(startX, startY);
+                bufferCxt.lineTo(bufferCanvas.width - BORDER, startY);
                 bufferCxt.stroke();
                 bufferCxt.closePath();
-                
+
                 bufferCxt.beginPath();
                 bufferCxt.strokeStyle = "black";
-                bufferCxt.strokeText((r+1),2,startY+5);
+                bufferCxt.strokeText((r + 1), 2, startY + 5);
                 bufferCxt.stroke();
                 bufferCxt.closePath();
             }
-            
-            for (var c=0;c<MAX_COL;c++){
-                var startX = BORDER+c*DIV_SIZE;
+
+            for (var c = 0; c < MAX_COL; c++) {
+                var startX = BORDER + c * DIV_SIZE;
                 var startY = BORDER;
                 bufferCxt.beginPath();
                 bufferCxt.strokeStyle = "white";
-                bufferCxt.moveTo(startX,startY);
-                bufferCxt.lineTo(startX,bufferCanvas.height-BORDER);
+                bufferCxt.moveTo(startX, startY);
+                bufferCxt.lineTo(startX, bufferCanvas.height - BORDER);
                 bufferCxt.stroke();
                 bufferCxt.closePath();
-                
+
                 bufferCxt.beginPath();
                 bufferCxt.strokeStyle = "black";
-                bufferCxt.strokeText((c+1),startX-5,13);
+                bufferCxt.strokeText((c + 1), startX - 5, 13);
                 bufferCxt.stroke();
                 bufferCxt.closePath();
             }
-            
-            for (var r=1;r<MAX_ROW-1;r++){
-                for (var c=1;c<MAX_COL-1;c++){
-                    var x = BORDER + c*DIV_SIZE;
-                    var y = BORDER + r*DIV_SIZE;
+
+            for (var r = 1; r < MAX_ROW - 1; r++) {
+                for (var c = 1; c < MAX_COL - 1; c++) {
+                    var x = BORDER + c * DIV_SIZE;
+                    var y = BORDER + r * DIV_SIZE;
                     bufferCxt.beginPath();
                     bufferCxt.fillStyle = "grey";
-                    bufferCxt.arc(x,y,2,0,2*Math.PI,false);
+                    bufferCxt.arc(x, y, 2, 0, 2 * Math.PI, false);
                     bufferCxt.fill();
                     bufferCxt.closePath();
                 }
             }
         }
-  
+
         // 绘制右侧画布
-        function drawRightCanvas(){
+        function drawRightCanvas() {
             rightCtx.beginPath();
-            rightCtx.strokeStyle="white";
+            rightCtx.strokeStyle = "white";
             rightCtx.font = "normal normal 23px 宋体";
-            rightCtx.strokeText("当前出棋方:",5,50);
-            rightCtx.strokeText("当前坐标:",5,90);
-            rightCtx.strokeText(CUR_POS,115,90);
-            
-            
+            rightCtx.strokeText("当前出棋方:", 5, 50);
+            rightCtx.strokeText("当前坐标:", 5, 90);
+            rightCtx.strokeText(CUR_POS, 115, 90);
+
             rightCtx.stroke();
-            
+
             rightCtx.fillStyle = PLAYER_CFG[CUR_TURN].color;
-            rightCtx.arc(160,40,CHESS_R-5,0,2*Math.PI,false);
+            rightCtx.arc(160, 40, CHESS_R - 5, 0, 2 * Math.PI, false);
             rightCtx.fill();
             rightCtx.closePath();
-            
+
             // 绘制胜利提示语
-            if (WINNER_CHESS_ARR.length == 5){
+            if (WINNER_CHESS_ARR.length == 5) {
                 rightCtx.beginPath();
-                rightCtx.strokeStyle=PLAYER_CFG[WINNER_CHESS_ARR[0].id].color;
+                rightCtx.strokeStyle = PLAYER_CFG[WINNER_CHESS_ARR[0].id].color;
                 var winnerName = PLAYER_CFG[WINNER_CHESS_ARR[0].id].name;
-                rightCtx.strokeText(winnerName+"胜利",40,400);
+                rightCtx.strokeText(winnerName + "胜利", 40, 400);
                 rightCtx.stroke();
             }
-            
+
             // 绘制玩家1已下的棋子数
             rightCtx.beginPath();
             rightCtx.fillStyle = PLAYER_CFG[PLAYER1_ID].color;
-            rightCtx.arc(25,130,CHESS_R-5,0,2*Math.PI,false);
-            rightCtx.fill();            
+            rightCtx.arc(25, 130, CHESS_R - 5, 0, 2 * Math.PI, false);
+            rightCtx.fill();
             rightCtx.closePath();
-            
-            var player1ChessNum=0,player2ChessNum=0;
-            for (var i=0;i<FIVE_CHESS_ARR.length;i++){
-                if (FIVE_CHESS_ARR[i].id == PLAYER1_ID){
+
+            var player1ChessNum = 0, player2ChessNum = 0;
+            for (var i = 0; i < FIVE_CHESS_ARR.length; i++) {
+                if (FIVE_CHESS_ARR[i].id == PLAYER1_ID) {
                     player1ChessNum++;
                 }
             }
-            player2ChessNum = FIVE_CHESS_ARR.length-player1ChessNum;
-            
+            player2ChessNum = FIVE_CHESS_ARR.length - player1ChessNum;
+
             rightCtx.beginPath();
-            rightCtx.strokeStyle="white";
+            rightCtx.strokeStyle = "white";
             rightCtx.font = "normal normal 23px 宋体";
-            rightCtx.strokeText(": "+player1ChessNum,55,135);
+            rightCtx.strokeText(": " + player1ChessNum, 55, 135);
             rightCtx.stroke();
             rightCtx.closePath();
-            
+
             // 绘制玩家2已下的棋子数
             rightCtx.beginPath();
             rightCtx.fillStyle = PLAYER_CFG[PLAYER2_ID].color;
-            rightCtx.arc(25,180,CHESS_R-5,0,2*Math.PI,false);
-            rightCtx.fill();              
+            rightCtx.arc(25, 180, CHESS_R - 5, 0, 2 * Math.PI, false);
+            rightCtx.fill();
             rightCtx.closePath();
-            
+
             rightCtx.beginPath();
-            rightCtx.strokeStyle="white";
+            rightCtx.strokeStyle = "white";
             rightCtx.font = "normal normal 23px 宋体";
-            rightCtx.strokeText(": "+player2ChessNum,55,185);
+            rightCtx.strokeText(": " + player2ChessNum, 55, 185);
             rightCtx.stroke();
             rightCtx.closePath();
         }
-  
+
         // 待机动画
-        function loadingAnimate(){
-            if (false){
-                for (var r=0;r<MAX_ROW;r++){
+        function loadingAnimate() {
+            if (false) {
+                for (var r = 0; r < MAX_ROW; r++) {
                     var startX = BORDER;
-                    var startY = BORDER+r*DIV_SIZE;
-                    
-                    var dx = randomNumber(3,8);
-                    var chess = new Chess("3",startX,startY,CHESS_R,dx,0,randomRgb(),1,false);
+                    var startY = BORDER + r * DIV_SIZE;
+
+                    var dx = randomNumber(3, 8);
+                    var chess = new Chess("3", startX, startY, CHESS_R, dx, 0, randomRgb(), 1, false);
                     LOADING_CHESS_ARR.push(chess);
                 }
-                
-                for (var c=0;c<MAX_COL;c++){
-                    var startX = BORDER+c*DIV_SIZE;
+
+                for (var c = 0; c < MAX_COL; c++) {
+                    var startX = BORDER + c * DIV_SIZE;
                     var startY = BORDER;
-                    
-                    var dy = randomNumber(3,8);
-                    var chess = new Chess("3",startX,startY,CHESS_R,0,dy,randomRgb(),1,false);
+
+                    var dy = randomNumber(3, 8);
+                    var chess = new Chess("3", startX, startY, CHESS_R, 0, dy, randomRgb(), 1, false);
                     LOADING_CHESS_ARR.push(chess);
                 }
             }
-            
-            for (var r=1;r<MAX_ROW;r+=2){
+
+            for (var r = 1; r < MAX_ROW; r += 2) {
                 var startX = BORDER;
-                var startY = BORDER+r*DIV_SIZE;
-                
+                var startY = BORDER + r * DIV_SIZE;
+
                 //var sAngle = randomFloat(0,Math.PI*2,2);
-                var dAngle = Math.PI/36;
-                var width = randomNumber(10,20);
-                var height = randomNumber(10,50);
+                var dAngle = Math.PI / 36;
+                var width = randomNumber(10, 20);
+                var height = randomNumber(10, 50);
                 var color = randomRgb();
-                var ball = new Ball(20,0,dAngle,startX,startY,width,height,color);
+                var ball = new Ball(20, 0, dAngle, startX, startY, width, height, color);
                 LOADING_BALL_ARR.push(ball);
             }
         }
         // 初始化棋盘
         initPanel();
         loadingAnimate();
-        var G_CYCLE=1;
-        function animate(){
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            rightCtx.clearRect(0,0,rightCanvas.width,rightCanvas.height);
+        var G_CYCLE = 1;
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            rightCtx.clearRect(0, 0, rightCanvas.width, rightCanvas.height);
             requestAnimationFrame(animate);
 
             // 绘制棋盘
-            ctx.drawImage(bufferCanvas,0,0,canvas.width,canvas.height);
-            
+            ctx.drawImage(bufferCanvas, 0, 0, canvas.width, canvas.height);
+
             // 绘制玩家已下的棋子
-            for (var i=0;i<FIVE_CHESS_ARR.length;i++){
+            for (var i = 0; i < FIVE_CHESS_ARR.length; i++) {
                 FIVE_CHESS_ARR[i].update();
             }
-            
+
             // 显示玩家准备要下的棋子
-            for (var i=0;i<FIVE_CHESS_TEMP_ARR.length;i++){
+            for (var i = 0; i < FIVE_CHESS_TEMP_ARR.length; i++) {
                 FIVE_CHESS_TEMP_ARR[i].update();
             }
 
             // 显示当前出棋方
             showCurPlayer();
-            
+
             // 右侧画布
             drawRightCanvas();
-            
-            if (G_CYCLE % 40 == 0){
+
+            if (G_CYCLE % 40 == 0) {
                 autoPlay();
             }
-            
-            if (G_CYCLE - LAST_CLICK_TIME >= 600){
+
+            if (G_CYCLE - LAST_CLICK_TIME >= 600) {
                 IS_LOADING = true;
             }
-            
+
             // 绘制待机动画
-            if (IS_LOADING && !IS_GAME_OVER){
-                for (var i=0;i<LOADING_CHESS_ARR.length;i++){
+            if (IS_LOADING && !IS_GAME_OVER) {
+                for (var i = 0; i < LOADING_CHESS_ARR.length; i++) {
                     LOADING_CHESS_ARR[i].update();
                 }
-                
-                for (var i=0;i<LOADING_BALL_ARR.length;i++){
+
+                for (var i = 0; i < LOADING_BALL_ARR.length; i++) {
                     LOADING_BALL_ARR[i].update();
                 }
-                
-                if (LOADING_BALL_ARR.length == 0){
+
+                if (LOADING_BALL_ARR.length == 0) {
                     loadingAnimate();
                 }
             }
-            
+
             G_CYCLE++;
         }
         animate();
 
-        $("#startBtn").click(function(){
-            if (!IS_START){
+        $("#startBtn").click(function () {
+            if (!IS_START) {
                 IS_START = true;
                 init();
             }
         })
-        
-        $("#restartBtn").click(function(){
+
+        $("#restartBtn").click(function () {
             IS_START = true;
             init();
         })

@@ -4,63 +4,63 @@
     <th:block th:include="common :: header"></th:block>
     <title>WebSocket客户端</title>
 <style type="text/css">
-    .mouseleftclick{
-        background-color:blue;
-        color:white;
+    .mouseleftclick {
+        background-color: blue;
+        color: white;
     }
 
-    body{
+    body {
         background-image: url("../img/fengjing/fj1.jpg");
         background-repeat: no-repeat;
-        background-size:100% 100%;
+        background-size: 100% 100%;
         padding-top: 60px;
         overflow: hidden;
     }
 
-    #mainDiv{
-        width:854px;
-        height:442px;
-        margin:0 auto;
+    #mainDiv {
+        width: 854px;
+        height: 442px;
+        margin: 0 auto;
         position: fixed;
-        left:138px;
-        top:80px;
+        left: 138px;
+        top: 80px;
     }
 
-    #header{
-        width:100%;
-        height:30px;
-        padding-top:5px;
-        padding-left:5px;
+    #header {
+        width: 100%;
+        height: 30px;
+        padding-top: 5px;
+        padding-left: 5px;
         cursor: move;
-        background-color:#365e71;
+        background-color: #365e71;
     }
 
-    #msgFromServer{
-        width:100%;
-        height:350px;
-        overflow:auto;
-        background-color:white;
-        padding:3px;
+    #msgFromServer {
+        width: 100%;
+        height: 350px;
+        overflow: auto;
+        background-color: white;
+        padding: 3px;
     }
 
-    #footer{
-        width:100%;
+    #footer {
+        width: 100%;
     }
 
-    #adDiv{
-        width:350px;
-        height:250px;
-        position:fixed;
-        bottom:10px;
-        right:10px;
-        border:3px solid green;
-        background-color:white;
-        over-flow:hidden;
-        display:none;
+    #adDiv {
+        width: 350px;
+        height: 250px;
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        border: 3px solid green;
+        background-color: white;
+        over-flow: hidden;
+        display: none;
     }
 
-    #msgFromServer p{
-        margin-bottom:7px;
+    #msgFromServer p {
+        margin-bottom: 7px;
     }
 </style>
 </head>
@@ -83,16 +83,17 @@
                     <button class='label label-danger' th:title="清屏" onclick="clearScreen()">
                         <span class="glyphicon glyphicon-ban-circle"></span>
                     </button>&nbsp;&nbsp;
-                    <button id="btnReconnect" class='label label-primary' type="button" th:title="重新连接" onclick="loginServer()">
+                    <button id="btnReconnect" class='label label-primary' type="button" th:title="重新连接"
+                            onclick="loginServer()">
                         <span class="glyphicon glyphicon-retweet"></span>
                     </button>
                 </div>
             </div>
-
+    
             <!--中间聊天框-->
             <div id="msgFromServer" align="left">
             </div>
-
+    
             <!--下方聊天内容发送-->
             <div id="footer" align="left">
                 <div style="height:25px;">
@@ -111,12 +112,14 @@
                 </div>
                 <!--聊天内容  发送按钮-->
                 <div style="height:33px;">
-                    <input id="msgToServer" autocomplete="off" style="width:80%;float:left;height:100%;border:2px solid grey" placeholder="请输入聊天内容"></input>
-                    <button id="sendBtn" type="button" class='btn btn-sm btn-success' style="width:20%;height:100%;float:right;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
+                    <input id="msgToServer" autocomplete="off"
+                           style="width:80%;float:left;height:100%;border:2px solid grey" placeholder="请输入聊天内容"></input>
+                    <button id="sendBtn" type="button" class='btn btn-sm btn-success'
+                            style="width:20%;height:100%;float:right;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
                 </div>
             </div>
         </div>
-
+    
         <!--右侧好友列表-->
         <div style="width: 24%;height:100%;float:right;border:2px solid green;background-color: white;">
             <div id="friendsListDiv" style="width: 100%;height: 100%;">
@@ -127,15 +130,18 @@
                 <div style="width:100%;height:413px;overflow-y: scroll;padding:3px;">
                     <div v-for="row in friendList" style="width:100%;height:50px;margin-bottom: 8px;">
                         <div style="width:26%;height:50px;float: left;">
-                            <img :src="row.headImage" width="100%" height="100%" onerror="this.onerror='';this.src=$.ws.errorImgUrl">
+                            <img :src="row.headImage" width="100%" height="100%"
+                                 onerror="this.onerror='';this.src=$.ws.errorImgUrl">
                         </div>
                         <div style="width:67%;height:50px;float:left;margin-left: 5px;">
                             <div>
                                 <template v-if="row.state == '0'">
-                                    <p style="font-size: 14px;color:grey;cursor: pointer;" @click="showPersonInfo(row.name)">{{row.name}}</p>
+                                    <p style="font-size: 14px;color:grey;cursor: pointer;"
+                                       @click="showPersonInfo(row.name)">{{row.name}}</p>
                                 </template>
                                 <template v-else>
-                                    <p style="font-size: 14px;color: red;cursor: pointer;" @click="showPersonInfo(row.name)">{{row.name}}</p>
+                                    <p style="font-size: 14px;color: red;cursor: pointer;"
+                                       @click="showPersonInfo(row.name)">{{row.name}}</p>
                                 </template>
                                 <p style="font-size: 12px;">{{row.lastLoginTime}}</p>
                             </div>
@@ -148,7 +154,7 @@
             </div>
         </div>
     </div>
-
+    
     <!--广告页面 -->
     <div id="adDiv">
         <div id="adBtn" style="style:1px solid red;background-color:#5082b9;padding-left:290px">
@@ -170,21 +176,21 @@
         $("#msgFromServer").val("");
         $("#msgFromServer").append(parent.chatRecord);
         //未读消息数
-        parent.unreadCount=0;
+        parent.unreadCount = 0;
         $("#unreadCountSpan", window.parent.document).text("");
         var currentUserOnlineInfo = undefined;
 
         var app = new Vue({
             el: '#mainDiv',
             data: {
-                friendList:{},
-                cyyList:{},
-                loginUser:sessionUser,
-                onlineFriendCount:0,
-                offlineFriendCount:0,
+                friendList: {},
+                cyyList: {},
+                loginUser: sessionUser,
+                onlineFriendCount: 0,
+                offlineFriendCount: 0
             },
             methods: {
-                getOnlineInfo:function() {
+                getOnlineInfo: function () {
                     $.ajax({
                         type: 'GET',
                         url: 'getOnlineInfo.json',
@@ -202,38 +208,38 @@
                             currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
                             // 是否被禁用
                             var enableStatus = currentUserOnlineInfo.enable;
-                            if (enableStatus == "0"){
+                            if (enableStatus == "0") {
                                 layer.tips('该账户已被禁用,10秒后强制退出!', '#msgFromServer', {
                                     tips: [2, 'red']
                                 });
-                                updateChatMsg("<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 该账户已被禁用,10秒后强制退出!</p>");
-                                setTimeout(logout,10000);
+                                updateChatMsg("<p style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [系统信息] 该账户已被禁用,10秒后强制退出!</p>");
+                                setTimeout(logout, 10000);
                                 return;
                             }
 
                             // 是否被禁言
                             var speakStatus = currentUserOnlineInfo.speak;
-                            if (speakStatus == "0"){
-                                $("#sendBtn").attr("disabled",true);
+                            if (speakStatus == "0") {
+                                $("#sendBtn").attr("disabled", true);
                                 $("#sendBtn").html("<span style='color:red;font-weight: bold;'>你已被禁言</span>");
-                            }else{
-                                $("#sendBtn").attr("disabled",false);
+                            } else {
+                                $("#sendBtn").attr("disabled", false);
                                 $("#sendBtn").html("发送");
                             }
                         }
                     });
                 },
-                selectText:function (e) {
+                selectText: function (e) {
                     $("#msgToServer").val(e.target.value);
                 },
-                showPersonInfo:function (userName) {
+                showPersonInfo: function (userName) {
                     layer.open({
                         type: 2,
                         title: '用户个人信息',
                         shadeClose: true,
                         shade: 0.2,
                         area: ['390px', '420px'],
-                        content: '/zhddkk/wsUsers/showPersonalInfo.page?user='+userName
+                        content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + userName
                     });
                 }
             },
@@ -244,19 +250,19 @@
 
         // 发送消息给服务器
         function send() {
-            if (currentUserOnlineInfo != undefined){
+            if (currentUserOnlineInfo != undefined) {
                 // 是否被禁用
                 var enableStatus = currentUserOnlineInfo.enable;
-                if (enableStatus == "0"){
+                if (enableStatus == "0") {
                     //被禁用了
-                    updateChatMsg("<span style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统消息] 你的账号已被禁用了</span>")
+                    updateChatMsg("<span style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [系统消息] 你的账号已被禁用了</span>")
                     return;
                 }
 
                 var speakStatus = currentUserOnlineInfo.speak;
-                if (speakStatus == "0"){
+                if (speakStatus == "0") {
                     //被禁言了
-                    updateChatMsg("<span style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统消息] 你已被禁言了</span>")
+                    updateChatMsg("<span style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [系统消息] 你已被禁言了</span>")
                     return;
                 }
             }
@@ -264,37 +270,37 @@
             var toUser = $("#selectUser").val();
             if (parent.webSocket != null) {
                 if (sessionUser == toUser) {
-                    updateChatMsg("<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 自己不能给自己发消息!</p>");
+                    updateChatMsg("<p style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [系统信息] 自己不能给自己发消息!</p>");
                     return false;
                 }
 
                 var msgToServer = $("#msgToServer").val();
                 if (msgToServer == null || msgToServer == "") {
-                    var msg = "<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 不允许发送空消息!</p>";
+                    var msg = "<p style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [系统信息] 不允许发送空消息!</p>";
                     updateChatMsg(msg);
                     return;
                 }
 
                 if (toUser == null || toUser == "") {
-                    var msg = "<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 你暂时没有好友,快去<a href='javascript:void(0)' onclick='toAddUser()'>添加好友</a>吧!</p>";
+                    var msg = "<p style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [系统信息] 你暂时没有好友,快去<a href='javascript:void(0)' onclick='toAddUser()'>添加好友</a>吧!</p>";
                     var textArea = $("#msgFromServer").append(msg);
                     parent.chatRecord = parent.chatRecord + msg;
                     textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
-                }else{
-                    var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;'>["+getCurrentTime() + "] [在线消息]  [我 -->" + toUser +"] "+ msgToServer +"</p>";
+                } else {
+                    var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [在线消息]  [我 -->" + toUser + "] " + msgToServer + "</p>";
                     updateChatMsg(htmlData);
                     sendMsgToServer(sessionUser, toUser, msgToServer);
                     $("#msgToServer").val("");
                 }
-            }else{
-                var msg = "<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
+            } else {
+                var msg = "<p style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [系统信息] 服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
                 updateChatMsg(msg);
             }
         }
 
         //发送消息
-        function sendMsgToServer(from,to,msg) {
-            if (parent.connectStatus == "1" && parent.webSocket != null){
+        function sendMsgToServer(from, to, msg) {
+            if (parent.connectStatus == "1" && parent.webSocket != null) {
                 var toServerMsgObj = {};
                 toServerMsgObj.typeId = 2;
                 toServerMsgObj.typeDesc = "在线消息";
@@ -303,74 +309,74 @@
                 toServerMsgObj.msg = msg;
                 var jsonObj = JSON.stringify(toServerMsgObj);
                 parent.webSocket.send(jsonObj);
-            }else{
-                var msg = "<p style='color:red;font-size:10px;line-height:14px;'>["+getCurrentTime()+"] [系统信息] 连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
+            } else {
+                var msg = "<p style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [系统信息] 连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
                 updateChatMsg(msg);
             }
         }
 
-        function logout(){
+        function logout() {
             window.parent.toIndex();
         }
 
-        function updateChatMsg(msg){
+        function updateChatMsg(msg) {
             var textArea = $('#msgFromServer').append(msg);
             parent.chatRecord = parent.chatRecord + msg;
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
 
         //定时获取在线人数信息
-        setInterval(function(){
+        setInterval(function () {
             app.getOnlineInfo();
-        },20000);
+        }, 20000);
 
         //聊天窗口可拖动
-        $.ws.dragPanelMove("#header","#mainDiv");
+        $.ws.dragPanelMove("#header", "#mainDiv");
 
         //定时切换背景图片
         var imgIndex = 1;
         var imgMaxIndex = 10;
-        function changeBackgroundImage(){
+        function changeBackgroundImage() {
             imgIndex++;
-            if (imgIndex>imgMaxIndex) {
+            if (imgIndex > imgMaxIndex) {
                 imgIndex = 1;
             }
-            var newPicUrl = "../img/fengjing/fj"+imgIndex+".jpg";
-            $("body").css("background-image","url("+newPicUrl+")");
+            var newPicUrl = "../img/fengjing/fj" + imgIndex + ".jpg";
+            $("body").css("background-image", "url(" + newPicUrl + ")");
         }
 
         //定时切换聊天背景图片
-        setInterval(function(){
+        setInterval(function () {
             changeBackgroundImage();
-        },60000);
+        }, 60000);
 
         //回车键发送聊天内容
-        $(document).keyup(function(event){
-            if(event.keyCode ==13){
+        $(document).keyup(function (event) {
+            if (event.keyCode == 13) {
                 send();
             }
         });
 
         //关闭右下角广告窗
-        function closeAd(){
+        function closeAd() {
             $("#adDiv").slideUp(500);
         }
 
         //添加好友
-        function toAddUser(){
+        function toAddUser() {
             var curPageid = "/zhddkk/wsUsers/wsUsers";
             parent.curPageid = curPageid;
             parent.showPage(curPageid);
         }
 
         //清屏
-        function clearScreen(){
+        function clearScreen() {
             parent.chatRecord = "";
             $("#msgFromServer").text("");
         }
 
         //登录服务器
-        function loginServer(){
+        function loginServer() {
             parent.loginServer();
         }
 
@@ -380,10 +386,10 @@
             winInnerHeight = window.innerHeight;
             var mainDivWidth = $("#mainDiv").width();
             var mainDivHeight = $("#mainDiv").height();
-            if (winInnerWidth>=mainDivWidth) {
+            if (winInnerWidth >= mainDivWidth) {
                 $("#mainDiv").css("left", (winInnerWidth - mainDivWidth) / 2 + "px");
             }
-            if (winInnerHeight>=mainDivHeight) {
+            if (winInnerHeight >= mainDivHeight) {
                 $("#mainDiv").css("top", (winInnerHeight - mainDivHeight) / 2 + "px");
             }
         });

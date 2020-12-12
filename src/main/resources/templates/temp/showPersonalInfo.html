@@ -7,21 +7,21 @@
 <title>显示个人信息</title>
 
 <style>
-    #mainDiv{
-        width:370px;
-        height:305px;
-        margin:0 auto;
-        border:2px solid green;
+    #mainDiv {
+        width: 370px;
+        height: 305px;
+        margin: 0 auto;
+        border: 2px solid green;
     }
 
-    #formDiv{
-        width:360px;
-        height:240px;
+    #formDiv {
+        width: 360px;
+        height: 240px;
     }
 
-    select{
-        width:212px;
-        margin-left:5px;
+    select {
+        width: 212px;
+        margin-left: 5px;
     }
 </style>
 </head>
@@ -29,20 +29,24 @@
     <div id="mainDiv" align="center">
         <div id="formDiv" align="left" style='position:relative;'>
             <input type="hidden" th:value="${user}" id="user">
-            <label for="realName">真实姓名:</label><input id="realName" name="realName" type="text" style="width:208px;margin-left:10px;"></input>
+            <label for="realName">真实姓名:</label><input id="realName" name="realName" type="text"
+                                                      style="width:208px;margin-left:10px;"></input>
             <br/>
 
             <div>
                 <label id="headImgLabel" for="headImg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
             </div>
             <div style='padding-left:70px;margin-top:-15px;margin-bottom: 10px;'>
-                <img id="headImg" alt="" title="点击放大图片" width="60px" height="60px" onclick="showdiv()" onerror="imgerror(this)">
+                <img id="headImg" alt="" title="点击放大图片" width="60px" height="60px" onclick="showdiv()"
+                     onerror="imgerror(this)">
             </div>
 
-            <label for="sign">个性签名:</label><input id="sign" name="sign" type="text" style="width:208px;margin-left:10px;"></input>
+            <label for="sign">个性签名:</label><input id="sign" name="sign" type="text"
+                                                  style="width:208px;margin-left:10px;"></input>
             <br/>
 
-            <label for="age">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</label><input id="age" name="age" type="text" style="width:208px;margin-left:10px;"></input>
+            <label for="age">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</label><input id="age" name="age" type="text"
+                                                                                         style="width:208px;margin-left:10px;"></input>
             <br/>
 
             <label for="sexSelect">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</label>
@@ -53,10 +57,13 @@
             </select>
             <br/>
 
-            <label for="tel">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话:</label><input id="tel" name="tel" type="text" style="width:208px;margin-left:10px;"></input>
+            <label for="tel">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话:</label><input id="tel" name="tel" type="text"
+                                                                                         style="width:208px;margin-left:10px;"></input>
             <br/>
 
-            <label for="address">住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址:</label><input id="address" name="address" type="text" style="width:208px;margin-left:10px;"></input>
+            <label for="address">住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址:</label><input id="address" name="address"
+                                                                                             type="text"
+                                                                                             style="width:208px;margin-left:10px;"></input>
             <br/>
 
             <label for="professionSelect">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业:</label>
@@ -89,20 +96,20 @@
 </body>
     <script>
         var user = $('#user').val();
-        $("input,select").attr("disabled","disabled");
+        $("input,select").attr("disabled", "disabled");
         queryPersonInfo();
 
         // 查询个人信息
-        function queryPersonInfo(){
+        function queryPersonInfo() {
             $.ajax({
                 type: 'POST',
-                url: rootUrl+'ws/queryPersonInfo.json',
-                data:{user:user},
+                url: rootUrl + 'ws/queryPersonInfo.json',
+                data: {user: user},
                 //dataType: 'json',
-                success: function(result) {
-                    if (JSON.stringify(result) == '{}'){
+                success: function (result) {
+                    if (JSON.stringify(result) == '{}') {
                         console.log("空对象");
-                    }else{
+                    } else {
                         $("#realName").val(result.realName);
                         $("#sign").val(result.sign);
                         $("#age").val(result.age);
@@ -111,7 +118,7 @@
                         $("#address").val(result.address);
                         $("#professionSelect").val(result.profession);
                         $("#hobbySelect").val(result.hobby);
-                        $("#headImg").attr("src",result.img);
+                        $("#headImg").attr("src", result.img);
                     }
                 }
             })
@@ -122,9 +129,9 @@
         }
 
         // 加载图片失败
-        function imgerror(imgObj){
+        function imgerror(imgObj) {
             var scrVar = $(imgObj).attr("src");
-            $(imgObj).attr("src",rootUrl+"/img/"+$.ws.errorImageName);
+            $(imgObj).attr("src", rootUrl + "/img/" + $.ws.errorImageName);
         }
     </script>
 </html>

@@ -46,7 +46,10 @@
             padding: 0;
             margin: 0;
         }
-    ]]></style>
+
+        ]
+        ]
+        ></style>
 </head>
 <body>
     <div class="noscript"><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websockets rely on Javascript being enabled. Please enable
@@ -74,14 +77,14 @@
             this.color = null;
         }
 
-        Snake.prototype.draw = function(context) {
+        Snake.prototype.draw = function (context) {
             for (var id in this.snakeBody) {
                 context.fillStyle = this.color;
                 context.fillRect(this.snakeBody[id].x, this.snakeBody[id].y, Game.gridSize, Game.gridSize);
             }
         };
 
-        Game.initialize = function() {
+        Game.initialize = function () {
             this.entities = [];
             var canvas = document.getElementById('playground');
             if (!canvas.getContext) {
@@ -115,13 +118,13 @@
             }
         };
 
-        Game.setDirection  = function(direction) {
+        Game.setDirection = function (direction) {
             Game.direction = direction;
             Game.socket.send(direction);
             Console.log('Sent: Direction ' + direction);
         };
 
-        Game.startGameLoop = function() {
+        Game.startGameLoop = function () {
             if (window.webkitRequestAnimationFrame) {
                 Game.nextFrame = function () {
                     webkitRequestAnimationFrame(Game.run);
@@ -145,34 +148,34 @@
             }
         };
 
-        Game.draw = function() {
+        Game.draw = function () {
             this.context.clearRect(0, 0, 640, 480);
             for (var id in this.entities) {
                 this.entities[id].draw(this.context);
             }
         };
 
-        Game.addSnake = function(id, color) {
+        Game.addSnake = function (id, color) {
             Game.entities[id] = new Snake();
             Game.entities[id].color = color;
         };
 
-        Game.updateSnake = function(id, snakeBody) {
+        Game.updateSnake = function (id, snakeBody) {
             if (typeof Game.entities[id] != "undefined") {
                 Game.entities[id].snakeBody = snakeBody;
             }
         };
 
-        Game.removeSnake = function(id) {
+        Game.removeSnake = function (id) {
             Game.entities[id] = null;
             // Force GC.
             delete Game.entities[id];
         };
 
-        Game.run = (function() {
+        Game.run = (function () {
             var skipTicks = 1000 / Game.fps, nextGameTick = (new Date).getTime();
 
-            return function() {
+            return function () {
                 while ((new Date).getTime() > nextGameTick) {
                     nextGameTick += skipTicks;
                 }
@@ -183,7 +186,7 @@
             };
         })();
 
-        Game.connect = (function(host) {
+        Game.connect = (function (host) {
             if ('WebSocket' in window) {
                 Game.socket = new WebSocket(host);
             } else if ('MozWebSocket' in window) {
@@ -198,7 +201,7 @@
                 Console.log('Info: WebSocket connection opened.');
                 Console.log('Info: Press an arrow key to begin.');
                 Game.startGameLoop();
-                setInterval(function() {
+                setInterval(function () {
                     // Prevent server read timeout.
                     Game.socket.send('ping');
                 }, 5000);
@@ -238,7 +241,7 @@
 
         var Console = {};
 
-        Console.log = (function(message) {
+        Console.log = (function (message) {
             var console = document.getElementById('console');
             var p = document.createElement('p');
             p.style.wordWrap = 'break-word';
@@ -252,8 +255,7 @@
 
         Game.initialize();
 
-
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             // Remove elements with "noscript" class - <noscript> is not allowed in XHTML
             var noscripts = document.getElementsByClassName("noscript");
             for (var i = 0; i < noscripts.length; i++) {

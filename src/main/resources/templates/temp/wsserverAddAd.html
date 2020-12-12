@@ -17,40 +17,40 @@
     <th:block th:include="common :: sessionInfo"></th:block>
 </body>
     <script type="text/javascript">
-        function publishAdsValidate(){
+        function publishAdsValidate() {
             var title = $("#adTitle").val();
-            if (null == title || title == ""){
+            if (null == title || title == "") {
                 alert("标题不能为空!");
                 return false;
             }
             return true;
         }
 
-        function addAd(){
-            adTitle=$("#adTitle").val();
-            if (null == adTitle || adTitle == ""){
+        function addAd() {
+            adTitle = $("#adTitle").val();
+            if (null == adTitle || adTitle == "") {
                 alert("标题不能为空!");
                 return;
             }
-            adContent=$("#adContent").val();
+            adContent = $("#adContent").val();
             $.ajax({
                 type: 'POST',
-                url: rootUrl+'ws/addAd.do',
-                data:{adTitle:adTitle,adContent:adContent},
+                url: rootUrl + 'ws/addAd.do',
+                data: {adTitle: adTitle, adContent: adContent},
                 //dataType: 'json',
-                async:false,
-                success: function(result) {
+                async: false,
+                success: function (result) {
                     layer.close(layer.index);
-                    if (result == "success"){
+                    if (result == "success") {
                         layer.alert("添加成功");
-                    }else{
+                    } else {
                         layer.alert("添加失败");
                     }
-                    setTimeout(function(){
+                    setTimeout(function () {
                         //调用父layer弹出层所在页面的方法
                         parent.closeLayerAndReload();
                         window.parent.location.reload();
-                    },1500);
+                    }, 1500);
                 }
             });
         }

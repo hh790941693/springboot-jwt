@@ -5,47 +5,49 @@
     <title>添加朋友圈</title>
 
 <style type="text/css">
-    #mainDiv{
-        width:98%;
-        height:420px;
-        border:2px solid green;
-        margin:0 auto;
-        padding:5px;
+    #mainDiv {
+        width: 98%;
+        height: 420px;
+        border: 2px solid green;
+        margin: 0 auto;
+        padding: 5px;
     }
 
-    #form span{
-        width:100px;
-        display:inline-block;
+    #form span {
+        width: 100px;
+        display: inline-block;
     }
 
-    .inputImgClass{
-
+    .inputImgClass {
+    
     }
 
-    .imgClass{
-        margin-left:30px;
+    .imgClass {
+        margin-left: 30px;
     }
 
-    .imgDiv{
-        padding-left:110px;
-        margin-top:-22px;
+    .imgDiv {
+        padding-left: 110px;
+        margin-top: -22px;
     }
 
-    hr{
-        margin:6px;
+    hr {
+        margin: 6px;
     }
 
 </style>
 </head>
 <body>
     <div id="mainDiv">
-        <form id="form" method="post" action="/ws/addCircle.do" enctype="multipart/form-data" onsubmit="return beforeSumbit()" target="hidden_frame">
+        <form id="form" method="post" action="/ws/addCircle.do" enctype="multipart/form-data"
+              onsubmit="return beforeSumbit()" target="hidden_frame">
             <div>
                 <input id="userNameHidden" name="user" th:value="${user}" hidden="hidden">
             </div>
             <div>
                 <span>内&nbsp;&nbsp;&nbsp;&nbsp;容:</span>
-                <textarea id="contentTa" style="margin-left:10px;" name="content" rows="4" cols="30" placeholder="请输入内容"></textarea>
+                <textarea id="contentTa" style="margin-left:10px;" name="content" rows="4" cols="30"
+                          placeholder="请输入内容"></textarea>
             </div>
             <hr/>
             <div>
@@ -104,42 +106,42 @@
 </body>
 
     <script type="text/javascript">
-        var curUser=$('#userNameHidden').val();
+        var curUser = $('#userNameHidden').val();
         initUpload();
-        $(".inputImgClass").change(function(){
+        $(".inputImgClass").change(function () {
             //获取对应的img对象
             var imgObj = $(this).prev();
-            $(imgObj).attr("src",URL.createObjectURL($(this)[0].files[0]));
+            $(imgObj).attr("src", URL.createObjectURL($(this)[0].files[0]));
         })
 
-        function beforeSumbit(){
+        function beforeSumbit() {
             $("#userNameHidden").val(curUser);
             var content = $("#contentTa").val();
-            if (content == ""){
+            if (content == "") {
                 return false;
             }
             return true;
         }
 
-        $("#hidden_frame").load(function(){
-            var text=$(this).contents().find("body").text();
-            if (text.indexOf("操作成功") != -1){
+        $("#hidden_frame").load(function () {
+            var text = $(this).contents().find("body").text();
+            if (text.indexOf("操作成功") != -1) {
                 layer.msg('新增朋友圈成功');
                 var timeout = 0.7;
                 var index = parent.layer.getFrameIndex(window.name);
-                setTimeout(function(){
+                setTimeout(function () {
                     parent.layer.close(index);
                     parent.refresh();
-                },timeout*1000)
+                }, timeout * 1000)
 
-            }else{
+            } else {
                 layer.msg('新增朋友圈失败');
             }
         });
 
-        function renderImg(btnName, imgName, inputName){
+        function renderImg(btnName, imgName, inputName) {
             layui.upload.render({
-                elem: '#'+btnName,
+                elem: '#' + btnName,
                 url: $.ws.uploadUrl,
                 size: 10240,//单位为KB
                 accept: 'images',
@@ -153,9 +155,9 @@
                 done: function (r) {
                     layer.closeAll('loading');
                     if (r.code == "1") {
-                        $("#"+imgName).attr("src", r.data);
-                        $("#"+imgName).show();
-                        $("#"+inputName).val(r.data);
+                        $("#" + imgName).attr("src", r.data);
+                        $("#" + imgName).show();
+                        $("#" + inputName).val(r.data);
                     }
                 },
                 error: function () {

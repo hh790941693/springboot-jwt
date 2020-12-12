@@ -6,15 +6,15 @@
         <title></title>
 
         <style type="text/css">
-            body{
-                margin:0;
+            body {
+                margin: 0;
                 padding: 0;
             }
 
-            #mainDiv{
-                width:99%;
-                height:700px;
-                margin:0 auto;
+            #mainDiv {
+                width: 99%;
+                height: 700px;
+                margin: 0 auto;
             }
         </style>
     </head>
@@ -32,54 +32,54 @@
         canvas.height = $(canvas).height();
         var ctx = canvas.getContext("2d");
 
-        var bird = new Bird(100, canvas.height/2, 15, "yellow");
-        window.addEventListener('click',function(event){
+        var bird = new Bird(100, canvas.height / 2, 15, "yellow");
+        window.addEventListener('click', function (event) {
             bird.up();
         });
 
-        $(document).keydown(function(event){
+        $(document).keydown(function (event) {
             var keyCode = event.keyCode;
             //console.log(keyCode);
-            if (keyCode == 87){
+            if (keyCode == 87) {
                 bird.up();
                 console.log("xx");
             }
         });
 
-        $(document).keyup(function(event){
+        $(document).keyup(function (event) {
             var keyCode = event.keyCode;
             //console.log(keyCode);
-            if (keyCode == 87){
+            if (keyCode == 87) {
                 bird.up();
                 console.log("-----------");
             }
         });
 
-        function Bird(x,y,r,color){
+        function Bird(x, y, r, color) {
             this.x = x;
             this.y = y;
-            this.r =r;
+            this.r = r;
             this.color = color;
 
             this.gravity = 0.1;
             this.lift = 10;
             this.opcity = 0;
 
-            this.draw = function(){
+            this.draw = function () {
                 ctx.beginPath();
-                ctx.arc(this.x,this.y,this.r,0,Math.PI*2,false);
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
                 ctx.fillStyle = this.color;
                 ctx.fill();
                 ctx.closePath();
             };
 
-            this.update = function(){
-                if (this.y + this.r > canvas.height){
+            this.update = function () {
+                if (this.y + this.r > canvas.height) {
                     this.gravity = 0;
                     this.y = canvas.height - this.r;
                 }
 
-                if (this.y < this.r){
+                if (this.y < this.r) {
                     this.y = this.r;
                 }
 
@@ -90,43 +90,43 @@
                 this.draw();
             }
 
-            this.up = function(){
-                this.opcity -= this.gravity*this.lift;
+            this.up = function () {
+                this.opcity -= this.gravity * this.lift;
             }
         }
 
-
-        function Pipe(color){
-            this.x = canvas.width-100;;
+        function Pipe(color) {
+            this.x = canvas.width - 100;
+            ;
             this.y = 0;
             this.w = 50;
-            this.top = randomNumber(1,canvas.height/2);
-            this.bottom = randomNumber(1,canvas.height/2);
-            this.color=color;
+            this.top = randomNumber(1, canvas.height / 2);
+            this.bottom = randomNumber(1, canvas.height / 2);
+            this.color = color;
 
-            this.hightLight= false;
+            this.hightLight = false;
 
-            this.draw = function(){
+            this.draw = function () {
                 ctx.beginPath();
-                ctx.rect(this.x,0,this.w,this.top);
+                ctx.rect(this.x, 0, this.w, this.top);
 
-                ctx.rect(this.x,canvas.height-this.bottom,this.w,this.bottom);
+                ctx.rect(this.x, canvas.height - this.bottom, this.w, this.bottom);
                 ctx.fillStyle = this.color;
-                if (this.hightLight){
+                if (this.hightLight) {
                     ctx.fillStyle = "red";
                 }
                 ctx.fill();
                 ctx.closePath();
             }
 
-            this.update = function(){
-                this.x -=1.5;
+            this.update = function () {
+                this.x -= 1.5;
                 this.draw();
             }
 
-            this.hits = function(bird){
-                if (bird.y < this.top || bird.y > canvas.height-this.bottom){
-                    if (bird.x+bird.r > this.x && bird.x-bird.r <this.x+this.w){
+            this.hits = function (bird) {
+                if (bird.y < this.top || bird.y > canvas.height - this.bottom) {
+                    if (bird.x + bird.r > this.x && bird.x - bird.r < this.x + this.w) {
 
                         this.hightLight = true;
                         return true;
@@ -139,10 +139,10 @@
         }
 
         var pipeArr = new Array();
-        var t=0;
-        function animate(){
+        var t = 0;
+        function animate() {
             requestAnimationFrame(animate);
-            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             //for (var i=0;i<circleArray.length;i++){
             //    circleArray[i].update();
@@ -153,14 +153,14 @@
             //}
             bird.update();
 
-            if (t%100==0){
+            if (t % 100 == 0) {
                 pipeArr.push(new Pipe("white"));
             }
 
-            for (var i=pipeArr.length-1;i>0;i--){
+            for (var i = pipeArr.length - 1; i > 0; i--) {
                 pipeArr[i].update();
-                if (pipeArr[i].x <0){
-                    pipeArr.splice(i,1);
+                if (pipeArr[i].x < 0) {
+                    pipeArr.splice(i, 1);
                 }
                 pipeArr[i].hits(bird);
             }
@@ -173,10 +173,10 @@
         animate();
         //setInterval(animate,10);
 
-        function randomNumber(start,end){
-            var range = end-start;
+        function randomNumber(start, end) {
+            var range = end - start;
             var rand = Math.random();
-            var num = start + Math.round(rand*range);
+            var num = start + Math.round(rand * range);
 
             return num;
         }

@@ -6,27 +6,27 @@
     <title>登录失败</title>
 
     <style type="text/css">
-        #mainDiv{
+        #mainDiv {
             width: 470px;
             height: auto;
             margin: 100px auto;
             border: 2px solid green;
         }
 
-        table{
-            width:100%;
-            margin-top:2px;
+        table {
+            width: 100%;
+            margin-top: 2px;
         }
 
-        table th{
-            background-color:green;
-            font-weight:bold;
-            color:white;
-            text-align:center;
+        table th {
+            background-color: green;
+            font-weight: bold;
+            color: white;
+            text-align: center;
         }
 
-        table td{
-            border:2px solid green;
+        table td {
+            border: 2px solid green;
         }
     </style>
 </head>
@@ -53,18 +53,18 @@
     </div>
 </body>
     <script type="text/javascript">
-        var user=$('#user').val();
-        var i=5;
-        var timer = setInterval(function(){
+        var user = $('#user').val();
+        var i = 5;
+        var timer = setInterval(function () {
             $("#timeSpan").text(i);
-            if (i==0){
+            if (i == 0) {
                 clearInterval(timer);
                 toIndex();
             }
-            i=i-1;
-        },1000);
+            i = i - 1;
+        }, 1000);
 
-        function toIndex(){
+        function toIndex() {
             top.location.href = rootUrl;
         }
     </script>

@@ -22,9 +22,11 @@
                             <div class="col-md-3">
                                 <div class="input-group">
                                     <div class="input-group-addon">用户</div>
-                                    <select name="userId" id="operUserSelect" th:value="${wsOperationLogDO.userId}" class="form-control select2">
+                                    <select name="userId" id="operUserSelect" th:value="${wsOperationLogDO.userId}"
+                                            class="form-control select2">
                                         <option value="">--- 请选择 ---</option>
-                                        <option th:each="info:${allUserList}" th:value="${info.id}" th:text="${info.name}"
+                                        <option th:each="info:${allUserList}" th:value="${info.id}"
+                                                th:text="${info.name}"
                                                 th:selected="${wsOperationLogDO.userId == info.id}">
                                         </option>
                                     </select>
@@ -34,7 +36,8 @@
                             <div class="col-md-3">
                                 <div class="input-group">
                                     <div class="input-group-addon">模块</div>
-                                    <select name="moduleName" id="moduleNameSelect" th:value="${wsOperationLogDO.operModule}" class="form-control select2">
+                                    <select name="moduleName" id="moduleNameSelect"
+                                            th:value="${wsOperationLogDO.operModule}" class="form-control select2">
                                         <option value="">--- 请选择 ---</option>
                                         <option th:each="info:${moduleList}" th:value="${info}" th:text="${info}"
                                                 th:selected="${wsOperationLogDO.operModule == info}">
@@ -61,7 +64,8 @@
                                 <button type="button" class="btn btn-sm btn-primary" onclick="clearOperationLog()">
                                     <i class="fa fa-trash" aria-hidden="true"></i>&nbsp;一键清空
                                 </button>
-                                <a id="exportDataBtn" style="color:white;" type="button" class='btn btn-sm btn-primary'> <i class="fa fa-download" aria-hidden="true"></i>&nbsp;导&nbsp;&nbsp;出</a>
+                                <a id="exportDataBtn" style="color:white;" type="button" class='btn btn-sm btn-primary'> <i
+                                        class="fa fa-download" aria-hidden="true"></i>&nbsp;导&nbsp;&nbsp;出</a>
                             </div>
                         </div>
                         <table id="exampleTable" data-mobile-responsive="true">

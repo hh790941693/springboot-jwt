@@ -5,34 +5,34 @@
         <meta charset="UTF-8">
         <title>网易新闻</title>
         <style>
-            #mainDiv{
-                width:70%;
-                height:100%;
-                margin:0 auto;
-                border:1px solid grey;
-                padding:10px;
+            #mainDiv {
+                width: 70%;
+                height: 100%;
+                margin: 0 auto;
+                border: 1px solid grey;
+                padding: 10px;
             }
 
-            #headDiv{
-                height:5%;
+            #headDiv {
+                height: 5%;
                 border-bottom: 1px solid grey;
             }
 
-            #headDiv ul{
-                width:100%;
-                height:100%;
+            #headDiv ul {
+                width: 100%;
+                height: 100%;
             }
 
-            #headDiv ul li{
-                float:left;
-                width:7.5%;
-                height:90%;
+            #headDiv ul li {
+                float: left;
+                width: 7.5%;
+                height: 90%;
                 font-size: 16px;
                 cursor: pointer;
             }
 
-            #contentDiv{
-                height:95%;
+            #contentDiv {
+                height: 95%;
                 margin-top: 5px;
                 overflow-y: scroll;
             }
@@ -82,18 +82,18 @@
         var app = new Vue({
             el: '#mainDiv',
             data: {
-                typeList:{},
-                contentList:{},
-                selectedIndex:0,
-                curPage:0,
-                numberPerPage:20,
+                typeList: {},
+                contentList: {},
+                selectedIndex: 0,
+                curPage: 0,
+                numberPerPage: 20
             },
             methods: {
-                queryNewsTypeList:function () {
+                queryNewsTypeList: function () {
                     //查询朋友圈列表
                     $.ajax({
                         type: "GET",
-                        url: rootUrl+'ws/queryWangyiNewsType',
+                        url: rootUrl + 'ws/queryWangyiNewsType',
                         success: function (result) {
                             if (result.code == 1) {
                                 app.typeList = result.data;
@@ -102,10 +102,10 @@
                         }
                     });
                 },
-                listNews:function (index) {
+                listNews: function (index) {
                     var selectedInfo = app.typeList[index];
                     var docId = selectedInfo.docId;
-                    if (app.selectedIndex != index){
+                    if (app.selectedIndex != index) {
                         app.curPage = 0;
                     }
 
@@ -114,22 +114,22 @@
                         dataType: "jsonp",
                         jsonp: "callback",
                         jsonpCallback: "artiList",
-                        url: selectedInfo.url + "/"+app.curPage+"-"+app.numberPerPage+".html",
+                        url: selectedInfo.url + "/" + app.curPage + "-" + app.numberPerPage + ".html",
                         success: function (result) {
                             app.contentList = result[docId];
                             app.selectedIndex = index;
-                            $('#headDiv ul li').css("background-color", "").css("color","black");
-                            $('#headDiv ul li[id="'+docId+'"]').css("background-color","blue").css("color","white");
+                            $('#headDiv ul li').css("background-color", "").css("color", "black");
+                            $('#headDiv ul li[id="' + docId + '"]').css("background-color", "blue").css("color", "white");
                         }
                     });
                 },
-                prePage:function(){
-                    if (app.curPage>=20){
+                prePage: function () {
+                    if (app.curPage >= 20) {
                         app.curPage -= 20;
                     }
                     app.listNews(app.selectedIndex);
                 },
-                nextPage:function () {
+                nextPage: function () {
                     app.curPage += 20;
                     app.listNews(app.selectedIndex);
                 }

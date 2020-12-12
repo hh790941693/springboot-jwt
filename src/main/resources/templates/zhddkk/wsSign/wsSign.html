@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <input id="user" name="user" th:value="${user}"  type="hidden">
+                        <input id="user" name="user" th:value="${user}" type="hidden">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="input-group">
@@ -42,10 +42,12 @@
                     <div class="ibox-content">
                         <div class="fixed-table-toolbar">
                             <div class="columns pull-left" style="display: none;">
-                                <button shiro:hasPermission="zhddkk:wsSign:add" type="button" class="btn  btn-primary" onclick="add()">
+                                <button shiro:hasPermission="zhddkk:wsSign:add" type="button" class="btn  btn-primary"
+                                        onclick="add()">
                                     <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;添加
                                 </button>
-                                <button shiro:hasPermission="zhddkk:wsSign:batchRemove" type="button" class="btn  btn-danger" onclick="batchRemove()">
+                                <button shiro:hasPermission="zhddkk:wsSign:batchRemove" type="button"
+                                        class="btn  btn-danger" onclick="batchRemove()">
                                     <i class="fa fa-trash" aria-hidden="true"></i>&nbsp;删除
                                 </button>
                             </div>

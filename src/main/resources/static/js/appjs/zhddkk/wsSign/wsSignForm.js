@@ -1,23 +1,23 @@
-$(function(){
+$(function () {
     validateRule();
 });
 
 //保存数据
 function save() {
     var action = "save";
-    if($("#id").val()){
+    if ($("#id").val()) {
         action = "update";
     }
     $.ajax({
-        cache : true,
-        type : "POST",
-        url : "/zhddkk/wsSign/" + action,
-        data : $('#form').serialize(),
-        async : false,
-        error : function() {
+        cache: true,
+        type: "POST",
+        url: "/zhddkk/wsSign/" + action,
+        data: $('#form').serialize(),
+        async: false,
+        error: function () {
             parent.layer.alert("保存失败，请稍后再试");
         },
-        success : function(data) {
+        success: function (data) {
             if (data.code === 1) {
                 parent.layer.msg("保存成功");
                 parent.reLoad();
@@ -33,7 +33,7 @@ function save() {
 
 //表单提交拦截
 $.validator.setDefaults({
-    submitHandler : function() {
+    submitHandler: function () {
         save();
     }
 });
@@ -42,27 +42,27 @@ $.validator.setDefaults({
 function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
     $("#form").validate({
-        rules : {
-                                    userId : {
-                required : true
+        rules: {
+            userId: {
+                required: true
             },
-                                userName : {
-                required : true
+            userName: {
+                required: true
             },
-                                createTime : {
-                required : true
+            createTime: {
+                required: true
+            }
+        },
+        messages: {
+            userId: {
+                required: icon + "请输入用户id"
             },
-                    },
-        messages : {
-                                    userId : {
-                required : icon + "请输入用户id"
+            userName: {
+                required: icon + "请输入用户名称"
             },
-                                userName : {
-                required : icon + "请输入用户名称"
-            },
-                                createTime : {
-                required : icon + "请输入签到时间"
-            },
-                    }
+            createTime: {
+                required: icon + "请输入签到时间"
+            }
+        }
     })
 }

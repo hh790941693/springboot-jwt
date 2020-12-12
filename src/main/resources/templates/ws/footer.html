@@ -4,43 +4,43 @@
     <title>WebSocket服务端</title>
 
 <style type="text/css">
-    label{
-        margin:0;
+    label {
+        margin: 0;
     }
 
-    #footDiv{
-        width:100%;
-        height:100%;
-        color:black;
-        font-size:14px;
-        font-weight:bold;
+    #footDiv {
+        width: 100%;
+        height: 100%;
+        color: black;
+        font-size: 14px;
+        font-weight: bold;
     }
 
-    #copyrightDiv ul li{
-        float:left;
-        list-style:none;
+    #copyrightDiv ul li {
+        float: left;
+        list-style: none;
     }
 
-    #statusDiv{
-        width:100%;
-        height:50%;
-        font-size:14px;
-        font-weight:bold;
-        margin-right:3px;
+    #statusDiv {
+        width: 100%;
+        height: 50%;
+        font-size: 14px;
+        font-weight: bold;
+        margin-right: 3px;
     }
 
-    #statusTips{
+    #statusTips {
         width: 100%;
         height: 100%;
         display: inline-block;
     }
 
-    #copyrightDiv li{
+    #copyrightDiv li {
         cursor: pointer;
         margin-right: 8px;
     }
 
-    #copyrightDiv li span{
+    #copyrightDiv li span {
         margin-right: 2px;
     }
 </style>
@@ -76,10 +76,10 @@
                 </ul>
             </div>
         </div>
-
+    
         <!--提示栏 -->
         <div id="statusDiv" align="right">
-            <span id="statusTips" ></span>
+            <span id="statusTips"></span>
         </div>
     </div>
     <th:block th:include="common :: footer"></th:block>
@@ -90,16 +90,16 @@
         var curVersion = "";
         queryVersion();
 
-        console.log("footer页面获取session数据:"+sessionUser);
+        console.log("footer页面获取session数据:" + sessionUser);
 
         //查询版本号
-        function queryVersion(){
+        function queryVersion() {
             $.ajax({
                 type: 'GET',
-                url: rootUrl+'ws/queryVersion.json',
+                url: rootUrl + 'ws/queryVersion.json',
                 //dataType: 'json',
-                async:false,
-                success: function(result) {
+                async: false,
+                success: function (result) {
                     curVersion = result;
                     $("#versionLabel").text(result);
                 }
@@ -107,28 +107,28 @@
         }
 
         //检查升级
-        function checkUpdate(){
+        function checkUpdate() {
             $.ajax({
                 type: 'GET',
-                url: rootUrl+'ws/checkUpdate.do?version='+curVersion+"&cmd=check",
+                url: rootUrl + 'ws/checkUpdate.do?version=' + curVersion + "&cmd=check",
                 //dataType: 'json',
-                async:false,
-                success: function(result) {
+                async: false,
+                success: function (result) {
                     //needUpdate:false;from:1.0;to:2.0
                     var needUpdate = result.split("needUpdate:")[1].split(";")[0];
-                    if (needUpdate == "true"){
+                    if (needUpdate == "true") {
                         var toVersion = result.split("to:")[1];
 
-                        layer.confirm('已经发现新版本,是否要升级到'+toVersion+"?", {
-                            btn: ['是','否'] //按钮
-                        }, function(index){
-                            console.log("开始升级到"+toVersion);
+                        layer.confirm('已经发现新版本,是否要升级到' + toVersion + "?", {
+                            btn: ['是', '否'] //按钮
+                        }, function (index) {
+                            console.log("开始升级到" + toVersion);
                             toUpdate(curVersion);
                             layer.close(index);
-                        }, function(index){
+                        }, function (index) {
                             layer.close(index);
                         });
-                    }else{
+                    } else {
                         layer.alert('已经是最新版本!');
                     }
                 }
@@ -136,75 +136,75 @@
         }
 
         //开始升级
-        function toUpdate(curVersion){
+        function toUpdate(curVersion) {
             $.ajax({
                 type: 'GET',
-                url: rootUrl+'ws/checkUpdate.do?version='+curVersion+"&cmd=update",
+                url: rootUrl + 'ws/checkUpdate.do?version=' + curVersion + "&cmd=update",
                 //dataType: 'json',
-                async:false,
-                success: function(result) {
-                    console.log("升级结果:"+result);
+                async: false,
+                success: function (result) {
+                    console.log("升级结果:" + result);
                 }
             });
         }
 
         //查看session信息
-        function showSessionInfo(){
+        function showSessionInfo() {
             parent.layer.open({
-                type : 2,
-                title : '会话信息',
-                maxmin : false,
-                shadeClose : true,//点击遮罩关闭层
-                area : [ '560px', '400px' ],
-                content : rootUrl + '/sessionInfo.page'
+                type: 2,
+                title: '会话信息',
+                maxmin: false,
+                shadeClose: true,//点击遮罩关闭层
+                area: ['560px', '400px'],
+                content: rootUrl + '/sessionInfo.page'
             });
         }
 
         //联系作者
-        function contactAuthor(){
+        function contactAuthor() {
             parent.layer.open({
-                type : 2,
-                title : '联系作者',
-                maxmin : false,
-                shadeClose : true,//点击遮罩关闭层
-                area : [ '530px', '300px' ],
-                content : rootUrl + 'index/contactAuthor.page'
+                type: 2,
+                title: '联系作者',
+                maxmin: false,
+                shadeClose: true,//点击遮罩关闭层
+                area: ['530px', '300px'],
+                content: rootUrl + 'index/contactAuthor.page'
             });
         }
 
         //捐赠作者
-        function donate(){
+        function donate() {
             parent.layer.open({
-                type : 2,
-                title : '捐赠作者',
-                maxmin : false,
-                shadeClose : true,//点击遮罩关闭层
-                area : [ '530px', '300px' ],
-                content : rootUrl + 'index/donate.page'
+                type: 2,
+                title: '捐赠作者',
+                maxmin: false,
+                shadeClose: true,//点击遮罩关闭层
+                area: ['530px', '300px'],
+                content: rootUrl + 'index/donate.page'
             });
         }
 
         //提出疑问
         function feedbackUs() {
             parent.layer.open({
-                type : 2,
-                title : '提出疑问',
-                maxmin : false,
-                shadeClose : true,//点击遮罩关闭层
-                area : [ '530px', '300px' ],
-                content : rootUrl + 'index/feedbackUs.page'
+                type: 2,
+                title: '提出疑问',
+                maxmin: false,
+                shadeClose: true,//点击遮罩关闭层
+                area: ['530px', '300px'],
+                content: rootUrl + 'index/feedbackUs.page'
             });
         }
 
         //关于我们
         function aboutUs() {
             parent.layer.open({
-                type : 2,
-                title : '关于我们',
-                maxmin : false,
-                shadeClose : true,//点击遮罩关闭层
-                area : [ '530px', '300px' ],
-                content : rootUrl + 'index/aboutUs.page'
+                type: 2,
+                title: '关于我们',
+                maxmin: false,
+                shadeClose: true,//点击遮罩关闭层
+                area: ['530px', '300px'],
+                content: rootUrl + 'index/aboutUs.page'
             });
         }
     </script>

@@ -6,43 +6,45 @@
         <title>音乐播放器</title>
 
         <style type="text/css">
-            *{
-                margin:0;
-                padding:0;
-            }
-            #mainDiv{
-                width:100%;
-                height:100%;
-                overflow:hidden;
+            * {
+                margin: 0;
+                padding: 0;
             }
 
-            #mainDiv button{
-                width:23%;
-                height:100%;
-                font-size:5px;
+            #mainDiv {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
             }
 
-            #playerDiv{
-                width:100%;
-                height:0;
-                margin-top:3px;
+            #mainDiv button {
+                width: 23%;
+                height: 100%;
+                font-size: 5px;
             }
 
-            #buttonsDiv{
-                width:100%;
-                height:22%;
-                margin-left:3px;
-                margin-top:5px;
+            #playerDiv {
+                width: 100%;
+                height: 0;
+                margin-top: 3px;
             }
-            #buttonsDiv button{
+
+            #buttonsDiv {
+                width: 100%;
+                height: 22%;
+                margin-left: 3px;
+                margin-top: 5px;
+            }
+
+            #buttonsDiv button {
                 font-size: 16px;
             }
 
-            #songNameDiv{
-                width:100%;
-                height:52%;
-                font-size:6px;
-                margin-top:5px;
+            #songNameDiv {
+                width: 100%;
+                height: 52%;
+                font-size: 6px;
+                margin-top: 5px;
             }
         </style>
     </head>
@@ -66,7 +68,8 @@
                 </button>
             </div>
             <div id="songNameDiv">
-                <span id="statusSpan">{{playTips}}:</span><br/><span id="songNameSpan" style='color:green;'>{{songName}}</span>
+                <span id="statusSpan">{{playTips}}:</span><br/><span id="songNameSpan"
+                                                                     style='color:green;'>{{songName}}</span>
             </div>
         </div>
 
@@ -79,19 +82,19 @@
             el: '#mainDiv',
             data: {
                 musicData: {},
-                songName:'',
+                songName: '',
                 curSelectedIndex: 0,
-                playTips:'等待播放',
+                playTips: '等待播放',
                 playStatus: -1,  //播放状态 -1:初始化  0:播放中 1:暂停中
                 playMode: 1,  //播放模式 0:单曲循环 1:顺序播放 2:随机播放
-                playModeClass:{
-                    0:'glyphicon glyphicon-refresh',
-                    1:'glyphicon glyphicon-retweet',
-                    2:'glyphicon glyphicon-random'
-                },
+                playModeClass: {
+                    0: 'glyphicon glyphicon-refresh',
+                    1: 'glyphicon glyphicon-retweet',
+                    2: 'glyphicon glyphicon-random'
+                }
             },
             methods: {
-                queryMusicList:function () {
+                queryMusicList: function () {
                     $.ajax({
                         type: "POST",
                         url: rootUrl + "file/showFiles.do",
@@ -99,16 +102,16 @@
                         success: function (result) {
                             if (result.code == 1) {
                                 app.musicData = result.data;
-                                if (app.musicData.length == 0){
+                                if (app.musicData.length == 0) {
                                     app.songName = "暂无歌曲";
                                 }
                             }
                         }
                     });
                 },
-                play:function(){
+                play: function () {
                     //播放
-                    if (app.musicData == null || app.musicData == undefined || app.musicData.length == 0){
+                    if (app.musicData == null || app.musicData == undefined || app.musicData.length == 0) {
                         return;
                     }
                     console.log("开始播放音乐");
@@ -116,21 +119,21 @@
                     var filename = selectedMusicInfo.filename;
                     var url = selectedMusicInfo.url;
 
-                    $("#player").attr("src",url);
+                    $("#player").attr("src", url);
                     app.playTips = "正在播放";
                     app.songName = filename;
-                    if (app.playStatus == -1 || app.playStatus == 1){
+                    if (app.playStatus == -1 || app.playStatus == 1) {
                         app.playStatus = 0; //播放中
                         $("#player")[0].play();
                         $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
-                    }else{
-                       app.playStatus = 1; //暂停中
+                    } else {
+                        app.playStatus = 1; //暂停中
                         app.playTips = "暂停中";
                         $("#player")[0].pause();
                         $("#btnPlay span").removeClass("glyphicon-pause").addClass("glyphicon-play");
                     }
                 },
-                nextMusic:function(){
+                nextMusic: function () {
                     //下一首
                     if (app.playMode == 1) {
                         if (app.curSelectedIndex >= app.musicData.length - 1) {
@@ -139,14 +142,14 @@
                             app.curSelectedIndex = app.curSelectedIndex + 1;
                         }
                         app.play();
-                    } else if (app.playMode == 0){
+                    } else if (app.playMode == 0) {
                         app.play();
-                    } else if (app.playMode == 2){
+                    } else if (app.playMode == 2) {
                         app.randomMusic();
                     }
                     app.playStatus = 0;
                 },
-                preMusic:function(){
+                preMusic: function () {
                     //上一首
                     if (app.playMode == 1) {
                         if (app.curSelectedIndex == 0) {
@@ -156,14 +159,14 @@
                         }
                         var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
                         app.playByIndex(selectedTr);
-                    } else if (app.playMode == 0){
+                    } else if (app.playMode == 0) {
                         app.playStatus = 1;
                         app.play();
-                    } else if (app.playMode == 2){
+                    } else if (app.playMode == 2) {
                         app.randomMusic();
                     }
                 },
-                playByIndex:function(){
+                playByIndex: function () {
                     var selectedMusicInfo = app.musicData[app.curSelectedIndex];
                     var filename = selectedMusicInfo.filename;
                     var url = selectedMusicInfo.url;
@@ -176,21 +179,21 @@
                     $("#player")[0].play();
                     $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
                 },
-                randomMusic:function(){
+                randomMusic: function () {
                     // 随机播放
-                    var randomNum = randomNumber(0,app.musicData.length-1);
+                    var randomNum = randomNumber(0, app.musicData.length - 1);
                     app.curSelectedIndex = randomNum;
                     app.playByIndex();
                 },
-                changePlayMode:function(){
-                    if (app.playMode >= Object.keys(app.playModeClass).length-1){
+                changePlayMode: function () {
+                    if (app.playMode >= Object.keys(app.playModeClass).length - 1) {
                         app.playMode = 0;
-                    }else{
-                        app.playMode = app.playMode+1;
+                    } else {
+                        app.playMode = app.playMode + 1;
                     }
                     var playClass = app.playModeClass[app.playMode];
                     $("#btnChangeMode span").removeClass().addClass(playClass);
-                },
+                }
             },
             created: function () {
                 this.queryMusicList();
@@ -199,22 +202,22 @@
 
         // 绑定事件
         Media = document.getElementById("player");
-        var eventTester = function(e){
-            Media.addEventListener(e,function(){
-                if (e == "ended"){
-                    if (app.playMode == 0){
+        var eventTester = function (e) {
+            Media.addEventListener(e, function () {
+                if (e == "ended") {
+                    if (app.playMode == 0) {
                         // 单曲循环
                         app.play();
                         app.playStatus = 1;
-                    }else if (app.playMode == 1){
+                    } else if (app.playMode == 1) {
                         //顺序播放
                         app.nextMusic();
-                    }else if (app.playMode == 2){
+                    } else if (app.playMode == 2) {
                         //随机播放
                         app.randomMusic();
                     }
-                }else if (e == "error"){
-                    if (app.playMode == 1 || app.playMode == 2){
+                } else if (e == "error") {
+                    if (app.playMode == 1 || app.playMode == 2) {
                         //do nothing
                     }
                 }

@@ -1,5 +1,5 @@
-var user=$('#user').val();
-$(function(){
+var user = $('#user').val();
+$(function () {
     validateRule();
     initUpload();
 });
@@ -7,19 +7,19 @@ $(function(){
 //保存数据
 function save() {
     var action = "save";
-    if($("#id").val()){
+    if ($("#id").val()) {
         action = "update";
     }
     $.ajax({
-        cache : true,
-        type : "POST",
-        url : "/zhddkk/wsFeedback/" + action,
-        data : $('#form').serialize(),
-        async : false,
-        error : function() {
+        cache: true,
+        type: "POST",
+        url: "/zhddkk/wsFeedback/" + action,
+        data: $('#form').serialize(),
+        async: false,
+        error: function () {
             parent.layer.alert("保存失败，请稍后再试");
         },
-        success : function(data) {
+        success: function (data) {
             if (data.code == 1) {
                 parent.layer.msg("保存成功");
                 parent.reLoad();
@@ -35,7 +35,7 @@ function save() {
 
 //表单提交拦截
 $.validator.setDefaults({
-    submitHandler : function() {
+    submitHandler: function () {
         save();
     }
 });
@@ -49,7 +49,7 @@ function initUpload() {
         accept: 'images',
         data: {
             "folder": "feedback",
-            "user":user
+            "user": user
         },
         before: function () {
             layer.load();
@@ -72,45 +72,45 @@ function initUpload() {
 function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
     $("#form").validate({
-        rules : {
-                                    userId : {
-                required : true
+        rules: {
+            userId: {
+                required: true
             },
-                                userName : {
-                required : true
+            userName: {
+                required: true
             },
-                                type : {
-                required : true
+            type: {
+                required: true
             },
-                                title : {
-                required : true
+            title: {
+                required: true
             },
-                                content : {
-                required : true
+            content: {
+                required: true
             },
-                                picUrl : {
-                required : true
-            },
-                    },
-        messages : {
-                                    userId : {
-                required : icon + "请输入用户id"
-            },
-                                userName : {
-                required : icon + "请输入用户名称"
-            },
-                                type : {
-                required : icon + "请输入反馈类型 1:建议 2:问题"
-            },
-                                title : {
-                required : icon + "请输入标题"
-            },
-                                content : {
-                required : icon + "请输入问题描述"
-            },
-                                picUrl : {
-                required : icon + "请输入图片url"
+            picUrl: {
+                required: true
             }
-                    }
+        },
+        messages: {
+            userId: {
+                required: icon + "请输入用户id"
+            },
+            userName: {
+                required: icon + "请输入用户名称"
+            },
+            type: {
+                required: icon + "请输入反馈类型 1:建议 2:问题"
+            },
+            title: {
+                required: icon + "请输入标题"
+            },
+            content: {
+                required: icon + "请输入问题描述"
+            },
+            picUrl: {
+                required: icon + "请输入图片url"
+            }
+        }
     })
 }

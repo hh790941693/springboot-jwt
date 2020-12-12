@@ -7,34 +7,34 @@
 <title>设置个人信息</title>
 
 <style>
-    #personInfoDiv{
-        width:360px;
-        height:auto;
-        border:2px solid green;
-        margin:0 auto;
+    #personInfoDiv {
+        width: 360px;
+        height: auto;
+        border: 2px solid green;
+        margin: 0 auto;
     }
 
-    #formDiv{
-        width:354px;
-        height:100%;
+    #formDiv {
+        width: 354px;
+        height: 100%;
     }
 
-    select{
-        width:212px;
-        margin-left:5px;
+    select {
+        width: 212px;
+        margin-left: 5px;
     }
 
-    #formDiv div{
-        margin-top:10px;
-        margin-left:5px;
+    #formDiv div {
+        margin-top: 10px;
+        margin-left: 5px;
     }
 
-    #mainDiv>ul{
-        height:100%;
+    #mainDiv > ul {
+        height: 100%;
         margin-top: 10px;
     }
 
-    #mainDiv ul li{
+    #mainDiv ul li {
         list-style: none;
         height: 30px;
         width: 100%;
@@ -44,19 +44,21 @@
         cursor: pointer;
     }
 
-    modifyPwdDiv span{
+    modifyPwdDiv span {
         display: inline-block;
-        width:90px;
-    }
-    modifyPwdDiv select{
-        width:175px;
+        width: 90px;
     }
 
-    modifyPwdDiv input{
-        width:175px;
+    modifyPwdDiv select {
+        width: 175px;
     }
-    modifyPwdDiv label{
-        margin-bottom:0px;
+
+    modifyPwdDiv input {
+        width: 175px;
+    }
+
+    modifyPwdDiv label {
+        margin-bottom: 0px;
     }
 </style>
 </head>
@@ -71,11 +73,13 @@
         <div id="rightDiv" style="float:right;width:69%;height:100%;border:1px solid blue;">
             <div id="personInfoDiv" style="width:100%;height:100%;border:1px solid yellow;display: block;">
                 <div id="formDiv" align="left">
-                    <form method="post" action="/zhddkk/wsUsers/setPersonInfo.do" enctype="multipart/form-data" onsubmit="return beforeSumbit()" target="hidden_frame">
+                    <form method="post" action="/zhddkk/wsUsers/setPersonInfo.do" enctype="multipart/form-data"
+                          onsubmit="return beforeSumbit()" target="hidden_frame">
                         <input id="userNameHidden" name="userName" type="hidden">
                         <div>
                             <label id="realNameLabel" for="realName">真实姓名:</label>
-                            <input id="realName" name="realName" type="text" style="width:208px;margin-left:10px;"></input>
+                            <input id="realName" name="realName" type="text"
+                                   style="width:208px;margin-left:10px;"></input>
                         </div>
 
                         <div>
@@ -86,15 +90,20 @@
                             </button>
                         </div>
                         <div style='padding-left:80px;'>
-                            <img id="headImg" onclick="showImg()" alt="" width="60px" height="60px" onerror="imgerror(this)">
+                            <img id="headImg" onclick="showImg()" alt="" width="60px" height="60px"
+                                 onerror="imgerror(this)">
                         </div>
 
                         <div>
-                            <label for="sign">个性签名:</label><input id="sign" name="sign" type="text" style="width:208px;margin-left:10px;"></input>
+                            <label for="sign">个性签名:</label><input id="sign" name="sign" type="text"
+                                                                  style="width:208px;margin-left:10px;"></input>
                         </div>
 
                         <div>
-                            <label for="age">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</label><input id="age" name="age" type="text" style="width:208px;margin-left:10px;"></input>
+                            <label for="age">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</label><input id="age"
+                                                                                                         name="age"
+                                                                                                         type="text"
+                                                                                                         style="width:208px;margin-left:10px;"></input>
                         </div>
 
                         <div>
@@ -108,16 +117,21 @@
                         </div>
 
                         <div>
-                            <label for="tel">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话:</label><input id="tel" name="tel" type="text" style="width:208px;margin-left:10px;"></input>
+                            <label for="tel">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话:</label><input id="tel"
+                                                                                                         name="tel"
+                                                                                                         type="text"
+                                                                                                         style="width:208px;margin-left:10px;"></input>
                         </div>
 
                         <div>
-                            <label for="address">住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址:</label><input id="address" name="address" type="text" style="width:208px;margin-left:10px;"></input>
+                            <label for="address">住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址:</label><input
+                                id="address" name="address" type="text" style="width:208px;margin-left:10px;"></input>
                         </div>
 
                         <div>
                             <label for="professionSelect">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业:</label>
-                            <select id="professionSelect" name="profession" onchange="setHiddenText(this,'professionTextHidden')">
+                            <select id="professionSelect" name="profession"
+                                    onchange="setHiddenText(this,'professionTextHidden')">
                                 <option value="1">IT</option>
                                 <option value="2">建筑</option>
                                 <option value="3">金融</option>
@@ -149,7 +163,8 @@
             </div>
 
             <div id="modifyPwdDiv" style="width:100%;height:100%;border:1px solid blue;display: none;">
-                <form style="margin:10px 5px;" id="forgetPassForm" action="updatePassword.do" method="post" target="hidden_frame">
+                <form style="margin:10px 5px;" id="forgetPassForm" action="updatePassword.do" method="post"
+                      target="hidden_frame">
                     <div>
                         <span>用户名:</span><input id=user name="user" type="text" autocomplete="off">
                     </div>
@@ -158,12 +173,12 @@
                         <br/>
                         <span>确认密码:</span><input id="confirmPass" name="confirmPass" type="password" autocomplete="off">
                         <br/>
-                        <span>问题1:</span><select id="select1"  name="select1">
+                        <span>问题1:</span><select id="select1" name="select1">
                     </select>
                         <br/>
                         <span>你的答案</span><input id="answer1" name="answer1" autocomplete="off">
                         <br/>
-                        <span>问题2:</span><select id="select2"  name="select2">
+                        <span>问题2:</span><select id="select2" name="select2">
                     </select>
                         <br/>
                         <span>你的答案</span><input id="answer2" name="answer2" autocomplete="off">
@@ -174,7 +189,8 @@
                         <span>你的答案</span><input id="answer3" name="answer3" autocomplete="off">
                     </div>
                     <div align="left" style="margin-top:10px;margin-left:130px;">
-                        <button id="btnregist" class='btn btn-sm btn-success'  type="submit" style="width:80px;">提交</button>
+                        <button id="btnregist" class='btn btn-sm btn-success' type="submit"
+                                style="width:80px;">提交</button>
                     </div>
                 </form>
             </div>
@@ -186,44 +202,44 @@
     <script>
         initUpload();
 
-        function setHiddenText(selectObj,hiddenId){
-            var checkText=$(selectObj).find("option:selected").text();
-            $("#"+hiddenId).val(checkText);
+        function setHiddenText(selectObj, hiddenId) {
+            var checkText = $(selectObj).find("option:selected").text();
+            $("#" + hiddenId).val(checkText);
         }
 
-        $("#leftDiv ul li").click(function(){
+        $("#leftDiv ul li").click(function () {
             var liId = $(this).attr("id");
-            var showDivIf = liId+"Div";
-            $("#rightDiv").children("div[id='"+showDivIf+"']").show();
-            $("#rightDiv").children("div[id!='"+showDivIf+"']").hide();
+            var showDivIf = liId + "Div";
+            $("#rightDiv").children("div[id='" + showDivIf + "']").show();
+            $("#rightDiv").children("div[id!='" + showDivIf + "']").hide();
         })
 
         //查询个人信息
         queryPersonInfo(sessionUser);
 
-        function beforeSumbit(){
+        function beforeSumbit() {
             $("#userNameHidden").val(sessionUser);
 
-            var sexText=$("#sexSelect").find("option:selected").text();
+            var sexText = $("#sexSelect").find("option:selected").text();
             $("#sexTextHidden").val(sexText);
 
-            var professionText=$("#professionSelect").find("option:selected").text();
+            var professionText = $("#professionSelect").find("option:selected").text();
             $("#professionTextHidden").val(professionText);
 
-            var hobbyText=$("#hobbySelect").find("option:selected").text();
+            var hobbyText = $("#hobbySelect").find("option:selected").text();
             $("#hobbyTextHidden").val(hobbyText);
             return true;
         }
 
         // 查询个人信息
-        function queryPersonInfo(user){
+        function queryPersonInfo(user) {
             $.ajax({
                 type: 'POST',
                 url: '/zhddkk/wsUsers/queryPersonInfo.json',
-                data:{'user':user},
+                data: {'user': user},
                 //dataType: 'json',
-                success: function(result) {
-                    if (result.code == 1){
+                success: function (result) {
+                    if (result.code == 1) {
                         var data = result.data;
                         $("#realName").val(data.realName);
                         $("#sign").val(data.sign);
@@ -236,34 +252,34 @@
                         $("#professionTextHidden").val(data.professionText);
                         $("#hobbySelect").val(data.hobby);
                         $("#hobbyTextHidden").val(data.hobbyText);
-                        $("#headImg").attr("src",data.img);
+                        $("#headImg").attr("src", data.img);
                         $("#headImgInput").val(data.img);
                     }
                 }
             })
         }
 
-        function refresh(){
+        function refresh() {
             window.location.href = window.location.href;
         };
 
         // 加载图片失败
-        function imgerror(imgObj){
+        function imgerror(imgObj) {
             var scrVar = $(imgObj).attr("src");
-            $(imgObj).attr("src",rootUrl+"img/"+$.ws.errorImageName);
+            $(imgObj).attr("src", rootUrl + "img/" + $.ws.errorImageName);
         }
 
-        $("#hidden_frame").load(function(){
-            var text=$(this).contents().find("body").text();
-            if (text.indexOf("操作成功") != -1){
+        $("#hidden_frame").load(function () {
+            var text = $(this).contents().find("body").text();
+            if (text.indexOf("操作成功") != -1) {
                 layer.msg('更新个人信息成功');
                 var index = parent.layer.getFrameIndex(window.name);
-                setTimeout(function(){
+                setTimeout(function () {
                     parent.layer.close(index);
                     refresh();
-                },2000)
+                }, 2000)
 
-            }else{
+            } else {
                 layer.msg('更新个人信息失败');
             }
         });
@@ -272,7 +288,7 @@
             $.ws.gShowImg($("#headImg").attr("src"));
         }
 
-        function initUpload(){
+        function initUpload() {
             layui.upload.render({
                 elem: '#imageBtn',
                 url: $.ws.uploadUrl,

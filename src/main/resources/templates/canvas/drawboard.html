@@ -57,9 +57,9 @@
     <script type="text/javascript">
     "use strict";
 
-    (function() {
+    (function () {
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             // Remove elements with "noscript" class - <noscript> is not
             // allowed in XHTML
             var noscripts = document.getElementsByClassName("noscript");
@@ -70,7 +70,7 @@
             // Add script for expand content.
             var expandElements = document.getElementsByClassName("expand");
             for (var ixx = 0; ixx < expandElements.length; ixx++) {
-                (function(el) {
+                (function (el) {
                     var expandContent = document.getElementById(el.getAttribute("data-content-id"));
                     expandContent.style.display = "none";
                     var arrow = document.createTextNode("◢ ");
@@ -90,10 +90,9 @@
                     textSpan.appendChild(document.createTextNode(" (click to expand)"));
                     el.appendChild(textSpan);
 
-
                     var visible = true;
 
-                    var switchExpand = function() {
+                    var switchExpand = function () {
                         visible = !visible;
                         expandContent.style.display = visible ? "block" : "none";
                         arrowSpan.style.color = visible ? "#000" : "#888";
@@ -106,17 +105,16 @@
                 })(expandElements[ixx]);
             }
 
-
             var Console = {};
 
-            Console.log = (function() {
+            Console.log = (function () {
                 var consoleContainer =
                     document.getElementById("console-container");
                 var console = document.createElement("div");
                 console.setAttribute("id", "console");
                 consoleContainer.appendChild(console);
 
-                return function(message) {
+                return function (message) {
                     var p = document.createElement('p');
                     p.style.wordWrap = "break-word";
                     p.appendChild(document.createTextNode(message));
@@ -127,7 +125,6 @@
                     console.scrollTop = console.scrollHeight;
                 }
             })();
-
 
             function Room(drawContainer) {
 
@@ -147,7 +144,7 @@
                     // Queue for buffering functions to be called.
                     var functionQueue = [];
 
-                    this.callFunction = function(func) {
+                    this.callFunction = function (func) {
                         // If message processing is paused, we push it
                         // into the queue - otherwise we process it directly.
                         if (pauseProcessing) {
@@ -157,11 +154,11 @@
                         }
                     };
 
-                    this.pauseProcessing = function() {
+                    this.pauseProcessing = function () {
                         pauseProcessing = true;
                     };
 
-                    this.resumeProcessing = function() {
+                    this.resumeProcessing = function () {
                         pauseProcessing = false;
 
                         // Process all queued functions until some handler calls
@@ -193,7 +190,7 @@
                 var canvasServerImage = document.createElement("canvas");
                 var canvasArray = [canvasDisplay, canvasBackground,
                     canvasServerImage];
-                canvasDisplay.addEventListener("mousedown", function(e) {
+                canvasDisplay.addEventListener("mousedown", function (e) {
                     // Prevent default mouse event to prevent browsers from marking text
                     // (and Chrome from displaying the "text" cursor).
                     e.preventDefault();
@@ -201,7 +198,6 @@
 
                 var labelPlayerCount = document.createTextNode("0");
                 var optionContainer = document.createElement("div");
-
 
                 var canvasDisplayCtx = canvasDisplay.getContext("2d");
                 var canvasBackgroundCtx = canvasBackground.getContext("2d");
@@ -225,14 +221,13 @@
                 var thicknessContainers;
 
                 var availableDrawTypes = [
-                           { name: "Brush", id: 1, continuous: true },
-                           { name: "Line", id: 2, continuous: false },
-                           { name: "Rectangle", id: 3, continuous: false },
-                           { name: "Ellipse", id: 4, continuous: false }
+                    {name: "Brush", id: 1, continuous: true},
+                    {name: "Line", id: 2, continuous: false},
+                    {name: "Rectangle", id: 3, continuous: false},
+                    {name: "Ellipse", id: 4, continuous: false}
                 ];
                 var currentDrawTypeIndex;
                 var drawTypeContainers;
-
 
                 var labelContainer = document.getElementById("labelContainer");
                 var placeholder = document.createElement("div");
@@ -243,9 +238,9 @@
                 labelContainer.appendChild(placeholder);
 
                 function rgb(color) {
-                       return "rgba(" + color[0] + "," + color[1] + ","
-                               + color[2] + "," + color[3] + ")";
-                   }
+                    return "rgba(" + color[0] + "," + color[1] + ","
+                        + color[2] + "," + color[3] + ")";
+                }
 
                 function PathIdContainer(path, id) {
                     this.path = path;
@@ -280,7 +275,7 @@
                         ctx.restore();
                     }
 
-                    this.draw = function(ctx) {
+                    this.draw = function (ctx) {
                         ctx.beginPath();
                         ctx.lineCap = "round";
                         ctx.lineWidth = thickness;
@@ -292,7 +287,7 @@
                             // in Java2D.
                             ctx.fillStyle = style;
                             ctx.arc(x1, y1, thickness / 2.0, 0,
-                                    Math.PI * 2.0, false);
+                                Math.PI * 2.0, false);
                             ctx.fill();
                         } else {
                             if (type == 1 || type == 2) {
@@ -320,11 +315,10 @@
                     };
                 }
 
-
                 function connect() {
                     var host = (window.location.protocol == "https:"
-                            ? "wss://" : "ws://") + window.location.host
-                            + "/examples/websocket/drawboard";
+                        ? "wss://" : "ws://") + window.location.host
+                        + "/examples/websocket/drawboard";
                     socket = new WebSocket(host);
 
                     /* Use a pausable event forwarder.
@@ -344,13 +338,13 @@
                         Console.log("WebSocket connection opened.");
 
                         // Set up a timer for pong messages.
-                        pingTimerId = window.setInterval(function() {
+                        pingTimerId = window.setInterval(function () {
                             socket.send("0");
                         }, 30000);
                     };
 
                     socket.onclose = function () {
-                        eventForwarder.callFunction(function() {
+                        eventForwarder.callFunction(function () {
                             Console.log("WebSocket connection closed.");
                             disableControls();
 
@@ -360,13 +354,13 @@
                     };
 
                     // Handles an incoming Websocket message.
-                    var handleOnMessage = function(message) {
+                    var handleOnMessage = function (message) {
 
                         // Split joined message and process them
                         // individually.
                         var messages = message.data.split(";");
                         for (var msgArrIdx = 0; msgArrIdx < messages.length;
-                                msgArrIdx++) {
+                             msgArrIdx++) {
                             var msg = messages[msgArrIdx];
                             var type = msg.substring(0, 1);
 
@@ -394,14 +388,14 @@
                                         // as PNG. Therefore we temporarily swap
                                         // the message handler.
                                         var originalHandler = handleOnMessage;
-                                        handleOnMessage = function(message) {
+                                        handleOnMessage = function (message) {
                                             // First, we restore the original handler.
                                             handleOnMessage = originalHandler;
 
                                             // Read the image.
                                             var blob = message.data;
                                             // Create new blob with correct MIME type.
-                                            blob = new Blob([blob], {type : "image/png"});
+                                            blob = new Blob([blob], {type: "image/png"});
 
                                             var url = URL.createObjectURL(blob);
 
@@ -414,7 +408,7 @@
                                             // forwarder until the image is loaded.
                                             eventForwarder.pauseProcessing();
 
-                                            img.onload = function() {
+                                            img.onload = function () {
 
                                                 // Release the object URL.
                                                 URL.revokeObjectURL(url);
@@ -427,20 +421,19 @@
 
                                                 // Now draw the image on the last canvas.
                                                 canvasServerImageCtx.clearRect(0, 0,
-                                                        canvasServerImage.width,
-                                                        canvasServerImage.height);
+                                                    canvasServerImage.width,
+                                                    canvasServerImage.height);
                                                 canvasServerImageCtx.drawImage(img, 0, 0);
 
                                                 // Draw it on the background canvas.
                                                 canvasBackgroundCtx.drawImage(canvasServerImage,
-                                                        0, 0);
+                                                    0, 0);
 
                                                 isStarted = true;
                                                 startControls();
 
                                                 // Refresh the display canvas.
                                                 refreshDisplayCanvas();
-
 
                                                 // Finally, resume the event forwarder.
                                                 eventForwarder.resumeProcessing();
@@ -457,7 +450,7 @@
                                         refreshPlayerCount();
 
                                         Console.log("Player " + (playerAdded
-                                                ? "joined." : "left."));
+                                            ? "joined." : "left."));
 
                                     } else if (type == "1") {
                                         // We received a new DrawMessage.
@@ -466,20 +459,20 @@
                                         for (var i = 0; i < drawMessages.length; i++) {
                                             var elements = drawMessages[i].split(",");
                                             var lastHandledId = parseInt(elements[0]);
-                                               maxLastHandledId = Math.max(maxLastHandledId,
-                                                       lastHandledId);
+                                            maxLastHandledId = Math.max(maxLastHandledId,
+                                                lastHandledId);
 
                                             var path = new Path(
-                                                    parseInt(elements[1]),
-                                                    [parseInt(elements[2]),
+                                                parseInt(elements[1]),
+                                                [parseInt(elements[2]),
                                                     parseInt(elements[3]),
                                                     parseInt(elements[4]),
                                                     parseInt(elements[5]) / 255.0],
-                                                    parseFloat(elements[6]),
-                                                    parseFloat(elements[7]),
-                                                    parseFloat(elements[8]),
-                                                    parseFloat(elements[9]),
-                                                    parseFloat(elements[10]));
+                                                parseFloat(elements[6]),
+                                                parseFloat(elements[7]),
+                                                parseFloat(elements[8]),
+                                                parseFloat(elements[9]),
+                                                parseFloat(elements[10]));
 
                                             // Draw the path onto the last canvas.
                                             path.draw(canvasServerImageCtx);
@@ -487,13 +480,13 @@
 
                                         // Draw the last canvas onto the background one.
                                         canvasBackgroundCtx.drawImage(canvasServerImage,
-                                                0, 0);
+                                            0, 0);
 
                                         // Now go through the pathsNotHandled array and
                                         // remove the paths that were already handled by
                                         // the server.
                                         while (pathsNotHandled.length > 0
-                                                && pathsNotHandled[0].id <= maxLastHandledId)
+                                        && pathsNotHandled[0].id <= maxLastHandledId)
                                             pathsNotHandled.shift();
 
                                         // Now me must draw the remaining paths onto
@@ -509,14 +502,13 @@
                         }
                     };
 
-                    socket.onmessage = function(message) {
-                        eventForwarder.callFunction(function() {
+                    socket.onmessage = function (message) {
+                        eventForwarder.callFunction(function () {
                             handleOnMessage(message);
                         });
                     };
 
                 }
-
 
                 function refreshPlayerCount() {
                     labelPlayerCount.nodeValue = String(playerCount);
@@ -539,8 +531,8 @@
                         canvasDisplayCtx.fillStyle = rgb(color);
 
                         canvasDisplayCtx.arc(currentMouseX, currentMouseY,
-                                availableThicknesses[currentThicknessIndex] / 2,
-                                0, Math.PI * 2.0, true);
+                            availableThicknesses[currentThicknessIndex] / 2,
+                            0, Math.PI * 2.0, true);
                         canvasDisplayCtx.fill();
                     }
 
@@ -553,16 +545,15 @@
                     placeholder = undefined;
 
                     labelContainer.appendChild(
-                            document.createTextNode("Number of Players: "));
+                        document.createTextNode("Number of Players: "));
                     labelContainer.appendChild(labelPlayerCount);
-
 
                     drawContainer.style.display = "block";
                     drawContainer.appendChild(canvasDisplay);
 
                     drawContainer.appendChild(optionContainer);
 
-                    canvasMouseDownHandler = function(e) {
+                    canvasMouseDownHandler = function (e) {
                         if (e.button == 0) {
                             currentMouseX = e.pageX - canvasDisplay.offsetLeft;
                             currentMouseY = e.pageY - canvasDisplay.offsetTop;
@@ -583,7 +574,7 @@
                     };
                     canvasDisplay.addEventListener("mousedown", canvasMouseDownHandler, false);
 
-                    canvasMouseMoveHandler = function(e) {
+                    canvasMouseMoveHandler = function (e) {
                         var mouseX = e.pageX - canvasDisplay.offsetLeft;
                         var mouseY = e.pageY - canvasDisplay.offsetTop;
 
@@ -593,10 +584,10 @@
                             if (drawType.continuous) {
 
                                 var path = new Path(drawType.id,
-                                        availableColors[currentColorIndex],
-                                        availableThicknesses[currentThicknessIndex],
-                                        currentMouseX, currentMouseY, mouseX,
-                                        mouseY);
+                                    availableColors[currentColorIndex],
+                                    availableThicknesses[currentThicknessIndex],
+                                    currentMouseX, currentMouseY, mouseX,
+                                    mouseY);
                                 // Draw it on the background canvas.
                                 path.draw(canvasBackgroundCtx);
 
@@ -612,10 +603,10 @@
                                 var color = availableColors[currentColorIndex].slice(0);
                                 color[3] = previewTransparency;
                                 currentPreviewPath = new Path(drawType.id,
-                                        color,
-                                        availableThicknesses[currentThicknessIndex],
-                                        currentMouseX, currentMouseY, mouseX,
-                                        mouseY, false);
+                                    color,
+                                    availableThicknesses[currentThicknessIndex],
+                                    currentMouseX, currentMouseY, mouseX,
+                                    mouseY, false);
                             }
 
                             refreshDisplayCanvas();
@@ -631,7 +622,7 @@
                     };
                     document.addEventListener("mousemove", canvasMouseMoveHandler, false);
 
-                    document.addEventListener("mouseup", function(e) {
+                    document.addEventListener("mouseup", function (e) {
                         if (e.button == 0) {
                             if (mouseDown) {
                                 mouseDown = false;
@@ -646,9 +637,9 @@
                                 // "terminate" a path as every path element contains both the start and the end point.
                                 if (!(drawType.continuous && mouseX == currentMouseX && mouseY == currentMouseY)) {
                                     var path = new Path(drawType.id, availableColors[currentColorIndex],
-                                            availableThicknesses[currentThicknessIndex],
-                                            currentMouseX, currentMouseY, mouseX,
-                                            mouseY);
+                                        availableThicknesses[currentThicknessIndex],
+                                        currentMouseX, currentMouseY, mouseX,
+                                        mouseY);
                                     // Draw it on the background canvas.
                                     path.draw(canvasBackgroundCtx);
 
@@ -665,23 +656,22 @@
                         }
                     }, false);
 
-                    canvasDisplay.addEventListener("mouseout", function(e) {
+                    canvasDisplay.addEventListener("mouseout", function (e) {
                         mouseInWindow = false;
                         refreshDisplayCanvas();
                     }, false);
 
-                    canvasDisplay.addEventListener("mousemove", function(e) {
+                    canvasDisplay.addEventListener("mousemove", function (e) {
                         if (!mouseInWindow) {
                             mouseInWindow = true;
                             refreshDisplayCanvas();
                         }
                     }, false);
 
-
                     // Create color and thickness controls.
                     var colorContainersBox = document.createElement("div");
                     colorContainersBox.setAttribute("style",
-                            "margin: 4px; border: 1px solid #bbb; border-radius: 3px;");
+                        "margin: 4px; border: 1px solid #bbb; border-radius: 3px;");
                     optionContainer.appendChild(colorContainersBox);
 
                     colorContainers = new Array(3 * 3 * 3);
@@ -696,11 +686,11 @@
                                 1.0
                             ];
                         colorContainer.setAttribute("style",
-                                "margin: 3px; width: 18px; height: 18px; "
-                                + "float: left; background-color: " + rgb(color));
+                            "margin: 3px; width: 18px; height: 18px; "
+                            + "float: left; background-color: " + rgb(color));
                         colorContainer.style.border = '2px solid #000';
-                        colorContainer.addEventListener("mousedown", (function(ix) {
-                            return function() {
+                        colorContainer.addEventListener("mousedown", (function (ix) {
+                            return function () {
                                 setColor(ix);
                             };
                         })(i), false);
@@ -712,10 +702,9 @@
                     divClearLeft.setAttribute("style", "clear: left;");
                     colorContainersBox.appendChild(divClearLeft);
 
-
                     var drawTypeContainersBox = document.createElement("div");
                     drawTypeContainersBox.setAttribute("style",
-                           "float: right; margin-right: 3px; margin-top: 1px;");
+                        "float: right; margin-right: 3px; margin-top: 1px;");
                     optionContainer.appendChild(drawTypeContainersBox);
 
                     drawTypeContainers = new Array(availableDrawTypes.length);
@@ -723,13 +712,13 @@
                         var drawTypeContainer = drawTypeContainers[i] =
                             document.createElement("div");
                         drawTypeContainer.setAttribute("style",
-                                "text-align: center; margin: 3px; padding: 0 3px;"
-                                + "height: 18px; float: left;");
+                            "text-align: center; margin: 3px; padding: 0 3px;"
+                            + "height: 18px; float: left;");
                         drawTypeContainer.style.border = "2px solid #000";
                         drawTypeContainer.appendChild(document.createTextNode(
-                                String(availableDrawTypes[i].name)));
-                        drawTypeContainer.addEventListener("mousedown", (function(ix) {
-                            return function() {
+                            String(availableDrawTypes[i].name)));
+                        drawTypeContainer.addEventListener("mousedown", (function (ix) {
+                            return function () {
                                 setDrawType(ix);
                             };
                         })(i), false);
@@ -737,10 +726,9 @@
                         drawTypeContainersBox.appendChild(drawTypeContainer);
                     }
 
-
                     var thicknessContainersBox = document.createElement("div");
                     thicknessContainersBox.setAttribute("style",
-                            "margin: 3px; border: 1px solid #bbb; border-radius: 3px;");
+                        "margin: 3px; border: 1px solid #bbb; border-radius: 3px;");
                     optionContainer.appendChild(thicknessContainersBox);
 
                     thicknessContainers = new Array(availableThicknesses.length);
@@ -748,13 +736,13 @@
                         var thicknessContainer = thicknessContainers[i] =
                             document.createElement("div");
                         thicknessContainer.setAttribute("style",
-                                "text-align: center; margin: 3px; width: 18px; "
-                                + "height: 18px; float: left;");
+                            "text-align: center; margin: 3px; width: 18px; "
+                            + "height: 18px; float: left;");
                         thicknessContainer.style.border = "2px solid #000";
                         thicknessContainer.appendChild(document.createTextNode(
-                                String(availableThicknesses[i])));
-                        thicknessContainer.addEventListener("mousedown", (function(ix) {
-                            return function() {
+                            String(availableThicknesses[i])));
+                        thicknessContainer.addEventListener("mousedown", (function (ix) {
+                            return function () {
                                 setThickness(ix);
                             };
                         })(i), false);
@@ -762,11 +750,9 @@
                         thicknessContainersBox.appendChild(thicknessContainer);
                     }
 
-
                     divClearLeft = document.createElement("div");
                     divClearLeft.setAttribute("style", "clear: left;");
                     thicknessContainersBox.appendChild(divClearLeft);
-
 
                     setColor(0);
                     setThickness(0);
@@ -791,51 +777,42 @@
 
                     // Send the path to the server.
                     var message = container.id + "|" + path.type + ","
-                            + path.color[0] + "," + path.color[1] + ","
-                            + path.color[2] + ","
-                            + Math.round(path.color[3] * 255.0) + ","
-                            + path.thickness + "," + path.x1 + ","
-                            + path.y1 + "," + path.x2 + "," + path.y2;
+                        + path.color[0] + "," + path.color[1] + ","
+                        + path.color[2] + ","
+                        + Math.round(path.color[3] * 255.0) + ","
+                        + path.thickness + "," + path.x1 + ","
+                        + path.y1 + "," + path.x2 + "," + path.y2;
 
                     socket.send("1" + message);
                 }
 
                 function setThickness(thicknessIndex) {
                     if (typeof currentThicknessIndex !== "undefined")
-                        thicknessContainers[currentThicknessIndex]
-                            .style.borderColor = "#000";
+                        thicknessContainers[currentThicknessIndex].style.borderColor = "#000";
                     currentThicknessIndex = thicknessIndex;
-                    thicknessContainers[currentThicknessIndex]
-                        .style.borderColor = "#d08";
+                    thicknessContainers[currentThicknessIndex].style.borderColor = "#d08";
                 }
 
                 function setColor(colorIndex) {
                     if (typeof currentColorIndex !== "undefined")
-                        colorContainers[currentColorIndex]
-                            .style.borderColor = "#000";
+                        colorContainers[currentColorIndex].style.borderColor = "#000";
                     currentColorIndex = colorIndex;
-                    colorContainers[currentColorIndex]
-                        .style.borderColor = "#d08";
+                    colorContainers[currentColorIndex].style.borderColor = "#d08";
                 }
 
                 function setDrawType(drawTypeIndex) {
                     if (typeof currentDrawTypeIndex !== "undefined")
-                        drawTypeContainers[currentDrawTypeIndex]
-                            .style.borderColor = "#000";
+                        drawTypeContainers[currentDrawTypeIndex].style.borderColor = "#000";
                     currentDrawTypeIndex = drawTypeIndex;
-                    drawTypeContainers[currentDrawTypeIndex]
-                        .style.borderColor = "#d08";
+                    drawTypeContainers[currentDrawTypeIndex].style.borderColor = "#d08";
                 }
-
 
                 connect();
 
             }
 
-
             // Initialize the room
             var room = new Room(document.getElementById("drawContainer"));
-
 
         }, false);
 

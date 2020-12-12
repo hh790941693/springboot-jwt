@@ -4,7 +4,7 @@
     <title>2D画图</title>
 
 <style type="text/css">
-    ul li{
+    ul li {
         list-style: none;
         height: 25px;
         width: 100%;
@@ -12,42 +12,45 @@
         font-weight: bold;
         cursor: pointer;
     }
-    ul a{
-        text-decoration:none;
+
+    ul a {
+        text-decoration: none;
     }
 
-    .mousemoveon{
-        background-color:grey;
-        color:white;
-    }
-    .mousemoveout{
-        background-color:white;
-        color:black;
-    }
-    .mouseleftclick{
-        background-color:blue;
-        color:white;
+    .mousemoveon {
+        background-color: grey;
+        color: white;
     }
 
-    #mainDiv{
-        width:1318px;
-        height:720px;
-        margin:0 auto;
+    .mousemoveout {
+        background-color: white;
+        color: black;
     }
 
-    #leftNaviDiv{
-        width:12%;
-        height:100%;
-        float:left;
-        border:2px solid green;
+    .mouseleftclick {
+        background-color: blue;
+        color: white;
+    }
+
+    #mainDiv {
+        width: 1318px;
+        height: 720px;
+        margin: 0 auto;
+    }
+
+    #leftNaviDiv {
+        width: 12%;
+        height: 100%;
+        float: left;
+        border: 2px solid green;
         text-align: center;
     }
 
-    #rightCanvasDiv{
-        width:87%;
-        height:100%;
-        float:left;
-        border:2px solid green;
+    #rightCanvasDiv {
+        width: 87%;
+        height: 100%;
+        float: left;
+        border: 2px solid green;
     }
 </style>
 </head>
@@ -56,19 +59,19 @@
         <div id="leftNaviDiv">
             <ul>
                 <li id="../canvas/starts.page" class='mouseleftclick'>太阳系</li>
-                <li id="../canvas/collision.page" >碰撞球</li>
-                <li id="../canvas/gravityBall.page" >重力球</li>
-                <li id="../canvas/randomBall.page" >随机运动</li>
-                <li id="../canvas/clock.page" >时钟</li>
-                <li id="../canvas/clock2.page" >时钟2</li>
-                <li id="../canvas/turnAroundBall.page" >星系云</li>
-                <li id="../canvas/hidePhotoBall.page" >探照灯</li>
-                <li id="../canvas/baidong.page" >游乐园</li>
-                <li id="../canvas/flappyBird.page" >鸟</li>
-                <li id="../canvas/trafficByCanvas_stepbystep.page" >交通1</li>
-                <li id="../canvas/trafficByCanvas-smooth-0624.page" >交通2</li>
-                <li id="../canvas/tank_p1p2.page" >坦克大战1</li>
-                <li id="../canvas/tank_construct.page" >坦克大战2</li>
+                <li id="../canvas/collision.page">碰撞球</li>
+                <li id="../canvas/gravityBall.page">重力球</li>
+                <li id="../canvas/randomBall.page">随机运动</li>
+                <li id="../canvas/clock.page">时钟</li>
+                <li id="../canvas/clock2.page">时钟2</li>
+                <li id="../canvas/turnAroundBall.page">星系云</li>
+                <li id="../canvas/hidePhotoBall.page">探照灯</li>
+                <li id="../canvas/baidong.page">游乐园</li>
+                <li id="../canvas/flappyBird.page">鸟</li>
+                <li id="../canvas/trafficByCanvas_stepbystep.page">交通1</li>
+                <li id="../canvas/trafficByCanvas-smooth-0624.page">交通2</li>
+                <li id="../canvas/tank_p1p2.page">坦克大战1</li>
+                <li id="../canvas/tank_construct.page">坦克大战2</li>
                 <li id="../canvas/pintu.page">拼图</li>
                 <li id="../canvas/wuziqi.page">五子棋</li>
                 <li id="../canvas/xiangqi_v6.0.page">象棋</li>
@@ -91,7 +94,7 @@
             </div>
         </div>
         <div id="rightCanvasDiv" align="center">
-            <iframe id="iframePage" width="100%" height="100%" ></iframe>
+            <iframe id="iframePage" width="100%" height="100%"></iframe>
         </div>
     </div>
 
@@ -100,31 +103,31 @@
 
     <script type="text/javascript">
         var curPage = $("#leftNaviDiv ul li").eq(0).attr("id");
-        $('#iframePage').attr('src',curPage);
-        $("ul li").click(function (){
+        $('#iframePage').attr('src', curPage);
+        $("ul li").click(function () {
             curPage = this.id;
-            $('#iframePage').attr('src',curPage);
+            $('#iframePage').attr('src', curPage);
             $("ul li").removeClass("mouseleftclick");
             $(this).addClass("mouseleftclick");
         });
 
-        $('#showNewWindowBtn').click(function(){
+        $('#showNewWindowBtn').click(function () {
             window.open(curPage);
         })
 
-        $('#backBtn').click(function(){
+        $('#backBtn').click(function () {
             top.location.href = rootUrl;
         })
 
-        $("ul li").hover(function(){
-            $(this).removeClass("mousemoveout");
-            $(this).removeClass("mousemoveon");
-            $(this).addClass("mousemoveon");
-        },
-        function(){
-            $(this).removeClass("mousemoveout");
-            $(this).removeClass("mousemoveon");
-            $(this).addClass("mousemoveout");
-        })
+        $("ul li").hover(function () {
+                $(this).removeClass("mousemoveout");
+                $(this).removeClass("mousemoveon");
+                $(this).addClass("mousemoveon");
+            },
+            function () {
+                $(this).removeClass("mousemoveout");
+                $(this).removeClass("mousemoveon");
+                $(this).addClass("mousemoveout");
+            })
     </script>
 </html>

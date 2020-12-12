@@ -4,56 +4,58 @@
 <title>我的申请记录</title>
 <style type="text/css">
 
-    #userTable tr td{
-        text-align:center;
+    #userTable tr td {
+        text-align: center;
     }
 
-    #userTable tr:nth-child(odd){
+    #userTable tr:nth-child(odd) {
         background: #ccc;
     }
 
-    #userTable{
-        border:2px solid green;
+    #userTable {
+        border: 2px solid green;
     }
 
-    #userTable th{
-        background-color:green;
-        color:white;
-        font-weight:bold;
-        text-align:center;
+    #userTable th {
+        background-color: green;
+        color: white;
+        font-weight: bold;
+        text-align: center;
     }
 
-    ul li{
-        list-style:none;
-        height:40px;
-        font-size:20px;
-        margin-left:-20px;
-        cursor:pointer;
-    }
-    ul a{
-        text-decoration:none;
+    ul li {
+        list-style: none;
+        height: 40px;
+        font-size: 20px;
+        margin-left: -20px;
+        cursor: pointer;
     }
 
-    #pagenavigation span{
+    ul a {
+        text-decoration: none;
+    }
+
+    #pagenavigation span {
         display: inline-block;
     }
 
-    .btnDisabledClass{
-        background-color:grey;
-        color:black;
+    .btnDisabledClass {
+        background-color: grey;
+        color: black;
     }
 
-    #controlDiv button{
-        width:45px;
+    #controlDiv button {
+        width: 45px;
     }
 </style>
 </head>
 <body>
     <div align="right" style="width:1095px;">
         <label id="onlineCount">在线:0</label>
-        <button id="refresh" type="button" class='btn btn-sm btn-primary'  onClick="refresh()">刷&nbsp;&nbsp;&nbsp;新</button>
+        <button id="refresh" type="button" class='btn btn-sm btn-primary'
+                onClick="refresh()">刷&nbsp;&nbsp;&nbsp;新</button>
 
-        <table id= "userTable" style="width:100%;border-collapse:separate; border-spacing:1px 4px;" >
+        <table id="userTable" style="width:100%;border-collapse:separate; border-spacing:1px 4px;">
         </table>
     </div>
 
@@ -65,13 +67,21 @@
         <div id="controlDiv" style="float:right;">
             <span>当前是第</span><span id="curPage">1</span><span>页</span>
             <span style="margin-left:10px">总共</span><span id="totalPage">0</span><span>页</span>
-            <button id="firstPage" class='btn btn-sm btn-warning'  onclick="getOnlineUsersByPage(1,parseInt($('#numPerPage').val()))" style="margin-left:10px;">&lt;&lt;</button>
-            <button id="prePage" class='btn btn-sm btn-primary' onclick="getOnlineUsersByPage(parseInt($('#curPage').text())-1,parseInt($('#numPerPage').val()))" style="margin-left:10px">&lt;</button>
-            <button id="nextPage" class='btn btn-sm btn-primary' onclick="getOnlineUsersByPage(parseInt($('#curPage').text())+1,parseInt($('#numPerPage').val()))" style="margin-left:10px">&gt;</button>
-            <button id="lastPage" class='btn btn-sm btn-warning'  onclick="getOnlineUsersByPage(parseInt($('#totalPage').text()),parseInt($('#numPerPage').val()))"style="margin-left:10px">&gt;&gt;</button>
+            <button id="firstPage" class='btn btn-sm btn-warning'
+                    onclick="getOnlineUsersByPage(1,parseInt($('#numPerPage').val()))" style="margin-left:10px;">&lt;&lt;</button>
+            <button id="prePage" class='btn btn-sm btn-primary'
+                    onclick="getOnlineUsersByPage(parseInt($('#curPage').text())-1,parseInt($('#numPerPage').val()))"
+                    style="margin-left:10px">&lt;</button>
+            <button id="nextPage" class='btn btn-sm btn-primary'
+                    onclick="getOnlineUsersByPage(parseInt($('#curPage').text())+1,parseInt($('#numPerPage').val()))"
+                    style="margin-left:10px">&gt;</button>
+            <button id="lastPage" class='btn btn-sm btn-warning'
+                    onclick="getOnlineUsersByPage(parseInt($('#totalPage').text()),parseInt($('#numPerPage').val()))"
+                    style="margin-left:10px">&gt;&gt;</button>
 
             <span style="margin-left:10px">每页显示</span>
-            <select id="numPerPage" onchange="getOnlineUsersByPage(parseInt($('#curPage').text()),parseInt($(this).val()))">
+            <select id="numPerPage"
+                    onchange="getOnlineUsersByPage(parseInt($('#curPage').text()),parseInt($(this).val()))">
                 <option value="5">5</option>
                 <option value="10" selected="selected">10</option>
                 <option value="15">15</option>
@@ -81,23 +91,25 @@
             </select>
             <span>条</span>
 
-            <span style="margin-left:10px">跳转至</span><input id="toPage" onblur="getOnlineUsersByPage(parseInt($(this).val()),parseInt($('#numPerPage').val()))" style="width:20px;"></input><span>页</span>
+            <span style="margin-left:10px">跳转至</span><input id="toPage"
+                                                            onblur="getOnlineUsersByPage(parseInt($(this).val()),parseInt($('#numPerPage').val()))"
+                                                            style="width:20px;"></input><span>页</span>
         </div>
     </div>
     <th:block th:include="common :: footer"></th:block>
     <th:block th:include="common :: sessionInfo"></th:block>
 </body>
     <script type="text/javascript">
-        var userLike="";
-        getOnlineUsersByPage(1,10);
-        function getOnlineUsersByPage(curPage,numPerPage) {
+        var userLike = "";
+        getOnlineUsersByPage(1, 10);
+        function getOnlineUsersByPage(curPage, numPerPage) {
             $.ajax({
                 type: 'GET',
-                url: rootUrl+'ws/getMyApplyList.json',
-                data:{curUser:sessionUser,userLike:userLike,curPage:curPage,numPerPage:numPerPage},
+                url: rootUrl + 'ws/getMyApplyList.json',
+                data: {curUser: sessionUser, userLike: userLike, curPage: curPage, numPerPage: numPerPage},
                 //dataType: 'json',
-                async:false,
-                success: function(result) {
+                async: false,
+                success: function (result) {
                     var totalPage = result.totalPage;
                     var list = result.list;
                     var totalCount = result.totalCount;
@@ -108,48 +120,41 @@
                     $("#totalCount").text(totalCount);
 
                     var curPageInt = parseInt(curPage);
-                    var totalPageInt =  parseInt(totalPage);
-                    if (list != null && list != "" && list != undefined && list.length>0)
-                    {
+                    var totalPageInt = parseInt(totalPage);
+                    if (list != null && list != "" && list != undefined && list.length > 0) {
                         $("#totalPage").text(totalPage);
                         $("#curPage").text(curPage);
                         $("#totalCount").text(totalCount);
 
                         var curPageInt = parseInt(curPage);
-                        var totalPageInt =  parseInt(totalPage);
+                        var totalPageInt = parseInt(totalPage);
 
-                        if (totalPage == 1)
-                        {
-                            $("#prePage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
-                            $("#firstPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
-                            $("#nextPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
-                            $("#lastPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
+                        if (totalPage == 1) {
+                            $("#prePage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
+                            $("#firstPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
+                            $("#nextPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
+                            $("#lastPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
                         }
-                        else
-                        {
-                            if (curPageInt == 1)
-                            {
-                                $("#prePage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
-                                $("#firstPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
+                        else {
+                            if (curPageInt == 1) {
+                                $("#prePage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
+                                $("#firstPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
                             }
-                            if (curPageInt > 1)
-                            {
-                                $("#prePage").removeClass("btn-warning").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled",false);
-                                $("#firstPage").removeClass("btn-primary").addClass("btn-warning").removeClass("btnDisabledClass").attr("disabled",false);
+                            if (curPageInt > 1) {
+                                $("#prePage").removeClass("btn-warning").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled", false);
+                                $("#firstPage").removeClass("btn-primary").addClass("btn-warning").removeClass("btnDisabledClass").attr("disabled", false);
                             }
-                            if (curPageInt < totalPage)
-                            {
-                                $("#nextPage").removeClass("btn-warning").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled",false);
-                                $("#lastPage").removeClass("btn-primary").addClass("btn-warning").removeClass("btnDisabledClass").attr("disabled",false);
+                            if (curPageInt < totalPage) {
+                                $("#nextPage").removeClass("btn-warning").addClass("btn-primary").removeClass("btnDisabledClass").attr("disabled", false);
+                                $("#lastPage").removeClass("btn-primary").addClass("btn-warning").removeClass("btnDisabledClass").attr("disabled", false);
                             }
-                            if (curPageInt == totalPageInt)
-                            {
-                                $("#nextPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
-                                $("#lastPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
+                            if (curPageInt == totalPageInt) {
+                                $("#nextPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
+                                $("#lastPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
 
                             }
                         }
-                        list.forEach(function(i,index){
+                        list.forEach(function (i, index) {
                             var id = i.id;
                             var fromUser = i.fromName;
                             var toUser = i.toName;
@@ -157,33 +162,33 @@
                             var processStatus = i.processStatus;
 
                             // 1:申请中 2:被拒绝 3:申请成功
-                            if (processStatus == 1){
-                                tabinfostr += "<tr id="+id+"><td>" + toUser + "</td><td>" + createTimeStr + "</td>"+"<td><span style='width:80px;background-color:blue;color:white;display:inline-block;'>申请中</span></td></tr>";
-                            }else if (processStatus == 2){
-                                tabinfostr += "<tr id="+id+"><td>" + toUser + "</td><td>" + createTimeStr + "</td>"+"<td><span style='width:80px;background-color:red;color:white;display:inline-block;'>已拒绝</span></td><td class='.operate'></td></tr>";
-                            }else if (processStatus == 3){
-                                tabinfostr += "<tr id="+id+"><td>" + toUser + "</td><td>" + createTimeStr + "</td>"+"<td><span style='width:80px;background-color:green;color:white;display:inline-block;'>已同意</span></td><td class='.operate'></td></tr>";
+                            if (processStatus == 1) {
+                                tabinfostr += "<tr id=" + id + "><td>" + toUser + "</td><td>" + createTimeStr + "</td>" + "<td><span style='width:80px;background-color:blue;color:white;display:inline-block;'>申请中</span></td></tr>";
+                            } else if (processStatus == 2) {
+                                tabinfostr += "<tr id=" + id + "><td>" + toUser + "</td><td>" + createTimeStr + "</td>" + "<td><span style='width:80px;background-color:red;color:white;display:inline-block;'>已拒绝</span></td><td class='.operate'></td></tr>";
+                            } else if (processStatus == 3) {
+                                tabinfostr += "<tr id=" + id + "><td>" + toUser + "</td><td>" + createTimeStr + "</td>" + "<td><span style='width:80px;background-color:green;color:white;display:inline-block;'>已同意</span></td><td class='.operate'></td></tr>";
                             }
                         });
-                    }else{
-                        $("#prePage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
-                        $("#firstPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
-                        $("#nextPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
-                        $("#lastPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled",true);
+                    } else {
+                        $("#prePage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
+                        $("#firstPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
+                        $("#nextPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
+                        $("#lastPage").removeClass("btn-primary btn-warning").addClass("btnDisabledClass").attr("disabled", true);
                     }
                     $("#userTable").html(tabinfostr);
-                    $("#onlineCount").html("在线:"+onlineCount);
+                    $("#onlineCount").html("在线:" + onlineCount);
                 }
             });
             return status;
         }
 
-        function refresh(){
+        function refresh() {
             window.location.href = window.location.href;
         };
 
-        window.setInterval(function(){
+        window.setInterval(function () {
             refresh();
-        },300000);
+        }, 300000);
     </script>
 </html>

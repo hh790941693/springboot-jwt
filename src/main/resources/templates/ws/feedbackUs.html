@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <title>提出疑问</title>
     <style>
-        p{
-            height:28px;
+        p {
+            height: 28px;
         }
 
-        span{
+        span {
             display: inline-block;
-            width:70px;
+            width: 70px;
         }
     </style>
 </head>
@@ -37,9 +37,9 @@
 </body>
     <script>
         function send() {
-            var name=$("#name").val();
-            var telephone=$("#telephone").val();
-            var feedback=$("#money").val();
+            var name = $("#name").val();
+            var telephone = $("#telephone").val();
+            var feedback = $("#money").val();
             if (name != '' && telephone != '' && feedback != 0) {
                 layer.msg("提交成功!");
                 setTimeout(function () {

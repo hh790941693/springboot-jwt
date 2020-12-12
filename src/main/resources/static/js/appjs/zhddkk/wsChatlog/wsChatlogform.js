@@ -1,23 +1,23 @@
-$(function(){
+$(function () {
     validateRule();
 });
 
 //保存数据
 function save() {
     var action = "save";
-    if($("#id").val()){
+    if ($("#id").val()) {
         action = "update";
     }
     $.ajax({
-        cache : true,
-        type : "POST",
-        url : "/zhddkk/wsChatlog/" + action,
-        data : $('#form').serialize(),
-        async : false,
-        error : function() {
+        cache: true,
+        type: "POST",
+        url: "/zhddkk/wsChatlog/" + action,
+        data: $('#form').serialize(),
+        async: false,
+        error: function () {
             parent.layer.alert("保存失败，请稍后再试");
         },
-        success : function(data) {
+        success: function (data) {
             if (data.code === 1) {
                 parent.layer.msg("保存成功");
                 parent.reLoad();
@@ -33,7 +33,7 @@ function save() {
 
 //表单提交拦截
 $.validator.setDefaults({
-    submitHandler : function() {
+    submitHandler: function () {
         save();
     }
 });
@@ -42,39 +42,39 @@ $.validator.setDefaults({
 function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
     $("#form").validate({
-        rules : {
-                                    time : {
-                required : true
+        rules: {
+            time: {
+                required: true
             },
-                                user : {
-                required : true
+            user: {
+                required: true
             },
-                                toUser : {
-                required : true
+            toUser: {
+                required: true
             },
-                                msg : {
-                required : true
+            msg: {
+                required: true
             },
-                                remark : {
-                required : true
+            remark: {
+                required: true
+            }
+        },
+        messages: {
+            time: {
+                required: icon + "请输入时间"
             },
-                    },
-        messages : {
-                                    time : {
-                required : icon + "请输入时间"
+            user: {
+                required: icon + "请输入发起人"
             },
-                                user : {
-                required : icon + "请输入发起人"
+            toUser: {
+                required: icon + "请输入被聊人"
             },
-                                toUser : {
-                required : icon + "请输入被聊人"
+            msg: {
+                required: icon + "请输入消息内容"
             },
-                                msg : {
-                required : icon + "请输入消息内容"
-            },
-                                remark : {
-                required : icon + "请输入备注"
-            },
-                    }
+            remark: {
+                required: icon + "请输入备注"
+            }
+        }
     })
 }

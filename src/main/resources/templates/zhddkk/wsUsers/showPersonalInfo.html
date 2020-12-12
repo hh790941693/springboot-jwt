@@ -7,26 +7,26 @@
 <title>显示个人信息</title>
 
 <style>
-    #mainDiv{
-        width:370px;
-        height:auto;
-        margin:0 auto;
-        border:2px solid green;
+    #mainDiv {
+        width: 370px;
+        height: auto;
+        margin: 0 auto;
+        border: 2px solid green;
     }
 
-    #formDiv{
-        width:360px;
-        height:100%;
+    #formDiv {
+        width: 360px;
+        height: 100%;
     }
 
-    #formDiv div{
+    #formDiv div {
         margin-top: 10px;
         margin-left: 5px;
     }
 
-    select{
-        width:212px;
-        margin-left:5px;
+    select {
+        width: 212px;
+        margin-left: 5px;
     }
 </style>
 </head>
@@ -43,7 +43,8 @@
                 <label id="headImgLabel" for="headImg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
             </div>
             <div style='padding-left:70px;margin-top:-15px;margin-bottom: 10px;'>
-                <img id="headImg" alt="" title="点击放大图片" width="60px" height="60px" onclick="showdiv()" onerror="imgerror(this)">
+                <img id="headImg" alt="" title="点击放大图片" width="60px" height="60px" onclick="showdiv()"
+                     onerror="imgerror(this)">
             </div>
 
             <div>
@@ -106,17 +107,17 @@
 </body>
     <script>
         var user = $('#user').val();
-        $("input,select").attr("disabled","disabled");
+        $("input,select").attr("disabled", "disabled");
         queryPersonInfo();
 
         // 查询个人信息
-        function queryPersonInfo(){
+        function queryPersonInfo() {
             $.ajax({
                 type: 'POST',
                 url: '/zhddkk/wsUsers/queryPersonInfo.json',
-                data:{user:user},
-                success: function(result) {
-                    if (result.code != 1){
+                data: {user: user},
+                success: function (result) {
+                    if (result.code != 1) {
                         layer.msg("查询个人详情页失败");
                         return;
                     }
@@ -129,7 +130,7 @@
                     $("#address").val(data.address);
                     $("#professionSelect").val(data.profession);
                     $("#hobbySelect").val(data.hobby);
-                    $("#headImg").attr("src",data.img);
+                    $("#headImg").attr("src", data.img);
                 }
             })
         }
@@ -139,9 +140,9 @@
         }
 
         // 加载图片失败
-        function imgerror(imgObj){
+        function imgerror(imgObj) {
             var scrVar = $(imgObj).attr("src");
-            $(imgObj).attr("src",rootUrl+"img/"+$.ws.errorImageName);
+            $(imgObj).attr("src", rootUrl + "img/" + $.ws.errorImageName);
         }
     </script>
 </html>

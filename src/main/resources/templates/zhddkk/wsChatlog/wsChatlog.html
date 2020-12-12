@@ -22,9 +22,11 @@
                             <div class="col-md-2">
                                 <div class="input-group">
                                     <div class="input-group-addon">用户</div>
-                                    <select name="user" id="fromUser" th:value="${chatLogDO.user}" class="form-control select2">
+                                    <select name="user" id="fromUser" th:value="${chatLogDO.user}"
+                                            class="form-control select2">
                                         <option value="">请选择</option>
-                                        <option th:each="info:${allUserList}" th:value="${info.name}" th:text="${info.name}"
+                                        <option th:each="info:${allUserList}" th:value="${info.name}"
+                                                th:text="${info.name}"
                                                 th:selected="${chatLogDO.user == info.name}">
                                         </option>
                                     </select>
@@ -33,9 +35,11 @@
                             <div class="col-md-2">
                                 <div class="input-group">
                                     <div class="input-group-addon">发给</div>
-                                    <select name="toUser" id="toUser" th:value="${chatLogDO.toUser}" class="form-control select2">
+                                    <select name="toUser" id="toUser" th:value="${chatLogDO.toUser}"
+                                            class="form-control select2">
                                         <option value="">请选择</option>
-                                        <option th:each="info:${allUserList}" th:value="${info.name}" th:text="${info.name}"
+                                        <option th:each="info:${allUserList}" th:value="${info.name}"
+                                                th:text="${info.name}"
                                                 th:selected="${chatLogDO.toUser == info.name}">
                                         </option>
                                     </select>
@@ -62,17 +66,19 @@
                 </div>
             </div>
         </div>
-        <!-- 表格 -->
+    <!-- 表格 -->
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
                         <div class="fixed-table-toolbar">
                             <div class="columns pull-left" style="display: none;">
-                                <button shiro:hasPermission="zhddkk:wsChatlog:add" type="button" class="btn  btn-primary" onclick="add()">
+                                <button shiro:hasPermission="zhddkk:wsChatlog:add" type="button"
+                                        class="btn  btn-primary" onclick="add()">
                                     <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;添加
                                 </button>
-                                <button shiro:hasPermission="zhddkk:wsChatlog:batchRemove" type="button" class="btn  btn-danger" onclick="batchRemove()">
+                                <button shiro:hasPermission="zhddkk:wsChatlog:batchRemove" type="button"
+                                        class="btn  btn-danger" onclick="batchRemove()">
                                     <i class="fa fa-trash" aria-hidden="true"></i>&nbsp;删除
                                 </button>
                             </div>

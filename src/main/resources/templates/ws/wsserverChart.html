@@ -6,10 +6,10 @@
     <title>领导驾驶舱</title>
     <script type="text/javascript" th:src="@{/js/echarts/echarts.common.min.js}"></script>
     <style>
-        #mainDiv{
-            width:100%;
-            height:100%;
-            margin:0 auto;
+        #mainDiv {
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -20,7 +20,7 @@
              <div id="row1-left-echarts-chart" style="width:49%;height:100%;float:left;">
 
              </div>
-
+    
             <!--每日上传文件-->
             <div id="row1-right-echarts-chart" style="width:49%;height:100%;float:right;">
 
@@ -58,7 +58,7 @@
             success: function (result) {
                 var itemNameArr = [];
                 var itemValueArr = [];
-                $.each(result,function (key,val) {
+                $.each(result, function (key, val) {
                     itemNameArr.push(key);
                     itemValueArr.push(val);
 
@@ -70,34 +70,34 @@
                         xAxis: {
                             type: 'category',
                             data: itemNameArr,
-                            splitLine:{
-                                show:false
+                            splitLine: {
+                                show: false
                             }
                         },
                         yAxis: {
                             type: 'value',
-                            splitLine:{
-                                show:false
+                            splitLine: {
+                                show: false
                             }
                         },
                         series: [{
                             data: itemValueArr,
                             type: 'line',
-                            itemStyle : {
+                            itemStyle: {
                                 normal: {
                                     color: 'black',
-                                    label : {
+                                    label: {
                                         show: true,
-                                        formatter:function (params) {
-                                            if (params.value==0){
+                                        formatter: function (params) {
+                                            if (params.value == 0) {
                                                 return "";
-                                            }else{
+                                            } else {
                                                 return params.value;
                                             }
                                         }
                                     },
-                                    lineStyle:{
-                                        color:'green'
+                                    lineStyle: {
+                                        color: 'green'
                                     }
                                 }
                             }
@@ -118,9 +118,9 @@
             success: function (result) {
                 var itemNameArr = [];
                 var itemValueArr = [];
-                $.each(result,function (key,val) {
+                $.each(result, function (key, val) {
                     itemNameArr.push(key);
-                    itemValueArr.push((val/1024/1024).toFixed(0));
+                    itemValueArr.push((val / 1024 / 1024).toFixed(0));
 
                     var fileSizeOption = {
                         title: {
@@ -133,34 +133,34 @@
                         xAxis: {
                             type: 'category',
                             data: itemNameArr,
-                            splitLine:{
-                                show:false
+                            splitLine: {
+                                show: false
                             }
                         },
                         yAxis: {
                             type: 'value',
-                            splitLine:{
-                                show:false
+                            splitLine: {
+                                show: false
                             }
                         },
                         series: [{
                             data: itemValueArr,
                             type: 'line',
-                            itemStyle : {
+                            itemStyle: {
                                 normal: {
                                     color: 'black',
-                                    label : {
+                                    label: {
                                         show: true,
-                                        formatter:function (params) {
-                                            if (params.value==0){
+                                        formatter: function (params) {
+                                            if (params.value == 0) {
                                                 return "";
-                                            }else{
+                                            } else {
                                                 return params.value;
                                             }
                                         }
                                     },
-                                    lineStyle:{
-                                        color:'blue'
+                                    lineStyle: {
+                                        color: 'blue'
                                     }
                                 }
                             }
@@ -171,7 +171,6 @@
             }
         });
 
-
         //每日在线人数
         var onlineChart = echarts.init(document.getElementById("row2-echarts-chart"));
         $.ajax({
@@ -181,15 +180,15 @@
             success: function (result) {
                 var itemNameArr = [];
                 var itemValueArr = [];
-                $.each(result,function (key,val) {
+                $.each(result, function (key, val) {
                     itemNameArr.push(key);
                     itemValueArr.push(val);
 
                     var onlineOption = {
                         grid: {
-                            left:'5%',
-                            top:'2%',
-                            right:'3%'
+                            left: '5%',
+                            top: '2%',
+                            right: '3%'
                         },
                         title: {
                             x: 'center',
@@ -198,34 +197,34 @@
                         xAxis: {
                             type: 'category',
                             data: itemNameArr,
-                            splitLine:{
-                                show:false
+                            splitLine: {
+                                show: false
                             }
                         },
                         yAxis: {
                             type: 'value',
-                            splitLine:{
-                                show:false
+                            splitLine: {
+                                show: false
                             }
                         },
                         series: [{
                             data: itemValueArr,
                             type: 'line',
-                            itemStyle : {
+                            itemStyle: {
                                 normal: {
                                     color: 'black',
-                                    label : {
+                                    label: {
                                         show: true,
-                                        formatter:function (params) {
-                                            if (params.value==0){
+                                        formatter: function (params) {
+                                            if (params.value == 0) {
                                                 return "";
-                                            }else{
+                                            } else {
                                                 return params.value;
                                             }
                                         }
                                     },
-                                    lineStyle:{
-                                        color:'red'
+                                    lineStyle: {
+                                        color: 'red'
                                     }
                                 }
                             }
@@ -261,7 +260,7 @@
                     data: [
                         {value: 335, name: '男'},
                         {value: 310, name: '女'},
-                        {value: 234, name: '未知'},
+                        {value: 234, name: '未知'}
                     ],
                     emphasis: {
                         itemStyle: {
@@ -302,7 +301,7 @@
                         {value: 23, name: '21-30'},
                         {value: 32, name: '31-40'},
                         {value: 36, name: '41-50'},
-                        {value: 21, name: '51以上'},
+                        {value: 21, name: '51以上'}
                     ],
                     emphasis: {
                         itemStyle: {
