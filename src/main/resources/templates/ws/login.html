@@ -14,7 +14,7 @@
 
     #mainDiv {
         width: 350px;
-        height: 330px;
+        height: 342px;
         /**
          * 水平居中
          */
@@ -130,9 +130,13 @@
                 <a id="securityCheck"><span class="fa fa-toggle-off" style="font-size: 18px;"></span> [[#{checkbox.check.label}]]</a>
             </div>
         </form>
-
+        
         <div style="position:absolute;width:180px;height:180px;left:360px;top:1px;">
             <img id="qrImg" style="width:160px;height:160px;display:none;">
+        </div>
+        
+        <div class="layui-progress layui-progress-text" lay-showpercent="true" lay-filter="checkProgress" style="top:15px;">
+            <div class="layui-progress-bar layui-bg-black" lay-percent="0%"></div>
         </div>
     </div>
 
@@ -154,6 +158,43 @@
     // 加载国际化
     $.ws.i18nInit([[${#locale.language}]], [[${#locale.country}]]);
 
+    var active = {};
+    layui.use('element', function(){
+        //Tab的切换功能，切换事件监听等，需要依赖element模块
+        var $ = layui.jquery,element = layui.element;
+
+        //触发事件
+        active = {
+            setPercent: function(percent){
+                //设置50%进度
+                element.progress('checkProgress', percent + '%');
+            },
+            loading: function(othis){
+                var DISABLED = 'layui-btn-disabled';
+                if(othis.hasClass(DISABLED)) return;
+
+                //模拟loading
+                var n = 0;
+                var timer = setInterval(function(){
+                    n = n + Math.random()*10|0;
+                    if(n>100){
+                        n = 100;
+                        clearInterval(timer);
+                        othis.removeClass(DISABLED);
+                    }
+                    element.progress('checkProgress', n+'%');
+                }, 300+Math.random()*1000);
+
+                othis.addClass(DISABLED);
+            }
+        };
+
+        $('.site-checkProgress-active').on('click', function(){
+            var othis = $(this), type = $(this).data('type');
+            active[type] ? active[type].call(this, othis) : '';
+        });
+    });
+    
     var user = "";
     var checkBeforeLogin = false;
     var backgroundAnimation = true;
@@ -333,7 +374,9 @@
         });
         var text = "";
         var i = 0;
+        var percent = 0;
         if (null == checkEnvTimer && !isCheckFinish && textArr.length > 0) {
+            //active.loading($("button[data-type='loading']"));
             $("#checkDiv").css("display", "block");
             checkEnvTimer = setInterval(function () {
                 if (i >= textArr.length) {
@@ -347,6 +390,9 @@
                 } else {
                     text += "<span style='height:20px;color:white;display:inline-block;margin-bottom: 5px;'>" + textArr[i] + "</span><br/>";
                     $("#checkContentDiv").html(text);
+
+                    percent += 100/textArr.length;
+                    active.setPercent(percent);
                 }
                 i++;
             }, 200);
