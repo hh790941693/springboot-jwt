@@ -89,7 +89,7 @@
                 <div id="formDiv" align="left">
                     <form method="post" action="/zhddkk/wsUsers/setPersonInfo.do" enctype="multipart/form-data"
                           onsubmit="return beforeSumbit()" target="hidden_frame1">
-                        <input id="userNameHidden" name="userName" type="hidden">
+                        <input id="userNameHidden" name="userName" type="hidden" th:value="${session.sessionInfo.user}" >
                         <div>
                             <label id="realNameLabel" for="realName">真实姓名:</label>
                             <input id="realName" name="realName" type="text" style="width:208px;margin-left:10px;"></input>
@@ -225,8 +225,6 @@
         queryPersonInfo(sessionUser);
 
         function beforeSumbit() {
-            $("#userNameHidden").val(sessionUser);
-
             var sexText = $("#sexSelect").find("option:selected").text();
             $("#sexTextHidden").val(sexText);
 
