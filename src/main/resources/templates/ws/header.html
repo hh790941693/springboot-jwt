@@ -74,12 +74,17 @@
         <div id="btnDiv" align="right" style="float:right;margin-right:5px;height:100%;">
             <!--当前时间-->
             <div style="text-align:right;height:30%;">
-                <span>窗口变化:</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                <input id="percentInput" class="wheelInputClass" type="range" value=100 min=85 max=150 step=3
-                       onchange="windowChange()">
                 <span id="curTimeSpan">0000-00-00 00:00:00</span>
             </div>
-            <div style="height:69%;padding-top:6px;">
+            <div style="height:69%;padding-top:5px;">
+                <select id="percentSelect" class="btn-success" style="display: inline-block;width:70px;height:25px;">
+                    <option value="85">85%</option>
+                    <option value="95">95%</option>
+                    <option value="100" selected>100%</option>
+                    <option value="105">105%</option>
+                    <option value="110">110%</option>
+                    <option value="140">Max</option>
+                </select>
                 <button id="simpleMusicBtn" onclick="parent.showSimpleMusicPlayer()" class='btn btn-large btn-warning'
                         th:title="#{btn.music.tips}">
                     <span class="glyphicon glyphicon-music"></span>
@@ -133,10 +138,10 @@
             $("#curTimeSpan").text(curTime);
         }, 1000);
 
-        // 播放模式监听
-        function windowChange() {
-            parent.manualResizWindow($("#percentInput").val());
-        }
+        // 窗口大小监听事件
+        $("#percentSelect").change(function () {
+            parent.manualResizWindow($(this).val());
+        });
 
         //定时获取天气
         grapWeatherInfo();
