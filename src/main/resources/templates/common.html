@@ -65,19 +65,19 @@
         <input type="hidden" id="sessionJsonStr" th:value="${session.sessionInfo.jsonStr}">
         <input type="hidden" id="sessionJsonObject" th:value="${session.sessionInfo.jsonObject}">
         <script th:inline="javascript">
-            let sessionUser = $("#sessionUser").val();
-            let sessionPassword = $("#sessionPassword").val();
-            let sessionWebserverIp = $("#sessionWebserverIp").val();
-            let sessionWebserverport = $("#sessionWebserverport").val();
-            let sessionSelfimg = $("#sessionSelfimg").val();
-            let sessionUseragent = $("#sessionUseragent").val();
-            let sessionUsertype = $("#sessionUsertype").val();
-            let sessionJsonStr = $("#sessionJsonStr").val();
-            let sessionJsonObject = eval('(' + $("#sessionJsonObject").val() + ')');
+            var sessionUser = $("#sessionUser").val();
+            var sessionPassword = $("#sessionPassword").val();
+            var sessionWebserverIp = $("#sessionWebserverIp").val();
+            var sessionWebserverport = $("#sessionWebserverport").val();
+            var sessionSelfimg = $("#sessionSelfimg").val();
+            var sessionUseragent = $("#sessionUseragent").val();
+            var sessionUsertype = $("#sessionUsertype").val();
+            var sessionJsonStr = $("#sessionJsonStr").val();
+            var sessionJsonObject = eval('(' + $("#sessionJsonObject").val() + ')');
 
             try {
-                let language = [[${#locale.language}]];
-                let counrty = [[${#locale.country}]];
+                var language = [[${#locale.language}]];
+                var counrty = [[${#locale.country}]];
                 $.ws.i18nInit(language, counrty);
             } catch (e) {
                 console.log("加载国际化信息异常:" + e);

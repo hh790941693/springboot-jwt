@@ -82,6 +82,22 @@
             <span class="fa fa-qrcode fa-3x" th:title="#{btn.qrcode.tips}"></span>
         </div>
         <!--选择语言-->
+        <div style="position:absolute;top:6px;right:2px;width:192px;" th:title="#{select.choose.language}">
+            <form class="layui-form">
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                  <select lay-verify="required" lay-filter="langSelect">
+                        <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${lang == 'zh_CN'}"></option>
+                        <option value="en_US" data-icon="fa fa-dollar" th:text="English"
+                                th:selected="${lang == 'en_US'}"></option>
+                        <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${lang == 'ko_KR'}"></option>
+                  </select>
+                </div>
+              </div>
+            </form>
+        </div>
+        
+        <!--
         <div style="position:absolute;top:6px;right:2px;" th:title="#{select.choose.language}">
             <select class="selectpicker" data-style="btn-info" data-width="80px">
                 <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${lang == 'zh_CN'}"></option>
@@ -90,6 +106,7 @@
                 <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${lang == 'ko_KR'}"></option>
             </select>
         </div>
+        -->
         <img id="backgroundImg" src="../img/fengjing/fj9.jpg" hidden>
         <form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
             <div class="input-group margin-bottom-sm">
@@ -159,10 +176,15 @@
     $.ws.i18nInit([[${#locale.language}]], [[${#locale.country}]]);
 
     var active = {};
-    layui.use('element', function(){
+    layui.use(['layer', 'jquery', 'form','element'], function(){
         //Tab的切换功能，切换事件监听等，需要依赖element模块
-        var $ = layui.jquery,element = layui.element;
-
+        var $ = layui.jquery,element = layui.element, form = layui.form;
+        
+        form.on('select(langSelect)', function(data){
+            form.render('select');
+            window.location.replace("/i18n?lang=" + data.value);
+        });
+        
         //触发事件
         active = {
             setPercent: function(percent){
