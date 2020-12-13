@@ -52,6 +52,7 @@
         </style>
     </head>
     <body>
+        <!--上传-->
         <div style="height:34px;">
             <div align="center" style="width:20%;height:100%;float:left;padding-top: 2px;">
                 <div class="layui-upload">
@@ -97,6 +98,7 @@
                                 <span class="glyphicon glyphicon-repeat"></span>
                             </button>
                             <button id="btnShowList" class='btn btn-warning' @click="showList($event)">[[#{btn.hidelist.label}]]</button>
+                            <button id="btnDeleteAll" class='btn btn-danger' @click="deleteAll()" style="margin-left: 10px;">[[#{btn.deleteall.label}]]</button>
                         </div>
                         <div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
                             <input type="radio" name="playmode" value="-1" checked="checked"
@@ -178,22 +180,27 @@
                     //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
                     obj.preview(function(index, file, result){
                         fileNumber++;
-                        element.progress('uploadProgress', "0%");
+                        //element.progress('uploadProgress', "0%");
                     });
                 }
                 ,done: function (res) {
                     finishNumber++;
+                    var percent = finishNumber/fileNumber*100+"%";
+                    element.progress('uploadProgress', percent);
                 }
                 ,allDone: function(obj){
                     //当文件全部被提交后，才触发
                     layer.msg("全部上传完毕。总:"+obj.total+" 成功:"+obj.successful+" 失败:"+obj.aborted);
                     finishNumber = 0;
                     fileNumber = 0;
+                    setTimeout(function(){
+                        window.location.href = window.location.href;
+                    }, 1500);
                 }
                 ,progress: function(n, elem){
                     //获取进度百分比
-                    var percent = n + '%'
-                    element.progress('uploadProgress', percent); //可配合 layui 进度条元素使用
+                    //var percent = n + '%';
+                    //element.progress('uploadProgress', percent); //可配合 layui 进度条元素使用
                 }
             });
         });
@@ -348,6 +355,28 @@
                         }
                     );
                 },
+                deleteAll : function(){
+                    // 删除所有音乐
+                    layer.confirm("确定一键删除吗?", {btn: ['确定', '取消'], title: "提示"},
+                        function () {
+                            $.each(app.musicData, function (i, item) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: rootUrl + "file/delFile.do",
+                                    data: {'id': item.id},
+                                    success: function (result) {
+                                        if (result == "success") {
+                                            layer.msg(item.filename + ":删除成功");
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                        ,function () {
+                            layer.close();
+                        }
+                    );
+                },
                 mouseEnter: function (music, index) {
                     // 鼠标进入事件
                     $.each($("#musicTable tr"), function (i, item) {
@@ -364,7 +393,7 @@
                 },
                 showList: function (event) {
                     // 显示/隐藏播放列表
-                    let target = event.currentTarget;
+                     target = event.currentTarget;
                     if (app.showMode == 0) {
                         $("#musicList").slideDown(500);
                         $(target).text($.ws.i18n("btn.hidelist.label"));
@@ -377,7 +406,7 @@
                 },
                 changePlayMode: function (event) {
                     // 改变播放模式
-                    let target = event.currentTarget;
+                    var target = event.currentTarget;
                     var modeVar = $(target).val();
                     app.playMode = modeVar;
                 }
