@@ -58,7 +58,6 @@
                 <div class="layui-upload">
                     <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="chooseFileBtn">选择文件</button>
                     <button type="button" class="layui-btn layui-btn-sm" id="uploadFileBtn">开始上传</button>
-                    <span>已选择文件:</span><span id="choosedNumberSpan">0</span>
                 </div>
             </div>
             <div style="width:74%;height:100%;float:left;">
@@ -184,7 +183,7 @@
                     //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
                     obj.preview(function(index, file, result){
                         fileNumber++;
-                        $("#choosedNumberSpan").text(fileNumber);
+                        $("#totalFileNumber").text(fileNumber);
                     });
                 }
                 ,done: function (res) {
@@ -205,7 +204,6 @@
 
                     $("#uploadFilename").text(filename);
                     $("#uploadedNumber").text(finishNumber);
-                    $("#totalFileNumber").text(fileNumber);
                 }
                 ,allDone: function(obj){
                     //当文件全部被提交后，才触发
