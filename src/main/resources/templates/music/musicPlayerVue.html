@@ -29,15 +29,7 @@
             #musicTable td {
                 text-align: center;
             }
-
-            #addMusic {
-                width: 100%;
-                height: 5%;
-                margin: 0 auto;
-                border-bottom: 1px solid grey;
-                padding-top: 2px;
-            }
-
+            
             #playerDiv {
                 width: 100%;
                 height: 93.4%;
@@ -60,16 +52,20 @@
         </style>
     </head>
     <body>
-        <div id="addMusic" align="center">
-            <form action="/upload/app/uploadMusic" method="post" enctype="multipart/form-data"
-                  onsubmit="return verify()" target="hidden_frame">
-                <input type="text" id="user" name="user" th:value="${user}" hidden="true">
-                <input type="hidden" name="folder" value="music">
-                <input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg"
-                       style="display: inline-block;" th:title="#{btn.choosesong.label}">
-                <input type="submit" th:value="#{btn.uploadsong.label}">
-            </form>
+        <div style="height:34px;">
+            <div align="center" style="width:20%;height:100%;float:left;padding-top: 2px;">
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="chooseFileBtn">选择文件</button>
+                    <button type="button" class="layui-btn layui-btn-sm" id="uploadFileBtn">开始上传</button>
+                </div>
+            </div>
+            <div style="width:75%;height:100%;float:left;">
+                 <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadProgress" style="top:8px;">
+                    <div class="layui-progress-bar layui-bg-red" lay-percent="0%"></div>
+                 </div>
+            </div>
         </div>
+        
         <div id="playerDiv">
             <div id="buttons" style="height:15%;border-bottom: 1px solid grey;">
                 <div id="songNameDiv" align="center"
@@ -159,6 +155,49 @@
     </body>
 
     <script type="text/javascript">
+        // 文件上传
+        layui.use(['upload', 'element'], function() {
+            var $ = layui.jquery, upload = layui.upload, element = layui.element;
+            var fileNumber = 0;
+            var finishNumber = 0;
+            //选完文件后不自动上传
+            upload.render({
+                elem: '#chooseFileBtn'
+                ,url: rootUrl+"/upload/app/uploadMusic" //改成您自己的上传接口
+                ,field: 'file'
+                ,data: {
+                    'user': sessionUser,
+                    'folder': 'music'
+                }
+                ,auto: false
+                ,multiple: true
+                ,accept: 'audio' //音频
+                ,exts: 'mp3'
+                ,bindAction: '#uploadFileBtn'
+                ,choose: function(obj){
+                    //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                    obj.preview(function(index, file, result){
+                        fileNumber++;
+                        element.progress('uploadProgress', "0%");
+                    });
+                }
+                ,done: function (res) {
+                    finishNumber++;
+                }
+                ,allDone: function(obj){
+                    //当文件全部被提交后，才触发
+                    layer.msg("全部上传完毕。总:"+obj.total+" 成功:"+obj.successful+" 失败:"+obj.aborted);
+                    finishNumber = 0;
+                    fileNumber = 0;
+                }
+                ,progress: function(n, elem){
+                    //获取进度百分比
+                    var percent = n + '%'
+                    element.progress('uploadProgress', percent); //可配合 layui 进度条元素使用
+                }
+            });
+        });
+        
         var app = new Vue({
             el: '#playerDiv',
             data: {
@@ -173,7 +212,7 @@
                 queryMusicList: function () {
                     // 查询歌曲列表
                     var fileType = ".mp3";
-                    var user = $('#user').val();
+                    var user = sessionUser;
                     $.ajax({
                         type: "POST",
                         url: rootUrl + "file/showFiles.do",
