@@ -53,16 +53,19 @@
     </head>
     <body>
         <!--上传-->
-        <div style="height:34px;">
+        <div style="height:36px;">
             <div align="center" style="width:24%;height:100%;float:left;padding-top: 2px;">
                 <div class="layui-upload">
                     <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="chooseFileBtn">选择文件</button>
                     <button type="button" class="layui-btn layui-btn-sm" id="uploadFileBtn">开始上传</button>
-                    <span>已选择:</span><span id="choosedNumberSpan">0</span><span>个文件</span>
+                    <span>已选择文件:</span><span id="choosedNumberSpan">0</span>
                 </div>
             </div>
             <div style="width:74%;height:100%;float:left;">
-                 <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadProgress" style="top:8px;">
+                <div style="text-align: right;">
+                    <span id="uploadFilename"></span><span id="uploadedNumber" style="margin-left: 10px;">0</span>/<span id="totalFileNumber">0</span>
+                </div>
+                 <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadProgress" style="top:0px;">
                     <div class="layui-progress-bar" lay-percent="0%"></div>
                  </div>
             </div>
@@ -190,7 +193,7 @@
                     var percent = finishNumber*100/fileNumber;
                     percent = Math.round(percent).toFixed(0)+"%";
                     element.progress('uploadProgress', percent);
-
+                    
                     var resObj = res[Object.keys(res)[0]];
                     var filename = resObj.filename;
                     var uploadFlag = resObj.uploadFlag;
@@ -199,6 +202,10 @@
                     } else {
                         showText += "<p><span style='width:82%;'>" + filename + "</span><span style='width:15%;color:blue;font-weight: bold;'>上传失败</span></p>";
                     }
+
+                    $("#uploadFilename").text(filename);
+                    $("#uploadedNumber").text(finishNumber);
+                    $("#totalFileNumber").text(fileNumber);
                 }
                 ,allDone: function(obj){
                     //当文件全部被提交后，才触发
