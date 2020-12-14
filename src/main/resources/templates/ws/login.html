@@ -175,48 +175,17 @@
     // 加载国际化
     $.ws.i18nInit([[${#locale.language}]], [[${#locale.country}]]);
 
-    var active = {};
-    layui.use(['layer', 'jquery', 'form','element'], function(){
-        //Tab的切换功能，切换事件监听等，需要依赖element模块
-        var $ = layui.jquery,element = layui.element, form = layui.form;
-        
-        form.on('select(langSelect)', function(data){
-            form.render('select');
-            window.location.replace("/i18n?lang=" + data.value);
-        });
-        
-        //触发事件
-        active = {
-            setPercent: function(percent){
-                //设置50%进度
-                element.progress('checkProgress', percent + '%');
-            },
-            loading: function(othis){
-                var DISABLED = 'layui-btn-disabled';
-                if(othis.hasClass(DISABLED)) return;
-
-                //模拟loading
-                var n = 0;
-                var timer = setInterval(function(){
-                    n = n + Math.random()*10|0;
-                    if(n>100){
-                        n = 100;
-                        clearInterval(timer);
-                        othis.removeClass(DISABLED);
-                    }
-                    element.progress('checkProgress', n+'%');
-                }, 300+Math.random()*1000);
-
-                othis.addClass(DISABLED);
-            }
-        };
-
-        $('.site-checkProgress-active').on('click', function(){
-            var othis = $(this), type = $(this).data('type');
-            active[type] ? active[type].call(this, othis) : '';
-        });
+    // 切换语言
+    layui.form.on('select(langSelect)', function(data){
+        layui.form.render('select');
+        window.location.replace("/i18n?lang=" + data.value);
     });
-    
+
+    // 设置进度条百分比
+    function setPercent(percent) {
+        layui.element.progress('checkProgress', percent + '%');
+    }
+
     var user = "";
     var checkBeforeLogin = false;
     var backgroundAnimation = true;
@@ -413,7 +382,7 @@
                     $("#checkContentDiv").html(text);
 
                     percent += 100/(textArr.length-3);
-                    active.setPercent(percent);
+                    setPercent(percent);
                 }
                 i++;
             }, 150+Math.random()*150);
@@ -449,9 +418,9 @@
     });
 
     // 切换语言
-    $('.selectpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-        var lang = e.currentTarget.value;
-        window.location.replace("/i18n?lang=" + lang);
-    });
+    // $('.selectpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+    //     var lang = e.currentTarget.value;
+    //     window.location.replace("/i18n?lang=" + lang);
+    // });
 </script>
 </html>

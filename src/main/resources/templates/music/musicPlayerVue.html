@@ -65,10 +65,10 @@
                 </div>
             </div>
             <div style="width:74%;height:100%;float:left;">
-                <div style="text-align: right;">
-                    <span id="uploadFilename"></span><span id="uploadedNumber" style="margin-left: 10px;">0</span>/<span id="totalFileNumber">0</span>
+                <div style="text-align: right;height:50%;">
+                    <span id="uploadFilename"></span><span id="uploadedNumber" style="margin-left: 10px;">0</span> / <span id="totalFileNumber">0</span>
                 </div>
-                 <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadProgress" style="top:0px;">
+                 <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadProgress">
                     <div class="layui-progress-bar" lay-percent="0%"></div>
                  </div>
             </div>
@@ -164,79 +164,77 @@
 
     <script type="text/javascript">
         // 文件上传
-        layui.use(['upload', 'element'], function() {
-            var $ = layui.jquery, upload = layui.upload, element = layui.element;
-            var fileNumber = 0;
-            var finishNumber = 0;
-            var showText = "<div id='uploadResultDiv'>";
-            //选完文件后不自动上传
-            upload.render({
-                elem: '#chooseFileBtn'
-                ,url: rootUrl+"/upload/app/uploadMusic" //改成您自己的上传接口
-                ,field: 'file'
-                ,data: {
-                    'user': sessionUser,
-                    'folder': 'music'
-                }
-                ,auto: false
-                ,multiple: true
-                ,accept: 'audio' //音频
-                ,exts: 'mp3'
-                ,bindAction: '#uploadFileBtn'
-                ,choose: function(obj){
-                    //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
-                    obj.preview(function(index, file, result){
-                        fileNumber++;
-                        $("#totalFileNumber").text(fileNumber);
-                    });
-                }
-                ,done: function (res) {
-                    finishNumber++;
-                    // 上传进度百分比
-                    var percent = finishNumber*100/fileNumber;
-                    percent = Math.round(percent).toFixed(0)+"%";
-                    element.progress('uploadProgress', percent);
-                    
-                    var resObj = res[Object.keys(res)[0]];
-                    var filename = resObj.filename;
-                    var uploadFlag = resObj.uploadFlag;
-                    if (uploadFlag) {
-                        showText += "<p><span style='width:82%;'>" + filename + "</span><span style='width:15%;color:blue;font-weight: bold;'>上传成功</span></p>";
-                    } else {
-                        showText += "<p><span style='width:82%;'>" + filename + "</span><span style='width:15%;color:blue;font-weight: bold;'>上传失败</span></p>";
-                    }
+        var fileNumber = 0;  // 总文件数
+        var finishNumber = 0; // 已上传文件数
+        var showText = "<div id='uploadResultDiv'>"; // 上传结束后弹出框html内容
+        //选完文件后不自动上传
+        layui.upload.render({
+            elem: '#chooseFileBtn' //选择文件按钮
+            ,url: rootUrl+"/upload/app/uploadMusic" //接口url
+            ,field: 'file'    //文件对象名称
+            ,data: {          //POST请求参数
+                'user': sessionUser,
+                'folder': 'music'
+            }
+            ,auto: false      //选择文件后是否自动上传
+            ,multiple: true   //是否多文件上传
+            ,accept: 'audio'  //音频
+            ,exts: 'mp3'      //后缀
+            ,bindAction: '#uploadFileBtn'  // 开始上传按钮
+            ,choose: function(obj){
+                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                obj.preview(function(index, file, result){
+                    fileNumber++;
+                    $("#totalFileNumber").text(fileNumber);
+                });
+            }
+            ,done: function (res) {
+                // 单个文件上传结束后
+                finishNumber++;
+                // 上传进度百分比
+                var percent = finishNumber*100/fileNumber;
+                percent = Math.round(percent).toFixed(0)+"%";
+                layui.element.progress('uploadProgress', percent);
 
-                    $("#uploadFilename").text(filename);
-                    $("#uploadedNumber").text(finishNumber);
+                var resObj = res[Object.keys(res)[0]];
+                var filename = resObj.filename;
+                var uploadFlag = resObj.uploadFlag;
+                if (uploadFlag) {
+                    showText += "<p><span style='width:82%;'>" + filename + "</span><span style='width:15%;color:blue;font-weight: bold;'>上传成功</span></p>";
+                } else {
+                    showText += "<p><span style='width:82%;'>" + filename + "</span><span style='width:15%;color:red;font-weight: bold;'>上传失败</span></p>";
                 }
-                ,allDone: function(obj){
-                    //当文件全部被提交后，才触发
-                    layer.msg("全部上传完毕。总:"+obj.total+" 成功:"+obj.successful+" 失败:"+obj.aborted);
-                    finishNumber = 0;
-                    fileNumber = 0;
 
-                    showText += "</div>";
-                    layer.closeAll();
-                    layer.open({
-                        type: 1,
-                        title: "上传结果",
-                        shadeClose: true,
-                        shade: 0.2,
-                        offset: "20%",
-                        area: ['530px', '60%'],
-                        content: showText
-                    });
-                    
-                    setTimeout(function(){
-                        window.location.href = window.location.href;
-                    }, 3500);
-                }
-                ,progress: function(n, elem){
-                    //获取进度百分比
-                    //var percent = n + '%';
-                    //element.progress('uploadProgress', percent); //可配合 layui 进度条元素使用
-                }
-            });
+                $("#uploadFilename").text(filename);
+                $("#uploadedNumber").text(finishNumber);
+            }
+            ,allDone: function(obj){
+                //当文件全部被提交后，才触发
+                layer.msg("全部上传完毕。总:"+obj.total+" 成功:"+obj.successful+" 失败:"+obj.aborted);
+                finishNumber = 0;
+                fileNumber = 0;
+
+                showText += "</div>";
+                layer.closeAll();
+                layer.open({
+                    type: 1,
+                    title: "上传结果",
+                    shadeClose: true,
+                    shade: 0.2,
+                    offset: "20%",
+                    area: ['530px', '60%'],
+                    content: showText
+                });
+
+                setTimeout(function(){
+                    window.location.href = window.location.href;
+                }, 3500);
+            }
+            ,progress: function(n, elem){
+                //获取单个文件上传进度百分比
+                //var percent = n + '%';
+                //element.progress('uploadProgress', percent); //可配合 layui 进度条元素使用
+            }
         });
         
         var app = new Vue({
@@ -443,6 +441,10 @@
                     var target = event.currentTarget;
                     var modeVar = $(target).val();
                     app.playMode = modeVar;
+                },
+                refreash: function () {
+                    // 刷新音乐列表
+                    window.location.href = window.location.href;
                 }
             },
             created: function () {
@@ -450,22 +452,7 @@
             }
         });
 
-        // 刷新音乐列表
-        function refreash() {
-            window.location.href = window.location.href;
-        }
-
-        //上传文件校验
-        function verify() {
-            var uploadFiles = $("#fileInput").val();
-            if (uploadFiles == "") {
-                return false;
-            }
-            layer.msg('正在上传文件，请稍候……', {icon: 16, shade: 0.2, shadeClose: false, time: 300000});
-            return true;
-        }
-        
-        // 绑定事件
+        // 音乐播放监听事件
         Media = document.getElementById("player");
         var eventTester = function (e) {
             Media.addEventListener(e, function () {
