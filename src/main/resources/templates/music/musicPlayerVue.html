@@ -148,10 +148,10 @@
                         <td>{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
                         <td>
                             <button class='delBtn btn btn-sm btn-success' @click="playMusic(music.id)">
-                                <span class="glyphicon glyphicon-play">[[#{btn.play.label}]]</span>
+                                <span class="glyphicon glyphicon-play"></span> [[#{btn.play.label}]]
                             </button>
                             <button class='delBtn btn btn-sm btn-danger' @click="deleteMusic(music.id)">
-                                <span class="glyphicon glyphicon-remove">[[#{btn.delete.label}]]</span>
+                                <span class="glyphicon glyphicon-trash"></span> [[#{btn.delete.label}]]
                             </button>
                         </td>
                     </tr>
