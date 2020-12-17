@@ -1370,9 +1370,8 @@ CREATE TABLE IF NOT EXISTS `ws_scheduled_cron` (
   `task_explain` varchar(50) NOT NULL DEFAULT '' COMMENT '任务描述',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态,1:正常;2:停用',
   PRIMARY KEY (`cron_id`),
-  UNIQUE KEY `cron_key` (`cron_key`),
   UNIQUE KEY `cron_key_unique_idx` (`cron_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='定时任务表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='定时任务表';
 
 -- 正在导出表  zhdd.ws_scheduled_cron 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `ws_scheduled_cron` DISABLE KEYS */;
