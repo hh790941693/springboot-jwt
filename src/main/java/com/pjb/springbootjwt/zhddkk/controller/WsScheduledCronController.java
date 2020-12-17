@@ -144,19 +144,29 @@ public class WsScheduledCronController extends AdminBaseController {
      */
     @ResponseBody
     @RequestMapping("/runTaskCron")
-    public Result<String> runTaskCron(String cronKey) throws Exception {
-        ((ScheduledOfTask) context.getBean(Class.forName(cronKey))).execute();
-        return Result.ok();
+    public Result<String> runTaskCron(String id) throws Exception {
+        WsScheduledCronDO wsScheduledCronDO = wsScheduledCronService.selectById(id);
+        if (null != wsScheduledCronDO && wsScheduledCronDO.getStatus() != 0) {
+            try {
+                ((ScheduledOfTask) context.getBean(Class.forName(wsScheduledCronDO.getCronKey()))).execute();
+                return Result.ok();
+            } catch (Exception e){
+                logger.error("执行任务失败:"+wsScheduledCronDO.getCronKey(), e);
+            }
+        }
+
+        return Result.fail();
     }
     /**
      * 启用或禁用定时任务
      */
     @ResponseBody
     @RequestMapping("/changeStatusTaskCron")
-    public Result<String> changeStatusTaskCron(Integer status, String cronKey) {
-        WsScheduledCronDO wsScheduledCronDO = wsScheduledCronService.selectOne(new EntityWrapper<WsScheduledCronDO>().eq("cron_key", cronKey));
+    public Result<String> changeStatusTaskCron(String id, Integer status) {
+        WsScheduledCronDO wsScheduledCronDO = wsScheduledCronService.selectById(id);
         if (null != wsScheduledCronDO){
             wsScheduledCronDO.setStatus(status);
+            wsScheduledCronService.updateById(wsScheduledCronDO);
             return Result.ok();
         }
 

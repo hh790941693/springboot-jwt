@@ -1368,7 +1368,7 @@ CREATE TABLE IF NOT EXISTS `ws_scheduled_cron` (
   `cron_key` varchar(128) NOT NULL COMMENT '定时任务完整类名',
   `cron_expression` varchar(20) NOT NULL COMMENT 'cron表达式',
   `task_explain` varchar(50) NOT NULL DEFAULT '' COMMENT '任务描述',
-  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态,1:正常;2:停用',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态,1:正常;0:停用',
   PRIMARY KEY (`cron_id`),
   UNIQUE KEY `cron_key_unique_idx` (`cron_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='定时任务表';

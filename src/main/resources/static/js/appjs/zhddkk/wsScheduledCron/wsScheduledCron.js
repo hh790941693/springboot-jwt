@@ -47,7 +47,7 @@ function load() {
 		},
 		columns : [
 			{
-				checkbox : true
+				checkbox : false
 			},
 						{
 				field : 'cronId',
@@ -67,24 +67,51 @@ function load() {
 			},
 						{
 				field : 'status',
-				title : '状态,1:正常;2:停用'
+				title : '状态',
+				formatter: function (value) {
+					var res = "";
+					if (value == 0) {
+						res = "<span class='label label-danger'>已禁用</span>";
+					} else {
+						res = "<span class='label label-primary'>已启用</span>";
+					}
+
+					return res;
+				}
 			},
 						{
 				title : '操作',
 				field : 'id',
 				align : 'center',
 				formatter : function(value, row, index) {
-					var e = '<a class="btn btn-warning btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
+					var e = '<a class="btn btn-info btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
 							+ row.cronId
 							+ '\')"><i class="fa fa-edit"></i></a> ';
-					var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
+					var d = '<a class="btn btn-danger btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
 							+ row.cronId
 							+ '\')"><i class="fa fa-remove"></i></a> ';
 
-					var run = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="运行"  mce_href="#" onclick="run(\''
-						+ row.cronKey
-						+ '\')"><i class="fa fa-run">运行</i></a> ';
-					return run+e+d;
+					var run = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="运行"  mce_href="#" onclick="runJob(\''
+						+ row.cronId
+						+ '\')"><i class="fa fa-play"> 运行</i></a> ';
+
+					var btns = e +d + run;
+					if (row.status == 0){
+                        var enableJob = '<a class="btn btn-primary btn-sm '+s_remove_h+'" href="#" title="启用"  mce_href="#" onclick="changeJobStatus(\''
+                            + row.cronId
+                            + '\',\''
+                            + '1'
+                            + '\')"><i class="fa fa-play"> 启用</i></a> ';
+                        btns += enableJob;
+                    } else {
+                        var disableJob = '<a class="btn btn-danger btn-sm '+s_remove_h+'" href="#" title="禁用"  mce_href="#" onclick="changeJobStatus(\''
+                            + row.cronId
+                            + '\',\''
+                            + '0'
+                            + '\')"><i class="fa fa-play"> 禁用</i></a> ';
+                        btns += disableJob;
+                    }
+					return btns;
 				}
 			}
 		]
@@ -184,14 +211,14 @@ function batchRemove() {
 }
 
 // 运行定时任务
-function run(cronKey){
+function runJob(jobId){
 	layer.confirm("确认要运行吗?", {
 		btn : [ '确定', '取消' ]
 	}, function() {
 		$.ajax({
 			type : 'POST',
 			data : {
-				"cronKey" : cronKey
+				"id" : jobId
 			},
 			url : prefix + '/runTaskCron',
 			success : function(r) {
@@ -206,4 +233,23 @@ function run(cronKey){
 	}, function() {
 
 	});
+}
+
+function changeJobStatus(jobId, status){
+    $.ajax({
+        type : 'POST',
+        data : {
+            "id" : jobId,
+            "status" : status
+        },
+        url : prefix + '/changeStatusTaskCron',
+        success : function(r) {
+            if (r.code == 1) {
+                layer.msg(r.msg);
+                reLoad();
+            } else {
+                layer.msg(r.msg);
+            }
+        }
+    });
 }

@@ -19,7 +19,7 @@ public interface ScheduledOfTask extends Runnable {
         WsScheduledCronService wsScheduledCronService = SpringContextHolder.getBean(WsScheduledCronService.class);
         WsScheduledCronDO wsScheduledCronDO = wsScheduledCronService
             .selectOne(new EntityWrapper<WsScheduledCronDO>().eq("cron_key", this.getClass().getName()));
-        if ("2".equals(wsScheduledCronDO.getStatus())) {
+        if ("0".equals(wsScheduledCronDO.getStatus())) {
             // 任务是禁用状态
             return;
         }

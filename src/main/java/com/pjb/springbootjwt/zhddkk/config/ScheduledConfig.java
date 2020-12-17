@@ -23,7 +23,7 @@ public class ScheduledConfig implements SchedulingConfigurer {
     private WsScheduledCronService wsScheduledCronService;
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        List<WsScheduledCronDO> list = wsScheduledCronService.selectList(new EntityWrapper<WsScheduledCronDO>().eq("status", "1"));
+        List<WsScheduledCronDO> list = wsScheduledCronService.selectList(new EntityWrapper<WsScheduledCronDO>().ne("status", "0"));
         for (WsScheduledCronDO wsScheduledCronDO : list) {
             Class<?> clazz;
             Object task;
