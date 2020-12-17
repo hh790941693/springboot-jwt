@@ -1361,6 +1361,27 @@ INSERT INTO `ws_user_profile` (`id`, `user_id`, `user_name`, `real_name`, `img`,
 	(24, 4, 'mb', 'mb', 'http://localhost:8101/headImg/6f4496cb-1d74-4357-92b4-aa586c1497df.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:37:53');
 /*!40000 ALTER TABLE `ws_user_profile` ENABLE KEYS */;
 
+-- 导出  表 zhdd.ws_scheduled_cron 结构
+DROP TABLE IF EXISTS `ws_scheduled_cron`;
+CREATE TABLE IF NOT EXISTS `ws_scheduled_cron` (
+  `cron_id` int NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `cron_key` varchar(128) NOT NULL COMMENT '定时任务完整类名',
+  `cron_expression` varchar(20) NOT NULL COMMENT 'cron表达式',
+  `task_explain` varchar(50) NOT NULL DEFAULT '' COMMENT '任务描述',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态,1:正常;2:停用',
+  PRIMARY KEY (`cron_id`),
+  UNIQUE KEY `cron_key` (`cron_key`),
+  UNIQUE KEY `cron_key_unique_idx` (`cron_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='定时任务表';
+
+-- 正在导出表  zhdd.ws_scheduled_cron 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `ws_scheduled_cron` DISABLE KEYS */;
+INSERT INTO `ws_scheduled_cron` (`cron_id`, `cron_key`, `cron_expression`, `task_explain`, `status`) VALUES
+	(1, 'com.pjb.springbootjwt.zhddkk.schedule.ScheduledTask1', '*/5 * * * * ?', '定时任务1', 0),
+	(2, 'com.pjb.springbootjwt.zhddkk.schedule.ScheduledTask2', '*/5 * * * * ?', '定时任务2', 0),
+	(3, 'com.pjb.springbootjwt.zhddkk.schedule.ScheduledTask3', '*/5 * * * * ?', '定时任务3', 0);
+/*!40000 ALTER TABLE `ws_scheduled_cron` ENABLE KEYS */;
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
