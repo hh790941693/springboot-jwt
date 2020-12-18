@@ -46,9 +46,6 @@ function load() {
 			 };
 		},
 		columns : [
-			{
-				checkbox : false
-			},
 						{
 				field : 'cronId',
 				title : '主键id'
@@ -101,14 +98,14 @@ function load() {
                             + row.cronId
                             + '\',\''
                             + '1'
-                            + '\')"><i class="fa fa-play"> 启用</i></a> ';
+                            + '\')"><i class="fa fa-hourglass-start"> 启用</i></a> ';
                         btns += enableJob;
                     } else {
                         var disableJob = '<a class="btn btn-danger btn-sm '+s_remove_h+'" href="#" title="禁用"  mce_href="#" onclick="changeJobStatus(\''
                             + row.cronId
                             + '\',\''
                             + '0'
-                            + '\')"><i class="fa fa-play"> 禁用</i></a> ';
+                            + '\')"><i class="fa fa-ban"> 禁用</i></a> ';
                         btns += disableJob;
                     }
 					return btns;
