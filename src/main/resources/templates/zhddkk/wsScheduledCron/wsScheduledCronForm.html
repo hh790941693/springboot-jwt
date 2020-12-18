@@ -11,7 +11,7 @@
 					<div class="ibox-content">
                         <form class="form-horizontal m-t" id="form">
 							<!-- 主键 -->
-                            <input type="hidden" id="cron_id" name="cron_id" th:value="${wsScheduledCron.cron_id}">
+                            <input type="hidden" id="cronId" name="cronId" th:value="${wsScheduledCron.cronId}">
 																													<div class="form-group">
 								<label class="col-sm-3 control-label" for="cronKey"><span style="color:red">*</span>&nbsp;定时任务完整类名：</label>
 								<div class="col-sm-8">
@@ -31,9 +31,12 @@
 								</div>
 							</div>
 																								<div class="form-group">
-								<label class="col-sm-3 control-label" for="status"><span style="color:red">*</span>&nbsp;状态,1:正常;2:停用：</label>
+								<label class="col-sm-3 control-label" for="status"><span style="color:red">*</span>&nbsp;状态：</label>
 								<div class="col-sm-8">
-									<input type="text" id="status" name="status" th:value="${wsScheduledCron.status}" class="form-control" />
+									<select class="form-control" id="status" name="status" th:value="${wsScheduledCron.status}">
+										<option value="1" th:selected="${wsScheduledCron.status == 1}">启用</option>
+                                        <option value="0" th:selected="${wsScheduledCron.status == 0}">禁用</option>
+									</select>
 								</div>
 							</div>
 											                            <div class="form-group">

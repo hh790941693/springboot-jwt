@@ -5,7 +5,7 @@ $(function(){
 //保存数据
 function save() {
     var action = "save";
-    if($("#id").val()){
+    if($("#cronId").val()){
         action = "update";
     }
     $.ajax({
