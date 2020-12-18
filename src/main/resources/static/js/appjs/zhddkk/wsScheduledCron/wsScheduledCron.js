@@ -83,16 +83,12 @@ function load() {
 				formatter : function(value, row, index) {
 					var e = '<a class="btn btn-info btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
 							+ row.cronId
-							+ '\')"><i class="fa fa-edit"></i></a> ';
+							+ '\')"><i class="fa fa-edit"> 编辑</i></a> ';
 					var d = '<a class="btn btn-danger btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
 							+ row.cronId
-							+ '\')"><i class="fa fa-remove"></i></a> ';
+							+ '\')"><i class="fa fa-remove"> 删除</i></a> ';
 
-					var run = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="运行"  mce_href="#" onclick="runJob(\''
-						+ row.cronId
-						+ '\')"><i class="fa fa-play"> 运行</i></a> ';
-
-					var btns = e +d + run;
+					var btns = e +d;
 					if (row.status == 0){
                         var enableJob = '<a class="btn btn-primary btn-sm '+s_remove_h+'" href="#" title="启用"  mce_href="#" onclick="changeJobStatus(\''
                             + row.cronId
@@ -108,6 +104,11 @@ function load() {
                             + '\')"><i class="fa fa-ban"> 禁用</i></a> ';
                         btns += disableJob;
                     }
+
+                    var run = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="运行"  mce_href="#" onclick="runJob(\''
+                        + row.cronId
+                        + '\')"><i class="fa fa-play"> 运行</i></a> ';
+                    btns += run;
 					return btns;
 				}
 			}
@@ -132,7 +133,7 @@ function add() {
 		title : '增加',
 		maxmin : true,
 		shadeClose : false,//点击遮罩关闭层
-		area : [ '1000px', '420px' ],
+		area : [ '800px', '420px' ],
 		content : prefix + '/add'
 	});
 }
@@ -144,7 +145,7 @@ function edit(id) {
 		title : '编辑',
 		maxmin : true,
 		shadeClose : false,//点击遮罩关闭层
-		area : [ '1000px', '420px' ],
+		area : [ '800px', '420px' ],
 		content : prefix + '/edit/' + id
 	});
 }
