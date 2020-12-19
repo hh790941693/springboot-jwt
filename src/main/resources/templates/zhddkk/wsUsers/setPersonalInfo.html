@@ -74,14 +74,22 @@
         background-color: white;
         color:black;
     }
+
+    .layui-form-item {
+        margin-bottom: 10px;
+    }
 </style>
 </head>
 <body>
     <div id="mainDiv" style="width:100%;height:98%;border:1px solid green;">
         <div id="leftDiv" style="float:left;width:30%;height:100%;border:1px solid green;">
             <ul>
-                <li id="personInfo" class="selected">基本信息</li>
-                <li id="modifyPwd">修改密码</li>
+                <li id="personInfo" class="selected">
+                    <span class="fa fa-user-circle-o"> 基本信息</span>
+                </li>
+                <li id="modifyPwd">
+                    <span class="fa fa-key"> 修改密码</span>
+                </li>
             </ul>
         </div>
         <div id="rightDiv" style="float:right;width:69%;height:100%;border:1px solid green;">
@@ -172,7 +180,7 @@
                 <iframe name="hidden_frame2" id="hidden_frame2" style='display: none'></iframe>
             </div>
 
-            <div id="modifyPwdDiv" style="width:96%;height:100%;display: none;">
+            <div id="modifyPwdDiv" style="width:96%;height:100%;padding-top:10px;display: none;">
                 <form class="layui-form" action="/zhddkk/wsUsers/updatePassword.do" lay-filter="modifyPasswordForm" method="post" target="hidden_frame2">
                   <div class="layui-form-item">
                     <label class="layui-form-label">用户名</label>
