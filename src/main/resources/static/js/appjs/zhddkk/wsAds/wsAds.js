@@ -82,10 +82,14 @@ function load() {
                 field: 'id',
                 align: 'center',
                 formatter: function (value, row, index) {
-                    var d = '<a class="btn btn-warning btn-sm ' + s_remove_h + '" href="#" title="删除"  mce_href="#" onclick="remove(\''
+                    var e = '<a class="btn btn-success btn-sm" href="#" title="编辑"  mce_href="#" onclick="edit(\''
                         + row.id
-                        + '\')"><i class="fa fa-remove"></i></a> ';
-                    return d;
+                        + '\')"><i class="fa fa-edit"> 编辑</i></a> ';
+
+                    var d = '<a class="btn btn-danger btn-sm" href="#" title="删除"  mce_href="#" onclick="remove(\''
+                        + row.id
+                        + '\')"><i class="fa fa-remove"> 删除</i></a> ';
+                    return e+d;
                 }
             }
         ]
