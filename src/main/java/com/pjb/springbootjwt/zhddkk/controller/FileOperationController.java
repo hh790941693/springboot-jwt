@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -201,8 +202,9 @@ public class FileOperationController
     @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.MUSIC,subModule="",describe="显示音乐列表")
     @RequestMapping("showFiles.do")
     @ResponseBody
+    @Cacheable(value="musicList")
     public Result<List<WsFileDO>> showFiles(HttpServletRequest request, @RequestParam(value="user",required=false) String user, @RequestParam("fileType") String fileType) {
-        List<WsFileDO> fileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", "music"));
+        List<WsFileDO> fileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", fileType));
 
         List<WsFileDO> needBatchUpdateList = new ArrayList<>();
         String webserverip = webSocketConfig.getAddress();
