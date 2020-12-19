@@ -27,22 +27,7 @@
         margin-top: 10px;
         margin-left: 5px;
     }
-
-    #mainDiv > ul {
-        height: 100%;
-        margin-top: 10px;
-    }
-
-    #mainDiv ul li {
-        list-style: none;
-        height: 43px;
-        width: 100%;
-        font-size: 20px;
-        font-weight: bold;
-        padding: 8px;
-        cursor: pointer;
-    }
-
+    
     modifyPwdDiv span {
         display: inline-block;
         width: 90px;
@@ -86,13 +71,9 @@
 <body>
     <div id="mainDiv" style="width:100%;height:98%;border:1px solid green;">
         <div id="leftDiv" style="float:left;width:30%;height:100%;border:1px solid green;">
-            <ul>
-                <li id="personInfo" class="selected">
-                    <span class="fa fa-user-circle-o"> 基本信息</span>
-                </li>
-                <li id="modifyPwd">
-                    <span class="fa fa-key"> 修改密码</span>
-                </li>
+            <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo" style="margin-right: 10px;width:100%;height:100%;">
+              <li id="personInfo" class="layui-nav-item layui-this"><a ><i class="fa fa-user-circle-o"> 基本信息</i></a></li>
+              <li id="modifyPwd" class="layui-nav-item"><a ><i class="fa fa-key"> 修改密码</i></a></li>
             </ul>
         </div>
         <div id="rightDiv" style="float:right;width:69%;height:100%;border:1px solid green;">
@@ -239,9 +220,6 @@
             var showDivIf = liId + "Div";
             $("#rightDiv").children("div[id='" + showDivIf + "']").show();
             $("#rightDiv").children("div[id!='" + showDivIf + "']").hide();
-            
-            $(this).removeClass().addClass("selected");
-            $("#leftDiv ul").children().not(this).removeClass().addClass("unSelected");
         });
 
         //查询个人信息

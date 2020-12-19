@@ -7,41 +7,36 @@
 
 <style type="text/css">
     #mainDiv {
-        width: 510px;
-        height: auto;
-        margin: 20px auto;
-        border: 2px solid green;
-        padding: 2px;
-    }
-
-    table {
         width: 100%;
-    }
-
-    table th {
-        background-color: green;
-        font-weight: bold;
-        color: white;
-        text-align: center;
-        height: 28px;
-    }
-
-    table tr {
-        border: 1px solid green;
-        height: 23px;
-    }
-
-    table td {
-        border: 1px solid green;
+        height: auto;
+        padding:3px;
     }
 </style>
 </head>
     <body>
         <div id="mainDiv">
-            <table>
-                <tr><th style="width:40%">键</th><th>值</th></tr>
-            </table>
-
+            <div class="layui-form" style="width: 100%;height: 100%">
+                  <table class="layui-table">
+                    <colgroup>
+                      <col width="150">
+                      <col width="150">
+                      <col>
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th>键</th>
+                        <th>值</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="info : ${session.sessionInfo.jsonObject}" th:if="${not #strings.startsWith(info.key,'json')}">
+                        <td th:text="${info.key}"></td>
+                        <td th:text="${info.value}"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            
             <div align="center" style="margin:6px auto;">
                 <button onclick="toIndex()" class='btn btn-large btn-primary'>返回首页</button>
             </div>
@@ -53,13 +48,6 @@
             if (sessionJsonObject == "{}") {
                 var trElement = $('<tr><td>NA</td><td>尚未登陆,请先登录!</td></tr>');
                 $("table").append(trElement);
-            } else {
-                $.each(sessionJsonObject, function (key, value) {
-                    if (typeof value == "string" && key.indexOf("json") == -1) {
-                        var trElement = $('<tr><td>' + key + '</td><td>' + value + '</td></tr>');
-                        $("table").append(trElement);
-                    }
-                });
             }
 
             // 返回首页
