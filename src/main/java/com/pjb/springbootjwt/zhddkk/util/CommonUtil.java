@@ -3,12 +3,9 @@ package com.pjb.springbootjwt.zhddkk.util;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
+
 import org.apache.commons.lang.StringUtils;
 
 public class CommonUtil {
@@ -200,5 +197,28 @@ public class CommonUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * 分页.
+     * @param list 列表
+     * @param current 当前页数(从0开始)
+     * @param size 每页条数
+     * @param <T> dto
+     * @return
+     */
+    public static <T> List<T> pageToList(List<T> list, int current, int size){
+        int start = 0;
+        int end = 0;
+        if (current == 1) {
+            start = 0;
+        } else {
+            start = (current - 1) * size;
+        }
+        end = start + size-1;
+        if (end > list.size()){
+            end = list.size() - 1;
+        }
+        return list.subList(start, end);
     }
 }

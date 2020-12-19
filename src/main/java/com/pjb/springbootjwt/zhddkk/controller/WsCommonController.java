@@ -11,10 +11,15 @@ import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
+import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +54,12 @@ public class WsCommonController extends AdminBaseController {
     private WsCommonService wsCommonService;
 
     /**
+     * 缓存.
+     */
+    @Autowired
+    private CacheService cacheService;
+
+    /**
     * 跳转到页面.
     */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.CONFIGURATION, subModule = "", describe = "通用配置页面")
@@ -68,16 +79,26 @@ public class WsCommonController extends AdminBaseController {
     @GetMapping("/list")
     //@RequiresPermissions("zhddkk:wsCommon:wsCommon")
     public Result<Page<WsCommonDO>> list(WsCommonDO wsCommonDto) {
-        Wrapper<WsCommonDO> wrapper = new EntityWrapper<WsCommonDO>();
-        if (StringUtils.isNotBlank(wsCommonDto.getType())) {
-            wrapper.eq("type", wsCommonDto.getType());
+        List<WsCommonDO> cacheList = cacheService.queryWsCommonList();
+        if (null != cacheList && cacheList.size() > 0){
+            cacheList = cacheList.stream().filter(cache->StringUtils.isNotBlank(cache.getType()) && cache.getType().equals(wsCommonDto.getType()))
+                    .filter(cache->StringUtils.isNotBlank(cache.getName()) && cache.getName().contains(wsCommonDto.getName())).collect(Collectors.toList());
+            Page<WsCommonDO> page = getPage(WsCommonDO.class);
+            page.setTotal(cacheList.size());
+            page.setRecords(CommonUtil.pageToList(cacheList, page.getCurrent(), page.getSize()));
+            return Result.ok(page);
+        } else {
+            Wrapper<WsCommonDO> wrapper = new EntityWrapper<WsCommonDO>();
+            if (StringUtils.isNotBlank(wsCommonDto.getType())) {
+                wrapper.eq("type", wsCommonDto.getType());
+            }
+            if (StringUtils.isNotBlank(wsCommonDto.getName())) {
+                wrapper.like("name", wsCommonDto.getName(), SqlLike.DEFAULT);
+            }
+            wrapper.orderBy("orderby");
+            Page<WsCommonDO> page = wsCommonService.selectPage(getPage(WsCommonDO.class), wrapper);
+            return Result.ok(page);
         }
-        if (StringUtils.isNotBlank(wsCommonDto.getName())) {
-            wrapper.like("name", wsCommonDto.getName(), SqlLike.DEFAULT);
-        }
-        wrapper.orderBy("orderby");
-        Page<WsCommonDO> page = wsCommonService.selectPage(getPage(WsCommonDO.class), wrapper);
-        return Result.ok(page);
     }
 
     /**

@@ -14,6 +14,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
+import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
 import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
 import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
@@ -102,6 +103,12 @@ public class LoginController {
      */
     @Autowired
     private MessageSource messageSource;
+
+    /**
+     * 缓存.
+     */
+    @Autowired
+    private CacheService cacheService;
 
     @Value("${server.address}")
     private String serverAddress;
@@ -288,6 +295,9 @@ public class LoginController {
         } catch (Exception e) {
             logger.debug("设置redis缓存失败,key:" + redisKey + " error:" + e.getMessage());
         }
+
+        // 缓存常用表数据
+        cacheService.initCache();
 
         response.sendRedirect("wsclientIndex.page");
     }
