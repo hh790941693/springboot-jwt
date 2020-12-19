@@ -217,7 +217,7 @@ public class CommonUtil {
         }
         end = start + size-1;
         if (end > list.size()){
-            end = list.size() - 1;
+            end = list.size();
         }
         return list.subList(start, end);
     }

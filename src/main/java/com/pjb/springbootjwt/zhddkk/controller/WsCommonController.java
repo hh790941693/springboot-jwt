@@ -15,6 +15,7 @@ import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,7 +83,9 @@ public class WsCommonController extends AdminBaseController {
         List<WsCommonDO> cacheList = cacheService.queryWsCommonList();
         if (null != cacheList && cacheList.size() > 0){
             cacheList = cacheList.stream().filter(cache->StringUtils.isNotBlank(cache.getType()) && cache.getType().equals(wsCommonDto.getType()))
-                    .filter(cache->StringUtils.isNotBlank(cache.getName()) && cache.getName().contains(wsCommonDto.getName())).collect(Collectors.toList());
+                    .filter(cache->StringUtils.isNotBlank(cache.getName()) && cache.getName().contains(wsCommonDto.getName()))
+                    .sorted(Comparator.comparing(WsCommonDO::getId))
+                    .collect(Collectors.toList());
             Page<WsCommonDO> page = getPage(WsCommonDO.class);
             page.setTotal(cacheList.size());
             page.setRecords(CommonUtil.pageToList(cacheList, page.getCurrent(), page.getSize()));
@@ -136,6 +139,8 @@ public class WsCommonController extends AdminBaseController {
     //@RequiresPermissions("zhddkk:wsCommon:add")
     public Result<String> save(WsCommonDO wsCommon) {
         wsCommonService.insert(wsCommon);
+        // 刷新缓存
+        cacheService.initCache();
         return Result.ok();
     }
 
@@ -147,6 +152,8 @@ public class WsCommonController extends AdminBaseController {
     //@RequiresPermissions("zhddkk:wsCommon:edit")
     public Result<String> update(WsCommonDO wsCommon) {
         wsCommonService.updateById(wsCommon);
+        // 刷新缓存
+        cacheService.initCache();
         return Result.ok();
     }
 
@@ -159,6 +166,8 @@ public class WsCommonController extends AdminBaseController {
     //@RequiresPermissions("zhddkk:wsCommon:remove")
     public Result<String> remove(Integer id) {
         wsCommonService.deleteById(id);
+        // 刷新缓存
+        cacheService.initCache();
         return Result.ok();
     }
 
@@ -170,6 +179,8 @@ public class WsCommonController extends AdminBaseController {
     //@RequiresPermissions("zhddkk:wsCommon:batchRemove")
     public Result<String> remove(@RequestParam("ids[]") Integer[] ids) {
         wsCommonService.deleteBatchIds(Arrays.asList(ids));
+        // 刷新缓存
+        cacheService.initCache();
         return Result.ok();
     }
 }
