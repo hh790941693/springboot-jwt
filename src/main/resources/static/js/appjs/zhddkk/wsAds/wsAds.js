@@ -112,7 +112,7 @@ function add() {
         title: '发布公告',
         maxmin: true,
         shadeClose: false,//点击遮罩关闭层
-        area: ['880px', '520px'],
+        area: ['1050px', '520px'],
         content: prefix + '/add'
     });
 }
@@ -123,7 +123,7 @@ function edit(id) {
         title: '编辑',
         maxmin: true,
         shadeClose: false,//点击遮罩关闭层
-        area: ['1000px', '520px'],
+        area: ['1050px', '520px'],
         content: prefix + '/edit/' + id
     });
 }

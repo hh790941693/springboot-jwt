@@ -14,7 +14,7 @@
                             <input type="hidden" id="id" name="id" th:value="${wsAds.id}">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="title"><span style="color:red">*</span>&nbsp;标题：</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-9">
                                     <input type="text" id="title" name="title" th:value="${wsAds.title}"
                                            class="form-control"/>
                                 </div>
@@ -24,7 +24,7 @@
                                 <label class="col-sm-2 control-label"><span style="color:red">*</span>&nbsp;内容：</label>
                                 <input id="contentInput" name="content" th:value="${wsAds.content}"
                                        style="display: none">
-                                <div class="col-sm-8">
+                                <div class="col-sm-9">
                                     <section id="editor">
                                         <div type="text" id="content" style="margin-top: 10px;"
                                              th:value="${wsAds.content}"></div>

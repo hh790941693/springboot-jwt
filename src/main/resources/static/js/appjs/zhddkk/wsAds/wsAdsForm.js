@@ -13,7 +13,6 @@ $(function () {
         editor.options.imageDeleteParams = {src: $img.attr('src')}
     });
     var markupStr = $('#contentInput').val();
-    console.log(markupStr);
     $('#content')[0].childNodes[1].innerHTML = markupStr;
 });
 
