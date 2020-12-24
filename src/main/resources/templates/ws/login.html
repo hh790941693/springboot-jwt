@@ -12,6 +12,14 @@
         padding: 0;
     }
 
+    body {
+        background-image: url('../img/login/lg1.jpg');
+        background-attachment: fixed;
+        background-size: cover;
+        background-repeat: no-repeat;
+        z-index: -1;
+    }
+
     #mainDiv {
         width: 350px;
         height: 342px;
@@ -278,6 +286,7 @@
             shadeClose: true,
             shade: 0.2,
             area: ['488px', '439px'],
+            anim: 1,
             content: 'register.page'
         });
     }
@@ -290,6 +299,7 @@
             shadeClose: true,
             shade: 0.2,
             area: ['490px', '318px'],
+            anim: 1,
             content: 'forgetPassword.page?user=' + user
         });
     }
