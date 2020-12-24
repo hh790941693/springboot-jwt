@@ -21,7 +21,7 @@
     }
 
     #mainDiv {
-        width: 350px;
+        width: 390px;
         height: 342px;
         /**
          * 水平居中
@@ -34,7 +34,7 @@
         position: relative;
         top: 50%;
         margin-top: -175px;
-        background-color: #506b7b;
+        background-color: whitesmoke;
         box-shadow: grey 10px 6px 10px;
         border: 1px solid grey;
         background-repeat: no-repeat;
@@ -43,7 +43,7 @@
     }
 
     #loginForm {
-        padding-left: 38px;
+        padding-left: 45px;
         padding-top: 30px;
     }
 
@@ -57,13 +57,8 @@
         background-color: #eeeeee;
     }
 
-    a {
-        color: white;
-    }
-
     a:hover {
         font-weight: bold;
-        color: white;
     }
 
     #helpDiv a {
@@ -191,7 +186,7 @@
 
     // 设置进度条百分比
     function setPercent(percent) {
-        layui.element.progress('checkProgress', percent + '%');
+        layui.element.progress('checkProgress', percent.toFixed(0) + '%');
     }
 
     var user = "";
@@ -392,6 +387,9 @@
                     $("#checkContentDiv").html(text);
 
                     percent += 100/(textArr.length-3);
+                    if (percent > 100) {
+                        percent = 100;
+                    }
                     setPercent(percent);
                 }
                 i++;
