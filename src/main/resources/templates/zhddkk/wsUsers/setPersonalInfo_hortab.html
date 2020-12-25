@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="common :: header"></th:block>
+    <meta charset="UTF-8">
+    <title>设置个人信息</title>
+
+    <style>
+        select {
+            width: 212px;
+            margin-left: 5px;
+        }
+
+        #modifyPwdDiv span {
+            display: inline-block;
+            width: 90px;
+        }
+
+        #modifyPwdDiv select {
+            width: 175px;
+        }
+
+        #modifyPwdDiv input {
+            width: 175px;
+        }
+
+        #modifyPwdDiv label {
+            margin-bottom: 0px;
+        }
+
+        #forgetPassForm div {
+            margin-top: 10px;
+            margin-left: 5px;
+        }
+
+        .layui-form-item {
+            margin-bottom: 10px;
+        }
+        .layui-form-label {
+            width: 82px;
+        }
+
+        .form-group div {
+            display: inline-block;
+        }
+        .form-group {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+<div id="mainDiv" style="width:100%;height:98%;">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><a ><i class="fa fa-user-circle-o"> 基本信息</i></a></li>
+            <li><a ><i class="fa fa-key"> 修改密码</i></a></li>
+        </ul>
+        <div class="layui-tab-content" style="height: 100px;">
+            <div class="layui-tab-item layui-show">
+                <div align="left">
+                    <form id="formDiv" method="post" action="/zhddkk/wsUsers/setPersonInfo.do" enctype="multipart/form-data"
+                          onsubmit="return beforeSumbit()" target="hidden_frame1">
+                        <input id="userNameHidden" name="userName" type="hidden" th:value="${session.sessionInfo.user}" >
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" id="realNameLabel" for="realName">真实姓名:</label>
+                            <div class="col-sm-9">
+                                <input id="realName" name="realName" class="form-control" type="text" style="margin-left:10px;"></input>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" id="headImgLabel" for="headImg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
+                            <input type="hidden" id="headImgInput" name="headImg" style="margin-left:10px;">
+                            <button type="button" id="imageBtn" class="layui-btn" style="margin-left: 15px;">
+                                <i class="layui-icon">&#xe67c;</i>上传图片
+                            </button>
+                        </div>
+                        <div style='padding-left:80px;'>
+                            <img id="headImg" onclick="showImg()" alt="" width="60px" height="60px"
+                                 onerror="imgerror(this)">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="sign">个性签名:</label>
+                            <div class="col-sm-9">
+                                <input id="sign" name="sign" class="form-control" type="text"></input>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="age">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</label>
+                            <div class="col-sm-9">
+                                <input id="age" name="age" class="form-control" type="text"></input>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="sexSelect">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</label>
+                            <div class="col-sm-9">
+                                <select id="sexSelect" name="sex" class="form-control" onchange="setHiddenText(this,'professionTextHidden')">
+                                    <option value="1" selected="selected">男</option>
+                                    <option value="2">女</option>
+                                    <option value="3">未知</option>
+                                </select>
+                                <input id="sexTextHidden" name="sexText" hidden="hidden"></input>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="tel">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话:</label>
+                            <div class="col-sm-9">
+                                <input id="tel" name="tel" class="form-control" type="text" style="margin-left:10px;"></input>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="address">住&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址:</label>
+                            <div class="col-sm-9">
+                                <input id="address" name="address" class="form-control" type="text" style="margin-left:10px;"></input>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="professionSelect">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业:</label>
+                            <div class="col-sm-9">
+                                <select id="professionSelect" name="profession" class="form-control"
+                                        onchange="setHiddenText(this,'professionTextHidden')">
+                                    <option value="1">IT</option>
+                                    <option value="2">建筑</option>
+                                    <option value="3">金融</option>
+                                    <option value="4">个体商户</option>
+                                    <option value="5">旅游</option>
+                                    <option value="6" selected="selected">其他</option>
+                                </select>
+                                <input id="professionTextHidden" name="professionText" hidden="hidden"></input>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="hobbySelect">爱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;好:</label>
+                            <div class="col-sm-9">
+                                <select id="hobbySelect" name="hobby" class="form-control" onchange="setHiddenText(this,'hobbyTextHidden')">
+                                    <option value="1">篮球</option>
+                                    <option value="2">足球</option>
+                                    <option value="3">爬山</option>
+                                    <option value="4">旅游</option>
+                                    <option value="5">网游</option>
+                                    <option value="6" selected="selected">其他</option>
+                                </select>
+                                <input id="hobbyTextHidden" name="hobbyText" hidden="hidden"></input>
+                            </div>
+                        </div>
+                        <div align="center" style='margin-bottom: 5px;'>
+                            <button type='submit' class='btn btn-sm btn-success' id="updatePersonInfoBtn">提&nbsp;&nbsp;&nbsp;&nbsp;交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div style="width:96%;height:100%;padding-top:10px;">
+                    <form class="layui-form" action="/zhddkk/wsUsers/updatePassword.do" lay-filter="modifyPasswordForm" method="post" target="hidden_frame2">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="user" readonly th:value="${session.sessionInfo.user}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">旧密码</label>
+                            <div class="layui-input-block">
+                                <input type="password" name="oldPass" lay-verify="required" placeholder="请输入旧密码" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">新密码</label>
+                            <div class="layui-input-block">
+                                <input type="password" name="newPass" lay-verify="required|newPass" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">确认密码</label>
+                            <div class="layui-input-block">
+                                <input type="password" name="confirmPass" lay-verify="required|confirmPass" placeholder="请输入确认密码" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="modifyPasswordBtn">立即提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <iframe name="hidden_frame1" id="hidden_frame1" style='display: none'></iframe>
+    <iframe name="hidden_frame2" id="hidden_frame2" style='display: none'></iframe>
+</div>
+
+<th:block th:include="common :: footer"></th:block>
+<th:block th:include="common :: sessionInfo"></th:block>
+</body>
+<script>
+    initUpload();
+
+    function setHiddenText(selectObj, hiddenId) {
+        var checkText = $(selectObj).find("option:selected").text();
+        $("#" + hiddenId).val(checkText);
+    }
+
+    //查询个人信息
+    queryPersonInfo(sessionUser);
+
+    function beforeSumbit() {
+        var sexText = $("#sexSelect").find("option:selected").text();
+        $("#sexTextHidden").val(sexText);
+
+        var professionText = $("#professionSelect").find("option:selected").text();
+        $("#professionTextHidden").val(professionText);
+
+        var hobbyText = $("#hobbySelect").find("option:selected").text();
+        $("#hobbyTextHidden").val(hobbyText);
+        return true;
+    }
+
+    //修改密码表单
+    layui.use(['form'], function() {
+        var form = layui.form;
+        form.verify({
+            newPass: function (value) {
+                // 与旧密码比较
+                if($('input[name=oldPass]').val() == value) {
+                    return '新密码不能与旧密码一样';
+                }
+            }
+            , confirmPass: function (value) {
+                if($('input[name=newPass]').val() != value) {
+                    return '两次密码不一致';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(modifyPasswordBtn)', function (data) {
+            return true;
+        });
+    });
+
+    // 查询个人信息
+    function queryPersonInfo(user) {
+        $.ajax({
+            type: 'POST',
+            url: '/zhddkk/wsUsers/queryPersonInfo.json',
+            data: {'user': user},
+            //dataType: 'json',
+            success: function (result) {
+                if (result.code == 1) {
+                    var data = result.data;
+                    $("#realName").val(data.realName);
+                    $("#sign").val(data.sign);
+                    $("#age").val(data.age);
+                    $("#sexSelect").val(data.sex);
+                    $("#sexTextHidden").val(data.sexText);
+                    $("#tel").val(data.tel);
+                    $("#address").val(data.address);
+                    $("#professionSelect").val(data.profession);
+                    $("#professionTextHidden").val(data.professionText);
+                    $("#hobbySelect").val(data.hobby);
+                    $("#hobbyTextHidden").val(data.hobbyText);
+                    $("#headImg").attr("src", data.img);
+                    $("#headImgInput").val(data.img);
+                }
+            }
+        })
+    }
+
+    function refresh() {
+        window.location.href = window.location.href;
+    };
+
+    // 加载图片失败
+    function imgerror(imgObj) {
+        $(imgObj).attr("src", rootUrl + "img/" + $.ws.errorImageName);
+    }
+
+    $("#hidden_frame1").load(function () {
+        var text = $(this).contents().find("body").text();
+        var jsonObj = JSON.parse(text);
+        if (jsonObj.code == 1) {
+            layer.msg('更新个人信息成功');
+            var index = parent.layer.getFrameIndex(window.name);
+            setTimeout(function () {
+                parent.layer.close(index);
+                refresh();
+            }, 2000)
+        } else {
+            layer.msg('更新个人信息失败');
+        }
+    });
+
+    $("#hidden_frame2").load(function () {
+        var text = $(this).contents().find("body").text();
+        var jsonObj = JSON.parse(text);
+        if (jsonObj.code == 1) {
+            layer.msg('修改密码成功');
+            var index = parent.layer.getFrameIndex(window.name);
+            setTimeout(function () {
+                parent.layer.close(index);
+                refresh();
+            }, 2000)
+        } else {
+            layer.msg(jsonObj.data);
+        }
+    });
+
+    function showImg() {
+        $.ws.gShowImg($("#headImg").attr("src"));
+    }
+
+    function initUpload() {
+        layui.upload.render({
+            elem: '#imageBtn',
+            url: $.ws.uploadUrl,
+            size: 10240,//单位为KB
+            accept: 'images',
+            data: {
+                "user": sessionUser,
+                "folder": "headImg"
+            },
+            before: function () {
+                layer.load();
+            },
+            done: function (r) {
+                layer.closeAll('loading');
+                if (r.code == "1") {
+                    $("#headImg").attr("src", r.data);
+                    $("#headImg").show();
+                    $("#headImgInput").val(r.data);
+                }
+            },
+            error: function () {
+                layer.closeAll('loading');
+            }
+        });
+    }
+</script>
+</html>
