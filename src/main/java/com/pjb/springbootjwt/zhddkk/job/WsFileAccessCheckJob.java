@@ -9,6 +9,7 @@ import com.pjb.springbootjwt.zhddkk.service.WsCircleService;
 import com.pjb.springbootjwt.zhddkk.service.WsFeedbackService;
 import com.pjb.springbootjwt.zhddkk.service.WsFileService;
 import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
+import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,9 @@ public class WsFileAccessCheckJob {
         String webserverip = webSocketConfig.getAddress();
         List<WsFileDO> needBatchUpdateList = new ArrayList<>();
         for (WsFileDO wsFileDO : wsFileList) {
+            boolean needUpdate = false;
             String url = wsFileDO.getUrl();
+            int accessStatus =  wsFileDO.getAccessStatus();
             if (StringUtils.isBlank(url)) {
                 continue;
             }
@@ -78,9 +81,25 @@ public class WsFileAccessCheckJob {
             if (!oldIp.equals(webserverip)) {
                 String newUrl = url.replace(oldIp, webserverip);
                 wsFileDO.setUrl(newUrl);
+                needUpdate = true;
+            }
+
+            if (CommonUtil.testUrl(url)) {
+                wsFileDO.setAccessStatus(1);
+                if (accessStatus != 1) {
+                    needUpdate = true;
+                }
+            } else {
+                wsFileDO.setAccessStatus(0);
+                if (accessStatus != 0) {
+                    needUpdate = true;
+                }
+            }
+            if (needUpdate) {
                 needBatchUpdateList.add(wsFileDO);
             }
         }
+
         if (needBatchUpdateList.size() > 0) {
             logger.info("本次更新文件数:{}", needBatchUpdateList.size());
             wsFileService.updateBatchById(needBatchUpdateList, needBatchUpdateList.size());

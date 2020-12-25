@@ -16,7 +16,6 @@ import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFileService;
-import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
 import com.pjb.springbootjwt.zhddkk.util.ServiceUtil;
@@ -35,7 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 文件控制器
+ * 文件控制器.
  * 
  * @author Administrator
  *
@@ -224,16 +223,7 @@ public class FileOperationController {
         if (needBatchUpdateList.size() > 0) {
             wsFileService.updateBatchById(needBatchUpdateList, needBatchUpdateList.size());
         }
-        
-        for (WsFileDO wsFileDO : fileList) {
-            String url = wsFileDO.getUrl();
-            if (CommonUtil.testUrl(url)) {
-                wsFileDO.setAccessStatus("1");
-            } else {
-                wsFileDO.setAccessStatus("0");
-            }
-        }
-        
+
         return Result.ok(fileList);
     }
 }

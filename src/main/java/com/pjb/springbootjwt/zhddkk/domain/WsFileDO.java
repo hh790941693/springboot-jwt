@@ -60,10 +60,8 @@ public class WsFileDO implements Serializable {
     //0:无效 1:有效
     @ApiModelProperty(value = "status",name = "0:无效 1:有效")
     private Integer status;
-
-    @TableField(exist = false)
     @ApiModelProperty(value = "accessStatus",name = "访问性 0:不可访问 1:可访问")
-    private String accessStatus;
+    private Integer accessStatus;
 
     public void setId(Integer id) {
         this.id = id;
@@ -171,11 +169,11 @@ public class WsFileDO implements Serializable {
         this.folder = folder;
     }
 
-    public String getAccessStatus() {
+    public Integer getAccessStatus() {
         return accessStatus;
     }
 
-    public void setAccessStatus(String accessStatus) {
+    public void setAccessStatus(Integer accessStatus) {
         this.accessStatus = accessStatus;
     }
 }
