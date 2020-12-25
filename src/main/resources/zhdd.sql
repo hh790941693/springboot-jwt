@@ -926,6 +926,7 @@ CREATE TABLE IF NOT EXISTS `ws_file` (
   `file_size` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
   `author` varchar(50) NOT NULL DEFAULT '' COMMENT '未知',
   `track_length` varchar(50) NOT NULL DEFAULT '' COMMENT '文件时长',
+  `access_status` TINYINT(3,0) NOT NULL DEFAULT '1' COMMENT ' 访问性 0:不可访问 1:可访问',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0:无效 1:有效',
