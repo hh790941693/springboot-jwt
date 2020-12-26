@@ -18,7 +18,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
-                    <input type="text" name="user" lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+                    <input type="text" name="user" lay-verify="required|lenthOver2" autocomplete="off" placeholder="请输入用户名" class="layui-input">
                 </div>
             </div>
            
@@ -38,14 +38,14 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">密码</label>
                 <div class="layui-input-block">
-                    <input type="password" name="pass" lay-verify="required" autocomplete="off" placeholder="请输入密码" class="layui-input">
+                    <input type="password" name="pass" lay-verify="required|lenthOver3" autocomplete="off" placeholder="请输入密码" class="layui-input">
                 </div>
             </div>
            
             <div class="layui-form-item">
                 <label class="layui-form-label">确认密码</label>
                 <div class="layui-input-block">
-                    <input type="password" name="confirmPass" lay-verify="required|confirmPass" autocomplete="off" placeholder="请输入确认密码" class="layui-input">
+                    <input type="password" name="confirmPass" lay-verify="required|confirmPass|lenthOver3" autocomplete="off" placeholder="请输入确认密码" class="layui-input">
                 </div>
             </div>
             
@@ -124,6 +124,16 @@
                 confirmPass: function (value) {
                     if($("input[name='pass']").val() != value) {
                         return '两次密码不一致';
+                    }
+                }
+                ,lenthOver2: function (value) {
+                    if (value.length < 2){
+                        return '长度不能小于2';
+                    }
+                }
+                ,lenthOver3: function (value) {
+                    if (value.length < 3){
+                        return '长度不能小于3';
                     }
                 }
             });
