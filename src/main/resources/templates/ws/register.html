@@ -2,75 +2,105 @@
 <head>
     <th:block th:include="common :: header"></th:block>
     <title>注册</title>
-<style type="text/css">
-    a {
-        font-size: 13px;
-    }
-
-    span {
-        display: inline-block;
-        width: 90px;
-    }
-
-    select {
-        width: 175px;
-    }
-
-    input {
-        width: 175px;
-    }
-
-    label {
-        margin-bottom: 0px;
-    }
-
-    #div001 span {
-        margin-top: 5px;
-    }
-</style>
+    <style type="text/css">
+        .layui-form-item {
+            margin-bottom: 2px;
+        }
+        .layui-form-label {
+            padding: 5px 15px;
+            width: 82px;
+        }
+    </style>
 </head>
 <body>
-    <div style="width:470px;height:auto;margin:0 auto;border:2px solid green;background-color:#53D2FB">
-        <input type="hidden" th:value="${dicJson}" id="dicJson">
-        <form style="margin:10px 5px;" id="registerForm" action="wsregister.do" method="post" target="hidden_frame">
-            <div>
-                <span>用户名称:</span><input id="user" name="user" type="text" autocomplete="off"></input>
+    <div style="width:470px;height:auto;margin:0 auto;padding-top: 5px;">
+        <form id="registerForm" class="layui-form" lay-filter="registerForm" method="post" action="wsregister.do" enctype="multipart/form-data" target="hidden_frame">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="user" lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+                </div>
+            </div>
+           
+            <div class="layui-form-item">
+                <label class="layui-form-label">头像</label>
+                <div class="layui-input-block">
+                    <input type="hidden" id="headImgInput" name="headImg" class="layui-input">
+                    <button type="button" id="imageBtn" class="layui-btn">
+                        <i class="layui-icon">&#xe67c;</i>上传图片
+                    </button>
+
+                    <img id="headImg" style="margin-left: 30px;" onclick="showImg()" alt="" width="60px" height="60px"
+                         onerror="imgerror(this)">
+                </div>
+            </div>
+           
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="pass" lay-verify="required" autocomplete="off" placeholder="请输入密码" class="layui-input">
+                </div>
+            </div>
+           
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="confirmPass" lay-verify="required|confirmPass" autocomplete="off" placeholder="请输入确认密码" class="layui-input">
+                </div>
+            </div>
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label">问题1</label>
+                <div class="layui-input-block">
+                    <select name="select1" lay-filter="select1">
+                        <option th:each="question,stat : ${questionList}" th:text="${question.name}" th:value="${question.name}" th:selected="${stat.index eq 0}"></option>
+                    </select>
+                </div>
+            </div>
+           
+            <div class="layui-form-item">
+                <label class="layui-form-label">您的答案</label>
+                <div class="layui-input-block">
+                    <input type="text" name="answer1" lay-verify="required" autocomplete="off" placeholder="请输入答案1" class="layui-input">
+                </div>
+            </div>
+           
+            <div class="layui-form-item">
+                <label class="layui-form-label">问题2</label>
+                <div class="layui-input-block">
+                    <select name="select2" lay-filter="select2">
+                        <option th:each="question,stat : ${questionList}" th:text="${question.name}" th:value="${question.name}" th:selected="${stat.index eq 1}"></option>
+                    </select>
+                </div>
+            </div>
+           
+            <div class="layui-form-item">
+                <label class="layui-form-label">您的答案</label>
+                <div class="layui-input-block">
+                    <input type="text" name="answer2" lay-verify="required" autocomplete="off" placeholder="请输入答案2" class="layui-input">
+                </div>
+            </div>
+           
+            <div class="layui-form-item">
+                <label class="layui-form-label">问题3</label>
+                <div class="layui-input-block">
+                    <select name="select3" lay-filter="select3">
+                        <option th:each="question,stat : ${questionList}" th:text="${question.name}" th:value="${question.name}" th:selected="${stat.index eq 2}"></option>
+                    </select>
+                </div>
             </div>
 
-            <div style="margin-top:5px;margin-bottom: 5px;">
-                <label id="headImgLabel" for="headImg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
-                <input type="hidden" id="headImgInput" name="headImg" style="width:208px;margin-left:10px;">
-                <button type="button" id="imageBtn" class="layui-btn" style="margin-left: 31px;">
-                    <i class="layui-icon">&#xe67c;</i>上传图片
-                </button>
-            </div>
-            <div style='padding:5px 0 5px 90px;display:none' id="headImgDiv">
-                <img id="headImg" alt="" width="60px" height="60px" onerror="imgerror(this)">
+            <div class="layui-form-item">
+                <label class="layui-form-label">您的答案</label>
+                <div class="layui-input-block">
+                    <input type="text" name="answer3" lay-verify="required" autocomplete="off" placeholder="请输入答案3" class="layui-input">
+                </div>
             </div>
 
-            <div id="div001">
-                <span>密码:</span><input id="pass" name="pass" type="password" autocomplete="off"></input>
-                <br/>
-                <span>确认密码:</span><input id="confirmPass" name="confirmPass" type="password" autocomplete="off"></input>
-                <br/>
-                <span>问题1:</span><select id="select1" name="select1">
-                </select>
-                <br/>
-                <span>你的答案</span><input id="answer1" name="answer1" autocomplete="off"></input>
-                <br/>
-                <span>问题2:</span><select id="select2" name="select2">
-                </select>
-                <br/>
-                <span>你的答案</span><input id="answer2" name="answer2" autocomplete="off"></input>
-                <br/>
-                <span>问题3:</span><select id="select3" name="select3">
-                </select>
-                <br/>
-                <span>你的答案</span><input id="answer3" name="answer3" autocomplete="off"></input>
-
-            </div>
-            <div align="left" style="margin-top:10px;margin-left:130px;">
-                <button id="btnregist" class='btn btn-sm btn-success' type="submit" style="width:80px;">注册</button>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="registerBtn">立即注册</button>
+                </div>
             </div>
         </form>
     </div>
@@ -79,63 +109,48 @@
 </body>
     <script type="text/javascript">
         var user = "";
-        $("#user").blur(function () {
-            user = $("#user").val();
+        $("input[name='user']").blur(function () {
+            user = $(this).val();
             if (user != '' && user != undefined) {
                 checkUserRegisterStatus(user);
             }
         });
         initUpload();
-
-        queryCommonData();
-        //查询注册问题
-        function queryCommonData() {
-            $.ajax({
-                type: 'GET',
-                url: rootUrl + '/queryAllCommonData.do',
-                //dataType: 'json',
-                async: true,
-                success: function (result) {
-                    var a = 2
-
-                    $("#select1").empty();
-                    $("#select2").empty();
-                    $("#select3").empty();
-                    var questionArr = result["zcwt"];
-                    for (var i = 0; i < questionArr.length; i++) {
-                        var qusTxt = questionArr[i].name;
-                        $("#select1").append("<option value=" + qusTxt + ">" + qusTxt + "</option>");
-                        $("#select2").append("<option value=" + qusTxt + ">" + qusTxt + "</option>");
-                        $("#select3").append("<option value=" + qusTxt + ">" + qusTxt + "</option>");
-
-                        $("#select1").get(0).selectedIndex = 0;
-                        $("#select2").get(0).selectedIndex = 1;
-                        $("#select3").get(0).selectedIndex = 2;
+        
+        //注册表单监听
+        layui.use(['form'], function() {
+            var form = layui.form;
+            form.verify({
+                confirmPass: function (value) {
+                    if($("input[name='pass']").val() != value) {
+                        return '两次密码不一致';
                     }
                 }
             });
-        }
 
+            //注册按钮监听提交
+            form.on('submit(registerBtn)', function (data) {
+                return true;
+            });
+        });
+        
+        // 用户状态检查
         function checkUserRegisterStatus(user) {
             if (user == "admin") {
                 layer.msg('admin为系统所用,请使用其他名称!');
-                $("#btnregist").attr("disabled", true);
-                $("#user").val("");
-                return
+                $("input[name='user']").val("");
+                return;
             }
             $.ajax({
                 type: 'POST',
                 url: rootUrl + '/checkUserRegisterStatus.json',
-                data: {user: user},
+                data: { 'user': user},
                 //dataType: 'json',
                 async: false,
                 success: function (result) {
                     if (result.code != 1) {
-                        $("#btnregist").attr("disabled", true);
                         layer.msg('该用户已经注册过了,请直接登录!');
-                        $("#user").val("");
-                    } else {
-                        $("#btnregist").attr("disabled", false);
+                        $("input[name='user']").val("");
                     }
                 }
             });
@@ -146,94 +161,17 @@
             if (text.indexOf("success") != -1) {
                 var timeout = 3;
                 layer.msg('注册成功,' + timeout + "秒后返回登录页面");
-                var user = $("#user").val();
                 var index = parent.layer.getFrameIndex(window.name);
                 setTimeout(function () {
                     parent.layer.close(index);
                     window.location.href = "login.page";
-                }, timeout * 1000)
-
+                }, timeout * 1000);
             } else if (text.indexOf("failed") != -1) {
                 layer.msg('注册失败');
             }
         });
 
-        $("#registerForm").validate({
-            rules: {
-                user:
-                    {
-                        required: true,
-                        minlength: 2,
-                        maxlength: 6
-                    },
-                pass:
-                    {
-                        required: true,
-                        minlength: 2,
-                        maxlength: 6
-                    },
-                confirmPass: {
-                    required: true,
-                    minlength: 2,
-                    maxlength: 6,
-                    equalTo: "#pass"
-                },
-                select1: {
-                    required: true
-                },
-                answer1: {
-                    required: true,
-                    minlength: 2
-                },
-                select2: {
-                    required: true
-                },
-                answer2: {
-                    required: true,
-                    minlength: 2
-                },
-                select3: {
-                    required: true
-                },
-                answer3: {
-                    required: true,
-                    minlength: 2
-                }
-            },
-            messages: {
-                user:
-                    {
-                        required: "请输入用户名",
-                        minlength: "用户名至少包含2个字符",
-                        maxlength: "用户名最多包含6位字符"
-                    },
-                pass:
-                    {
-                        required: "请输入密码",
-                        minlength: "密码至少包含2个字符",
-                        maxlength: "密码最多包含6位字符"
-                    },
-                confirmPass: {
-                    required: "请输入密码",
-                    minlength: "密码至少包含2个字符",
-                    maxlength: "密码最多包含6位字符",
-                    equalTo: "密码前后不一致"
-                },
-                answer1: {
-                    required: "请输入答案",
-                    minlength: "答案至少2个字符"
-                },
-                answer2: {
-                    required: "请输入答案",
-                    minlength: "答案至少2个字符"
-                },
-                answer3: {
-                    required: "请输入答案",
-                    minlength: "答案至少2个字符"
-                }
-            }
-        });
-
+        // 初始化上传模块
         function initUpload() {
             layui.upload.render({
                 elem: '#imageBtn',
@@ -251,7 +189,6 @@
                     layer.closeAll('loading');
                     if (r.code == "1") {
                         $("#headImg").attr("src", r.data);
-                        $("#headImgDiv").show();
                         $("#headImgInput").val(r.data);
                     }
                 },
@@ -264,6 +201,11 @@
         // 加载图片失败
         function imgerror(imgObj) {
             $(imgObj).attr("src", rootUrl + "img/" + $.ws.errorImageName);
+        }
+
+        // 预览图片
+        function showImg() {
+            $.ws.gShowImg($("#headImg").attr("src"));
         }
     </script>
 </html>

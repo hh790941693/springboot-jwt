@@ -331,8 +331,10 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "注册首页")
     @RequestMapping(value = "register.page")
-    public String toRegister() {
+    public String toRegister(Model model) {
         logger.debug("访问register.page");
+        List<WsCommonDO> list = wsCommonService.selectList(new EntityWrapper<WsCommonDO>().eq("type", "zcwt"));
+        model.addAttribute("questionList", list);
         return "ws/register";
     }
 
@@ -353,20 +355,18 @@ public class LoginController {
                              @RequestParam("select1")String question1, @RequestParam("answer1")String answer1,
                              @RequestParam("select2")String question2, @RequestParam("answer2")String answer2,
                              @RequestParam("select3")String question3, @RequestParam("answer3")String answer3) {
-        // 是否已注册过  true:已注册
-        boolean isUserExist = false;
-
-        List<WsUsersDO> userList = wsUsersService.selectList(null);
-        for (WsUsersDO u : userList) {
-            if (u.getName().equals(user)) {
-                isUserExist = true;
-                break;
-            }
-        }
-        if (isUserExist) {
+        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+        if (null != wsUsersDO) {
             // 如果已经注册
             model.addAttribute("user", user);
             model.addAttribute("detail", "当前用户已注册,请直接登录!");
+            return CommonConstants.FAIL;
+        }
+
+        if (!pass.equals(confirmPass)) {
+            // 如果密码不一致
+            model.addAttribute("user", user);
+            model.addAttribute("detail", "两次密码不一致!");
             return CommonConstants.FAIL;
         }
 
