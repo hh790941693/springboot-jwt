@@ -6,16 +6,18 @@
 <title>会话信息</title>
 
 <style type="text/css">
-    #mainDiv {
-        width: 100%;
-        height: auto;
-        padding:3px;
+    .layui-table td, .layui-table th {
+        line-height: 14px;
+    }
+
+    .layui-table {
+        margin: 5px;
     }
 </style>
 </head>
     <body>
-        <div id="mainDiv">
-            <div class="layui-form" style="width: 100%;height: 100%">
+        <div id="mainDiv" style="overflow-y: hidden;">
+            <div class="layui-form" style="width: 98%;height: calc(100% - 12px)">
                   <table class="layui-table">
                     <colgroup>
                       <col width="150">
@@ -36,7 +38,7 @@
                     </tbody>
                   </table>
                 </div>
-            
+
             <div align="center" style="margin:6px auto;">
                 <button onclick="toIndex()" class='btn btn-large btn-primary'>返回首页</button>
             </div>
