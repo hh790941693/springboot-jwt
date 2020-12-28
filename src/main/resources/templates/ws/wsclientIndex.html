@@ -192,7 +192,7 @@
                 <div id="leftNaviDiv">
                     <div th:if="${session.sessionInfo.userType == '0'}">
                         <div id="leftSerNavi">
-                            <img id="leftNavBackgroundImg" src="../img/headerY.jpg" hidden>
+                            <img id="leftSerNavBackgroundImg" src="../img/headerY.jpg" hidden>
                             <ul>
                                 <!--<li id="wsserverUser.page" class="mouseleftclick">用户管理</li>-->
                                 <li id="/zhddkk/wsUsers/wsUsersForAdmin" class="mouseleftclick">
@@ -255,7 +255,7 @@
                     </div>
                     <div th:if="${session.sessionInfo.userType != '0'}">
                         <div id="leftCliNavi">
-                            <img id="leftNavBackgroundImg" src="../img/headerY.jpg" hidden>
+                            <img id="leftCliNavBackgroundImg" src="../img/headerY.jpg" hidden>
                             <ul>
                                 <li id="/ws/wsclientChat.page" class="mouseleftclick">
                                     <span class="fa fa-comments"></span>[[#{li.chat.label}]]

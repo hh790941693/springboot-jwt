@@ -11,4 +11,4 @@ $("#leftCliNavi ul li").click(function () {
 })
 
 //定时滚动左侧导航栏背景图片
-$.ws.backgroundImgAnimation("leftNavBackgroundImg", "leftCliNavi", 2, 20);
+$.ws.backgroundImgAnimation("leftCliNavBackgroundImg", "leftCliNavi", 2, 20);

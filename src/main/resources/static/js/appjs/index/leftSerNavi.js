@@ -21,4 +21,4 @@ $("#leftSerNavi ul li").click(function () {
 })
 
 //定时滚动左侧导航栏背景图片
-$.ws.backgroundImgAnimation("leftNavBackgroundImg", "leftSerNavi", 2, 20);
+$.ws.backgroundImgAnimation("leftSerNavBackgroundImg", "leftSerNavi", 2, 20);
