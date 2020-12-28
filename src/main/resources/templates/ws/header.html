@@ -164,7 +164,7 @@
         function getOnlineInfo() {
             $.ajax({
                 type: 'GET',
-                url: 'getOnlineInfo.json',
+                url: 'ws/getOnlineInfo.json',
                 data: {"user": sessionUser},
                 //dataType: 'json',
                 success: function (result) {

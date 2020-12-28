@@ -1,0 +1,39 @@
+label {
+    margin: 0;
+}
+
+#footDiv {
+    width: 100%;
+    height: 100%;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#copyrightDiv ul li {
+    float: left;
+    list-style: none;
+}
+
+#statusDiv {
+    width: 100%;
+    height: 50%;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 3px;
+}
+
+#statusTips {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+}
+
+#copyrightDiv li {
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+#copyrightDiv li span {
+    margin-right: 2px;
+}
