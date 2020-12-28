@@ -52,7 +52,7 @@
             overflow: hidden;
         }
 
-        #footerDiv {
+        #footerPage {
             width: 100%;
             height: 7.05%;
             border: 2px solid green;
@@ -97,9 +97,9 @@
     </style>
 </head>
 <body>
-    <div id="mainDiv">
+    <div id="mainDiv" class="divShadow">
         <!--头部-->
-        <div id="headerPage" class="divShadow" align="center">
+        <div id="headerPage" align="center">
             <div id="headerDiv" align="center">
                 <img id="headBackgroundImg" src="../img/headerX.jpg" hidden>
                 <div style="float:left;">
@@ -181,7 +181,7 @@
         </div>
     
         <!--中间部分-->
-        <div id='centerDiv' class="divShadow">
+        <div id='centerDiv'>
             <!--滚动消息-->
             <div id="recentNewsDiv">
                 <marquee direction="left" scrolldelay="10" scrollamount="7" onMouseOver="this.stop()" onMouseOut="this.start()"><span id="adsSpan"></span></marquee>
@@ -311,7 +311,7 @@
         </div>
     
         <!--底部-->
-        <div id="footerDiv" class="divShadow" align="center">
+        <div id="footerPage" align="center">
             <div id="footDiv" align="center">
                 <div style="height:50%;">
                     <div style="float:left;">
@@ -755,7 +755,7 @@
                 vPos = 0;
             }
             clock++;
-        }, 100);
+        }, 150);
 
         //获取最新广告
         queryRecentAdsList();
