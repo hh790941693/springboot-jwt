@@ -3,8 +3,13 @@
     <th:block th:include="common :: header"></th:block>
     <link rel="stylesheet" type="text/css" th:href="@{/css/index/header.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/index/footer.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index/leftCliNavi.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index/leftSerNavi.css}">
+    <th:block th:if="${session.sessionInfo.userType == '0'}">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/index/leftSerNavi.css}">
+    </th:block>
+    <th:block th:if="${session.sessionInfo.userType != '0'}">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/index/leftCliNavi.css}">
+    </th:block>
+
     <title></title>
     <style type="text/css">
         #mainDiv {
@@ -190,7 +195,7 @@
             <div id="leftAndRightIframeDiv">
                 <!--左侧导航栏-->
                 <div id="leftNaviDiv">
-                    <div th:if="${session.sessionInfo.userType == '0'}">
+                    <th:block th:if="${session.sessionInfo.userType == '0'}">
                         <div id="leftSerNavi">
                             <img id="leftSerNavBackgroundImg" src="../img/headerY.jpg" hidden>
                             <ul>
@@ -252,8 +257,8 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
-                    <div th:if="${session.sessionInfo.userType != '0'}">
+                    </th:block>
+                    <th:block th:if="${session.sessionInfo.userType != '0'}">
                         <div id="leftCliNavi">
                             <img id="leftCliNavBackgroundImg" src="../img/headerY.jpg" hidden>
                             <ul>
@@ -300,7 +305,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    </th:block>
                 </div>
     
                 <!--右侧子页面-->
@@ -385,8 +390,12 @@
     <th:block th:include="common :: sessionInfo"></th:block>
     <script type="text/javascript" th:src="@{/js/appjs/index/header.js}"></script>
     <script type="text/javascript" th:src="@{/js/appjs/index/footer.js}"></script>
-    <script type="text/javascript" th:src="@{/js/appjs/index/leftCliNavi.js}"></script>
-    <script type="text/javascript" th:src="@{/js/appjs/index/leftSerNavi.js}"></script>
+    <th:block th:if="${session.sessionInfo.userType == '0'}">
+        <script type="text/javascript" th:src="@{/js/appjs/index/leftSerNavi.js}"></script>
+    </th:block>
+    <th:block th:if="${session.sessionInfo.userType != '0'}">
+        <script type="text/javascript" th:src="@{/js/appjs/index/leftCliNavi.js}"></script>
+    </th:block>
 </body>
 
     <script type="text/javascript">
