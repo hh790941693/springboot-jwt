@@ -46,6 +46,9 @@ public class SesstionTimeoutFilter implements Filter {
     // 忽略的URL前缀列表
     private static final List<String> IGNORE_URL_PREFIX_LIST = new ArrayList<>(Arrays.asList(
             "/js/",
+            "/css/",
+            "/json/",
+            "/img/",
             "/canvas/",
             "/zhddWebSocket/",
             "/game/",
