@@ -250,6 +250,7 @@
             $("input[name='hobbyText']").val(text);
         });
 
+        // 选择省份
         form.on('select(province)', function (data) {
             $("select[name='city']").empty();
             $("select[name='district']").empty();
@@ -260,9 +261,12 @@
                     })
                 }
             });
+            $("select[name='city']").get(0).selectedIndex = 0;
+            $("select[name='district']").get(0).selectedIndex = 0;
             layui.form.render();
         });
 
+        // 选择城市
         form.on('select(city)', function (data) {
             $("select[name='district']").empty();
             var provinceId = $("select[name='province']").val();
@@ -277,6 +281,7 @@
                     })
                 }
             });
+            $("select[name='district']").get(0).selectedIndex = 0;
             layui.form.render();
         });
     });
@@ -405,7 +410,17 @@
                     positionData = result;
                     $.each(result, function (pIndex, pItem) {
                         $("select[name='province']").append("<option value='" + pItem.name + "'>" + pItem.name + "</option>");
+                        $.each(pItem.city, function (cIndex, cItem) {
+                            $("select[name='city']").append("<option value='" + cItem.name + "'>" + cItem.name + "</option>");
+                            $.each(cItem.area, function (aIndex, aItem) {
+                                $("select[name='district']").append("<option value='" + aItem + "'>" + aItem + "</option>");
+                            })
+                        })
                     });
+
+                    $("select[name='province']").get(0).selectedIndex = 0;
+                    $("select[name='city']").get(0).selectedIndex = 0;
+                    $("select[name='district']").get(0).selectedIndex = 0;
                     layui.form.render();
                 }
             }
