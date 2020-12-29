@@ -14,6 +14,9 @@
             padding: 5px 15px;
             width: 82px;
         }
+        .layui-form-item .layui-input-inline {
+            width: 123px;
+        }
     </style>
 </head>
 <body>
@@ -81,8 +84,27 @@
                             </div>
                         </div>
 
-                        <div class="layui-form-item">
+                         <div class="layui-form-item">
                             <label class="layui-form-label">住址</label>
+                            <div class="layui-input-inline" style="margin-left: 28px;">
+                                <select name="province" lay-filter="province" lay-verify="required">
+                                    <option value="">请选择省份</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="city" lay-filter="city" lay-verify="required">
+                                    <option value="">请选择城市</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="district" lay-filter="district" lay-verify="required">
+                                    <option value="">请选择区县</option>
+                                </select>
+                            </div>
+                         </div>
+                        
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">详细住址</label>
                             <div class="layui-input-block">
                                 <input type="text" name="address" lay-verify="required" autocomplete="off" placeholder="请输入住址" class="layui-input">
                             </div>
@@ -177,6 +199,9 @@
 <script>
     initUpload();
 
+    // 区域位置数据
+    var positionData = null;
+    initPosition();
     //查询个人信息
     queryPersonInfo(sessionUser);
 
@@ -204,7 +229,6 @@
 
         //个人信息修改监听提交
         form.on('submit(personInfoBtn)', function (data) {
-            console.log(data);
             return true;
         });
 
@@ -225,6 +249,36 @@
             var text = data.elem[data.elem.selectedIndex].text;
             $("input[name='hobbyText']").val(text);
         });
+
+        form.on('select(province)', function (data) {
+            $("select[name='city']").empty();
+            $("select[name='district']").empty();
+            $.each(positionData, function (pIndex, pItem) {
+                if (pItem.name == data.value) {
+                    $.each(pItem.city, function (cIndex, cItem) {
+                        $("select[name='city']").append("<option value='" + cItem.name + "'>" + cItem.name + "</option>");
+                    })
+                }
+            });
+            layui.form.render();
+        });
+
+        form.on('select(city)', function (data) {
+            $("select[name='district']").empty();
+            var provinceId = $("select[name='province']").val();
+            $.each(positionData, function(pIndex, pItem) {
+                if (pItem.name == provinceId) {
+                    $.each(pItem.city, function (cIndex, cItem) {
+                        if (cItem.name == data.value) {
+                            $.each(cItem.area, function (aIndex, aItem) {
+                                $("select[name='district']").append("<option value='" + aItem + "'>" + aItem + "</option>");
+                            })
+                        }
+                    })
+                }
+            });
+            layui.form.render();
+        });
     });
 
     // 查询个人信息
@@ -243,6 +297,16 @@
                     $("select[name='sex']").val(data.sex);
                     $("input[name='sexText']").val(data.sexText);
                     $("input[name='tel']").val(data.tel);
+                    var location = data.location;
+                    var province = "", city = "", district = "";
+                    if (location.indexOf("-") != -1) {
+                        province = location.split("-")[0];
+                        city = location.split("-")[1];
+                        district = location.split("-")[2];
+                        $("select[name='province']").val(province);
+                        $("select[name='city']").val(city);
+                        $("select[name='district']").val(district);
+                    }
                     $("input[name='address']").val(data.address);
                     $("select[name='profession']").val(data.profession);
                     $("input[name='professionText']").val(data.professionText);
@@ -323,6 +387,27 @@
             },
             error: function () {
                 layer.closeAll('loading');
+            }
+        });
+    }
+
+    function initPosition() {
+        $("select[name='province']").empty();
+        $("select[name='city']").empty();
+        $("select[name='district']").empty();
+        $.ajax({
+            type: 'get',
+            url: rootUrl + '/json/position.json',
+            //dataType: 'json',
+            async: false,
+            success: function (result) {
+                if (result.code != 1) {
+                    positionData = result;
+                    $.each(result, function (pIndex, pItem) {
+                        $("select[name='province']").append("<option value='" + pItem.name + "'>" + pItem.name + "</option>");
+                    });
+                    layui.form.render();
+                }
             }
         });
     }

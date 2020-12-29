@@ -430,6 +430,9 @@ public class WsUsersController extends AdminBaseController {
                                 @RequestParam(value="sex",required=false) Integer sex,
                                 @RequestParam(value="sexText",required=false) String sexText,
                                 @RequestParam(value="tel",required=false) String tel,
+                                @RequestParam(value="province",required=false) String province,
+                                @RequestParam(value="city",required=false) String city,
+                                @RequestParam(value="district",required=false) String district,
                                 @RequestParam(value="address",required=false) String address,
                                 @RequestParam(value="profession",required=false) Integer profession,
                                 @RequestParam(value="professionText",required=false) String professionText,
@@ -440,6 +443,8 @@ public class WsUsersController extends AdminBaseController {
         if (null == wsUsersDO){
             return Result.fail();
         }
+
+        String location = province + "-" + city + "-" + district;
 
         // 检查表中是否有个人信息记录
         WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", wsUsersDO.getId()));
@@ -455,6 +460,7 @@ public class WsUsersController extends AdminBaseController {
             wup.setSex(sex);
             wup.setSexText(sexText);
             wup.setTel(tel);
+            wup.setLocation(location);
             wup.setAddress(address);
             wup.setProfession(profession);
             wup.setProfessionText(professionText);
@@ -474,6 +480,7 @@ public class WsUsersController extends AdminBaseController {
             wsUserProfileDO.setSex(sex);
             wsUserProfileDO.setSexText(sexText);
             wsUserProfileDO.setTel(tel);
+            wsUserProfileDO.setLocation(location);
             wsUserProfileDO.setAddress(address);
             wsUserProfileDO.setProfession(profession);
             wsUserProfileDO.setProfessionText(professionText);

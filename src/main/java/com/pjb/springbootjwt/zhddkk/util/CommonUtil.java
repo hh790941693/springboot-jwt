@@ -186,7 +186,7 @@ public class CommonUtil {
             inputStream = url.openStream();
             return true;
         } catch (Exception e1) {
-            e1.printStackTrace();
+            // do nothing
         } finally {
             if (null != inputStream) {
                 try {

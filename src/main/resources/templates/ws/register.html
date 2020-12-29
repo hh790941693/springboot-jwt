@@ -10,10 +10,6 @@
             padding: 5px 15px;
             width: 82px;
         }
-
-        .layui-form-item .layui-input-inline {
-            width: 123px;
-        }
     </style>
 </head>
 <body>
@@ -25,26 +21,7 @@
                     <input type="text" name="user" lay-verify="required|lenthOver2" autocomplete="off" placeholder="请输入用户名" class="layui-input">
                 </div>
             </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label">住址</label>
-                <div class="layui-input-inline" style="margin-left: 28px;">
-                    <select name="provinceId" id="province" lay-filter="province" >
-                        <option value="">请选择省份</option>
-                    </select>
-                </div>
-                <div class="layui-input-inline">
-                    <select name="cityId" id="city" lay-filter="city">
-                        <option value="">请选择城市</option>
-                    </select>
-                </div>
-                <div class="layui-input-inline">
-                    <select name="districtId" id="district" >
-                        <option value="">请选择区县</option>
-                    </select>
-                </div>
-            </div>
-
+            
             <div class="layui-form-item">
                 <label class="layui-form-label">头像</label>
                 <div class="layui-input-block">
@@ -139,9 +116,7 @@
             }
         });
         initUpload();
-        var positionData = null;
-        initPosition();
-
+        
         //注册表单监听
         layui.use(['form'], function() {
             var form = layui.form;
@@ -162,37 +137,7 @@
                     }
                 }
             });
-
-            form.on('select(province)', function (data) {
-                $("select[name='cityId']").empty();
-                $("select[name='districtId']").empty();
-                $.each(positionData, function (pIndex, pItem) {
-                    if (pItem.name == data.value) {
-                        $.each(pItem.city, function (cIndex, cItem) {
-                            $("select[name='cityId']").append("<option value='" + cItem.name + "'>" + cItem.name + "</option>");
-                        })
-                    }
-                });
-                layui.form.render();
-            });
-
-            form.on('select(city)', function (data) {
-                $("select[name='districtId']").empty();
-                var provinceId = $("select[name='provinceId']").val();
-                $.each(positionData, function(pIndex, pItem) {
-                    if (pItem.name == provinceId) {
-                        $.each(pItem.city, function (cIndex, cItem) {
-                            if (cItem.name == data.value) {
-                                $.each(cItem.area, function (aIndex, aItem) {
-                                    $("select[name='districtId']").append("<option value='" + aItem + "'>" + aItem + "</option>");
-                                })
-                            }
-                        })
-                    }
-                });
-                layui.form.render();
-            });
-
+            
             //注册按钮监听提交
             form.on('submit(registerBtn)', function (data) {
                 return true;
@@ -262,29 +207,7 @@
                 }
             });
         }
-
-        function initPosition() {
-            $("select[name='provinceId']").empty();
-            $("select[name='cityId']").empty();
-            $("select[name='districtId']").empty();
-            $.ajax({
-                type: 'get',
-                url: rootUrl + '/json/position.json',
-                //dataType: 'json',
-                async: false,
-                success: function (result) {
-                    if (result.code != 1) {
-                        positionData = result;
-                        console.log(result);
-                        $.each(result, function (pIndex, pItem) {
-                            $("select[name='provinceId']").append("<option value='" + pItem.name + "'>" + pItem.name + "</option>");
-                        });
-                        layui.form.render();
-                    }
-                }
-            });
-        }
-
+        
         // 加载图片失败
         function imgerror(imgObj) {
             $(imgObj).attr("src", rootUrl + "img/" + $.ws.errorImageName);

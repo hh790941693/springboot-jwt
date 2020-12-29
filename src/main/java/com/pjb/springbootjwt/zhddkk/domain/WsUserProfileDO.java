@@ -9,12 +9,14 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 
 /**
  * 
  */
  @TableName("ws_user_profile")
+ @Data
 public class WsUserProfileDO implements Serializable {
 
     @TableField(exist = false)
@@ -51,7 +53,10 @@ public class WsUserProfileDO implements Serializable {
     //电话
     @ApiModelProperty(value = "tel",name = "电话")
     private String tel;
-    //地址
+    //位置区域
+    @ApiModelProperty(value = "location",name = "位置区域")
+    private String location;
+    //详细地址
     @ApiModelProperty(value = "address",name = "地址")
     private String address;
     //职业  1:IT 2:建筑  3:金融  4:个体商户 5:旅游 99:其他
@@ -71,148 +76,13 @@ public class WsUserProfileDO implements Serializable {
     @ApiModelProperty(value = "createTime",name = "创建时间")
     private Date createTime;
 
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
-
-    public Integer getSex() {
-        return sex;
-    }
-
-
-    public void setSexText(String sexText) {
-        this.sexText = sexText;
-    }
-
-    public String getSexText() {
-        return sexText;
-    }
-
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    public String getTel() {
-        return tel;
-    }
-
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-
-    public void setProfession(Integer profession) {
-        this.profession = profession;
-    }
-
-    public Integer getProfession() {
-        return profession;
-    }
-
-
-    public void setProfessionText(String professionText) {
-        this.professionText = professionText;
-    }
-
-    public String getProfessionText() {
-        return professionText;
-    }
-
-
-    public void setHobby(Integer hobby) {
-        this.hobby = hobby;
-    }
-
-    public Integer getHobby() {
-        return hobby;
-    }
-
-
-    public void setHobbyText(String hobbyText) {
-        this.hobbyText = hobbyText;
-    }
-
-    public String getHobbyText() {
-        return hobbyText;
-    }
-
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
+    // 省
+    @TableField(exist = false)
+    private String province;
+    // 市
+    @TableField(exist = false)
+    private String city;
+    // 区
+    @TableField(exist = false)
+    private String district;
 }
