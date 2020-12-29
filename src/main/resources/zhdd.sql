@@ -1329,6 +1329,7 @@ CREATE TABLE IF NOT EXISTS `ws_user_profile` (
   `sex` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '性别 1:男 2:女 3:未知',
   `sex_text` varchar(50) NOT NULL DEFAULT '男' COMMENT '性别(文本)',
   `tel` varchar(50) NOT NULL DEFAULT '' COMMENT '电话',
+  `location` VARCHAR(150) NOT NULL DEFAULT '' COMMENT '位置区域',
   `address` varchar(150) NOT NULL DEFAULT '' COMMENT '地址',
   `profession` int(11) unsigned NOT NULL DEFAULT '99' COMMENT '职业  1:IT 2:建筑  3:金融  4:个体商户 5:旅游 99:其他',
   `profession_text` varchar(50) NOT NULL DEFAULT '其他' COMMENT '职业(文本)',
@@ -1341,25 +1342,12 @@ CREATE TABLE IF NOT EXISTS `ws_user_profile` (
 -- Dumping data for table zhdd.ws_user_profile: ~17 rows (approximately)
 /*!40000 ALTER TABLE `ws_user_profile` DISABLE KEYS */;
 INSERT INTO `ws_user_profile` (`id`, `user_id`, `user_name`, `real_name`, `img`, `sign`, `age`, `sex`, `sex_text`, `tel`, `address`, `profession`, `profession_text`, `hobby`, `hobby_text`, `create_time`) VALUES
-	(6, 24, 'bb', '艰苦艰苦人', 'http://localhost:8101/headImg/41a440e4-02be-4624-813f-2d8d42e455ce.jpg', '草泥马的', 11, 1, '男', '2548745', '韩国首尔', 6, '其他', 6, '其他', '2019-01-08 16:22:30'),
-	(7, 18, '黄朝辉', '黄CC', 'http://localhost:8101/headImg/3beff57d-b28b-4ee0-9a84-5b0ab43ee417.jpg', '啊啊  西巴咯马', 23, 1, '男', '4344524425', '广东佛山', 5, '旅游', 6, '其他', '2019-01-08 17:47:05'),
-	(8, 1, 'admin', 'admin', 'http://localhost:8101/circle/admin.jpg', '这人很懒,一点也没留下', 23, 2, '女', '8888888', '无名岛', 2, '建筑', 4, '旅游', '2019-01-16 11:00:50'),
-	(9, 23, 'aa', '我没有名字a啊', 'http://localhost:8101/headImg/8.jpg', '不喜欢签名kijl', 56, 1, '男', '13888888', '日本东京', 4, '个体商户', 4, '旅游', '2019-01-17 13:17:29'),
-	(10, 31, 'dd', '蛋蛋', 'http://localhost:8101/headImg/2.jpg', '这人很懒,一点也没留下', 23, 1, '男', '16605141987', '韩国釜山', 4, '个体商户', 4, '旅游', '2020-05-13 13:35:42'),
-	(11, 30, 'cc', '哇卡卡打开', 'http://localhost:8101/headImg/u=3337455883,2495110955&fm=214&gp=0.jpg', '好累', 45, 1, '男', '7415455', '韩国龙山', 2, '建筑', 6, '其他', '2020-05-13 14:15:20'),
-	(12, 20, '씨발', '西巴', 'http://localhost:8101/headImg/6849ae90-3b33-4a9b-ba84-52705a92229d.gif', '这人很懒,一点也没留下', 30, 1, '男', '16605141987', '日本横滨', 2, '建筑', 2, '足球', '2020-05-30 21:56:20'),
-	(13, 25, 'vb', '', 'http://localhost:8101/headImg/70d5921d-b876-4dcc-b478-109a2382b989.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-06-01 21:10:20'),
-	(14, 28, 'good', 'good', 'http://localhost:8101/headImg/15cc6f27-7564-4d08-aaec-f19a833032b4.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:35:53'),
-	(15, 29, 'gt', 'gt', 'http://localhost:8101/headImg/de87e2b1-8be5-42e6-87d8-cca3cd073ab1.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:36:06'),
-	(16, 22, 'hhh', 'hhhh', 'http://localhost:8101/headImg/d3ce489f-0b33-48b7-bc7d-86bf26cc157f.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:36:20'),
-	(17, 2, 'bbbb', 'bbbb', 'http://localhost:8101/headImg/d25df26a-81a1-47ba-88ca-03172c13190d.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:36:31'),
-	(18, 11, '无名1', '无名1', 'http://localhost:8101/headImg/5e877c77-37d3-467c-8a1c-e0d04b7ba256.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:36:41'),
-	(19, 12, '无名2', '无名2', 'http://localhost:8101/headImg/17edc79c-269c-45c3-9bc4-9293b5d0b16e.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:36:50'),
-	(20, 13, '无名3', '无名3', 'http://localhost:8101/headImg/786c5ae9-e26c-47ec-b38f-95b161228d60.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:37:01'),
-	(21, 14, '无名5', '无名4', 'http://localhost:8101/headImg/793d6377-73a3-4777-802f-e6c365d8700f.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:37:14'),
-	(22, 15, '无名7', '无名7', 'http://localhost:8101/headImg/95201f37-27f9-40ce-bc3e-5fc9d995f03c.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:37:32'),
-	(23, 16, '无名9', '无名9', 'http://localhost:8101/headImg/2d0d5d7b-67d4-422e-814e-9a0380254184.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:37:42'),
-	(24, 4, 'mb', 'mb', 'http://localhost:8101/headImg/6f4496cb-1d74-4357-92b4-aa586c1497df.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', 6, '其他', 6, '其他', '2020-07-03 09:37:53');
+	(6, 24, 'bb', '艰苦艰苦人', 'http://localhost:8101/headImg/41a440e4-02be-4624-813f-2d8d42e455ce.jpg', '草泥马的', 11, 1, '男', '2548745', '', '韩国首尔', 6, '其他', 6, '其他', '2019-01-08 16:22:30'),
+	(7, 18, '黄朝辉', '黄CC', 'http://localhost:8101/headImg/3beff57d-b28b-4ee0-9a84-5b0ab43ee417.jpg', '啊啊  西巴咯马', 23, 1, '男', '4344524425',  '', '广东佛山', 5, '旅游', 6, '其他', '2019-01-08 17:47:05'),
+	(8, 1, 'admin', 'admin', 'http://localhost:8101/circle/admin.jpg', '这人很懒,一点也没留下', 23, 2, '女', '8888888',  '', '无名岛', 2, '建筑', 4, '旅游', '2019-01-16 11:00:50'),
+	(9, 23, 'aa', '我没有名字a啊', 'http://localhost:8101/headImg/8.jpg', '不喜欢签名kijl', 56, 1, '男', '13888888',  '', '日本东京', 4, '个体商户', 4, '旅游', '2019-01-17 13:17:29'),
+	(10, 31, 'dd', '蛋蛋', 'http://localhost:8101/headImg/2.jpg', '这人很懒,一点也没留下', 23, 1, '男', '16605141987',  '', '韩国釜山', 4, '个体商户', 4, '旅游', '2020-05-13 13:35:42'),
+	(11, 30, 'cc', '哇卡卡打开', 'http://localhost:8101/headImg/u=3337455883,2495110955&fm=214&gp=0.jpg', '好累', 45, 1, '男', '7415455',  '', '韩国龙山', 2, '建筑', 6, '其他', '2020-05-13 14:15:20');
 /*!40000 ALTER TABLE `ws_user_profile` ENABLE KEYS */;
 
 -- 导出  表 zhdd.ws_scheduled_cron 结构
