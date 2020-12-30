@@ -52,8 +52,10 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">问题1</label>
                 <div class="layui-input-block">
-                    <select name="select1" lay-filter="select1">
-                        <option th:each="question,stat : ${questionList}" th:text="${question.name}" th:value="${question.name}" th:selected="${stat.index eq 0}"></option>
+                    <select name="select1" lay-filter="select1" lay-verify="required">
+                        <option value="">请选择问题1</option>
+                        <!-- th:selected="${stat.index eq 0}" -->
+                        <option th:each="question,stat : ${questionList}" th:text="${question.name}" th:value="${question.name}"></option>
                     </select>
                 </div>
             </div>
@@ -68,8 +70,9 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">问题2</label>
                 <div class="layui-input-block">
-                    <select name="select2" lay-filter="select2">
-                        <option th:each="question,stat : ${questionList}" th:text="${question.name}" th:value="${question.name}" th:selected="${stat.index eq 1}"></option>
+                    <select name="select2" lay-filter="select2" lay-verify="required">
+                        <option value="">请选择问题2</option>
+                        <option th:each="question,stat : ${questionList}" th:text="${question.name}" th:value="${question.name}"></option>
                     </select>
                 </div>
             </div>
@@ -84,8 +87,9 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">问题3</label>
                 <div class="layui-input-block">
-                    <select name="select3" lay-filter="select3">
-                        <option th:each="question,stat : ${questionList}" th:text="${question.name}" th:value="${question.name}" th:selected="${stat.index eq 2}"></option>
+                    <select name="select3" lay-filter="select3" lay-verify="required">
+                        <option value="">请选择问题3</option>
+                        <option th:each="question,stat : ${questionList}" th:text="${question.name}" th:value="${question.name}"></option>
                     </select>
                 </div>
             </div>
