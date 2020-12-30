@@ -18,6 +18,7 @@ import com.pjb.springbootjwt.zhddkk.service.WsFriendsApplyService;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsService;
 import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
 import com.pjb.springbootjwt.zhddkk.util.ExcelUtil;
+import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import org.apache.commons.lang.StringUtils;
@@ -409,9 +410,23 @@ public class WsUsersController extends AdminBaseController {
      */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.SETTING,subModule="",describe="用户信息设置首页")
     @RequestMapping(value = "setPersonalInfo.page")
-    public String setPersonalInfo(Model model,@RequestParam("user")String user) {
+    public String setPersonalInfo(Model model, @RequestParam("user")String user) {
         logger.debug("访问setPersonalInfo.page");
         model.addAttribute("user", user);
+        WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_name", user));
+        if (null != wsUserProfileDO) {
+            String location = wsUserProfileDO.getLocation();
+            if (StringUtils.isNotBlank(location) && location.contains("-")) {
+                String province = location.split("-")[0];
+                String city = location.split("-")[1];
+                String district = location.split("-")[2];
+                wsUserProfileDO.setProvince(province);
+                wsUserProfileDO.setCity(city);
+                wsUserProfileDO.setDistrict(district);
+            }
+        }
+        model.addAttribute("userProfile", wsUserProfileDO);
+        model.addAttribute("userProfileJson", JsonUtil.javaobject2Jsonobject(wsUserProfileDO));
         return "zhddkk/wsUsers/setPersonalInfo";
     }
 

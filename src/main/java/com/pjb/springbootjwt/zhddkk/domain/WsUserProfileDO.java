@@ -78,11 +78,11 @@ public class WsUserProfileDO implements Serializable {
 
     // 省
     @TableField(exist = false)
-    private String province;
+    private String province = "";
     // 市
     @TableField(exist = false)
-    private String city;
+    private String city = "";
     // 区
     @TableField(exist = false)
-    private String district;
+    private String district = "";
 }

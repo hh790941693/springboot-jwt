@@ -20,190 +20,197 @@
     </style>
 </head>
 <body>
-<div id="mainDiv" style="width:100%;height:100%; overflow-y: hidden;">
-    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-        <ul class="layui-tab-title">
-            <li class="layui-this"><a ><i class="fa fa-user-circle-o"> 基本信息</i></a></li>
-            <li><a ><i class="fa fa-key"> 修改密码</i></a></li>
-        </ul>
-        <div class="layui-tab-content" style="height: 100px;">
-            <div class="layui-tab-item layui-show">
-                <div style="width:98%;height:100%;">
-                    <form class="layui-form" lay-filter="personInfoForm" method="post" action="/zhddkk/wsUsers/setPersonInfo.do" enctype="multipart/form-data" target="hidden_frame1">
-                        <div class="layui-form-item">
-                            <input name="userName" type="hidden" th:value="${session.sessionInfo.user}" >
-                            <label class="layui-form-label">真实姓名</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="realName" lay-verify="required" autocomplete="off" placeholder="请输入真实姓名" class="layui-input">
+    <div id="mainDiv" style="width:100%;height:100%; overflow-y: hidden;">
+        <input type="hidden" id="userProfileJsonStr" th:value="${userProfileJson}">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this"><a ><i class="fa fa-user-circle-o"> 基本信息</i></a></li>
+                <li><a ><i class="fa fa-key"> 修改密码</i></a></li>
+            </ul>
+            <div class="layui-tab-content" style="height: 100px;">
+                <div class="layui-tab-item layui-show">
+                    <div style="width:98%;height:100%;">
+                        <form class="layui-form" lay-filter="personInfoForm" method="post" action="/zhddkk/wsUsers/setPersonInfo.do" enctype="multipart/form-data" target="hidden_frame1">
+                            <div class="layui-form-item">
+                                <input name="userName" type="hidden" th:value="${session.sessionInfo.user}" >
+                                <label class="layui-form-label">真实姓名</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="realName" th:value="${userProfile.realName}" lay-verify="required" autocomplete="off" placeholder="请输入真实姓名" class="layui-input">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">头像</label>
-                            <div class="layui-input-block">
-                                <input type="hidden" id="headImgInput" name="headImg" class="layui-input">
-                                <button type="button" id="imageBtn" class="layui-btn">
-                                    <i class="layui-icon">&#xe67c;</i>上传图片
-                                </button>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">头像</label>
+                                <div class="layui-input-block">
+                                    <input type="hidden" id="headImgInput" name="headImg" class="layui-input" th:value="${userProfile.img}">
+                                    <button type="button" id="imageBtn" class="layui-btn">
+                                        <i class="layui-icon">&#xe67c;</i>上传图片
+                                    </button>
 
-                                <img id="headImg" style="margin-left: 30px;" onclick="showImg()" alt="" width="60px" height="60px"
-                                     onerror="imgerror(this)">
+                                    <img id="headImg" style="margin-left: 30px;" onclick="showImg()" alt="" width="60px" height="60px" th:src="${userProfile.img}"
+                                         onerror="imgerror(this)">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">个性签名</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="sign" lay-verify="required" autocomplete="off" placeholder="请输入个性签名" class="layui-input">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">个性签名</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="sign" th:value="${userProfile.sign}" lay-verify="required" autocomplete="off" placeholder="请输入个性签名" class="layui-input">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">年龄</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="age" lay-verify="number" autocomplete="off" placeholder="请输入年龄" class="layui-input">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">年龄</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="age" th:value="${userProfile.age}" lay-verify="number" autocomplete="off" placeholder="请输入年龄" class="layui-input">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">性别</label>
-                            <div class="layui-input-block">
-                                <select name="sex" lay-filter="sex">
-                                    <option value="1">男</option>
-                                    <option value="2">女</option>
-                                    <option value="3">未知</option>
-                                </select>
-                                <input name="sexText" hidden="hidden"></input>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">性别</label>
+                                <div class="layui-input-block">
+                                    <select name="sex" th:value="${userProfile.sex}" lay-filter="sex">
+                                        <option value="1">男</option>
+                                        <option value="2">女</option>
+                                        <option value="3">未知</option>
+                                    </select>
+                                    <input name="sexText" hidden="hidden"></input>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">电话</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="tel" lay-verify="phone" autocomplete="off" placeholder="请输入电话" class="layui-input">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">电话</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="tel" th:value="${userProfile.tel}" lay-verify="phone" autocomplete="off" placeholder="请输入电话" class="layui-input">
+                                </div>
                             </div>
-                        </div>
 
-                         <div class="layui-form-item">
-                            <label class="layui-form-label">住址</label>
-                            <div class="layui-input-inline" style="margin-left: 28px;">
-                                <select name="province" lay-filter="province" lay-verify="required">
-                                    <option value="">请选择省份</option>
-                                </select>
-                            </div>
-                            <div class="layui-input-inline">
-                                <select name="city" lay-filter="city" lay-verify="required">
-                                    <option value="">请选择城市</option>
-                                </select>
-                            </div>
-                            <div class="layui-input-inline">
-                                <select name="district" lay-filter="district" lay-verify="required">
-                                    <option value="">请选择区县</option>
-                                </select>
-                            </div>
-                         </div>
-                        
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">详细住址</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="address" lay-verify="required" autocomplete="off" placeholder="请输入住址" class="layui-input">
-                            </div>
-                        </div>
+                             <div class="layui-form-item">
+                                <label class="layui-form-label">住址</label>
+                                <div class="layui-input-inline" style="margin-left: 28px;">
+                                    <select name="province" th:value="${userProfile.province}" lay-filter="province" lay-verify="required">
+                                        <option value="">请选择省份</option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="city" th:value="${userProfile.city}" lay-filter="city" lay-verify="required">
+                                        <option value="">请选择城市</option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="district" th:value="${userProfile.district}" lay-filter="district" lay-verify="required">
+                                        <option value="">请选择区县</option>
+                                    </select>
+                                </div>
+                             </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">职业</label>
-                            <div class="layui-input-block">
-                                <select name="profession" lay-filter="profession">
-                                    <option value="1">IT</option>
-                                    <option value="2">建筑</option>
-                                    <option value="3">金融</option>
-                                    <option value="4">个体商户</option>
-                                    <option value="5">旅游</option>
-                                    <option value="6">其他</option>
-                                </select>
-                                <input name="professionText" hidden="hidden"></input>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">详细住址</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="address" th:value="${userProfile.address}" lay-verify="required" autocomplete="off" placeholder="请输入住址" class="layui-input">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">爱好</label>
-                            <div class="layui-input-block">
-                                <select name="hobby" lay-filter="hobby">
-                                    <option value="1">篮球</option>
-                                    <option value="2">足球</option>
-                                    <option value="3">爬山</option>
-                                    <option value="4">旅游</option>
-                                    <option value="5">网游</option>
-                                    <option value="6">其他</option>
-                                </select>
-                                <input name="hobbyText" hidden="hidden"></input>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">职业</label>
+                                <div class="layui-input-block">
+                                    <select name="profession" th:value="${userProfile.profession}" lay-filter="profession">
+                                        <option value="1">IT</option>
+                                        <option value="2">建筑</option>
+                                        <option value="3">金融</option>
+                                        <option value="4">个体商户</option>
+                                        <option value="5">旅游</option>
+                                        <option value="6">其他</option>
+                                    </select>
+                                    <input name="professionText" hidden="hidden"></input>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <div class="layui-input-block">
-                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="personInfoBtn">立即提交</button>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">爱好</label>
+                                <div class="layui-input-block">
+                                    <select name="hobby" th:value="${userProfile.hobby}" lay-filter="hobby">
+                                        <option value="1">篮球</option>
+                                        <option value="2">足球</option>
+                                        <option value="3">爬山</option>
+                                        <option value="4">旅游</option>
+                                        <option value="5">网游</option>
+                                        <option value="6">其他</option>
+                                    </select>
+                                    <input name="hobbyText" hidden="hidden"></input>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="personInfoBtn">立即提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div class="layui-tab-item">
-                <div style="width:98%;height:100%;">
-                    <form class="layui-form" action="/zhddkk/wsUsers/updatePassword.do" lay-filter="modifyPasswordForm" method="post" target="hidden_frame2">
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">用户名</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="user" readonly th:value="${session.sessionInfo.user}" autocomplete="off" class="layui-input">
+                <div class="layui-tab-item">
+                    <div style="width:98%;height:100%;">
+                        <form class="layui-form" action="/zhddkk/wsUsers/updatePassword.do" lay-filter="modifyPasswordForm" method="post" target="hidden_frame2">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="user" readonly th:value="${session.sessionInfo.user}" autocomplete="off" class="layui-input">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">旧密码</label>
-                            <div class="layui-input-block">
-                                <input type="password" name="oldPass" lay-verify="required" placeholder="请输入旧密码" autocomplete="off" class="layui-input">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">旧密码</label>
+                                <div class="layui-input-block">
+                                    <input type="password" name="oldPass" lay-verify="required" placeholder="请输入旧密码" autocomplete="off" class="layui-input">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">新密码</label>
-                            <div class="layui-input-block">
-                                <input type="password" name="newPass" lay-verify="required|newPass" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">新密码</label>
+                                <div class="layui-input-block">
+                                    <input type="password" name="newPass" lay-verify="required|newPass" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">确认密码</label>
-                            <div class="layui-input-block">
-                                <input type="password" name="confirmPass" lay-verify="required|confirmPass" placeholder="请输入确认密码" autocomplete="off" class="layui-input">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">确认密码</label>
+                                <div class="layui-input-block">
+                                    <input type="password" name="confirmPass" lay-verify="required|confirmPass" placeholder="请输入确认密码" autocomplete="off" class="layui-input">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <div class="layui-input-block">
-                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="modifyPasswordBtn">立即提交</button>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="modifyPasswordBtn">立即提交</button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+        <iframe name="hidden_frame1" id="hidden_frame1" style='display: none'></iframe>
+        <iframe name="hidden_frame2" id="hidden_frame2" style='display: none'></iframe>
     </div>
-    <iframe name="hidden_frame1" id="hidden_frame1" style='display: none'></iframe>
-    <iframe name="hidden_frame2" id="hidden_frame2" style='display: none'></iframe>
-</div>
 
-<th:block th:include="common :: footer"></th:block>
-<th:block th:include="common :: sessionInfo"></th:block>
+    <th:block th:include="common :: footer"></th:block>
+    <th:block th:include="common :: sessionInfo"></th:block>
 </body>
 <script>
     initUpload();
-
     // 区域位置数据
     var positionData = null;
     initPosition();
     //查询个人信息
-    queryPersonInfo(sessionUser);
+    //queryPersonInfo(sessionUser);
+
+    // 初始化區域位置信息
+    var userProfileJsonObj = JSON.parse($("#userProfileJsonStr").val());
+    $("select[name='province']").val(userProfileJsonObj.province);
+    $("select[name='city']").val(userProfileJsonObj.city);
+    $("select[name='district']").val(userProfileJsonObj.district);
+    layui.form.render();
 
     //修改密码表单
     layui.use(['form'], function() {
