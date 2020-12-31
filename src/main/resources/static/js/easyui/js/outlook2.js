@@ -6,10 +6,10 @@
 	$(".accordion-header").click(function(){
 		if ($(this).hasClass("accordion-header-selected")) {
 			// 开启
-			$(this).children("div[class*='panel-icon']").removeClass().addClass("panel-icon icon-folder-open");
+			$(this).children("div[class*='panel-icon']").removeClass().addClass("panel-icon icon-menu-folder-open");
 		} else {
 			// 关闭
-			$(this).children("div[class*='panel-icon']").removeClass().addClass("panel-icon").addClass("icon-sys");
+			$(this).children("div[class*='panel-icon']").removeClass().addClass("panel-icon").addClass("icon-menu-folder-close");
 		}
 	})
 })

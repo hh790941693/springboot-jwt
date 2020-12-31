@@ -22,7 +22,7 @@ a:hover{ color:Red; text-decoration:underline;}
 
 
 .icon{padding:2px 9px; background:url(../images/tabicons.png) no-repeat; }
-.icon-sys{ background:url(../images/directory.png) no-repeat;}
+
 .icon-add{background-position: -19px 0px;}
 .icon-nav{background-position: -100px -18px;}
 .icon-users{background-position: -100px -480px;}
@@ -52,8 +52,22 @@ a:hover{ color:Red; text-decoration:underline;}
 .icon-football{background-position: -380px -400px;}
 .icon-game-hander{background-position: -360px -220px;}
 .icon-star{background-position: -40px -420px;}
-.icon-folder-open{
+.icon-wechat{background-position: -100px -100px;}
+.icon-search-plus{background-position: -80px -260px;}
+.icon-earth{background-position: -160px -500px;}
+.icon-woman{background-position: -180px -480px;}
+.icon-newspaper{background-position: -180px -160px;}
+
+.icon-menu-directory{ background:url(../images/directory.png) no-repeat;}
+
+.icon-menu-folder-open{
     background:url(../images/tabicons.png) no-repeat;
+    padding: 2px 2px;
     background-position: -240px -500px;
+}
+.icon-menu-folder-close{
+    background:url(../images/tabicons.png) no-repeat;
+    padding: 2px 2px;
+    background-position: -260px -500px;
 }
 
