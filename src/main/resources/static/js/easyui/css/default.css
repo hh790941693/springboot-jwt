@@ -20,7 +20,7 @@ a:hover {text-decoration:none;}
     font-size: 16px;
 }
 .easyui-accordion ul li span {
-    height: 12px;
+    height: 13px;
     display: inline-block;
 }
 .easyui-accordion ul li div{margin:2px 0px;padding-left:10px;padding-top:2px;}
@@ -28,13 +28,12 @@ a:hover {text-decoration:none;}
 .easyui-accordion ul li div.hover a{color:#416AA3;}
 .easyui-accordion ul li div.selected{border:1px solid #99BBE8; background:#E0ECFF;cursor:default;}
 .easyui-accordion ul li div.selected a{color:#416AA3; font-weight:bold;}
-.panel-icon {
-    left: 2px;
+.panel-header .panel-icon {
+    left: 1px;
 }
 
 
 .icon{padding:2px 9px; background:url(../images/tabicons.png) no-repeat; }
-
 .icon-add{background-position: -19px 0px;}
 .icon-nav{background-position: -100px -18px;}
 .icon-users{background-position: -100px -480px;}

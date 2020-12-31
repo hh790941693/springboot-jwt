@@ -53,16 +53,9 @@
 </head>
 
 <body class="easyui-layout" style="overflow-y: hidden"  scroll="no">
-    <noscript>
-        <div style=" position:absolute; z-index:100000; height:2046px;top:0px;left:0px; width:100%; background:white; text-align:center;">
-            <img src="/js/easyui/images/noscript.gif" alt='抱歉，请开启脚本支持！' />
-        </div>
-    </noscript>
-
     <div region="north" split="true" border="false" style="overflow: hidden; height: 62px;
             background: url(/js/easyui/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
             line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
-
         <div style="width:180px;height:100%;float:left;">
             <div style="width:62px;height:calc(100% - 2px);float: left;padding:1px;">
                 <img th:src="${session.sessionInfo.selfImg}" width="60" height="60">
@@ -166,8 +159,8 @@
                 </span>
             </marquee>
         </div>
-        <div region="south" split="true" title="内容部分" id="centerDiv" style="height:100%;">
-            <div id="tabs" class="easyui-tabs"  fit="true" border="false" style="height:100%;">
+        <div region="south" split="true" title="内容部分" id="centerDiv" style="height:100%;width:100%;">
+            <div id="tabs" class="easyui-tabs"  fit="true" border="false" style="height:100%;width:100%;">
                 <div title="首页" style="padding:20px;overflow:hidden;" id="home">
                     <h1>Welcome to jQuery UI!</h1>
 
