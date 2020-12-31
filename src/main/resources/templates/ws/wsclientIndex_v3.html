@@ -226,39 +226,73 @@
 </body>
 
 <script type="text/javascript">
-    var _menus = {
-        "menus":[
-            {"menuid":"1","icon":"icon-sys","menuname":"系统管理",
-                "menus":[
-                    {"menuname":"用户管理","icon":"icon-users","url":"/zhddkk/wsUsers/wsUsersForAdmin"},
-                    {"menuname":"音乐播放","icon":"icon-music","url":"../file/musicPlayer.page"},
-                    {"menuname":"聊天监控","icon":"icon-video","url":"/ws/wsserverChartMonitor.page"},
-                    {"menuname":"朋友圈","icon":"icon-role","url":"/ws/wsclientCircle.page"},
-                    {"menuname":"聊天记录","icon":"icon-file","url":"/zhddkk/wsChatlog"},
-                    {"menuname":"操作记录","icon":"icon-file","url":"/zhddkk/wsOperationLog"},
-                    {"menuname":"广告发布","icon":"icon-edit","url":"/zhddkk/wsAds"},
-                    {"menuname":"反馈建议","icon":"icon-feedback","url":"/zhddkk/wsFeedback/adminFeedback"},
-                    {"menuname":"领导驾驶舱","icon":"icon-chart-bar","url":"/ws/wsserverChart.page"},
-                    {"menuname":"定时任务","icon":"icon-clock","url":"/zhddkk/wsScheduledCron"},
-                    {"menuname":"生成代码","icon":"icon-java","url":"/common/generator"}
-                ]
-            }
-            ,{"menuid":"2","icon":"icon-sys","menuname":"通用配置",
-                "menus":[
-                    {"menuname":"敏感词配置","icon":"icon-nav","url":"/zhddkk/wsCommon/mgc"},
-                    {"menuname":"脏话配置","icon":"icon-nav","url":"/zhddkk/wsCommon/zh"},
-                    {"menuname":"常用语配置","icon":"icon-nav","url":"/zhddkk/wsCommon/cyy"},
-                    {"menuname":"注册问题配置","icon":"icon-nav","url":"/zhddkk/wsCommon/zcwt"}
-                ]
-            }
-            ,{"menuid":"3","icon":"icon-sys","menuname":"娱乐管理",
-                "menus":[
-                    {"menuname":"游戏娱乐","icon":"icon-football","url":"../game/gameIndex.page"},
-                    {"menuname":"H5游戏","icon":"icon-game-hander","url":"../canvas/canvasIndex.page"}
-                ]
-            }
-        ]
-    };
+    // 左侧导航菜单
+    var _menus = {};
+    if (sessionUsertype == '0') {
+        _menus = {
+            "menus": [
+                {
+                    "menuid": "1", "icon": "icon-sys", "menuname": "系统管理",
+                    "menus": [
+                        {"menuname": "用户管理", "icon": "icon-users", "url": "/zhddkk/wsUsers/wsUsersForAdmin"},
+                        {"menuname": "音乐播放", "icon": "icon-music", "url": "../file/musicPlayer.page"},
+                        {"menuname": "聊天监控", "icon": "icon-video", "url": "/ws/wsserverChartMonitor.page"},
+                        {"menuname": "朋友圈", "icon": "icon-role", "url": "/ws/wsclientCircle.page"},
+                        {"menuname": "聊天记录", "icon": "icon-file", "url": "/zhddkk/wsChatlog"},
+                        {"menuname": "操作记录", "icon": "icon-file", "url": "/zhddkk/wsOperationLog"},
+                        {"menuname": "广告发布", "icon": "icon-edit", "url": "/zhddkk/wsAds"},
+                        {"menuname": "反馈建议", "icon": "icon-feedback", "url": "/zhddkk/wsFeedback/adminFeedback"},
+                        {"menuname": "领导驾驶舱", "icon": "icon-chart-bar", "url": "/ws/wsserverChart.page"},
+                        {"menuname": "定时任务", "icon": "icon-clock", "url": "/zhddkk/wsScheduledCron"},
+                        {"menuname": "生成代码", "icon": "icon-java", "url": "/common/generator"}
+                    ]
+                }
+                , {
+                    "menuid": "2", "icon": "icon-sys", "menuname": "通用配置",
+                    "menus": [
+                        {"menuname": "敏感词配置", "icon": "icon-nav", "url": "/zhddkk/wsCommon/mgc"},
+                        {"menuname": "脏话配置", "icon": "icon-nav", "url": "/zhddkk/wsCommon/zh"},
+                        {"menuname": "常用语配置", "icon": "icon-nav", "url": "/zhddkk/wsCommon/cyy"},
+                        {"menuname": "注册问题配置", "icon": "icon-nav", "url": "/zhddkk/wsCommon/zcwt"}
+                    ]
+                }
+                , {
+                    "menuid": "3", "icon": "icon-sys", "menuname": "娱乐管理",
+                    "menus": [
+                        {"menuname": "游戏娱乐", "icon": "icon-football", "url": "../game/gameIndex.page"},
+                        {"menuname": "H5游戏", "icon": "icon-game-hander", "url": "../canvas/canvasIndex.page"}
+                    ]
+                }
+            ]
+        };
+    } else {
+        _menus = {
+            "menus": [
+                {
+                    "menuid": "1", "icon": "icon-sys", "menuname": "系统管理",
+                    "menus": [
+                        {"menuname": "实时聊天", "icon": "icon-users", "url": "/ws/wsclientChat.page"},
+                        {"menuname": "音乐播放", "icon": "icon-music", "url": "/file/musicPlayer.page"},
+                        {"menuname": "添加朋友", "icon": "icon-video", "url": "/zhddkk/wsUsers/wsUsers"},
+                        {"menuname": "我的朋友", "icon": "icon-role", "url": "/zhddkk/wsFriends"},
+                        {"menuname": "我的申请", "icon": "icon-file", "url": "/zhddkk/wsFriendsApply/myApply"},
+                        {"menuname": "好友申请", "icon": "icon-file", "url": "/zhddkk/wsFriendsApply/friendApply"},
+                        {"menuname": "朋友圈", "icon": "icon-edit", "url": "/ws/wsclientCircle.page"},
+                        {"menuname": "反馈建议", "icon": "icon-feedback", "url": "/zhddkk/wsFeedback/myFeedback"},
+                        {"menuname": "智能助手", "icon": "icon-chart-bar", "url": "/ws/intelAssistant.page"},
+                        {"menuname": "网易新闻", "icon": "icon-clock", "url": "/ws/wangyiNews.page"}
+                    ]
+                }
+                , {
+                    "menuid": "3", "icon": "icon-sys", "menuname": "娱乐管理",
+                    "menus": [
+                        {"menuname": "游戏娱乐", "icon": "icon-football", "url": "../game/gameIndex.page"},
+                        {"menuname": "H5游戏", "icon": "icon-game-hander", "url": "../canvas/canvasIndex.page"}
+                    ]
+                }
+            ]
+        };
+    }
 
     //设置登录窗口
     function openPwd() {
