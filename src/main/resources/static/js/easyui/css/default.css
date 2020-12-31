@@ -8,7 +8,10 @@ a:hover{ color:Red; text-decoration:underline;}
 .txt {border: #878787 1px solid;padding: 4px 3px;font:Verdana, Geneva, sans-serif,宋体;line-height: 14px; background-color: #fff;  height: auto; font-size: 14px;}
 .footer{text-align:center;color:#15428B; margin:0px; padding:0px;line-height:23px; font-weight:bold;}
 
-.head a{color:White;text-decoration:underline;}
+.head a{color:white;text-decoration:none;}
+a {text-decoration:none;}
+.head a:hover {color:white;text-decoration:none;}
+a:hover {text-decoration:none;}
 
 .easyui-accordion ul{list-style-type:none;margin:0px; padding:10px;}
 .easyui-accordion ul li{ padding:0px;}
@@ -18,7 +21,9 @@ a:hover{ color:Red; text-decoration:underline;}
 .easyui-accordion ul li div.hover a{color:#416AA3;}
 .easyui-accordion ul li div.selected{border:1px solid #99BBE8; background:#E0ECFF;cursor:default;}
 .easyui-accordion ul li div.selected a{color:#416AA3; font-weight:bold;}
-
+.panel-icon {
+    left: 2px;
+}
 
 
 .icon{padding:2px 9px; background:url(../images/tabicons.png) no-repeat; }
@@ -55,8 +60,16 @@ a:hover{ color:Red; text-decoration:underline;}
 .icon-wechat{background-position: -100px -100px;}
 .icon-search-plus{background-position: -80px -260px;}
 .icon-earth{background-position: -160px -500px;}
-.icon-woman{background-position: -180px -480px;}
 .icon-newspaper{background-position: -180px -160px;}
+.icon-user1{background-position: -100px -480px;}
+.icon-user2{background-position: -120px -480px;}
+.icon-user3{background-position: -140px -480px;}
+.icon-user4{background-position: -160px -480px;}
+.icon-user5{background-position: -180px -480px;}
+.icon-user6{background-position: -200px -480px;}
+.icon-user7{background-position: -220px -480px;}
+.icon-user8{background-position: -240px -480px;}
+.icon-admin{background-position: -80px -420px;}
 
 .icon-menu-directory{ background:url(../images/directory.png) no-repeat;}
 
