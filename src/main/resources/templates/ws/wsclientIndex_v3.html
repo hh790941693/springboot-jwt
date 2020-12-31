@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:th="http://www.thymeleaf.org">
 <head id="Head1">
-    <title>漂亮的easyui后台框架演示-css后台模板-www.nongfuit.com</title>
+    <title></title>
     <link rel="stylesheet" type="text/css" href="/js/easyui/css/default.css" />
     <link rel="stylesheet" type="text/css" href="/js/easyui/js/themes/default/easyui.css" />
     <link rel="stylesheet" type="text/css" href="/js/easyui/js/themes/icon.css" />
@@ -13,6 +13,7 @@
     <script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/common.js}"></script>
     <script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery/jquery.i18n.properties.js}"></script>
     <script type="text/javascript" th:src="@{/js/plugins/layui/layui.all.js}"></script>
     <th:block th:include="common :: sessionInfo"></th:block>
 
@@ -34,6 +35,20 @@
             cursor: move;
             font-size: 10px;
         }
+
+        #recentNewsDiv {
+            width: 100%;
+            height: 3.5%;
+            background-color: #bfffea;
+        }
+
+        #weatherDiv label {
+            font-size: 25px;
+        }
+
+        #headerTitleDiv label {
+            font-size: 25px;
+        }
     </style>
 </head>
 
@@ -44,34 +59,44 @@
         </div>
     </noscript>
 
-    <div region="north" split="true" border="false" style="overflow: hidden; height: 60px;
+    <div region="north" split="true" border="false" style="overflow: hidden; height: 62px;
             background: url(/js/easyui/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
             line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
 
-        <div style="width:10%;height:100%;float:left;border:1px solid red;">
-            <div style="width:50%;height:100%;float: left;">
+        <div style="width:180px;height:100%;float:left;">
+            <div style="width:62px;height:calc(100% - 2px);float: left;padding:1px;">
                 <img th:src="${session.sessionInfo.selfImg}" width="60" height="60">
             </div>
-            <div style="width: 50%;height:100%;float: left;">
-                <div style="width:100%;height:50%;">
-                    <span th:text="${session.sessionInfo.user}"></span>
+            <div style="width: 50%;height:100%;float: left;margin-left: 5px;">
+                <div style="width:100%;height:50%;padding-top: 5px;">
+                    <span th:text="${session.sessionInfo.user}" style="font-size: 25px;"></span>
                 </div>
-                <div style="width:100%;height:50%;">
-                    <span class="glyphicon glyphicon-user" th:title="#{span.onlinecount.tips}"></span><label
+                <div style="width:100%;height:40%;">
+                    <span class="icon icon-users" th:title="#{span.onlinecount.tips}"></span><label
                         id="onlineNum">0</label>&nbsp;&nbsp;
-                    <span class="glyphicon glyphicon-tree-deciduous" th:title="#{span.coinnum.tips}"></span><label
+                    <span class="icon icon-star" th:title="#{span.coinnum.tips}"></span><label
                         id="coinNum">0</label>
                 </div>
             </div>
         </div>
 
-        <div style="width:70%;height:100%;float:left;border:1px solid green;">
-        </div>
-        <div style="width:auto;height:100%;float:right;border:1px solid blue;text-align:right;padding-right:2px;">
-            <div style="height:50%;">
-                <span style="font-size:21px;">2020-12-30 17:21:00</span>
+        <div style="width:70%;height:100%;float:left;text-align: center;">
+            <!--天气-->
+            <div id="weatherDiv" style="height:100%;padding-top:13px;display: block;">
+                <label id="weatherInfo" style="color:white;"></label>&nbsp;&nbsp;
+                <label id="lastUpdateTime" style="color:white;"></label>&nbsp;&nbsp;
+                <label id="location" style="color:white;"></label>
             </div>
-            <div style="height:50%;">
+
+            <div id="headerTitleDiv" style="height:100%;font-size:20px;padding-top:13px;display: none;">
+                <label id="titleLabel" style="color:white;">websocket客户端</label>
+            </div>
+        </div>
+        <div style="width:auto;height:100%;float:right;text-align:right;padding-right:2px;">
+            <div style="height:45%;padding: 5px 5px 0 0;">
+                <span id="curTimeSpan" style="font-size:21px;">0000-00-00 00:00:00</span>
+            </div>
+            <div style="height:50%;padding-top: 5px;">
                     <span class="head">
                         <a href="#" id="playMusicBtn">
                             <span class="icon icon-music2"></span>音乐播放&nbsp;&nbsp;
@@ -93,7 +118,7 @@
         </div>
     </div>
 
-    <div region="south" split="true" style="height: 55px; background: #D2E0F2; ">
+    <div region="south" split="true" style="height: 55px; background: #D2E0F2;">
         <div class="footer" style="height:100%;">
             <div style="height:50%;">
                 <div style="width:30%;float:left;text-align:left;">
@@ -132,8 +157,11 @@
     </div>
 
     <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
-        <div region="north" split="true" title="滚动消息" id="recentNewsDiv" style="height:30px;background: rgb(210, 224, 242);">
-
+        <div region="north" split="true" title="滚动消息" id="recentNewsDiv" style="height:20px;background-color: #E0ECFF;border-bottom: 1px solid #8DB2E3;">
+            <marquee direction="left" scrolldelay="10" scrollamount="7" onMouseOver="this.stop()" onMouseOut="this.start()">
+                <span id="adsSpan">
+                </span>
+            </marquee>
         </div>
         <div region="south" split="true" title="内容部分" id="centerDiv" style="height:100%;">
             <div id="tabs" class="easyui-tabs"  fit="true" border="false" style="height:100%;">
@@ -256,6 +284,59 @@
 
 
     $(function() {
+        console.log("主页获取session数据:" + sessionUser);
+        // 修改地址栏地址,不显示多余的参数或者页面信息
+        history.replaceState(null, null, "/");
+
+        // 设置网页标题
+        setPageTitle();
+        function setPageTitle() {
+            let title = "";
+            if (sessionUsertype == "0") {
+                title = "page.serverindex.title";
+            } else {
+                title = "page.clientindex.title";
+            }
+            $("title").text($.ws.i18n(title));
+        }
+
+        //定时获取天气
+        grapWeatherInfo();
+        function grapWeatherInfo() {
+            $.ajax({
+                type: 'GET',
+                url: rootUrl + 'index/grapWetherInfo',
+                async: false,
+                success: function (result) {
+                    if (result.code == 1) {
+                        $("#weatherInfo").text(result.data.remark);
+                        $("#lastUpdateTime").text(result.data.lastUpdateTime);
+                        $("#location").text(result.data.location);
+                    }
+                }
+            });
+        }
+
+        //定时切换header标题
+        var headerTitle = $.ws.i18n("web.title");
+        setInterval(function () {
+            var titleStatus = $("#headerTitleDiv").css("display");
+            if (titleStatus == "none") {
+                $("#titleLabel").text(headerTitle);
+                $("#headerTitleDiv").css("display", "block");
+                $("#weatherDiv").css("display", "none");
+            } else {
+                $("#headerTitleDiv").css("display", "none");
+                $("#weatherDiv").css("display", "block");
+            }
+        }, 8000);
+
+        //定时更新时间
+        setInterval(function () {
+            var curTime = getCurrentTime();
+            $("#curTimeSpan").text(curTime);
+        }, 1000);
+
         // 音乐播放
         $("#playMusicBtn").click(function (){
             var displayStatus = $("#musicIframeDiv").css("display");
@@ -400,6 +481,67 @@
         }
         //音乐播放器可拖动代码
         $.ws.dragPanelMove("#musicIframeHeader", "#musicIframeDiv");
+
+        //获取在线人数和积分数量
+        getOnlineInfo();
+        function getOnlineInfo() {
+            $.ajax({
+                type: 'GET',
+                url: 'ws/getOnlineInfo.json',
+                data: {"user": sessionUser},
+                //dataType: 'json',
+                success: function (result) {
+                    if (result.code != 1) {
+                        return;
+                    }
+                    var jsonObj = result.data;
+                    var currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
+                    var coinNum = currentUserOnlineInfo.coinNum;
+                    var onlineNum = jsonObj.onlineUserList.length;
+                    var headImage = currentUserOnlineInfo.headImage;
+
+                    $("#coinNum").text(coinNum);
+                    $("#onlineNum").text(onlineNum);
+                    if (headImage == null || headImage == "") {
+                        $("#myImg").attr("src", rootUrl + "../img/" + $.ws.errorImageName);
+                    } else {
+                        $("#myImg").attr("src", headImage);
+                    }
+                }
+            });
+        }
+
+        //获取最新广告
+        queryRecentAdsList();
+        function queryRecentAdsList() {
+            $.ajax({
+                type: 'GET',
+                url: '/zhddkk/wsAds/queryRecentAdsList?count=4',
+                async: false,
+                success: function (result) {
+                    if (result.code == 1) {
+                        var totalAds = "";
+                        var data = result.data;
+                        if (data.length == 0) {
+                            totalAds = "<span style='font-weight: bold;font-size:14px;color:red;'>暂无消息</span>";
+                        } else {
+                            $.each(data, function (i, val) {
+                                totalAds += "<span style='font-size:14px;font-weight: bold'>" + val.title + "</span>" + "<span style='font-size:9px;margin-left:5px;margin-right: 200px;'>" + val.createTime + "<a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a>" + "</span>";
+                            });
+                        }
+                        $("#adsSpan").html(totalAds);
+                    }
+                }
+            });
+        }
     });
+
+    /**
+     * 查看广告详情页
+     * @param adId
+     */
+    function showAdsDetail(adId) {
+        window.open("./zhddkk/wsAds/adsDetail.page?id=" + adId);
+    }
 </script>
 </html>
