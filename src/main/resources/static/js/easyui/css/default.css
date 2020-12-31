@@ -52,4 +52,8 @@ a:hover{ color:Red; text-decoration:underline;}
 .icon-football{background-position: -380px -400px;}
 .icon-game-hander{background-position: -360px -220px;}
 .icon-star{background-position: -40px -420px;}
+.icon-folder-open{
+    background:url(../images/tabicons.png) no-repeat;
+    background-position: -240px -500px;
+}
 
