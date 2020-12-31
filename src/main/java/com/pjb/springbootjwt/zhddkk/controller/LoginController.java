@@ -62,6 +62,8 @@ public class LoginController {
 
     private static final Map<String, String> configMap = WsInterceptor.getConfigMap();
 
+    private static final String INDEX_PAGE_NAME = "wsclientIndex_v3";
+
     /**
      * webSocketConfig.
      */
@@ -130,7 +132,7 @@ public class LoginController {
         // 如果用户已登陆过，则直接跳转登陆成功首页
         SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession().getAttribute(CommonConstants.SESSION_INFO);
         if (null != sessionInfoBean) {
-            return "ws/wsclientIndex";
+            return "ws/" + INDEX_PAGE_NAME;
         }
 
         // 检查cookie
@@ -311,7 +313,7 @@ public class LoginController {
     @RequestMapping(value = "wsclientIndex.page")
     public String wsclientIndex() {
         logger.debug("访问wsclientIndex.page");
-        return "ws/wsclientIndex";
+        return "ws/" + INDEX_PAGE_NAME;
     }
 
     /**
