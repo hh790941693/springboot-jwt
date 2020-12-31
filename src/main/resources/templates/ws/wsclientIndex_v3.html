@@ -44,11 +44,25 @@
         </div>
     </noscript>
 
-    <div region="north" split="true" border="false" style="overflow: hidden; height: 80px;
+    <div region="north" split="true" border="false" style="overflow: hidden; height: 60px;
             background: url(/js/easyui/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
             line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
 
         <div style="width:10%;height:100%;float:left;border:1px solid red;">
+            <div style="width:50%;height:100%;float: left;">
+                <img th:src="${session.sessionInfo.selfImg}" width="60" height="60">
+            </div>
+            <div style="width: 50%;height:100%;float: left;">
+                <div style="width:100%;height:50%;">
+                    <span th:text="${session.sessionInfo.user}"></span>
+                </div>
+                <div style="width:100%;height:50%;">
+                    <span class="glyphicon glyphicon-user" th:title="#{span.onlinecount.tips}"></span><label
+                        id="onlineNum">0</label>&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-tree-deciduous" th:title="#{span.coinnum.tips}"></span><label
+                        id="coinNum">0</label>
+                </div>
+            </div>
         </div>
 
         <div style="width:70%;height:100%;float:left;border:1px solid green;">
@@ -79,7 +93,7 @@
         </div>
     </div>
 
-    <div region="south" split="true" style="height: 60px; background: #D2E0F2; ">
+    <div region="south" split="true" style="height: 55px; background: #D2E0F2; ">
         <div class="footer" style="height:100%;">
             <div style="height:50%;">
                 <div style="width:30%;float:left;text-align:left;">
