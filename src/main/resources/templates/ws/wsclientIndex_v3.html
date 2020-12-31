@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <div style="width:70%;height:100%;float:left;text-align: center;">
+        <div style="width:65%;height:100%;float:left;text-align: center;">
             <!--天气-->
             <div id="weatherDiv" style="height:100%;padding-top:13px;display: block;">
                 <label id="weatherInfo" style="color:white;"></label>&nbsp;&nbsp;
@@ -109,6 +109,9 @@
                         </a>
                         <a href="#" id="settingBtn">
                             <span class="icon icon-setting"></span>设置&nbsp;&nbsp;
+                        </a>
+                        <a href="#" id="modifyPasswordBtn">
+                            <span class="icon icon-key"></span>修改密码&nbsp;&nbsp;
                         </a>
                         <a href="#" id="loginOutBtn">
                             <span class="icon icon-door-open"></span>安全退出&nbsp;
@@ -177,7 +180,7 @@
     <!--修改密码窗口-->
     <div id="modifyPasswordDiv" class="easyui-window" title="修改密码" collapsible="false" minimizable="false"
          maximizable="false" icon="icon-save"  style="width: 300px; height: 150px; padding: 5px;
-            background: #fafafa;display:none;">
+            background: #fafafa;display: none">
         <div class="easyui-layout" fit="true">
             <div region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;">
                 <table cellpadding=3>
@@ -428,6 +431,11 @@
                 content: '/zhddkk/wsUsers/setPersonalInfo.page?user=' + sessionUser
             });
         });
+
+        // 修改密码
+        $("#modifyPasswordBtn").click(function (){
+            $("#modifyPasswordDiv").show();
+        })
 
         // 退出
         $("#loginOutBtn").click(function() {
