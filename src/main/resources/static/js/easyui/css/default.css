@@ -70,6 +70,8 @@ a:hover {text-decoration:none;}
 .icon-user7{background-position: -220px -480px;}
 .icon-user8{background-position: -240px -480px;}
 .icon-admin{background-position: -80px -420px;}
+.icon-upload{background-position: -240px 0px;}
+.icon-download{background-position: 0px -20px;}
 
 .icon-menu-directory{ background:url(../images/directory.png) no-repeat;}
 
