@@ -15,7 +15,14 @@ a:hover {text-decoration:none;}
 
 .easyui-accordion ul{list-style-type:none;margin:0px; padding:10px;}
 .easyui-accordion ul li{ padding:0px;}
-.easyui-accordion ul li a{line-height:24px;}
+.easyui-accordion ul li a {
+    line-height: 26px;
+    font-size: 16px;
+}
+.easyui-accordion ul li span {
+    height: 12px;
+    display: inline-block;
+}
 .easyui-accordion ul li div{margin:2px 0px;padding-left:10px;padding-top:2px;}
 .easyui-accordion ul li div.hover{border:1px dashed #99BBE8; background:#E0ECFF;cursor:pointer;}
 .easyui-accordion ul li div.hover a{color:#416AA3;}
