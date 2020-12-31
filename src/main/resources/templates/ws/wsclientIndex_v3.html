@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/js/easyui/js/themes/default/easyui.css" />
     <link rel="stylesheet" type="text/css" href="/js/easyui/js/themes/icon.css" />
     <link rel="stylesheet" type="text/css" th:href="@{/js/plugins/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/js/fontAwesome/css/font-awesome.css}">
     <script type="text/javascript" src="/js/easyui/js/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="/js/easyui/js/jquery.easyui.js"></script>
     <script type="text/javascript" src='/js/easyui/js/outlook2.js'> </script>
@@ -76,13 +77,12 @@
                 </div>
 
                 <div style="width:30%;float:right;text-align:right;">
-                        <span class="footer">
-                            <a href="#" id="sessionInfoBtn">会话信息</a>&nbsp;
-                            <a href="#" id="contactBtn">联系作者</a>&nbsp;
-                            <a href="#" id="donateBtn">捐赠</a>&nbsp;
-                            <a href="#" id="feedbackBtn">反馈建议</a>&nbsp;
-                            <a href="#" id="aboutUsBtn">关于我们</a>
-                        </span>
+                    <a href="#" id="sessionInfoBtn" class="easyui-linkbutton" plain="true" icon="icon icon-role">会话信息</a>
+                    <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cancel">Cancel</a>
+                    <a href="#" id="contactBtn">联系作者</a>&nbsp;
+                    <a href="#" id="donateBtn">捐赠</a>&nbsp;
+                    <a href="#" id="feedbackBtn">反馈建议</a>&nbsp;
+                    <a href="#" id="aboutUsBtn">关于我们</a>
                 </div>
             </div>
 
@@ -116,7 +116,7 @@
     <!--修改密码窗口-->
     <div id="modifyPasswordDiv" class="easyui-window" title="修改密码" collapsible="false" minimizable="false"
          maximizable="false" icon="icon-save"  style="width: 300px; height: 150px; padding: 5px;
-            background: #fafafa;">
+            background: #fafafa;display:none;">
         <div class="easyui-layout" fit="true">
             <div region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;">
                 <table cellpadding=3>
@@ -170,10 +170,11 @@
             {"menuid":"1","icon":"icon-sys","menuname":"系统管理",
                 "menus":[
                     {"menuname":"用户管理","icon":"icon-users","url":"/zhddkk/wsUsers/wsUsersForAdmin"},
-                    {"menuname":"音乐播放","icon":"icon-nav","url":"../file/musicPlayer.page"},
-                    {"menuname":"聊天监控","icon":"icon-add","url":"/ws/wsserverChartMonitor.page"},
+                    {"menuname":"音乐播放","icon":"icon-music","url":"../file/musicPlayer.page"},
+                    {"menuname":"聊天监控","icon":"icon-camera","url":"/ws/wsserverChartMonitor.page"},
                     {"menuname":"朋友圈","icon":"icon-role","url":"/ws/wsclientCircle.page"},
                     {"menuname":"聊天记录","icon":"icon-set","url":"/zhddkk/wsChatlog"},
+                    {"menuname":"操作记录","icon":"icon-set","url":"/zhddkk/wsOperationLog"},
                     {"menuname":"广告发布","icon":"icon-log","url":"/zhddkk/wsAds"},
                     {"menuname":"反馈建议","icon":"icon-log","url":"/zhddkk/wsFeedback/adminFeedback"},
                     {"menuname":"领导驾驶舱","icon":"icon-log","url":"/ws/wsserverChart.page"},
