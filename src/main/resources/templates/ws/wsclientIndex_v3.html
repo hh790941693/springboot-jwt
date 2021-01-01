@@ -3,12 +3,12 @@
 <head id="Head1">
     <title></title>
     <link rel="stylesheet" type="text/css" href="/js/easyui/css/default.css" />
-    <link rel="stylesheet" type="text/css" href="/js/easyui/js/themes/default/easyui.css" />
-    <link rel="stylesheet" type="text/css" href="/js/easyui/js/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="/js/easyui-1.9.11/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="/js/easyui-1.9.11/themes/icon.css" />
     <link rel="stylesheet" type="text/css" th:href="@{/js/plugins/layui/css/layui.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/js/fontAwesome/css/font-awesome.css}">
-    <script type="text/javascript" src="/js/easyui/js/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="/js/easyui/js/jquery.easyui.js"></script>
+    <script type="text/javascript" src="/js/easyui-1.9.11/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/easyui-1.9.11/jquery.easyui.min.js"></script>
     <script type="text/javascript" src='/js/easyui/js/outlook2.js'> </script>
     <script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/common.js}"></script>
@@ -161,7 +161,7 @@
         </div>
         <div region="south" split="true" title="内容部分" id="centerDiv" style="height:100%;width:100%;">
             <div id="tabs" class="easyui-tabs"  fit="true" border="false" style="height:100%;width:100%;">
-                <div title="首页" style="padding:20px;overflow:hidden;" id="home">
+                <div title="首页" data-options="iconCls:'icon icon-house',closable:false" style="padding:20px;overflow:hidden;" id="home">
                     <h1>Welcome to jQuery UI!</h1>
 
                 </div>
