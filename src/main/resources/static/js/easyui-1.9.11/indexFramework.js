@@ -29,20 +29,21 @@ function initLeftMenu() {
         menujson = {};
         menujson.title = n.menuname;
         menujson.iconCls = n.icon;
-        contentHtml = "<ul>";
+        var contentHtml = "<ul>";
         $.each(n.menus, function(j, o) {
-            contentHtml += '<li><div><a target="mainFrame" href="' + o.url + '" ><span class="icon '+o.icon+'" ></span>' + o.menuname + '</a></div></li> ';
+            contentHtml += '<li><div closable="'+o.closable+'"><a target="mainFrame" href="' + o.url + '" ><span class="icon '+o.icon+'" ></span>' + o.menuname + '</a></div></li> ';
         });
         contentHtml += '</ul>';
         menujson.content = contentHtml;
-        $('.easyui-accordion').accordion('add',menujson);
+        $('.easyui-accordion').accordion('add', menujson);
     })
 
 	$('.easyui-accordion li a').click(function(){
 		var tabTitle = $(this).text();
 		var url = $(this).attr("href");
-		var iconClass = $(this).children("span[class*='icon']").eq(0).attr("class")
-		addTab(tabTitle,url, iconClass);
+		var parentDiv = $(this).parent("div:first");
+        var closableValue = $(parentDiv).attr("closable");
+		addTab(tabTitle, url, closableValue);
 		$('.easyui-accordion li div').removeClass("selected");
 		$(this).parent().addClass("selected");
 	}).hover(function(){
@@ -54,14 +55,14 @@ function initLeftMenu() {
 	$(".easyui-accordion").accordion();
 }
 
-function addTab(subtitle,url, iconClass){
+function addTab(subtitle,url, closable){
 	if(!$('#tabs').tabs('exists',subtitle)){
 		$('#tabs').tabs('add',{
-			title:subtitle,
-			content:createFrame(url),
-			closable:true,
-			width:$('#mainPanle').width()-10,
-			height:$('#mainPanle').height()-26
+			title: subtitle,
+			content: createFrame(url),
+			closable: closable == "true" ? true : false,
+			width: $('#mainPanle').width()-10,
+			height: $('#mainPanle').height()-26
 		});
 	}else{
 		$('#tabs').tabs('select',subtitle);
@@ -90,7 +91,13 @@ function tabClose() {
 		});
 		
 		var subtitle =$(this).children("span").text();
-		$('#mm').data("currtab",subtitle);
+		var classes = $(this).children("span[class*='tabs-title']").attr("class");
+		var closeable = false;
+		if (classes.indexOf("tabs-closable") != -1){
+            closeable = true;
+        }
+		$('#mm').data("currtab", subtitle);
+        $('#mm').data("closeable", closeable);
 		
 		return false;
 	});
@@ -100,7 +107,9 @@ function tabCloseEven() {
 	//关闭当前
 	$('#mm-tabclose').click(function(){
 		var currtabTitle = $('#mm').data("currtab");
-		if (currtabTitle != indexTabTitle) {
+		var closeable = $('#mm').data("closeable");
+        //var closeTab = $('#tabs').tabs('getTab', currtabTitle);
+		if (closeable) {
             $('#tabs').tabs('close', currtabTitle);
         }
 	});
@@ -108,18 +117,24 @@ function tabCloseEven() {
 	$('#mm-tabcloseall').click(function(){
 		$('.tabs-inner span').each(function(i,n){
 			var text = $(n).text();
-			if (text != indexTabTitle) {
-                $('#tabs').tabs('close', text);
+			if (text != "") {
+			    var classes = $(n).attr("class");
+                if (classes.indexOf("tabs-closable") != -1) {
+                    $('#tabs').tabs('close', text);
+                }
             }
 		});	
 	});
 	//关闭除当前之外的TAB
 	$('#mm-tabcloseother').click(function(){
-		var currtab_title = $('#mm').data("currtab");
+        var currtabTitle = $('#mm').data("currtab");
 		$('.tabs-inner span').each(function(i,n){
 			var text = $(n).text();
-			if(text != currtab_title && text != indexTabTitle) {
-                $('#tabs').tabs('close', text);
+			if (text != "") {
+                var classes = $(n).attr("class");
+                if (text != currtabTitle && classes.indexOf("tabs-closable") != -1) {
+                    $('#tabs').tabs('close', text);
+                }
             }
 		});	
 	});
