@@ -2,14 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head id="Head1">
     <title></title>
-    <link rel="stylesheet" type="text/css" href="/js/easyui/css/default.css" />
+    <link rel="stylesheet" type="text/css" href="/js/easyui-1.9.11/css/default.css" />
     <link rel="stylesheet" type="text/css" href="/js/easyui-1.9.11/themes/default/easyui.css" />
     <link rel="stylesheet" type="text/css" href="/js/easyui-1.9.11/themes/icon.css" />
     <link rel="stylesheet" type="text/css" th:href="@{/js/plugins/layui/css/layui.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/js/fontAwesome/css/font-awesome.css}">
     <script type="text/javascript" src="/js/easyui-1.9.11/jquery.min.js"></script>
     <script type="text/javascript" src="/js/easyui-1.9.11/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src='/js/easyui/js/outlook2.js'> </script>
+    <script type="text/javascript" src='/js/easyui-1.9.11/indexFramework.js'> </script>
     <script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/common.js}"></script>
     <script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
@@ -53,6 +53,7 @@
 </head>
 
 <body class="easyui-layout" style="overflow-y: hidden"  scroll="no">
+    <!--网页北部区域：头像、时间等信息-->
     <div region="north" split="true" border="false" style="overflow: hidden; height: 62px;
             background: url(/js/easyui/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
             line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
@@ -113,7 +114,8 @@
             </div>
         </div>
     </div>
-
+    
+    <!--网页南部区域：网页底部，版权等信息-->
     <div region="south" split="true" style="height: 55px; background: #D2E0F2;">
         <div class="footer" style="height:100%;">
             <div style="height:50%;">
@@ -145,13 +147,15 @@
             </div>
         </div>
     </div>
-
+    
+    <!--网页西部区域：菜单导航-->
     <div region="west" split="true" title="导航菜单" style="width:180px;" id="west">
         <div class="easyui-accordion" fit="true" border="false">
             <!--  导航内容 -->
         </div>
     </div>
-
+    
+    <!--网页中间区域：内容部分-->
     <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
         <div region="north" split="true" title="滚动消息" id="recentNewsDiv" style="height:20px;background-color: #E0ECFF;border-bottom: 1px solid #8DB2E3;">
             <marquee direction="left" scrolldelay="10" scrollamount="7" onMouseOver="this.stop()" onMouseOut="this.start()">
@@ -168,12 +172,10 @@
             </div>
         </div>
     </div>
-
-
-    <!--修改密码窗口-->
+    
+    <!--修改密码窗口 默认不显示-->
     <div id="modifyPasswordDiv" class="easyui-window" title="修改密码" collapsible="false" minimizable="false"
-         maximizable="false" icon="icon-save"  style="width: 300px; height: 150px; padding: 5px;
-            background: #fafafa;">
+         maximizable="false" icon="icon-save"  style="width: 300px; height: 150px; padding: 5px;background: #fafafa;">
         <div class="easyui-layout" fit="true">
             <div region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;">
                 <table cellpadding=3 style="border-collapse:separate; border-spacing:10px;">
@@ -202,6 +204,7 @@
         </div>
     </div>
 
+    <!--tab框区域右键菜单栏 默认不显示-->
     <div id="mm" class="easyui-menu" style="width:150px;">
         <div id="mm-tabclose">关闭</div>
         <div id="mm-tabcloseall">全部关闭</div>
@@ -213,12 +216,12 @@
         <div id="mm-exit">退出</div>
     </div>
 
-    <!--右上角 二维码-->
+    <!--右上角 二维码 默认不显示-->
     <div id="qrDiv" style="display:none;position: fixed;right: 5px;top: 90px;width: 180px;height: 180px;">
         <img id="qrcodeImg" style="width: 160px;height: 160px;">
     </div>
 
-    <!--左下角 迷你音乐播放器-->
+    <!--左下角 迷你音乐播放器 默认不显示-->
     <div id='musicIframeDiv'>
         <div id='musicIframeHeader'>
             <span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
@@ -232,6 +235,7 @@
     // 左侧导航菜单
     var _menus = {};
     if (sessionUsertype == '0') {
+        // 管理员菜单
         _menus = {
             "menus": [
                 {
@@ -269,6 +273,7 @@
             ]
         };
     } else {
+        // 普通用户菜单
         _menus = {
             "menus": [
                 {
