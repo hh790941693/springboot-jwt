@@ -54,7 +54,7 @@
 
 <body class="easyui-layout" style="overflow-y: hidden"  scroll="no">
     <!--网页北部区域：头像、时间等信息-->
-    <div region="north" split="true" border="false" style="overflow: hidden; height: 62px;
+    <div region="north" split="true" border="false" style="overflow: hidden; height: 67px;
             background: url(/js/easyui/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
             line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
         <div style="width:180px;height:100%;float:left;">
@@ -90,7 +90,7 @@
             <div style="height:45%;padding: 5px 5px 0 0;">
                 <span id="curTimeSpan" style="font-size:21px;">0000-00-00 00:00:00</span>
             </div>
-            <div style="height:50%;padding-top: 5px;">
+            <div style="height:50%;padding-top: 10px;">
                     <span class="head">
                         <a href="#" id="playMusicBtn">
                             <span class="icon icon-music2"></span>音乐播放&nbsp;&nbsp;
@@ -164,7 +164,7 @@
                 </span>
             </marquee>
         </div>
-        <div region="south" split="true" title="内容部分" id="centerDiv" style="height:100%;width:100%;">
+        <div region="south" split="true" title="内容部分" id="centerDiv" style="height:calc(100% - 20px);width:100%;">
             <div id="tabs" class="easyui-tabs"  fit="true" border="false" style="height:100%;width:100%;">
                 <div title="首页" data-options="iconCls:'icon icon-house',closable:false" style="padding:20px;overflow:hidden;" id="home">
                     <h1>Welcome to jQuery UI!</h1>
