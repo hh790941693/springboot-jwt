@@ -73,18 +73,23 @@
             padding: 0;
             margin: 0 6px;
         }
+        
+        #northDiv .panel-body {
+            background-color: transparent;
+            color: white;
+        }
     </style>
 </head>
 
 <body class="easyui-layout" style="overflow-y: hidden"  scroll="no">
     <!--网页北部区域：头像、时间等信息-->
-    <div region="north" split="true" border="true" style="overflow: hidden; height: 67px;
-            background: url(/js/easyui/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
-            line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
+    <div id="northDiv" region="north" split="false" border="true" style="overflow: hidden; height: 67px;
+            background: url(/js/easyui-1.9.11/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
+            line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体;">
         
             <div class="easyui-layout" data-options="fit:true">
                 <!--左侧-->
-                <div data-options="region:'west',split:false,border:false" style="width:178px">
+                <div data-options="region:'west',split:false,border:false" style="width:178px;">
                     <div class="easyui-layout" data-options="fit:true">
                         <!--左侧头像-->
                         <div data-options="region:'west',split:false,border:false" style="width:62px;padding:1px;">
@@ -112,8 +117,8 @@
                 
                 <!--中间部分-->
                 <div data-options="region:'center',split:false,border:false" style="text-align: center;">
-                    <div id="headerTitleDiv" style="height:100%;font-size:20px;padding-top:13px;display: block;">
-                        <label id="titleLabel" style="color:black;">websocket客户端</label>
+                    <div id="headerTitleDiv" style="height:100%;font-size:20px;padding-top:20px;display: block;">
+                        <label id="titleLabel" style="color:white;">websocket客户端</label>
                     </div>
                 </div>
                 
@@ -124,16 +129,16 @@
                             <div data-options="region:'north',split:false,border:false" style="height:40%;">
                                 <div class="easyui-layout" data-options="fit:true">
                                     <!--天气-->
-                                    <div data-options="region:'west',split:false,border:true" style="width:300px;text-align: center;">
+                                    <div data-options="region:'west',split:false,border:false" style="width:320px;text-align: center;">
                                         <div id="weatherDiv" style="height:100%;padding-top:1px;display: block;">
-                                            <label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
-                                            <label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
-                                            <label id="location" style="color:black;"></label>
+                                            <label id="weatherInfo" style="color:white;"></label>&nbsp;&nbsp;
+                                            <label id="lastUpdateTime" style="color:white;"></label>&nbsp;&nbsp;
+                                            <label id="location" style="color:white;"></label>
                                         </div>
                                     </div>
                                     <!--时间-->
-                                     <div data-options="region:'center',split:false,border:true" style="text-align: right;padding-right: 5px;">
-                                        <span id="curTimeSpan" style="font-size:14px;">0000-00-00 00:00:00</span>
+                                     <div data-options="region:'center',split:false,border:false" style="text-align: right;padding-right: 5px;">
+                                        <span id="curTimeSpan" style="font-size:14px;color: white;">0000-00-00 00:00:00</span>
                                     </div>
                                 </div>
                             </div>
@@ -153,7 +158,7 @@
     </div>
     
     <!--网页南部区域：网页底部，版权等信息-->
-    <div region="south" split="true" style="height: 55px; background: #D2E0F2;">
+    <div region="south" split="false" style="height: 55px; background: #D2E0F2;">
         <div class="footer" style="height:100%;">
             <div style="height:50%;">
                 <div style="width:30%;float:left;text-align:left;">
@@ -187,7 +192,7 @@
     </div>
     
     <!--网页西部区域：菜单导航-->
-    <div region="west" split="true" title="导航菜单" style="width:180px;" id="west">
+    <div region="west" split="false" title="导航菜单" style="width:180px;" id="west">
         <div class="easyui-accordion" fit="true" border="false">
             <!--  导航内容 -->
         </div>
@@ -195,12 +200,12 @@
     
     <!--网页中间区域：内容部分-->
     <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
-        <div region="north" split="true" title="滚动消息" id="recentNewsDiv" style="height:20px;background-color: #E0ECFF;border-bottom: 1px solid #8DB2E3;">
+        <div region="north" split="false" title="滚动消息" id="recentNewsDiv" style="height:20px;background-color: #E0ECFF;border-bottom: 1px solid #8DB2E3;">
             <marquee direction="left" scrolldelay="10" scrollamount="7" onMouseOver="this.stop()" onMouseOut="this.start()">
                 <span id="adsSpan"></span>
             </marquee>
         </div>
-        <div region="south" split="true" title="内容部分" id="centerDiv" style="height:calc(100% - 20px);width:100%;">
+        <div region="south" split="false" title="内容部分" id="centerDiv" style="height:calc(100% - 20px);width:100%;">
             <div id="tabs" class="easyui-tabs"  fit="true" border="false" style="height:100%;width:100%;">
                 <div title="首页" data-options="iconCls:'icon icon-house',closable:false" style="padding:20px;overflow:hidden;" id="home">
                     <div class="easyui-layout" data-options="fit:true">
