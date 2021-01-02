@@ -44,7 +44,7 @@
         }
 
         #weatherDiv label {
-            font-size: 25px;
+            font-size: 16px;
         }
 
         #headerTitleDiv label {
@@ -97,14 +97,7 @@
                 
                 <!--中间部分-->
                 <div data-options="region:'center',split:false,border:false" style="text-align: center;">
-                    <!--天气-->
-                    <div id="weatherDiv" style="height:100%;padding-top:13px;display: block;">
-                        <label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
-                        <label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
-                        <label id="location" style="color:black;"></label>
-                    </div>
-        
-                    <div id="headerTitleDiv" style="height:100%;font-size:20px;padding-top:13px;display: none;">
+                    <div id="headerTitleDiv" style="height:100%;font-size:20px;padding-top:13px;display: block;">
                         <label id="titleLabel" style="color:black;">websocket客户端</label>
                     </div>
                 </div>
@@ -113,12 +106,25 @@
                  <div data-options="region:'east',split:false,border:false" style="width:580px">
                         <div class="easyui-layout" data-options="fit:true">
                             <!--右侧时间-->
-                            <div data-options="region:'north',split:false,border:false" style="height:40%;text-align: right;padding-right: 5px;">
-                                <span id="curTimeSpan" style="font-size:17px;">0000-00-00 00:00:00  星期一</span>
+                            <div data-options="region:'north',split:false,border:false" style="height:40%;">
+                                <div class="easyui-layout" data-options="fit:true">
+                                    <!--天气-->
+                                    <div data-options="region:'west',split:false,border:true" style="width:350px;text-align: center;">
+                                        <div id="weatherDiv" style="height:100%;padding-top:1px;display: block;">
+                                            <label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
+                                            <label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
+                                            <label id="location" style="color:black;"></label>
+                                        </div>
+                                    </div>
+                                    <!--时间-->
+                                     <div data-options="region:'center',split:false,border:true" style="text-align: right;padding-right: 5px;">
+                                        <span id="curTimeSpan" style="font-size:17px;">0000-00-00 00:00:00  星期一</span>
+                                    </div>
+                                </div>
                             </div>
 
                             <!--右侧按钮组-->
-                            <div data-options="region:'center',split:false,border:false" style="height:60%;">
+                            <div data-options="region:'center',split:false,border:false" style="height:60%;padding-top: 4px;">
                                 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon icon-music2'" id="playMusicBtn">音乐播放</a>
                                 <a href="#" id="signBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-calendar'">每日签到&nbsp;&nbsp;</a>
                                  <a href="#" id="qrcodeBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-telephone'">手机登录&nbsp;&nbsp;</a>
@@ -382,17 +388,7 @@
 
         //定时切换header标题
         var headerTitle = $.ws.i18n("web.title");
-        setInterval(function () {
-            var titleStatus = $("#headerTitleDiv").css("display");
-            if (titleStatus == "none") {
-                $("#titleLabel").text(headerTitle);
-                $("#headerTitleDiv").css("display", "block");
-                $("#weatherDiv").css("display", "none");
-            } else {
-                $("#headerTitleDiv").css("display", "none");
-                $("#weatherDiv").css("display", "block");
-            }
-        }, 8000);
+        $("#titleLabel").text(headerTitle);
 
         //定时更新时间
         setInterval(function () {
