@@ -97,7 +97,7 @@
         </div>
         <div style="width:auto;height:100%;float:right;text-align:right;padding-right:2px;">
             <div style="height:45%;padding: 5px 5px 0 0;">
-                <span id="curTimeSpan" style="font-size:21px;">0000-00-00 00:00:00</span>
+                <span id="curTimeSpan" style="font-size:17px;">0000-00-00 00:00:00  星期一</span>
             </div>
             <div style="height:50%;padding-top: 1px;">
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon icon-music2'" id="playMusicBtn">音乐播放</a>
@@ -163,7 +163,14 @@
             <div id="tabs" class="easyui-tabs"  fit="true" border="false" style="height:100%;width:100%;">
                 <div title="首页" data-options="iconCls:'icon icon-house',closable:false" style="padding:20px;overflow:hidden;" id="home">
                     <h1>Welcome to jQuery UI!</h1>
-
+                    <div class="easyui-panel" style="width:100%;max-width:400px;padding:30px 60px;">
+                        <div style="margin-bottom:20px">
+                            <input class="easyui-datebox" label="Start Date:" labelPosition="top" style="width:100%;">
+                        </div>
+                        <div style="margin-bottom:20px">
+                            <input class="easyui-datebox" label="End Date:" labelPosition="top" style="width:100%;">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

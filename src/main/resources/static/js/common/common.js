@@ -251,6 +251,9 @@ function getCurrentTime() {
     var m = date.getMinutes();
     var s = date.getSeconds();
 
+    var weekendArr = new Array('星期日','星期一','星期二','星期三','星期四','星期五','星期六');
+    var week = weekendArr[date.getDay()];
+
     if (month < 10) {
         month = "0" + month;
     }
@@ -267,7 +270,7 @@ function getCurrentTime() {
         s = "0" + s;
     }
 
-    return year + "-" + month + "-" + day + " " + h + ":" + m + ":" + s;
+    return year + "-" + month + "-" + day + " " + h + ":" + m + ":" + s + "  " + week;
 }
 
 function randomNumber(start, end) {
