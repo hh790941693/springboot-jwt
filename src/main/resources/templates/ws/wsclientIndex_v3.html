@@ -11,6 +11,7 @@
     <script type="text/javascript" src="/js/easyui-1.9.11/jquery.easyui.min.js"></script>
     <script type="text/javascript" src='/js/easyui-1.9.11/locale/easyui-lang-zh_CN.js'> </script>
     <script type="text/javascript" src='/js/easyui-1.9.11/indexFramework.js'> </script>
+    <script type="text/javascript" th:src="@{/js/vue/vue.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/common.js}"></script>
     <script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
@@ -196,21 +197,54 @@
     <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
         <div region="north" split="true" title="滚动消息" id="recentNewsDiv" style="height:20px;background-color: #E0ECFF;border-bottom: 1px solid #8DB2E3;">
             <marquee direction="left" scrolldelay="10" scrollamount="7" onMouseOver="this.stop()" onMouseOut="this.start()">
-                <span id="adsSpan">
-                </span>
+                <span id="adsSpan"></span>
             </marquee>
         </div>
         <div region="south" split="true" title="内容部分" id="centerDiv" style="height:calc(100% - 20px);width:100%;">
             <div id="tabs" class="easyui-tabs"  fit="true" border="false" style="height:100%;width:100%;">
                 <div title="首页" data-options="iconCls:'icon icon-house',closable:false" style="padding:20px;overflow:hidden;" id="home">
-                    <h1>Welcome to jQuery UI!</h1>
-                    <div class="easyui-panel" style="width:100%;max-width:400px;padding:30px 60px;">
-                        <div style="margin-bottom:20px">
-                            <input class="easyui-datebox" label="Start Date:" labelPosition="top" style="width:100%;">
+                    <div class="easyui-layout" data-options="fit:true">
+                        <div data-options="region:'west',split:false,border:true,title:'左侧',iconCls:'icon icon-clock'" style="width:30%;">
                         </div>
-                        <div style="margin-bottom:20px">
-                            <input class="easyui-datebox" label="End Date:" labelPosition="top" style="width:100%;">
-                        </div>
+                        
+                         <div data-options="region:'center',split:false,border:true,title:'中间',iconCls:'icon icon-user2'">
+                         </div>
+                        
+                         <div data-options="region:'east',split:false,border:true,title:'我的好友',iconCls:'icon icon-role'" style="width:20%;padding: 10px;">
+                            <!--右侧好友列表-->
+                            <div style="width: 100%;height:100%;border:2px solid green;background-color: white;">
+                                <div id="friendsListDiv" style="width: 100%;height: 100%;">
+                                    <div style="width:100%;height:25px;background-color: #365e71;color:white;">
+                                        <span>我的好友列表</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span>{{onlineFriendCount}}/{{friendList.length}}</span>
+                                    </div>
+                                    <div style="width:100%;height:413px;overflow-y: scroll;padding:3px;">
+                                        <div v-for="row in friendList" style="width:100%;height:50px;margin-bottom: 8px;">
+                                            <div style="width:26%;height:50px;float: left;">
+                                                <img :src="row.headImage" width="100%" height="100%"
+                                                     onerror="this.onerror='';this.src=$.ws.errorImgUrl">
+                                            </div>
+                                            <div style="width:67%;height:50px;float:left;margin-left: 5px;">
+                                                <div>
+                                                    <template v-if="row.state == '0'">
+                                                        <p style="font-size: 14px;color:grey;cursor: pointer;"
+                                                           @click="showPersonInfo(row.name)">{{row.name}}</p>
+                                                    </template>
+                                                    <template v-else>
+                                                        <p style="font-size: 14px;color: red;cursor: pointer;"
+                                                           @click="showPersonInfo(row.name)">{{row.name}}</p>
+                                                    </template>
+                                                    <p style="font-size: 12px;">{{row.lastLoginTime}}</p>
+                                                </div>
+                                                <div>
+                                                    <span style="font-size: 12px;">{{row.sign}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
                     </div>
                 </div>
             </div>
@@ -857,5 +891,47 @@
         $("#bottomSpanTips").css("color", color);
         $("#bottomSpanTips").html(msg);
     }
+    
+    // 首页--我的好友列表
+    var app = new Vue({
+        el: '#friendsListDiv',
+        data: {
+            friendList: {},
+            loginUser: sessionUser,
+            onlineFriendCount: 0,
+            offlineFriendCount: 0
+        },
+        methods: {
+            getOnlineInfo: function () {
+                $.ajax({
+                    type: 'GET',
+                    url: 'ws/getOnlineInfo.json',
+                    data: {"user": sessionUser},
+                    success: function (result) {
+                        if (result.code != 1) {
+                            return;
+                        }
+                        var jsonObj = result.data;
+                        app.friendList = jsonObj.friendsList;
+                        app.onlineFriendCount = jsonObj.onlineFriendCount;
+                        app.offlineFriendCount = jsonObj.offlineFriendCount;
+                    }
+                });
+            },
+            showPersonInfo: function (userName) {
+                layer.open({
+                    type: 2,
+                    title: '用户个人信息',
+                    shadeClose: true,
+                    shade: 0.2,
+                    area: ['390px', '420px'],
+                    content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + userName
+                });
+            }
+        },
+        created: function (e) {
+            this.getOnlineInfo();
+        }
+    });
 </script>
 </html>
