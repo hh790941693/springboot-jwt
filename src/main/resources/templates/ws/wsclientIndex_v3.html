@@ -44,7 +44,7 @@
         }
 
         #weatherDiv label {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         #headerTitleDiv label {
@@ -57,6 +57,20 @@
             padding:5px 4px;
             border:1px solid #ccc;
             box-sizing:border-box;
+        }
+
+        .l-btn-icon-left .l-btn-text {
+            margin: 0 2px 0 23px;
+        }
+
+        .l-btn-text {
+            display: inline-block;
+            vertical-align: top;
+            width: auto;
+            line-height: 24px;
+            font-size: 11px;
+            padding: 0;
+            margin: 0 6px;
         }
     </style>
 </head>
@@ -103,13 +117,13 @@
                 </div>
                 
                 <!--右侧-->
-                 <div data-options="region:'east',split:false,border:false" style="width:580px">
+                 <div data-options="region:'east',split:false,border:false" style="width:470px">
                         <div class="easyui-layout" data-options="fit:true">
                             <!--右侧时间-->
                             <div data-options="region:'north',split:false,border:false" style="height:40%;">
                                 <div class="easyui-layout" data-options="fit:true">
                                     <!--天气-->
-                                    <div data-options="region:'west',split:false,border:true" style="width:350px;text-align: center;">
+                                    <div data-options="region:'west',split:false,border:true" style="width:300px;text-align: center;">
                                         <div id="weatherDiv" style="height:100%;padding-top:1px;display: block;">
                                             <label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
                                             <label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
@@ -118,7 +132,7 @@
                                     </div>
                                     <!--时间-->
                                      <div data-options="region:'center',split:false,border:true" style="text-align: right;padding-right: 5px;">
-                                        <span id="curTimeSpan" style="font-size:17px;">0000-00-00 00:00:00  星期一</span>
+                                        <span id="curTimeSpan" style="font-size:14px;">0000-00-00 00:00:00</span>
                                     </div>
                                 </div>
                             </div>

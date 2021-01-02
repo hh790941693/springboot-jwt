@@ -270,7 +270,7 @@ function getCurrentTime() {
         s = "0" + s;
     }
 
-    return year + "-" + month + "-" + day + " " + h + ":" + m + ":" + s + "  " + week;
+    return year + "-" + month + "-" + day + " " + h + ":" + m + ":" + s;
 }
 
 function randomNumber(start, end) {
