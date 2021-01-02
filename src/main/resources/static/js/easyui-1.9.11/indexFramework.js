@@ -10,6 +10,7 @@ $(function(){
 
 	// 左侧导航栏展开与关闭
 	$(".accordion-header").click(function(){
+        $(".accordion-header div[class*='panel-icon']").removeClass().addClass("panel-icon").addClass("icon-menu-folder-close");
 		if ($(this).hasClass("accordion-header-selected")) {
 			// 开启
 			$(this).children("div[class*='panel-icon']").removeClass().addClass("panel-icon icon-menu-folder-open");
