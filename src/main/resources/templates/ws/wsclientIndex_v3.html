@@ -99,10 +99,10 @@
                                 
                                 <!--在线用户数、积分数-->
                                 <div data-options="region:'center',split:false,border:false" style="height:45%;padding: 5px 0 0 5px;">
-                                      <span class="icon icon-admin" th:title="#{span.onlinecount.tips}"></span><label
-                                        id="onlineNum">0</label>&nbsp;&nbsp;
-                                        <span class="icon icon-star" th:title="#{span.coinnum.tips}"></span><label
-                                        id="coinNum">0</label>
+                                      <span class="icon icon-admin" th:title="#{span.onlinecount.tips}"></span>
+                                      <label id="onlineNum">0</label>&nbsp;&nbsp;
+                                      <span class="icon icon-star" th:title="#{span.coinnum.tips}"></span>
+                                      <label id="coinNum">0</label>
                                 </div>
                             </div>
                         </div>
@@ -194,12 +194,7 @@
     
     <!--网页中间区域：内容部分-->
     <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
-        <div region="north" split="false" title="滚动消息" style="width: 100%;height:20px;background-color: white;border-bottom: 1px solid #8DB2E3;">
-            <marquee direction="left" scrolldelay="10" scrollamount="7" onMouseOver="this.stop()" onMouseOut="this.start()">
-                <span id="adsSpan"></span>
-            </marquee>
-        </div>
-        <div region="south" split="false" title="内容部分" id="centerDiv" style="height:calc(100% - 20px);width:100%;">
+        <div region="north" split="false" title="内容部分" id="centerDiv" style="height:calc(100% - 20px);width:100%;">
             <div id="tabs" class="easyui-tabs"  fit="true" border="false" style="height:100%;width:100%;">
                 <div title="首页" data-options="iconCls:'icon icon-house',closable:false" style="padding:20px;overflow:hidden;" id="home">
                     <div class="easyui-layout" data-options="fit:true">
@@ -247,6 +242,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <div region="south" split="false" title="滚动消息" style="width: 100%;height:20px;background-color: white;border-top: 1px solid #8DB2E3;">
+            <marquee direction="left" scrolldelay="10" scrollamount="7" onMouseOver="this.stop()" onMouseOut="this.start()">
+                <span id="adsSpan"></span>
+            </marquee>
         </div>
     </div>
     
@@ -641,7 +642,7 @@
                             totalAds = "<span style='font-weight: bold;font-size:14px;color:red;'>暂无消息</span>";
                         } else {
                             $.each(data, function (i, val) {
-                                totalAds += "<span style='font-size:14px;'>" + val.title + "</span>" + "<span style='font-size:9px;margin-left:5px;margin-right: 200px;'>" + val.createTime + "<a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a>" + "</span>";
+                                totalAds += "<span style='font-size:14px;font-weight: bold;'>" + val.title + "</span>" + "<span style='font-size:9px;margin-left:5px;margin-right: 200px;'>" + val.createTime + "<a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a>" + "</span>";
                             });
                         }
                         $("#adsSpan").html(totalAds);
