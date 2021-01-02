@@ -63,51 +63,72 @@
 
 <body class="easyui-layout" style="overflow-y: hidden"  scroll="no">
     <!--网页北部区域：头像、时间等信息-->
-    <div region="north" split="true" border="false" style="overflow: hidden; height: 67px;
+    <div region="north" split="true" border="true" style="overflow: hidden; height: 67px;
             background: url(/js/easyui/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
             line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
-        <div style="width:180px;height:100%;float:left;">
-            <div style="width:62px;height:calc(100% - 2px);float: left;padding:1px;">
-                <img th:src="${session.sessionInfo.selfImg}" width="60" height="60">
-            </div>
-            <div style="width: 50%;height:100%;float: left;margin-left: 5px;">
-                <div style="width:100%;height:50%;padding-top: 5px;">
-                    <span th:text="${session.sessionInfo.user}" style="font-size: 25px;"></span>
+        
+            <div class="easyui-layout" data-options="fit:true">
+                <!--左侧-->
+                <div data-options="region:'west',split:false,border:false" style="width:178px">
+                    <div class="easyui-layout" data-options="fit:true">
+                        <!--左侧头像-->
+                        <div data-options="region:'west',split:false,border:false" style="width:62px;padding:1px;">
+                            <img th:src="${session.sessionInfo.selfImg}" width="100%" height="100%">
+                        </div>
+                        <!--右侧-->
+                        <div data-options="region:'center',split:false,border:false">
+                            <div class="easyui-layout" data-options="fit:true" border="false">
+                                <!--登陆用户-->
+                                <div data-options="region:'north',split:false,border:false" style="height:55%;padding: 4px 0 0 5px;">
+                                    <span th:text="${session.sessionInfo.user}" style="font-size: 25px;"></span>
+                                </div>
+                                
+                                <!--在线用户数、积分数-->
+                                <div data-options="region:'center',split:false,border:false" style="height:45%;padding: 5px 0 0 5px;">
+                                      <span class="icon icon-admin" th:title="#{span.onlinecount.tips}"></span><label
+                                        id="onlineNum">0</label>&nbsp;&nbsp;
+                                        <span class="icon icon-star" th:title="#{span.coinnum.tips}"></span><label
+                                        id="coinNum">0</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style="width:100%;height:50%;padding-top: 8px;">
-                    <span class="icon icon-admin" th:title="#{span.onlinecount.tips}"></span><label
-                        id="onlineNum">0</label>&nbsp;&nbsp;
-                    <span class="icon icon-star" th:title="#{span.coinnum.tips}"></span><label
-                        id="coinNum">0</label>
+                
+                <!--中间部分-->
+                <div data-options="region:'center',split:false,border:false" style="text-align: center;">
+                    <!--天气-->
+                    <div id="weatherDiv" style="height:100%;padding-top:13px;display: block;">
+                        <label id="weatherInfo" style="color:black;"></label>&nbsp;&nbsp;
+                        <label id="lastUpdateTime" style="color:black;"></label>&nbsp;&nbsp;
+                        <label id="location" style="color:black;"></label>
+                    </div>
+        
+                    <div id="headerTitleDiv" style="height:100%;font-size:20px;padding-top:13px;display: none;">
+                        <label id="titleLabel" style="color:black;">websocket客户端</label>
+                    </div>
                 </div>
-            </div>
-        </div>
+                
+                <!--右侧-->
+                 <div data-options="region:'east',split:false,border:false" style="width:580px">
+                        <div class="easyui-layout" data-options="fit:true">
+                            <!--右侧时间-->
+                            <div data-options="region:'north',split:false,border:false" style="height:40%;text-align: right;padding-right: 5px;">
+                                <span id="curTimeSpan" style="font-size:17px;">0000-00-00 00:00:00  星期一</span>
+                            </div>
 
-        <div style="width:50%;height:100%;float:left;text-align: center;">
-            <!--天气-->
-            <div id="weatherDiv" style="height:100%;padding-top:13px;display: block;">
-                <label id="weatherInfo" style="color:white;"></label>&nbsp;&nbsp;
-                <label id="lastUpdateTime" style="color:white;"></label>&nbsp;&nbsp;
-                <label id="location" style="color:white;"></label>
+                            <!--右侧按钮组-->
+                            <div data-options="region:'center',split:false,border:false" style="height:60%;">
+                                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon icon-music2'" id="playMusicBtn">音乐播放</a>
+                                <a href="#" id="signBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-calendar'">每日签到&nbsp;&nbsp;</a>
+                                 <a href="#" id="qrcodeBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-telephone'">手机登录&nbsp;&nbsp;</a>
+                                <a href="#" id="settingBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-setting'">设置&nbsp;&nbsp;</a>
+                                <a href="#" id="modifyPasswordBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-key'">修改密码&nbsp;&nbsp;</a>
+                                <a href="#" id="loginOutBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-door-open'">安全退出&nbsp;&nbsp;</a>
+                            </div>
+                        </div>
+                 </div>
             </div>
-
-            <div id="headerTitleDiv" style="height:100%;font-size:20px;padding-top:13px;display: none;">
-                <label id="titleLabel" style="color:white;">websocket客户端</label>
-            </div>
-        </div>
-        <div style="width:auto;height:100%;float:right;text-align:right;padding-right:2px;">
-            <div style="height:45%;padding: 5px 5px 0 0;">
-                <span id="curTimeSpan" style="font-size:17px;">0000-00-00 00:00:00  星期一</span>
-            </div>
-            <div style="height:50%;padding-top: 1px;">
-                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon icon-music2'" id="playMusicBtn">音乐播放</a>
-                    <a href="#" id="signBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-calendar'">每日签到&nbsp;&nbsp;</a>
-                     <a href="#" id="qrcodeBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-telephone'">手机登录&nbsp;&nbsp;</a>
-                    <a href="#" id="settingBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-setting'">设置&nbsp;&nbsp;</a>
-                    <a href="#" id="modifyPasswordBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-key'">修改密码&nbsp;&nbsp;</a>
-                    <a href="#" id="loginOutBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-door-open'">安全退出&nbsp;&nbsp;</a>
-            </div>
-        </div>
     </div>
     
     <!--网页南部区域：网页底部，版权等信息-->
