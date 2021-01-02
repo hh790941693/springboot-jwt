@@ -444,15 +444,22 @@
 
         // 退出
         $("#loginOutBtn").click(function() {
-            $.ajax({
-                type: 'POST',
-                url: 'ws/logout.do',
-                data: {"user": sessionUser},
-                async: false,
-                success: function (result) {
-                    top.location.href = rootUrl;
+            layer.confirm("确定退出吗?", {btn: ['确定', '取消'], title: "提示"},
+                function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'ws/logout.do',
+                        data: {"user": sessionUser},
+                        async: false,
+                        success: function (result) {
+                            top.location.href = rootUrl;
+                        }
+                    });
                 }
-            });
+                , function () {
+                    layer.close();
+                }
+            )
         });
 
         // 会话信息
