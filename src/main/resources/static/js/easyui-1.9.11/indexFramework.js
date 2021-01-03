@@ -40,7 +40,9 @@ function initLeftMenu() {
 		var url = $(this).attr("href");
 		var parentDiv = $(this).parent("div:first");
         var closableValue = $(parentDiv).attr("closable");
-		addTab(tabTitle, url, closableValue);
+        var firstSpanChild = $(this).children("span:first");
+        var iconClass = $(firstSpanChild).attr("class");
+		addTab(tabTitle, url, closableValue, iconClass);
 		$('.easyui-accordion li div').removeClass("selected");
 		$(this).parent().addClass("selected");
 	}).hover(function(){
@@ -52,11 +54,12 @@ function initLeftMenu() {
 	$(".easyui-accordion").accordion();
 }
 
-function addTab(subtitle,url, closable){
+function addTab(subtitle,url, closable, iconClass){
 	if(!$('#tabs').tabs('exists',subtitle)){
 		$('#tabs').tabs('add',{
 			title: subtitle,
 			content: createFrame(url),
+            iconCls: iconClass,
 			closable: closable == "true" ? true : false,
 			width: $('#mainPanle').width()-10,
 			height: $('#mainPanle').height()-26
