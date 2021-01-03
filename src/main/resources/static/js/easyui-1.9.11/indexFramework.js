@@ -68,7 +68,9 @@ function addTab(subtitle,url, closable){
 	}else{
 		$('#tabs').tabs('select',subtitle);
 	}
-	tabClose();
+	if (closable == "true") {
+        tabClose();
+    }
 }
 
 function createFrame(url) {
