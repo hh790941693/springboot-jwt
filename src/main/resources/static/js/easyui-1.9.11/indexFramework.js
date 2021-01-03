@@ -3,10 +3,6 @@ var indexTabTitle = "首页";
 $(function(){
     // 初始化左侧导航栏菜单
 	initLeftMenu();
-	// 绑定双击关闭事件、右键菜单事件
-	tabClose();
-	// 右键菜单事件
-	tabCloseEven();
 
 	// 左侧导航栏展开与关闭
 	$(".accordion-header").click(function(){
@@ -69,7 +65,10 @@ function addTab(subtitle,url, closable){
 		$('#tabs').tabs('select',subtitle);
 	}
 	if (closable == "true") {
-        tabClose();
+        tabDoubleClickCloseEvent();
+        tabSelectEvent();
+        tabMenuEvent();
+        tabMenuCloseEvent();
     }
 }
 
@@ -78,35 +77,55 @@ function createFrame(url) {
 	return s;
 }
 
-function tabClose() {
+// tab选中事件
+function tabSelectEvent(){
+    $(".tabs-inner").click(function(){
+        var subtitle = $(this).children("span").text();
+        $('#tabs').tabs('select', subtitle);
+
+        var tab = $('#tabs').tabs('getSelected');  // 获取选择的面板
+        $('#tabs').tabs('update', {
+            tab: tab,
+            options: {
+                title: subtitle
+            }
+        });
+    });
+}
+
+function tabMenuEvent(){
+    $(".tabs-inner").bind('contextmenu',function(e){
+        $('#mm').menu('show', {
+            left: e.pageX,
+            top: e.pageY,
+        });
+
+        var subtitle =$(this).children("span").text();
+        var classes = $(this).children("span[class*='tabs-title']").attr("class");
+        var closeable = false;
+        if (classes.indexOf("tabs-closable") != -1){
+            closeable = true;
+        }
+        $('#mm').data("currtab", subtitle);
+        $('#mm').data("closeable", closeable);
+
+        return false;
+    });
+}
+
+function tabDoubleClickCloseEvent() {
 	/*双击关闭TAB选项卡*/
 	$(".tabs-inner").dblclick(function(){
 		var subtitle = $(this).children("span").text();
-		if (subtitle != indexTabTitle) {
+        var classes = $(this).children("span[class*='tabs-title']").attr("class");
+        if (classes.indexOf("tabs-closable") != -1){
             $('#tabs').tabs('close', subtitle);
         }
 	});
-
-	$(".tabs-inner").bind('contextmenu',function(e){
-		$('#mm').menu('show', {
-			left: e.pageX,
-			top: e.pageY,
-		});
-		
-		var subtitle =$(this).children("span").text();
-		var classes = $(this).children("span[class*='tabs-title']").attr("class");
-		var closeable = false;
-		if (classes.indexOf("tabs-closable") != -1){
-            closeable = true;
-        }
-		$('#mm').data("currtab", subtitle);
-        $('#mm').data("closeable", closeable);
-		
-		return false;
-	});
 }
+
 //绑定右键菜单事件
-function tabCloseEven() {
+function tabMenuCloseEvent() {
 	//关闭当前
 	$('#mm-tabclose').click(function(){
 		var currtabTitle = $('#mm').data("currtab");
