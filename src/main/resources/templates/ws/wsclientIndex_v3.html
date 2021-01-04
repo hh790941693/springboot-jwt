@@ -122,13 +122,13 @@
                 </div>
                 
                 <!--右侧-->
-                 <div data-options="region:'east',split:false,border:false" style="width:470px">
+                 <div data-options="region:'east',split:false,border:false" style="width:520px">
                         <div class="easyui-layout" data-options="fit:true">
                             <!--右侧时间-->
                             <div data-options="region:'north',split:false,border:false" style="height:40%;">
                                 <div class="easyui-layout" data-options="fit:true">
                                     <!--天气-->
-                                    <div data-options="region:'west',split:false,border:false" style="width:320px;text-align: center;">
+                                    <div data-options="region:'west',split:false,border:false" style="width:340px;text-align: center;">
                                         <div id="weatherDiv" style="height:100%;padding-top:1px;display: block;">
                                             <label id="weatherInfo" style="color:white;"></label>&nbsp;&nbsp;
                                             <label id="lastUpdateTime" style="color:white;"></label>&nbsp;&nbsp;
@@ -655,8 +655,9 @@
                             $.each(data, function (i, val) {
                                 var spanHtml = "<span style='font-size:14px;font-weight: bold;'>" + val.title + "</span>" + "<span style='font-size:9px;margin-left:5px;margin-right: 200px;'>" + val.createTime + "<a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a>" + "</span>";
                                 totalAds += spanHtml;
-                                
-                                $("#recentNewsPanel ul").append("<li>"+spanHtml+"</li>");
+
+                                var spanHtml2 = "<span style='font-size:14px;font-weight: bold;'>" + val.title + "</span>" + "<span style='font-size:9px;margin-left:5px;'>" + val.createTime + "<a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a>" + "</span>";
+                                $("#recentNewsPanel ul").append("<li>"+spanHtml2+"</li>");
                             });
                         }
                         $("#adsSpan").html(totalAds);
