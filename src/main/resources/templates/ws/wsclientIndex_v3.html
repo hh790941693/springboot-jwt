@@ -1,16 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head id="Head1">
+<meta charset="utf-8">
+<head>
     <title></title>
-    <link rel="stylesheet" type="text/css" href="/js/easyui-1.9.11/themes/default/easyui.css" />
-    <link rel="stylesheet" type="text/css" href="/js/easyui-1.9.11/themes/icon.css" />
-    <link rel="stylesheet" type="text/css" href="/js/easyui-1.9.11/css/default.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/themes/default/easyui.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/themes/icon.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/css/default.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/js/plugins/layui/css/layui.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/js/fontAwesome/css/font-awesome.css}">
-    <script type="text/javascript" src="/js/easyui-1.9.11/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/easyui-1.9.11/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src='/js/easyui-1.9.11/locale/easyui-lang-zh_CN.js'> </script>
-    <script type="text/javascript" src='/js/easyui-1.9.11/indexFramework.js'> </script>
+    <script type="text/javascript" th:src="@{/js/easyui-1.9.11/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/easyui-1.9.11/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src='@{/js/easyui-1.9.11/locale/easyui-lang-zh_CN.js}'> </script>
+    <script type="text/javascript" th:src='@{/js/easyui-1.9.11/indexFramework.js}'> </script>
     <script type="text/javascript" th:src="@{/js/vue/vue.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery/rootPath.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/common.js}"></script>
@@ -650,12 +651,14 @@
                         var totalAds = "";
                         var data = result.data;
                         if (data.length == 0) {
-                            totalAds = "<span style='font-weight: bold;font-size:14px;color:red;'>暂无消息</span>";
+                            totalAds = "&lt;span style='font-weight: bold;font-size:14px;color:red;'>暂无消息&lt;/span>";
                         } else {
                             $.each(data, function (i, val) {
+                                // 首页底部滚动消息用
                                 var spanHtml = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;margin-right: 200px;'>"+val.createTime+"</span>";
                                 totalAds += spanHtml;
 
+                                // 首页 左侧 消息列表用
                                 var spanHtml2 = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;'>"+val.createTime+"</span>";
                                 $("#recentNewsPanel ul").append("<li>"+spanHtml2+"</li>");
                             });
