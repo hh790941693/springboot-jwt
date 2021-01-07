@@ -26,7 +26,7 @@
             #headDiv ul li {
                 float: left;
                 width: 7.5%;
-                height: 90%;
+                height: 72%;
                 font-size: 16px;
                 cursor: pointer;
             }
@@ -64,7 +64,9 @@
                         <p>
                             {{row.digest}}
                         </p>
-                        <a :href="row.url" target="_blank" style="color:blue;">查看详情</a>
+                        <template v-if="row.url != ''">
+                            <a :href="row.url" target="_blank" style="color:blue;">查看详情</a>
+                        </template>
                     </div>
                     <div style="width:30%;float: right;">
                         <p>评论数:<span>{{row.commentCount}}</span></p>
