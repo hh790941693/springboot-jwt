@@ -323,7 +323,7 @@
             <span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
             <button id='resetMusicIframeDivPosBtn' style='display:inline-block;width:30%;color:black;'>复位</button>
         </div>
-        <iframe id="musicIframePage" scrolling="auto" frameborder="0" width="100%" style="height:calc(100% - 17px);" src="../file/musicPlayerSimple.page"></iframe>
+        <iframe id="musicIframePage" scrolling="auto" frameborder="0" width="100%" style="height:calc(100% - 17px);" src="/file/musicPlayerSimple.page"></iframe>
     </div>
     
     <!--右下角 广告页面(隐藏) -->
@@ -355,7 +355,7 @@
                     "menuid": "1", "icon": "icon-menu-folder-open", "menuname": "系统管理",
                     "menus": [
                         {"menuname": "用户管理", "icon": "icon-users", "closable":"true", "url": "/zhddkk/wsUsers/wsUsersForAdmin?user="+sessionUser},
-                        {"menuname": "音乐播放", "icon": "icon-music", "closable":"false", "url": "../file/musicPlayer.page?user="+sessionUser},
+                        {"menuname": "音乐播放", "icon": "icon-music", "closable":"false", "url": "/file/musicPlayer.page?user="+sessionUser},
                         {"menuname": "聊天监控", "icon": "icon-video", "closable":"true", "url": "/ws/wsserverChartMonitor.page?user="+sessionUser},
                         {"menuname": "朋友圈", "icon": "icon-earth", "closable":"true", "url": "/ws/wsclientCircle.page?user="+sessionUser},
                         {"menuname": "聊天记录", "icon": "icon-file", "closable":"true", "url": "/zhddkk/wsChatlog?user="+sessionUser},
@@ -379,8 +379,8 @@
                 , {
                     "menuid": "3", "icon": "icon-menu-folder-close", "menuname": "娱乐管理",
                     "menus": [
-                        {"menuname": "游戏娱乐", "icon": "icon-football", "closable":"true", "url": "../game/gameIndex.page?user="+sessionUser},
-                        {"menuname": "H5游戏", "icon": "icon-game-hander", "closable":"true", "url": "../canvas/canvasIndex.page?user="+sessionUser}
+                        {"menuname": "游戏娱乐", "icon": "icon-football", "closable":"true", "url": "/game/gameIndex.page?user="+sessionUser},
+                        {"menuname": "H5游戏", "icon": "icon-game-hander", "closable":"true", "url": "/canvas/canvasIndex.page?user="+sessionUser}
                     ]
                 }
             ]
@@ -407,8 +407,8 @@
                 , {
                     "menuid": "3", "icon": "icon-menu-folder-close", "menuname": "娱乐管理",
                     "menus": [
-                        {"menuname": "游戏娱乐", "icon": "icon-football", "closable":"true", "url": "../game/gameIndex.page?user="+sessionUser},
-                        {"menuname": "H5游戏", "icon": "icon-game-hander", "closable":"true", "url": "../canvas/canvasIndex.page?user="+sessionUser}
+                        {"menuname": "游戏娱乐", "icon": "icon-football", "closable":"true", "url": "/game/gameIndex.page?user="+sessionUser},
+                        {"menuname": "H5游戏", "icon": "icon-game-hander", "closable":"true", "url": "/canvas/canvasIndex.page?user="+sessionUser}
                     ]
                 }
             ]
