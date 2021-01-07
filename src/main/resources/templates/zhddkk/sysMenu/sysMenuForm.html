@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+	<th:block th:include="common :: header"></th:block>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+                        <form class="form-horizontal m-t" id="form">
+							<!-- 主键 -->
+                            <input type="hidden" id="id" name="id" th:value="${sysMenu.id}">
+																													<div class="form-group">
+								<label class="col-sm-3 control-label" for="name"><span style="color:red">*</span>&nbsp;菜单名称：</label>
+								<div class="col-sm-8">
+									<input type="text" id="name" name="name" th:value="${sysMenu.name}" class="form-control" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="parentId">父菜单id：</label>
+								<div class="col-sm-8">
+									<select class="form-control" id="parentId" name="parentId" th:value="${sysMenu.parentId}">
+										 <option value="">--- 请选择 ---</option>
+                                        <option th:each="info:${pMenuList}" th:value="${info.id}"
+												th:text="${info.name}"
+												th:selected="${sysMenu.parentId == info.id}">
+                                        </option>
+									</select>
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="url">url：</label>
+								<div class="col-sm-8">
+									<input type="text" id="url" name="url" th:value="${sysMenu.url}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="icon"><span style="color:red">*</span>&nbsp;图标名称：</label>
+								<div class="col-sm-8">
+									<input type="text" id="icon" name="icon" th:value="${sysMenu.icon}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="extColumn1">扩展字段1：</label>
+								<div class="col-sm-8">
+									<input type="text" id="extColumn1" name="extColumn1" th:value="${sysMenu.extColumn1}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="extColumn2">扩展字段2：</label>
+								<div class="col-sm-8">
+									<input type="text" id="extColumn2" name="extColumn2" th:value="${sysMenu.extColumn2}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="extColumn3">扩展字段3：</label>
+								<div class="col-sm-8">
+									<input type="text" id="extColumn3" name="extColumn3" th:value="${sysMenu.extColumn3}" class="form-control" />
+								</div>
+							</div>
+											                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button type="submit" class="btn btn-primary">保存</button>
+                                </div>
+                            </div>
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="common :: footer"></th:block>
+</body>
+<script type="text/javascript" th:src="@{/js/appjs/zhddkk/sysMenu/sysMenuForm.js}"></script>
+</html>
