@@ -65,6 +65,11 @@ function load() {
 				title : '图标名称',
                 align : 'center',
                 valign : 'middle',
+				formatter : function(item) {
+					return item.icon == null ? ''
+						: '<span style="display: inline-block;width: 20px;height: 20px;" class="' + item.icon
+						+ '"></span>';
+				}
 			},
 						{
 				field : 'extColumn1',
