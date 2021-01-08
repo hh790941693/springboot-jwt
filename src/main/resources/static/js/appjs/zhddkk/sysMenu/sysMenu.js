@@ -43,10 +43,9 @@ function load() {
 			{
                 title : '菜单id',
                 field : 'id',
-                visible : false,
                 align : 'center',
                 valign : 'middle',
-                width : '50px'
+                width : '60px'
 			},
 						{
 				field : 'name',
@@ -91,7 +90,7 @@ function load() {
 				title : '操作',
 				field : 'id',
 				align : 'center',
-				formatter : function(value, row, index) {
+				formatter : function(row, value) {
 					var e = '<a class="btn btn-warning btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
 							+ row.id
 							+ '\')"><i class="fa fa-edit"></i></a> ';
