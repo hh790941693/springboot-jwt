@@ -139,4 +139,13 @@ public class SysMenuController extends AdminBaseController {
 		sysMenuService.deleteBatchIds(Arrays.asList(ids));
 		return Result.ok();
 	}
+
+	/**
+	 * 跳转到选择图标页面.
+	 */
+	@GetMapping("iconSelect.page")
+	//@RequiresPermissions("zhddkk:sysMenu:sysMenu")
+	public String iconSelect(){
+		return "zhddkk/sysMenu/iconSelect";
+	}
 }

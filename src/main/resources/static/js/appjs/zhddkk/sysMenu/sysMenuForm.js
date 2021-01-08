@@ -1,5 +1,7 @@
+var prefix = "/zhddkk/sysMenu";
 $(function(){
     validateRule();
+    openIconPage();
 });
 
 //保存数据
@@ -58,5 +60,19 @@ function validateRule() {
                 required : icon + "请输入图标名称"
             },
                     }
+    })
+}
+
+// 选择图标
+function openIconPage(){
+    $("#selectIconBtn").click(function (){
+        layer.open({
+            type : 2,
+            title : '选择图标',
+            maxmin : true,
+            shadeClose : false,//点击遮罩关闭层
+            area : [ '70%', '80%' ],
+            content : prefix + "/iconSelect.page"
+        });
     })
 }

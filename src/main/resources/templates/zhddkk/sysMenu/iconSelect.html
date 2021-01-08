@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>选择图标</title>
+    <th:block th:include="common :: header"></th:block>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/css/default.css}" />
+
+    <style>
+
+    </style>
+</head>
+<body>
+    <div style="width:200px;height:200px;padding:10px 0 0 60px;">
+
+            <div class="radio">
+                <input type="radio" name="icon" value="icon-video" checked>
+                <span class="icon icon-video"></span>
+                <label>摄像头</label>
+            </div>
+
+            <div class="radio">
+                <input type="radio" name="icon" value="icon-music" checked>
+                <span class="icon icon-music"></span>
+                <label>音乐</label>
+            </div>
+
+            <div style="height:20px;">
+                <button id="confirmBtn">确定</button>
+            </div>
+    </div>
+    <th:block th:include="common :: footer"></th:block>
+</body>
+
+<script>
+    $("#confirmBtn").click(function () {
+        var selectVal=$("input[name='icon']").val();
+        console.log("xxxxx:"+selectVal);
+    })
+</script>
+</html>
