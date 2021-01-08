@@ -88,10 +88,6 @@ function load() {
 				title : '创建时间'
 			},
 						{
-				field : 'updateTime',
-				title : '更新时间'
-			},
-						{
 				title : '操作',
 				field : 'id',
 				align : 'center',

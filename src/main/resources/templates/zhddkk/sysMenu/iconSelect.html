@@ -4,38 +4,82 @@
     <meta charset="UTF-8">
     <title>选择图标</title>
     <th:block th:include="common :: header"></th:block>
+    <th:block th:include="common :: footer"></th:block>
+    <link th:href="@{/js/fontAwesome/css/font-awesome.min.css}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/css/default.css}" />
-
-    <style>
-
+    <style type="text/css">
+        .icon{
+            margin: 1px;
+            cursor:pointer;
+            font-size: 18px;
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            border-radius: 3px;
+        }
+        .icon:hover {
+            background-color: #1d9d74;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
-    <div style="width:200px;height:200px;padding:10px 0 0 60px;">
+<div class="ico-list">
+     <i class="icon icon-add" aria-hidden="true"></i>
+     <i class="icon icon-nav" aria-hidden="true"></i>
+     <i class="icon icon-users" aria-hidden="true"></i>
+     <i class="icon icon-role" aria-hidden="true"></i>
+     <i class="icon icon-set" aria-hidden="true"></i>
+     <i class="icon icon-log" aria-hidden="true"></i>
+     <i class="icon icon-music" aria-hidden="true"></i>
+     <i class="icon icon-camera" aria-hidden="true"></i>
+     <i class="icon icon-phone" aria-hidden="true"></i>
+     <i class="icon icon-money" aria-hidden="true"></i>
+     <i class="icon icon-bugs" aria-hidden="true"></i>
+     <i class="icon icon-house" aria-hidden="true"></i>
+     <i class="icon icon-info" aria-hidden="true"></i>
+     <i class="icon icon-music2" aria-hidden="true"></i>
+     <i class="icon icon-edit" aria-hidden="true"></i>
+    <i class="icon icon-calendar" aria-hidden="true"></i>
+    <i class="icon icon-table" aria-hidden="true"></i>
+    <i class="icon icon-setting" aria-hidden="true"></i>
+    <i class="icon icon-door-open" aria-hidden="true"></i>
+    <i class="icon icon-video" aria-hidden="true"></i>
+    <i class="icon icon-telephone" aria-hidden="true"></i>
+    <i class="icon icon-java" aria-hidden="true"></i>
+    <i class="icon icon-clock" aria-hidden="true"></i>
+    <i class="icon icon-chart-bar" aria-hidden="true"></i>
+    <i class="icon icon-feedback" aria-hidden="true"></i>
+    <i class="icon icon-file" aria-hidden="true"></i>
+    <i class="icon icon-football" aria-hidden="true"></i>
+    <i class="icon icon-game-hander" aria-hidden="true"></i>
+    <i class="icon icon-star" aria-hidden="true"></i>
+    <i class="icon icon-wechat" aria-hidden="true"></i>
+    <i class="icon icon-search-plus" aria-hidden="true"></i>
+    <i class="icon icon-earth" aria-hidden="true"></i>
+    <i class="icon icon-newspaper" aria-hidden="true"></i>
+    <i class="icon icon-user1" aria-hidden="true"></i>
+    <i class="icon icon-user2" aria-hidden="true"></i>
+    <i class="icon icon-user3" aria-hidden="true"></i>
+    <i class="icon icon-user4" aria-hidden="true"></i>
+    <i class="icon icon-user5" aria-hidden="true"></i>
+    <i class="icon icon-user6" aria-hidden="true"></i>
+    <i class="icon icon-user7" aria-hidden="true"></i>
+    <i class="icon icon-user8" aria-hidden="true"></i>
+    <i class="icon icon-admin" aria-hidden="true"></i>
+    <i class="icon icon-upload" aria-hidden="true"></i>
+    <i class="icon icon-download" aria-hidden="true"></i>
+    <i class="icon icon-key" aria-hidden="true"></i>
+</div>
 
-            <div class="radio">
-                <input type="radio" name="icon" value="icon-video" checked>
-                <span class="icon icon-video"></span>
-                <label>摄像头</label>
-            </div>
-
-            <div class="radio">
-                <input type="radio" name="icon" value="icon-music" checked>
-                <span class="icon icon-music"></span>
-                <label>音乐</label>
-            </div>
-
-            <div style="height:20px;">
-                <button id="confirmBtn">确定</button>
-            </div>
-    </div>
-    <th:block th:include="common :: footer"></th:block>
-</body>
-
-<script>
-    $("#confirmBtn").click(function () {
-        var selectVal=$("input[name='icon']").val();
-        console.log("xxxxx:"+selectVal);
-    })
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name);
+    //给父页面传值
+    $('.ico-list i').on('click', function(){
+        parent.$('#icon').val($(this).attr('class'));
+        //parent.layer.tips('Look here', '#parentIframe', {time: 5000});
+        parent.layer.close(index);
+    });
 </script>
+</body>
 </html>
