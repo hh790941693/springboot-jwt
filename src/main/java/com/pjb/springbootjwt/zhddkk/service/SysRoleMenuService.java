@@ -10,4 +10,8 @@ import java.util.List;
  */
 public interface SysRoleMenuService extends CoreService<SysRoleMenuDO> {
     List<Integer> listMenuIdByRoleId(int roleId);
+
+    void removeByRoleId(int roleId);
+
+    void batchSave(List<SysRoleMenuDO> list);
 }

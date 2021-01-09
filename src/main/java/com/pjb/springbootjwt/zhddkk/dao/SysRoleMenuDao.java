@@ -14,4 +14,8 @@ import java.util.List;
 public interface SysRoleMenuDao extends BaseDao<SysRoleMenuDO> {
 
     List<Integer> listMenuIdByRoleId(int roleId);
+
+    int removeByRoleId(int roleId);
+
+    int batchSave(List<SysRoleMenuDO> list);
 }

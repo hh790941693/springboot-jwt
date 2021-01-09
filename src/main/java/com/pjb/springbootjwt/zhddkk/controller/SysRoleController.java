@@ -1,13 +1,15 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.baomidou.mybatisplus.enums.SqlLike;
-import com.pjb.springbootjwt.zhddkk.service.WsAdsService;
+import com.pjb.springbootjwt.zhddkk.domain.SysRoleMenuDO;
+import com.pjb.springbootjwt.zhddkk.service.SysMenuService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -22,6 +24,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.domain.SysRoleDO;
 import com.pjb.springbootjwt.zhddkk.service.SysRoleService;
+import com.pjb.springbootjwt.zhddkk.service.SysRoleMenuService;
 import com.pjb.springbootjwt.common.vo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +43,6 @@ public class SysRoleController extends AdminBaseController {
 
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
-
-    private WsAdsService wsAdsService;
 
 	/**
     * binder.
@@ -112,7 +113,18 @@ public class SysRoleController extends AdminBaseController {
 		sysRoleService.insert(sysRole);
         List<Integer> menuIdList = sysRole.getMenuIds();
         if (null != menuIdList && menuIdList.size() > 0){
-
+            List<SysRoleMenuDO> insertRoleMenuList = new ArrayList<>();
+            for (int menuId : menuIdList) {
+                SysRoleMenuDO sysRoleMenuDO = new SysRoleMenuDO();
+                sysRoleMenuDO.setRoleId(sysRole.getId());
+                sysRoleMenuDO.setRoleName(sysRole.getName());
+                sysRoleMenuDO.setMenuId(menuId);
+                insertRoleMenuList.add(sysRoleMenuDO);
+            }
+            sysRoleMenuService.removeByRoleId(sysRole.getId());
+            sysRoleMenuService.batchSave(insertRoleMenuList);
+        } else {
+            sysRoleMenuService.removeByRoleId(sysRole.getId());
         }
         return Result.ok();
 	}
@@ -125,6 +137,22 @@ public class SysRoleController extends AdminBaseController {
 	//@RequiresPermissions("zhddkk:sysRole:edit")
 	public Result<String> update(SysRoleDO sysRole) {
 		sysRoleService.updateById(sysRole);
+        List<Integer> menuIdList = sysRole.getMenuIds();
+        if (null != menuIdList && menuIdList.size() > 0){
+            List<SysRoleMenuDO> insertRoleMenuList = new ArrayList<>();
+            for (int menuId : menuIdList) {
+                SysRoleMenuDO sysRoleMenuDO = new SysRoleMenuDO();
+                sysRoleMenuDO.setRoleId(sysRole.getId());
+                sysRoleMenuDO.setRoleName(sysRole.getName());
+                sysRoleMenuDO.setMenuId(menuId);
+                insertRoleMenuList.add(sysRoleMenuDO);
+            }
+
+            sysRoleMenuService.removeByRoleId(sysRole.getId());
+            sysRoleMenuService.batchSave(insertRoleMenuList);
+        } else {
+            sysRoleMenuService.removeByRoleId(sysRole.getId());
+        }
 		return Result.ok();
 	}
 	

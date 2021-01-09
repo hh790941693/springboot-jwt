@@ -6,4 +6,16 @@
         select menu_id from sys_role_menu
         <where>role_id = #{roleId}</where>
     </select>
+
+    <delete id="removeByRoleId">
+		DELETE FROM sys_role_menu WHERE role_id=#{roleId}
+	</delete>
+
+    <insert id="batchSave">
+        INSERT INTO sys_role_menu(role_id, menu_id) values
+        <foreach item="item" index="index" collection="list"
+                 separator=",">
+            (#{item.roleId},#{item.menuId})
+        </foreach>
+    </insert>
 </mapper>

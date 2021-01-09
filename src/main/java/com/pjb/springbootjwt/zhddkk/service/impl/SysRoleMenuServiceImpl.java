@@ -27,4 +27,14 @@ public class SysRoleMenuServiceImpl extends CoreServiceImpl<SysRoleMenuDao, SysR
     public List<Integer> listMenuIdByRoleId(int roleId) {
         return sysRoleMenuDao.listMenuIdByRoleId(roleId);
     }
+
+    @Override
+    public void removeByRoleId(int roleId) {
+        sysRoleMenuDao.removeByRoleId(roleId);
+    }
+
+    @Override
+    public void batchSave(List<SysRoleMenuDO> list) {
+        sysRoleMenuDao.batchSave(list);
+    }
 }
