@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+     <meta charset="UTF-8">
+     <title>选择角色</title>
+     <th:block th:include="common :: header"></th:block>
+     <th:block th:include="common :: footer"></th:block>
+     <th:block th:include="common :: sessionInfo"></th:block>
+</head>
+<body>
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox-content">
+					<form class="form-horizontal m-t" id="signupForm">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">用户id</label>
+                            <div class="col-sm-7">
+                                <input id="userId" name="userId" th:value="${userId}" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">角色id</label>
+                            <div class="col-sm-7">
+                                <input id="roleId" name="roleId" th:value="${sysUserRoleDO != null ? sysUserRoleDO.id : null}" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">角色</label>
+                            <div class="col-sm-7">
+                                <label th:each="role:${roleList}" class="checkbox-inline">
+                                    <input name="role" type="radio" th:value="${role.id}"
+                                           th:text="${role.name}" th:checked="${role.roleSign}">
+                                </label>
+                            </div>
+                        </div>
+                    
+						<div class="form-group">
+							<div class="col-sm-8 col-sm-offset-3">
+								<button type="submit" class="btn btn-primary">提交</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+    <script>
+        //表单提交拦截
+        $("button[type='submit']").click(function () {
+            save();
+        });
+
+        //保存数据
+        function save() {
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: "/zhddkk/wsUsers/saveRole",
+                data: {
+                    'userId': $("input[name='userId']").val(),
+                    'roleId': $('input[name="role"]:checked').val(),
+                },
+                async: false,
+                error: function () {
+                    parent.layer.alert("保存失败，请稍后再试");
+                },
+                success: function (data) {
+                    if (data.code === 1) {
+                        parent.layer.msg("保存成功");
+                        parent.reLoad();
+                        var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
+                        parent.layer.close(index);
+                    } else {
+                        parent.layer.alert("保存失败，请稍后再试");
+                    }
+                }
+            });
+        }
+    </script>
+</html>

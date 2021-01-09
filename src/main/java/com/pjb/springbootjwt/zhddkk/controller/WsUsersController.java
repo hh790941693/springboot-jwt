@@ -9,14 +9,13 @@ import java.util.Map;
 import com.baomidou.mybatisplus.enums.SqlLike;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
-import com.pjb.springbootjwt.zhddkk.domain.WsFriendsApplyDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsFriendsDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
+import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsApplyService;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsService;
 import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
+import com.pjb.springbootjwt.zhddkk.service.SysUserRoleService;
 import com.pjb.springbootjwt.zhddkk.util.ExcelUtil;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
@@ -34,8 +33,8 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
-import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
+import com.pjb.springbootjwt.zhddkk.service.SysRoleService;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +68,12 @@ public class WsUsersController extends AdminBaseController {
 
     @Autowired
     private WsUserProfileService wsUserProfileService;
+
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
 
     /**
     * 跳转到用户账号表页面
@@ -541,6 +546,46 @@ public class WsUsersController extends AdminBaseController {
             return Result.ok();
         }
 
+        return Result.fail();
+    }
+
+    // selectRole
+    /**
+     * 选择角色
+     *
+     * @param model
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/selectRole/{id}")
+    public String selectRole(Model model, @PathVariable("id") Integer userId) {
+        logger.debug("访问electRole");
+        List<SysRoleDO> roleList = sysRoleService.selectList(null);
+        SysUserRoleDO sysUserRoleDO = sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", userId));
+        model.addAttribute("sysUserRoleDO", sysUserRoleDO);
+        model.addAttribute("userId", userId);
+        model.addAttribute("roleList", roleList);
+        return "zhddkk/wsUsers/selectRole";
+    }
+
+    @RequestMapping(value = "/saveRole")
+    @ResponseBody
+    public Result<String> saveRole(String userId, String roleId){
+        WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
+        if (null != wsUsersDO){
+            sysUserRoleService.delete(new EntityWrapper<SysUserRoleDO>().eq("user_id", wsUsersDO.getId()));
+            SysRoleDO sysRoleDO = sysRoleService.selectById(roleId);
+            if (null != sysRoleDO) {
+                SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
+                sysUserRoleDO.setRoleId(Integer.valueOf(roleId));
+                sysUserRoleDO.setRoleName(sysRoleDO.getName());
+                sysUserRoleDO.setUserId(wsUsersDO.getId());
+                sysUserRoleDO.setUserName(wsUsersDO.getName());
+                sysUserRoleService.insert(sysUserRoleDO);
+            }
+
+            return Result.ok();
+        }
         return Result.fail();
     }
 }

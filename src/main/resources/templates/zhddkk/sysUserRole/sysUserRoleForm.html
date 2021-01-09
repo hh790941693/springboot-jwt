@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+	<th:block th:include="common :: header"></th:block>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+                        <form class="form-horizontal m-t" id="form">
+							<!-- 主键 -->
+                            <input type="hidden" id="id" name="id" th:value="${sysUserRole.id}">
+																													<div class="form-group">
+								<label class="col-sm-3 control-label" for="userId"><span style="color:red">*</span>&nbsp;用户id：</label>
+								<div class="col-sm-8">
+									<input type="text" id="userId" name="userId" th:value="${sysUserRole.userId}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="userName"><span style="color:red">*</span>&nbsp;用户名称：</label>
+								<div class="col-sm-8">
+									<input type="text" id="userName" name="userName" th:value="${sysUserRole.userName}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="roleId"><span style="color:red">*</span>&nbsp;角色id：</label>
+								<div class="col-sm-8">
+									<input type="text" id="roleId" name="roleId" th:value="${sysUserRole.roleId}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="roleName"><span style="color:red">*</span>&nbsp;角色名称：</label>
+								<div class="col-sm-8">
+									<input type="text" id="roleName" name="roleName" th:value="${sysUserRole.roleName}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="createTime"><span style="color:red">*</span>&nbsp;创建时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="createTime" name="createTime" th:value="${sysUserRole.createTime}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="updateTime"><span style="color:red">*</span>&nbsp;更新时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="updateTime" name="updateTime" th:value="${sysUserRole.updateTime}" class="form-control" />
+								</div>
+							</div>
+											                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button type="submit" class="btn btn-primary">保存</button>
+                                </div>
+                            </div>
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="common :: footer"></th:block>
+</body>
+<script type="text/javascript" th:src="@{/js/appjs/zhddkk/sysUserRole/sysUserRoleForm.js}"></script>
+</html>

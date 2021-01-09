@@ -149,6 +149,12 @@ function load() {
                 formatter: function (value, row, index) {
                     var btns = "";
 
+                    var selectRoleBtn = '<a class="btn btn-info btn-sm href="#" mce_href="#" title="选择角色" onclick="selectRole(\''
+                        + row.id
+                        + '\')"><i class="fa fa-edit">选择角色</i></a> ';
+
+                    btns += selectRoleBtn;
+
                     //是否在线 0:离线 1:在线
                     if (row.state == "1") {
                         var offLineBtn = '<a class="btn btn-danger btn-sm" href="#" title="下线"  mce_href="#" onclick="offlineUser(\''
@@ -404,5 +410,17 @@ function queryPersonInfo(thisObj) {
         shade: 0.2,
         area: ['390px', '420px'],
         content: prefix + '/showPersonalInfo.page?user=' + user
+    });
+}
+
+// 选择角色
+function selectRole(id){
+    layer.open({
+        type: 2,
+        title: '选择角色',
+        maxmin: true,
+        shadeClose: false,//点击遮罩关闭层
+        area: ['750px', '420px'],
+        content: prefix + '/selectRole/' + id
     });
 }
