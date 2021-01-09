@@ -1,46 +1,6 @@
-var menuIds;
 $(function(){
-    getMenuTreeData();
     validateRule();
 });
-
-function loadMenuTree(menuTree) {
-    $('#menuTree').jstree({
-        "plugins" : [ "wholerow", "checkbox" ],
-        'core' : {
-            'data' : menuTree
-        },
-        "checkbox" : {
-            //"keep_selected_style" : false,
-            //"undetermined" : true
-            //"three_state" : false,
-            //"cascade" : ' up'
-        }
-    });
-    $('#menuTree').jstree('open_all');
-}
-function getAllSelectNodes() {
-    var ref = $('#menuTree').jstree(true); // 获得整个树
-    menuIds = ref.get_selected(); // 获得所有选中节点的，返回值为数组
-    $("#menuTree").find(".jstree-undetermined").each(function(i, element) {
-        menuIds.push($(element).closest('.jstree-node').attr("id"));
-    });
-    console.log(menuIds);
-}
-function getMenuTreeData() {
-    var id = $('#id').val();
-    var url = "/zhddkk/sysMenu/tree";
-    if (!!id){
-        url =  "/zhddkk/sysMenu/tree/" + id;
-    }
-    $.ajax({
-        type : "GET",
-        url : url,
-        success : function(data) {
-            loadMenuTree(data);
-        }
-    });
-}
 
 //保存数据
 function save() {
@@ -48,11 +8,10 @@ function save() {
     if($("#id").val()){
         action = "update";
     }
-    $('#menuIds').val(menuIds);
     $.ajax({
         cache : true,
         type : "POST",
-        url : "/zhddkk/sysRole/" + action,
+        url : "/zhddkk/sysRoleMenu/" + action,
         data : $('#form').serialize(),
         async : false,
         error : function() {
@@ -75,7 +34,6 @@ function save() {
 //表单提交拦截
 $.validator.setDefaults({
     submitHandler : function() {
-        getAllSelectNodes();
         save();
     }
 });
@@ -85,7 +43,16 @@ function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
     $("#form").validate({
         rules : {
-                                    name : {
+                                    roleId : {
+                required : true
+            },
+                                roleName : {
+                required : true
+            },
+                                menuId : {
+                required : true
+            },
+                                menuName : {
                 required : true
             },
                                 createTime : {
@@ -96,8 +63,17 @@ function validateRule() {
             },
                     },
         messages : {
-                                    name : {
-                required : icon + "请输入角色名"
+                                    roleId : {
+                required : icon + "请输入角色id"
+            },
+                                roleName : {
+                required : icon + "请输入角色名称"
+            },
+                                menuId : {
+                required : icon + "请输入菜单id"
+            },
+                                menuName : {
+                required : icon + "请输入菜单名称"
             },
                                 createTime : {
                 required : icon + "请输入创建时间"

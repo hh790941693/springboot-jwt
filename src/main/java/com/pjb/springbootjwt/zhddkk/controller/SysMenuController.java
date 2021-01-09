@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.pjb.springbootjwt.zhddkk.bean.Tree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -147,5 +148,21 @@ public class SysMenuController extends AdminBaseController {
 	//@RequiresPermissions("zhddkk:sysMenu:sysMenu")
 	public String iconSelect(){
 		return "zhddkk/sysMenu/iconSelect";
+	}
+
+    @GetMapping("/tree")
+    @ResponseBody
+    Tree<SysMenuDO> tree() {
+        Tree<SysMenuDO> tree = new Tree<SysMenuDO>();
+        tree = sysMenuService.getTree();
+        return tree;
+    }
+
+	@GetMapping("/tree/{roleId}")
+	@ResponseBody
+    Tree<SysMenuDO> tree(@PathVariable("roleId") int roleId) {
+		Tree<SysMenuDO> tree = new Tree<SysMenuDO>();
+		tree = sysMenuService.getTree(roleId);
+		return tree;
 	}
 }

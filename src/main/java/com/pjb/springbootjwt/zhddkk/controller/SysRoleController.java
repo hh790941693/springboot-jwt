@@ -3,9 +3,11 @@ package com.pjb.springbootjwt.zhddkk.controller;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.baomidou.mybatisplus.enums.SqlLike;
+import com.pjb.springbootjwt.zhddkk.service.WsAdsService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -33,6 +35,14 @@ public class SysRoleController extends AdminBaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(SysRoleController.class);
 
+    @Autowired
+    private SysRoleService sysRoleService;
+
+    @Autowired
+    private SysRoleMenuService sysRoleMenuService;
+
+    private WsAdsService wsAdsService;
+
 	/**
     * binder.
 	* @param binder binder
@@ -43,9 +53,6 @@ public class SysRoleController extends AdminBaseController {
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
-
-    @Autowired
-	private SysRoleService sysRoleService;
 
     /**
     * 跳转到角色表页面.
@@ -103,6 +110,10 @@ public class SysRoleController extends AdminBaseController {
 	//@RequiresPermissions("zhddkk:sysRole:add")
 	public Result<String> save(SysRoleDO sysRole) {
 		sysRoleService.insert(sysRole);
+        List<Integer> menuIdList = sysRole.getMenuIds();
+        if (null != menuIdList && menuIdList.size() > 0){
+
+        }
         return Result.ok();
 	}
 

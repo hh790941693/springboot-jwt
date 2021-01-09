@@ -2,13 +2,11 @@ package com.pjb.springbootjwt.zhddkk.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,36 +14,37 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * 角色表
+ * 角色与菜单关系表
  */
-@TableName("sys_role")
+@TableName("sys_role_menu")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SysRoleDO implements Serializable {
+public class SysRoleMenuDO implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
     
-    //角色id
+    //
     @TableId(type = IdType.AUTO)
-    @ApiModelProperty(value = "id", name = "角色id")
+    @ApiModelProperty(value = "id", name = "")
     private Integer id;
-    //角色名
-    @ApiModelProperty(value = "name", name = "角色名")
-    private String name;
+    //角色id
+    @ApiModelProperty(value = "roleId", name = "角色id")
+    private Integer roleId;
+    //角色名称
+    @ApiModelProperty(value = "roleName", name = "角色名称")
+    private String roleName;
+    //菜单id
+    @ApiModelProperty(value = "menuId", name = "菜单id")
+    private Integer menuId;
+    //菜单名称
+    @ApiModelProperty(value = "menuName", name = "菜单名称")
+    private String menuName;
     //创建时间
     @ApiModelProperty(value = "createTime", name = "创建时间")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
     //更新时间
     @ApiModelProperty(value = "updateTime", name = "更新时间")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
-
-    @TableField(exist = false)
-    private String roleNameLike;
-
-    @TableField(exist = false)
-    private List<Integer> menuIds;
 }
