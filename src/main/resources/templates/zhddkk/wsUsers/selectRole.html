@@ -22,9 +22,10 @@
                         </div>
                         
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">角色id</label>
+                            <label class="col-sm-3 control-label">角色名</label>
                             <div class="col-sm-7">
-                                <input id="roleId" name="roleId" th:value="${sysUserRoleDO != null ? sysUserRoleDO.id : null}" readonly>
+                                <input id="roleId" name="roleId" th:value="${sysUserRoleDO != null ? sysUserRoleDO.roleId : null}" type="hidden">
+                                <input id="roleName" name="roleName" th:value="${sysUserRoleDO != null ? sysUserRoleDO.roleName : null}" readonly>
                             </div>
                         </div>
                         
@@ -33,7 +34,7 @@
                             <div class="col-sm-7">
                                 <label th:each="role:${roleList}" class="checkbox-inline">
                                     <input name="role" type="radio" th:value="${role.id}"
-                                           th:text="${role.name}" th:checked="${role.roleSign}">
+                                           th:text="${role.name}" th:checked="${sysUserRoleDO != null && role.id == sysUserRoleDO.id}">
                                 </label>
                             </div>
                         </div>
@@ -54,6 +55,16 @@
         $("button[type='submit']").click(function () {
             save();
         });
+        
+        // 设置radio选中状态
+        var roleId = $("#roleId").val();
+        if (roleId != "") {
+            $.each($("input[name='role']"), function (index,item) {
+                if ($(item).val() == roleId) {
+                    $(item).prop("checked", true);
+                }
+            })
+        }
 
         //保存数据
         function save() {
