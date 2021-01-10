@@ -106,12 +106,12 @@ function load() {
 
 //重新加载表格
 function reLoad() {
-	$('#exampleTable').bootstrapTable('refresh');
+    load();
 }
 
 //重置
 function cleanForm(){
-	reLoad();
+    load();
 }
 
 //添加
@@ -152,7 +152,7 @@ function remove(id) {
 			success : function(r) {
 				if (r.code == 1) {
 					layer.msg(r.msg);
-					reLoad();
+                    load();
 				}else{
 					layer.msg(r.msg);
 				}
@@ -185,7 +185,7 @@ function batchRemove() {
 			success : function(r) {
 				if (r.code == 1) {
 					layer.msg(r.msg);
-					reLoad();
+                    load();
 				} else {
 					layer.msg(r.msg);
 				}
