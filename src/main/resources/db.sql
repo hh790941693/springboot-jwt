@@ -77,37 +77,37 @@ CREATE TABLE IF NOT EXISTS `sys_menu` (
 INSERT INTO `sys_menu` (`id`, `name`, `parent_id`, `url`, `icon`, `ext_column1`, `ext_column2`, `ext_column3`, `create_time`, `update_time`) VALUES
 	(1, '系统管理', 0, '', 'icon-menu-folder-open', '', '', '', '2021-01-07 21:18:30', '2021-01-07 21:18:30'),
 	(2, '娱乐管理', 0, '', 'icon-menu-folder-close', '', '', '', '2021-01-07 21:19:01', '2021-01-07 21:19:01'),
-	(3, '游戏娱乐', 2, '/game/gameIndex.page', 'icon icon-football', 'true', '', '', '2021-01-07 21:19:58', '2021-01-10 14:35:33'),
-	(4, '用户管理', 1, '/zhddkk/wsUsers/wsUsersForAdmin', 'icon icon-role', 'false', '', '', '2021-01-07 21:20:50', '2021-01-10 15:01:02'),
-	(6, '角色配置', 1, '/zhddkk/sysRole', 'icon icon-admin', 'false', '', '', '2021-01-10 12:29:30', '2021-01-10 15:01:06'),
-	(8, '菜单配置', 1, '/zhddkk/sysMenu', 'icon icon-log', 'false', '', '', '2021-01-10 12:53:39', '2021-01-10 15:01:10'),
-	(9, '音乐播放', 1, '/file/musicPlayer.page', 'icon icon-music2', 'true', '', '', '2021-01-10 12:54:26', '2021-01-10 12:54:26'),
-	(10, '聊天监控', 1, '/ws/wsserverChartMonitor.page', 'icon icon-video', 'true', '', '', '2021-01-10 12:54:58', '2021-01-10 12:54:58'),
-	(11, '朋友圈', 1, '/ws/wsclientCircle.page', 'icon icon-earth', 'true', '', '', '2021-01-10 12:55:33', '2021-01-10 12:55:33'),
-	(12, '聊天记录', 1, '/zhddkk/wsChatlog', 'icon icon-file', 'true', '', '', '2021-01-10 12:55:57', '2021-01-10 12:55:57'),
-	(13, '操作记录', 1, '/zhddkk/wsOperationLog', 'icon icon-file', 'true', '', '', '2021-01-10 12:56:13', '2021-01-10 12:56:13'),
-	(14, '广告发布', 1, '/zhddkk/wsAds', 'icon icon-edit', 'true', '', '', '2021-01-10 12:56:33', '2021-01-10 12:56:33'),
-	(15, '反馈建议', 1, '/zhddkk/wsFeedback/adminFeedback', 'icon icon-feedback', 'true', '', '', '2021-01-10 12:56:53', '2021-01-10 12:56:53'),
-	(16, '领导驾驶舱', 1, '/ws/wsserverChart.page', 'icon icon-chart-bar', 'true', '', '', '2021-01-10 12:57:14', '2021-01-10 12:57:14'),
-	(17, '定时任务', 1, '/zhddkk/wsScheduledCron', 'icon icon-clock', 'true', '', '', '2021-01-10 12:57:32', '2021-01-10 12:57:32'),
-	(18, '生成代码', 1, '/common/generator', 'icon icon-java', 'true', '', '', '2021-01-10 12:57:51', '2021-01-10 12:57:51'),
+	(3, '游戏娱乐', 2, '/game/gameIndex.page', 'icon icon-25-19', 'true', '', '', '2021-01-07 21:19:58', '2021-01-10 17:14:15'),
+	(4, '用户管理', 1, '/zhddkk/wsUsers/wsUsersForAdmin', 'icon icon-11-19', 'false', '', '', '2021-01-07 21:20:50', '2021-01-10 16:56:34'),
+	(6, '角色配置', 1, '/zhddkk/sysRole', 'icon icon-22-5', 'false', '', '', '2021-01-10 12:29:30', '2021-01-10 16:56:45'),
+	(8, '菜单配置', 1, '/zhddkk/sysMenu', 'icon icon-17-4', 'false', '', '', '2021-01-10 12:53:39', '2021-01-10 16:57:25'),
+	(9, '音乐播放', 1, '/file/musicPlayer.page', 'icon icon-15-2', 'true', '', '', '2021-01-10 12:54:26', '2021-01-10 17:09:39'),
+	(10, '聊天监控', 1, '/ws/wsserverChartMonitor.page', 'icon icon-26-8', 'true', '', '', '2021-01-10 12:54:58', '2021-01-10 17:10:07'),
+	(11, '朋友圈', 1, '/ws/wsclientCircle.page', 'icon icon-26-9', 'true', '', '', '2021-01-10 12:55:33', '2021-01-10 17:10:17'),
+	(12, '聊天记录', 1, '/zhddkk/wsChatlog', 'icon icon-13-5', 'true', '', '', '2021-01-10 12:55:57', '2021-01-10 17:10:47'),
+	(13, '操作记录', 1, '/zhddkk/wsOperationLog', 'icon icon-16-12', 'true', '', '', '2021-01-10 12:56:13', '2021-01-10 17:11:34'),
+	(14, '广告发布', 1, '/zhddkk/wsAds', 'icon icon-1-10', 'true', '', '', '2021-01-10 12:56:33', '2021-01-10 17:11:56'),
+	(15, '反馈建议', 1, '/zhddkk/wsFeedback/adminFeedback', 'icon icon-12-9', 'true', '', '', '2021-01-10 12:56:53', '2021-01-10 17:12:06'),
+	(16, '领导驾驶舱', 1, '/ws/wsserverChart.page', 'icon icon-5-13', 'true', '', '', '2021-01-10 12:57:14', '2021-01-10 17:12:21'),
+	(17, '定时任务', 1, '/zhddkk/wsScheduledCron', 'icon icon-6-1', 'true', '', '', '2021-01-10 12:57:32', '2021-01-10 17:12:39'),
+	(18, '生成代码', 1, '/common/generator', 'icon icon-16-2', 'true', '', '', '2021-01-10 12:57:51', '2021-01-10 17:14:01'),
 	(20, '通用管理', 0, '', 'icon-menu-folder-close', '', '', '', '2021-01-10 12:59:00', '2021-01-10 12:59:00'),
-	(21, '敏感词配置', 20, '/zhddkk/wsCommon/mgc', 'icon icon-log', 'true', '', '', '2021-01-10 12:59:39', '2021-01-10 12:59:39'),
-	(22, '脏话配置', 20, '/zhddkk/wsCommon/zh', 'icon icon-log', 'true', '', '', '2021-01-10 13:00:05', '2021-01-10 13:00:05'),
-	(23, '常用语配置', 20, '/zhddkk/wsCommon/cyy', 'icon icon-log', 'true', '', '', '2021-01-10 13:00:27', '2021-01-10 13:00:27'),
-	(24, '注册问题配置', 20, '/zhddkk/wsCommon/zcwt', 'icon icon-log', 'true', '', '', '2021-01-10 13:00:48', '2021-01-10 13:00:48'),
+	(21, '敏感词配置', 20, '/zhddkk/wsCommon/mgc', 'icon icon-13-14', 'true', '', '', '2021-01-10 12:59:39', '2021-01-10 17:15:10'),
+	(22, '脏话配置', 20, '/zhddkk/wsCommon/zh', 'icon icon-13-14', 'true', '', '', '2021-01-10 13:00:05', '2021-01-10 17:15:17'),
+	(23, '常用语配置', 20, '/zhddkk/wsCommon/cyy', 'icon icon-13-14', 'true', '', '', '2021-01-10 13:00:27', '2021-01-10 17:15:24'),
+	(24, '注册问题配置', 20, '/zhddkk/wsCommon/zcwt', 'icon icon-13-14', 'true', '', '', '2021-01-10 13:00:48', '2021-01-10 17:15:32'),
 	(25, '客户端管理', 0, '', 'icon-menu-folder-open', '', '', '', '2021-01-10 13:02:12', '2021-01-10 13:02:12'),
-	(26, '实时聊天', 25, '/ws/wsclientChat.page', 'icon icon-wechat', 'true', '', '', '2021-01-10 13:02:34', '2021-01-10 13:02:34'),
-	(27, '音乐播放', 25, '/file/musicPlayer.page', 'icon icon-music2', 'true', '', '', '2021-01-10 13:02:54', '2021-01-10 13:02:54'),
-	(28, '添加朋友', 25, '/zhddkk/wsUsers/wsUsers', 'icon icon-search-plus', 'true', '', '', '2021-01-10 13:03:29', '2021-01-10 13:03:29'),
-	(29, '我的朋友', 25, '/zhddkk/wsFriends', 'icon icon-role', 'true', '', '', '2021-01-10 13:03:48', '2021-01-10 13:03:48'),
-	(30, '我的申请', 25, '/zhddkk/wsFriendsApply/myApply', 'icon icon-upload', 'true', '', '', '2021-01-10 13:04:13', '2021-01-10 13:04:13'),
-	(31, '好友申请', 25, '/zhddkk/wsFriendsApply/friendApply', 'icon icon-upload', 'true', '', '', '2021-01-10 13:04:36', '2021-01-10 13:04:36'),
-	(32, '朋友圈', 25, '/ws/wsclientCircle.page', 'icon icon-earth', 'true', '', '', '2021-01-10 13:04:55', '2021-01-10 13:04:55'),
-	(33, '反馈建议', 25, '/zhddkk/wsFeedback/myFeedback', 'icon icon-feedback', 'true', '', '', '2021-01-10 13:05:12', '2021-01-10 13:05:12'),
-	(34, '智能助手', 25, '/ws/intelAssistant.page', 'icon icon-user5', 'true', '', '', '2021-01-10 13:05:37', '2021-01-10 13:11:38'),
-	(35, '网易新闻', 25, '/ws/wangyiNews.page', 'icon icon-newspaper', 'true', '', '', '2021-01-10 13:05:55', '2021-01-10 13:05:55'),
-	(38, 'H5游戏', 2, '/canvas/canvasIndex.page', 'icon icon-game-hander', 'true', '', '', '2021-01-10 14:44:17', '2021-01-10 14:44:17');
+	(26, '实时聊天', 25, '/ws/wsclientChat.page', 'icon icon-6-6', 'true', '', '', '2021-01-10 13:02:34', '2021-01-10 17:15:45'),
+	(27, '音乐播放', 25, '/file/musicPlayer.page', 'icon icon-15-2', 'true', '', '', '2021-01-10 13:02:54', '2021-01-10 17:15:56'),
+	(28, '添加朋友', 25, '/zhddkk/wsUsers/wsUsers', 'icon icon-14-5', 'true', '', '', '2021-01-10 13:03:29', '2021-01-10 17:16:06'),
+	(29, '我的朋友', 25, '/zhddkk/wsFriends', 'icon icon-11-19', 'true', '', '', '2021-01-10 13:03:48', '2021-01-10 17:16:15'),
+	(30, '我的申请', 25, '/zhddkk/wsFriendsApply/myApply', 'icon icon-1-13', 'true', '', '', '2021-01-10 13:04:13', '2021-01-10 17:16:31'),
+	(31, '好友申请', 25, '/zhddkk/wsFriendsApply/friendApply', 'icon icon-2-1', 'true', '', '', '2021-01-10 13:04:36', '2021-01-10 17:16:42'),
+	(32, '朋友圈', 25, '/ws/wsclientCircle.page', 'icon icon-26-9', 'true', '', '', '2021-01-10 13:04:55', '2021-01-10 17:16:50'),
+	(33, '反馈建议', 25, '/zhddkk/wsFeedback/myFeedback', 'icon icon-12-9', 'true', '', '', '2021-01-10 13:05:12', '2021-01-10 17:16:58'),
+	(34, '智能助手', 25, '/ws/intelAssistant.page', 'icon icon-25-10', 'true', '', '', '2021-01-10 13:05:37', '2021-01-10 17:17:09'),
+	(35, '网易新闻', 25, '/ws/wangyiNews.page', 'icon icon-9-10', 'true', '', '', '2021-01-10 13:05:55', '2021-01-10 17:17:59'),
+	(38, 'H5游戏', 2, '/canvas/canvasIndex.page', 'icon icon-12-19', 'true', '', '', '2021-01-10 14:44:17', '2021-01-10 17:14:34');
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.sys_role
@@ -244,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `t_role_permission` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table zhdd.t_role_permission: ~0 rows (approximately)
+-- Dumping data for table zhdd.t_role_permission: ~1 rows (approximately)
 /*!40000 ALTER TABLE `t_role_permission` DISABLE KEYS */;
 INSERT INTO `t_role_permission` (`id`, `role_id`, `role_name`, `permission_id`, `permission_name`) VALUES
 	(1, 1, 'admin', 1, 'add');
@@ -296,7 +296,7 @@ CREATE TABLE IF NOT EXISTS `ws_ads` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8 COMMENT='广告表';
 
--- Dumping data for table zhdd.ws_ads: ~14 rows (approximately)
+-- Dumping data for table zhdd.ws_ads: ~15 rows (approximately)
 /*!40000 ALTER TABLE `ws_ads` DISABLE KEYS */;
 INSERT INTO `ws_ads` (`id`, `title`, `content`, `receive_list`, `create_time`) VALUES
 	(18, '오늘 날씨가 정말 밝아요', '이런 좋은 날씨라서 운동을 해야지.아무든 몸이 제일 중요해여', '[]', '2018-12-12 10:03:24'),
@@ -330,7 +330,44 @@ CREATE TABLE IF NOT EXISTS `ws_chatlog` (
 -- Dumping data for table zhdd.ws_chatlog: ~1 rows (approximately)
 /*!40000 ALTER TABLE `ws_chatlog` DISABLE KEYS */;
 INSERT INTO `ws_chatlog` (`id`, `time`, `user`, `to_user`, `msg`, `remark`) VALUES
-	(363, '2021-01-10 15:36:12', 'admin', '', '登录成功', 'Windows NT 10.0');
+	(363, '2021-01-10 15:36:12', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(364, '2021-01-10 15:53:34', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(365, '2021-01-10 16:27:25', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(366, '2021-01-10 16:28:34', 'admin', '', '退出服务器', ''),
+	(367, '2021-01-10 16:28:34', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(368, '2021-01-10 16:29:42', 'admin', '', '退出服务器', ''),
+	(369, '2021-01-10 16:29:42', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(370, '2021-01-10 16:30:56', 'admin', '', '退出服务器', ''),
+	(371, '2021-01-10 16:30:56', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(372, '2021-01-10 16:53:00', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(373, '2021-01-10 16:55:45', 'admin', '', '退出服务器', ''),
+	(374, '2021-01-10 16:55:45', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(375, '2021-01-10 17:09:23', 'admin', '', '退出服务器', ''),
+	(376, '2021-01-10 17:09:26', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(377, '2021-01-10 17:26:53', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(378, '2021-01-10 17:27:06', 'admin', '', '退出服务器', ''),
+	(379, '2021-01-10 17:27:13', 'aa', '', '登录成功', 'Windows NT 10.0'),
+	(380, '2021-01-10 17:32:31', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(381, '2021-01-10 17:33:03', 'admin', '', '退出服务器', ''),
+	(382, '2021-01-10 17:33:03', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(383, '2021-01-10 17:33:47', 'admin', '', '退出服务器', ''),
+	(384, '2021-01-10 17:33:54', 'aa', '', '登录成功', 'Windows NT 10.0'),
+	(385, '2021-01-10 17:37:28', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(386, '2021-01-10 17:37:34', 'admin', '', '退出服务器', ''),
+	(387, '2021-01-10 17:37:35', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(388, '2021-01-10 17:37:43', 'admin', '', '退出服务器', ''),
+	(389, '2021-01-10 17:37:44', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(390, '2021-01-10 17:39:02', 'admin', '', '退出服务器', ''),
+	(391, '2021-01-10 17:39:11', 'aa', '', '登录成功', 'Windows NT 10.0'),
+	(392, '2021-01-10 17:42:03', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(393, '2021-01-10 17:42:33', 'admin', '', '退出服务器', ''),
+	(394, '2021-01-10 17:42:33', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(395, '2021-01-10 17:44:37', 'admin', '', '退出服务器', ''),
+	(396, '2021-01-10 17:44:37', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(397, '2021-01-10 17:45:08', 'admin', '', '退出服务器', ''),
+	(398, '2021-01-10 17:45:09', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(399, '2021-01-10 17:46:32', 'admin', '', '登录成功', 'Windows NT 10.0'),
+	(400, '2021-01-10 17:48:20', 'admin', '', '登录成功', 'Windows NT 10.0');
 /*!40000 ALTER TABLE `ws_chatlog` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_circle
@@ -350,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `ws_circle` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COMMENT='朋友圈表';
 
--- Dumping data for table zhdd.ws_circle: ~6 rows (approximately)
+-- Dumping data for table zhdd.ws_circle: ~8 rows (approximately)
 /*!40000 ALTER TABLE `ws_circle` DISABLE KEYS */;
 INSERT INTO `ws_circle` (`id`, `user_name`, `user_id`, `content`, `like_num`, `pic1`, `pic2`, `pic3`, `pic4`, `pic5`, `pic6`, `create_time`) VALUES
 	(42, '无名3', 13, '考虑时间管理会计师的价格快速', 4, 'http://127.0.0.1:8101/circle\\8.jpg', NULL, 'http://127.0.0.1:8101/circle\\8da770a589874189852b1504361231ae_th.gif', NULL, NULL, NULL, '2020-05-11 18:38:35'),
@@ -374,7 +411,7 @@ CREATE TABLE IF NOT EXISTS `ws_circle_comment` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COMMENT='朋友圈评论表';
 
--- Dumping data for table zhdd.ws_circle_comment: ~15 rows (approximately)
+-- Dumping data for table zhdd.ws_circle_comment: ~17 rows (approximately)
 /*!40000 ALTER TABLE `ws_circle_comment` DISABLE KEYS */;
 INSERT INTO `ws_circle_comment` (`id`, `circle_id`, `user_id`, `user_name`, `comment`, `create_time`) VALUES
 	(1, 1, 25, 'vb', '为什么不舒服', '2019-01-04 21:20:28'),
@@ -678,7 +715,7 @@ CREATE TABLE IF NOT EXISTS `ws_friends` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COMMENT='好友列表';
 
--- Dumping data for table zhdd.ws_friends: ~28 rows (approximately)
+-- Dumping data for table zhdd.ws_friends: ~32 rows (approximately)
 /*!40000 ALTER TABLE `ws_friends` DISABLE KEYS */;
 INSERT INTO `ws_friends` (`id`, `uid`, `uname`, `fid`, `fname`, `create_time`, `remark`) VALUES
 	(5, 23, 'aa', 18, '黄朝辉', '2019-01-26 21:54:19', NULL),
@@ -727,7 +764,7 @@ CREATE TABLE IF NOT EXISTS `ws_friends_apply` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8 COMMENT='好友申请表';
 
--- Dumping data for table zhdd.ws_friends_apply: ~39 rows (approximately)
+-- Dumping data for table zhdd.ws_friends_apply: ~40 rows (approximately)
 /*!40000 ALTER TABLE `ws_friends_apply` DISABLE KEYS */;
 INSERT INTO `ws_friends_apply` (`id`, `from_id`, `from_name`, `to_id`, `to_name`, `process_status`, `create_time`) VALUES
 	(122, 23, 'aa', 1, 'admin', 1, '2019-01-18 13:49:03'),
@@ -913,7 +950,8 @@ INSERT INTO `ws_sign` (`id`, `user_id`, `user_name`, `create_time`) VALUES
 	(83, 1, 'admin', '2021-01-02 00:17:16'),
 	(84, 18, '黄朝辉', '2021-01-02 13:02:57'),
 	(85, 18, '黄朝辉', '2021-01-03 16:14:16'),
-	(86, 1, 'admin', '2021-01-03 17:12:27');
+	(86, 1, 'admin', '2021-01-03 17:12:27'),
+	(87, 1, 'admin', '2021-01-10 15:59:21');
 /*!40000 ALTER TABLE `ws_sign` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_users
@@ -941,7 +979,7 @@ CREATE TABLE IF NOT EXISTS `ws_users` (
 -- Dumping data for table zhdd.ws_users: ~31 rows (approximately)
 /*!40000 ALTER TABLE `ws_users` DISABLE KEYS */;
 INSERT INTO `ws_users` (`id`, `name`, `password`, `register_time`, `state`, `last_login_time`, `last_logout_time`, `enable`, `speak`, `coin_num`, `question1`, `answer1`, `question2`, `answer2`, `question3`, `answer3`, `create_time`) VALUES
-	(1, 'admin', 'MjQzMTBCNkQxNkM1NkZCNzk2M0ZCNEY1REMxQkM0NDk=', '2018-03-22 22:37:07', '1', '2021-01-10 15:36:12', '2021-01-10 15:18:31', '1', '1', 620, '你最喜欢的明星是谁?', '11', '你最喜欢的一首歌是什么?', '22', '你父亲的生日是什么时候', '33', '2018-12-12 10:10:15'),
+	(1, 'admin', 'MjQzMTBCNkQxNkM1NkZCNzk2M0ZCNEY1REMxQkM0NDk=', '2018-03-22 22:37:07', '1', '2021-01-10 17:48:20', '2021-01-10 17:45:08', '1', '1', 630, '你最喜欢的明星是谁?', '11', '你最喜欢的一首歌是什么?', '22', '你父亲的生日是什么时候', '33', '2018-12-12 10:10:15'),
 	(4, 'mb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-31 21:55:17', '0', '2020-07-03 09:29:04', '2018-12-12 16:07:08', '1', '1', 0, '你最喜欢的水果是什么?', 'apple', '你的初中在哪里？', '湖北', '你的第一次是什么时候？', '16', '2018-12-12 10:10:15'),
 	(5, '小七', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-24 11:03:07', '0', '2018-03-31 23:35:22', '2018-03-31 23:38:03', '1', '1', 0, '你最喜欢的明星是谁?', '用户', '你最喜欢的一首歌是?', '计划', '你的初恋女友是谁?', '哦了', '2018-12-12 10:10:15'),
 	(6, '小三', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-24 10:45:15', '0', '2018-03-25 22:28:51', '2018-03-25 22:27:00', '1', '1', 0, '你最喜欢的明星是谁?', '喜鹊', '你最喜欢的一首歌是?', '我的心', '你的初恋女友是谁?', '曹君怡', '2018-12-12 10:10:15'),
@@ -961,7 +999,7 @@ INSERT INTO `ws_users` (`id`, `name`, `password`, `register_time`, `state`, `las
 	(20, '씨발', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 09:58:06', '0', '2020-05-30 21:56:34', '2020-05-30 21:57:34', '1', '1', 0, '你最喜欢的水果是什么?', '사과', '你父亲生日是什么时候?', '유원일십사일', '你最想去哪旅行?', '한국', '2018-12-12 10:10:15'),
 	(21, '徐志摩', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 10:10:50', '0', '2018-12-12 10:16:02', '2018-12-12 10:16:02', '1', '1', 0, '你最喜欢的水果是什么?', '梨子', '你父亲生日是什么时候?', '元旦节', '你最想去哪旅行?', '非洲', '2018-12-12 10:10:50'),
 	(22, 'hhh', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 13:55:37', '0', '2020-07-03 09:25:55', '2018-12-12 14:51:08', '1', '1', 0, '你最喜欢的水果是什么?', '梨子', '你父亲生日是什么时候?', 'dd', '你最想去哪旅行?', '한국', '2018-12-12 13:55:37'),
-	(23, 'aa', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:38:58', '0', '2021-01-10 15:03:32', '2021-01-10 15:03:42', '1', '1', 171, '你最喜欢的水果是什么?', '带到', '你父亲生日是什么时候?', '带到', '你最想去哪旅行?', '的啊', '2018-12-12 16:38:58'),
+	(23, 'aa', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:38:58', '0', '2021-01-10 17:39:11', '2021-01-10 15:03:42', '1', '1', 171, '你最喜欢的水果是什么?', '带到', '你父亲生日是什么时候?', '带到', '你最想去哪旅行?', '的啊', '2018-12-12 16:38:58'),
 	(24, 'bb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:39:16', '0', '2020-07-03 09:24:37', '2020-07-01 12:22:38', '1', '1', 35, '你最喜欢的水果是什么?', '的的', '你父亲生日是什么时候?', '都是大神', '你最想去哪旅行?', '都是的', '2018-12-12 16:39:16'),
 	(25, 'vb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-13 15:34:55', '0', '2020-07-03 09:26:09', '2020-06-01 21:23:16', '1', '1', 0, '你最喜欢的水果是什么?', '的的', '你父亲生日是什么时候?', '33', '你最想去哪旅行?', '55', '2018-12-13 15:34:55'),
 	(26, 'jkx', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-13 15:35:13', '0', '2018-12-13 15:41:00', '2018-12-13 15:41:00', '1', '1', 0, '你最想去哪旅行?', '中国', '你最想去哪旅行?', '中国', '你怎么看待中国的房价?', '太高了', '2018-12-13 15:35:13'),
