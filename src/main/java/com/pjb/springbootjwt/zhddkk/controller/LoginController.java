@@ -60,7 +60,8 @@ public class LoginController {
 
     private static final Map<String, String> configMap = WsInterceptor.getConfigMap();
 
-    private static final String INDEX_PAGE_NAME = "wsclientIndex_v3";
+    // 登陆成功后的页面前缀
+    private static final String INDEX_PAGE_NAME = "wsclientIndex";
 
     /**
      * webSocketConfig.
