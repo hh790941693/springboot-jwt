@@ -71,7 +71,7 @@ function openIconPage(){
             title : '选择图标',
             maxmin : true,
             shadeClose : false,//点击遮罩关闭层
-            area : [ '40%', '80%' ],
+            area : [ '52%', '80%' ],
             content : prefix + "/iconSelect.page"
         });
     })
