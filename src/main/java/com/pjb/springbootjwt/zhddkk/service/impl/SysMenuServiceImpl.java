@@ -77,4 +77,9 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
         Tree<SysMenuDO> t = BuildTree.build(trees);
         return t;
     }
+
+    @Override
+    public List<SysMenuDO> queryRoleMenuList(int roleId) {
+        return baseMapper.queryRoleMenuList(roleId);
+    }
 }

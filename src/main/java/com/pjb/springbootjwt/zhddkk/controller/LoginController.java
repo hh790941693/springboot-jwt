@@ -9,12 +9,10 @@ import com.pjb.springbootjwt.zhddkk.bean.SystemInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
-import com.pjb.springbootjwt.zhddkk.domain.WsChatlogDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.service.CacheService;
+import com.pjb.springbootjwt.zhddkk.service.SysUserRoleService;
 import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
 import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
 import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
@@ -111,6 +109,9 @@ public class LoginController {
      */
     @Autowired
     private CacheService cacheService;
+
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
 
     @Value("${server.address}")
     private String serverAddress;
@@ -270,14 +271,17 @@ public class LoginController {
 
         // 设置session非活动失效时间(10分钟)
         request.getSession().setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
-        // 用户类型
-        String userType = CommonConstants.USER_TYPE_COMMON;
-        if (user.equals(CommonConstants.ADMIN_USER)) {
-            userType = CommonConstants.USER_TYPE_MANAGER;
+
+        // 角色信息
+        String roleId = null;
+        SysUserRoleDO sysUserRoleDO = sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", curUserObj.getId()));
+        if (null != sysUserRoleDO) {
+            roleId = String.valueOf(sysUserRoleDO.getRoleId());
         }
+
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(request.getSession().getId(),
-                user, curUserObj.getPassword(), webserverip, webserverPort, selfImg, shortAgent, userType);
+                String.valueOf(curUserObj.getId()), user, curUserObj.getPassword(), webserverip, webserverPort, selfImg, shortAgent, roleId);
         String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
         JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
         sessionInfoBean.setJsonStr(jsonStr);
@@ -695,6 +699,10 @@ public class LoginController {
      */
     private void saveCookie(HttpServletRequest request, HttpServletResponse response, WsUsersDO curUserObj) {
         //记录cookie
+        Cookie userIdCookie = new Cookie(CommonConstants.S_USER_ID, String.valueOf(curUserObj.getId()));
+        userIdCookie.setPath("/");
+        userIdCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT); //用户Id30分钟
+
         Cookie userCookie = new Cookie(CommonConstants.S_USER, curUserObj.getName());
         userCookie.setPath("/");
         userCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT); //用户名30分钟
@@ -711,6 +719,7 @@ public class LoginController {
         webserverportCookie.setPath("/");
         webserverportCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
 
+        response.addCookie(userIdCookie);
         response.addCookie(userCookie);
         response.addCookie(passCookie);
         response.addCookie(webserveripCookie);

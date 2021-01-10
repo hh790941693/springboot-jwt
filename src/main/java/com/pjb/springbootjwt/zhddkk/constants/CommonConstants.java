@@ -11,6 +11,7 @@ public class CommonConstants {
     public static final String SESSION_INFO = "sessionInfo";
 
     //session中存储的KV键值对
+    public static final String S_USER_ID = "userid";
     public static final String S_USER = "user";
     public static final String S_PASS = "pass";
     public static final String S_WEBSERVERIP = "webserverip";

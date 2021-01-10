@@ -1,7 +1,9 @@
 package com.pjb.springbootjwt.zhddkk.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -59,4 +61,8 @@ public class SysMenuDO implements Serializable {
     @ApiModelProperty(value = "updateTime", name = "更新时间")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
+
+    // 子菜单列表
+    @TableField(exist = false)
+    private List<SysMenuDO> childrenList = new ArrayList<SysMenuDO>();
 }

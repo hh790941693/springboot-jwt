@@ -2,5 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pjb.springbootjwt.zhddkk.dao.SysMenuDao">
-
+    <select id="queryRoleMenuList" resultType="com.pjb.springbootjwt.zhddkk.domain.SysMenuDO">
+        SELECT
+          T2.*
+        FROM
+          sys_role_menu T1
+        RIGHT JOIN
+          sys_menu T2 ON T1.menu_id = T2.id
+        WHERE
+          T1.role_id = ${roleId}
+    </select>
 </mapper>

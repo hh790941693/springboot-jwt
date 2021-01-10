@@ -24,11 +24,11 @@ function initLeftMenu() {
     var menujson = {};
     $.each(_menus.menus, function(i, n) {
         menujson = {};
-        menujson.title = n.menuname;
+        menujson.title = n.name;
         menujson.iconCls = n.icon;
         var contentHtml = "<ul>";
-        $.each(n.menus, function(j, o) {
-            contentHtml += '<li><div closable="'+o.closable+'"><a target="mainFrame" href="' + o.url + '" ><span class="icon '+o.icon+'" ></span>' + o.menuname + '</a></div></li> ';
+        $.each(n.childrenList, function(j, o) {
+            contentHtml += '<li><div closable="'+o.extColumn1+'"><a target="mainFrame" href="' + o.url + '" ><span class="'+o.icon+'" ></span>' + o.name + '</a></div></li> ';
         });
         contentHtml += '</ul>';
         menujson.content = contentHtml;

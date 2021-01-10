@@ -346,77 +346,22 @@
 
 <script type="text/javascript">
     // 左侧导航菜单
-    var _menus = {};
-    if (sessionUsertype == '0') {
-        // 管理员菜单
-        _menus = {
-            "menus": [
-                {
-                    "menuid": "1", "icon": "icon-menu-folder-open", "menuname": "系统管理",
-                    "menus": [
-                        {"menuname": "用户管理", "icon": "icon-users", "closable":"true", "url": "/zhddkk/wsUsers/wsUsersForAdmin?user="+sessionUser},
-                        {"menuname": "角色配置", "icon": "icon-java", "closable":"true", "url": "/zhddkk/sysRole?user="+sessionUser},
-                        {"menuname": "菜单配置", "icon": "icon-java", "closable":"true", "url": "/zhddkk/sysMenu?user="+sessionUser},
-                        {"menuname": "音乐播放", "icon": "icon-music", "closable":"false", "url": "/file/musicPlayer.page?user="+sessionUser},
-                        {"menuname": "聊天监控", "icon": "icon-video", "closable":"true", "url": "/ws/wsserverChartMonitor.page?user="+sessionUser},
-                        {"menuname": "朋友圈", "icon": "icon-earth", "closable":"true", "url": "/ws/wsclientCircle.page?user="+sessionUser},
-                        {"menuname": "聊天记录", "icon": "icon-file", "closable":"true", "url": "/zhddkk/wsChatlog?user="+sessionUser},
-                        {"menuname": "操作记录", "icon": "icon-file", "closable":"true", "url": "/zhddkk/wsOperationLog?user="+sessionUser},
-                        {"menuname": "广告发布", "icon": "icon-edit", "closable":"true", "url": "/zhddkk/wsAds?user="+sessionUser},
-                        {"menuname": "反馈建议", "icon": "icon-feedback", "closable":"true", "url": "/zhddkk/wsFeedback/adminFeedback?user="+sessionUser},
-                        {"menuname": "领导驾驶舱", "icon": "icon-chart-bar", "closable":"true", "url": "/ws/wsserverChart.page?user="+sessionUser},
-                        {"menuname": "定时任务", "icon": "icon-clock", "closable":"true", "url": "/zhddkk/wsScheduledCron?user="+sessionUser},
-                        {"menuname": "生成代码", "icon": "icon-java", "closable":"true", "url": "/common/generator?user="+sessionUser},
-                    ]
-                }
-                , {
-                    "menuid": "2", "icon": "icon-menu-folder-close", "menuname": "通用配置",
-                    "menus": [
-                        {"menuname": "敏感词配置", "icon": "icon-nav", "closable":"true", "url": "/zhddkk/wsCommon/mgc?user="+sessionUser},
-                        {"menuname": "脏话配置", "icon": "icon-nav", "closable":"true", "url": "/zhddkk/wsCommon/zh?user="+sessionUser},
-                        {"menuname": "常用语配置", "icon": "icon-nav", "closable":"true", "url": "/zhddkk/wsCommon/cyy?user="+sessionUser},
-                        {"menuname": "注册问题配置", "icon": "icon-nav", "closable":"true", "url": "/zhddkk/wsCommon/zcwt?user="+sessionUser}
-                    ]
-                }
-                , {
-                    "menuid": "3", "icon": "icon-menu-folder-close", "menuname": "娱乐管理",
-                    "menus": [
-                        {"menuname": "游戏娱乐", "icon": "icon-football", "closable":"true", "url": "/game/gameIndex.page?user="+sessionUser},
-                        {"menuname": "H5游戏", "icon": "icon-game-hander", "closable":"true", "url": "/canvas/canvasIndex.page?user="+sessionUser}
-                    ]
-                }
-            ]
-        };
-    } else {
-        // 普通用户菜单
-        _menus = {
-            "menus": [
-                {
-                    "menuid": "1", "icon": "icon-menu-folder-open", "menuname": "系统管理",
-                    "menus": [
-                        {"menuname": "实时聊天", "icon": "icon-role", "closable":"true", "url": "/ws/wsclientChat.page?user="+sessionUser},
-                        {"menuname": "音乐播放", "icon": "icon-music", "closable":"true", "url": "/file/musicPlayer.page?user="+sessionUser},
-                        {"menuname": "添加朋友", "icon": "icon-search-plus", "closable":"true", "url": "/zhddkk/wsUsers/wsUsers?user="+sessionUser},
-                        {"menuname": "我的朋友", "icon": "icon-role", "closable":"true", "url": "/zhddkk/wsFriends?user="+sessionUser},
-                        {"menuname": "我的申请", "icon": "icon-upload", "closable":"true", "url": "/zhddkk/wsFriendsApply/myApply?user="+sessionUser},
-                        {"menuname": "好友申请", "icon": "icon-download", "closable":"true", "url": "/zhddkk/wsFriendsApply/friendApply?user="+sessionUser},
-                        {"menuname": "朋友圈", "icon": "icon-earth", "closable":"true", "url": "/ws/wsclientCircle.page?user="+sessionUser},
-                        {"menuname": "反馈建议", "icon": "icon-feedback", "closable":"true", "url": "/zhddkk/wsFeedback/myFeedback?user="+sessionUser},
-                        {"menuname": "智能助手", "icon": "icon-user5", "closable":"true", "url": "/ws/intelAssistant.page?user="+sessionUser},
-                        {"menuname": "网易新闻", "icon": "icon-newspaper", "closable":"true", "url": "/ws/wangyiNews.page?user="+sessionUser}
-                    ]
-                }
-                , {
-                    "menuid": "3", "icon": "icon-menu-folder-close", "menuname": "娱乐管理",
-                    "menus": [
-                        {"menuname": "游戏娱乐", "icon": "icon-football", "closable":"true", "url": "/game/gameIndex.page?user="+sessionUser},
-                        {"menuname": "H5游戏", "icon": "icon-game-hander", "closable":"true", "url": "/canvas/canvasIndex.page?user="+sessionUser}
-                    ]
-                }
-            ]
-        };
-    }
-
+    var _menus = {
+        "menus":[]
+    };
+    $.ajax({
+        type: 'GET',
+        url: rootUrl + '/zhddkk/sysMenu/getRoleMenuList/' + sessionRoleId,
+        async: false,
+        dataType: 'json',
+        success: function (result) {
+            if (result.code == 1) {
+                console.log(result);
+                _menus.menus = result.data;
+            }
+        }
+    });
+    
     $(function() {
         console.log("主页获取session数据:" + sessionUser);
         // 修改地址栏地址,不显示多余的参数或者页面信息
@@ -428,8 +373,8 @@
         // 设置网页标题
         setPageTitle();
         function setPageTitle() {
-            let title = "";
-            if (sessionUsertype == "0") {
+            var title = "";
+            if (sessionRoleId == "1") {
                 title = "page.serverindex.title";
             } else {
                 title = "page.clientindex.title";

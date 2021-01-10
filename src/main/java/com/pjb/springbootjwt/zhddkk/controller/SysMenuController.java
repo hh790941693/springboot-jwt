@@ -1,12 +1,14 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.zhddkk.bean.Tree;
+import com.pjb.springbootjwt.zhddkk.domain.SysRoleMenuDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.domain.SysMenuDO;
 import com.pjb.springbootjwt.zhddkk.service.SysMenuService;
+import com.pjb.springbootjwt.zhddkk.service.SysRoleMenuService;
 import com.pjb.springbootjwt.common.vo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +49,9 @@ public class SysMenuController extends AdminBaseController {
 
     @Autowired
 	private SysMenuService sysMenuService;
+
+    @Autowired
+	private SysRoleMenuService sysRoleMenuService;
 
     /**
     * 跳转到菜单表页面.
@@ -127,6 +133,7 @@ public class SysMenuController extends AdminBaseController {
 	//@RequiresPermissions("zhddkk:sysMenu:remove")
 	public Result<String> remove(Integer id) {
 		sysMenuService.deleteById(id);
+        sysRoleMenuService.delete(new EntityWrapper<SysRoleMenuDO>().eq("menu_id", id));
         return Result.ok();
 	}
 	
@@ -165,4 +172,40 @@ public class SysMenuController extends AdminBaseController {
 		tree = sysMenuService.getTree(roleId);
 		return tree;
 	}
+
+    /**
+     * 查询角色对应的菜单列表
+     * @param roleId
+     * @return
+     */
+	@GetMapping("/getRoleMenuList/{roleId}")
+	@ResponseBody
+	public Result<List<SysMenuDO>> queryRoleMenuList(@PathVariable("roleId") int roleId) {
+        List<SysMenuDO> srcList = sysMenuService.queryRoleMenuList(roleId);
+        List<SysMenuDO> targetList = adjustMenuList(srcList);
+	    return Result.ok(targetList);
+	}
+
+	private static List<SysMenuDO> adjustMenuList(List<SysMenuDO> srcList){
+        List<SysMenuDO> parentList = new ArrayList<>();
+        for (SysMenuDO sysMenuDO : srcList) {
+            if (sysMenuDO.getParentId() == 0) {
+                parentList.add(sysMenuDO);
+            }
+        }
+
+        if (parentList.size() > 0) {
+            for (SysMenuDO parentMenuDO : parentList) {
+                List<SysMenuDO> childrenList = new ArrayList<>();
+                for (SysMenuDO subMenuDO : srcList) {
+                    if (subMenuDO.getParentId() == parentMenuDO.getId()) {
+                        childrenList.add(subMenuDO);
+                    }
+                }
+                parentMenuDO.setChildrenList(childrenList);
+            }
+        }
+
+        return parentList;
+    }
 }

@@ -63,23 +63,25 @@
     
     <!-- session信息 -->
     <div th:fragment="sessionInfo">
+        <input type="hidden" id="sessionUserId" th:value="${session.sessionInfo.userId}">
         <input type="hidden" id="sessionUser" th:value="${session.sessionInfo.user}">
         <input type="hidden" id="sessionPassword" th:value="${session.sessionInfo.password}">
         <input type="hidden" id="sessionWebserverIp" th:value="${session.sessionInfo.webserverIp}">
         <input type="hidden" id="sessionWebserverport" th:value="${session.sessionInfo.webserverPort}">
         <input type="hidden" id="sessionSelfimg" th:value="${session.sessionInfo.selfImg}">
         <input type="hidden" id="sessionUseragent" th:value="${session.sessionInfo.userAgent}">
-        <input type="hidden" id="sessionUsertype" th:value="${session.sessionInfo.userType}">
+        <input type="hidden" id="sessionRoleId" th:value="${session.sessionInfo.roleId}">
         <input type="hidden" id="sessionJsonStr" th:value="${session.sessionInfo.jsonStr}">
         <input type="hidden" id="sessionJsonObject" th:value="${session.sessionInfo.jsonObject}">
         <script th:inline="javascript">
+            var sessionUserId = $("#sessionUserId").val();
             var sessionUser = $("#sessionUser").val();
             var sessionPassword = $("#sessionPassword").val();
             var sessionWebserverIp = $("#sessionWebserverIp").val();
             var sessionWebserverport = $("#sessionWebserverport").val();
             var sessionSelfimg = $("#sessionSelfimg").val();
             var sessionUseragent = $("#sessionUseragent").val();
-            var sessionUsertype = $("#sessionUsertype").val();
+            var sessionRoleId = $("#sessionRoleId").val();
             var sessionJsonStr = $("#sessionJsonStr").val();
             var sessionJsonObject = eval('(' + $("#sessionJsonObject").val() + ')');
 
