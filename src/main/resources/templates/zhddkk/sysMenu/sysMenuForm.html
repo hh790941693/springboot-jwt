@@ -47,9 +47,12 @@
 							</div>
 							
 							<div class="form-group">
-								<label class="col-sm-3 control-label" for="extColumn1">扩展字段1：</label>
+								<label class="col-sm-3 control-label" for="extColumn1">是否可关闭(true|false)：</label>
 								<div class="col-sm-8">
-									<input type="text" id="extColumn1" name="extColumn1" th:value="${sysMenu.extColumn1}" class="form-control" />
+									<select id="extColumn1" name="extColumn1" th:value="${sysMenu.extColumn1}" class="form-control">
+										<option th:value="true" th:selected="${sysMenu.extColumn1 == 'true'}">可关闭</option>
+										<option th:value="false" th:selected="${sysMenu.extColumn1 == 'false'}">不可关闭</option>
+									</select>
 								</div>
 							</div>
 																								<div class="form-group">

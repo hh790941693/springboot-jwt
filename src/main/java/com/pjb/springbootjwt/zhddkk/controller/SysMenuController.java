@@ -8,7 +8,11 @@ import java.util.List;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.zhddkk.bean.Tree;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.SysRoleMenuDO;
+import com.pjb.springbootjwt.zhddkk.domain.SysUserRoleDO;
+import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -22,6 +26,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.domain.SysMenuDO;
 import com.pjb.springbootjwt.zhddkk.service.SysMenuService;
+import com.pjb.springbootjwt.zhddkk.service.SysUserRoleService;
 import com.pjb.springbootjwt.zhddkk.service.SysRoleMenuService;
 import com.pjb.springbootjwt.common.vo.Result;
 import org.slf4j.Logger;
@@ -52,6 +57,12 @@ public class SysMenuController extends AdminBaseController {
 
     @Autowired
 	private SysRoleMenuService sysRoleMenuService;
+
+    @Autowired
+    private WsUsersService wsUsersService;
+
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
 
     /**
     * 跳转到菜单表页面.
@@ -175,14 +186,36 @@ public class SysMenuController extends AdminBaseController {
 
     /**
      * 查询角色对应的菜单列表
-     * @param roleId
+     * @param userId
      * @return
      */
-	@GetMapping("/getRoleMenuList/{roleId}")
+	@GetMapping("/getRoleMenuList")
 	@ResponseBody
-	public Result<List<SysMenuDO>> queryRoleMenuList(@PathVariable("roleId") int roleId) {
-        List<SysMenuDO> srcList = sysMenuService.queryRoleMenuList(roleId);
-        List<SysMenuDO> targetList = adjustMenuList(srcList);
+	public Result<List<SysMenuDO>> queryRoleMenuList(int userId) {
+        List<SysMenuDO> targetList = new ArrayList<>();
+        WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
+        if (null != wsUsersDO) {
+            SysUserRoleDO sysUserRoleDO = sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", userId));
+            if (null == sysUserRoleDO && wsUsersDO.getName().equals(CommonConstants.ADMIN_USER)) {
+                SysMenuDO parentSysMenuDO = new SysMenuDO();
+                parentSysMenuDO.setName("系统管理");
+                parentSysMenuDO.setIcon("icon-menu-folder-open");
+
+                List<SysMenuDO> childrenList = new ArrayList<SysMenuDO>();
+                SysMenuDO sonSysMenuDO = new SysMenuDO();
+                sonSysMenuDO.setName("用户管理");
+                sonSysMenuDO.setIcon("icon icon-users");
+                sonSysMenuDO.setUrl("/zhddkk/wsUsers/wsUsersForAdmin");
+                sonSysMenuDO.setExtColumn1("false");
+                childrenList.add(sonSysMenuDO);
+
+                parentSysMenuDO.setChildrenList(childrenList);
+                targetList.add(parentSysMenuDO);
+            } else {
+                List<SysMenuDO> srcList = sysMenuService.queryRoleMenuList(sysUserRoleDO.getRoleId());
+                targetList = adjustMenuList(srcList);
+            }
+        }
 	    return Result.ok(targetList);
 	}
 

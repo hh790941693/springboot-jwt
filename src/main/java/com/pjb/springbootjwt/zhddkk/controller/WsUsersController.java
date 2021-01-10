@@ -263,7 +263,6 @@ public class WsUsersController extends AdminBaseController {
             wrapper.eq("t1.speak", wsUsersDTO.getSpeak());
         }
 
-        wrapper.ne("t1.name", CommonConstants.ADMIN_USER);
         Page<WsUsersDO> page = getPage(WsUsersDO.class);
         List<WsUsersDO> userList = wsUsersService.queryUserPage(page, wrapper);
         page.setRecords(userList);

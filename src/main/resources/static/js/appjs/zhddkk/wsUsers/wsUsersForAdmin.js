@@ -148,12 +148,15 @@ function load() {
                 align: 'center',
                 formatter: function (value, row, index) {
                     var btns = "";
-
                     var selectRoleBtn = '<a class="btn btn-info btn-sm href="#" mce_href="#" title="选择角色" onclick="selectRole(\''
                         + row.id
                         + '\')"><i class="fa fa-edit">选择角色</i></a> ';
 
                     btns += selectRoleBtn;
+
+                    if (row.name == "admin") {
+                        return selectRoleBtn;
+                    }
 
                     //是否在线 0:离线 1:在线
                     if (row.state == "1") {

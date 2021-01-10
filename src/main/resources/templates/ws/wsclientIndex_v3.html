@@ -351,7 +351,7 @@
     };
     $.ajax({
         type: 'GET',
-        url: rootUrl + '/zhddkk/sysMenu/getRoleMenuList/' + sessionRoleId,
+        url: rootUrl + '/zhddkk/sysMenu/getRoleMenuList?userId=' + sessionUserId,
         async: false,
         dataType: 'json',
         success: function (result) {
