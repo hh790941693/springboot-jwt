@@ -111,7 +111,7 @@ function reLoad() {
 
 //重置
 function cleanForm(){
-    load();
+    reLoad();
 }
 
 //添加
@@ -152,7 +152,7 @@ function remove(id) {
 			success : function(r) {
 				if (r.code == 1) {
 					layer.msg(r.msg);
-                    load();
+                    reLoad();
 				}else{
 					layer.msg(r.msg);
 				}
