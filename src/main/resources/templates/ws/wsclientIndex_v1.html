@@ -109,11 +109,11 @@
             <div id="leftAndRightIframeDiv">
                 <!--左侧导航栏-->
                 <div id="leftNaviDiv">
-                    <div th:if="${session.sessionInfo.userType == '0'}">
+                    <div th:if="${session.sessionInfo.user == 'admin'}">
                         <iframe id="leftNaviIframePage" src="ws/serverLeftNavi.page" width="100%"
                                 height="100%"></iframe>
                     </div>
-                    <div th:if="${session.sessionInfo.userType != '0'}">
+                    <div th:if="${session.sessionInfo.user != 'admin'}">
                         <iframe id="leftNaviIframePage" src="ws/clientLeftNavi.page" width="100%"
                                 height="100%"></iframe>
                     </div>
@@ -204,7 +204,7 @@
 
         // 默认显示页:聊天窗口首页
         var curPageid = "ws/wsclientChat.page";
-        if (sessionUsertype == '0') {
+        if (sessionUser == 'admin') {
             curPageid = "/zhddkk/wsUsers/wsUsersForAdmin";
         }
         showPage(curPageid);
@@ -565,7 +565,7 @@
         setPageTitle();
         function setPageTitle() {
             let title = "";
-            if (sessionUsertype == "0") {
+            if (sessionUser == "admin") {
                 title = "page.serverindex.title";
             } else {
                 title = "page.clientindex.title";

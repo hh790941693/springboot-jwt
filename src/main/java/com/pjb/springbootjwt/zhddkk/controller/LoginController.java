@@ -61,7 +61,11 @@ public class LoginController {
     private static final Map<String, String> configMap = WsInterceptor.getConfigMap();
 
     // 登陆成功后的页面前缀
-    private static final String INDEX_PAGE_NAME = "wsclientIndex";
+    // 目前可用值:wsclientIndex 比v2更新一点的版本
+    //          wsclientIndex_v1 头、底、导航栏、iframe分离
+    //          wsclientIndex_v2 头、底、导航栏、iframe都在一个页面
+    //          wsclientIndex_v3 采用jquery easyUI重新设计
+    private static final String INDEX_PAGE_NAME = "wsclientIndex_v3";
 
     /**
      * webSocketConfig.
