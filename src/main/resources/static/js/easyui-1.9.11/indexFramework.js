@@ -25,10 +25,11 @@ function initLeftMenu() {
     $.each(_menus.menus, function(i, n) {
         menujson = {};
         menujson.title = n.name;
-        menujson.iconCls = n.icon;
+        menujson.iconCls = "icon-menu-folder-close";
         var contentHtml = "<ul>";
         $.each(n.childrenList, function(j, o) {
-            contentHtml += '<li><div closable="'+o.extColumn1+'"><a target="mainFrame" href="' + o.url + '" ><span class="'+o.icon+'" ></span>' + o.name + '</a></div></li> ';
+        	var urlNew = o.url + "?user=" + sessionUser;
+            contentHtml += '<li><div closable="'+o.extColumn1+'"><a target="mainFrame" href="' + urlNew + '" ><span class="'+o.icon+'" ></span>' + o.name + '</a></div></li> ';
         });
         contentHtml += '</ul>';
         menujson.content = contentHtml;
