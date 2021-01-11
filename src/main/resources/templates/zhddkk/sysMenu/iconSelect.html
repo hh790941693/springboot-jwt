@@ -48,6 +48,7 @@
     //给父页面传值
     $('.ico-list i').on('click', function(){
         parent.$('#icon').val($(this).attr('class'));
+        parent.$('#iconImg').attr("class", $(this).attr('class'));
         //parent.layer.tips('Look here', '#parentIframe', {time: 5000});
         parent.layer.close(index);
     });

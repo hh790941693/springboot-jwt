@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <head>
 	<th:block th:include="common :: header"></th:block>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/css/default.css}" />
 <body class="gray-bg">
 	<div class="wrapper wrapper-content ">
 		<div class="row">
@@ -39,10 +40,11 @@
 							
 							<div class="form-group">
 								<label class="col-sm-3 control-label">图标：</label>
-								<div class="col-sm-6">
+								<div class="col-sm-5">
 									<input id="icon" name="icon" th:value="${sysMenu.icon}" class="form-control" type="text"
 										   placeholder="例如：icon icon-edit">
 								</div>
+                                <i id="iconImg" th:class="${sysMenu.icon}" style="margin-right: 50px;"></i>
 								<input id="selectIconBtn" class="btn btn-warning" type="button" value="选择图标">
 							</div>
 							

@@ -150,7 +150,7 @@ function load() {
                     var btns = "";
                     var selectRoleBtn = '<a class="btn btn-info btn-sm href="#" mce_href="#" title="选择角色" onclick="selectRole(\''
                         + row.id
-                        + '\')"><i class="fa fa-edit">选择角色</i></a> ';
+                        + '\')"><i class="fa fa-edit">设置角色</i></a> ';
 
                     btns += selectRoleBtn;
 
