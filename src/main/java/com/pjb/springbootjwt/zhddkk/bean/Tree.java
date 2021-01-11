@@ -8,41 +8,41 @@ import java.util.Map;
 
 public class Tree<T> {
     /**
-     * ½ÚµãID
+     *ID.
      */
     private String id;
     /**
-     * ÏÔÊ¾½ÚµãÎÄ±¾
+     * text.
      */
     private String text;
     /**
-     * ½Úµã×´Ì¬£¬open closed
+     *open closed.
      */
     private Map<String, Object> state;
     /**
-     * ½ÚµãÊÇ·ñ±»Ñ¡ÖĞ true false
+     * æ˜¯å¦é€‰æ‹© true/false.
      */
     private boolean checked = false;
     /**
-     * ½ÚµãÊôĞÔ
+     * å±æ€§.
      */
     private Map<String, Object> attributes;
 
     /**
-     * ½ÚµãµÄ×Ó½Úµã
+     * å­èŠ‚ç‚¹.
      */
     private List<Tree<T>> children = new ArrayList<Tree<T>>();
 
     /**
-     * ¸¸ID
+     * çˆ¶ID.
      */
     private String parentId;
     /**
-     * ÊÇ·ñÓĞ¸¸½Úµã
+     * æ˜¯å¦å«æœ‰çˆ¶èŠ‚ç‚¹.
      */
     private boolean hasParent = false;
     /**
-     * ÊÇ·ñÓĞ×Ó½Úµã
+     * æ˜¯å¦å«æœ‰å­èŠ‚ç‚¹.
      */
     private boolean hasChildren = false;
 
