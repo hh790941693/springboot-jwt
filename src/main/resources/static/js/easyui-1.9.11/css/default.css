@@ -19,10 +19,7 @@ a:hover {text-decoration:none;}
     line-height: 26px;
     font-size: 16px;
 }
-.easyui-accordion ul li span {
-    height: 17px;
-    display: inline-block;
-}
+
 .easyui-accordion ul li div{height:30px; margin:2px 0px;padding-left:10px;padding-top:2px;}
 .easyui-accordion ul li div.hover{border:1px dashed #99BBE8; background:#E0ECFF;cursor:pointer;}
 .easyui-accordion ul li div.hover a{color:#416AA3;}
@@ -34,8 +31,8 @@ a:hover {text-decoration:none;}
 }
 
 
-.icon{padding:2px 9px; background:url(../images/tabicons.png) no-repeat; }
-.icon-1-1{background-position: -0px -0px}
+.icon{background:url(../images/tabicons.png) no-repeat center; padding: 2px 9px;}
+.icon-1-1{background-position: -0px -0px;}
 .icon-1-2{background-position: -20px -0px}
 .icon-1-3{background-position: -40px -0px}
 .icon-1-4{background-position: -60px -0px}
