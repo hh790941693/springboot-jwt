@@ -31,8 +31,10 @@
     var extraElems = "";
     for (var r=1;r<=26;r++) {
         for (var c=1;c<=20;c++) {
-            var icon = "icon icon-"+r+"-"+c;
-            extraElems += "<i class='"+icon+"' aria-hidden='true'></i>";
+            if ((r<=25) || (r == 26 && c<=14)) {
+                var icon = "icon icon-" + r + "-" + c;
+                extraElems += "<i class='" + icon + "' aria-hidden='true'></i>";
+            }
         }
     }
     $(".ico-list").append(extraElems);
