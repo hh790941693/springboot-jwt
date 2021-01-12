@@ -51,7 +51,7 @@ function load() {
         columns: [
             {
                 field: 'id',
-                title: '主键'
+                title: '用户id'
             },
             {
                 field: 'name',
