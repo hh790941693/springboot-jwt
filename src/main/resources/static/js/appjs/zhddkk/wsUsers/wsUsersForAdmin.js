@@ -423,7 +423,7 @@ function selectRole(id){
         title: '选择角色',
         maxmin: true,
         shadeClose: false,//点击遮罩关闭层
-        area: ['750px', '420px'],
+        area: ['775px', '400px'],
         content: prefix + '/selectRole/' + id
     });
 }
