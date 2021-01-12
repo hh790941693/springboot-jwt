@@ -65,7 +65,7 @@ function save() {
                 var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
                 parent.layer.close(index);
             } else {
-                parent.layer.alert("保存失败，请稍后再试");
+                parent.layer.alert("保存失败，请稍后再试。原因:"+r.data);
             }
 
         }
