@@ -143,8 +143,22 @@ public class SysMenuController extends AdminBaseController {
 	@ResponseBody
 	//@RequiresPermissions("zhddkk:sysMenu:remove")
 	public Result<String> remove(Integer id) {
-		sysMenuService.deleteById(id);
-        sysRoleMenuService.delete(new EntityWrapper<SysRoleMenuDO>().eq("menu_id", id));
+	    SysMenuDO sysMenuDO = sysMenuService.selectById(id);
+	    // 待删除的菜单id列表
+        List<Integer> deleteMenuIdList = new ArrayList<>();
+        deleteMenuIdList.add(id);
+
+	    if (null != sysMenuDO) {
+	        if (sysMenuDO.getParentId() == 0) {
+	            // 如果删除的是父节点,则同时删除其子节点菜单
+	            List<SysMenuDO> childrenMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().eq("parent_id", sysMenuDO.getId()));
+                for (SysMenuDO smd : childrenMenuList) {
+                    deleteMenuIdList.add(smd.getId());
+                }
+	        }
+            sysMenuService.deleteBatchIds(deleteMenuIdList);
+            sysRoleMenuService.delete(new EntityWrapper<SysRoleMenuDO>().in("menu_id", deleteMenuIdList));
+        }
         return Result.ok();
 	}
 	
