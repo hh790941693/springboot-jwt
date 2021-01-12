@@ -141,6 +141,12 @@ public class SysRoleController extends AdminBaseController {
 	@RequestMapping("/update")
 	//@RequiresPermissions("zhddkk:sysRole:edit")
 	public Result<String> update(SysRoleDO sysRole) {
+		String roleName = sysRole.getName();
+		int roleCount = sysRoleService.selectCount(new EntityWrapper<SysRoleDO>().eq("name", roleName));
+		if (roleCount > 0) {
+			return Result.fail("角色名已存在");
+		}
+
 		sysRoleService.updateById(sysRole);
         List<Integer> menuIdList = sysRole.getMenuIds();
         if (null != menuIdList && menuIdList.size() > 0){
