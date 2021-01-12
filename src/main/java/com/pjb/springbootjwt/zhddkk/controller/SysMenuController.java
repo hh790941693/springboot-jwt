@@ -16,6 +16,7 @@ import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -38,150 +39,156 @@ import org.slf4j.LoggerFactory;
 @Controller
 @RequestMapping("/zhddkk/sysMenu")
 public class SysMenuController extends AdminBaseController {
-
+    
     private static final Logger logger = LoggerFactory.getLogger(SysMenuController.class);
-
-	/**
-    * binder.
-	* @param binder binder
-	*/
-	@InitBinder
+    
+    /**
+     * binder.
+     * 
+     * @param binder binder
+     */
+    @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
-
+    
     @Autowired
-	private SysMenuService sysMenuService;
-
+    private SysMenuService sysMenuService;
+    
     @Autowired
-	private SysRoleMenuService sysRoleMenuService;
-
+    private SysRoleMenuService sysRoleMenuService;
+    
     @Autowired
     private WsUsersService wsUsersService;
-
+    
     @Autowired
     private SysUserRoleService sysUserRoleService;
-
+    
     /**
-    * 跳转到菜单表页面.
-	*/
-	@GetMapping()
-	//@RequiresPermissions("zhddkk:sysMenu:sysMenu")
-    public String sysMenu(){
-	    return "zhddkk/sysMenu/sysMenu";
-	}
-
+     * 跳转到菜单表页面.
+     */
+    @GetMapping()
+    // @RequiresPermissions("zhddkk:sysMenu:sysMenu")
+    public String sysMenu() {
+        return "zhddkk/sysMenu/sysMenu";
+    }
+    
     /**
      * 获取菜单表列表数据.
      */
-	@ResponseBody
-	@GetMapping("/list")
-	//@RequiresPermissions("zhddkk:sysMenu:sysMenu")
-	public List<SysMenuDO> list(SysMenuDO sysMenuDto) {
+    @ResponseBody
+    @GetMapping("/list")
+    // @RequiresPermissions("zhddkk:sysMenu:sysMenu")
+    public List<SysMenuDO> list(SysMenuDO sysMenuDto) {
         Wrapper<SysMenuDO> wrapper = new EntityWrapper<SysMenuDO>(sysMenuDto);
         Page<SysMenuDO> page = sysMenuService.selectPage(getPage(SysMenuDO.class), wrapper);
         List<SysMenuDO> list = sysMenuService.selectList(null);
         return list;
-	}
-
+    }
+    
     /**
      * 跳转到菜单表添加页面.
      */
-	@GetMapping("/add")
-	//@RequiresPermissions("zhddkk:sysMenu:add")
+    @GetMapping("/add")
+    // @RequiresPermissions("zhddkk:sysMenu:add")
     public String add(Model model) {
-		SysMenuDO sysMenu = new SysMenuDO();
+        SysMenuDO sysMenu = new SysMenuDO();
         model.addAttribute("sysMenu", sysMenu);
-
+        
         List<SysMenuDO> pMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().eq("parent_id", 0));
         model.addAttribute("pMenuList", pMenuList);
-
-	    return "zhddkk/sysMenu/sysMenuForm";
-	}
-
+        
+        return "zhddkk/sysMenu/sysMenuForm";
+    }
+    
     /**
      * 跳转到菜单表编辑页面.
+     * 
      * @param id 菜单表ID
      * @param model 菜单表实体
      */
-	@GetMapping("/edit/{id}")
-	//@RequiresPermissions("zhddkk:sysMenu:edit")
+    @GetMapping("/edit/{id}")
+    // @RequiresPermissions("zhddkk:sysMenu:edit")
     public String edit(@PathVariable("id") Integer id, Model model) {
-		SysMenuDO sysMenu = sysMenuService.selectById(id);
-		model.addAttribute("sysMenu", sysMenu);
-	    return "zhddkk/sysMenu/sysMenuForm";
-	}
-	
-	/**
-	 * 保存菜单表.
-	 */
-	@ResponseBody
-	@PostMapping("/save")
-	//@RequiresPermissions("zhddkk:sysMenu:add")
-	public Result<String> save(SysMenuDO sysMenu) {
-		sysMenuService.insert(sysMenu);
+        SysMenuDO sysMenu = sysMenuService.selectById(id);
+        model.addAttribute("sysMenu", sysMenu);
+        return "zhddkk/sysMenu/sysMenuForm";
+    }
+    
+    /**
+     * 保存菜单表.
+     */
+    @ResponseBody
+    @PostMapping("/save")
+    // @RequiresPermissions("zhddkk:sysMenu:add")
+    public Result<String> save(SysMenuDO sysMenu) {
+        sysMenuService.insert(sysMenu);
         return Result.ok();
-	}
-
-	/**
-	 * 编辑菜单表.
-	 */
-	@ResponseBody
-	@RequestMapping("/update")
-	//@RequiresPermissions("zhddkk:sysMenu:edit")
-	public Result<String> update(SysMenuDO sysMenu) {
-		sysMenuService.updateById(sysMenu);
-		return Result.ok();
-	}
-	
-	/**
-	 * 删除菜单表.
-	 */
-	@PostMapping("/remove")
-	@ResponseBody
-	//@RequiresPermissions("zhddkk:sysMenu:remove")
-	public Result<String> remove(Integer id) {
-	    SysMenuDO sysMenuDO = sysMenuService.selectById(id);
-	    // 待删除的菜单id列表
+    }
+    
+    /**
+     * 编辑菜单表.
+     */
+    @ResponseBody
+    @RequestMapping("/update")
+    // @RequiresPermissions("zhddkk:sysMenu:edit")
+    public Result<String> update(SysMenuDO sysMenu) {
+        sysMenuService.updateById(sysMenu);
+        return Result.ok();
+    }
+    
+    /**
+     * 删除菜单表.
+     */
+    @PostMapping("/remove")
+    @ResponseBody
+    @Transactional
+    // @RequiresPermissions("zhddkk:sysMenu:remove")
+    public Result<String> remove(Integer id) {
+        SysMenuDO sysMenuDO = sysMenuService.selectById(id);
+        // 待删除的菜单id列表
         List<Integer> deleteMenuIdList = new ArrayList<>();
         deleteMenuIdList.add(id);
-
-	    if (null != sysMenuDO) {
-	        if (sysMenuDO.getParentId() == 0) {
-	            // 如果删除的是父节点,则同时删除其子节点菜单
-	            List<SysMenuDO> childrenMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().eq("parent_id", sysMenuDO.getId()));
+        
+        if (null != sysMenuDO) {
+            if (sysMenuDO.getParentId() == 0) {
+                // 如果删除的是父节点,则同时删除其子节点菜单
+                List<SysMenuDO> childrenMenuList =
+                    sysMenuService.selectList(new EntityWrapper<SysMenuDO>().eq("parent_id", sysMenuDO.getId()));
                 for (SysMenuDO smd : childrenMenuList) {
                     deleteMenuIdList.add(smd.getId());
                 }
-	        }
+            }
             sysMenuService.deleteBatchIds(deleteMenuIdList);
             sysRoleMenuService.delete(new EntityWrapper<SysRoleMenuDO>().in("menu_id", deleteMenuIdList));
+
+            return Result.ok();
         }
+        return Result.fail();
+    }
+    
+    /**
+     * 批量删除菜单表.
+     */
+    @PostMapping("/batchRemove")
+    @ResponseBody
+    // @RequiresPermissions("zhddkk:sysMenu:batchRemove")
+    public Result<String> remove(@RequestParam("ids[]") Integer[] ids) {
+        sysMenuService.deleteBatchIds(Arrays.asList(ids));
         return Result.ok();
-	}
-	
-	/**
-	 * 批量删除菜单表.
-	 */
-	@PostMapping("/batchRemove")
-	@ResponseBody
-	//@RequiresPermissions("zhddkk:sysMenu:batchRemove")
-	public Result<String> remove(@RequestParam("ids[]") Integer[] ids) {
-		sysMenuService.deleteBatchIds(Arrays.asList(ids));
-		return Result.ok();
-	}
-
-	/**
-	 * 跳转到选择图标页面.
-	 */
-	@GetMapping("iconSelect.page")
-	//@RequiresPermissions("zhddkk:sysMenu:sysMenu")
-	public String iconSelect(){
-		return "zhddkk/sysMenu/iconSelect";
-	}
-
+    }
+    
+    /**
+     * 跳转到选择图标页面.
+     */
+    @GetMapping("iconSelect.page")
+    // @RequiresPermissions("zhddkk:sysMenu:sysMenu")
+    public String iconSelect() {
+        return "zhddkk/sysMenu/iconSelect";
+    }
+    
     @GetMapping("/tree")
     @ResponseBody
     Tree<SysMenuDO> tree() {
@@ -189,32 +196,34 @@ public class SysMenuController extends AdminBaseController {
         tree = sysMenuService.getTree();
         return tree;
     }
-
-	@GetMapping("/tree/{roleId}")
-	@ResponseBody
+    
+    @GetMapping("/tree/{roleId}")
+    @ResponseBody
     Tree<SysMenuDO> tree(@PathVariable("roleId") int roleId) {
-		Tree<SysMenuDO> tree = new Tree<SysMenuDO>();
-		tree = sysMenuService.getTree(roleId);
-		return tree;
-	}
-
+        Tree<SysMenuDO> tree = new Tree<SysMenuDO>();
+        tree = sysMenuService.getTree(roleId);
+        return tree;
+    }
+    
     /**
      * 查询角色对应的菜单列表
+     * 
      * @param userId
      * @return
      */
-	@GetMapping("/getRoleMenuList")
-	@ResponseBody
-	public Result<List<SysMenuDO>> queryRoleMenuList(int userId) {
+    @GetMapping("/getRoleMenuList")
+    @ResponseBody
+    public Result<List<SysMenuDO>> queryRoleMenuList(int userId) {
         List<SysMenuDO> targetList = new ArrayList<>();
         WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
         if (null != wsUsersDO) {
-            SysUserRoleDO sysUserRoleDO = sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", userId));
+            SysUserRoleDO sysUserRoleDO =
+                sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", userId));
             if (null == sysUserRoleDO && wsUsersDO.getName().equals(CommonConstants.ADMIN_USER)) {
                 SysMenuDO parentSysMenuDO = new SysMenuDO();
                 parentSysMenuDO.setName("系统管理");
                 parentSysMenuDO.setIcon("icon-menu-folder-open");
-
+                
                 List<SysMenuDO> childrenList = new ArrayList<SysMenuDO>();
                 SysMenuDO sonSysMenuDO = new SysMenuDO();
                 sonSysMenuDO.setName("用户管理");
@@ -222,25 +231,26 @@ public class SysMenuController extends AdminBaseController {
                 sonSysMenuDO.setUrl("/zhddkk/wsUsers/wsUsersForAdmin");
                 sonSysMenuDO.setExtColumn1("false");
                 childrenList.add(sonSysMenuDO);
-
+                
                 parentSysMenuDO.setChildrenList(childrenList);
                 targetList.add(parentSysMenuDO);
-            } else {
+            }
+            else {
                 List<SysMenuDO> srcList = sysMenuService.queryRoleMenuList(sysUserRoleDO.getRoleId());
                 targetList = adjustMenuList(srcList);
             }
         }
-	    return Result.ok(targetList);
-	}
-
-	private static List<SysMenuDO> adjustMenuList(List<SysMenuDO> srcList){
+        return Result.ok(targetList);
+    }
+    
+    private static List<SysMenuDO> adjustMenuList(List<SysMenuDO> srcList) {
         List<SysMenuDO> parentList = new ArrayList<>();
         for (SysMenuDO sysMenuDO : srcList) {
             if (sysMenuDO.getParentId() == 0) {
                 parentList.add(sysMenuDO);
             }
         }
-
+        
         if (parentList.size() > 0) {
             for (SysMenuDO parentMenuDO : parentList) {
                 List<SysMenuDO> childrenList = new ArrayList<>();
@@ -252,7 +262,7 @@ public class SysMenuController extends AdminBaseController {
                 parentMenuDO.setChildrenList(childrenList);
             }
         }
-
+        
         return parentList;
     }
 }
