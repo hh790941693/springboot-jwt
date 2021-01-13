@@ -77,7 +77,7 @@ function addTab(subtitle,url, closable, iconClass){
 }
 
 function createFrame(url) {
-	var s = '<iframe name="mainFrame" scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:100%;"></iframe>';
+	var s = '<iframe name="mainFrame" scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99.5%;"></iframe>';
 	return s;
 }
 
