@@ -10,12 +10,20 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 /**
  * 用户账号表
  */
- @TableName("ws_users")
+@TableName("ws_users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class WsUsersDO implements Serializable {
 
     @TableField(exist = false)
@@ -105,189 +113,9 @@ public class WsUsersDO implements Serializable {
     @TableField(exist = false)
     private String sign;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @TableField(exist = false)
+    private Integer roleId;
 
-    public Integer getId() {
-        return id;
-    }
-
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setEnable(String enable) {
-        this.enable = enable;
-    }
-
-    public String getEnable() {
-        return enable;
-    }
-
-
-    public void setSpeak(String speak) {
-        this.speak = speak;
-    }
-
-    public String getSpeak() {
-        return speak;
-    }
-
-
-    public void setQuestion1(String question1) {
-        this.question1 = question1;
-    }
-
-    public String getQuestion1() {
-        return question1;
-    }
-
-
-    public void setAnswer1(String answer1) {
-        this.answer1 = answer1;
-    }
-
-    public String getAnswer1() {
-        return answer1;
-    }
-
-
-    public void setQuestion2(String question2) {
-        this.question2 = question2;
-    }
-
-    public String getQuestion2() {
-        return question2;
-    }
-
-
-    public void setAnswer2(String answer2) {
-        this.answer2 = answer2;
-    }
-
-    public String getAnswer2() {
-        return answer2;
-    }
-
-
-    public void setQuestion3(String question3) {
-        this.question3 = question3;
-    }
-
-    public String getQuestion3() {
-        return question3;
-    }
-
-
-    public void setAnswer3(String answer3) {
-        this.answer3 = answer3;
-    }
-
-    public String getAnswer3() {
-        return answer3;
-    }
-
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public String getRegisterTime() {
-        return registerTime;
-    }
-
-    public void setRegisterTime(String registerTime) {
-        this.registerTime = registerTime;
-    }
-
-    public String getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    public void setLastLoginTime(String lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
-
-    public String getLastLogoutTime() {
-        return lastLogoutTime;
-    }
-
-    public void setLastLogoutTime(String lastLogoutTime) {
-        this.lastLogoutTime = lastLogoutTime;
-    }
-
-    public Integer getIsFriend() {
-        return isFriend;
-    }
-
-    public void setIsFriend(Integer isFriend) {
-        this.isFriend = isFriend;
-    }
-
-    public String getPasswordDecode() {
-        return passwordDecode;
-    }
-
-    public void setPasswordDecode(String passwordDecode) {
-        this.passwordDecode = passwordDecode;
-    }
-
-    public String getSendMsg() {
-        return sendMsg;
-    }
-
-    public void setSendMsg(String sendMsg) {
-        this.sendMsg = sendMsg;
-    }
-
-    public String getHeadImage() {
-        return headImage;
-    }
-
-    public void setHeadImage(String headImage) {
-        this.headImage = headImage;
-    }
-
-    public Integer getCoinNum() {
-        return coinNum;
-    }
-
-    public void setCoinNum(Integer coinNum) {
-        this.coinNum = coinNum;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
+    @TableField(exist = false)
+    private String roleName;
 }

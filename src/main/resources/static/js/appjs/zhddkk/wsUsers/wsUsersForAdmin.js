@@ -143,6 +143,13 @@ function load() {
                 }
             },
             {
+                field: 'roleName',
+                title: '角色',
+                formatter : function (value, row, index) {
+                    return value == null ? "" : value;
+                }
+            },
+            {
                 title: '操作',
                 field: 'id',
                 align: 'center',
