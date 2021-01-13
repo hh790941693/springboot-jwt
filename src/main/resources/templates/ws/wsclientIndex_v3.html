@@ -349,6 +349,8 @@
     var _menus = {
         "menus":[]
     };
+
+    // 获取左侧导航栏菜单列表
     $.ajax({
         type: 'GET',
         url: rootUrl + '/zhddkk/sysMenu/getRoleMenuList?userId=' + sessionUserId,
@@ -361,6 +363,36 @@
             }
         }
     });
+
+    //获取在线人数和积分数量
+    var onlineData = {};
+    $.ajax({
+        type: 'GET',
+        url: 'ws/getOnlineInfo.json',
+        async: false,
+        data: {"user": sessionUser},
+        //dataType: 'json',
+        success: function (result) {
+            if (result.code != 1) {
+                return;
+            }
+            onlineData = result.data;
+            var currentUserOnlineInfo = onlineData.currentOnlineUserInfo;
+            var coinNum = currentUserOnlineInfo.coinNum;
+            var onlineNum = onlineData.onlineUserList.length;
+            var headImage = currentUserOnlineInfo.headImage;
+
+            // 左上角头像、积分、在线人数
+            $("#coinNum").text(coinNum);
+            $("#onlineNum").text(onlineNum);
+            if (headImage == null || headImage == "") {
+                $("#myImg").attr("src", rootUrl + "../img/" + $.ws.errorImageName);
+            } else {
+                $("#myImg").attr("src", headImage);
+            }
+        }
+    });
+
     
     $(function() {
         console.log("主页获取session数据:" + sessionUser);
@@ -563,34 +595,34 @@
         //音乐播放器可拖动代码
         $.ws.dragPanelMove("#musicIframeHeader", "#musicIframeDiv");
 
-        //获取在线人数和积分数量
-        getOnlineInfo();
-        function getOnlineInfo() {
-            $.ajax({
-                type: 'GET',
-                url: 'ws/getOnlineInfo.json',
-                data: {"user": sessionUser},
-                //dataType: 'json',
-                success: function (result) {
-                    if (result.code != 1) {
-                        return;
-                    }
-                    var jsonObj = result.data;
-                    var currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
-                    var coinNum = currentUserOnlineInfo.coinNum;
-                    var onlineNum = jsonObj.onlineUserList.length;
-                    var headImage = currentUserOnlineInfo.headImage;
-
-                    $("#coinNum").text(coinNum);
-                    $("#onlineNum").text(onlineNum);
-                    if (headImage == null || headImage == "") {
-                        $("#myImg").attr("src", rootUrl + "../img/" + $.ws.errorImageName);
-                    } else {
-                        $("#myImg").attr("src", headImage);
-                    }
+        // 首页--我的好友列表
+        var app = new Vue({
+            el: '#friendsListDiv',
+            data: {
+                friendList: {},
+                loginUser: sessionUser,
+                onlineFriendCount: 0,
+                offlineFriendCount: 0,
+                friendList: onlineData.friendsList,
+                onlineFriendCount: onlineData.onlineFriendCount,
+                offlineFriendCount: onlineData.offlineFriendCount,
+            },
+            methods: {
+                showPersonInfo: function (userName) {
+                    layer.open({
+                        type: 2,
+                        title: '用户个人信息',
+                        shadeClose: true,
+                        shade: 0.2,
+                        area: ['390px', '420px'],
+                        content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + userName
+                    });
                 }
-            });
-        }
+            },
+            created: function (e) {
+                // do nothing
+            }
+        });
 
         //获取最新广告
         queryRecentAdsList();
@@ -862,47 +894,5 @@
         $("#bottomSpanTips").css("color", color);
         $("#bottomSpanTips").html(msg);
     }
-    
-    // 首页--我的好友列表
-    var app = new Vue({
-        el: '#friendsListDiv',
-        data: {
-            friendList: {},
-            loginUser: sessionUser,
-            onlineFriendCount: 0,
-            offlineFriendCount: 0
-        },
-        methods: {
-            getOnlineInfo: function () {
-                $.ajax({
-                    type: 'GET',
-                    url: 'ws/getOnlineInfo.json',
-                    data: {"user": sessionUser},
-                    success: function (result) {
-                        if (result.code != 1) {
-                            return;
-                        }
-                        var jsonObj = result.data;
-                        app.friendList = jsonObj.friendsList;
-                        app.onlineFriendCount = jsonObj.onlineFriendCount;
-                        app.offlineFriendCount = jsonObj.offlineFriendCount;
-                    }
-                });
-            },
-            showPersonInfo: function (userName) {
-                layer.open({
-                    type: 2,
-                    title: '用户个人信息',
-                    shadeClose: true,
-                    shade: 0.2,
-                    area: ['390px', '420px'],
-                    content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + userName
-                });
-            }
-        },
-        created: function (e) {
-            this.getOnlineInfo();
-        }
-    });
 </script>
 </html>
