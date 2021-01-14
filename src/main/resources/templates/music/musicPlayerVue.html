@@ -34,6 +34,7 @@
                 width: 100%;
                 height: 92.4%;
                 margin: 0px auto;
+                min-width: 928px;
             }
 
             #uploadResultDiv {
@@ -75,20 +76,20 @@
         </div>
         
         <div id="playerDiv">
-            <div id="buttons" style="height:15%;border-bottom: 1px solid grey;">
+            <div id="buttons" style="height:11%;min-height: 66px;border-bottom: 1px solid grey;">
                 <div id="songNameDiv" align="center"
                      style="background-color:yellow;height:35%;border-bottom:2px solid green;padding-top:3px;">
                     <span id="statusSpan"
                           style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span><span> : </span><label
                         id="songName"></label>
                 </div>
-                <div style="height:67%;">
-                    <div style="float:left;width:30%;height:46px;margin-top:5px;margin-left: 5px;">
+                <div style="width:100%; height:64%;padding-top: 5px;">
+                    <div style="float:left;width:30%;height:100%;margin-left: 5px;">
                         <audio id="player" controls="controls" src="" style="width:100%;height:100%;"></audio>
                     </div>
 
-                    <div style="float:right;margin-top:10px;width:68%;">
-                        <div style="float:left;margin-left:10px;height:40px;">
+                    <div style="float:right;width:68%;height: 100%;">
+                        <div style="float:left;margin-left:10px;height:100%;">
                             <button id="btnPre" class='btn btn-primary' @click="preMusic()" th:title="#{btn.last.tips}">
                                 <span class="glyphicon glyphicon-step-backward"></span>
                             </button>
