@@ -361,7 +361,6 @@
         dataType: 'json',
         success: function (result) {
             if (result.code == 1) {
-                console.log(result);
                 _menus.menus = result.data;
             }
         }
@@ -531,7 +530,7 @@
                 title: '会话信息',
                 maxmin: false,
                 shadeClose: true,//点击遮罩关闭层
-                area: ['630px', '410px'],
+                area: ['630px', '450px'],
                 anim: 1,
                 content: '/sessionInfo.page'
             });

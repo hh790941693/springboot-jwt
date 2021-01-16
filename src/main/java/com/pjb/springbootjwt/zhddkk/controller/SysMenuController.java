@@ -219,23 +219,24 @@ public class SysMenuController extends AdminBaseController {
         if (null != wsUsersDO) {
             SysUserRoleDO sysUserRoleDO =
                 sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", userId));
-            if (null == sysUserRoleDO && wsUsersDO.getName().equals(CommonConstants.ADMIN_USER)) {
-                SysMenuDO parentSysMenuDO = new SysMenuDO();
-                parentSysMenuDO.setName("系统管理");
-                parentSysMenuDO.setIcon("icon-menu-folder-open");
-                
-                List<SysMenuDO> childrenList = new ArrayList<SysMenuDO>();
-                SysMenuDO sonSysMenuDO = new SysMenuDO();
-                sonSysMenuDO.setName("用户管理");
-                sonSysMenuDO.setIcon("icon icon-users");
-                sonSysMenuDO.setUrl("/zhddkk/wsUsers/wsUsersForAdmin");
-                sonSysMenuDO.setExtColumn1("false");
-                childrenList.add(sonSysMenuDO);
-                
-                parentSysMenuDO.setChildrenList(childrenList);
-                targetList.add(parentSysMenuDO);
-            }
-            else {
+            if (null == sysUserRoleDO) {
+                if (wsUsersDO.getName().equals(CommonConstants.ADMIN_USER)) {
+                    SysMenuDO parentSysMenuDO = new SysMenuDO();
+                    parentSysMenuDO.setName("系统管理");
+                    parentSysMenuDO.setIcon("icon-menu-folder-open");
+
+                    List<SysMenuDO> childrenList = new ArrayList<SysMenuDO>();
+                    SysMenuDO sonSysMenuDO = new SysMenuDO();
+                    sonSysMenuDO.setName("用户管理");
+                    sonSysMenuDO.setIcon("icon icon-users");
+                    sonSysMenuDO.setUrl("/zhddkk/wsUsers/wsUsersForAdmin");
+                    sonSysMenuDO.setExtColumn1("false");
+                    childrenList.add(sonSysMenuDO);
+
+                    parentSysMenuDO.setChildrenList(childrenList);
+                    targetList.add(parentSysMenuDO);
+                }
+            } else {
                 List<SysMenuDO> srcList = sysMenuService.queryRoleMenuList(sysUserRoleDO.getRoleId());
                 targetList = adjustMenuList(srcList);
             }
