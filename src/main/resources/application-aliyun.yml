@@ -1,0 +1,42 @@
+server:
+  address: 192.168.2.115
+  port: 8085
+  tomcat:
+    basedir: /opt/tomcatTemp
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://58.220.130.183:3306/zhdd?useSSL=false
+    username: park
+    password: bKeP4zhGm5QFX@N4
+  cache:
+    ehcache:
+      config: classpath:ehcache.xml
+  redis:
+    host: 192.168.31.153
+    port: 6379
+    password: 123456
+    database: 0
+    timeout: 1000s
+    jedis:
+      pool:
+        max-idle: 500
+        min-idle: 50
+        max-active: -1
+
+#本地上传
+upload:
+  config:
+    #本地存储路径
+    store-path: /opt/music
+    #访问url(需要通过nginx来访问)
+    #server {
+    #  listen 8101;
+    #  server_name  localhost;
+    #  location / {
+    #    root /home/springbootJwt;
+    #    autoindex on;
+    #  }
+    #}
+    view-url: http://${server.address}:9999/
