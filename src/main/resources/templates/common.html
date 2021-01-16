@@ -71,6 +71,7 @@
         <input type="hidden" id="sessionSelfimg" th:value="${session.sessionInfo.selfImg}">
         <input type="hidden" id="sessionUseragent" th:value="${session.sessionInfo.userAgent}">
         <input type="hidden" id="sessionRoleId" th:value="${session.sessionInfo.roleId}">
+        <input type="hidden" id="sessionRoleName" th:value="${session.sessionInfo.roleName}">
         <input type="hidden" id="sessionJsonStr" th:value="${session.sessionInfo.jsonStr}">
         <input type="hidden" id="sessionJsonObject" th:value="${session.sessionInfo.jsonObject}">
         <script th:inline="javascript">
@@ -82,6 +83,7 @@
             var sessionSelfimg = $("#sessionSelfimg").val();
             var sessionUseragent = $("#sessionUseragent").val();
             var sessionRoleId = $("#sessionRoleId").val();
+            var sessionRoleName = $("#sessionRoleName").val();
             var sessionJsonStr = $("#sessionJsonStr").val();
             var sessionJsonObject = eval('(' + $("#sessionJsonObject").val() + ')');
 

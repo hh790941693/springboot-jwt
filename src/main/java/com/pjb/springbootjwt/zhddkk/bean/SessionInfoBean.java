@@ -29,6 +29,8 @@ public class SessionInfoBean {
 
     private String roleId;
 
+    private String roleName;
+
     private JSONObject jsonObject;
 
     private String jsonStr;
@@ -48,9 +50,10 @@ public class SessionInfoBean {
      * @param selfImg 头像url
      * @param userAgent 浏览器类型
      * @param roleId 用户角色id
+     * @param roleName 角色名
      */
     public SessionInfoBean(String id, String userId, String user, String password, String webserverIp,
-                           String webserverPort, String selfImg, String userAgent, String roleId) {
+                           String webserverPort, String selfImg, String userAgent, String roleId, String roleName) {
         this.id = id;
         this.userId = userId;
         this.user = user;
@@ -60,5 +63,6 @@ public class SessionInfoBean {
         this.selfImg = selfImg;
         this.userAgent = userAgent;
         this.roleId = roleId;
+        this.roleName = roleName;
     }
 }

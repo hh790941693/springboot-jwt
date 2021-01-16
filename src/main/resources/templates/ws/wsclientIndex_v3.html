@@ -99,18 +99,21 @@
                     <div class="easyui-layout" data-options="fit:true">
                         <!--左侧头像-->
                         <div data-options="region:'west',split:false,border:false" style="width:62px;padding:1px;">
-                            <img th:src="${session.sessionInfo.selfImg}" width="100%" height="100%">
+                            <img id="headImage" th:src="${session.sessionInfo.selfImg}" width="100%" height="100%">
                         </div>
                         <!--右侧-->
                         <div data-options="region:'center',split:false,border:false">
                             <div class="easyui-layout" data-options="fit:true" border="false">
                                 <!--登陆用户-->
-                                <div data-options="region:'north',split:false,border:false" style="height:55%;padding: 4px 0 0 5px;">
-                                    <span th:text="${session.sessionInfo.user}" style="font-size: 25px;"></span>
+                                <div data-options="region:'north',split:false,border:false" style="height:35%;padding: 1px 0 0 5px;overflow: hidden;">
+                                    <span th:text="${session.sessionInfo.user}" style="font-size: 23px;"></span>
                                 </div>
-                                
+                                <!--角色名-->
+                                <div data-options="region:'center',split:false,border:false" style="height:28%;padding: 1px 0 0 5px;margin-left: -7px;overflow: hidden;">
+                                    【<span th:text="${session.sessionInfo.roleName == '' ? '尚无角色' : session.sessionInfo.roleName}" style="font-size: 13px;"></span>】
+                                </div>
                                 <!--在线用户数、积分数-->
-                                <div data-options="region:'center',split:false,border:false" style="height:45%;padding: 5px 0 0 5px;">
+                                <div data-options="region:'south',split:false,border:false" style="height:37%;padding: 5px 0 0 5px;overflow: hidden;">
                                       <span class="icon icon-11-19" th:title="#{span.onlinecount.tips}"></span>
                                       <label id="onlineNum">0</label>&nbsp;&nbsp;
                                       <span class="icon icon-22-3" th:title="#{span.coinnum.tips}"></span>
@@ -386,9 +389,9 @@
             $("#coinNum").text(coinNum);
             $("#onlineNum").text(onlineNum);
             if (headImage == null || headImage == "") {
-                $("#myImg").attr("src", rootUrl + "../img/" + $.ws.errorImageName);
+                $("#headImage").attr("src", rootUrl + "../img/" + $.ws.errorImageName);
             } else {
-                $("#myImg").attr("src", headImage);
+                $("#headImage").attr("src", headImage);
             }
         }
     });

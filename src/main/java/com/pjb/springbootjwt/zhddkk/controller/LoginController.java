@@ -12,6 +12,7 @@ import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.service.CacheService;
+import com.pjb.springbootjwt.zhddkk.service.SysRoleService;
 import com.pjb.springbootjwt.zhddkk.service.SysUserRoleService;
 import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
 import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
@@ -117,6 +118,9 @@ public class LoginController {
 
     @Autowired
     private SysUserRoleService sysUserRoleService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
 
     @Value("${server.address}")
     private String serverAddress;
@@ -278,22 +282,19 @@ public class LoginController {
         request.getSession().setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
         // 角色信息
-        String roleId = null;
-        SysUserRoleDO sysUserRoleDO = sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", curUserObj.getId()));
-        if (null != sysUserRoleDO) {
-            roleId = String.valueOf(sysUserRoleDO.getRoleId());
-        }
+        SysRoleDO sysRoleInfo = queryRoleInfo(curUserObj.getId());
+        String roleId = sysRoleInfo != null ? String.valueOf(sysRoleInfo.getId()) : "";
+        String roleName = sysRoleInfo != null ? String.valueOf(sysRoleInfo.getName()) : "";
 
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(request.getSession().getId(),
-                String.valueOf(curUserObj.getId()), user, curUserObj.getPassword(), webserverip, webserverPort, selfImg, shortAgent, roleId);
+                String.valueOf(curUserObj.getId()), user, curUserObj.getPassword(), webserverip, webserverPort, selfImg, shortAgent, roleId, roleName);
         String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
         JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
         sessionInfoBean.setJsonStr(jsonStr);
         sessionInfoBean.setJsonObject(jsonObj);
         // 页面通过th:value="${session.sessionInfo.jsonStr}"来获取session信息
         request.getSession().setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
-        //model.addAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
         // 往redis中存储用户信息
         String redisKey = REDIS_KEY_PREFIX + user;
@@ -738,5 +739,19 @@ public class LoginController {
             localeCookie.setMaxAge(CommonConstants.LOCALE_COOKIE_EXPIRE);
             response.addCookie(localeCookie);
         }
+    }
+
+    /**
+     * 获取用户角色信息.
+     * @param userId 用户id
+     * @return
+     */
+    private SysRoleDO queryRoleInfo(Integer userId){
+        SysRoleDO sysRoleDO = null;
+        SysUserRoleDO sysUserRoleDO = sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", userId));
+        if (null != sysUserRoleDO) {
+            sysRoleDO = sysRoleService.selectById(sysUserRoleDO.getRoleId());
+        }
+        return sysRoleDO;
     }
 }
