@@ -44,7 +44,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,12 +120,6 @@ public class LoginController {
 
     @Autowired
     private SysRoleService sysRoleService;
-
-    @Value("${server.address}")
-    private String serverAddress;
-
-    @Value("${server.port}")
-    private String serverPort;
 
     /**
      * 首页登录.
@@ -567,7 +560,7 @@ public class LoginController {
         }
 
         if (isNeedGenerateCode) {
-            String text = scheme + "://" + serverAddress + ":" + serverPort;
+            String text = scheme + "://" + webSocketConfig.getAddress() + ":" + webSocketConfig.getPort();
             System.out.println("登录地址:" + text);
             try {
                 String qrCodeFilePath = QRCodeUtil.generateQRCode(text, 200, 200, "png", savePathAbs);
