@@ -1,6 +1,6 @@
 server:
-  address: 192.168.2.115
-  port: 8085
+  address: 10.0.4.14
+  port: 8100
   tomcat:
     basedir: /opt/tomcatTemp
 
@@ -8,8 +8,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://58.220.130.183:3306/zhdd?useSSL=false
-    username: park
-    password: bKeP4zhGm5QFX@N4
+    username: root
+    password: ^klzvG064A7%ERQj
   cache:
     ehcache:
       config: classpath:ehcache.xml
@@ -39,4 +39,4 @@ upload:
     #    autoindex on;
     #  }
     #}
-    view-url: http://${server.address}:9999/
+    view-url: http://81.68.80.210:8101/
