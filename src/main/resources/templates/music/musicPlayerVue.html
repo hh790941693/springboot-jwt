@@ -32,7 +32,7 @@
             
             #playerDiv {
                 width: 100%;
-                height: calc(100% - 36px);
+                height: calc(100% - 44px);
                 margin: 0px auto;
                 min-width: 928px;
             }
@@ -53,111 +53,114 @@
         </style>
     </head>
     <body>
-        <!--上传-->
-        <div style="height:36px;">
-            <div align="center" style="width:24%;height:100%;float:left;padding-top: 2px;">
-                <div class="layui-upload">
-                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="chooseFileBtn">
-                        <span class="glyphicon glyphicon-folder-open"></span> [[#{btn.choose.label}]]
-                    </button>
-                    <button type="button" class="layui-btn layui-btn-sm" id="uploadFileBtn">
-                        <span class="glyphicon glyphicon-arrow-up"></span> [[#{btn.upload.label}]]
-                    </button>
-                </div>
-            </div>
-            <div style="width:74%;height:100%;float:left;">
-                <div style="text-align: right;height:50%;">
-                    <span id="uploadFilename"></span><span id="uploadedNumber" style="margin-left: 10px;">0</span> / <span id="totalFileNumber">0</span>
-                </div>
-                 <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadProgress">
-                    <div class="layui-progress-bar" lay-percent="0%"></div>
-                 </div>
-            </div>
-        </div>
-        
-        <div id="playerDiv">
-            <div id="buttons" style="height:11%;min-height: 66px;border-bottom: 1px solid grey;">
-                <div id="songNameDiv" align="center"
-                     style="background-color:yellow;height:35%;border-bottom:2px solid green;padding-top:3px;">
-                    <span id="statusSpan"
-                          style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span><span> : </span><label
-                        id="songName"></label>
-                </div>
-                <div style="width:100%; height:64%;padding-top: 5px;">
-                    <div style="float:left;width:30%;height:100%;margin-left: 5px;">
-                        <audio id="player" controls="controls" src="" style="width:100%;height:100%;"></audio>
+        <div id="mainDiv" style="width: 100%; height: 100%;overflow-y: hidden;">
+            <!--上传-->
+            <div id="uploadDiv" style="height:44px;padding-top: 4px;">
+                <div align="center" style="width:24%;height:100%;float:left;padding-top: 2px;">
+                    <div class="layui-upload">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="chooseFileBtn">
+                            <span class="glyphicon glyphicon-folder-open"></span> [[#{btn.choose.label}]]
+                        </button>
+                        <button type="button" class="layui-btn layui-btn-sm" id="uploadFileBtn">
+                            <span class="glyphicon glyphicon-arrow-up"></span> [[#{btn.upload.label}]]
+                        </button>
                     </div>
-
-                    <div style="float:right;width:68%;height: 100%;">
-                        <div style="float:left;margin-left:10px;height:100%;">
-                            <button id="btnPre" class='btn btn-primary' @click="preMusic()" th:title="#{btn.last.tips}">
-                                <span class="glyphicon glyphicon-step-backward"></span>
-                            </button>
-                            <button id="btnPlay" class='btn btn-success' @click="play()"
-                                    th:title="#{btn.playpause.tips}">
-                                <span class="glyphicon glyphicon-play"></span>
-                            </button>
-                            <button id="btnNext" class='btn btn-primary' @click="nextMusic()"
-                                    th:title="#{btn.next.tips}">
-                                <span class="glyphicon glyphicon-step-forward"></span>
-                            </button>
-                            <button id="btnRefresh" class='btn btn-info' @click="refreash()"
-                                    th:title="#{btn.refreash.tips}">
-                                <span class="glyphicon glyphicon-repeat"></span>
-                            </button>
-                            <button id="btnShowList" class='btn btn-warning' @click="showList($event)">[[#{btn.hidelist.label}]]</button>
-                            <button id="btnDeleteAll" class='btn btn-danger' @click="deleteAll()" style="margin-left: 10px;">[[#{btn.deleteall.label}]]</button>
-                        </div>
-                        <div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
-                            <input type="radio" name="playmode" value="-1" checked="checked"
-                                   @click="changePlayMode($event)" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
-                            <input type="radio" name="playmode" value="0" @click="changePlayMode($event)"
-                                   th:title="#{radio.loop.tips}">[[#{radio.loop.tips}]]&nbsp;&nbsp;
-                            <input type="radio" name="playmode" value="1" @click="changePlayMode($event)"
-                                   th:title="#{radio.order.tips}">[[#{radio.order.tips}]]&nbsp;&nbsp;
-                            <input type="radio" name="playmode" value="2" @click="changePlayMode($event)"
-                                   th:title="#{radio.random.tips}">[[#{radio.random.tips}]]
-                        </div>
+                </div>
+                <div style="width:74%;height:100%;float:left;">
+                    <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadProgress">
+                        <div class="layui-progress-bar" lay-percent="0%"></div>
+                     </div>
+                    <div style="text-align: right;height:50%;">
+                        <span id="uploadFilename"></span><span id="uploadedNumber" style="margin-left: 10px;">0</span> / <span id="totalFileNumber">0</span>
                     </div>
                 </div>
             </div>
-
-            <div id="musicList" style="overflow-y: scroll;width: 100%;height:89%;">
-                <table id="musicTable" style="width:100%;border-collapse:separate; border-spacing:1px 4px;">
-                    <tr class="thClass">
-                        <th style="width:60px;">选择</th>
-                        <th style="width:60px;">主键</th>
-                        <th style="width:200px;">歌曲名称</th>
-                        <th style="width:60px;">大小</th>
-                        <th style="width:40px;">访问性</th>
-                        <th style="display:none;">url</th>
-                        <th style="width:40px;">操作</th>
-                    </tr>
-                    <tr v-for="(music,index) in musicData" :key="index" @mouseenter="mouseEnter(music, index)"
-                        @mouseleave="mouseLeave(music, index)">
-                        <td>
-                            <div v-if="index==0">
-                                <input type='radio' name='selectMusic' checked="checked"/>
+            
+            <div id="playerDiv">
+                <div id="buttons" style="height:11%;min-height: 66px;border-bottom: 1px solid grey;">
+                    <div id="songNameDiv" align="center"
+                         style="background-color:yellow;height:35%;border-bottom:2px solid green;">
+                        <span id="statusSpan"
+                              style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span><span> : </span><label
+                            id="songName"></label>
+                    </div>
+                    <div style="width:100%; height:64%;padding-top: 5px;">
+                        <div style="float:left;width:30%;height:100%;margin-left: 5px;">
+                            <audio id="player" controls="controls" src="" style="width:100%;height:100%;"></audio>
+                        </div>
+    
+                        <div style="float:right;width:68%;height: 100%;">
+                            <div style="float:left;margin-left:10px;height:100%;">
+                                <button id="btnPre" class='btn btn-primary' @click="preMusic()" th:title="#{btn.last.tips}">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button id="btnPlay" class='btn btn-success' @click="play()"
+                                        th:title="#{btn.playpause.tips}">
+                                    <span class="glyphicon glyphicon-play"></span>
+                                </button>
+                                <button id="btnNext" class='btn btn-primary' @click="nextMusic()"
+                                        th:title="#{btn.next.tips}">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button id="btnRefresh" class='btn btn-info' @click="refreash()"
+                                        th:title="#{btn.refreash.tips}">
+                                    <span class="glyphicon glyphicon-repeat"></span>
+                                </button>
+                                <button id="btnShowList" class='btn btn-warning' @click="showList($event)">[[#{btn.hidelist.label}]]</button>
+                                <button id="btnDeleteAll" class='btn btn-danger' @click="deleteAll()" style="margin-left: 10px;">[[#{btn.deleteall.label}]]</button>
                             </div>
-                            <div v-else>
-                                <input type='radio' name='selectMusic'/>
+                            <div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
+                                <input type="radio" name="playmode" value="-1" checked="checked"
+                                       @click="changePlayMode($event)" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
+                                <input type="radio" name="playmode" value="0" @click="changePlayMode($event)"
+                                       th:title="#{radio.loop.tips}">[[#{radio.loop.tips}]]&nbsp;&nbsp;
+                                <input type="radio" name="playmode" value="1" @click="changePlayMode($event)"
+                                       th:title="#{radio.order.tips}">[[#{radio.order.tips}]]&nbsp;&nbsp;
+                                <input type="radio" name="playmode" value="2" @click="changePlayMode($event)"
+                                       th:title="#{radio.random.tips}">[[#{radio.random.tips}]]
                             </div>
-                        </td>
-                        <td>{{music.id}}</td>
-                        <td @dblclick="doublePlay(index)">{{music.filename}}</td>
-                        <td>{{(parseInt(music.fileSize)/1024.0/1024.0).toFixed(0)}}M</td>
-                        <td>{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
-                        <td>
-                            <button class='delBtn btn btn-sm btn-success' @click="playMusic(music.id)">
-                                <span class="glyphicon glyphicon-play"></span> [[#{btn.play.label}]]
-                            </button>
-                            <button class='delBtn btn btn-sm btn-danger' @click="deleteMusic(music.id)">
-                                <span class="glyphicon glyphicon-trash"></span> [[#{btn.delete.label}]]
-                            </button>
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                    </div>
+                </div>
+    
+                <div id="musicList" style="overflow-y: scroll;width: 100%;height:89%;">
+                    <table id="musicTable" style="width:100%;border-collapse:separate; border-spacing:1px 4px;">
+                        <tr class="thClass">
+                            <th style="width:10%;">选择</th>
+                            <th style="width:10%;">主键</th>
+                            <th style="width:43%;">歌曲名称</th>
+                            <th style="width:13%;">大小</th>
+                            <th style="width:9%;">访问性</th>
+                            <th style="display:none;">url</th>
+                            <th style="width:14%;">操作</th>
+                        </tr>
+                        <tr v-for="(music,index) in musicData" :key="index" @mouseenter="mouseEnter(music, index)"
+                            @mouseleave="mouseLeave(music, index)">
+                            <td>
+                                <div v-if="index==0">
+                                    <input type='radio' name='selectMusic' checked="checked"/>
+                                </div>
+                                <div v-else>
+                                    <input type='radio' name='selectMusic'/>
+                                </div>
+                            </td>
+                            <td>{{music.id}}</td>
+                            <td @dblclick="doublePlay(index)">{{music.filename}}</td>
+                            <td>{{(parseInt(music.fileSize)/1024.0/1024.0).toFixed(0)}}M</td>
+                            <td>{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
+                            <td>
+                                <button class='delBtn btn btn-sm btn-success' @click="playMusic(music.id)">
+                                    <span class="glyphicon glyphicon-play"></span> [[#{btn.play.label}]]
+                                </button>
+                                <button class='delBtn btn btn-sm btn-danger' @click="deleteMusic(music.id)">
+                                    <span class="glyphicon glyphicon-trash"></span> [[#{btn.delete.label}]]
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
+            
         </div>
         <th:block th:include="common :: footer"></th:block>
         <th:block th:include="common :: sessionInfo"></th:block>
