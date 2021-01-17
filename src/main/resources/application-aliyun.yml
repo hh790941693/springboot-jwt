@@ -40,3 +40,9 @@ upload:
     #  }
     #}
     view-url: http://81.68.80.210:8101/
+
+#websocket聊天服务器配置
+websocket:
+  config:
+    address: 81.68.80.210
+    port: ${server.port}

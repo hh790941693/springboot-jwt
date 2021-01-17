@@ -35,7 +35,7 @@ spring:
       - classpath:/static
       - classpath:/static/css
   profiles:
-    active: home
+    active: aliyun
   servlet:
     #上传文件设置
     multipart:
@@ -53,9 +53,3 @@ alioss:
     bucketName: hx-dfz
     rootPath: uploads
     viewUrl: http://hx-dfz.oss-cn-shanghai.aliyuncs.com/
-
-#websocket聊天服务器配置
-websocket:
-  config:
-    address: ${server.address}
-    port: ${server.port}
