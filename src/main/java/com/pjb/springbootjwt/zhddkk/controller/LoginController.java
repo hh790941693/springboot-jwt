@@ -278,7 +278,7 @@ public class LoginController {
         //记录cookie
         saveCookie(request, response, curUserObj);
 
-        // 设置session非活动失效时间(10分钟)
+        // 设置session非活动失效时间(30分钟)
         request.getSession().setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
         // 角色信息
@@ -420,6 +420,17 @@ public class LoginController {
                 wsUserProfileDO.setImg(headImg);
             }
             wsUserProfileService.insert(wsUserProfileDO);
+        }
+
+        // 分配[普通用户]角色
+        SysRoleDO sysRoleDO = sysRoleService.selectOne(new EntityWrapper<SysRoleDO>().eq("name", "普通用户"));
+        if (null != sysRoleDO) {
+            SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
+            sysUserRoleDO.setUserId(insrtWu.getId());
+            sysUserRoleDO.setUserName(insrtWu.getName());
+            sysUserRoleDO.setRoleId(sysRoleDO.getId());
+            sysUserRoleDO.setRoleName(sysRoleDO.getName());
+            sysUserRoleService.insert(sysUserRoleDO);
         }
 
         model.addAttribute("user", user);

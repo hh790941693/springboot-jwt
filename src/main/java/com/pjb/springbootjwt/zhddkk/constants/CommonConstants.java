@@ -28,8 +28,8 @@ public class CommonConstants {
     //cookie过期时间(单位:秒) 30分钟
     public static final int COOKIE_TIMEOUT = 1800;
 
-    //session不活动时的超时时间(单位:秒)  10分钟
-    public static final int SESSION_INACTIVE_TIMEOUT = 600;
+    //session不活动时的超时时间(单位:秒)  30分钟
+    public static final int SESSION_INACTIVE_TIMEOUT = 1800;
 
     // 请求结果常量
     public static final String SUCCESS = "success";
