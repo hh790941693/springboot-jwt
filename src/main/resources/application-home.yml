@@ -1,8 +1,8 @@
 server:
-  address: 192.168.31.94
+  address: 127.0.0.1
   port: 8100
   tomcat:
-    basedir: c:\\tomcatTemp
+    basedir: ${temp.tomcat.path.windows}
 
 spring:
   datasource:

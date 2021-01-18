@@ -2,7 +2,7 @@ server:
   address: 10.0.4.14
   port: 8100
   tomcat:
-    basedir: /opt/tomcatTemp
+    basedir: ${temp.tomcat.path.linux}
 
 spring:
   datasource:

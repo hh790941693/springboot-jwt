@@ -37,7 +37,7 @@ public class Application {
 
     private static final Logger log = LoggerFactory.getLogger(Application.class);
 
-    private static final String SPRING_TOMCAT_TEMP_LIUNX = "/opt/springBootTomcatTemp";
+    private static final String SPRING_TOMCAT_TEMP_LIUNX = "/opt/tomcatTemp";
 
     private static final String SPRING_TOMCAT_TEMP_WINDOW = "C:\\tomcatTemp";
 
