@@ -14,7 +14,7 @@
         <property name="log.path" value="d:\\jwtlogs" />
     </springProfile>
 
-    <springProfile name="linux">
+    <springProfile name="linux,tencent">
         <property name="log.path" value="/opt/springbootjwt/logs" />
     </springProfile>
 
