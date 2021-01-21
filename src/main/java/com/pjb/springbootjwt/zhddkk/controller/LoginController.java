@@ -66,7 +66,7 @@ public class LoginController {
     //          wsclientIndex_v1 头、底、导航栏、iframe分离
     //          wsclientIndex_v2 头、底、导航栏、iframe都在一个页面
     //          wsclientIndex_v3 采用jquery easyUI重新设计
-    private static final String INDEX_PAGE_NAME = "wsclientIndex_v3";
+    private static String INDEX_PAGE_NAME = "wsclientIndex_v3";
 
     // 数据库驱动
     @Value("${spring.datasource.driver-class-name}")
@@ -148,6 +148,18 @@ public class LoginController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "登陆首页页面")
     @RequestMapping({"", "/", "/index"})
     public String home(Model model, HttpServletRequest request) {
+        String version = request.getParameter("v");
+        if (StringUtils.isNotBlank(version)) {
+            if (version.equals("0")) {
+                INDEX_PAGE_NAME = "wsclientIndex";
+            } else if (version.equals("1")) {
+                INDEX_PAGE_NAME = "wsclientIndex_v1";
+            } else if (version.equals("2")) {
+                INDEX_PAGE_NAME = "wsclientIndex_v2";
+            } else if (version.equals("3")) {
+                INDEX_PAGE_NAME = "wsclientIndex_v3";
+            }
+        }
 
         // 如果用户已登陆过，则直接跳转登陆成功首页
         SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession().getAttribute(CommonConstants.SESSION_INFO);
