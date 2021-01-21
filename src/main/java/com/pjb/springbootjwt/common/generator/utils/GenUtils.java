@@ -248,11 +248,11 @@ public class GenUtils {
         } else if (template.contains("add.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
-                    + File.separator + "Add.js";
+                    + File.separator + classname + "Add.js";
         } else if (template.contains("edit.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
-                    + File.separator + "Edit.js";
+                    + File.separator + classname + "Edit.js";
         } else if (template.contains("form.js.vm")) {
             return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
                     + File.separator + "appjs" + File.separator + packageName + File.separator + classname
