@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SessionController {
     /**
      * 查看session信息.
+     * 
      * @param request 请求
      * @param response 响应
      */
@@ -30,7 +31,7 @@ public class SessionController {
     public void querySessionInfo(HttpServletRequest request, HttpServletResponse response) {
         HttpSession httpSession = request.getSession(false);
         Enumeration<String> enumeration = httpSession.getAttributeNames();
-
+        
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         PrintWriter printWriter;
@@ -46,7 +47,7 @@ public class SessionController {
                 String name = enumeration.nextElement();
                 Object value;
                 if (name.equals(CommonConstants.SESSION_INFO)) {
-                    SessionInfoBean sessionInfoBean = (SessionInfoBean) httpSession.getAttribute(name);
+                    SessionInfoBean sessionInfoBean = (SessionInfoBean)httpSession.getAttribute(name);
                     value = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
                 } else {
                     value = httpSession.getAttribute(name);
@@ -58,9 +59,10 @@ public class SessionController {
             e.printStackTrace();
         }
     }
-
+    
     /**
      * 跳转session信息页面.
+     * 
      * @param request 请求
      * @param model 模型
      * @return 会话信息
@@ -68,8 +70,8 @@ public class SessionController {
     @RequestMapping("/sessionInfo.page")
     public String sessionInfoPage(HttpServletRequest request, Model model) {
         HttpSession httpSession = request.getSession(false);
-        SessionInfoBean sessionInfoBean = (SessionInfoBean) httpSession.getAttribute(CommonConstants.SESSION_INFO);
-
+        SessionInfoBean sessionInfoBean = (SessionInfoBean)httpSession.getAttribute(CommonConstants.SESSION_INFO);
+        
         if (null != sessionInfoBean) {
             SessionInfoBean copyBean = new SessionInfoBean();
             BeanUtils.copyProperties(sessionInfoBean, copyBean);
@@ -78,10 +80,10 @@ public class SessionController {
             model.addAttribute(CommonConstants.SESSION_INFO, JsonUtil.javaobject2Jsonobject(copyBean));
             return "ws/sessionInfo";
         }
-
+        
         return "redirect:/";
     }
-
+    
     /**
      * 对密码做特殊处理.
      *

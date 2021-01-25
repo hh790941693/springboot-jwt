@@ -10,7 +10,6 @@ import java.util.List;
 import com.baomidou.mybatisplus.enums.SqlLike;
 import com.pjb.springbootjwt.zhddkk.domain.SysRoleMenuDO;
 import com.pjb.springbootjwt.zhddkk.domain.SysUserRoleDO;
-import com.pjb.springbootjwt.zhddkk.service.SysMenuService;
 import com.pjb.springbootjwt.zhddkk.service.SysUserRoleService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,8 +163,7 @@ public class SysRoleController extends AdminBaseController {
             
             sysRoleMenuService.removeByRoleId(sysRole.getId());
             sysRoleMenuService.batchSave(insertRoleMenuList);
-        }
-        else {
+        } else {
             sysRoleMenuService.removeByRoleId(sysRole.getId());
         }
         return Result.ok();

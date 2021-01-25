@@ -777,9 +777,9 @@ public class LoginController {
     /**
      * 获取用户角色信息.
      * @param userId 用户id
-     * @return
+     * @return 角色信息
      */
-    private SysRoleDO queryRoleInfo(Integer userId){
+    private SysRoleDO queryRoleInfo(Integer userId) {
         SysRoleDO sysRoleDO = null;
         SysUserRoleDO sysUserRoleDO = sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", userId));
         if (null != sysUserRoleDO) {

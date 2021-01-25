@@ -82,10 +82,7 @@ public class SysMenuController extends AdminBaseController {
     @GetMapping("/list")
     // @RequiresPermissions("zhddkk:sysMenu:sysMenu")
     public List<SysMenuDO> list(SysMenuDO sysMenuDto) {
-        Wrapper<SysMenuDO> wrapper = new EntityWrapper<SysMenuDO>(sysMenuDto);
-        Page<SysMenuDO> page = sysMenuService.selectPage(getPage(SysMenuDO.class), wrapper);
-        List<SysMenuDO> list = sysMenuService.selectList(null);
-        return list;
+        return sysMenuService.selectList(null);
     }
     
     /**
@@ -97,8 +94,8 @@ public class SysMenuController extends AdminBaseController {
         SysMenuDO sysMenu = new SysMenuDO();
         model.addAttribute("sysMenu", sysMenu);
         
-        List<SysMenuDO> pMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().eq("parent_id", 0));
-        model.addAttribute("pMenuList", pMenuList);
+        List<SysMenuDO> parentMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().eq("parent_id", 0));
+        model.addAttribute("pMenuList", parentMenuList);
         
         return "zhddkk/sysMenu/sysMenuForm";
     }
@@ -206,10 +203,10 @@ public class SysMenuController extends AdminBaseController {
     }
     
     /**
-     * 查询角色对应的菜单列表
+     * 查询角色对应的菜单列表.
      * 
-     * @param userId
-     * @return
+     * @param userId 用户id
+     * @return 角色菜单列表
      */
     @GetMapping("/getRoleMenuList")
     @ResponseBody
@@ -224,13 +221,14 @@ public class SysMenuController extends AdminBaseController {
                     SysMenuDO parentSysMenuDO = new SysMenuDO();
                     parentSysMenuDO.setName("系统管理");
                     parentSysMenuDO.setIcon("icon-menu-folder-open");
-
-                    List<SysMenuDO> childrenList = new ArrayList<SysMenuDO>();
+                    
                     SysMenuDO sonSysMenuDO = new SysMenuDO();
                     sonSysMenuDO.setName("用户管理");
                     sonSysMenuDO.setIcon("icon icon-users");
                     sonSysMenuDO.setUrl("/zhddkk/wsUsers/wsUsersForAdmin");
                     sonSysMenuDO.setExtColumn1("false");
+
+                    List<SysMenuDO> childrenList = new ArrayList<SysMenuDO>();
                     childrenList.add(sonSysMenuDO);
 
                     parentSysMenuDO.setChildrenList(childrenList);
