@@ -15,11 +15,14 @@ import lombok.NoArgsConstructor;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
 #end
+#if(${hasCreateTime} || ${hasUpdateTime} || ${hasDeleteTime})
+import com.fasterxml.jackson.annotation.JsonFormat;
+#end
 
 /**
- * ${comments}
+ * ${comments}.
  */
-@TableName("${tableName}")
+@TableName("${tableName}" )
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,13 +30,23 @@ public class ${className}DO implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
-    
+
 #foreach ($column in $columns)
     //$column.comments
 #if ($column.attrname == $pk.attrname)
     @TableId(type = IdType.AUTO)
 #end
-    @ApiModelProperty(value = "$column.attrname", name = "$column.comments")
+    @ApiModelProperty(value = "$column.attrname" , name = "$column.comments")
+#if($column.attrname == "createTime")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+#end
+#if($column.attrname == "updateTime")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+#end
+#if($column.attrname == "deleteTime")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+#end
     private $column.attrType $column.attrname;
+
 #end
 }

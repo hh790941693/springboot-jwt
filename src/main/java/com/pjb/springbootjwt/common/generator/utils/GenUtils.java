@@ -102,8 +102,12 @@ public class GenUtils {
         // 字段特性
         map.put("hasBigDecimal", dataTypeList.contains("decimal"));
         //时间类型的包含3种，date、datetime、timestamp
-        if (dataTypeList.contains("date") || dataTypeList.contains("datetime") || dataTypeList.contains("timestamp")) {
+        if (dataTypeList.contains("date")) {
+            map.put("hasDate", 1);
+        } else if (dataTypeList.contains("datetime")) {
             map.put("hasDatetime", 1);
+        } else if (dataTypeList.contains("timestamp")) {
+            map.put("hasTimestamp", 1);
         }
         map.put("hasDeleted", columnNameList.contains("deleted"));
         map.put("hasVersion", columnNameList.contains("version"));
@@ -111,6 +115,9 @@ public class GenUtils {
         map.put("hasCreateBy", columnNameList.contains("createBy"));
         map.put("hasUpdateAt", columnNameList.contains("updateAt"));
         map.put("hasUpdateBy", columnNameList.contains("updateBy"));
+        map.put("hasCreateTime", columnNameList.contains("create_time"));
+        map.put("hasUpdateTime", columnNameList.contains("update_time"));
+        map.put("hasDeleteTime", columnNameList.contains("delete_time"));
         VelocityContext context = new VelocityContext(map);
 
         // 获取模板列表
