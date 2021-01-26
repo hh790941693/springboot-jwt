@@ -47,79 +47,79 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/zhddkk/wsUsers")
 public class WsUsersController extends AdminBaseController {
-
+    
     private static Logger logger = LoggerFactory.getLogger(WsUsersController.class);
-
+    
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
-
+    
     @Autowired
     private WsUsersService wsUsersService;
-
+    
     @Autowired
     private WsFriendsService wsFriendsService;
-
+    
     @Autowired
     private WsFriendsApplyService wsFriendsApplyService;
-
+    
     @Autowired
     private WsUserProfileService wsUserProfileService;
-
+    
     @Autowired
     private SysUserRoleService sysUserRoleService;
-
+    
     @Autowired
     private SysRoleService sysRoleService;
-
+    
     /**
-    * 跳转到用户账号表页面
-    */
-    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户列表页面")
+     * 跳转到用户账号表页面.
+     */
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "用户列表页面")
     @GetMapping("/wsUsers")
-    public String wsUsers(Model model, String user){
+    public String wsUsers(Model model, String user) {
         model.addAttribute("user", user);
         return "zhddkk/wsUsers/wsUsers";
     }
-
+    
     /**
-     * 获取用户账号表列表数据
+     * 获取用户账号表列表数据.
      */
-    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户列表")
+    @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "用户列表")
     @ResponseBody
     @GetMapping("/wsUsersList")
-    public Result<Page<WsUsersDO>> list(WsUsersDO wsUsersDTO, String curUser){
+    public Result<Page<WsUsersDO>> list(WsUsersDO wsUsersDTO, String curUser) {
         Wrapper<WsUsersDO> wrapper = new EntityWrapper<WsUsersDO>();
-        if (StringUtils.isNotBlank(wsUsersDTO.getName())){
+        if (StringUtils.isNotBlank(wsUsersDTO.getName())) {
             wrapper.like("t1.name", wsUsersDTO.getName(), SqlLike.DEFAULT);
         }
         Page<WsUsersDO> page = getPage(WsUsersDO.class);
         List<WsUsersDO> userList = wsUsersService.queryUserPage(page, wrapper);
         page.setRecords(userList);
-
-        if (null != userList && userList.size()>0) {
+        
+        if (null != userList && userList.size() > 0) {
             for (WsUsersDO wu : userList) {
                 if (wu.getName().equals(curUser)) {
                     wu.setIsFriend(3);
                     continue;
                 }
                 wu.setIsFriend(0);
-                int isMyFriend = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>()
-                        .eq("uname", curUser).eq("fname", wu.getName()));
+                int isMyFriend = wsFriendsService
+                    .selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", curUser).eq("fname", wu.getName()));
                 if (isMyFriend > 0) {
-                    wu.setIsFriend(3);//已是好友
+                    wu.setIsFriend(3); // 已是好友
                 } else {
-                    // 0:不是  1:申请中 2:被拒绝 3:申请成功
-                    List<WsFriendsApplyDO> applyList = wsFriendsApplyService.selectList(new EntityWrapper<WsFriendsApplyDO>()
-                            .eq("from_name", curUser).eq("to_name", wu.getName()));
+                    // 0:不是 1:申请中 2:被拒绝 3:申请成功
+                    List<WsFriendsApplyDO> applyList = wsFriendsApplyService.selectList(
+                        new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUser).eq("to_name", wu.getName()));
                     if (null == applyList || applyList.size() == 0) {
-                        wu.setIsFriend(0);//去申请
+                        wu.setIsFriend(0); // 去申请
                     } else if (applyList.size() == 1) {
                         Integer processStatus = applyList.get(0).getProcessStatus();
-                        wu.setIsFriend(processStatus);// 1:申请中 2:被拒绝 3:申请成功
+                        wu.setIsFriend(processStatus); // 1:申请中 2:被拒绝 3:申请成功
                     } else if (applyList.size() > 1) {
                         // 过滤掉被驳回的记录
                         for (WsFriendsApplyDO temp : applyList) {
@@ -134,89 +134,90 @@ public class WsUsersController extends AdminBaseController {
         }
         return Result.ok(page);
     }
-
+    
     /**
-     * 跳转到用户账号表添加页面
+     * 跳转到用户账号表添加页面.
      */
     @GetMapping("/add")
     @RequiresPermissions("zhddkk:wsUsers:add")
-    public String add(Model model){
+    public String add(Model model) {
         WsUsersDO wsUsers = new WsUsersDO();
         model.addAttribute("wsUsers", wsUsers);
         return "zhddkk/wsUsers/wsUsersForm";
     }
-
+    
     /**
-     * 跳转到用户账号表编辑页面
+     * 跳转到用户账号表编辑页面.
+     * 
      * @param id 用户账号表ID
      * @param model 用户账号表实体
      */
     @GetMapping("/edit/{id}")
     @RequiresPermissions("zhddkk:wsUsers:edit")
-    public String edit(@PathVariable("id") Integer id,Model model){
+    public String edit(@PathVariable("id") Integer id, Model model) {
         WsUsersDO wsUsers = wsUsersService.selectById(id);
         model.addAttribute("wsUsers", wsUsers);
         return "zhddkk/wsUsers/wsUsersForm";
     }
-
+    
     /**
-     * 保存用户账号表
+     * 保存用户账号表.
      */
     @ResponseBody
     @PostMapping("/save")
     @RequiresPermissions("zhddkk:wsUsers:add")
-    public Result<String> save( WsUsersDO wsUsers){
+    public Result<String> save(WsUsersDO wsUsers) {
         wsUsersService.insert(wsUsers);
         return Result.ok();
     }
-
+    
     /**
-     * 编辑用户账号表
+     * 编辑用户账号表.
      */
     @ResponseBody
     @RequestMapping("/update")
     @RequiresPermissions("zhddkk:wsUsers:edit")
-    public Result<String> update( WsUsersDO wsUsers){
+    public Result<String> update(WsUsersDO wsUsers) {
         wsUsersService.updateById(wsUsers);
         return Result.ok();
     }
-
+    
     /**
-     * 删除用户账号表
+     * 删除用户账号表.
      */
     @PostMapping("/remove")
     @ResponseBody
     @RequiresPermissions("zhddkk:wsUsers:remove")
-    public Result<String> remove( Integer id){
+    public Result<String> remove(Integer id) {
         wsUsersService.deleteById(id);
         return Result.ok();
     }
-
+    
     /**
-     * 批量删除用户账号表
+     * 批量删除用户账号表.
      */
     @PostMapping("/batchRemove")
     @ResponseBody
     @RequiresPermissions("zhddkk:wsUsers:batchRemove")
-    public Result<String> remove(@RequestParam("ids[]") Integer[] ids){
+    public Result<String> remove(@RequestParam("ids[]") Integer[] ids) {
         wsUsersService.deleteBatchIds(Arrays.asList(ids));
         return Result.ok();
     }
-
-    @OperationLogAnnotation(type=OperationEnum.INSERT,module=ModuleEnum.USER_MANAGE,subModule="",describe="添加好友")
+    
+    @OperationLogAnnotation(type = OperationEnum.INSERT, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "添加好友")
     @PostMapping("/addAsFriends")
     @ResponseBody
-    public Result<String> addAsFriends(String curUser, Integer toUserId){
+    public Result<String> addAsFriends(String curUser, Integer toUserId) {
         Integer fromUserId = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", curUser)).getId();
         String toUserName = wsUsersService.selectById(toUserId).getName();
-
-        logger.info(curUser+"申请添加"+toUserName+"为好友");
+        
+        logger.info(curUser + "申请添加" + toUserName + "为好友");
         WsFriendsDO wf = new WsFriendsDO();
         wf.setUname(curUser);
         wf.setFname(toUserName);
-        int existCount = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", curUser)
-                .eq("fname", toUserName));
-        if (existCount<=0) {
+        int existCount =
+            wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", curUser).eq("fname", toUserName));
+        if (existCount <= 0) {
             WsFriendsApplyDO wfa = new WsFriendsApplyDO();
             wfa.setFromId(fromUserId);
             wfa.setFromName(curUser);
@@ -224,28 +225,28 @@ public class WsUsersController extends AdminBaseController {
             wfa.setToName(toUserName);
             wfa.setProcessStatus(1);
             wsFriendsApplyService.insert(wfa);
-
+            
             return Result.ok();
-        }else{
-            logger.info(toUserName+"已是你的好友了,无需再次申请");
+        } else {
+            logger.info(toUserName + "已是你的好友了,无需再次申请");
         }
-
+        
         return Result.fail();
     }
-
+    
     /**
      * 跳转到管理员用户列表
      */
-    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户列表页面(管理员)")
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "用户列表页面(管理员)")
     @GetMapping("/wsUsersForAdmin")
-    public String wsUsersForAdmin(Model model, String user){
+    public String wsUsersForAdmin(Model model, String user) {
         return "zhddkk/wsUsers/wsUsersForAdmin";
     }
-
+    
     /**
-     * 获取管理员用户列表
+     * 获取管理员用户列表.
      */
-    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户列表(管理员)")
+    @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "用户列表(管理员)")
     @ResponseBody
     @GetMapping("/wsUsersListForAdmin")
     public Result<Page<WsUsersDO>> wsUsersListForAdmin(WsUsersDO wsUsersDTO) {
@@ -262,30 +263,31 @@ public class WsUsersController extends AdminBaseController {
         if (StringUtils.isNotBlank(wsUsersDTO.getSpeak())) {
             wrapper.eq("t1.speak", wsUsersDTO.getSpeak());
         }
-
+        
         Page<WsUsersDO> page = getPage(WsUsersDO.class);
         List<WsUsersDO> userList = wsUsersService.queryUserPage(page, wrapper);
         page.setRecords(userList);
-
+        
         return Result.ok(page);
     }
-
+    
     /**
-     * 让某用户下线
+     * 让某用户下线.
+     * 
      * @param id
      * @return
      */
-    @OperationLogAnnotation(type= OperationEnum.UPDATE,module= ModuleEnum.USER_MANAGE,subModule="",describe="使用户下线")
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "使用户下线")
     @RequestMapping(value = "offlineUser.do")
     @ResponseBody
     public Result<String> offlineUser(@RequestParam("id") String id) {
         WsUsersDO wsUsersDO = wsUsersService.selectById(id);
-        if (null == wsUsersDO){
+        if (null == wsUsersDO) {
             return Result.fail("用户不存在");
         }
         String userName = wsUsersDO.getName();
         Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-        for (Map.Entry<String,ZhddWebSocket> entry : socketMap.entrySet()) {
+        for (Map.Entry<String, ZhddWebSocket> entry : socketMap.entrySet()) {
             if (entry.getKey().equals(userName)) {
                 try {
                     entry.getValue().getSession().close();
@@ -296,70 +298,73 @@ public class WsUsersController extends AdminBaseController {
                 }
             }
         }
-
+        
         wsUsersDO.setState("0");
         boolean updateFlag = wsUsersService.updateById(wsUsersDO);
-        if (updateFlag){
+        if (updateFlag) {
             return Result.ok();
         }
         return Result.fail();
     }
-
+    
     /**
-     * 让某用户禁用/启用
+     * 让某用户禁用/启用.
+     * 
      * @param id
      * @param status
      * @return
      */
-    @OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户的禁用/启用")
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "用户的禁用/启用")
     @RequestMapping(value = "operEnableUser.do")
     @ResponseBody
-    public Result<String> operEnableUser(@RequestParam("id") String id,@RequestParam("status") String status) {
+    public Result<String> operEnableUser(@RequestParam("id") String id, @RequestParam("status") String status) {
         WsUsersDO wsUsersDO = wsUsersService.selectById(id);
-        if (null == wsUsersDO){
+        if (null == wsUsersDO) {
             return Result.fail("用户不存在");
         }
         wsUsersDO.setEnable(status);
         boolean updateFlag = wsUsersService.updateById(wsUsersDO);
-        if (updateFlag){
+        if (updateFlag) {
             return Result.ok();
         }
         return Result.fail();
     }
-
+    
     /**
-     * 让某用户禁言/开言
+     * 让某用户禁言/开言.
+     * 
      * @param id
      * @param status
      * @return
      */
-    @OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.USER_MANAGE,subModule="",describe="用户的禁言/开言")
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "用户的禁言/开言")
     @RequestMapping(value = "operSpeakUser.do")
     @ResponseBody
-    public Result<String> operSpeakUser(@RequestParam("id") String id,@RequestParam("status") String status) {
+    public Result<String> operSpeakUser(@RequestParam("id") String id, @RequestParam("status") String status) {
         WsUsersDO wsUsersDO = wsUsersService.selectById(id);
-        if (null == wsUsersDO){
+        if (null == wsUsersDO) {
             return Result.fail("用户不存在");
         }
         wsUsersDO.setSpeak(status);
         boolean updateFlag = wsUsersService.updateById(wsUsersDO);
-        if (updateFlag){
+        if (updateFlag) {
             return Result.ok();
         }
         return Result.fail();
     }
-
+    
     /**
-     * 导出用户信息
+     * 导出用户信息.
      *
      * @param response
      */
-    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.USER_MANAGE,subModule="",describe="导出用户信息")
+    @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "导出用户信息")
     @RequestMapping(value = "exportUser.do", method = RequestMethod.GET)
-    public void exportUser(HttpServletResponse response){
+    public void exportUser(HttpServletResponse response) {
         logger.debug("开始导出用户信息");
-        List<WsUsersDO> list = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER));
-        if (null != list && list.size()>0) {
+        List<WsUsersDO> list =
+            wsUsersService.selectList(new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER));
+        if (null != list && list.size() > 0) {
             for (WsUsersDO wu : list) {
                 String password = wu.getPassword();
                 if (StringUtils.isNotEmpty(password)) {
@@ -367,57 +372,58 @@ public class WsUsersController extends AdminBaseController {
                     wu.setPasswordDecode(passwordDecode);
                 }
             }
-
+            
             String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
             String fileName = "wsUser".concat("_").concat(time).concat(".xls");
             ExcelUtil.exportExcel(list, "用户信息", "用户", WsUsersDO.class, fileName, response);
         }
     }
-
+    
     /**
-     * 显示用户信息
+     * 显示用户信息.
      *
      * @param model
      * @param user
      * @return
      */
-    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.SETTING,subModule="",describe="显示用户信息首页")
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.SETTING, subModule = "", describe = "显示用户信息首页")
     @RequestMapping(value = "showPersonalInfo.page")
-    public String showPersonalInfo(Model model,@RequestParam("user")String user) {
+    public String showPersonalInfo(Model model, @RequestParam("user") String user) {
         logger.debug("访问showPersonalInfo.page");
         model.addAttribute("user", user);
         return "zhddkk/wsUsers/showPersonalInfo";
     }
-
+    
     /**
-     * 查询个人信息
+     * 查询个人信息.
      *
      * @return
      */
-    @OperationLogAnnotation(type=OperationEnum.QUERY,module=ModuleEnum.SETTING,subModule="",describe="查询个人信息")
-    @RequestMapping(value="queryPersonInfo.json",method=RequestMethod.POST)
+    @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.SETTING, subModule = "", describe = "查询个人信息")
+    @RequestMapping(value = "queryPersonInfo.json", method = RequestMethod.POST)
     @ResponseBody
     public Result<WsUserProfileDO> queryPersonInfo(@RequestParam("user") String user) {
-        WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>()
-                .eq("user_name", user));
+        WsUserProfileDO wsUserProfileDO =
+            wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_name", user));
         if (null == wsUserProfileDO) {
             return Result.fail();
         }
-
+        
         return Result.ok(wsUserProfileDO);
     }
-
+    
     /**
-     * 设置个人信息
+     * 设置个人信息.
      *
      * @return
      */
-    @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.SETTING,subModule="",describe="用户信息设置首页")
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.SETTING, subModule = "", describe = "用户信息设置首页")
     @RequestMapping(value = "setPersonalInfo.page")
-    public String setPersonalInfo(Model model, @RequestParam("user")String user) {
+    public String setPersonalInfo(Model model, @RequestParam("user") String user) {
         logger.debug("访问setPersonalInfo.page");
         model.addAttribute("user", user);
-        WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_name", user));
+        WsUserProfileDO wsUserProfileDO =
+            wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_name", user));
         if (null != wsUserProfileDO) {
             String location = wsUserProfileDO.getLocation();
             if (StringUtils.isNotBlank(location) && location.contains("-")) {
@@ -433,40 +439,40 @@ public class WsUsersController extends AdminBaseController {
         model.addAttribute("userProfileJson", JsonUtil.javaobject2Jsonobject(wsUserProfileDO));
         return "zhddkk/wsUsers/setPersonalInfo";
     }
-
+    
     /**
-     * 设置个人信息
+     * 设置个人信息.
      *
      */
-    @OperationLogAnnotation(type=OperationEnum.UPDATE,module=ModuleEnum.SETTING,subModule="",describe="设置个人信息")
-    @RequestMapping(value = "setPersonInfo.do",method=RequestMethod.POST)
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.SETTING, subModule = "", describe = "设置个人信息")
+    @RequestMapping(value = "setPersonInfo.do", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> setPersonInfo(@RequestParam(value="userName",required=true) String userName,
-                                @RequestParam(value="realName",required=false) String realName,
-                                @RequestParam(value="headImg",required=false) String headImg,
-                                @RequestParam(value="sign",required=false) String sign,
-                                @RequestParam(value="age",required=false) Integer age,
-                                @RequestParam(value="sex",required=false) Integer sex,
-                                @RequestParam(value="sexText",required=false) String sexText,
-                                @RequestParam(value="tel",required=false) String tel,
-                                @RequestParam(value="province",required=false) String province,
-                                @RequestParam(value="city",required=false) String city,
-                                @RequestParam(value="district",required=false) String district,
-                                @RequestParam(value="address",required=false) String address,
-                                @RequestParam(value="profession",required=false) Integer profession,
-                                @RequestParam(value="professionText",required=false) String professionText,
-                                @RequestParam(value="hobby",required=false) Integer hobby,
-                                @RequestParam(value="hobbyText",required=false) String hobbyText
-    ) {
+    public Result<String> setPersonInfo(@RequestParam(value = "userName", required = true) String userName,
+        @RequestParam(value = "realName", required = false) String realName,
+        @RequestParam(value = "headImg", required = false) String headImg,
+        @RequestParam(value = "sign", required = false) String sign,
+        @RequestParam(value = "age", required = false) Integer age,
+        @RequestParam(value = "sex", required = false) Integer sex,
+        @RequestParam(value = "sexText", required = false) String sexText,
+        @RequestParam(value = "tel", required = false) String tel,
+        @RequestParam(value = "province", required = false) String province,
+        @RequestParam(value = "city", required = false) String city,
+        @RequestParam(value = "district", required = false) String district,
+        @RequestParam(value = "address", required = false) String address,
+        @RequestParam(value = "profession", required = false) Integer profession,
+        @RequestParam(value = "professionText", required = false) String professionText,
+        @RequestParam(value = "hobby", required = false) Integer hobby,
+        @RequestParam(value = "hobbyText", required = false) String hobbyText) {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
-        if (null == wsUsersDO){
+        if (null == wsUsersDO) {
             return Result.fail();
         }
-
+        
         String location = province + "-" + city + "-" + district;
-
+        
         // 检查表中是否有个人信息记录
-        WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", wsUsersDO.getId()));
+        WsUserProfileDO wsUserProfileDO =
+            wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", wsUsersDO.getId()));
         if (null == wsUserProfileDO) {
             logger.info("插入个人信息");
             WsUserProfileDO wup = new WsUserProfileDO();
@@ -486,10 +492,10 @@ public class WsUsersController extends AdminBaseController {
             wup.setHobby(hobby);
             wup.setHobbyText(hobbyText);
             boolean insertFlag = wsUserProfileService.insert(wup);
-            if (insertFlag){
+            if (insertFlag) {
                 return Result.ok();
             }
-        }else {
+        } else {
             logger.info("更新个人信息");
             wsUserProfileDO.setUserName(userName);
             wsUserProfileDO.setRealName(realName);
@@ -506,72 +512,89 @@ public class WsUsersController extends AdminBaseController {
             wsUserProfileDO.setHobby(hobby);
             wsUserProfileDO.setHobbyText(hobbyText);
             boolean updateFlag = wsUserProfileService.updateById(wsUserProfileDO);
-            if (updateFlag){
+            if (updateFlag) {
                 return Result.ok();
             }
         }
-
+        
         return Result.fail();
     }
-
+    
     /**
-     * 更新密码
+     * 更新密码.
      *
      */
-    @OperationLogAnnotation(type=OperationEnum.UPDATE, module=ModuleEnum.UPDATE_PASSWORD, subModule="", describe="修改密码")
-    @RequestMapping(value = "updatePassword.do",method=RequestMethod.POST)
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.UPDATE_PASSWORD, subModule = "", describe = "修改密码")
+    @RequestMapping(value = "updatePassword.do", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> updatePassword(@RequestParam(value="user") String user,
-                                 @RequestParam(value="oldPass") String oldPass,
-                                 @RequestParam(value="newPass") String newPass,
-                                 @RequestParam(value="confirmPass") String confirmPass){
-        if (!newPass.equals(confirmPass)){
+    public Result<String> updatePassword(@RequestParam(value = "user") String user,
+        @RequestParam(value = "oldPass") String oldPass, @RequestParam(value = "newPass") String newPass,
+        @RequestParam(value = "confirmPass") String confirmPass) {
+        if (StringUtils.isBlank(oldPass)) {
+            return Result.fail("旧密码不能为空");
+        }
+
+        if (StringUtils.isBlank(newPass)) {
+            return Result.fail("新密码不能为空");
+        }
+
+        if (StringUtils.isBlank(confirmPass)) {
+            return Result.fail("确认密码不能为空");
+        }
+
+        if (!newPass.equals(confirmPass)) {
             return Result.fail("两次密码不一致");
         }
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-        if (null != wsUsersDO){
+        if (null != wsUsersDO) {
             String passwordDecode = SecurityAESUtil.decryptAES(wsUsersDO.getPassword(), CommonConstants.AES_PASSWORD);
-            if (!passwordDecode.equals(oldPass)){
+            if (!passwordDecode.equals(oldPass)) {
                 return Result.fail("旧密码不正确");
             }
-
-            if (passwordDecode.equals(newPass)){
+            
+            if (passwordDecode.equals(newPass)) {
                 return Result.fail("新密码不能是旧密码");
             }
-
+            
             String passwordEncode = SecurityAESUtil.encryptAES(newPass, CommonConstants.AES_PASSWORD);
             wsUsersDO.setPassword(passwordEncode);
             wsUsersService.updateById(wsUsersDO);
             return Result.ok();
         }
-
+        
         return Result.fail();
     }
 
-    // selectRole
     /**
-     * 选择角色
+     * 选择角色.
      *
-     * @param model
-     * @param userId
+     * @param model 对象模型
+     * @param userId 用户id
      * @return
      */
     @RequestMapping(value = "/selectRole/{id}")
     public String selectRole(Model model, @PathVariable("id") Integer userId) {
         logger.debug("访问electRole");
         List<SysRoleDO> roleList = sysRoleService.selectList(null);
-        SysUserRoleDO sysUserRoleDO = sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", userId));
+        SysUserRoleDO sysUserRoleDO =
+            sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", userId));
         model.addAttribute("sysUserRoleDO", sysUserRoleDO);
         model.addAttribute("userId", userId);
         model.addAttribute("roleList", roleList);
         return "zhddkk/wsUsers/selectRole";
     }
 
+    /**
+     * 设置用户角色.
+     * @param userId 用户id
+     * @param roleId 角色id
+     * @return result
+     */
     @RequestMapping(value = "/saveRole")
     @ResponseBody
-    public Result<String> saveRole(String userId, String roleId){
+    public Result<String> saveRole(String userId, String roleId) {
         WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
-        if (null != wsUsersDO){
+        if (null != wsUsersDO) {
             sysUserRoleService.delete(new EntityWrapper<SysUserRoleDO>().eq("user_id", wsUsersDO.getId()));
             SysRoleDO sysRoleDO = sysRoleService.selectById(roleId);
             if (null != sysRoleDO) {
@@ -582,7 +605,6 @@ public class WsUsersController extends AdminBaseController {
                 sysUserRoleDO.setUserName(wsUsersDO.getName());
                 sysUserRoleService.insert(sysUserRoleDO);
             }
-
             return Result.ok();
         }
         return Result.fail();
