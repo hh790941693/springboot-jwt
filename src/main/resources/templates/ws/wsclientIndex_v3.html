@@ -225,7 +225,7 @@
                          <div data-options="region:'center',split:false,border:true,title:'中间',iconCls:'icon icon-13-16'">
                          </div>
                         
-                         <div data-options="region:'east',split:false,border:true,title:'我的好友',iconCls:'icon icon-11-19'" style="width:260px;padding: 10px;">
+                         <div id="myFriendsDiv" data-options="region:'east',split:false,border:true,title:'我的好友',iconCls:'icon icon-11-19'" style="width:260px;padding: 10px;display: none;">
                             <!--右侧好友列表-->
                             <div style="width: 100%;height:100%;border:2px solid green;background-color: white;">
                                 <div id="friendsListDiv" style="width: 100%;height: 100%;">
@@ -274,7 +274,7 @@
     
     <!--修改密码窗口 默认不显示-->
     <div id="modifyPasswordDiv" class="easyui-window" title="修改密码" collapsible="false" minimizable="false"
-         maximizable="false" data-options="iconCls:'icon-save'"  style="width: 300px; height: 160px; padding: 1px;">
+         maximizable="false" data-options="iconCls:'icon-save'" closed="true" style="width: 300px; height: 160px; padding: 1px;display: none;">
         <div class="easyui-layout" fit="true">
             <div region="center" border="true" style="padding: 10px;">
                 <table cellpadding=3 style="border-collapse:separate; border-spacing:10px;">
@@ -304,7 +304,7 @@
     </div>
 
     <!--tab框区域右键菜单栏 默认不显示-->
-    <div id="mm" class="easyui-menu" style="width:150px;">
+    <div id="mm" class="easyui-menu" style="width:150px;display: none;">
         <div id="mm-tabclose">关闭</div>
         <div id="mm-tabcloseall">全部关闭</div>
         <div id="mm-tabcloseother">除此之外全部关闭</div>
@@ -402,7 +402,15 @@
         history.replaceState(null, null, "/");
 
         // 修改密码对话框
-        openModifyPasswordDialog();
+        $('#modifyPasswordDiv').window({
+            title: '修改密码',
+            width: 300,
+            modal: true,
+            shadow: true,
+            closed: true,
+            height: 260,
+            resizable:false
+        });
 
         // 设置网页标题
         setPageTitle();
@@ -656,19 +664,6 @@
             });
         }
     });
-
-    // 修改密码对话框
-    function openModifyPasswordDialog() {
-        $('#modifyPasswordDiv').window({
-            title: '修改密码',
-            width: 300,
-            modal: true,
-            shadow: true,
-            closed: true,
-            height: 260,
-            resizable:false
-        });
-    }
 
     // 新密码与确认密码是否一致
     $.extend($.fn.validatebox.defaults.rules, {
