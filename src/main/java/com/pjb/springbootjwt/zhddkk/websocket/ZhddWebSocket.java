@@ -130,11 +130,7 @@ public class ZhddWebSocket {
                     adminSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
 
-                WsChatlogDO wcl1 = new WsChatlogDO();
-                wcl1.setTime(sdfx.format(new Date()));
-                wcl1.setUser(msgFrom);
-                wcl1.setToUser(msgTo);
-                wcl1.setMsg(msgStr);
+                WsChatlogDO wcl1 = new WsChatlogDO(sdfx.format(new Date()), msgFrom, msgTo, msgStr,"");
                 wsChatlogService.insert(wcl1);
             }
         }
@@ -153,16 +149,6 @@ public class ZhddWebSocket {
                        @PathParam("pass") String pass,
                        @PathParam("userAgent") String userAgent,
                        Session session, EndpointConfig endpointConfig) {
-        if (endpointConfig.getUserProperties().containsKey(HttpSession.class.getName())) {
-            HttpSession httpSession = (HttpSession) endpointConfig.getUserProperties().get(HttpSession.class.getName());
-            String sessionUser = (String) httpSession.getAttribute(CommonConstants.S_USER + "_" + user);
-            if (StringUtils.isBlank(sessionUser)) {
-                httpSession.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
-                httpSession.setAttribute(CommonConstants.S_USER + "_" + user, user);
-                httpSession.setAttribute(CommonConstants.S_PASS + "_" + user, pass);
-            }
-        }
-
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user).eq("password", pass));
         if (null == wsUsersDO) {
             logger.info("用户{}不存在或者密码错误", user);
@@ -183,22 +169,15 @@ public class ZhddWebSocket {
         clients.put(user, this);
 
         SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        WsChatlogDO loginLog = new WsChatlogDO();
-        loginLog.setTime(sdfx.format(new Date()));
-        loginLog.setUser(this.user);
-        loginLog.setToUser("");
-        loginLog.setMsg("登录成功");
-        loginLog.setRemark(this.userAgent);
+        WsChatlogDO loginLog = new WsChatlogDO(sdfx.format(new Date()), this.user, "", "登录成功", this.userAgent);
         wsChatlogService.insert(loginLog);
 
-        String curTime = sdfx.format(new Date());
-        String msg = user + "已上线";
-        logger.debug(msg);
+        logger.debug(user + "已上线");
         for (Entry<String, ZhddWebSocket> entry : clients.entrySet()) {
             if (!entry.getKey().equals(user)) {
                 try {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息",
-                            CommonConstants.ADMIN_USER, entry.getKey(), msg);
+                    ChatMessageBean chatBean = new ChatMessageBean(sdfx.format(new Date()), "1", "系统消息",
+                            CommonConstants.ADMIN_USER, entry.getKey(), user + "已上线");
                     entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -262,11 +241,7 @@ public class ZhddWebSocket {
             wsUsersService.updateById(wsUsersDO);
 
             // 记录登出日志
-            WsChatlogDO logoutLog = new WsChatlogDO();
-            logoutLog.setTime(sdfx.format(new Date()));
-            logoutLog.setUser(this.user);
-            logoutLog.setToUser("");
-            logoutLog.setMsg("退出服务器");
+            WsChatlogDO logoutLog = new WsChatlogDO(sdfx.format(new Date()), this.user, "", "退出服务器", "");
             wsChatlogService.insert(logoutLog);
         }
     }

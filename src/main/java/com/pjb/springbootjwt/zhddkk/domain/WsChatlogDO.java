@@ -8,12 +8,18 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 /**
- * 聊天记录表
+ * 聊天记录表.
  */
- @TableName("ws_chatlog")
+@TableName("ws_chatlog")
+@Data
+@ToString
 public class WsChatlogDO implements Serializable {
 
     @TableField(exist = false)
@@ -44,71 +50,13 @@ public class WsChatlogDO implements Serializable {
     @TableField(exist = false)
     private String endTime;
 
-    public void setTime(String time) {
+    public WsChatlogDO() {}
+
+    public WsChatlogDO(String time, String user, String toUser, String msg, String remark) {
         this.time = time;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-
-    public void setUser(String user) {
         this.user = user;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-
-    public void setToUser(String toUser) {
         this.toUser = toUser;
-    }
-
-    public String getToUser() {
-        return toUser;
-    }
-
-
-    public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-
-    public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getBeginTime() {
-        return beginTime;
-    }
-
-    public void setBeginTime(String beginTime) {
-        this.beginTime = beginTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
     }
 }

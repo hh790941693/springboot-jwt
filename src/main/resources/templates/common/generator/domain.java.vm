@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * ${comments}.
  */
-@TableName("${tableName}" )
+@TableName("${tableName}")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

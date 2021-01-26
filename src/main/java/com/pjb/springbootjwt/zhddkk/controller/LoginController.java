@@ -423,11 +423,7 @@ public class LoginController {
 
         //插入注册日志
         SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        WsChatlogDO loginLog = new WsChatlogDO();
-        loginLog.setTime(sdfx.format(new Date()));
-        loginLog.setUser(user);
-        loginLog.setToUser("");
-        loginLog.setMsg("注册成功");
+        WsChatlogDO loginLog = new WsChatlogDO(sdfx.format(new Date()), user, "", "注册成功", "");
         wsChatlogService.insert(loginLog);
 
         //插入用户profile信息

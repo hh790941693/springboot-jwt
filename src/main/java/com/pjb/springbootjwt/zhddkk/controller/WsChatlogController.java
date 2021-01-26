@@ -103,8 +103,7 @@ public class WsChatlogController extends AdminBaseController {
     @GetMapping("/add")
     //@RequiresPermissions("zhddkk:wsChatlog:add")
     public String add(Model model) {
-        WsChatlogDO wsChatlog = new WsChatlogDO();
-        model.addAttribute("wsChatlog", wsChatlog);
+        model.addAttribute("wsChatlog", new WsChatlogDO());
         return "zhddkk/wsChatlog/wsChatlogform";
     }
 

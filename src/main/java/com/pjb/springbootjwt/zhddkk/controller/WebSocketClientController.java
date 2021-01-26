@@ -86,6 +86,8 @@ public class WebSocketClientController extends AdminBaseController {
         HttpSession httpSession = request.getSession(false);
         System.out.println("退出前SESSION:" + httpSession.getId());
         httpSession.invalidate();
+        ZhddWebSocket.getClients().remove(user);
+        ZhddWebSocket.subOnLineCount();
         return CommonConstants.SUCCESS;
     }
 
