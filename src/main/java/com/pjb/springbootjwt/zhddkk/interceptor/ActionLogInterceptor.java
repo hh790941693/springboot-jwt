@@ -49,6 +49,11 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         if (!url.startsWith("/zhddkk") && !url.startsWith("/ws") && !url.startsWith("/file")) {
             return;
         }
+        if (url.endsWith("jpg") || url.endsWith("jpeg") || url.endsWith("JPG")
+                || url.endsWith("JPEG") || url.endsWith("png") || url.endsWith("PNG")
+                || url.endsWith("gif") || url.endsWith("GIF")) {
+            return;
+        }
         System.out.println("-----------------------------------action请求-------------------------------------");
 
         String functionName =  handler.toString().trim();
