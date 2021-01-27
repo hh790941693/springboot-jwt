@@ -358,7 +358,7 @@
             if (direciton == SOUTH_TO_NORTH) {
                 if (isFirstRun) {
                     if (hasClassLike(curGps, "carClass")) {
-                        console.log(curGps + " 当前位置有车辆,本次定时任务不做什么");
+                        //console.log(curGps + " 当前位置有车辆,本次定时任务不做什么");
                         return;
                     }
                 }
@@ -412,7 +412,7 @@
                     var rgbColor = $("." + lightClassName).css("background-color");
                     var color = convertRgb(rgbColor);
                     if (color == RED) {
-                        console.log(curGps + ":汽车等候区," + nextGps + ":有斑马线,当前是红灯");
+                        //console.log(curGps + ":汽车等候区," + nextGps + ":有斑马线,当前是红灯");
                         return;
                     }
                 }
@@ -441,7 +441,7 @@
             } else if (direciton == NORTH_TO_SOUTH) {
                 if (isFirstRun) {
                     if (hasClassLike(curGps, "carClass", carId)) {
-                        console.log(curGps + " 当前位置有车辆,本次定时任务不做什么");
+                        //console.log(curGps + " 当前位置有车辆,本次定时任务不做什么");
                         return;
                     }
                 }
@@ -491,7 +491,7 @@
                     var rgbColor = $("." + lightClassName).css("background-color");
                     var color = convertRgb(rgbColor);
                     if (color == RED) {
-                        console.log(curGps + ":汽车等候区," + nextGps + ":有斑马线,当前是红灯");
+                        //console.log(curGps + ":汽车等候区," + nextGps + ":有斑马线,当前是红灯");
                         return;
                     }
                 }
@@ -520,7 +520,7 @@
             } else if (direciton == WEST_TO_EAST) {
                 if (isFirstRun) {
                     if (hasClassLike(curGps, "carClass")) {
-                        console.log(curGps + " 当前位置有车辆,本次定时任务不做什么");
+                        //console.log(curGps + " 当前位置有车辆,本次定时任务不做什么");
                         return;
                     }
                 }
@@ -568,7 +568,7 @@
                     var rgbColor = $("." + lightClassName).css("background-color");
                     var color = convertRgb(rgbColor);
                     if (color == RED) {
-                        console.log(curGps + ":汽车等候区," + nextGps + ":有斑马线,当前是红灯");
+                        //console.log(curGps + ":汽车等候区," + nextGps + ":有斑马线,当前是红灯");
                         return;
                     }
                 }
@@ -597,7 +597,7 @@
             } else if (direciton == EAST_TO_WEST) {
                 if (isFirstRun) {
                     if (hasClassLike(curGps, "carClass")) {
-                        console.log(curGps + " 当前位置有车辆,本次定时任务不做什么");
+                        //console.log(curGps + " 当前位置有车辆,本次定时任务不做什么");
                         return;
                     }
                 }
@@ -645,7 +645,7 @@
                     var rgbColor = $("." + lightClassName).css("background-color");
                     var color = convertRgb(rgbColor);
                     if (color == RED) {
-                        console.log(curGps + ":汽车等候区," + nextGps + ":有斑马线,当前是红灯");
+                        //(curGps + ":汽车等候区," + nextGps + ":有斑马线,当前是红灯");
                         return;
                     }
                 }
@@ -711,7 +711,7 @@
             if (direciton == SOUTH_TO_NORTH) {
                 if (isFirstRun) {
                     if (hasClassLike(curGps, "manClass")) {
-                        console.log(curGps + " 当前位置有行人,本次定时任务不做什么");
+                        //console.log(curGps + " 当前位置有行人,本次定时任务不做什么");
                         return;
                     }
                 }
@@ -738,7 +738,7 @@
                     var rgbColor = $("." + lightClassName).css("background-color");
                     var color = convertRgb(rgbColor);
                     if (color == RED) {
-                        console.log(curGps + ":人行等候区," + nextGps + ",当前是红灯");
+                        //console.log(curGps + ":人行等候区," + nextGps + ",当前是红灯");
                         return;
                     }
                 }
@@ -752,7 +752,7 @@
             } else if (direciton == NORTH_TO_SOUTH) {
                 if (isFirstRun) {
                     if (hasClassLike(curGps, "manClass")) {
-                        console.log(curGps + " 当前位置有行人,本次定时任务不做什么");
+                        //console.log(curGps + " 当前位置有行人,本次定时任务不做什么");
                         return;
                     }
                 }
@@ -779,7 +779,7 @@
                     var rgbColor = $("." + lightClassName).css("background-color");
                     var color = convertRgb(rgbColor);
                     if (color == RED) {
-                        console.log(curGps + ":人行等候区," + nextGps + ",当前是红灯");
+                        //console.log(curGps + ":人行等候区," + nextGps + ",当前是红灯");
                         return;
                     }
                 }
@@ -793,7 +793,7 @@
             } else if (direciton == WEST_TO_EAST) {
                 if (isFirstRun) {
                     if (hasClassLike(curGps, "manClass")) {
-                        console.log(curGps + " 当前位置有行人,本次定时任务不做什么");
+                        //console.log(curGps + " 当前位置有行人,本次定时任务不做什么");
                         return;
                     }
                 }
@@ -820,7 +820,7 @@
                     var rgbColor = $("." + lightClassName).css("background-color");
                     var color = convertRgb(rgbColor);
                     if (color == RED) {
-                        console.log(curGps + ":人行等候区," + nextGps + ",当前是红灯");
+                        //console.log(curGps + ":人行等候区," + nextGps + ",当前是红灯");
                         return;
                     }
                 }
@@ -834,7 +834,7 @@
             } else if (direciton == EAST_TO_WEST) {
                 if (isFirstRun) {
                     if (hasClassLike(curGps, "manClass")) {
-                        console.log(curGps + " 当前位置有行人,本次定时任务不做什么");
+                        //console.log(curGps + " 当前位置有行人,本次定时任务不做什么");
                         return;
                     }
                 }
@@ -861,7 +861,7 @@
                     var rgbColor = $("." + lightClassName).css("background-color");
                     var color = convertRgb(rgbColor);
                     if (color == RED) {
-                        console.log(curGps + ":人行等候区," + nextGps + ",当前是红灯");
+                        //console.log(curGps + ":人行等候区," + nextGps + ",当前是红灯");
                         return;
                     }
                 }
