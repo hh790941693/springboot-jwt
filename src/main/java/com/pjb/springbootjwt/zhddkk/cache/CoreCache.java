@@ -19,10 +19,12 @@ public class CoreCache {
     private List<WsFileDO> userFileList = null;
 
     public static CoreCache getInstance() {
-        if (null == coreCache) {
-            coreCache = new CoreCache();
+        synchronized (CoreCache.class) {
+            if (null == coreCache) {
+                coreCache = new CoreCache();
+            }
+            return coreCache;
         }
-        return coreCache;
     }
 
     public List<WsCommonDO> getCommonList() {
