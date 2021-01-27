@@ -314,3 +314,8 @@ function i18nInit(lang, country) {
 function i18n(labelKey) {
     return $.i18n.prop(labelKey);
 }
+
+function countListSize(obj) {
+    console.log(obj);
+    return Object.keys(obj).length;
+}

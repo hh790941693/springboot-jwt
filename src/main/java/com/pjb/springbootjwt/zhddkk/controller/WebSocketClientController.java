@@ -657,6 +657,31 @@ public class WebSocketClientController extends AdminBaseController {
     }
 
     /**
+     * 点踩朋友圈.
+     *
+     */
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.CIRCLE, subModule = "", describe = "点赞朋友圈")
+    @RequestMapping(value = "toDislike.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Result<String> toDislike(@RequestParam("user")String user, @RequestParam("circleId")Integer circleId) {
+        WsCircleDO wsCircleDO = wsCircleService.selectById(circleId);
+        if (null == wsCircleDO) {
+            return Result.fail();
+        }
+        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+        if (null == wsUsersDO) {
+            return Result.fail();
+        }
+        int dislikeNum = wsCircleDO.getDislikeNum();
+        wsCircleDO.setDislikeNum(dislikeNum + 1);
+        boolean updateFlag = wsCircleService.updateById(wsCircleDO);
+        if (updateFlag) {
+            return Result.ok();
+        }
+        return Result.fail();
+    }
+
+    /**
      * 删除朋友圈.
      *
      */

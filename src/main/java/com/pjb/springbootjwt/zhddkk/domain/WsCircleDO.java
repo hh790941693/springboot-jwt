@@ -37,6 +37,9 @@ public class WsCircleDO implements Serializable {
     //点赞数
     @ApiModelProperty(value = "likeNum",name = "点赞数")
     private Integer likeNum;
+    //点踩数
+    @ApiModelProperty(value = "dislikeNum",name = "点踩数")
+    private Integer dislikeNum;
     //图片1
     @ApiModelProperty(value = "pic1",name = "图片1")
     private String pic1;
@@ -187,5 +190,11 @@ public class WsCircleDO implements Serializable {
 
     public void setHeadImg(String headImg) {
         this.headImg = headImg;
+    }
+    public Integer getDislikeNum() {
+        return dislikeNum;
+    }
+    public void setDislikeNum(Integer dislikeNum) {
+        this.dislikeNum = dislikeNum;
     }
 }
