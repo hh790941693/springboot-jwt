@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.vo.Result;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
@@ -80,10 +81,10 @@ public class WsCommonController extends AdminBaseController {
     @GetMapping("/list")
     //@RequiresPermissions("zhddkk:wsCommon:wsCommon")
     public Result<Page<WsCommonDO>> list(WsCommonDO wsCommonDto) {
-        List<WsCommonDO> cacheList = cacheService.queryWsCommonList();
-        if (null != cacheList && cacheList.size() > 0){
-            cacheList = cacheList.stream().filter(cache->StringUtils.isNotBlank(cache.getType()) && cache.getType().equals(wsCommonDto.getType()))
-                    .filter(cache->StringUtils.isNotBlank(cache.getName()) && cache.getName().contains(wsCommonDto.getName()))
+        List<WsCommonDO> cacheList = CoreCache.getInstance().getCommonList();
+        if (null != cacheList && cacheList.size() > 0) {
+            cacheList = cacheList.stream().filter(cache -> StringUtils.isNotBlank(cache.getType()) && cache.getType().equals(wsCommonDto.getType()))
+                    .filter(cache -> StringUtils.isNotBlank(cache.getName()) && cache.getName().contains(wsCommonDto.getName()))
                     .sorted(Comparator.comparing(WsCommonDO::getId))
                     .collect(Collectors.toList());
             Page<WsCommonDO> page = getPage(WsCommonDO.class);
@@ -140,7 +141,7 @@ public class WsCommonController extends AdminBaseController {
     public Result<String> save(WsCommonDO wsCommon) {
         wsCommonService.insert(wsCommon);
         // 刷新缓存
-        cacheService.initCache();
+        cacheService.cacheData();
         return Result.ok();
     }
 
@@ -153,7 +154,7 @@ public class WsCommonController extends AdminBaseController {
     public Result<String> update(WsCommonDO wsCommon) {
         wsCommonService.updateById(wsCommon);
         // 刷新缓存
-        cacheService.initCache();
+        cacheService.cacheData();
         return Result.ok();
     }
 
@@ -167,7 +168,7 @@ public class WsCommonController extends AdminBaseController {
     public Result<String> remove(Integer id) {
         wsCommonService.deleteById(id);
         // 刷新缓存
-        cacheService.initCache();
+        cacheService.cacheData();
         return Result.ok();
     }
 
@@ -180,7 +181,7 @@ public class WsCommonController extends AdminBaseController {
     public Result<String> remove(@RequestParam("ids[]") Integer[] ids) {
         wsCommonService.deleteBatchIds(Arrays.asList(ids));
         // 刷新缓存
-        cacheService.initCache();
+        cacheService.cacheData();
         return Result.ok();
     }
 }

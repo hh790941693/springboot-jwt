@@ -1,21 +1,21 @@
 package com.pjb.springbootjwt.zhddkk.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
+import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
-import com.pjb.springbootjwt.zhddkk.service.CacheService;
-import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
-import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
+import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+import com.pjb.springbootjwt.zhddkk.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class CacheServiceImpl implements CacheService{
+public class CacheServiceImpl implements CacheService {
 
     private static Logger logger = LoggerFactory.getLogger(CacheServiceImpl.class);
 
@@ -23,40 +23,44 @@ public class CacheServiceImpl implements CacheService{
     private WsCommonService wsCommonService;
 
     @Autowired
+    private WsUsersService wsUsersService;
+
+    @Autowired
     private WsUserProfileService wsUserProfileService;
 
-    private static final String COMMON = "common";
-
-    private static final String USER_PROFILE = "userProfile";
-
-    private static final Map<String, List<WsCommonDO>> commonMap = new ConcurrentHashMap<>();
-
-    private static final Map<String, List<WsUserProfileDO>> userProfileMap = new ConcurrentHashMap<>();
+    @Autowired
+    private WsFileService wsFileService;
 
     @Override
-    public  void initCache() {
+    public  void cacheData() {
         logger.info("--------------------开始缓存数据-------------------");
-        initCommon();
-        initUserProfile();
+        initCommonData();
+        initUserData();
+        initUserProfileData();
+        initUserFileData();
     }
 
-    @Override
-    public List<WsCommonDO> queryWsCommonList(){
-        return commonMap.get(COMMON);
-    }
-
-    @Override
-    public List<WsUserProfileDO> queryWsUserProfileList(){
-        return userProfileMap.get(USER_PROFILE);
-    }
-
-    private void initCommon(){
+    private void initCommonData() {
+        logger.info("缓存common数据");
         List<WsCommonDO> list = wsCommonService.selectList(null);
-        commonMap.put(COMMON, list);
+        CoreCache.getInstance().setCommonList(list);
     }
 
-    private void initUserProfile(){
+    private void initUserData() {
+        logger.info("缓存用户数据");
+        List<WsUsersDO> list = wsUsersService.selectList(null);
+        CoreCache.getInstance().setUserList(list);
+    }
+
+    private void initUserProfileData() {
+        logger.info("缓存用户门面数据");
         List<WsUserProfileDO> list = wsUserProfileService.selectList(null);
-        userProfileMap.put(USER_PROFILE, list);
+        CoreCache.getInstance().setUserProfileList(list);
+    }
+
+    private void initUserFileData() {
+        logger.info("缓存用户文件数据");
+        List<WsFileDO> list = wsFileService.selectList(new EntityWrapper<WsFileDO>().isNotNull("user"));
+        CoreCache.getInstance().setUserFileList(list);
     }
 }

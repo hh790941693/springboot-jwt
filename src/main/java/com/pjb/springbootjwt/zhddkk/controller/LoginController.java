@@ -331,7 +331,7 @@ public class LoginController {
         }
 
         // 缓存常用表数据
-        cacheService.initCache();
+        cacheService.cacheData();
 
         response.sendRedirect("wsclientIndex.page");
     }

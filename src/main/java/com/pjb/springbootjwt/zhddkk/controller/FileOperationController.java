@@ -2,7 +2,9 @@ package com.pjb.springbootjwt.zhddkk.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -10,7 +12,9 @@ import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.FileUploadResultBean;
+import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
+import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
@@ -206,8 +210,12 @@ public class FileOperationController {
     // @Cacheable(value="musicList") 需要启动redis才可以
     public Result<List<WsFileDO>> showFiles(HttpServletRequest request,
         @RequestParam(value = "user", required = false) String user, @RequestParam("fileType") String fileType) {
-        List<WsFileDO> fileList =
-            wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", fileType));
+        List<WsFileDO> fileList = CoreCache.getInstance().getUserFileList();
+        if (null != fileList && fileList.size() > 0) {
+            fileList = fileList.stream().filter(cache -> StringUtils.isNotBlank(cache.getUser()) && cache.getUser().equals(user)).filter(cache -> StringUtils.isNotBlank(cache.getFolder()) && cache.getFolder().equals(fileType)).sorted(Comparator.comparing(WsFileDO::getId)).collect(Collectors.toList());
+        } else {
+            fileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", fileType));
+        }
         
         List<WsFileDO> needBatchUpdateList = new ArrayList<>();
         String webserverip = webSocketConfig.getAddress();
