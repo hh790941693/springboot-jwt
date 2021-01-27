@@ -233,7 +233,7 @@
                                         <span>我的好友列表</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <span>{{onlineFriendCount}}/{{friendList.length}}</span>
                                     </div>
-                                    <div style="width:100%;height:413px;overflow-y: scroll;padding:3px;">
+                                    <div style="width:100%;height:calc(100% - 25px);overflow-y: scroll;padding:3px;">
                                         <div v-for="row in friendList" style="width:100%;height:50px;margin-bottom: 8px;">
                                             <div style="width:26%;height:50px;float: left;">
                                                 <img :src="row.headImage" width="100%" height="100%"
