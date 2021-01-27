@@ -377,6 +377,7 @@ CREATE TABLE IF NOT EXISTS `ws_circle` (
   `user_id` int(11) unsigned NOT NULL COMMENT '用户id',
   `content` varchar(1000) NOT NULL COMMENT '内容',
   `like_num` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '点赞数',
+  `dislike_num` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '点踩数',
   `pic1` varchar(255) DEFAULT NULL COMMENT '图片1',
   `pic2` varchar(255) DEFAULT NULL COMMENT '图片2',
   `pic3` varchar(255) DEFAULT NULL COMMENT '图片3',
@@ -390,14 +391,14 @@ CREATE TABLE IF NOT EXISTS `ws_circle` (
 -- Dumping data for table zhdd.ws_circle: ~8 rows (approximately)
 /*!40000 ALTER TABLE `ws_circle` DISABLE KEYS */;
 INSERT INTO `ws_circle` (`id`, `user_name`, `user_id`, `content`, `like_num`, `pic1`, `pic2`, `pic3`, `pic4`, `pic5`, `pic6`, `create_time`) VALUES
-	(42, '无名3', 13, '考虑时间管理会计师的价格快速', 4, 'http://127.0.0.1:8101/circle\\8.jpg', NULL, 'http://127.0.0.1:8101/circle\\8da770a589874189852b1504361231ae_th.gif', NULL, NULL, NULL, '2020-05-11 18:38:35'),
-	(49, 'aa', 23, '给公司高管', 2, 'http://127.0.0.1:8101/circle/c8e7a6a0-b90b-424f-a6dd-63bf35a27160.jpg', NULL, NULL, NULL, NULL, NULL, '2020-06-03 19:26:44'),
-	(50, 'aa', 23, '给打个广告', 3, 'http://127.0.0.1:8101/circle/b2f1ba4d-ec0f-41a4-b25a-e776338ae48e.jpg', NULL, NULL, NULL, NULL, NULL, '2020-06-03 19:36:14'),
-	(53, 'aa', 23, '如何他很讨厌很有体会', 2, NULL, NULL, NULL, NULL, NULL, NULL, '2020-06-03 19:38:21'),
-	(54, 'aa', 23, '光和热人如何', 14, NULL, NULL, NULL, NULL, NULL, NULL, '2020-06-03 19:43:49'),
-	(55, 'bb', 24, '工行股份分红华国锋和', 24, NULL, 'http://127.0.0.1:8101/circle/5ad4775b-a3f6-44b3-8066-5847215baa23.jpg', NULL, NULL, NULL, NULL, '2020-06-03 20:19:46'),
-	(56, 'admin', 1, '2020/10/25', 11, 'http://127.0.0.1:8101/circle/0909a1bd-5ba8-4cf8-b012-525ad86f3685.jpg', 'http://127.0.0.1:8101/circle/db76a2c2-d7ba-463e-9a4c-18a026591d14.jpg', NULL, NULL, NULL, NULL, '2020-10-25 10:30:57'),
-	(57, 'admin', 1, '你好', 39, 'http://127.0.0.1:8101/circle/5beba4a2-519c-439e-8680-e7d09ab1fabb.jpg', NULL, NULL, NULL, NULL, NULL, '2020-11-19 21:38:20');
+	(42, '无名3', 13, '考虑时间管理会计师的价格快速', 4,0, 'http://127.0.0.1:8101/circle\\8.jpg', NULL, 'http://127.0.0.1:8101/circle\\8da770a589874189852b1504361231ae_th.gif', NULL, NULL, NULL, '2020-05-11 18:38:35'),
+	(49, 'aa', 23, '给公司高管', 2,0, 'http://127.0.0.1:8101/circle/c8e7a6a0-b90b-424f-a6dd-63bf35a27160.jpg', NULL, NULL, NULL, NULL, NULL, '2020-06-03 19:26:44'),
+	(50, 'aa', 23, '给打个广告', 3,0, 'http://127.0.0.1:8101/circle/b2f1ba4d-ec0f-41a4-b25a-e776338ae48e.jpg', NULL, NULL, NULL, NULL, NULL, '2020-06-03 19:36:14'),
+	(53, 'aa', 23, '如何他很讨厌很有体会', 2,0, NULL, NULL, NULL, NULL, NULL, NULL, '2020-06-03 19:38:21'),
+	(54, 'aa', 23, '光和热人如何', 14,0, NULL, NULL, NULL, NULL, NULL, NULL, '2020-06-03 19:43:49'),
+	(55, 'bb', 24, '工行股份分红华国锋和', 24,0, NULL, 'http://127.0.0.1:8101/circle/5ad4775b-a3f6-44b3-8066-5847215baa23.jpg', NULL, NULL, NULL, NULL, '2020-06-03 20:19:46'),
+	(56, 'admin', 1, '2020/10/25', 11,0, 'http://127.0.0.1:8101/circle/0909a1bd-5ba8-4cf8-b012-525ad86f3685.jpg', 'http://127.0.0.1:8101/circle/db76a2c2-d7ba-463e-9a4c-18a026591d14.jpg', NULL, NULL, NULL, NULL, '2020-10-25 10:30:57'),
+	(57, 'admin', 1, '你好', 39,0, 'http://127.0.0.1:8101/circle/5beba4a2-519c-439e-8680-e7d09ab1fabb.jpg', NULL, NULL, NULL, NULL, NULL, '2020-11-19 21:38:20');
 /*!40000 ALTER TABLE `ws_circle` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_circle_comment
