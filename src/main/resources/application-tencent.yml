@@ -1,3 +1,6 @@
+#
+# 腾讯云环境
+#
 server:
   address: 10.0.4.14
   port: 8100
@@ -44,5 +47,6 @@ upload:
 #websocket聊天服务器配置
 websocket:
   config:
+    #如果是内网 就配置成内网IP或者127.0.0.1;如果是外网，配置成公网IP
     address: 81.68.80.210
     port: ${server.port}

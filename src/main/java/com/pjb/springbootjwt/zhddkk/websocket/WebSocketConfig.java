@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 /**
- * 开启WebSocket支持.
- * @author zhengkai.blog.csdn.net
+ * WebSocket配置.
  */
 @Configuration
 @ConfigurationProperties(prefix = "websocket.config")
