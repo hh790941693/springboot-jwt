@@ -220,8 +220,12 @@
                             </div>
                         </div>
                         
-                         <div data-options="region:'center',split:false,border:true,title:'红绿灯',iconCls:'icon icon-13-16'" style="overflow: hidden;">
-                             <iframe scrolling="auto" frameborder="0" src="../canvas/trafficByCanvas-smooth-0624.page" style="width:100%;height:100%;"></iframe>
+                         <div data-options="region:'center',split:false,border:true,title:'娱乐区',iconCls:'icon icon-13-16',tools:'#gameTool'" style="overflow: hidden;">
+                             <iframe id="gameIframe" scrolling="auto" frameborder="0" src="../canvas/trafficByCanvas-smooth-0624.page" style="width:100%;height:100%;"></iframe>
+
+                             <div id="gameTool">
+                                 <a href="javascript:void(0)" title="换一个" class="fa fa-refresh" onclick="changeGame()"></a>
+                             </div>
                          </div>
                         
                          <div id="myFriendsDiv" data-options="region:'east',collapsed:true,split:false,border:true,title:'好友列表',iconCls:'icon icon-11-19'" style="width:260px;padding: 10px;display: none;">
@@ -707,6 +711,17 @@
      */
     function showAdsDetail(adId) {
         window.open("./zhddkk/wsAds/adsDetail.page?id=" + adId);
+    }
+
+    // 首页-中间部分-切换游戏
+    function changeGame() {
+        var gameList = new Array("../canvas/starts.page","../canvas/clock.page","../canvas/clock2.page"
+            ,"../canvas/trafficByCanvas_stepbystep.page","../canvas/trafficByCanvas-smooth-0624.page"
+            ,"../canvas/tank_p1p2.page","../canvas/tank_construct.page","../canvas/xiangqi_v6.0.page","../canvas/pintu.page"
+            ,"../game/ball.page","../game/plane.page","../game/myrussia.page");
+        var gIndex = randomNumber(0, gameList.length);
+        var gUrl = gameList[gIndex];
+        $("#gameIframe").attr("src", gUrl);
     }
 
     // ---------------------------------以下是供聊天用的全局变量-----------------------
