@@ -18,6 +18,9 @@ a:hover {text-decoration:none;}
 .easyui-accordion ul li a {
     line-height: 26px;
     font-size: 16px;
+    /**2021-01-27 增加的属性*/
+    width: 100%;
+    display: inline-block;
 }
 
 .easyui-accordion ul li div{height:30px; margin:2px 0px;padding-left:10px;padding-top:2px;}

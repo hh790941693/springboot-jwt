@@ -28,7 +28,10 @@ function initLeftMenu() {
         menujson.iconCls = "icon-menu-folder-close";
         var contentHtml = "<ul>";
         $.each(n.childrenList, function(j, o) {
-        	var urlNew = o.url + "?user=" + sessionUser;
+        	var urlNew = o.url + "?userId=" + sessionUserId
+				               + "&user=" + sessionUser
+				               + "&roleId=" + sessionRoleId
+        	                   + "&roleName=" + sessionRoleName;
             contentHtml += '<li><div closable="'+o.extColumn1+'"><a target="mainFrame" href="' + urlNew + '" ><span class="'+o.icon+'" ></span>' + o.name + '</a></div></li> ';
         });
         contentHtml += '</ul>';
