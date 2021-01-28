@@ -75,6 +75,7 @@ public class ZhddWebSocket {
         //1:系统消息  2:在线消息 3:离线消息  4:广告消息
 
         if (message.contains("msg")) {
+            String roomName = jsonObject.getString("roomName");
             String msgFrom = jsonObject.getString("from");
             String msgTo = jsonObject.getString("to");
             String typeId = jsonObject.getString("typeId");
@@ -107,15 +108,20 @@ public class ZhddWebSocket {
             if (typeId.equals("1")) {
                 // 如果是系统消息
                 ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息", msgFrom, msgTo, msg);
+                Map<String, ZhddWebSocket> roomClientMap = clientsMap.get(roomName);
                 Session fromSession = querySession(roomName, msgFrom);
-                fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                if (null != fromSession) {
+                    fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                }
             } else {
                 // 如果用户不在线
                 Session toSession = querySession(roomName, msgTo);
                 if (null == toSession) {
                     Session fromSession = querySession(roomName, msgFrom);
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "3", "离线消息", msgFrom, msgTo, msg);
-                    fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                    if (null != fromSession) {
+                        ChatMessageBean chatBean = new ChatMessageBean(curTime, "3", "离线消息", msgFrom, msgTo, msg);
+                        fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                    }
                 } else {
                     ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg);
                     toSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));

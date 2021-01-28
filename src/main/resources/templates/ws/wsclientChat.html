@@ -289,7 +289,7 @@
                 } else {
                     var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [在线消息]  [我 -->" + toUser + "] " + msgToServer + "</p>";
                     updateChatMsg(htmlData);
-                    sendMsgToServer(sessionUser, toUser, msgToServer);
+                    sendMsgToServer(parent.roomName, sessionUser, toUser, msgToServer);
                     $("#msgToServer").val("");
                 }
             } else {
@@ -299,11 +299,12 @@
         }
 
         //发送消息
-        function sendMsgToServer(from, to, msg) {
+        function sendMsgToServer(roomName, from, to, msg) {
             if (parent.connectStatus == "1" && parent.webSocket != null) {
                 var toServerMsgObj = {};
                 toServerMsgObj.typeId = 2;
                 toServerMsgObj.typeDesc = "在线消息";
+                toServerMsgObj.roomName = roomName;
                 toServerMsgObj.from = from;
                 toServerMsgObj.to = to;
                 toServerMsgObj.msg = msg;
