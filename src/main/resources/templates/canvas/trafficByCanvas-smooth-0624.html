@@ -25,7 +25,7 @@
     <body>
         <div id="mainDiv" style="width:100%;height:auto;overflow:hidden;">
             <div style="width: 70%;height:100%;float:left;">
-                <canvas id="canvas" style="width:780px;height:600px;background:#fff;float:left;">
+                <canvas id="canvas" style="width:780px;height:600px;background:#000;float:left;">
                     你的浏览器不支持canvas标签
                 </canvas>
             </div>
@@ -52,8 +52,7 @@
                         汽车速度随机&nbsp;:<input id="speedSwitch" style="width:15px;" type="checkbox" checked="checked">
                         <br/>
 
-                        显示网格&nbsp;&nbsp;&nbsp;:<input id="gridSwitch" style="width:15px;" type="checkbox"
-                                                      checked="checked">
+                        显示网格&nbsp;&nbsp;&nbsp;:<input id="gridSwitch" style="width:15px;" type="checkbox">
                         <br/>
 
                         <div id="carSpeeddiv" style="display:none">
@@ -103,8 +102,8 @@
                         速度&nbsp;&nbsp;&nbsp;&nbsp;:<span id="objSpeed">0</span>
                         <br/>
                         背景颜色&nbsp;&nbsp;:<select id="bgColor" onchange="changeBgColor()">
-                            <option value="white" selected="selected">白色</option>
-                            <option value="black">黑色</option>
+                            <option value="white">白色</option>
+                            <option value="black" selected="selected">黑色</option>
                         </select>
                     </div>
 
@@ -184,7 +183,7 @@
         // 汽车速度是否随机
         var BOOL_RANDOM_SPEED = true;
         // 是否显示地面网格
-        var BOOL_SHOW_ROAD_GRID = true;
+        var BOOL_SHOW_ROAD_GRID = false;
         // 小地图显示模式 1:复杂 2:简单
         var SMALL_MAP_MODE = 1;
         // 小地图放大级别 0-7 级别越大 地图越大
@@ -332,7 +331,7 @@
 
         // 汽车资源图片
         var carImage = new Image();
-        carImage.src = rootUrl + "/img/car.jpg";
+        carImage.src = rootUrl + "/img/car2.png";
         // 行人资源图片
         var manImage = new Image();
         manImage.src = rootUrl + "/img/man.png";
