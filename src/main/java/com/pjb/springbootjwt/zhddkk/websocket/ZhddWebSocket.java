@@ -109,15 +109,15 @@ public class ZhddWebSocket {
                 // 如果是系统消息
                 ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息", msgFrom, msgTo, msg);
                 Map<String, Session> roomClientMap = clientsMap.get(roomName);
-                Session fromSession = querySession(roomName, msgFrom);
+                Session fromSession = queryRoomSession(roomName, msgFrom);
                 if (null != fromSession) {
                     fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
             } else {
                 // 如果用户不在线
-                Session toSession = querySession(roomName, msgTo);
+                Session toSession = queryRoomSession(roomName, msgTo);
                 if (null == toSession) {
-                    Session fromSession = querySession(roomName, msgFrom);
+                    Session fromSession = queryRoomSession(roomName, msgFrom);
                     if (null != fromSession) {
                         ChatMessageBean chatBean = new ChatMessageBean(curTime, "3", "离线消息", msgFrom, msgTo, msg);
                         fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
@@ -128,7 +128,7 @@ public class ZhddWebSocket {
                 }
 
                 // 给admin发消息
-                Session adminSession = querySession(roomName, CommonConstants.ADMIN_USER);
+                Session adminSession = queryRoomSession(roomName, CommonConstants.ADMIN_USER);
                 if (null != adminSession) {
                     ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg);
                     adminSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
@@ -141,7 +141,7 @@ public class ZhddWebSocket {
     }
 
     /**
-     * 连接服务器.
+     * 进入聊天室.
      * @param roomName 房间名称
      * @param user 用户名
      * @param pass 密码
@@ -166,31 +166,34 @@ public class ZhddWebSocket {
             OnClose();
             return;
         }
-
-        logger.info("用户：{} 已进入房间：{}", user, roomName);
         this.session = session;
         this.roomName = roomName;
         this.user = user;
+        this.pass = pass;
         this.userAgent = userAgent;
         this.loginTimes = System.currentTimeMillis();
 
-        // 房间人员信息
+        String enterMsgFormat = "%s 进入了聊天室：%s";
+        String enterMsg = String.format(enterMsgFormat, this.user, this.roomName);
+        logger.info(enterMsg);
+
+        // 更新房间人员信息
         addRoomUser(roomName, user);
 
-        // 房间在线人数
+        // 更新房间在线人数
         addOnLineCount(roomName);
 
         // 登录日志
-        WsChatlogDO loginLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, this.user, "", "登录成功", this.userAgent);
+        WsChatlogDO loginLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, this.user, "", "进入了聊天室", this.userAgent);
         wsChatlogService.insert(loginLog);
 
-        logger.debug(user + "已上线");
-        Map<String, Session> roomClientMap = clientsMap.get(roomName);
+        // 广播消息
+        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClients(roomName);
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
-            if (!entry.getKey().equals(user)) {
+            if (!entry.getKey().equals(this.user)) {
                 try {
                     ChatMessageBean chatBean = new ChatMessageBean(SDF_STANDARD.format(new Date()), "1", "系统消息",
-                            CommonConstants.ADMIN_USER, entry.getKey(), user + "已上线");
+                            CommonConstants.ADMIN_USER, entry.getKey(), enterMsg);
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -218,22 +221,26 @@ public class ZhddWebSocket {
     }
 
     /**
-     * 关闭.
+     * 聊天室关闭.
      */
     @javax.websocket.OnClose
     public void OnClose() {
+        // 在线人数-1
         subOnLineCount(roomName);
+        // 删除房间相关人信息
         removeRoomUser(roomName, this.user);
 
-        String msg = "房间:" + roomName + " 用户:" + user + "已下线!";
-        logger.debug(msg);
+        String leaveMsgFormat = "%s 离开了聊天室：%s";
+        String leaveMsg = String.format(leaveMsgFormat, this.user, this.roomName);
+        logger.info(leaveMsg);
 
+        // 广播消息
         Map<String, Session> roomClientMap = clientsMap.get(roomName);
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             if (!entry.getKey().equals(user)) {
                 try {
                     ChatMessageBean chatBean = new ChatMessageBean(SDF_STANDARD.format(new Date()), "1", "系统消息",
-                            CommonConstants.ADMIN_USER, entry.getKey(), msg);
+                            CommonConstants.ADMIN_USER, entry.getKey(), leaveMsg);
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -245,17 +252,17 @@ public class ZhddWebSocket {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", this.user));
         if (null != wsUsersDO) {
             // 记录登出日志
-            WsChatlogDO logoutLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, this.user, "", "退出服务器", "");
+            WsChatlogDO logoutLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, this.user, "", "离开了聊天室", "");
             wsChatlogService.insert(logoutLog);
         }
     }
 
     /**
-     * 连接异常.
+     * 连接聊天室异常.
      */
     @OnError
     public void onError(Throwable throwable) {
-        logger.info("用户{}: 连接服务器异常", this.user);
+        logger.info("用户{}: 进入聊天室:{} 失败", this.user, this.roomName);
         removeRoomUser(roomName, this.user);
     }
 
@@ -340,24 +347,12 @@ public class ZhddWebSocket {
         return this.session;
     }
 
-    public synchronized long getLoginTimes() {
-        return this.loginTimes;
-    }
-
-    public String getUser() {
-        return this.user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
     /**
      * 查询会话信息.
      * @param username 用户id
      * @return 会话信息
      */
-    public static Session querySession(String roomName, String username) {
+    public static Session queryRoomSession(String roomName, String username) {
         Map<String, Session> roomClientMap = clientsMap.get(roomName);
         if (null != roomClientMap) {
             if (roomClientMap.containsKey(username)) {
