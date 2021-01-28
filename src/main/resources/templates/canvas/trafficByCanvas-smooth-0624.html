@@ -349,14 +349,14 @@
             }
 
             for (var y = startRow * DIV_HEIGHT; y <= endRow * DIV_HEIGHT; y += DIV_HEIGHT) {
-                content.moveTo(0, y);
-                content.lineTo(canvas.width, y);
+                content.moveTo(DIV_WIDTH, y);
+                content.lineTo(canvas.width-DIV_WIDTH, y);
                 content.strokeStyle = "grey";
                 content.stroke();
             }
             for (var x = startCol * DIV_WIDTH; x <= endCol * DIV_WIDTH; x += DIV_WIDTH) {
-                content.moveTo(x, 0);
-                content.lineTo(x, canvas.height);
+                content.moveTo(x, DIV_HEIGHT);
+                content.lineTo(x, canvas.height-DIV_HEIGHT);
                 content.strokeStyle = "grey";
                 content.stroke();
             }
