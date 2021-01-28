@@ -194,7 +194,7 @@
                     $.ajax({
                         type: 'GET',
                         url: 'getOnlineInfo.json',
-                        data: {"user": sessionUser},
+                        data: {"roomName":parent.roomName, "user": sessionUser},
                         success: function (result) {
                             if (result.code != 1) {
                                 return;

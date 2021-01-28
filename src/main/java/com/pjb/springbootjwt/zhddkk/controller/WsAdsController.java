@@ -161,21 +161,25 @@ public class WsAdsController extends AdminBaseController {
         if (insertFlag) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String curTime = sdf.format(new Date());
-            Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-            for (Map.Entry<String, ZhddWebSocket> entry : socketMap.entrySet()) {
-                if (entry.getKey().equals(CommonConstants.ADMIN_USER)) {
-                    continue;
-                }
 
-                try {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "4", "广告消息",
-                            CommonConstants.ADMIN_USER, entry.getKey(),  "title:" + title + ";content:");
-                    entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
-                    receiveList.add(entry.getKey());
-                } catch (IOException e) {
-                    e.printStackTrace();
+            Map<String, Map<String, ZhddWebSocket>> socketMap = ZhddWebSocket.getClientsMap();
+            for (Map.Entry<String, Map<String, ZhddWebSocket>> outerEntry : socketMap.entrySet()) {
+                Map<String, ZhddWebSocket> roomClientMap = outerEntry.getValue();
+                for (Map.Entry<String, ZhddWebSocket> innerEntry : outerEntry.getValue().entrySet()) {
+                    if (innerEntry.getKey().equals(CommonConstants.ADMIN_USER)) {
+                        continue;
+                    }
+                    try {
+                        ChatMessageBean chatBean = new ChatMessageBean(curTime, "4", "广告消息",
+                                CommonConstants.ADMIN_USER, innerEntry.getKey(), "title:" + title + ";content:" + content);
+                        innerEntry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                        receiveList.add(innerEntry.getKey());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
             wsAdsDO.setReceiveList(receiveList.toString());
             wsAdsService.updateById(wsAdsDO);
             return Result.ok();

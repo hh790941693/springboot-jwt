@@ -25,7 +25,6 @@ import com.pjb.springbootjwt.zhddkk.util.OsUtil;
 import com.pjb.springbootjwt.zhddkk.util.QRCodeUtil;
 import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
-import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import com.wf.captcha.ArithmeticCaptcha;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -56,6 +55,8 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 public class LoginController {
 
     private static final String REDIS_KEY_PREFIX = "ws_"; //登陆用户的redis缓存前缀
+
+    private static final SimpleDateFormat SDF_STANDARD = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -216,9 +217,6 @@ public class LoginController {
     public void wsclient(@RequestParam("user")String user, @RequestParam("pass")String pass,
                          @RequestParam("verifyCode")String verifyCodeInput,
                            HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // 检查当前用户是否已经登录过
-        Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-
         // 获取用户信息
         WsUsersDO curUserObj = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
 
@@ -242,7 +240,7 @@ public class LoginController {
         }
 
         // 是否已登录
-        if (socketMap.containsKey(user)) {
+        if (curUserObj.getState().equals("1")) {
             // 如果已登录
             request.setAttribute("user", user);
             request.setAttribute("detail", "当前用户已经登录了,请不要重复登录!");
@@ -332,6 +330,11 @@ public class LoginController {
 
         // 缓存常用表数据
         cacheService.cacheData();
+
+        // 更新用户登录状态和时间
+        curUserObj.setState("1");
+        curUserObj.setLastLoginTime(SDF_STANDARD.format(new Date()));
+        wsUsersService.updateById(curUserObj);
 
         response.sendRedirect("wsclientIndex.page");
     }
@@ -423,7 +426,7 @@ public class LoginController {
 
         //插入注册日志
         SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        WsChatlogDO loginLog = new WsChatlogDO(sdfx.format(new Date()), user, "", "注册成功", "");
+        WsChatlogDO loginLog = new WsChatlogDO(sdfx.format(new Date()), "", user, "", "注册成功", "");
         wsChatlogService.insert(loginLog);
 
         //插入用户profile信息

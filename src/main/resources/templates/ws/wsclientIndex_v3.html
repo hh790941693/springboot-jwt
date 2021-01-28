@@ -356,6 +356,9 @@
         "menus":[]
     };
 
+    // 聊天室房间号
+    var roomName = "001";
+
     // 获取左侧导航栏菜单列表
     $.ajax({
         type: 'GET',
@@ -375,7 +378,7 @@
         type: 'GET',
         url: 'ws/getOnlineInfo.json',
         async: false,
-        data: {"user": sessionUser},
+        data: {"roomName":roomName,"user": sessionUser},
         //dataType: 'json',
         success: function (result) {
             if (result.code != 1) {
@@ -779,7 +782,7 @@
 
     function loginServer() {
         if (webSocket == null) {
-            var socketUrl = "ws://" + sessionWebserverIp + ":" + sessionWebserverport + "/zhddWebSocket/" + sessionUser + "/" + sessionPassword + "/" + sessionUseragent;
+            var socketUrl = "ws://" + sessionWebserverIp + ":" + sessionWebserverport + "/zhddWebSocket/" + roomName + "/" + sessionUser + "/" + sessionPassword + "/" + sessionUseragent;
             webSocket = new WebSocket(socketUrl);
             webSocket.onerror = function (event) {
                 onError(event);

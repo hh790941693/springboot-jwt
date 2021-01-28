@@ -21,6 +21,7 @@ import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.servlet.http.Cookie;
@@ -46,6 +47,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("ws")
 public class WebSocketClientController extends AdminBaseController {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketClientController.class);
+
+    private static final SimpleDateFormat SDF_STANDARD = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final Map<String, String> configMap = WsInterceptor.getConfigMap();
 
@@ -86,8 +89,13 @@ public class WebSocketClientController extends AdminBaseController {
         HttpSession httpSession = request.getSession(false);
         System.out.println("退出前SESSION:" + httpSession.getId());
         httpSession.invalidate();
-        ZhddWebSocket.getClients().remove(user);
-        ZhddWebSocket.subOnLineCount();
+        ZhddWebSocket.removeAllRoomUser(user);
+
+        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+        if (null != wsUsersDO) {
+            wsUsersDO.setState("0");
+            wsUsersDO.setLastLogoutTime(SDF_STANDARD.format(new Date()));
+        }
         return CommonConstants.SUCCESS;
     }
 
@@ -181,11 +189,11 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "getOnlineInfo.json")
     @ResponseBody
-    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value = "user") String user) {
+    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value = "roomName") String roomName, @RequestParam(value = "user") String user) {
         if (StringUtils.isBlank(user)) {
             return Result.fail(new WsOnlineInfo());
         }
-        Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
+        Map<String, ZhddWebSocket> roomClientMap = ZhddWebSocket.getRoomClients(roomName);
 
         //所有用户
         List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>()
@@ -196,7 +204,7 @@ public class WebSocketClientController extends AdminBaseController {
         List<WsUsersDO> offlineUserList = new ArrayList<WsUsersDO>();
 
         for (WsUsersDO wu : allUserList) {
-            if (socketMap.containsKey(wu.getName())) {
+            if (roomClientMap.containsKey(wu.getName())) {
                 wu.setState("1");
                 onlineUserList.add(wu);
             } else {
@@ -311,7 +319,7 @@ public class WebSocketClientController extends AdminBaseController {
         rqe.setTotalCount(totalCount);
         rqe.setTotalPage(totalPage);
         rqe.setList(userlist);
-        rqe.setParameter1(ZhddWebSocket.getClients().size());
+        rqe.setParameter1(0);
         return JsonUtil.javaobject2Jsonobject(rqe);
     }
 
@@ -347,7 +355,7 @@ public class WebSocketClientController extends AdminBaseController {
         rqe.setTotalCount(totalCount);
         rqe.setTotalPage(totalPage);
         rqe.setList(userlist);
-        rqe.setParameter1(ZhddWebSocket.getClients().size());
+        rqe.setParameter1(0);
 
         return JsonUtil.javaobject2Jsonobject(rqe);
     }
@@ -384,7 +392,7 @@ public class WebSocketClientController extends AdminBaseController {
         rqe.setTotalCount(totalCount);
         rqe.setTotalPage(totalPage);
         rqe.setList(userlist);
-        rqe.setParameter1(ZhddWebSocket.getClients().size());
+        rqe.setParameter1(0);
 
         return JsonUtil.javaobject2Jsonobject(rqe);
     }
@@ -749,7 +757,7 @@ public class WebSocketClientController extends AdminBaseController {
         rqe.setTotalCount(totalCount);
         rqe.setTotalPage(totalPage);
         rqe.setList(userlist);
-        rqe.setParameter1(ZhddWebSocket.getClients().size());
+        rqe.setParameter1(0);
 
         return JsonUtil.javaobject2Jsonobject(rqe);
     }

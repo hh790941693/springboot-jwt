@@ -32,6 +32,10 @@ public class WsChatlogDO implements Serializable {
 
     @ApiModelProperty(value = "time",name = "")
     private String time;
+
+    // 房间号
+    private String roomName;
+
     //
     @ApiModelProperty(value = "user",name = "")
     private String user;
@@ -52,8 +56,9 @@ public class WsChatlogDO implements Serializable {
 
     public WsChatlogDO() {}
 
-    public WsChatlogDO(String time, String user, String toUser, String msg, String remark) {
+    public WsChatlogDO(String time, String roomName, String user, String toUser, String msg, String remark) {
         this.time = time;
+        this.roomName = roomName;
         this.user = user;
         this.toUser = toUser;
         this.msg = msg;

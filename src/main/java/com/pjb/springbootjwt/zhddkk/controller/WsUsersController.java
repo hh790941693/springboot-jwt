@@ -286,20 +286,10 @@ public class WsUsersController extends AdminBaseController {
             return Result.fail("用户不存在");
         }
         String userName = wsUsersDO.getName();
-        Map<String, ZhddWebSocket> socketMap = ZhddWebSocket.getClients();
-        for (Map.Entry<String, ZhddWebSocket> entry : socketMap.entrySet()) {
-            if (entry.getKey().equals(userName)) {
-                try {
-                    entry.getValue().getSession().close();
-                    ZhddWebSocket.getClients().remove(userName);
-                    break;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
+        ZhddWebSocket.removeAllRoomUser(wsUsersDO.getName());
+
         wsUsersDO.setState("0");
+        wsUsersDO.setLastLogoutTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         boolean updateFlag = wsUsersService.updateById(wsUsersDO);
         if (updateFlag) {
             return Result.ok();
