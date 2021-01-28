@@ -28,6 +28,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -193,7 +194,7 @@ public class WebSocketClientController extends AdminBaseController {
         if (StringUtils.isBlank(user)) {
             return Result.fail(new WsOnlineInfo());
         }
-        Map<String, ZhddWebSocket> roomClientMap = ZhddWebSocket.getRoomClients(roomName);
+        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClients(roomName);
 
         //所有用户
         List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>()

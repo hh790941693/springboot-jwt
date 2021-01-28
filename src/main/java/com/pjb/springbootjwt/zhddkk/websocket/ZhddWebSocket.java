@@ -34,8 +34,8 @@ public class ZhddWebSocket {
 
     private static final SimpleDateFormat SDF_STANDARD = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    // 房间号:当前session信息
-    private static Map<String, Map<String, ZhddWebSocket>> clientsMap = new ConcurrentHashMap();
+    // <房间号, <用戶名,用户session>>
+    private static Map<String, Map<String, Session>> clientsMap = new ConcurrentHashMap();
 
     private Session session;
 
@@ -108,7 +108,7 @@ public class ZhddWebSocket {
             if (typeId.equals("1")) {
                 // 如果是系统消息
                 ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息", msgFrom, msgTo, msg);
-                Map<String, ZhddWebSocket> roomClientMap = clientsMap.get(roomName);
+                Map<String, Session> roomClientMap = clientsMap.get(roomName);
                 Session fromSession = querySession(roomName, msgFrom);
                 if (null != fromSession) {
                     fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
@@ -185,13 +185,13 @@ public class ZhddWebSocket {
         wsChatlogService.insert(loginLog);
 
         logger.debug(user + "已上线");
-        Map<String, ZhddWebSocket> roomClientMap = clientsMap.get(roomName);
-        for (Entry<String, ZhddWebSocket> entry : roomClientMap.entrySet()) {
+        Map<String, Session> roomClientMap = clientsMap.get(roomName);
+        for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             if (!entry.getKey().equals(user)) {
                 try {
                     ChatMessageBean chatBean = new ChatMessageBean(SDF_STANDARD.format(new Date()), "1", "系统消息",
                             CommonConstants.ADMIN_USER, entry.getKey(), user + "已上线");
-                    entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                    entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -228,13 +228,13 @@ public class ZhddWebSocket {
         String msg = "房间:" + roomName + " 用户:" + user + "已下线!";
         logger.debug(msg);
 
-        Map<String, ZhddWebSocket> roomClientMap = clientsMap.get(roomName);
-        for (Entry<String, ZhddWebSocket> entry : roomClientMap.entrySet()) {
+        Map<String, Session> roomClientMap = clientsMap.get(roomName);
+        for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             if (!entry.getKey().equals(user)) {
                 try {
                     ChatMessageBean chatBean = new ChatMessageBean(SDF_STANDARD.format(new Date()), "1", "系统消息",
                             CommonConstants.ADMIN_USER, entry.getKey(), msg);
-                    entry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                    entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -279,22 +279,22 @@ public class ZhddWebSocket {
 
     public synchronized void addRoomUser(String roomName, String user) {
         if (clientsMap.containsKey(roomName)) {
-            Map<String, ZhddWebSocket> roomMap = clientsMap.get(roomName);
-            roomMap.put(user, this);
+            Map<String, Session> roomMap = clientsMap.get(roomName);
+            roomMap.put(user, this.session);
         } else {
-            Map<String, ZhddWebSocket> userMap = new HashMap<>();
-            userMap.put(user, this);
+            Map<String, Session> userMap = new HashMap<>();
+            userMap.put(user, this.session);
             clientsMap.put(roomName, userMap);
         }
     }
 
     public static synchronized void removeRoomUser(String roomName, String user) {
         if (clientsMap.containsKey(roomName)) {
-            Map<String, ZhddWebSocket> userMap = clientsMap.get(roomName);
+            Map<String, Session> userMap = clientsMap.get(roomName);
             if (userMap.containsKey(user)) {
                 userMap.remove(user);
                 try {
-                    userMap.get(user).getSession().close();
+                    userMap.get(user).close();
                 } catch (Exception e) {
                     // do nothing
                 }
@@ -303,13 +303,13 @@ public class ZhddWebSocket {
     }
 
     public static void removeAllRoomUser(String user) {
-        for (Entry<String, Map<String, ZhddWebSocket>> entry : clientsMap.entrySet()) {
-            Map<String, ZhddWebSocket> roomMap = entry.getValue();
+        for (Entry<String, Map<String, Session>> entry : clientsMap.entrySet()) {
+            Map<String, Session> roomMap = entry.getValue();
             if (roomMap.containsKey(user)) {
                 roomMap.remove(user);
                 subOnLineCount(entry.getKey());
                 try {
-                    roomMap.get(user).getSession().close();
+                    roomMap.get(user).close();
                 } catch (Exception e) {
                     continue;
                 }
@@ -325,14 +325,14 @@ public class ZhddWebSocket {
         return onlineCount;
     }
 
-    public static synchronized Map<String, ZhddWebSocket> getRoomClients(String roomName) {
+    public static synchronized Map<String, Session> getRoomClients(String roomName) {
         if (clientsMap.containsKey(roomName)) {
             return clientsMap.get(roomName);
         }
-        return new ConcurrentHashMap<String, ZhddWebSocket>();
+        return new ConcurrentHashMap<String, Session>();
     }
 
-    public static Map<String, Map<String, ZhddWebSocket>> getClientsMap() {
+    public static Map<String, Map<String, Session>> getClientsMap() {
         return clientsMap;
     }
 
@@ -358,10 +358,10 @@ public class ZhddWebSocket {
      * @return 会话信息
      */
     public static Session querySession(String roomName, String username) {
-        Map<String, ZhddWebSocket> roomClientMap = clientsMap.get(roomName);
+        Map<String, Session> roomClientMap = clientsMap.get(roomName);
         if (null != roomClientMap) {
             if (roomClientMap.containsKey(username)) {
-                return roomClientMap.get(username).getSession();
+                return roomClientMap.get(username);
             }
         }
         return null;

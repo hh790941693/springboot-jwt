@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.Session;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,8 +73,8 @@ public class WebSocketServerController extends AdminBaseController {
     @RequestMapping(value = "offlineUser.do")
     @ResponseBody
     public String offlineUser(@RequestParam("user") String user) {
-        Map<String, Map<String,ZhddWebSocket>> socketMap = ZhddWebSocket.getClientsMap();
-        for (Entry<String, Map<String, ZhddWebSocket>> entry : socketMap.entrySet()) {
+        Map<String, Map<String, Session>> socketMap = ZhddWebSocket.getClientsMap();
+        for (Entry<String, Map<String, Session>> entry : socketMap.entrySet()) {
             if (entry.getValue().containsKey(user)) {
                 entry.getValue().remove(user);
                 ZhddWebSocket.removeRoomUser(entry.getKey(), user);
@@ -144,11 +145,11 @@ public class WebSocketServerController extends AdminBaseController {
         ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, typeDesc, msgFrom, msgTo, msgStr);
 
         // 在线人数
-        Map<String, Map<String, ZhddWebSocket>> socketMap = ZhddWebSocket.getClientsMap();
-        for (Entry<String, Map<String, ZhddWebSocket>> entry : socketMap.entrySet()) {
+        Map<String, Map<String, Session>> socketMap = ZhddWebSocket.getClientsMap();
+        for (Entry<String, Map<String, Session>> entry : socketMap.entrySet()) {
             if (entry.getValue().containsKey(user)) {
                 try {
-                    entry.getValue().get(user).getSession().getBasicRemote().sendText(chatBean.toString());
+                    entry.getValue().get(user).getBasicRemote().sendText(chatBean.toString());
                     result = CommonConstants.SUCCESS;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -196,17 +197,17 @@ public class WebSocketServerController extends AdminBaseController {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String curTime = sdf.format(new Date());
 
-            Map<String, Map<String, ZhddWebSocket>> socketMap = ZhddWebSocket.getClientsMap();
-            for (Entry<String, Map<String, ZhddWebSocket>> outerEntry : socketMap.entrySet()) {
-                Map<String, ZhddWebSocket> roomClientMap = outerEntry.getValue();
-                for (Entry<String, ZhddWebSocket> innerEntry : outerEntry.getValue().entrySet()) {
+            Map<String, Map<String, Session>> socketMap = ZhddWebSocket.getClientsMap();
+            for (Entry<String, Map<String, Session>> outerEntry : socketMap.entrySet()) {
+                Map<String, Session> roomClientMap = outerEntry.getValue();
+                for (Entry<String, Session> innerEntry : outerEntry.getValue().entrySet()) {
                     if (innerEntry.getKey().equals(CommonConstants.ADMIN_USER)) {
                         continue;
                     }
                     try {
                         ChatMessageBean chatBean = new ChatMessageBean(curTime, "4", "广告消息",
                                 CommonConstants.ADMIN_USER, innerEntry.getKey(), "title:" + adTitle + ";content:" + adContent);
-                        innerEntry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                        innerEntry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                         receiveList.add(innerEntry.getKey());
                     } catch (IOException e) {
                         e.printStackTrace();

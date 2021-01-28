@@ -6,6 +6,7 @@ import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import java.util.List;
 import java.util.Map;
+import javax.websocket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +33,15 @@ public class CheckUserStatusJob {
     public void cronJob() {
         logger.info("[定时任务]定时检查用户的在线/离线状态");
 
-        Map<String, Map<String, ZhddWebSocket>> clientsMap = ZhddWebSocket.getClientsMap();
+        Map<String, Map<String, Session>> clientsMap = ZhddWebSocket.getClientsMap();
         logger.info("当前在线用户数:" + clientsMap.size());
         List<WsUsersDO> dbUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().eq("state", "1"));
         logger.info("数据库在线人数:" + dbUserList.size());
         for (WsUsersDO wsUsersDO : dbUserList) {
             boolean userOnline = false;
-            for (Map.Entry<String, Map<String, ZhddWebSocket>> outEntry : clientsMap.entrySet()) {
-                for (Map.Entry<String, ZhddWebSocket> innerEntry : outEntry.getValue().entrySet()) {
-                    if (innerEntry.getValue().getUser().equals(wsUsersDO.getName())) {
+            for (Map.Entry<String, Map<String, Session>> outEntry : clientsMap.entrySet()) {
+                for (Map.Entry<String, Session> innerEntry : outEntry.getValue().entrySet()) {
+                    if (innerEntry.getKey().equals(wsUsersDO.getName())) {
                         userOnline = true;
                         break;
                     }

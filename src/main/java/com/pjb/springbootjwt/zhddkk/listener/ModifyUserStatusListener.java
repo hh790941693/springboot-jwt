@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.websocket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -46,15 +47,15 @@ public class ModifyUserStatusListener implements ServletContextListener, Command
 
     private void updateUser() {
         logger.info("开始检查在线用户状态");
-        Map<String, Map<String, ZhddWebSocket>> clientsMap = ZhddWebSocket.getClientsMap();
+        Map<String, Map<String, Session>> clientsMap = ZhddWebSocket.getClientsMap();
         logger.info("当前在线用户数:" + clientsMap.size());
         List<WsUsersDO> dbUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().eq("state", "1"));
         logger.info("数据库在线人数:" + dbUserList.size());
         for (WsUsersDO wsUsersDO : dbUserList) {
             boolean userOnline = false;
-            for (Map.Entry<String, Map<String, ZhddWebSocket>> outEntry : clientsMap.entrySet()) {
-                for (Map.Entry<String, ZhddWebSocket> innerEntry : outEntry.getValue().entrySet()) {
-                    if (innerEntry.getValue().getUser().equals(wsUsersDO.getName())) {
+            for (Map.Entry<String, Map<String, Session>> outEntry : clientsMap.entrySet()) {
+                for (Map.Entry<String, Session> innerEntry : outEntry.getValue().entrySet()) {
+                    if (innerEntry.getKey().equals(wsUsersDO.getName())) {
                         userOnline = true;
                         break;
                     }

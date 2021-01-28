@@ -18,6 +18,7 @@ import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.websocket.Session;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,17 +163,17 @@ public class WsAdsController extends AdminBaseController {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String curTime = sdf.format(new Date());
 
-            Map<String, Map<String, ZhddWebSocket>> socketMap = ZhddWebSocket.getClientsMap();
-            for (Map.Entry<String, Map<String, ZhddWebSocket>> outerEntry : socketMap.entrySet()) {
-                Map<String, ZhddWebSocket> roomClientMap = outerEntry.getValue();
-                for (Map.Entry<String, ZhddWebSocket> innerEntry : outerEntry.getValue().entrySet()) {
+            Map<String, Map<String, Session>> socketMap = ZhddWebSocket.getClientsMap();
+            for (Map.Entry<String, Map<String, Session>> outerEntry : socketMap.entrySet()) {
+                Map<String, Session> roomClientMap = outerEntry.getValue();
+                for (Map.Entry<String, Session> innerEntry : outerEntry.getValue().entrySet()) {
                     if (innerEntry.getKey().equals(CommonConstants.ADMIN_USER)) {
                         continue;
                     }
                     try {
                         ChatMessageBean chatBean = new ChatMessageBean(curTime, "4", "广告消息",
                                 CommonConstants.ADMIN_USER, innerEntry.getKey(), "title:" + title + ";content:" + content);
-                        innerEntry.getValue().getSession().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                        innerEntry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                         receiveList.add(innerEntry.getKey());
                     } catch (IOException e) {
                         e.printStackTrace();
