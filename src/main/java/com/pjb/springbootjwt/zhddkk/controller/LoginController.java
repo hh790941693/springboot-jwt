@@ -240,13 +240,13 @@ public class LoginController {
         }
 
         // 是否已登录
-        if (curUserObj.getState().equals("1")) {
-            // 如果已登录
-            request.setAttribute("user", user);
-            request.setAttribute("detail", "当前用户已经登录了,请不要重复登录!");
-            request.getRequestDispatcher("loginfail.page").forward(request, response);
-            return;
-        }
+//        if (curUserObj.getState().equals("1")) {
+//            // 如果已登录
+//            request.setAttribute("user", user);
+//            request.setAttribute("detail", "当前用户已经登录了,请不要重复登录!");
+//            request.getRequestDispatcher("loginfail.page").forward(request, response);
+//            return;
+//        }
 
         //数据库明文密码
         String dbPassDecrypted = SecurityAESUtil.decryptAES(curUserObj.getPassword(), CommonConstants.AES_PASSWORD);
