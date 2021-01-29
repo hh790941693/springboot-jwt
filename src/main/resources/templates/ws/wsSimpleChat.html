@@ -6,11 +6,15 @@
   <title>简易聊天室</title>
    
    <style>
+       body {
+           margin: 0;
+           padding: 20px;
+       }
+       
         #mainDiv {
             width: 100%;
             height: 100%;
             margin: 0 auto;
-            padding: 20px;
             border: 1px solid black;
         }
 
@@ -38,11 +42,13 @@
         <!--头部按钮组-->
         <div id="header">
             <div align="left" style="width:20%;height:100%;float:left;margin-top:-5px;">
-                <span style="color:yellow;font-weight:bold;font-size:24px;height:100%;display:inline-block;">{{loginUser}}</span>
+                <span style="color:yellow;font-weight:bold;font-size:24px;height:100%;display:inline-block;">{{roomName}}</span>
+                <span class="fa fa-user"></span>
+                <label id="onlineNum">{{roomUserCount}}</label>&nbsp;&nbsp;
             </div>
 
             <div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
-                <button id="refreashConlineCount" class='label label-info' th:title="刷新" onclick="getOnlineInfo()">
+                <button id="refreashConlineCount" class='label label-info' th:title="刷新" @click="getOnlineInfo()">
                     <span class="glyphicon glyphicon-refresh"></span>
                 </button>&nbsp;&nbsp;
                 <button class='label label-danger' th:title="清屏" onclick="clearScreen()">
@@ -63,14 +69,14 @@
         <div id="footer" align="left">
             <div style="height:25px;">
                 <!--选择对象-->
-                <select id="selectUser" style="width:50%;height:100%;float:left;">
+                <select id="selectUser" style="width:49%;height:100%;float:left;margin-left:1px;">
                     <option value=""></option>
                     <option v-for="row in roomUserList" :value="row">
                         {{row}}
                     </option>
                 </select>
               <!--选择常用语-->
-                <select id="selectCyy" style="width:50%;height:100%;float:right;" @change="selectText">
+                <select id="selectCyy" style="width:49%;height:100%;float:right;margin-right: 1px;" @change="selectText">
                     <option v-for="cyy in cyyList">
                         {{cyy.name}}
                     </option>
@@ -92,13 +98,14 @@
     <script type="text/javascript">
         var currentUserOnlineInfo = undefined;
         var webSocket = null;
-        var roomName = "002";
         var chatRecord = "";
+        var roomName = "002";
         loginServer();
 
         var app = new Vue({
             el: '#mainDiv',
             data: {
+                roomName: roomName,
                 roomUserList: {},
                 roomUserCount:0,
                 cyyList: {},
@@ -109,7 +116,7 @@
                     $.ajax({
                         type: 'GET',
                         url: 'getOnlineInfo.json',
-                        data: {"roomName":parent.roomName, "user": sessionUser},
+                        data: {"roomName":roomName, "user": sessionUser},
                         success: function (result) {
                             if (result.code != 1) {
                                 return;
@@ -198,12 +205,12 @@
                 if (toUser != null && toUser != "") {
                     var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [在线消息]  [我 -->" + toUser + "] " + msgToServer + "</p>";
                     //updateChatMsg(htmlData);
-                    sendMsgToServer(roomName, sessionUser, toUser, msgToServer);
+                    sendMsgToServer(app.roomName, sessionUser, toUser, msgToServer);
                     $("#msgToServer").val("");
                 } else {
                     var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [在线消息]  [我] " + msgToServer + "</p>";
                     //updateChatMsg(htmlData);
-                    sendMsgToServer(roomName, sessionUser, "", msgToServer);
+                    sendMsgToServer(app.roomName, sessionUser, "", msgToServer);
                     $("#msgToServer").val("");
                 }
             } else {
