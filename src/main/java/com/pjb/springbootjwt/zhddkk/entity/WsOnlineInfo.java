@@ -28,4 +28,9 @@ public class WsOnlineInfo {
     private int offlineFriendCount = 0;
     // 敏感词、脏话、常用语、注册问题
     private Map<String, List<WsCommonDO>> commonMap;
+
+    // 房间用户列表
+    private List<String> roomUserList;
+    // 房间用户数
+    private int roomUserCount = 0;
 }

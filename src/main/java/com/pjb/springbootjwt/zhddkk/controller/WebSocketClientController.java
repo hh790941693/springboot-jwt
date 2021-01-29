@@ -194,7 +194,7 @@ public class WebSocketClientController extends AdminBaseController {
         if (StringUtils.isBlank(user)) {
             return Result.fail(new WsOnlineInfo());
         }
-        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClients(roomName);
+        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClientsMap(roomName);
 
         //所有用户
         List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>()
@@ -240,6 +240,11 @@ public class WebSocketClientController extends AdminBaseController {
         woi.setOfflineFriendCount(offLineFriendList.size());
         woi.setCommonMap(buildCommonData());
         woi.setCurrentOnlineUserInfo(currentOnlineUserInfo);
+
+        // 房间用户列表
+        List<String> roomUserList = ZhddWebSocket.getRoomClientsList(roomName);
+        woi.setRoomUserList(roomUserList);
+        woi.setRoomUserCount(roomUserList.size());
 
         return Result.ok(woi);
     }
@@ -999,6 +1004,14 @@ public class WebSocketClientController extends AdminBaseController {
     String intelAssistantPage(Model model, String user) {
         model.addAttribute("user", user);
         return "ws/intelAssistant";
+    }
+
+    /**
+     * 简易聊天室.
+     */
+    @GetMapping("wsSimpleChat.page")
+    String wsSimpleChat(Model model) {
+        return "ws/wsSimpleChat";
     }
 
     /**

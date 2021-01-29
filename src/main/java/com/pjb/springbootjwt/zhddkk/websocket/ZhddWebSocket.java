@@ -108,30 +108,16 @@ public class ZhddWebSocket {
             if (typeId.equals("1")) {
                 // 如果是系统消息
                 ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息", msgFrom, msgTo, msg);
-                Map<String, Session> roomClientMap = clientsMap.get(roomName);
                 Session fromSession = queryRoomSession(roomName, msgFrom);
                 if (null != fromSession) {
                     fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
             } else {
                 // 如果用户不在线
-                Session toSession = queryRoomSession(roomName, msgTo);
-                if (null == toSession) {
-                    Session fromSession = queryRoomSession(roomName, msgFrom);
-                    if (null != fromSession) {
-                        ChatMessageBean chatBean = new ChatMessageBean(curTime, "3", "离线消息", msgFrom, msgTo, msg);
-                        fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
-                    }
-                } else {
+                Map<String, Session> roomClientMap = getRoomClientsMap(roomName);
+                for (Entry<String, Session> entry : roomClientMap.entrySet()) {
                     ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg);
-                    toSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
-                }
-
-                // 给admin发消息
-                Session adminSession = queryRoomSession(roomName, CommonConstants.ADMIN_USER);
-                if (null != adminSession) {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg);
-                    adminSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                    entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
 
                 WsChatlogDO wcl1 = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, msgFrom, msgTo, msgStr,"");
@@ -188,7 +174,7 @@ public class ZhddWebSocket {
         wsChatlogService.insert(loginLog);
 
         // 广播消息
-        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClients(roomName);
+        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClientsMap(roomName);
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             if (!entry.getKey().equals(this.user)) {
                 try {
@@ -332,11 +318,20 @@ public class ZhddWebSocket {
         return onlineCount;
     }
 
-    public static synchronized Map<String, Session> getRoomClients(String roomName) {
+    public static synchronized Map<String, Session> getRoomClientsMap(String roomName) {
         if (clientsMap.containsKey(roomName)) {
             return clientsMap.get(roomName);
         }
         return new ConcurrentHashMap<String, Session>();
+    }
+
+    public static synchronized List<String> getRoomClientsList(String roomName) {
+        List<String> roomUserList = new ArrayList<>();
+        Map<String, Session> roomClientMap = getRoomClientsMap(roomName);
+        for (Entry<String, Session> entry : roomClientMap.entrySet()) {
+            roomUserList.add(entry.getKey());
+        }
+        return roomUserList;
     }
 
     public static Map<String, Map<String, Session>> getClientsMap() {
