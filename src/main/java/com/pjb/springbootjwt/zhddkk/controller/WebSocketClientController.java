@@ -96,6 +96,7 @@ public class WebSocketClientController extends AdminBaseController {
         if (null != wsUsersDO) {
             wsUsersDO.setState("0");
             wsUsersDO.setLastLogoutTime(SDF_STANDARD.format(new Date()));
+            wsUsersService.updateById(wsUsersDO);
         }
         return CommonConstants.SUCCESS;
     }
