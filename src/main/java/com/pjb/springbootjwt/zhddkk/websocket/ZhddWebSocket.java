@@ -179,7 +179,7 @@ public class ZhddWebSocket {
             if (!entry.getKey().equals(this.user)) {
                 try {
                     ChatMessageBean chatBean = new ChatMessageBean(SDF_STANDARD.format(new Date()), "1", "系统消息",
-                            CommonConstants.ADMIN_USER, entry.getKey(), enterMsg);
+                            "", "", enterMsg);
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -195,7 +195,7 @@ public class ZhddWebSocket {
             for (WsChatlogDO wcl : chatLogHistoryList) {
                 String time = wcl.getTime();
                 String sendmsg = wcl.getUser() + "-->我 " + wcl.getMsg();
-                ChatMessageBean chatBean = new ChatMessageBean(time, "1", "系统消息", CommonConstants.ADMIN_USER, user, sendmsg);
+                ChatMessageBean chatBean = new ChatMessageBean(time, "1", "系统消息", "", "", sendmsg);
                 try {
                     this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     Thread.sleep(50);
@@ -226,7 +226,7 @@ public class ZhddWebSocket {
             if (!entry.getKey().equals(user)) {
                 try {
                     ChatMessageBean chatBean = new ChatMessageBean(SDF_STANDARD.format(new Date()), "1", "系统消息",
-                            CommonConstants.ADMIN_USER, entry.getKey(), leaveMsg);
+                            "", "", leaveMsg);
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
                     e.printStackTrace();

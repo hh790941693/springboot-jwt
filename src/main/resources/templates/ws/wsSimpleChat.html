@@ -325,11 +325,21 @@
             if (msgTo == null || msgTo == "") {
                 showStr = "[" + curTime + "] [" + typeDesc + "] [" + msgFrom + "] " + msg;
             }
-            var defaultCss = "color:red;font-size:10px;line-height:14px;"
+            if (msgFrom == null || msgFrom == "") {
+                showStr = "[" + curTime + "] [" + typeDesc + "] " + msg;
+            }
+            
+            // 其他人发的消息
+            var defaultCss = "color:black;font-size:10px;line-height:14px;"
             if (msgTo == sessionUser) {
-                defaultCss = "color:green;font-size:10px;line-height:14px;";
+                // 发给我的消息
+                defaultCss = "color:red;font-size:10px;line-height:14px;";
             } else if (msgFrom == sessionUser) {
+                // 我发出去的消息
                 defaultCss = "color:blue;font-size:10px;line-height:14px;";
+            } else if (msgFrom == null || msgFrom == "") {
+                // 系统消息
+                defaultCss = "color:green;font-size:10px;line-height:14px;";
             }
             
             var htmlData = "<p style='" + defaultCss + "'>" + showStr + "</p>";
