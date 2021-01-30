@@ -34,6 +34,8 @@ public class ZhddWebSocket {
 
     private static final SimpleDateFormat SDF_STANDARD = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    private static final SimpleDateFormat SDF_HHMMSS = new SimpleDateFormat("HH:mm:ss");
+
     // <房间号, <用戶名,用户session>>
     private static Map<String, Map<String, Session>> clientsMap = new ConcurrentHashMap();
 
@@ -46,8 +48,6 @@ public class ZhddWebSocket {
     private String pass;
 
     private String userAgent;
-
-    private long loginTimes;
 
     private static Map<String, Integer> onlineCountMap = new ConcurrentHashMap();
 
@@ -104,7 +104,7 @@ public class ZhddWebSocket {
                 msg = msg.replaceAll(wc.getName(), "***");
             }
 
-            String curTime = SDF_STANDARD.format(new Date());
+            String curTime = SDF_HHMMSS.format(new Date());
             if (typeId.equals("1")) {
                 // 如果是系统消息
                 ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息", msgFrom, msgTo, msg);
@@ -120,7 +120,7 @@ public class ZhddWebSocket {
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
 
-                WsChatlogDO wcl1 = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, msgFrom, msgTo, msgStr,"");
+                WsChatlogDO wcl1 = new WsChatlogDO(curTime, roomName, msgFrom, msgTo, msgStr,"");
                 wsChatlogService.insert(wcl1);
             }
         }
@@ -157,7 +157,6 @@ public class ZhddWebSocket {
         this.user = user;
         this.pass = pass;
         this.userAgent = userAgent;
-        this.loginTimes = System.currentTimeMillis();
 
         String enterMsgFormat = "%s 进入了聊天室：%s";
         String enterMsg = String.format(enterMsgFormat, this.user, this.roomName);
@@ -178,7 +177,7 @@ public class ZhddWebSocket {
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             if (!entry.getKey().equals(this.user)) {
                 try {
-                    ChatMessageBean chatBean = new ChatMessageBean(SDF_STANDARD.format(new Date()), "1", "系统消息",
+                    ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), "1", "系统消息",
                             "", "", enterMsg);
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
@@ -194,6 +193,9 @@ public class ZhddWebSocket {
         if (null != chatLogHistoryList && chatLogHistoryList.size() > 0) {
             for (WsChatlogDO wcl : chatLogHistoryList) {
                 String time = wcl.getTime();
+                if (time.length() >= 18) {
+                    time = time.substring(11);
+                }
                 //String sendmsg = wcl.getUser() + "-->我 " + wcl.getMsg();
                 String sendmsg = wcl.getMsg();
                 ChatMessageBean chatBean = new ChatMessageBean(time, "1", "离线消息", wcl.getUser(), "我", sendmsg);
@@ -226,7 +228,7 @@ public class ZhddWebSocket {
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             if (!entry.getKey().equals(user)) {
                 try {
-                    ChatMessageBean chatBean = new ChatMessageBean(SDF_STANDARD.format(new Date()), "1", "系统消息",
+                    ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), "1", "系统消息",
                             "", "", leaveMsg);
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {

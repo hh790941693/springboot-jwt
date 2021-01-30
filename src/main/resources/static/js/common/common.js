@@ -273,6 +273,25 @@ function getCurrentTime() {
     return year + "-" + month + "-" + day + " " + h + ":" + m + ":" + s;
 }
 
+function getCurrentTimeOfHHMMSS() {
+    var date = new Date();
+    var h = date.getHours();
+    var m = date.getMinutes();
+    var s = date.getSeconds();
+
+    if (h < 10) {
+        h = "0" + h;
+    }
+    if (m < 10) {
+        m = "0" + m;
+    }
+    if (s < 10) {
+        s = "0" + s;
+    }
+
+    return h + ":" + m + ":" + s;
+}
+
 function randomNumber(start, end) {
     var w = end - start - 1;
     var randomNum = Math.round(Math.random() * w + start + 1);
