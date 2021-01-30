@@ -196,6 +196,7 @@
             var toServerMsgObj = {};
             toServerMsgObj.typeId = 2;
             toServerMsgObj.typeDesc = "在线消息";
+            toServerMsgObj.roomName = parent.roomName;
             toServerMsgObj.from = from;
             toServerMsgObj.to = to;
             toServerMsgObj.msg = msg;

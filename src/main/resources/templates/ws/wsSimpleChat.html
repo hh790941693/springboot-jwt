@@ -47,9 +47,9 @@
         <!--头部按钮组-->
         <div id="header">
             <div align="left" style="width:20%;height:100%;float:left;margin-top:-5px;">
-                <span style="color:yellow;font-weight:bold;font-size:24px;height:100%;display:inline-block;">{{roomName}}</span>
-                <span class="fa fa-user"></span>
-                <label id="onlineNum">{{roomUserCount}}</label>&nbsp;&nbsp;
+                <span style="color:yellow;font-weight:bold;font-size:24px;height:100%;display:inline-block;margin-right: 10px;">{{roomName}}</span>
+                <span class="fa fa-user" style="color:white;"></span>
+                <label id="onlineNum" style="color:white;">{{roomUserCount}}</label>&nbsp;&nbsp;
             </div>
 
             <div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
@@ -90,7 +90,7 @@
           <!--聊天内容  发送按钮-->
             <div style="height:33px;">
                 <input id="msgToServer" autocomplete="off"
-                       style="width:80%;float:left;height:100%;border:2px solid grey" placeholder="请输入聊天内容">
+                       style="width:80%;float:left;height:100%;border:2px solid grey" placeholder="请输入聊天内容<按Enter键发送>">
                 <button id="sendBtn" type="button" class='btn btn-sm btn-success'
                         style="width:20%;height:100%;float:right;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
             </div>
