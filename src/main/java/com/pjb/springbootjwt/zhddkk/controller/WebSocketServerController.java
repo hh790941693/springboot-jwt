@@ -73,13 +73,7 @@ public class WebSocketServerController extends AdminBaseController {
     @RequestMapping(value = "offlineUser.do")
     @ResponseBody
     public String offlineUser(@RequestParam("user") String user) {
-        Map<String, Map<String, Session>> socketMap = ZhddWebSocket.getClientsMap();
-        for (Entry<String, Map<String, Session>> entry : socketMap.entrySet()) {
-            if (entry.getValue().containsKey(user)) {
-                entry.getValue().remove(user);
-                ZhddWebSocket.removeRoomUser(entry.getKey(), user);
-            }
-        }
+        ZhddWebSocket.removeAllRoomUser(user);
 
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {

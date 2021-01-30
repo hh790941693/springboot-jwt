@@ -29,11 +29,16 @@
 
         #msgFromServer {
             width: 100%;
-            height: 350px;
+            height: calc(100% - 88px);
             overflow: auto;
             background-color: white;
             padding: 3px;
         }
+       
+       #footer {
+           width: 100%;
+           height:58px;
+       }
    </style>
 </head>
 <body>
@@ -98,7 +103,6 @@
     <script type="text/javascript">
         var currentUserOnlineInfo = undefined;
         var webSocket = null;
-        var chatRecord = "";
         var roomName = "002";
         loginServer();
 
@@ -153,16 +157,6 @@
                 selectText: function (e) {
                     $("#msgToServer").val(e.target.value);
                 },
-                showPersonInfo: function (userName) {
-                    layer.open({
-                        type: 2,
-                        title: '用户个人信息',
-                        shadeClose: true,
-                        shade: 0.2,
-                        area: ['390px', '420px'],
-                        content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + userName
-                    });
-                }
             },
             created: function (e) {
                 this.getOnlineInfo();
@@ -220,14 +214,14 @@
         }
 
         //发送消息
-        function sendMsgToServer(roomName, from, to, msg) {
+        function sendMsgToServer(roomName, userFrom, userTo, msg) {
             if (webSocket != null) {
                 var toServerMsgObj = {};
                 toServerMsgObj.typeId = 2;
                 toServerMsgObj.typeDesc = "在线消息";
                 toServerMsgObj.roomName = roomName;
-                toServerMsgObj.from = from;
-                toServerMsgObj.to = to;
+                toServerMsgObj.from = userFrom;
+                toServerMsgObj.to = userTo;
                 toServerMsgObj.msg = msg;
                 var jsonObj = JSON.stringify(toServerMsgObj);
                 webSocket.send(jsonObj);
@@ -236,30 +230,23 @@
                 updateChatMsg(msg);
             }
         }
-
-        function logout() {
-            window.parent.toIndex();
-        }
-
+        
         function updateChatMsg(msg) {
             var textArea = $('#msgFromServer').append(msg);
-            chatRecord = chatRecord + msg;
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
 
         function updateChatMsgWithColor(msg, color, fontSize) {
             var newMsg = "<p style='color:" + color + ";font-size:" + fontSize + "px;line-height:14px;'>[" + getCurrentTime() + "] [系统信息] " + msg + "</p>";
             var textArea = $("#msgFromServer").append(newMsg);
-            chatRecord = chatRecord + newMsg;
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
         
-        //定时获取在线人数信息
-        setInterval(function () {
-            app.getOnlineInfo();
-        }, 20000);
-
-
+        // //定时获取在线人数信息
+        // setInterval(function () {
+        //     app.getOnlineInfo();
+        // }, 20000);
+        
         //回车键发送聊天内容
         $(document).keyup(function (event) {
             if (event.keyCode == 13) {
@@ -294,21 +281,19 @@
 
         //连接成功
         function onOpen(event) {
-            connectStatus = "1";
-            var msg = $.ws.i18n("label.connected");
-            updateChatMsgWithColor(msg, "green", 10);
+            updateChatMsgWithColor("已进入聊天室", "green", 10);
         }
 
         //连接失败
         function onError(event) {
-            updateChatMsgWithColor("连接服务器异常!", "red", 10);
+            updateChatMsgWithColor("连接聊天室服务器异常!", "red", 10);
             webSocket = null;
         }
 
         //连接关闭
         function OnClose(event) {
-            updateChatMsgWithColor("客户端已断开!", "red", 10);
-            stop();
+            updateChatMsgWithColor("聊天室已断开!", "red", 10);
+            webSocket = null;
         }
 
         //接收消息
@@ -317,7 +302,6 @@
             var curTime = jsonObj.curTime;
             var msgFrom = jsonObj.from;
             var msgTo = jsonObj.to;
-            var typeId = jsonObj.typeId;
             var typeDesc = jsonObj.typeDesc;
             var msg = jsonObj.msg;
 
