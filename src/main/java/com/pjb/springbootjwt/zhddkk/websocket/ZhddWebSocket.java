@@ -194,8 +194,9 @@ public class ZhddWebSocket {
         if (null != chatLogHistoryList && chatLogHistoryList.size() > 0) {
             for (WsChatlogDO wcl : chatLogHistoryList) {
                 String time = wcl.getTime();
-                String sendmsg = wcl.getUser() + "-->我 " + wcl.getMsg();
-                ChatMessageBean chatBean = new ChatMessageBean(time, "1", "系统消息", "", "", sendmsg);
+                //String sendmsg = wcl.getUser() + "-->我 " + wcl.getMsg();
+                String sendmsg = wcl.getMsg();
+                ChatMessageBean chatBean = new ChatMessageBean(time, "1", "离线消息", wcl.getUser(), "我", sendmsg);
                 try {
                     this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     Thread.sleep(50);
