@@ -92,7 +92,7 @@
                 <input id="msgToServer" autocomplete="off"
                        style="width:75%;float:left;height:100%;border:2px solid grey" placeholder="请输入聊天内容<按Enter键发送>">
                 <button id="sendBtn" type="button" class='btn btn-sm btn-success'
-                        style="width:25%;height:100%;float:right;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
+                        style="width:25%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
             </div>
         </div>
     </div>
@@ -310,30 +310,49 @@
             var defaultCss = "color:black;font-size:14px;line-height:22px;";
             if (msgTo == sessionUser) {
                 // 发给我的消息
-                defaultCss = "color:red;font-size:14px;line-height:22px;";
+                defaultCss = "color:black;font-size:14px;line-height:22px;";
             } else if (msgFrom == sessionUser) {
                 // 我发出去的消息
-                defaultCss = "color:blue;font-size:14px;line-height:22px;";
+                defaultCss = "color:white;font-size:14px;line-height:22px;";
             }
             
-            var htmlData = "<div style='width:70%;height:auto;margin-bottom: 10px;'>";
+            var htmlDate = "";
             if (msgFrom == sessionUser) {
+                // 右侧
                 htmlData = "<div style='width:70%;height:auto;margin-bottom: 10px;margin-left:29%;text-align:right;'>";
+                htmlData += "<p style='height:20px;'>";
+                
+                htmlData += "<span style='display: inline-block;margin-right: 10px;'>" + typeDesc + "</span>";
+                htmlData += "<span style='display: inline-block;margin-right: 10px;'>" + curTime + "</span>";
+                htmlData += "<a style='display: inline-block;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
+                htmlData += "</p>";
+            } else {
+                // 左侧
+                htmlData = "<div style='width:70%;height:auto;margin-bottom: 10px;'>";
+                htmlData += "<p style='height:20px;'>";
+
+                htmlData += "<a style='display: inline-block;margin-right: 10px;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
+                htmlData += "<span style='display: inline-block;margin-right: 10px;'>" + curTime + "</span>";
+                htmlData += "<span style='display: inline-block;'>" + typeDesc + "</span>";
+                htmlData += "</p>";
             }
-            htmlData += "<p style='height:20px;'>";
-            htmlData += "<a style='display: inline-block;margin-right: 10px;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
-            htmlData += "<span style='display: inline-block;margin-right: 10px;'>" + curTime + "</span>";
-            htmlData += "<span style='display: inline-block;'>" + typeDesc + "</span>";
-            htmlData += "</p>";
-            htmlData += "<p style='height:auto;background-color: #ddd;border-radius: 5px;'>";
-            if (msgTo != null && msgTo != "") {
-                if (msgTo == sessionUser) {
-                    htmlData += "<span style='color:blue;text-indent: 2em;display: inline-block;'>@</span><span style='" + defaultCss + "'>" + msgTo + " " + msg + "</span>";
+            
+            if (msgFrom == sessionUser) {
+                // 底色蓝色，字体白色，@蓝色
+                htmlData += "<p style='height:auto;background-color: #21b0dd;border-radius: 5px;'>";
+                if (msgTo != null && msgTo != "") {
+                    htmlData += "<span style='color:blue;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
                 } else {
-                    htmlData += "<span style='color:red;text-indent: 2em;display: inline-block;'>@</span><span style='" + defaultCss + "'>" + msgTo + " " + msg + "</span>";
+                    htmlData += "<span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
                 }
             } else {
-                htmlData += "<span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
+                // 底色灰色，字体黑色，@蓝色
+                htmlData += "<p style='height:auto;background-color: #ddd;border-radius: 5px;'>";
+                if (msgTo != null && msgTo != "") {
+                    htmlData += "<span style='color:blue;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
+                } else {
+                    htmlData += "<span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
+                }
             }
             htmlData += "</p>";
             htmlData += "</div>";
