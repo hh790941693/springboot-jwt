@@ -137,7 +137,7 @@
                                 layer.tips('该账户已被禁用,10秒后强制退出!', '#msgFromServer', {
                                     tips: [2, 'red']
                                 });
-                                updateChatMsg("<p style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 该账户已被禁用,10秒后强制退出!</p>");
+                                updateChatMsg("<p style='color:red;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 该账户已被禁用,10秒后强制退出!</p>");
                                 setTimeout(logout, 10000);
                                 return;
                             }
@@ -170,14 +170,14 @@
                 var enableStatus = currentUserOnlineInfo.enable;
                 if (enableStatus == "0") {
                     //被禁用了
-                    updateChatMsg("<span style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTimeOfHHMMSS() + "] [系统消息] 你的账号已被禁用了</span>")
+                    updateChatMsg("<span style='color:red;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统消息] 你的账号已被禁用了</span>")
                     return;
                 }
 
                 var speakStatus = currentUserOnlineInfo.speak;
                 if (speakStatus == "0") {
                     //被禁言了
-                    updateChatMsg("<span style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTimeOfHHMMSS() + "] [系统消息] 你已被禁言了</span>")
+                    updateChatMsg("<span style='color:red;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统消息] 你已被禁言了</span>")
                     return;
                 }
             }
@@ -185,30 +185,30 @@
             var toUser = $("#selectUser").val();
             if (webSocket != null) {
                 if (sessionUser == toUser) {
-                    updateChatMsg("<p style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 自己不能给自己发消息!</p>");
+                    updateChatMsg("<p style='color:red;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 自己不能给自己发消息!</p>");
                     return false;
                 }
 
                 var msgToServer = $("#msgToServer").val();
                 if (msgToServer == null || msgToServer == "") {
-                    var msg = "<p style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 不允许发送空消息!</p>";
+                    var msg = "<p style='color:red;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 不允许发送空消息!</p>";
                     updateChatMsg(msg);
                     return;
                 }
 
                 if (toUser != null && toUser != "") {
-                    var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;'>[" + getCurrentTimeOfHHMMSS() + "] [在线消息]  [我 -->" + toUser + "] " + msgToServer + "</p>";
+                    var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [在线消息]  [我 -->" + toUser + "] " + msgToServer + "</p>";
                     //updateChatMsg(htmlData);
                     sendMsgToServer(app.roomName, sessionUser, toUser, msgToServer);
                     $("#msgToServer").val("");
                 } else {
-                    var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;'>[" + getCurrentTimeOfHHMMSS() + "] [在线消息]  [我] " + msgToServer + "</p>";
+                    var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [在线消息]  [我] " + msgToServer + "</p>";
                     //updateChatMsg(htmlData);
                     sendMsgToServer(app.roomName, sessionUser, "", msgToServer);
                     $("#msgToServer").val("");
                 }
             } else {
-                var msg = "<p style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
+                var msg = "<p style='color:red;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
                 updateChatMsg(msg);
             }
         }
@@ -226,7 +226,7 @@
                 var jsonObj = JSON.stringify(toServerMsgObj);
                 webSocket.send(jsonObj);
             } else {
-                var msg = "<p style='color:red;font-size:10px;line-height:14px;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
+                var msg = "<p style='color:red;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
                 updateChatMsg(msg);
             }
         }
@@ -237,7 +237,7 @@
         }
 
         function updateChatMsgWithColor(msg, color, fontSize) {
-            var newMsg = "<p style='color:" + color + ";font-size:" + fontSize + "px;line-height:14px;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] " + msg + "</p>";
+            var newMsg = "<p style='color:" + color + ";font-size:" + fontSize + "px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] " + msg + "</p>";
             var textArea = $("#msgFromServer").append(newMsg);
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
@@ -305,29 +305,55 @@
             var typeDesc = jsonObj.typeDesc;
             var msg = jsonObj.msg;
 
-            var showStr = "[" + curTime + "] [" + typeDesc + "] [" + msgFrom + "] [@ " + msgTo + "] " + msg;
-            if (msgTo == null || msgTo == "") {
-                showStr = "[" + curTime + "] [" + typeDesc + "] [" + msgFrom + "] " + msg;
-            }
             if (msgFrom == null || msgFrom == "") {
-                showStr = "[" + curTime + "] [" + typeDesc + "] " + msg;
+                // 系统消息
+                updateChatMsgWithColor(msg, "green", 10);
+                return;
             }
             
             // 其他人发的消息
-            var defaultCss = "color:black;font-size:10px;line-height:14px;"
+            var defaultCss = "color:black;font-size:14px;line-height:22px;";
             if (msgTo == sessionUser) {
                 // 发给我的消息
-                defaultCss = "color:red;font-size:10px;line-height:14px;";
+                defaultCss = "color:red;font-size:14px;line-height:22px;";
             } else if (msgFrom == sessionUser) {
                 // 我发出去的消息
-                defaultCss = "color:blue;font-size:10px;line-height:14px;";
-            } else if (msgFrom == null || msgFrom == "") {
-                // 系统消息
-                defaultCss = "color:green;font-size:10px;line-height:14px;";
+                defaultCss = "color:blue;font-size:14px;line-height:22px;";
             }
             
-            var htmlData = "<p style='" + defaultCss + "'>" + showStr + "</p>";
+            var htmlData = "<div style='width:70%;height:auto;margin-bottom: 5px;background-color: #ddd;border-radius: 5px;'>";
+            if (msgFrom == sessionUser) {
+                htmlData = "<div style='width:70%;height:auto;margin-bottom: 5px;margin-left:29%;text-align:right;background-color: #ddd;border-radius: 5px;'>";
+            }
+            htmlData += "<p style='height:20px;'>";
+            htmlData += "<a style='display: inline-block;margin-right: 10px;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
+            htmlData += "<span style='display: inline-block;margin-right: 10px;'>" + curTime + "</span>";
+            htmlData += "<span style='display: inline-block;'>" + typeDesc + "</span>";
+            htmlData += "</p>";
+            htmlData += "<p style='height:auto;'>";
+            if (msgTo != null && msgTo != "") {
+                if (msgTo == sessionUser) {
+                    htmlData += "<span style='color:blue;text-indent: 2em;display: inline-block;'>@</span><span style='" + defaultCss + "'>" + msgTo + " " + msg + "</span>";
+                } else {
+                    htmlData += "<span style='color:red;text-indent: 2em;display: inline-block;'>@</span><span style='" + defaultCss + "'>" + msgTo + " " + msg + "</span>";
+                }
+            } else {
+                htmlData += "<span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
+            }
+            htmlData += "</p>";
+            htmlData += "</div>";
             updateChatMsg(htmlData);
+        }
+
+        function showPersonInfo(userName) {
+            layer.open({
+                type: 2,
+                title: '用户个人信息',
+                shadeClose: true,
+                shade: 0.2,
+                area: ['390px', '420px'],
+                content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + userName
+            });
         }
     </script>
 </body>
