@@ -30,8 +30,7 @@ function initLeftMenu() {
         $.each(n.childrenList, function(j, o) {
         	var urlNew = o.url + "?userId=" + sessionUserId
 				               + "&user=" + sessionUser
-				               + "&roleId=" + sessionRoleId
-        	                   + "&roleName=" + sessionRoleName;
+				               + "&roleId=" + sessionRoleId;
             contentHtml += '<li><div closable="'+o.extColumn1+'"><a target="mainFrame" href="' + urlNew + '" ><span class="'+o.icon+'" ></span>' + o.name + '</a></div></li> ';
         });
         contentHtml += '</ul>';
