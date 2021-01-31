@@ -14,6 +14,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -67,6 +68,16 @@ public class WsChatlogController extends AdminBaseController {
                 .orderBy("name"));
         model.addAttribute("allUserList", allUserList);
         model.addAttribute("chatLogDO", new WsChatlogDO());
+
+        List<WsChatlogDO> chatlogList = wsChatlogService.selectList(new EntityWrapper<WsChatlogDO>().isNotNull("room_name"));
+        List<String> roomList = new ArrayList<>();
+        for (WsChatlogDO wsChatlogDO : chatlogList) {
+            if (!roomList.contains(wsChatlogDO.getRoomName())) {
+                roomList.add(wsChatlogDO.getRoomName());
+            }
+        }
+        model.addAttribute("roomList", roomList);
+
         return "zhddkk/wsChatlog/wsChatlog";
     }
 
@@ -80,6 +91,10 @@ public class WsChatlogController extends AdminBaseController {
     //@RequiresPermissions("zhddkk:wsChatlog:wsChatlog")
     public Result<Page<WsChatlogDO>> list(WsChatlogDO wsChatlogDto) {
         Wrapper<WsChatlogDO> wrapper = new EntityWrapper<WsChatlogDO>();
+        if (StringUtils.isNotBlank(wsChatlogDto.getRoomName())) {
+            wrapper.eq("room_name", wsChatlogDto.getRoomName());
+        }
+
         if (StringUtils.isNotBlank(wsChatlogDto.getUser())) {
             wrapper.eq("user", wsChatlogDto.getUser());
         }

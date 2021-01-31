@@ -42,6 +42,7 @@ function load() {
                 //传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
                 pageNumber: params.pageNumber,
                 pageSize: params.pageSize,
+                roomName: $('#roomName').val(),
                 user: $('#fromUser').val(),
                 toUser: $('#toUser').val(),
                 beginTime: $('#beginTime').val(),
@@ -64,6 +65,10 @@ function load() {
             {
                 field: 'id',
                 title: '主键'
+            },
+            {
+                field: 'roomName',
+                title: '房间名称'
             },
             {
                 field: 'user',
@@ -112,6 +117,7 @@ function reLoad() {
 }
 
 function cleanForm() {
+    $('#roomName').val("");
     $("#fromUser").val("");
     $("#toUser").val("");
     $("#beginTime").val("");

@@ -19,7 +19,21 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">房间名称</div>
+                                    <select name="roomName" id="roomName" th:value="${chatLogDO.roomName}"
+                                            class="form-control select2">
+                                        <option value="">请选择</option>
+                                        <option th:each="room:${roomList}" th:value="${room}"
+                                                th:text="${room}"
+                                                th:selected="${chatLogDO.roomName == room}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
                                 <div class="input-group">
                                     <div class="input-group-addon">用户</div>
                                     <select name="user" id="fromUser" th:value="${chatLogDO.user}"
@@ -32,7 +46,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="input-group">
                                     <div class="input-group-addon">发给</div>
                                     <select name="toUser" id="toUser" th:value="${chatLogDO.toUser}"
@@ -45,7 +59,9 @@
                                     </select>
                                 </div>
                             </div>
-
+                        </div>
+                        
+                        <div class="row">
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <div class="input-group-addon">从</div>
