@@ -90,7 +90,7 @@ public class WebSocketClientController extends AdminBaseController {
         HttpSession httpSession = request.getSession(false);
         System.out.println("退出前SESSION:" + httpSession.getId());
         httpSession.invalidate();
-        ZhddWebSocket.removeAllRoomUser(user);
+        ZhddWebSocket.removeUserFromAllRoom(user);
 
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {
@@ -195,7 +195,7 @@ public class WebSocketClientController extends AdminBaseController {
         if (StringUtils.isBlank(user)) {
             return Result.fail(new WsOnlineInfo());
         }
-        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClientsMap(roomName);
+        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClientsSessionMap(roomName);
 
         //所有用户
         List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>()
@@ -243,7 +243,7 @@ public class WebSocketClientController extends AdminBaseController {
         woi.setCurrentOnlineUserInfo(currentOnlineUserInfo);
 
         // 房间用户列表
-        List<String> roomUserList = ZhddWebSocket.getRoomClientsList(roomName);
+        List<String> roomUserList = ZhddWebSocket.getRoomClientsUserList(roomName);
         woi.setRoomUserList(roomUserList);
         woi.setRoomUserCount(roomUserList.size());
 

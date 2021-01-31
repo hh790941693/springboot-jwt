@@ -286,7 +286,7 @@ public class WsUsersController extends AdminBaseController {
             return Result.fail("用户不存在");
         }
         String userName = wsUsersDO.getName();
-        ZhddWebSocket.removeAllRoomUser(wsUsersDO.getName());
+        ZhddWebSocket.removeUserFromAllRoom(wsUsersDO.getName());
 
         wsUsersDO.setState("0");
         wsUsersDO.setLastLogoutTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));

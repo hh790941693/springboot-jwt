@@ -2,7 +2,6 @@ package com.pjb.springbootjwt.zhddkk.websocket;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
-import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsChatlogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
@@ -71,8 +70,8 @@ public class ZhddWebSocket {
         }
 
         JSONObject jsonObject = JsonUtil.jsonstr2Jsonobject(message);
-        //time:2019-01-03 16:00:05;typeId:1;typeDesc:系统消息;from:admin;to:无名1;msg:hello
-        //1:系统消息  2:在线消息 3:离线消息  4:广告消息
+        //time:2019-01-03 16:00:05;typeId:2;typeDesc:在线消息;from:admin;to:无名1;msg:hello
+        //1:广播消息  2:在线消息 3:离线消息
 
         if (message.contains("msg")) {
             String roomName = jsonObject.getString("roomName");
@@ -113,8 +112,7 @@ public class ZhddWebSocket {
                     fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
             } else {
-                // 如果用户不在线
-                Map<String, Session> roomClientMap = getRoomClientsMap(roomName);
+                Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
                 for (Entry<String, Session> entry : roomClientMap.entrySet()) {
                     ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg);
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
@@ -158,8 +156,8 @@ public class ZhddWebSocket {
         this.pass = pass;
         this.userAgent = userAgent;
 
-        String enterMsgFormat = "%s 进入了聊天室：%s";
-        String enterMsg = String.format(enterMsgFormat, this.user, this.roomName);
+        String enterMsgFormat = "%s(%s) 进入了聊天室：%s";
+        String enterMsg = String.format(enterMsgFormat, this.user, this.userAgent, this.roomName);
         logger.info(enterMsg);
 
         // 更新房间人员信息
@@ -173,12 +171,12 @@ public class ZhddWebSocket {
         wsChatlogService.insert(loginLog);
 
         // 广播消息
-        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClientsMap(roomName);
+        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClientsSessionMap(roomName);
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             if (!entry.getKey().equals(this.user)) {
                 try {
-                    ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), "1", "系统消息",
-                            "", "", enterMsg);
+                    ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), "1", "广播消息",
+                            "", "", enterMsg, getRoomOnlineInfo(this.roomName));
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -196,9 +194,8 @@ public class ZhddWebSocket {
                 if (time.length() >= 18) {
                     time = time.substring(11);
                 }
-                //String sendmsg = wcl.getUser() + "-->我 " + wcl.getMsg();
-                String sendmsg = wcl.getMsg();
-                ChatMessageBean chatBean = new ChatMessageBean(time, "1", "离线消息", wcl.getUser(), "我", sendmsg);
+
+                ChatMessageBean chatBean = new ChatMessageBean(time, "3", "离线消息", wcl.getUser(), "我", wcl.getMsg());
                 try {
                     this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     Thread.sleep(50);
@@ -219,8 +216,8 @@ public class ZhddWebSocket {
         // 删除房间相关人信息
         removeRoomUser(roomName, this.user);
 
-        String leaveMsgFormat = "%s 离开了聊天室：%s";
-        String leaveMsg = String.format(leaveMsgFormat, this.user, this.roomName);
+        String leaveMsgFormat = "%s(%s) 离开了聊天室：%s";
+        String leaveMsg = String.format(leaveMsgFormat, this.user, this.userAgent, this.roomName);
         logger.info(leaveMsg);
 
         // 广播消息
@@ -228,8 +225,8 @@ public class ZhddWebSocket {
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             if (!entry.getKey().equals(user)) {
                 try {
-                    ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), "1", "系统消息",
-                            "", "", leaveMsg);
+                    ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), "1", "广播消息",
+                            "", "", leaveMsg, getRoomOnlineInfo(this.roomName));
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -255,6 +252,7 @@ public class ZhddWebSocket {
         removeRoomUser(roomName, this.user);
     }
 
+    // 聊天室人数+1
     public static synchronized void addOnLineCount(String roomName) {
         if (onlineCountMap.containsKey(roomName)) {
             int onlineCount = onlineCountMap.get(roomName);
@@ -264,6 +262,7 @@ public class ZhddWebSocket {
         }
     }
 
+    // 聊天人数-1
     public static synchronized void subOnLineCount(String roomName) {
         if (onlineCountMap.containsKey(roomName)) {
             int onlineCount = onlineCountMap.get(roomName);
@@ -273,6 +272,7 @@ public class ZhddWebSocket {
         }
     }
 
+    // 聊天室加人
     public synchronized void addRoomUser(String roomName, String user) {
         if (clientsMap.containsKey(roomName)) {
             Map<String, Session> roomMap = clientsMap.get(roomName);
@@ -284,6 +284,7 @@ public class ZhddWebSocket {
         }
     }
 
+    // 聊天室减人
     public static synchronized void removeRoomUser(String roomName, String user) {
         if (clientsMap.containsKey(roomName)) {
             Map<String, Session> userMap = clientsMap.get(roomName);
@@ -298,7 +299,8 @@ public class ZhddWebSocket {
         }
     }
 
-    public static void removeAllRoomUser(String user) {
+    // 删除用户的所有聊天室
+    public static void removeUserFromAllRoom(String user) {
         for (Entry<String, Map<String, Session>> entry : clientsMap.entrySet()) {
             Map<String, Session> roomMap = entry.getValue();
             if (roomMap.containsKey(user)) {
@@ -313,6 +315,7 @@ public class ZhddWebSocket {
         }
     }
 
+    // 获取聊天室的人数
     public static synchronized int getOnLineCount(String roomName) {
         int onlineCount = 0;
         if (onlineCountMap.containsKey(roomName)) {
@@ -321,16 +324,27 @@ public class ZhddWebSocket {
         return onlineCount;
     }
 
-    public static synchronized Map<String, Session> getRoomClientsMap(String roomName) {
+    // 获取聊天室在线信息
+    public static synchronized Map<String, Object> getRoomOnlineInfo (String roomName) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("count", getOnLineCount(roomName));
+        map.put("userList", getRoomClientsUserList(roomName));
+
+        return map;
+    }
+
+    // 获取聊天室的所有用户(session)
+    public static synchronized Map<String, Session> getRoomClientsSessionMap(String roomName) {
         if (clientsMap.containsKey(roomName)) {
             return clientsMap.get(roomName);
         }
-        return new ConcurrentHashMap<String, Session>();
+        return new ConcurrentHashMap<>();
     }
 
-    public static synchronized List<String> getRoomClientsList(String roomName) {
+    // 获取聊天室的所有用户(用户名)
+    public static synchronized List<String> getRoomClientsUserList(String roomName) {
         List<String> roomUserList = new ArrayList<>();
-        Map<String, Session> roomClientMap = getRoomClientsMap(roomName);
+        Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             roomUserList.add(entry.getKey());
         }
