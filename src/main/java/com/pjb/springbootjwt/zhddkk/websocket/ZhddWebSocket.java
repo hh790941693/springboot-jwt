@@ -123,7 +123,7 @@ public class ZhddWebSocket {
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
 
-                WsChatlogDO wcl1 = new WsChatlogDO(curTime, roomName, msgFrom, msgTo, msgStr,"");
+                WsChatlogDO wcl1 = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, msgFrom, msgTo, msgStr,"");
                 wsChatlogService.insert(wcl1);
             }
         }
@@ -152,7 +152,6 @@ public class ZhddWebSocket {
             this.user = null;
             this.pass = null;
             this.userAgent = null;
-            OnClose();
             return;
         }
         this.session = session;
@@ -180,7 +179,7 @@ public class ZhddWebSocket {
                     ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), "1", "广播消息",
                             "", "", enterMsg, getRoomOnlineInfo(this.roomName));
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -232,7 +231,7 @@ public class ZhddWebSocket {
                     ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), "1", "广播消息",
                             "", "", leaveMsg, getRoomOnlineInfo(this.roomName));
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
