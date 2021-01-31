@@ -107,7 +107,7 @@ public class WsChatlogController extends AdminBaseController {
         if (StringUtils.isNotBlank(wsChatlogDto.getEndTime())) {
             wrapper.le("time", wsChatlogDto.getEndTime());
         }
-        wrapper.isNotNull("to_user").ne("to_user", "").orderBy("time", false).orderBy("user");
+        wrapper.orderBy("time", false).orderBy("user");
         Page<WsChatlogDO> page = wsChatlogService.selectPage(getPage(WsChatlogDO.class), wrapper);
         return Result.ok(page);
     }
