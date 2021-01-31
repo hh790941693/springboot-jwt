@@ -32,7 +32,7 @@ public class CacheServiceImpl implements CacheService {
     private WsFileService wsFileService;
 
     @Override
-    public  void cacheData() {
+    public void cacheData() {
         logger.info("--------------------开始缓存数据-------------------");
         initCommonData();
         initUserData();

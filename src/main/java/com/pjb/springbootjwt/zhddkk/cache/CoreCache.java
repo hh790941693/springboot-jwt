@@ -56,6 +56,21 @@ public class CoreCache {
         return userProfileList;
     }
 
+    public WsUserProfileDO getUserProfile(String username) {
+        if (null == userProfileList) {
+            return null;
+        }
+
+        WsUserProfileDO wsUserProfileDO = null;
+        for (WsUserProfileDO wupd : userProfileList) {
+            if (wupd.getUserName().equals(username)) {
+                wsUserProfileDO = wupd;
+                break;
+            }
+        }
+        return wsUserProfileDO;
+    }
+
     public void setUserProfileList(List<WsUserProfileDO> userProfileList) {
         this.userProfileList = userProfileList;
     }

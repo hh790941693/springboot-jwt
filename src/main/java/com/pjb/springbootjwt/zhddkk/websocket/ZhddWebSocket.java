@@ -2,6 +2,7 @@ package com.pjb.springbootjwt.zhddkk.websocket;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
+import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.domain.WsChatlogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
@@ -106,15 +107,19 @@ public class ZhddWebSocket {
             String curTime = SDF_HHMMSS.format(new Date());
             if (typeId.equals("1")) {
                 // 如果是系统消息
-                ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息", msgFrom, msgTo, msg);
+                ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息", msgFrom, msgTo, msg, new HashMap<>());
                 Session fromSession = queryRoomSession(roomName, msgFrom);
                 if (null != fromSession) {
                     fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
             } else {
+                // 发送方相关信息
+                Map<String, Object> extendMap = new HashMap<>();
+                extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(msgFrom));
+
                 Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
                 for (Entry<String, Session> entry : roomClientMap.entrySet()) {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg);
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg, extendMap);
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
 
@@ -192,7 +197,11 @@ public class ZhddWebSocket {
                     time = time.substring(11);
                 }
 
-                ChatMessageBean chatBean = new ChatMessageBean(time, "3", "离线消息", wcl.getUser(), "我", wcl.getMsg());
+                // 发送方相关信息
+                Map<String, Object> extendMap = new HashMap<>();
+                extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(wcl.getUser()));
+
+                ChatMessageBean chatBean = new ChatMessageBean(time, "3", "离线消息", wcl.getUser(), "我", wcl.getMsg(), extendMap);
                 try {
                     this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     Thread.sleep(50);
