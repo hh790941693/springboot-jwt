@@ -316,9 +316,9 @@
 
             if (typeId == 1) {
                 // 系统消息
-                var extendMap = jsonObj.extendMap;
                 updateChatMsgWithColor(msg, "green", 10);
-                console.log(extendMap)
+                // 更新在线人数等信息
+                var extendMap = jsonObj.extendMap;
                 app.roomUserCount = extendMap.count;
                 app.roomUserList = extendMap.userList;
                 return;

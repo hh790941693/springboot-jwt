@@ -163,9 +163,6 @@ public class ZhddWebSocket {
         // 更新房间人员信息
         addRoomUser(roomName, user);
 
-        // 更新房间在线人数
-        addOnLineCount(roomName);
-
         // 登录日志
         WsChatlogDO loginLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, this.user, "", "进入了聊天室", this.userAgent);
         wsChatlogService.insert(loginLog);
@@ -211,8 +208,6 @@ public class ZhddWebSocket {
      */
     @javax.websocket.OnClose
     public void OnClose() {
-        // 在线人数-1
-        subOnLineCount(roomName);
         // 删除房间相关人信息
         removeRoomUser(roomName, this.user);
 
@@ -252,26 +247,6 @@ public class ZhddWebSocket {
         removeRoomUser(roomName, this.user);
     }
 
-    // 聊天室人数+1
-    public static synchronized void addOnLineCount(String roomName) {
-        if (onlineCountMap.containsKey(roomName)) {
-            int onlineCount = onlineCountMap.get(roomName);
-            onlineCountMap.put(roomName, onlineCount + 1);
-        } else {
-            onlineCountMap.put(roomName, 1);
-        }
-    }
-
-    // 聊天人数-1
-    public static synchronized void subOnLineCount(String roomName) {
-        if (onlineCountMap.containsKey(roomName)) {
-            int onlineCount = onlineCountMap.get(roomName);
-            onlineCountMap.put(roomName, onlineCount - 1);
-        } else {
-            onlineCountMap.put(roomName, 0);
-        }
-    }
-
     // 聊天室加人
     public synchronized void addRoomUser(String roomName, String user) {
         if (clientsMap.containsKey(roomName)) {
@@ -305,7 +280,6 @@ public class ZhddWebSocket {
             Map<String, Session> roomMap = entry.getValue();
             if (roomMap.containsKey(user)) {
                 roomMap.remove(user);
-                subOnLineCount(entry.getKey());
                 try {
                     roomMap.get(user).close();
                 } catch (Exception e) {
@@ -316,18 +290,16 @@ public class ZhddWebSocket {
     }
 
     // 获取聊天室的人数
-    public static synchronized int getOnLineCount(String roomName) {
-        int onlineCount = 0;
-        if (onlineCountMap.containsKey(roomName)) {
-            onlineCount = onlineCountMap.get(roomName);
-        }
-        return onlineCount;
+    public static synchronized int getRoomOnLineCount(String roomName) {
+        Map<String, Session> map = getRoomClientsSessionMap(roomName);
+        int count = map != null ? map.size() : 0;
+        return count;
     }
 
     // 获取聊天室在线信息
     public static synchronized Map<String, Object> getRoomOnlineInfo (String roomName) {
         Map<String, Object> map = new HashMap<>();
-        map.put("count", getOnLineCount(roomName));
+        map.put("count", getRoomOnLineCount(roomName));
         map.put("userList", getRoomClientsUserList(roomName));
 
         return map;
