@@ -327,8 +327,8 @@
             
             // 发送方用户相关信息
             var msgFromUserProfile = null;
-            if (typeId == 2) {
-                // 聊天消息
+            if (typeId == 2 || typeId == 3) {
+                // 聊天消息/离线消息
                 msgFromUserProfile = extendMap.userProfile;
             }
             
@@ -349,8 +349,8 @@
                 htmlData += "<p style='height:20px;'>";
                 
                 htmlData += "<span style='display: inline-block;margin-right: 10px;'>" + typeDesc + "</span>";
-                htmlData += "<span style='display: inline-block;margin-right: 10px;'>" + curTime + "</span>";
-                htmlData += "<a style='display: inline-block;margin-right: 5px;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
+                htmlData += "<span style='display: inline-block;margin-right: 10px;color: grey;'>" + curTime + "</span>";
+                htmlData += "<a style='display: inline-block;margin-right: 5px;font-weight: bold;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
                 htmlData += "<img width='15' height='15' src='"+msgFromUserProfile.img+"'>";
                 htmlData += "</p>";
             } else {
@@ -359,15 +359,15 @@
                 htmlData += "<p style='height:20px;'>";
 
                 htmlData += "<img width='15' height='15' style='margin-right: 5px;' src='"+msgFromUserProfile.img+"'>";
-                htmlData += "<a style='display: inline-block;margin-right: 10px;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
-                htmlData += "<span style='display: inline-block;margin-right: 10px;'>" + curTime + "</span>";
+                htmlData += "<a style='display: inline-block;margin-right: 10px;font-weight: bold;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
+                htmlData += "<span style='display: inline-block;margin-right: 10px;color: grey;'>" + curTime + "</span>";
                 htmlData += "<span style='display: inline-block;'>" + typeDesc + "</span>";
                 htmlData += "</p>";
             }
             
             if (msgFrom == sessionUser) {
                 // 底色蓝色，字体白色，@蓝色
-                htmlData += "<p style='height:auto;background-color: #21b0dd;border-radius: 5px;'>";
+                htmlData += "<p style='height:auto;background-color: #0a8fb9;border-radius: 5px;'>";
                 if (msgTo != null && msgTo != "") {
                     htmlData += "<span style='color:blue;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
                 } else {
