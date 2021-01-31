@@ -344,7 +344,7 @@
             
             var htmlDate = "";
             if (msgFrom == sessionUser) {
-                // 右侧
+                // 右侧--当前用户发出去的消息
                 htmlData = "<div style='width:70%;height:auto;margin-bottom: 10px;margin-left:29%;text-align:right;'>";
                 htmlData += "<p style='height:20px;'>";
                 
@@ -354,7 +354,7 @@
                 htmlData += "<img width='15' height='15' src='"+msgFromUserProfile.img+"'>";
                 htmlData += "</p>";
             } else {
-                // 左侧
+                // 左侧--其他用户发的消息
                 htmlData = "<div style='width:70%;height:auto;margin-bottom: 10px;'>";
                 htmlData += "<p style='height:20px;'>";
 
@@ -366,6 +366,7 @@
             }
             
             if (msgFrom == sessionUser) {
+                // 当前用户发出去的消息
                 // 底色蓝色，字体白色，@蓝色
                 htmlData += "<p style='height:auto;border-radius: 5px;background-image: linear-gradient(to left, #0a8fb9 , rgba(38,44,185,0.58));'>";
                 if (msgTo != null && msgTo != "") {
@@ -374,10 +375,18 @@
                     htmlData += "<span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
                 }
             } else {
+                // 别人发出去的消息
                 // 底色灰色，字体黑色，@蓝色
                 htmlData += "<p style='height:auto;border-radius: 5px;background-image: linear-gradient(to right, #ddd , rgba(132,172,221,0.58));'>";
                 if (msgTo != null && msgTo != "") {
-                    htmlData += "<span style='color:blue;font-weight:bold;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
+                    if (msgTo == sessionUser) {
+                        // 别人@我的消息
+                        msgTo = "我";
+                        htmlData += "<span style='color:red;font-weight:bold;text-indent: 2em;display: inline-block;'>@" + msgTo + "</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
+                    } else {
+                        // 别人@其他人的消息
+                        htmlData += "<span style='color:blue;font-weight:bold;text-indent: 2em;display: inline-block;'>@" + msgTo + "</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
+                    }
                 } else {
                     htmlData += "<span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
                 }
