@@ -58,7 +58,7 @@ public class ZhddWebSocket {
     public static WsCommonService wsCommonService;
 
     /**
-     * 接受消息.
+     * 准发消息.
      * @param message 消息
      * @param session 会话
      * @throws IOException 异常
@@ -72,7 +72,7 @@ public class ZhddWebSocket {
 
         JSONObject jsonObject = JsonUtil.jsonstr2Jsonobject(message);
         //time:2019-01-03 16:00:05;typeId:2;typeDesc:在线消息;from:admin;to:无名1;msg:hello
-        //1:广播消息  2:在线消息 3:离线消息
+        //1:广播消息  2:在线消息 4.通知消息
 
         if (message.contains("msg")) {
             String roomName = jsonObject.getString("roomName");
@@ -106,13 +106,14 @@ public class ZhddWebSocket {
 
             String curTime = SDF_HHMMSS.format(new Date());
             if (typeId.equals("1")) {
-                // 如果是系统消息
+                // 系统消息
                 ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息", msgFrom, msgTo, msg, new HashMap<>());
                 Session fromSession = queryRoomSession(roomName, msgFrom);
                 if (null != fromSession) {
                     fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
-            } else {
+            } else if (typeId.equals("2")){
+                // 聊天消息
                 // 发送方相关信息
                 Map<String, Object> extendMap = new HashMap<>();
                 extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(msgFrom));
@@ -125,6 +126,13 @@ public class ZhddWebSocket {
 
                 WsChatlogDO wcl1 = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, msgFrom, msgTo, msgStr,"");
                 wsChatlogService.insert(wcl1);
+            } else if (typeId.equals("4")){
+                // 通知消息
+                Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
+                for (Entry<String, Session> entry : roomClientMap.entrySet()) {
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "4", "通知消息", "管理员", "", msg, new HashMap<>());
+                    entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                }
             }
         }
     }

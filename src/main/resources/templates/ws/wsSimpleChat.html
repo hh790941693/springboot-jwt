@@ -24,14 +24,23 @@
             max-height: 400px;
         }
 
-        #header {
+        #headerDiv {
             width: 100%;
             height: 30px;
             padding-top: 5px;
             padding-left: 5px;
             background-color: #365e71;
         }
-
+        
+        #noticeDiv {
+            width:100%;
+            height:22px;
+            position:absolute;
+            top:50px;
+            background-image: linear-gradient(to right, rgba(228, 243, 205, 0.98), rgba(225, 189, 11, 0.98));
+            display: none;
+        }
+        
         #msgFromServer {
             width: 100%;
             height: calc(100% - 90px);
@@ -40,7 +49,7 @@
             padding: 3px;
         }
        
-       #footer {
+       #footerDiv {
            width: 100%;
            height:60px;
        }
@@ -50,7 +59,7 @@
     <div id="mainDiv">
 
         <!--头部按钮组-->
-        <div id="header">
+        <div id="headerDiv">
             <div align="left" style="width:30%;height:100%;float:left;margin-top:-5px;">
                 <span style="color:yellow;font-weight:bold;font-size:20px;height:100%;display:inline-block;margin-right: 10px;">房号:{{roomName}}</span>
                 <span class="fa fa-user" style="color:white;"></span>
@@ -58,6 +67,11 @@
             </div>
 
             <div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
+                <th:block th:if="${session.sessionInfo.roleName == '管理员'}">
+                    <button class='label label-info' th:title="发布通知" @click="sendNotice()">
+                        <span class="glyphicon glyphicon-comment"></span>
+                    </button>&nbsp;&nbsp;
+                </th:block>
                 <button id="refreashConlineCount" class='label label-info' th:title="刷新" @click="getOnlineInfo()">
                     <span class="glyphicon glyphicon-refresh"></span>
                 </button>&nbsp;&nbsp;
@@ -73,13 +87,20 @@
                 </button>
             </div>
         </div>
+        
+        <!-- 通知栏 -->
+        <div id="noticeDiv">
+            <marquee direction="right" scrolldelay="10" scrollamount="10" onMouseOver="this.stop()" onMouseOut="this.start()">
+                <span id="noticeSpan"></span>
+            </marquee>
+        </div>
 
       <!--中间聊天框-->
         <div id="msgFromServer" align="left">
         </div>
-
+        
       <!--下方聊天内容发送-->
-        <div id="footer" align="left">
+        <div id="footerDiv" align="left">
             <div style="height:25px;">
                 <!--选择对象-->
                 <select id="selectUser" style="width:50%;height:100%;float:left;">
@@ -168,10 +189,11 @@
                 selectText: function (e) {
                     $("#msgToServer").val(e.target.value);
                 },
-                //清屏
+                // 清屏
                 clearScreen: function() {
                     $("#msgFromServer").text("");
                 },
+                // 切换背景图片
                 changeBackgroundImage: function () {
                     app.imgIndex++;
                     if (app.imgIndex > app.imgMaxIndex) {
@@ -179,7 +201,22 @@
                     }
                     var newPicUrl = "../img/fengjing/fj" + app.imgIndex + ".jpg";
                     $("body").css("background-image", "url(" + newPicUrl + ")");
-                }
+                },
+                // 发布通知
+                sendNotice: function () {
+                    layer.prompt({
+                        formType: 2,
+                        value: '',
+                        title: '请输入通知内容'
+                    }, function (value, index) {
+                        layer.close(index);
+                        if (value != "") {
+                            sendNoticeToServer(app.roomName, value);
+                        } else {
+                            alert("通知内容不能为空!");
+                        }
+                    });
+                },
             },
             created: function (e) {
                 this.getOnlineInfo();
@@ -246,6 +283,21 @@
             } else {
                 var msg = "<p style='color:red;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
                 updateChatMsg(msg);
+            }
+        }
+
+        // 发送通知消息
+        function sendNoticeToServer(roomName, msg) {
+            if (webSocket != null) {
+                var toServerMsgObj = {};
+                toServerMsgObj.typeId = 4;
+                toServerMsgObj.typeDesc = "通知消息";
+                toServerMsgObj.roomName = roomName;
+                toServerMsgObj.from = "";
+                toServerMsgObj.to = "";
+                toServerMsgObj.msg = msg;
+                var jsonObj = JSON.stringify(toServerMsgObj);
+                webSocket.send(jsonObj);
             }
         }
         
@@ -333,6 +385,21 @@
                 msgFromUserProfile = extendMap.userProfile;
             }
             
+            if (typeId == 4) {
+                // 通知消息
+                $("#noticeDiv").show();
+                setTimeout(function () {
+                    $("#noticeSpan").html(msg);
+                    $("marquee")[0].start();
+                },500);
+                setTimeout(function () {
+                    $("#noticeSpan").html("");
+                    $("#noticeDiv").hide();
+                },6000);
+                updateChatMsgWithColor(msg, "green", 10);
+                return;
+            }
+            
             // 其他人发的消息
             var defaultCss = "color:black;font-size:14px;line-height:22px;";
             if (msgTo == sessionUser) {
@@ -406,6 +473,23 @@
                 area: ['390px', '420px'],
                 content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + userName
             });
+        }
+        
+        function tipsAnimation(msg){
+            var parentdiv = $('<div style="border:1px solid red;height:30px;z-index:99;background-color: #cfaf59;text-align: center;position: fixed;left:5%;"></div>');        //创建一个父div
+            parentdiv.attr('id','parentDiv');        //给父div设置id
+            
+            var childdiv = $('<p></p>');        //创建一个子div
+            childdiv.attr('id','tipsP');        //给子div设置id
+            $(childdiv).text(msg);
+            childdiv.appendTo(parentdiv);        //将子div添加到父div中
+            parentdiv.appendTo('body');          //将父div添加到body中
+
+
+            $(parentdiv).animate({left:"60%"},2000);
+            setTimeout(function () {
+                $(parentdiv).remove();
+            }, 2000);
         }
     </script>
 </body>
