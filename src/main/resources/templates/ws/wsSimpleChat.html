@@ -60,7 +60,7 @@
                 <button id="refreashConlineCount" class='label label-info' th:title="刷新" @click="getOnlineInfo()">
                     <span class="glyphicon glyphicon-refresh"></span>
                 </button>&nbsp;&nbsp;
-                <button class='label label-primary' th:title="切换背景" @click="changeBackgroundImage()">
+                <button class='label label-success' th:title="切换背景" @click="changeBackgroundImage()">
                         <span class="glyphicon glyphicon-picture"></span>
                 </button>&nbsp;&nbsp;
                 <button class='label label-danger' th:title="清屏" @click="clearScreen()">
@@ -367,7 +367,7 @@
             
             if (msgFrom == sessionUser) {
                 // 底色蓝色，字体白色，@蓝色
-                htmlData += "<p style='height:auto;background-image: linear-gradient(to left, #0a8fb9 , rgba(38,44,185,0.58));'>";
+                htmlData += "<p style='height:auto;border-radius: 5px;background-image: linear-gradient(to left, #0a8fb9 , rgba(38,44,185,0.58));'>";
                 if (msgTo != null && msgTo != "") {
                     htmlData += "<span style='color:blue;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
                 } else {
@@ -377,7 +377,7 @@
                 // 底色灰色，字体黑色，@蓝色
                 htmlData += "<p style='height:auto;border-radius: 5px;background-image: linear-gradient(to right, #ddd , rgba(132,172,221,0.58));'>";
                 if (msgTo != null && msgTo != "") {
-                    htmlData += "<span style='color:blue;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
+                    htmlData += "<span style='color:blue;font-weight:bold;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
                 } else {
                     htmlData += "<span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
                 }
