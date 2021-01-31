@@ -320,55 +320,13 @@ INSERT INTO `ws_ads` (`id`, `title`, `content`, `receive_list`, `create_time`) V
 CREATE TABLE IF NOT EXISTS `ws_chatlog` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `time` varchar(50) DEFAULT NULL COMMENT '时间',
+  `room_name` VARCHAR(200) NULL DEFAULT NULL COMMENT '房间名称',
   `user` varchar(50) DEFAULT '' COMMENT '发起人',
   `to_user` varchar(50) DEFAULT '' COMMENT '被聊人',
   `msg` varchar(4000) DEFAULT '' COMMENT '内容',
   `remark` varchar(400) DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=364 DEFAULT CHARSET=utf8 COMMENT='聊天记录表';
-
--- Dumping data for table zhdd.ws_chatlog: ~1 rows (approximately)
-/*!40000 ALTER TABLE `ws_chatlog` DISABLE KEYS */;
-INSERT INTO `ws_chatlog` (`id`, `time`, `user`, `to_user`, `msg`, `remark`) VALUES
-	(363, '2021-01-10 15:36:12', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(364, '2021-01-10 15:53:34', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(365, '2021-01-10 16:27:25', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(366, '2021-01-10 16:28:34', 'admin', '', '退出服务器', ''),
-	(367, '2021-01-10 16:28:34', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(368, '2021-01-10 16:29:42', 'admin', '', '退出服务器', ''),
-	(369, '2021-01-10 16:29:42', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(370, '2021-01-10 16:30:56', 'admin', '', '退出服务器', ''),
-	(371, '2021-01-10 16:30:56', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(372, '2021-01-10 16:53:00', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(373, '2021-01-10 16:55:45', 'admin', '', '退出服务器', ''),
-	(374, '2021-01-10 16:55:45', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(375, '2021-01-10 17:09:23', 'admin', '', '退出服务器', ''),
-	(376, '2021-01-10 17:09:26', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(377, '2021-01-10 17:26:53', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(378, '2021-01-10 17:27:06', 'admin', '', '退出服务器', ''),
-	(379, '2021-01-10 17:27:13', 'aa', '', '登录成功', 'Windows NT 10.0'),
-	(380, '2021-01-10 17:32:31', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(381, '2021-01-10 17:33:03', 'admin', '', '退出服务器', ''),
-	(382, '2021-01-10 17:33:03', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(383, '2021-01-10 17:33:47', 'admin', '', '退出服务器', ''),
-	(384, '2021-01-10 17:33:54', 'aa', '', '登录成功', 'Windows NT 10.0'),
-	(385, '2021-01-10 17:37:28', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(386, '2021-01-10 17:37:34', 'admin', '', '退出服务器', ''),
-	(387, '2021-01-10 17:37:35', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(388, '2021-01-10 17:37:43', 'admin', '', '退出服务器', ''),
-	(389, '2021-01-10 17:37:44', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(390, '2021-01-10 17:39:02', 'admin', '', '退出服务器', ''),
-	(391, '2021-01-10 17:39:11', 'aa', '', '登录成功', 'Windows NT 10.0'),
-	(392, '2021-01-10 17:42:03', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(393, '2021-01-10 17:42:33', 'admin', '', '退出服务器', ''),
-	(394, '2021-01-10 17:42:33', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(395, '2021-01-10 17:44:37', 'admin', '', '退出服务器', ''),
-	(396, '2021-01-10 17:44:37', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(397, '2021-01-10 17:45:08', 'admin', '', '退出服务器', ''),
-	(398, '2021-01-10 17:45:09', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(399, '2021-01-10 17:46:32', 'admin', '', '登录成功', 'Windows NT 10.0'),
-	(400, '2021-01-10 17:48:20', 'admin', '', '登录成功', 'Windows NT 10.0');
-/*!40000 ALTER TABLE `ws_chatlog` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_circle
 CREATE TABLE IF NOT EXISTS `ws_circle` (
