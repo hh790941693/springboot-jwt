@@ -394,11 +394,11 @@
             var curTime = jsonObj.curTime;
             var msgFrom = jsonObj.from;
             var msgTo = jsonObj.to;
-            //1:广播消息  2:在线消息 3:离线消息
+            //1:广播消息  2:在线消息 3:离线消息 4:通知消息  5:状态消息
             var typeId = jsonObj.typeId;
             var typeDesc = jsonObj.typeDesc;
             var msg = jsonObj.msg;
-            // 扩展数据
+            // 扩展数据 发送人相关信息
             var extendMap = jsonObj.extendMap;
 
             if (typeId == 1) {
