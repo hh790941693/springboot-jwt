@@ -152,6 +152,28 @@
                 loginUser: sessionUser,
                 imgIndex: 1,
                 imgMaxIndex: 10,
+                msgTypeMap: {
+                    "system":{
+                        "desc":"系统消息",
+                        "value":1
+                    },
+                    "onlinechat":{
+                        "desc":"在线消息",
+                        "value":2
+                    },
+                    "offlinechat":{
+                        "desc":"离线消息",
+                        "value":3
+                    },
+                    "notice":{
+                        "desc":"通知消息",
+                        "value":4
+                    },
+                    "status":{
+                        "desc":"状态消息",
+                        "value":5
+                    },
+                }
             },
             methods: {
                 getOnlineInfo: function () {
@@ -285,8 +307,8 @@
         function sendMsgToServer(roomName, userFrom, userTo, msg) {
             if (webSocket != null) {
                 var toServerMsgObj = {};
-                toServerMsgObj.typeId = 2;
-                toServerMsgObj.typeDesc = "在线消息";
+                toServerMsgObj.typeId = app.msgTypeMap.onlinechat.value;
+                toServerMsgObj.typeDesc = app.msgTypeMap.onlinechat.desc;
                 toServerMsgObj.roomName = roomName;
                 toServerMsgObj.from = userFrom;
                 toServerMsgObj.to = userTo;
@@ -308,8 +330,8 @@
         function sendNoticeToServer(roomName, msg) {
             if (webSocket != null) {
                 var toServerMsgObj = {};
-                toServerMsgObj.typeId = 4;
-                toServerMsgObj.typeDesc = "通知消息";
+                toServerMsgObj.typeId = app.msgTypeMap.notice.value;
+                toServerMsgObj.typeDesc = app.msgTypeMap.notice.desc;
                 toServerMsgObj.roomName = roomName;
                 toServerMsgObj.from = "";
                 toServerMsgObj.to = "";
@@ -329,8 +351,8 @@
         function sendStatusToServer(roomName, userFrom, msg) {
             if (webSocket != null) {
                 var toServerMsgObj = {};
-                toServerMsgObj.typeId = 5;
-                toServerMsgObj.typeDesc = "状态消息";
+                toServerMsgObj.typeId = app.msgTypeMap.status.value;
+                toServerMsgObj.typeDesc = app.msgTypeMap.status.desc;
                 toServerMsgObj.roomName = roomName;
                 toServerMsgObj.from = userFrom;
                 toServerMsgObj.to = "";
@@ -401,7 +423,7 @@
             // 扩展数据 发送人相关信息
             var extendMap = jsonObj.extendMap;
 
-            if (typeId == 1) {
+            if (typeId == app.msgTypeMap.system.value) {
                 // 广播消息
                 updateChatMsgWithColor(msg, "green", 10);
                 // 更新在线人数等信息
@@ -410,7 +432,7 @@
                 return;
             }
 
-            if (typeId == 5) {
+            if (typeId == app.msgTypeMap.status.value) {
                 // 状态消息
                 var status = msg.split(":")[0];
                 var tmpMsg = msg.split(":")[1];
@@ -430,12 +452,12 @@
             
             // 发送方用户相关信息
             var msgFromUserProfile = null;
-            if (typeId == 2 || typeId == 3) {
+            if (typeId == app.msgTypeMap.onlinechat.value || typeId == app.msgTypeMap.offlinechat.value) {
                 // 聊天消息/离线消息
                 msgFromUserProfile = extendMap.userProfile;
             }
             
-            if (typeId == 4) {
+            if (typeId == app.msgTypeMap.notice.value) {
                 // 通知消息
                 $("#noticeDiv").show();
                 setTimeout(function () {
