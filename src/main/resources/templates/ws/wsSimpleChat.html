@@ -418,7 +418,12 @@
                     $("#inputStatusSpan").html(msgFrom+":"+tmpMsg);
                 } else {
                     var spanTxt = $("#inputStatusSpan").text();
-                    $("#inputStatusSpan").text("");
+                    if (spanTxt != "") {
+                        inputUser = spanTxt.split(":")[0];
+                        if (inputUser == msgFrom) {
+                            $("#inputStatusSpan").text("");
+                        }
+                    }
                 }
                 return;
             }
