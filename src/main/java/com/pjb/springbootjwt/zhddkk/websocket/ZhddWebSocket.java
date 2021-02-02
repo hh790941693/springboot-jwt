@@ -3,6 +3,7 @@ package com.pjb.springbootjwt.zhddkk.websocket;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
+import com.pjb.springbootjwt.zhddkk.constants.ChatMsgTypeEnum;
 import com.pjb.springbootjwt.zhddkk.domain.WsChatlogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
@@ -93,14 +94,14 @@ public class ZhddWebSocket {
             }
 
             String curTime = SDF_HHMMSS.format(new Date());
-            if (typeId.equals("1")) {
+            if (typeId.equals(ChatMsgTypeEnum.SYSTEM_MSG.getTypeId())) {
                 // 系统消息
-                ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, "系统消息", msgFrom, msgTo, msg, new HashMap<>());
+                ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, ChatMsgTypeEnum.SYSTEM_MSG.getDesc(), msgFrom, msgTo, msg, new HashMap<>());
                 Session fromSession = queryRoomSession(roomName, msgFrom);
                 if (null != fromSession) {
                     fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
-            } else if (typeId.equals("2")){
+            } else if (typeId.equals(ChatMsgTypeEnum.CHAT_ONLINE_MSG.getTypeId())){
                 // 聊天消息
                 // 发送方相关信息
                 Map<String, Object> extendMap = new HashMap<>();
@@ -108,20 +109,20 @@ public class ZhddWebSocket {
 
                 Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
                 for (Entry<String, Session> entry : roomClientMap.entrySet()) {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, "在线消息", msgFrom, msgTo, msg, extendMap);
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, ChatMsgTypeEnum.CHAT_ONLINE_MSG.getDesc(), msgFrom, msgTo, msg, extendMap);
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
 
                 WsChatlogDO wcl1 = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, msgFrom, msgTo, msgStr,"");
                 wsChatlogService.insert(wcl1);
-            } else if (typeId.equals("4")){
+            } else if (typeId.equals(ChatMsgTypeEnum.NOTICE_MSG.getTypeId())){
                 // 通知消息
                 Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
                 for (Entry<String, Session> entry : roomClientMap.entrySet()) {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, "通知消息", "管理员", "", msg, new HashMap<>());
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, ChatMsgTypeEnum.NOTICE_MSG.getDesc(), "管理员", "", msg, new HashMap<>());
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
-            } else if (typeId.equals("5")){
+            } else if (typeId.equals(ChatMsgTypeEnum.STATUS_MSG.getTypeId())){
                 // 状态消息
                 if (msg.contains("input")) {
                     String inputStatus = msg.split(":")[1];
@@ -146,7 +147,7 @@ public class ZhddWebSocket {
 
                     Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
                     for (Entry<String, Session> entry : roomClientMap.entrySet()) {
-                        ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, "状态消息", msgFrom, "", msg, extendMap);
+                        ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, ChatMsgTypeEnum.STATUS_MSG.getDesc(), msgFrom, "", msg, extendMap);
                         entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     }
                 }
@@ -201,7 +202,7 @@ public class ZhddWebSocket {
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             if (!entry.getKey().equals(this.user)) {
                 try {
-                    ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), "1", "广播消息",
+                    ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), ChatMsgTypeEnum.SYSTEM_MSG.getTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getDesc(),
                             "", "", enterMsg, getRoomOnlineInfo(this.roomName));
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (Exception e) {
@@ -225,7 +226,7 @@ public class ZhddWebSocket {
                 Map<String, Object> extendMap = new HashMap<>();
                 extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(wcl.getUser()));
 
-                ChatMessageBean chatBean = new ChatMessageBean(time, "3", "离线消息", wcl.getUser(), "我", wcl.getMsg(), extendMap);
+                ChatMessageBean chatBean = new ChatMessageBean(time, ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getTypeId(), ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getDesc(), wcl.getUser(), "我", wcl.getMsg(), extendMap);
                 try {
                     this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     Thread.sleep(50);
@@ -254,7 +255,7 @@ public class ZhddWebSocket {
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             if (!entry.getKey().equals(user)) {
                 try {
-                    ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), "1", "广播消息",
+                    ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), ChatMsgTypeEnum.SYSTEM_MSG.getTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getDesc(),
                             "", "", leaveMsg, getRoomOnlineInfo(this.roomName));
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 } catch (Exception e) {
