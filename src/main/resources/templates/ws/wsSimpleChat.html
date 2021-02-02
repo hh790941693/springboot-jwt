@@ -402,19 +402,19 @@
             }
             
             // 其他人发的消息
-            var defaultCss = "color:black;font-size:14px;line-height:22px;";
+            var defaultCss = "color:black;font-size:10px;line-height:20px;";
             if (msgTo == sessionUser) {
                 // 发给我的消息
-                defaultCss = "color:black;font-size:14px;line-height:22px;";
+                defaultCss = "color:black;font-size:10px;line-height:20px;";
             } else if (msgFrom == sessionUser) {
                 // 我发出去的消息
-                defaultCss = "color:white;font-size:14px;line-height:22px;";
+                defaultCss = "color:white;font-size:10px;line-height:20px;";
             }
             
             var htmlDate = "";
             if (msgFrom == sessionUser) {
                 // 右侧--当前用户发出去的消息
-                htmlData = "<div style='width:70%;height:auto;margin-bottom: 10px;margin-left:29%;text-align:right;'>";
+                htmlData = "<div style='width:60%;height:auto;margin-bottom: 10px;margin-left:40%;text-align:right;'>";
                 htmlData += "<p style='height:20px;'>";
                 
                 htmlData += "<span style='display: inline-block;margin-right: 10px;'>" + typeDesc + "</span>";
@@ -424,7 +424,7 @@
                 htmlData += "</p>";
             } else {
                 // 左侧--其他用户发的消息
-                htmlData = "<div style='width:70%;height:auto;margin-bottom: 10px;'>";
+                htmlData = "<div style='width:60%;height:auto;margin-bottom: 10px;'>";
                 htmlData += "<p style='height:20px;'>";
 
                 htmlData += "<img width='15' height='15' style='margin-right: 5px;' src='"+msgFromUserProfile.img+"'>";
@@ -437,7 +437,7 @@
             if (msgFrom == sessionUser) {
                 // 当前用户发出去的消息
                 // 底色蓝色，字体白色，@蓝色
-                htmlData += "<p style='height:auto;border-radius: 5px;background-image: linear-gradient(to left, #0a8fb9 , rgba(38,44,185,0.58));'>";
+                htmlData += "<p style='height:auto;border-radius: 5px;padding: 0 5px;background-image: linear-gradient(to left, #0a8fb9 , rgba(38,44,185,0.58));'>";
                 if (msgTo != null && msgTo != "") {
                     htmlData += "<span style='color:blue;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
                 } else {
@@ -446,7 +446,7 @@
             } else {
                 // 别人发出去的消息
                 // 底色灰色，字体黑色，@蓝色
-                htmlData += "<p style='height:auto;border-radius: 5px;background-image: linear-gradient(to right, #ddd , rgba(132,172,221,0.58));'>";
+                htmlData += "<p style='height:auto;border-radius: 5px;padding: 0 5px;background-image: linear-gradient(to right, #ddd , rgba(132,172,221,0.58));'>";
                 if (msgTo != null && msgTo != "") {
                     if (msgTo == sessionUser) {
                         // 别人@我的消息
