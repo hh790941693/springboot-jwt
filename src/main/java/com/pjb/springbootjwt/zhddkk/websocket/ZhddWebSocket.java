@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -49,8 +50,6 @@ public class ZhddWebSocket {
 
     private String userAgent;
 
-    private static Map<String, Integer> onlineCountMap = new ConcurrentHashMap();
-
     public static WsUsersService wsUsersService;
 
     public static WsChatlogService wsChatlogService;
@@ -58,7 +57,7 @@ public class ZhddWebSocket {
     public static WsCommonService wsCommonService;
 
     /**
-     * 准发消息.
+     * 转发消息.
      * @param message 消息
      * @param session 会话
      * @throws IOException 异常
@@ -71,8 +70,8 @@ public class ZhddWebSocket {
         }
 
         JSONObject jsonObject = JsonUtil.jsonstr2Jsonobject(message);
-        //time:2019-01-03 16:00:05;typeId:2;typeDesc:在线消息;from:admin;to:无名1;msg:hello
-        //1:广播消息  2:在线消息 4.通知消息
+        //{time:2019-01-03 16:00:05,typeId:2,typeDesc:在线消息,from:admin,to:无名1,msg:hello}
+        //1:广播消息  2:在线消息  4.通知消息  5.状态消息
 
         if (message.contains("msg")) {
             String roomName = jsonObject.getString("roomName");
@@ -80,26 +79,12 @@ public class ZhddWebSocket {
             String msgTo = jsonObject.getString("to");
             String typeId = jsonObject.getString("typeId");
             String typeDesc = jsonObject.getString("typeDesc");
-
-            String msgStr = null;
-            try {
-                msgStr = jsonObject.getString("msg");
-            } catch (Exception e) {
-                // 如果消息为空 直接退出
-                return;
-            }
+            String msgStr = jsonObject.getString("msg");
 
             //对消息进行敏感字、脏话进行处理
             String msg = msgStr;
-            List<WsCommonDO> mgcList = wsCommonService.selectList(new EntityWrapper<WsCommonDO>()
-                .eq("type", "mgc"));
-
-            List<WsCommonDO> zhList = wsCommonService.selectList(new EntityWrapper<WsCommonDO>()
-                    .eq("type", "zh"));
-            List<WsCommonDO> allList = new ArrayList<WsCommonDO>();
-            allList.addAll(mgcList);
-            allList.addAll(zhList);
-
+            List<WsCommonDO> commonList = CoreCache.getInstance().getCommonList();
+            List<WsCommonDO> allList = commonList.stream().filter(c->c.getType().equals("mgc") || c.getType().equals("zh")).collect(Collectors.toList());
             for (WsCommonDO wc : allList) {
                 msg = msg.replaceAll(wc.getName(), "***");
             }
