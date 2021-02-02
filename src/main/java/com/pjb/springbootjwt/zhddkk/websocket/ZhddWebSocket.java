@@ -40,6 +40,9 @@ public class ZhddWebSocket {
     // <房间号, <用戶名,用户session>>
     private static Map<String, Map<String, Session>> clientsMap = new ConcurrentHashMap();
 
+    // <房间号, List<用户名>>
+    private static Map<String, List<String>> roomInputingUserMap = new ConcurrentHashMap();
+
     private Session session;
 
     private String roomName;
@@ -120,13 +123,32 @@ public class ZhddWebSocket {
                 }
             } else if (typeId.equals("5")){
                 // 状态消息
-                Map<String, Object> extendMap = new HashMap<>();
-                extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(msgFrom));
+                if (msg.contains("input")) {
+                    String inputStatus = msg.split(":")[1];
 
-                Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
-                for (Entry<String, Session> entry : roomClientMap.entrySet()) {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, "状态消息", msgFrom, "", msg, extendMap);
-                    entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                    List<String> roomInputingUserList = roomInputingUserMap.get(roomName);
+                    if (null == roomInputingUserList) {
+                        roomInputingUserList = new ArrayList<>();
+                    }
+
+                    if (inputStatus.equals("1")) {
+                        if (!roomInputingUserList.contains(msgFrom)) {
+                            roomInputingUserList.add(0, msgFrom);
+                        }
+                    } else {
+                        if (roomInputingUserList.contains(msgFrom)) {
+                            roomInputingUserList.remove(msgFrom);
+                        }
+                    }
+                    roomInputingUserMap.put(roomName, roomInputingUserList);
+                    Map<String, Object> extendMap = new HashMap<>();
+                    extendMap.put("inputingUserList", roomInputingUserList);
+
+                    Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
+                    for (Entry<String, Session> entry : roomClientMap.entrySet()) {
+                        ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, "状态消息", msgFrom, "", msg, extendMap);
+                        entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                    }
                 }
             }
         }
@@ -220,7 +242,8 @@ public class ZhddWebSocket {
     @javax.websocket.OnClose
     public void OnClose() {
         // 删除房间相关人信息
-        removeRoomUser(roomName, this.user);
+        removeRoomUser(this.roomName, this.user);
+        removeRoomInputing(this.roomName, this.user);
 
         String leaveMsgFormat = "%s(%s) 离开了聊天室：%s";
         String leaveMsg = String.format(leaveMsgFormat, this.user, this.userAgent, this.roomName);
@@ -256,6 +279,7 @@ public class ZhddWebSocket {
     public void onError(Throwable throwable) {
         logger.info("用户{}: 进入聊天室:{} 失败", this.user, this.roomName);
         removeRoomUser(roomName, this.user);
+        removeRoomInputing(this.roomName, this.user);
     }
 
     // 聊天室加人
@@ -281,6 +305,16 @@ public class ZhddWebSocket {
                 } catch (Exception e) {
                     // do nothing
                 }
+            }
+        }
+    }
+
+    // 聊天室正在聊天减人
+    public static synchronized void removeRoomInputing(String roomName, String user) {
+        if (roomInputingUserMap.containsKey(roomName)) {
+            List<String> inputingUserList = roomInputingUserMap.get(roomName);
+            if (inputingUserList.contains(user)) {
+                inputingUserList.remove(user);
             }
         }
     }

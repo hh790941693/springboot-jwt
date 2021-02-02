@@ -434,19 +434,25 @@
 
             if (typeId == app.msgTypeMap.status.value) {
                 // 状态消息
-                var status = msg.split(":")[0];
-                var tmpMsg = msg.split(":")[1];
-                if (status == "1") {
-                    $("#inputStatusSpan").html(msgFrom+":"+tmpMsg);
+                var inputingUserList = extendMap.inputingUserList;
+                if (inputingUserList.length == 0) {
+                    $("#inputStatusSpan").text("");
+                }else if (inputingUserList.length <=3 ){
+                    var inputMsg = "";
+                    $.each(inputingUserList, function (index,item) {
+                        inputMsg += item + "、";
+                    });
+                    inputMsg = inputMsg.substring(0, inputMsg.length - 1);
+                    inputMsg += "正在输入...";
                 } else {
-                    var spanTxt = $("#inputStatusSpan").text();
-                    if (spanTxt != "") {
-                        inputUser = spanTxt.split(":")[0];
-                        if (inputUser == msgFrom) {
-                            $("#inputStatusSpan").text("");
-                        }
+                    var inputMsg = "";
+                    for (var i = 0;i < 3;i++) {
+                        inputMsg += inputingUserList[i] + "、";
                     }
+                    inputMsg = inputMsg.substring(0, inputMsg.length - 1);
+                    inputMsg += "等"+inputingUserList.length+"位用户正在输入...";
                 }
+                $("#inputStatusSpan").text(inputMsg);
                 return;
             }
             
@@ -556,12 +562,12 @@
 
         // 输入框聚焦事件
         $("#msgToServer").focus(function() {
-            sendStatusToServer(app.roomName, sessionUser, "1:正在输入...");
+            sendStatusToServer(app.roomName, sessionUser, "input:1");
         });
 
         // 输入框失去焦点事件
         $("#msgToServer").blur(function() {
-            sendStatusToServer(app.roomName, sessionUser, "0:取消输入");
+            sendStatusToServer(app.roomName, sessionUser, "input:0");
         });
     </script>
 </body>
