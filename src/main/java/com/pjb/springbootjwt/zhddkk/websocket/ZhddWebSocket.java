@@ -92,7 +92,7 @@ public class ZhddWebSocket {
             String curTime = SDF_HHMMSS.format(new Date());
             if (typeId.equals("1")) {
                 // 系统消息
-                ChatMessageBean chatBean = new ChatMessageBean(curTime, "1", "系统消息", msgFrom, msgTo, msg, new HashMap<>());
+                ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, "系统消息", msgFrom, msgTo, msg, new HashMap<>());
                 Session fromSession = queryRoomSession(roomName, msgFrom);
                 if (null != fromSession) {
                     fromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
@@ -105,7 +105,7 @@ public class ZhddWebSocket {
 
                 Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
                 for (Entry<String, Session> entry : roomClientMap.entrySet()) {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "2", "在线消息", msgFrom, msgTo, msg, extendMap);
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, "在线消息", msgFrom, msgTo, msg, extendMap);
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
 
@@ -115,7 +115,17 @@ public class ZhddWebSocket {
                 // 通知消息
                 Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
                 for (Entry<String, Session> entry : roomClientMap.entrySet()) {
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, "4", "通知消息", "管理员", "", msg, new HashMap<>());
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, "通知消息", "管理员", "", msg, new HashMap<>());
+                    entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                }
+            } else if (typeId.equals("5")){
+                // 状态消息
+                Map<String, Object> extendMap = new HashMap<>();
+                extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(msgFrom));
+
+                Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
+                for (Entry<String, Session> entry : roomClientMap.entrySet()) {
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, "状态消息", msgFrom, "", msg, extendMap);
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
             }

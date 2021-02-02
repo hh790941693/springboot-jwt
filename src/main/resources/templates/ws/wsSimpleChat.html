@@ -62,12 +62,17 @@
         <!--头部按钮组-->
         <div id="headerDiv">
             <div align="left" style="width:30%;height:100%;float:left;margin-top:-5px;">
-                <span style="color:yellow;font-weight:bold;font-size:20px;height:100%;display:inline-block;margin-right: 10px;">房号:{{roomName}}</span>
+                <span style="color:yellow;font-weight:bold;font-size:18px;height:100%;display:inline-block;margin-right: 10px;">房号:{{roomName}}</span>
                 <span class="fa fa-user" style="color:white;"></span>
                 <label id="onlineNum" style="color:white;">{{roomUserCount}}</label>&nbsp;&nbsp;
+
             </div>
 
-            <div align="right" style="width:62%;height:100%;float:right;margin-right:3px;">
+            <div style="width:30%;height:100%;float:left;color:white;text-align: center;">
+                <span id="inputStatusSpan"></span>
+            </div>
+
+            <div align="right" style="width:38%;height:100%;float:right;margin-right:3px;">
                 <th:block th:if="${session.sessionInfo.roleName == '管理员'}">
                     <button class='label label-info' th:title="发布通知" @click="sendNotice()">
                         <span class="glyphicon glyphicon-comment"></span>
@@ -269,7 +274,14 @@
             }
         }
 
-        //发送消息
+        /**
+         * 发送聊天消息
+         *
+         * @param roomName 房间名称
+         * @param userFrom 发送人
+         * @param userTo  接收人
+         * @param msg    聊天内容
+         */
         function sendMsgToServer(roomName, userFrom, userTo, msg) {
             if (webSocket != null) {
                 var toServerMsgObj = {};
@@ -287,7 +299,12 @@
             }
         }
 
-        // 发送通知消息
+        /**
+         * 发送通知消息
+         *
+         * @param roomName 房间名称
+         * @param msg 通知内容
+         */
         function sendNoticeToServer(roomName, msg) {
             if (webSocket != null) {
                 var toServerMsgObj = {};
@@ -295,6 +312,27 @@
                 toServerMsgObj.typeDesc = "通知消息";
                 toServerMsgObj.roomName = roomName;
                 toServerMsgObj.from = "";
+                toServerMsgObj.to = "";
+                toServerMsgObj.msg = msg;
+                var jsonObj = JSON.stringify(toServerMsgObj);
+                webSocket.send(jsonObj);
+            }
+        }
+
+        /**
+         * 发送状态消息
+         *
+         * @param roomName 房间名称
+         * @param userFrom 发送人
+         * @param msg      状态内容
+         */
+        function sendStatusToServer(roomName, userFrom, msg) {
+            if (webSocket != null) {
+                var toServerMsgObj = {};
+                toServerMsgObj.typeId = 5;
+                toServerMsgObj.typeDesc = "状态消息";
+                toServerMsgObj.roomName = roomName;
+                toServerMsgObj.from = userFrom;
                 toServerMsgObj.to = "";
                 toServerMsgObj.msg = msg;
                 var jsonObj = JSON.stringify(toServerMsgObj);
@@ -313,13 +351,6 @@
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
 
-        //回车键发送聊天内容
-        $(document).keyup(function (event) {
-            if (event.keyCode == 13) {
-                send();
-            }
-        });
-        
         //登录服务器
         function loginServer() {
             if (webSocket == null) {
@@ -377,6 +408,18 @@
                 app.roomUserCount = extendMap.count;
                 app.roomUserList = extendMap.userList;
                 return;
+            }
+
+            if (typeId == 5) {
+                // 状态消息
+                var status = msg.split(":")[0];
+                var tmpMsg = msg.split(":")[1];
+                if (status == "1") {
+                    $("#inputStatusSpan").html(msgFrom+":"+tmpMsg);
+                } else {
+                    var spanTxt = $("#inputStatusSpan").text();
+                    $("#inputStatusSpan").text("");
+                }
             }
             
             // 发送方用户相关信息
@@ -475,23 +518,23 @@
                 content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + userName
             });
         }
-        
-        function tipsAnimation(msg){
-            var parentdiv = $('<div style="border:1px solid red;height:30px;z-index:99;background-color: #cfaf59;text-align: center;position: fixed;left:5%;"></div>');        //创建一个父div
-            parentdiv.attr('id','parentDiv');        //给父div设置id
-            
-            var childdiv = $('<p></p>');        //创建一个子div
-            childdiv.attr('id','tipsP');        //给子div设置id
-            $(childdiv).text(msg);
-            childdiv.appendTo(parentdiv);        //将子div添加到父div中
-            parentdiv.appendTo('body');          //将父div添加到body中
 
+        //回车键发送聊天内容
+        $(document).keyup(function (event) {
+            if (event.keyCode == 13) {
+                send();
+            }
+        });
 
-            $(parentdiv).animate({left:"60%"},2000);
-            setTimeout(function () {
-                $(parentdiv).remove();
-            }, 2000);
-        }
+        // 输入框聚焦事件
+        $("#msgToServer").focus(function() {
+            sendStatusToServer(app.roomName, sessionUser, "1:正在输入...");
+        });
+
+        // 输入框失去焦点事件
+        $("#msgToServer").blur(function() {
+            sendStatusToServer(app.roomName, sessionUser, "0:取消输入");
+        });
     </script>
 </body>
 </html>
