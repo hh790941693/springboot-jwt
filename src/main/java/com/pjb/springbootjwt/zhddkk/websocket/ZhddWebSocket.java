@@ -23,6 +23,8 @@ import javax.websocket.OnMessage;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+
+import com.pjb.springbootjwt.zhddkk.util.UnicodeUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -113,7 +115,7 @@ public class ZhddWebSocket {
                     entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                 }
 
-                WsChatlogDO wcl1 = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, msgFrom, msgTo, msgStr,"");
+                WsChatlogDO wcl1 = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, msgFrom, msgTo, UnicodeUtil.string2Unicode(msgStr),"");
                 wsChatlogService.insert(wcl1);
             } else if (typeId.equals(ChatMsgTypeEnum.NOTICE_MSG.getTypeId())){
                 // 通知消息
@@ -226,7 +228,7 @@ public class ZhddWebSocket {
                 Map<String, Object> extendMap = new HashMap<>();
                 extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(wcl.getUser()));
 
-                ChatMessageBean chatBean = new ChatMessageBean(time, ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getTypeId(), ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getDesc(), wcl.getUser(), "我", wcl.getMsg(), extendMap);
+                ChatMessageBean chatBean = new ChatMessageBean(time, ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getTypeId(), ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getDesc(), wcl.getUser(), "我", UnicodeUtil.unicode2String(wcl.getMsg()), extendMap);
                 try {
                     this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     Thread.sleep(50);

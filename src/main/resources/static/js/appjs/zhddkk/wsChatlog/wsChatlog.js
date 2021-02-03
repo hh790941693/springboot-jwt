@@ -82,6 +82,7 @@ function load() {
                 field: 'msg',
                 title: '消息内容',
                 formatter: function (value) {
+                    value = eval("'"+value+"'");
                     return $.ws.subStringText(value, 30);
                 }
             },
