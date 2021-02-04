@@ -35,7 +35,7 @@ spring:
       - classpath:/static
       - classpath:/static/css
   profiles:
-    active: tencent
+    active: home
   servlet:
     #上传文件设置
     multipart:
