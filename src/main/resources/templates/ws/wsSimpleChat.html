@@ -44,7 +44,7 @@
             display: none;
         }
         
-        #msgFromServer {
+        #msgFromServerDiv {
             width: 100%;
             height: calc(100% - 90px);
             overflow: auto;
@@ -60,7 +60,6 @@
 </head>
 <body>
     <div id="mainDiv">
-
         <!--头部按钮组-->
         <div id="headerDiv">
             <div align="left" style="width:30%;height:100%;float:left;margin-top:-5px;">
@@ -104,7 +103,7 @@
         </div>
 
       <!--中间聊天框-->
-        <div id="msgFromServer" align="left">
+        <div id="msgFromServerDiv" align="left">
         </div>
         
       <!--下方聊天内容发送-->
@@ -126,9 +125,12 @@
             </div>
           <!--聊天内容  发送按钮-->
             <div style="height:35px;">
-                <input id="msgToServer" autocomplete="off"
+                <!--输入框-->
+                <input id="sendMsgInput" autocomplete="off"
                        style="width:69%;float:left;height:100%;border:1px solid grey" placeholder="请输入聊天内容<按Enter键发送>">
+                <!--表情按钮-->
                 <input id="emojiBtn" type="image" style="width:6%;height:35px;padding: 5px;background-color: white;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZBAMAAAA2x5hQAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAkUExURUxpcfTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAOfx6yUAAAALdFJOUwAzbVQOoYrzwdwkAoU+0gAAAM1JREFUGNN9kK0PQWEUxl8fM24iCYopwi0muuVuzGyKwATFZpJIU01RUG/RBMnHxfz+Oef9uNM84d1+23nO+zxHKVG2WWupRJkdcAwtpCK0lpbqWE01pB0QayonREMoIp7AawQrWSgGGb4pn6dSeSh68FAVXqHqy3wKrkJiDGDTg3dnp//w+WnwlwIOJauF+C7sXRVfdha4O4oIJfTbtdSxs2uqhs585A0ko8iLTMEcDE1n65A+29pYAlr72nz9dKu7GuNTcsL2fDQzB/wCPVJ69nZGb3gAAAAASUVORK5CYII=">
+                <!--发送按钮-->
                 <button id="sendBtn" type="button" class='btn btn-sm btn-success'
                         style="width:25%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
             </div>
@@ -327,7 +329,7 @@
                             // 是否被禁用
                             var enableStatus = currentUserOnlineInfo.enable;
                             if (enableStatus == "0") {
-                                layer.tips('该账户已被禁用,10秒后强制退出!', '#msgFromServer', {
+                                layer.tips('该账户已被禁用,10秒后强制退出!', '#msgFromServerDiv', {
                                     tips: [2, 'red']
                                 });
                                 updateChatMsgWithColor("该账户已被禁用,10秒后强制退出!", "red", 10);
@@ -348,11 +350,11 @@
                     });
                 },
                 selectText: function (e) {
-                    $("#msgToServer").val(e.target.value);
+                    $("#sendMsgInput").val(e.target.value);
                 },
                 // 清屏
                 clearScreen: function() {
-                    $("#msgFromServer").text("");
+                    $("#msgFromServerDiv").text("");
                 },
                 // 切换背景图片
                 changeBackgroundImage: function () {
@@ -386,6 +388,12 @@
 
         // 发送消息给服务器
         function send() {
+            if (webSocket == null) {
+                var msg = "<p style='color:red;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
+                updateChatMsg(msg);
+                return;
+            }
+
             if (currentUserOnlineInfo != undefined) {
                 // 是否被禁用
                 var enableStatus = currentUserOnlineInfo.enable;
@@ -394,7 +402,6 @@
                     updateChatMsgWithColor("你的账号已被禁用了", "red", 10);
                     return;
                 }
-
                 var speakStatus = currentUserOnlineInfo.speak;
                 if (speakStatus == "0") {
                     //被禁言了
@@ -404,29 +411,20 @@
             }
 
             var toUser = $("#selectUser").val();
-            if (webSocket != null) {
-                if (sessionUser == toUser) {
-                    updateChatMsgWithColor("不能给自己发消息!", "red", 10);
-                    return false;
-                }
-
-                var msg = $("#msgToServer").val();
-                if (msg == null || msg == "") {
-                    updateChatMsgWithColor("不允许发送空消息!", "red", 10);
-                    return;
-                }
-
-                if (toUser != null && toUser != "") {
-                    sendMsgToServer(app.roomName, sessionUser, toUser, msg);
-                    $("#msgToServer").val("");
-                } else {
-                    sendMsgToServer(app.roomName, sessionUser, "", msg);
-                    $("#msgToServer").val("");
-                }
-            } else {
-                var msg = "<p style='color:red;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
-                updateChatMsg(msg);
+            if (sessionUser == toUser) {
+                updateChatMsgWithColor("不能给自己发消息!", "red", 10);
+                return false;
             }
+
+            var msg = $("#sendMsgInput").val();
+            if (msg == null || msg == "") {
+                updateChatMsgWithColor("不允许发送空消息!", "red", 10);
+                return;
+            }
+
+            sendMsgToServer(app.roomName, sessionUser, toUser, msg);
+            // 清空输入框内容
+            $("#sendMsgInput").val("");
         }
 
         /**
@@ -496,13 +494,13 @@
         }
         
         function updateChatMsg(msg) {
-            var textArea = $('#msgFromServer').append(msg);
+            var textArea = $('#msgFromServerDiv').append(msg);
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
 
         function updateChatMsgWithColor(msg, color, fontSize) {
             var newMsg = "<p style='color:" + color + ";font-size:" + fontSize + "px;line-height:14px;text-align: center;margin-bottom: 5px;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] " + msg + "</p>";
-            var textArea = $("#msgFromServer").append(newMsg);
+            var textArea = $("#msgFromServerDiv").append(newMsg);
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
 
@@ -611,8 +609,8 @@
                 return;
             }
 
-            msg=parseEmoji(msg);
-            console.log(msg);
+            // 对消息内容进行解析(表情)
+            msg = parseEmoji(msg);
 
             // 其他人发的消息
             var defaultCss = "color:black;font-size:10px;line-height:20px;";
@@ -676,9 +674,6 @@
             htmlData += "</p>";
             htmlData += "</div>";
             updateChatMsg(htmlData);
-            //$("#msgFromServer").emojiParse({
-            //    icons: emojiIcons
-            //});
         }
 
         function showPersonInfo(userName) {
@@ -700,17 +695,17 @@
         });
 
         // 输入框聚焦事件
-        $("#msgToServer").focus(function() {
+        $("#sendMsgInput").focus(function() {
             sendStatusToServer(app.roomName, sessionUser, "input:1");
         });
 
         // 输入框失去焦点事件
-        $("#msgToServer").blur(function() {
+        $("#sendMsgInput").blur(function() {
             sendStatusToServer(app.roomName, sessionUser, "input:0");
         });
 
         // 加载表情
-        $("#msgToServer").emoji({
+        $("#sendMsgInput").emoji({
             showTab: true,
             animation: 'fade',
             button: '#emojiBtn',
