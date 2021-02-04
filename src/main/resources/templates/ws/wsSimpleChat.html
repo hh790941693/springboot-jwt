@@ -718,7 +718,12 @@
             icons: emojiIcons
         });
 
-        function parseEmoji(htmlContent) {
+        /**
+         * 解析表情
+         * @param htmlContent 待解析的内容
+         * @returns {*}
+         */
+        function parseEmoji(content) {
             var path,
                 alias,
                 pattern,
@@ -743,7 +748,7 @@
 
                     pattern = placeholder.replace(new RegExp('{alias}', 'gi'), '([\\s\\S]+?)');
                     regexp = new RegExp(pattern, 'gm');
-                    result = htmlContent.replace(regexp, function ($0, $1) {
+                    result = content.replace(regexp, function ($0, $1) {
                         var n = revertAlias[$1];
                         if (n) {
                             return '<img class="emoji_icon" src="' + path + n + file + '"/>';
@@ -753,7 +758,7 @@
                     });
                 } else {
                     pattern = placeholder.replace(new RegExp('{alias}', 'gi'), '(\\d+?)');
-                    result = htmlContent.replace(new RegExp(pattern, 'gm'), '<img class="emoji_icon" style="width:20px;height:20px;" src="' + path + '$1' + file + '"/>');
+                    result = content.replace(new RegExp(pattern, 'gm'), '<img class="emoji_icon" style="width:20px;height:20px;" src="' + path + '$1' + file + '"/>');
                 }
             }
             return result;
