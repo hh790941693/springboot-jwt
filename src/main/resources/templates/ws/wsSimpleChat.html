@@ -123,15 +123,18 @@
       <!--下方聊天内容输入、表情、发送-->
         <div id="footerDiv" align="left">
             <div style="height:25px;">
+                <!--表情按钮-->
+                <input id="emojiBtn" type="image" style="width:25px;height:100%;float:left;padding: 4px;border:1px solid grey;background-color: white;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZBAMAAAA2x5hQAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAkUExURUxpcfTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAOfx6yUAAAALdFJOUwAzbVQOoYrzwdwkAoU+0gAAAM1JREFUGNN9kK0PQWEUxl8fM24iCYopwi0muuVuzGyKwATFZpJIU01RUG/RBMnHxfz+Oef9uNM84d1+23nO+zxHKVG2WWupRJkdcAwtpCK0lpbqWE01pB0QayonREMoIp7AawQrWSgGGb4pn6dSeSh68FAVXqHqy3wKrkJiDGDTg3dnp//w+WnwlwIOJauF+C7sXRVfdha4O4oIJfTbtdSxs2uqhs585A0ko8iLTMEcDE1n65A+29pYAlr72nz9dKu7GuNTcsL2fDQzB/wCPVJ69nZGb3gAAAAASUVORK5CYII=">
+
                 <!--选择@对象-->
-                <select id="selectUser" style="width:50%;height:100%;float:left;">
+                <select id="selectUser" style="width:47%;height:100%;float:left;">
                     <option value=""></option>
                     <option v-for="row in roomUserList" :value="row">
                         {{row}}
                     </option>
                 </select>
               <!--选择常用语-->
-                <select id="selectCyy" style="width:50%;height:100%;float:right;" @change="selectText">
+                <select id="selectCyy" style="width:calc(53% - 25px);height:100%;float:left;" @change="selectText">
                     <option v-for="cyy in cyyList">
                         {{cyy.name}}
                     </option>
@@ -142,10 +145,8 @@
                 <!--输入框-->
                 <input id="sendMsgInput" autocomplete="off"
                        style="width:69%;float:left;height:100%;border:1px solid grey" placeholder="请输入聊天内容<按Enter键发送>">
-                <!--表情按钮-->
-                <input id="emojiBtn" type="image" style="width:6%;height:35px;padding: 5px;background-color: white;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZBAMAAAA2x5hQAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAkUExURUxpcfTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAOfx6yUAAAALdFJOUwAzbVQOoYrzwdwkAoU+0gAAAM1JREFUGNN9kK0PQWEUxl8fM24iCYopwi0muuVuzGyKwATFZpJIU01RUG/RBMnHxfz+Oef9uNM84d1+23nO+zxHKVG2WWupRJkdcAwtpCK0lpbqWE01pB0QayonREMoIp7AawQrWSgGGb4pn6dSeSh68FAVXqHqy3wKrkJiDGDTg3dnp//w+WnwlwIOJauF+C7sXRVfdha4O4oIJfTbtdSxs2uqhs585A0ko8iLTMEcDE1n65A+29pYAlr72nz9dKu7GuNTcsL2fDQzB/wCPVJ69nZGb3gAAAAASUVORK5CYII=">
                 <!--发送按钮-->
-                <button id="sendBtn" type="button" class='btn btn-sm btn-success' style="width:25%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
+                <button id="sendBtn" type="button" class='btn btn-sm btn-success' style="width:31%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
             </div>
         </div>
     </div>
@@ -695,7 +696,7 @@
             showTab: true,
             animation: 'fade',
             button: '#emojiBtn',
-            position: 'topLeft',
+            position: 'topRight',
             icons: emojiIcons
         });
 
