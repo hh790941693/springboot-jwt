@@ -193,7 +193,7 @@
                             <span>
                                 <span class="fa fa-thumbs-up" style="margin-right: 5px;">{{item.likeNum}}</span>
                                 <span class="fa fa-thumbs-down" style="margin-right: 5px;">{{item.dislikeNum}}</span>
-                                <span class="fa fa-comment">{{countListSize(item.commentList)}}</span>
+                                <span class="fa fa-comment">{{$.ws.countListSize(item.commentList)}}</span>
                             </span>
                             <span class='timeSpanClass'>{{compareTwoTime(new Date(item.createTime).getTime(),new Date().getTime())}}</span>
                         </div>

@@ -1,7 +1,7 @@
 protocol = window.location.protocol;
 host = window.location.host;
 
-//公共api
+//公共配置和接口
 $.ws = {
 
     //上传文件接口地址
@@ -20,12 +20,27 @@ $.ws = {
         $.fancybox.open('<img src = "' + imgUrl + '" />');
     },
 
+    //初始化i18n插件
     i18nInit: function (lang, country) {
-        i18nInit(lang, country);
+        try {
+            $.i18n.properties({
+                path: '/i18n/',
+                name: 'messages',
+                language: lang + '_' + country,
+                mode: "both"
+            });
+        } catch (e) {
+            console.log("load i18n properties error");
+        }
     },
 
+    // 根据key获取国际化的值
     i18n: function (labelKey) {
-        return i18n(labelKey);
+        return $.i18n.prop(labelKey);
+    },
+
+    countListSize: function (obj) {
+        return Object.keys(obj).length;
     },
 
     //背景图片动画
@@ -313,28 +328,4 @@ function compareTwoTime(time1, time2) {
         var tmp = Math.round(interval / 86400);
         return tmp + "天前";
     }
-}
-
-//初始化i18n插件
-function i18nInit(lang, country) {
-    try {
-        $.i18n.properties({
-            path: '/i18n/',
-            name: 'messages',
-            language: lang + '_' + country,
-            mode: "both"
-        });
-    } catch (e) {
-        console.log("load i18n properties error");
-    }
-}
-
-//根据key获取国际化的值
-function i18n(labelKey) {
-    return $.i18n.prop(labelKey);
-}
-
-function countListSize(obj) {
-    console.log(obj);
-    return Object.keys(obj).length;
 }
