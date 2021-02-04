@@ -64,16 +64,19 @@
         <!--头部按钮组-->
         <div id="headerDiv">
             <div align="left" style="width:30%;height:100%;float:left;margin-top:-5px;">
+                <!--房间号-->
                 <span style="color:yellow;font-weight:bold;font-size:18px;height:100%;display:inline-block;margin-right: 10px;">房号:{{roomName}}</span>
                 <span class="fa fa-user" style="color:white;"></span>
+                <!--聊天室人数-->
                 <label id="onlineNum" style="color:white;">{{roomUserCount}}</label>&nbsp;&nbsp;
-
             </div>
 
+            <!--用户输入状态提示语-->
             <div style="width:30%;height:100%;float:left;color:white;text-align: center;">
                 <span id="inputStatusSpan"></span>
             </div>
 
+            <!--按钮组-->
             <div align="right" style="width:38%;height:100%;float:right;margin-right:3px;">
                 <th:block th:if="${session.sessionInfo.roleName == '管理员'}">
                     <button class='label label-info' th:title="发布通知" @click="sendNotice()">
@@ -96,21 +99,21 @@
             </div>
         </div>
         
-        <!-- 通知栏 -->
+        <!-- 滚动消息通知栏(默认隐藏) -->
         <div id="noticeDiv">
             <marquee direction="right" scrolldelay="10" scrollamount="8" onMouseOver="this.stop()" onMouseOut="this.start()">
                 <span id="noticeSpan"></span>
             </marquee>
         </div>
 
-      <!--中间聊天框-->
+      <!--中间聊天内容框-->
         <div id="msgFromServerDiv" align="left">
         </div>
         
-      <!--下方聊天内容发送-->
+      <!--下方聊天内容输入、表情、发送-->
         <div id="footerDiv" align="left">
             <div style="height:25px;">
-                <!--选择对象-->
+                <!--选择@对象-->
                 <select id="selectUser" style="width:50%;height:100%;float:left;">
                     <option value=""></option>
                     <option v-for="row in roomUserList" :value="row">
@@ -124,7 +127,7 @@
                     </option>
                 </select>
             </div>
-          <!--聊天内容  发送按钮-->
+          <!--聊天内容、表情、发送按钮-->
             <div style="height:35px;">
                 <!--输入框-->
                 <input id="sendMsgInput" autocomplete="off"
@@ -132,8 +135,7 @@
                 <!--表情按钮-->
                 <input id="emojiBtn" type="image" style="width:6%;height:35px;padding: 5px;background-color: white;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZBAMAAAA2x5hQAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAkUExURUxpcfTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAPTGAOfx6yUAAAALdFJOUwAzbVQOoYrzwdwkAoU+0gAAAM1JREFUGNN9kK0PQWEUxl8fM24iCYopwi0muuVuzGyKwATFZpJIU01RUG/RBMnHxfz+Oef9uNM84d1+23nO+zxHKVG2WWupRJkdcAwtpCK0lpbqWE01pB0QayonREMoIp7AawQrWSgGGb4pn6dSeSh68FAVXqHqy3wKrkJiDGDTg3dnp//w+WnwlwIOJauF+C7sXRVfdha4O4oIJfTbtdSxs2uqhs585A0ko8iLTMEcDE1n65A+29pYAlr72nz9dKu7GuNTcsL2fDQzB/wCPVJ69nZGb3gAAAAASUVORK5CYII=">
                 <!--发送按钮-->
-                <button id="sendBtn" type="button" class='btn btn-sm btn-success'
-                        style="width:25%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
+                <button id="sendBtn" type="button" class='btn btn-sm btn-success' style="width:25%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
             </div>
         </div>
     </div>
