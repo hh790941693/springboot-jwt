@@ -105,7 +105,24 @@ public class ZhddWebSocket {
                 }
             } else if (typeId.equals(ChatMsgTypeEnum.CHAT_ONLINE_MSG.getTypeId())){
                 // 聊天消息
-                // 发送方相关信息
+                // 发送方信息
+                WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", msgFrom));
+                if (null != wsUsersDO) {
+                    // 禁用
+                    if (wsUsersDO.getEnable().equals("0")) {
+                        Session msgFromSession = queryRoomSession(roomName, msgFrom);
+                        ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getDesc(), "", "", "你的账号已被禁用了!", new HashMap<>());
+                        msgFromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                        return;
+                    }
+                    // 禁言
+                    if (wsUsersDO.getSpeak().equals("0")) {
+                        Session msgFromSession = queryRoomSession(roomName, msgFrom);
+                        ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getDesc(), "", "", "你已被禁言了!", new HashMap<>());
+                        msgFromSession.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
+                        return;
+                    }
+                }
                 Map<String, Object> extendMap = new HashMap<>();
                 extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(msgFrom));
 
