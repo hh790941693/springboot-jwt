@@ -71,12 +71,14 @@
     <div id="mainDiv">
         <!--头部按钮组-->
         <div id="headerDiv">
-            <div align="left" style="width:30%;height:100%;float:left;margin-top:-5px;">
+            <div align="left" style="width:30%;height:100%;float:left;font-size: 20px;color: white;">
                 <!--房间号-->
-                <span style="color:yellow;font-weight:bold;font-size:18px;height:100%;display:inline-block;margin-right: 10px;">房号:{{roomName}}</span>
-                <span class="fa fa-user" style="color:white;"></span>
+                <span class="fa fa-home"></span>
+                <span style="height:100%;color: yellow;display:inline-block;margin-right: 10px;">{{roomName}}</span>
+
                 <!--聊天室人数-->
-                <label id="onlineNum" style="color:white;">{{roomUserCount}}</label>&nbsp;&nbsp;
+                <span class="fa fa-user"></span>
+                <label id="onlineNum">{{roomUserCount}}</label>&nbsp;&nbsp;
             </div>
 
             <!--用户输入状态提示语-->
