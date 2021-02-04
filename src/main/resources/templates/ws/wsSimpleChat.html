@@ -145,7 +145,7 @@
                     </option>
                 </select>
             </div>
-          <!--聊天内容、表情、发送按钮-->
+          <!--输入框、发送按钮-->
             <div style="height:30px;">
                 <!--输入框-->
                 <input id="sendMsgInput" autocomplete="off"
@@ -164,10 +164,11 @@
     <script th:src="@{/js/jquery-emoji/jquery.emoji.js}"></script>
     
     <script type="text/javascript">
+        // websocke对象
         var webSocket = null;
         // 房间名称
         var roomName = "002";
-        // 表情图标
+        // 表情图标配置
         var emojiIcons = [
             {
                 name: "QQ动态",
@@ -289,7 +290,7 @@
             }
         },
         {
-            name: "qq静态",
+            name: "QQ静态",
             path: rootUrl + "img/emoji/qqs/",
             maxNum: 84,
             file: ".png",
@@ -333,6 +334,7 @@
                 }
             },
             methods: {
+                // 获取房间人数、聊天常用语言、房间人详细信息
                 getOnlineInfo: function () {
                     $.ajax({
                         type: 'GET',
@@ -349,6 +351,7 @@
                         }
                     });
                 },
+                // 选择常用语下拉框事件
                 selectText: function (e) {
                     $("#sendMsgInput").val(e.target.value);
                 },
@@ -365,7 +368,7 @@
                     var newPicUrl = "../img/fengjing/fj" + app.imgIndex + ".jpg";
                     $("body").css("background-image", "url(" + newPicUrl + ")");
                 },
-                // 发布通知
+                // 管理员发布通知消息(聊天窗口顶部滚动消息)
                 sendNotice: function () {
                     layer.prompt({
                         formType: 2,
@@ -668,10 +671,11 @@
             updateChatMsg(htmlData);
         }
 
+        // 查看用户详情
         function showPersonInfo(userName) {
             layer.open({
                 type: 2,
-                title: '用户个人信息',
+                title: '用户详情信息',
                 shadeClose: true,
                 shade: 0.2,
                 area: ['390px', '420px'],
@@ -686,12 +690,12 @@
             }
         });
 
-        // 输入框聚焦事件
+        // 输入框聚焦事件(发送状态消息,告诉服务器某用户正在输入中)
         $("#sendMsgInput").focus(function() {
             sendStatusToServer(app.roomName, sessionUser, "input:1");
         });
 
-        // 输入框失去焦点事件
+        // 输入框失去焦点事件(发送状态消息,告诉服务器某用户已停止输入)
         $("#sendMsgInput").blur(function() {
             sendStatusToServer(app.roomName, sessionUser, "input:0");
         });
