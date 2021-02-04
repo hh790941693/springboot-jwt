@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <th:block th:include="common :: header"></th:block>
+  <!-- 引入jquery-emoji表情相关css文件 -->
   <link rel="stylesheet" th:href="@{/js/jquery-emoji/jquery.mCustomScrollbar.min.css}"/>
   <link rel="stylesheet" th:href="@{/js/jquery-emoji/jquery.emoji.css}"/>
   <title>简易聊天室</title>
@@ -139,6 +140,7 @@
 
     <th:block th:include="common :: footer"></th:block>
     <th:block th:include="common :: sessionInfo"></th:block>
+    <!-- 引入jquery-emoji表情相关js文件 -->
     <script th:src="@{/js/jquery-emoji/jquery.mousewheel-3.0.6.min.js}"></script>
     <script th:src="@{/js/jquery-emoji/jquery.mCustomScrollbar.min.js}"></script>
     <script th:src="@{/js/jquery-emoji/jquery.emoji.js}"></script>
