@@ -57,6 +57,14 @@
            width: 100%;
            height:60px;
        }
+
+       /**
+        * 表情大小
+        */
+       .emoji_icon {
+           width: 20px;
+           height: 20px;
+       }
    </style>
 </head>
 <body>
@@ -731,7 +739,7 @@
                 pattern,
                 regexp,
                 revertAlias = {};
-            var result;
+            var result = content;
             for (var i = 0; i < emojiIcons.length; i++) {
                 path = emojiIcons[i].path;
                 if (!path) {
@@ -750,7 +758,7 @@
 
                     pattern = placeholder.replace(new RegExp('{alias}', 'gi'), '([\\s\\S]+?)');
                     regexp = new RegExp(pattern, 'gm');
-                    result = content.replace(regexp, function ($0, $1) {
+                    result = result.replace(regexp, function ($0, $1) {
                         var n = revertAlias[$1];
                         if (n) {
                             return '<img class="emoji_icon" src="' + path + n + file + '"/>';
@@ -760,7 +768,7 @@
                     });
                 } else {
                     pattern = placeholder.replace(new RegExp('{alias}', 'gi'), '(\\d+?)');
-                    result = content.replace(new RegExp(pattern, 'gm'), '<img class="emoji_icon" style="width:20px;height:20px;" src="' + path + '$1' + file + '"/>');
+                    result = result.replace(new RegExp(pattern, 'gm'), '<img class="emoji_icon" src="' + path + '$1' + file + '"/>');
                 }
             }
             return result;
