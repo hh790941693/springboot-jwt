@@ -11,7 +11,7 @@
 
     <!--正式环境日志路径-->
     <springProfile name="home">
-        <property name="log.path" value="d:\\jwtlogs" />
+        <property name="log.path" value="c:\\jwtlogs" />
     </springProfile>
 
     <springProfile name="linux,tencent">
