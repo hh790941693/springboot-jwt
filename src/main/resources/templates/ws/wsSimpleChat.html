@@ -158,7 +158,6 @@
     <script th:src="@{/js/jquery-emoji/jquery.emoji.js}"></script>
     
     <script type="text/javascript">
-        var currentUserOnlineInfo = undefined;
         var webSocket = null;
         // 房间名称
         var roomName = "002";
@@ -338,28 +337,6 @@
                             app.roomUserList = jsonObj.roomUserList;
                             app.cyyList = jsonObj.commonMap.cyy;
                             app.roomUserCount = jsonObj.roomUserCount;
-
-                            currentUserOnlineInfo = jsonObj.currentOnlineUserInfo;
-                            // 是否被禁用
-                            var enableStatus = currentUserOnlineInfo.enable;
-                            if (enableStatus == "0") {
-                                layer.tips('该账户已被禁用,10秒后强制退出!', '#msgFromServerDiv', {
-                                    tips: [2, 'red']
-                                });
-                                updateChatMsgWithColor("该账户已被禁用,10秒后强制退出!", "red", 10);
-                                setTimeout(logout, 10000);
-                                return;
-                            }
-
-                            // 是否被禁言
-                            var speakStatus = currentUserOnlineInfo.speak;
-                            if (speakStatus == "0") {
-                                $("#sendBtn").attr("disabled", true);
-                                $("#sendBtn").html("<span style='color:red;font-weight: bold;'>你已被禁言</span>");
-                            } else {
-                                $("#sendBtn").attr("disabled", false);
-                                $("#sendBtn").html("发送");
-                            }
                         }
                     });
                 },
@@ -406,22 +383,6 @@
                 var msg = "<p style='color:red;font-size:10px;line-height:14px;text-align: center;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] 服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!</p>";
                 updateChatMsg(msg);
                 return;
-            }
-
-            if (currentUserOnlineInfo != undefined) {
-                // 是否被禁用
-                var enableStatus = currentUserOnlineInfo.enable;
-                if (enableStatus == "0") {
-                    //被禁用了
-                    updateChatMsgWithColor("你的账号已被禁用了", "red", 10);
-                    return;
-                }
-                var speakStatus = currentUserOnlineInfo.speak;
-                if (speakStatus == "0") {
-                    //被禁言了
-                    updateChatMsgWithColor("你已被禁言了", "red", 10);
-                    return;
-                }
             }
 
             var toUser = $("#selectUser").val();
