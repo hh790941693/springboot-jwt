@@ -610,7 +610,10 @@
                 updateChatMsgWithColor(msg, "green", 10);
                 return;
             }
-            
+
+            msg=parseEmoji(msg);
+            console.log(msg);
+
             // 其他人发的消息
             var defaultCss = "color:black;font-size:10px;line-height:20px;";
             if (msgTo == sessionUser) {
@@ -673,9 +676,9 @@
             htmlData += "</p>";
             htmlData += "</div>";
             updateChatMsg(htmlData);
-            $("#msgFromServer").emojiParse({
-                icons: emojiIcons
-            });
+            //$("#msgFromServer").emojiParse({
+            //    icons: emojiIcons
+            //});
         }
 
         function showPersonInfo(userName) {
@@ -714,6 +717,47 @@
             position: 'topLeft',
             icons: emojiIcons
         });
+
+        function parseEmoji(htmlContent) {
+            var path,
+                alias,
+                pattern,
+                regexp,
+                revertAlias = {};
+            var result;
+            for (var i = 0; i < emojiIcons.length; i++) {
+                path = emojiIcons[i].path;
+                if (!path) {
+                    console.log('Path not config!');
+                    continue;
+                }
+                alias = emojiIcons[i].alias;
+                file = emojiIcons[i].file || '.jpg';
+                placeholder = emojiIcons[i].placeholder;
+                if (alias) {
+                    for (var attr in alias) {
+                        if (alias.hasOwnProperty(attr)) {
+                            revertAlias[alias[attr]] = attr;
+                        }
+                    }
+
+                    pattern = placeholder.replace(new RegExp('{alias}', 'gi'), '([\\s\\S]+?)');
+                    regexp = new RegExp(pattern, 'gm');
+                    result = htmlContent.replace(regexp, function ($0, $1) {
+                        var n = revertAlias[$1];
+                        if (n) {
+                            return '<img class="emoji_icon" src="' + path + n + file + '"/>';
+                        } else {
+                            return $0;
+                        }
+                    });
+                } else {
+                    pattern = placeholder.replace(new RegExp('{alias}', 'gi'), '(\\d+?)');
+                    result = htmlContent.replace(new RegExp(pattern, 'gm'), '<img class="emoji_icon" style="width:20px;height:20px;" src="' + path + '$1' + file + '"/>');
+                }
+            }
+            return result;
+        }
     </script>
 </body>
 </html>
