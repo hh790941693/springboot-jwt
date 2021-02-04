@@ -428,7 +428,8 @@
         }
 
         /**
-         * 发送聊天消息
+         * 发送聊天消息.
+         * 用户发送的聊天内容(支持表情)
          *
          * @param roomName 房间名称
          * @param userFrom 发送人
@@ -453,7 +454,8 @@
         }
 
         /**
-         * 发送通知消息
+         * 发送通知消息.
+         * 聊天窗口上面滚动的消息
          *
          * @param roomName 房间名称
          * @param msg 通知内容
@@ -473,11 +475,12 @@
         }
 
         /**
-         * 发送状态消息
+         * 发送状态消息.
+         * 比如：用户输入状态等消息
          *
          * @param roomName 房间名称
          * @param userFrom 发送人
-         * @param msg      状态内容
+         * @param msg      状态内容。格式:input:0 或者input:1
          */
         function sendStatusToServer(roomName, userFrom, msg) {
             if (webSocket != null) {
