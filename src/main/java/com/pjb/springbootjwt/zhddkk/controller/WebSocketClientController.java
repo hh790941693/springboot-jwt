@@ -243,9 +243,11 @@ public class WebSocketClientController extends AdminBaseController {
         woi.setCurrentOnlineUserInfo(currentOnlineUserInfo);
 
         // 房间用户列表
-        List<String> roomUserList = ZhddWebSocket.getRoomClientsUserList(roomName);
-        woi.setRoomUserList(roomUserList);
-        woi.setRoomUserCount(roomUserList.size());
+        List<String> roomUserNameList = ZhddWebSocket.getRoomClientsUserList(roomName);
+        woi.setRoomUserNameList(roomUserNameList);
+        List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_name", roomUserNameList));
+        woi.setRoomUserProfileList(roomUserProfileList);
+        woi.setRoomUserCount(roomUserNameList.size());
 
         return Result.ok(woi);
     }

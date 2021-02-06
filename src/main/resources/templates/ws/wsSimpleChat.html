@@ -27,6 +27,20 @@
             max-height: 400px;
         }
 
+        #leftChatDiv {
+            width:100%;
+            height:100%;
+            float: left;
+        }
+        
+        #rightUserListDiv {
+            display: none;
+            width:19%;
+            height: 100%;
+            float: right;
+            border-left: 1px solid grey;
+        }
+        
         #headerDiv {
             width: 100%;
             height: 30px;
@@ -71,84 +85,120 @@
 </head>
 <body>
     <div id="mainDiv">
-        <!--头部按钮组-->
-        <div id="headerDiv">
-            <div align="left" style="width:30%;height:100%;float:left;font-size: 20px;color: white;">
-                <!--房间号-->
-                <span class="fa fa-home"></span>
-                <span style="height:100%;color: yellow;display:inline-block;margin-right: 10px;">{{roomName}}</span>
-
-                <!--聊天室人数-->
-                <span class="fa fa-user"></span>
-                <span id="onlineNum">{{roomUserCount}}</span>&nbsp;&nbsp;
+        <div id="leftChatDiv">
+            <!--头部按钮组-->
+            <div id="headerDiv">
+                <div align="left" style="width:30%;height:100%;float:left;font-size: 20px;color: white;">
+                    <!--房间号-->
+                    <span class="fa fa-home"></span>
+                    <span style="height:100%;color: yellow;display:inline-block;margin-right: 10px;">{{roomName}}</span>
+    
+                    <!--聊天室人数-->
+                    <span class="fa fa-user"></span>
+                    <span id="onlineNum">{{roomUserCount}}</span>&nbsp;&nbsp;
+                </div>
+    
+                <!--用户输入状态提示语-->
+                <div style="width:20%;height:100%;float:left;color:white;text-align: center;">
+                    <span id="inputStatusSpan"></span>
+                </div>
+    
+                <!--按钮组-->
+                <div align="right" style="width:46%;height:100%;float:right;margin-right:3px;">
+                    <th:block th:if="${session.sessionInfo.roleName == '管理员'}">
+                        <button class='label label-info' th:title="发布通知" @click="sendNotice()">
+                            <span class="glyphicon glyphicon-comment"></span>
+                        </button>&nbsp;
+                    </th:block>
+                    <button id="refreashConlineCount" class='label label-info' th:title="刷新" @click="getOnlineInfo()">
+                        <span class="glyphicon glyphicon-refresh"></span>
+                    </button>&nbsp;
+                    <button class='label label-success' th:title="切换背景" @click="changeBackgroundImage()">
+                            <span class="glyphicon glyphicon-picture"></span>
+                    </button>&nbsp;
+                    <button class='label label-danger' th:title="清屏" @click="clearScreen()">
+                        <span class="glyphicon glyphicon-ban-circle"></span>
+                    </button>&nbsp;
+                    <button id="btnReconnect" class='label label-primary' type="button" th:title="重新连接"
+                            onclick="loginServer()">
+                        <span class="glyphicon glyphicon-retweet"></span>
+                    </button>&nbsp;
+                    <button id="btnShowUserList" class='label label-primary' type="button" th:title="用户列表"
+                            @click="showUserList()">
+                        <span class="fa fa-users"></span>
+                    </button>
+                </div>
             </div>
-
-            <!--用户输入状态提示语-->
-            <div style="width:30%;height:100%;float:left;color:white;text-align: center;">
-                <span id="inputStatusSpan"></span>
+            
+            <!-- 滚动消息通知栏(默认隐藏) -->
+            <div id="noticeDiv">
+                <marquee direction="right" scrolldelay="10" scrollamount="8" onMouseOver="this.stop()" onMouseOut="this.start()">
+                    <span id="noticeSpan"></span>
+                </marquee>
             </div>
-
-            <!--按钮组-->
-            <div align="right" style="width:38%;height:100%;float:right;margin-right:3px;">
-                <th:block th:if="${session.sessionInfo.roleName == '管理员'}">
-                    <button class='label label-info' th:title="发布通知" @click="sendNotice()">
-                        <span class="glyphicon glyphicon-comment"></span>
-                    </button>&nbsp;&nbsp;
-                </th:block>
-                <button id="refreashConlineCount" class='label label-info' th:title="刷新" @click="getOnlineInfo()">
-                    <span class="glyphicon glyphicon-refresh"></span>
-                </button>&nbsp;&nbsp;
-                <button class='label label-success' th:title="切换背景" @click="changeBackgroundImage()">
-                        <span class="glyphicon glyphicon-picture"></span>
-                </button>&nbsp;&nbsp;
-                <button class='label label-danger' th:title="清屏" @click="clearScreen()">
-                    <span class="glyphicon glyphicon-ban-circle"></span>
-                </button>&nbsp;&nbsp;
-                <button id="btnReconnect" class='label label-primary' type="button" th:title="重新连接"
-                        onclick="loginServer()">
-                    <span class="glyphicon glyphicon-retweet"></span>
-                </button>
+    
+          <!--中间聊天内容框-->
+            <div id="msgFromServerDiv" align="left">
+            </div>
+            
+          <!--下方聊天内容输入、表情、发送-->
+            <div id="footerDiv" align="left">
+                <div style="height:25px;">
+                    <!--表情按钮-->
+                    <img id="emojiBtn" style="width:25px;height:100%;float:left;border:1px solid grey;background-color: white;">
+    
+                    <!--选择@对象-->
+                    <select id="selectUser" style="width:47%;height:100%;float:left;">
+                        <option value=""></option>
+                        <option v-for="row in roomUserNameList" :value="row">
+                            {{row}}
+                        </option>
+                    </select>
+                  <!--选择常用语-->
+                    <select id="selectCyy" style="width:calc(53% - 25px);height:100%;float:left;" @change="selectText">
+                        <option v-for="cyy in cyyList">
+                            {{cyy.name}}
+                        </option>
+                    </select>
+                </div>
+              <!--输入框、发送按钮-->
+                <div style="height:35px;">
+                    <!--输入框-->
+                    <input id="sendMsgInput" autocomplete="off"
+                           style="width:69%;float:left;height:100%;border:1px solid grey" placeholder="请输入聊天内容<按Enter键发送>">
+                    <!--发送按钮-->
+                    <button id="sendBtn" type="button" class='btn btn-sm btn-success' style="width:31%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
+                </div>
             </div>
         </div>
         
-        <!-- 滚动消息通知栏(默认隐藏) -->
-        <div id="noticeDiv">
-            <marquee direction="right" scrolldelay="10" scrollamount="8" onMouseOver="this.stop()" onMouseOut="this.start()">
-                <span id="noticeSpan"></span>
-            </marquee>
-        </div>
-
-      <!--中间聊天内容框-->
-        <div id="msgFromServerDiv" align="left">
-        </div>
-        
-      <!--下方聊天内容输入、表情、发送-->
-        <div id="footerDiv" align="left">
-            <div style="height:25px;">
-                <!--表情按钮-->
-                <img id="emojiBtn" style="width:25px;height:100%;float:left;border:1px solid grey;background-color: white;">
-
-                <!--选择@对象-->
-                <select id="selectUser" style="width:47%;height:100%;float:left;">
-                    <option value=""></option>
-                    <option v-for="row in roomUserList" :value="row">
-                        {{row}}
-                    </option>
-                </select>
-              <!--选择常用语-->
-                <select id="selectCyy" style="width:calc(53% - 25px);height:100%;float:left;" @change="selectText">
-                    <option v-for="cyy in cyyList">
-                        {{cyy.name}}
-                    </option>
-                </select>
+        <div id="rightUserListDiv">
+            <div style="width:100%;height:29px;background-color: #365e71;color:white;">
+                <span>在线用户</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span>{{roomUserCount}}</span>
             </div>
-          <!--输入框、发送按钮-->
-            <div style="height:35px;">
-                <!--输入框-->
-                <input id="sendMsgInput" autocomplete="off"
-                       style="width:69%;float:left;height:100%;border:1px solid grey" placeholder="请输入聊天内容<按Enter键发送>">
-                <!--发送按钮-->
-                <button id="sendBtn" type="button" class='btn btn-sm btn-success' style="width:31%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
+            <div style="width:100%;height:calc(100% - 25px);overflow-y: scroll;background-color: white;padding:3px;">
+                <div v-for="row in roomUserProfileList" style="width:100%;height:32px;margin-bottom: 8px;">
+                    <div style="width:30px;height:30px;float: left;">
+                        <img :src="row.img" width="100%" height="100%"
+                             onerror="this.onerror='';this.src=$.ws.errorImgUrl">
+                    </div>
+                    <div style="width:calc(100% - 35px);height:32px;float:left;margin-left: 5px;overflow-y: hidden;">
+                        <div>
+                            <template v-if="row.state == '0'">
+                                <p style="font-size: 14px;color:grey;cursor: pointer;"
+                                   @click="showPersonInfo(row.userName)">{{row.userName}}</p>
+                            </template>
+                            <template v-else>
+                                <p style="font-size: 14px;color: blue;cursor: pointer;"
+                                   @click="showPersonInfo(row.userName)">{{row.userName}}</p>
+                            </template>
+                        </div>
+                        <div>
+                            <span style="font-size: 12px;">{{row.realName}}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -173,7 +223,8 @@
             el: '#mainDiv',
             data: {
                 roomName: roomName,
-                roomUserList: {},
+                roomUserNameList: {},
+                roomUserProfileList:{},
                 roomUserCount:0,
                 cyyList: {},
                 loginUser: sessionUser,
@@ -214,7 +265,8 @@
                                 return;
                             }
                             var jsonObj = result.data;
-                            app.roomUserList = jsonObj.roomUserList;
+                            app.roomUserNameList = jsonObj.roomUserNameList;
+                            app.roomUserProfileList = jsonObj.roomUserProfileList;
                             app.cyyList = jsonObj.commonMap.cyy;
                             app.roomUserCount = jsonObj.roomUserCount;
                         }
@@ -252,6 +304,17 @@
                         }
                     });
                 },
+                showUserList: function () {
+                    $("#rightUserListDiv").toggle();
+                    var rdisp = $("#rightUserListDiv").css("display");
+                    var rwidth = $("#rightUserListDiv").css("width");
+                    if (rdisp == "block") {
+                        $("#leftChatDiv").css("width", "calc(100% - "+rwidth+")");
+                    } else {
+                        $("#leftChatDiv").css("width", "100%");
+                    }
+                    
+                }
             },
             created: function (e) {
                 this.getOnlineInfo();

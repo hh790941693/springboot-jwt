@@ -1,6 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.entity;
 
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
+import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import lombok.Data;
 import java.util.List;
@@ -30,7 +31,9 @@ public class WsOnlineInfo {
     private Map<String, List<WsCommonDO>> commonMap;
 
     // 房间用户列表
-    private List<String> roomUserList;
+    private List<String> roomUserNameList;
+    // 房间用户详情列表
+    private List<WsUserProfileDO> roomUserProfileList;
     // 房间用户数
     private int roomUserCount = 0;
 }
