@@ -35,7 +35,7 @@
         
         #rightUserListDiv {
             display: none;
-            width:19%;
+            width: calc(20% - 1px);
             height: 100%;
             float: right;
             border-left: 1px solid grey;
@@ -88,7 +88,7 @@
         <div id="leftChatDiv">
             <!--头部按钮组-->
             <div id="headerDiv">
-                <div align="left" style="width:30%;height:100%;float:left;font-size: 20px;color: white;">
+                <div align="left" style="width:25%;height:100%;float:left;font-size: 20px;color: white;">
                     <!--房间号-->
                     <span class="fa fa-home"></span>
                     <span style="height:100%;color: yellow;display:inline-block;margin-right: 10px;">{{roomName}}</span>
@@ -104,7 +104,7 @@
                 </div>
     
                 <!--按钮组-->
-                <div align="right" style="width:46%;height:100%;float:right;margin-right:3px;">
+                <div align="right" style="width:48%;height:100%;float:right;margin-right:3px;">
                     <th:block th:if="${session.sessionInfo.roleName == '管理员'}">
                         <button class='label label-info' th:title="发布通知" @click="sendNotice()">
                             <span class="glyphicon glyphicon-comment"></span>
@@ -306,9 +306,9 @@
                 showUserList: function () {
                     $("#rightUserListDiv").toggle();
                     var rdisp = $("#rightUserListDiv").css("display");
-                    var rwidth = $("#rightUserListDiv").css("width");
                     if (rdisp == "block") {
-                        $("#leftChatDiv").css("width", "calc(100% - "+rwidth+")");
+                        $("#leftChatDiv").css("width", "80%");
+                        //$("#rightUserListDiv").css("width", "calc(20% - 1px)");
                     } else {
                         $("#leftChatDiv").css("width", "100%");
                     }
