@@ -150,7 +150,7 @@
                     <!--选择@对象-->
                     <select id="selectUser" style="width:47%;height:100%;float:left;">
                         <option value=""></option>
-                        <option v-for="row in roomUserProfileList" :value="row">
+                        <option v-for="row in roomUserProfileList" :key="row.userName" :value="row.userName" :disabled="row.userName == sessionUser">
                             {{row.userName}}
                         </option>
                     </select>
