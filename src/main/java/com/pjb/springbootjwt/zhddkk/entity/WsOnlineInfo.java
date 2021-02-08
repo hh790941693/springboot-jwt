@@ -30,8 +30,6 @@ public class WsOnlineInfo {
     // 敏感词、脏话、常用语、注册问题
     private Map<String, List<WsCommonDO>> commonMap;
 
-    // 房间用户列表
-    private List<String> roomUserNameList;
     // 房间用户详情列表
     private List<WsUserProfileDO> roomUserProfileList;
     // 房间用户数

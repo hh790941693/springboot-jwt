@@ -150,8 +150,8 @@
                     <!--选择@对象-->
                     <select id="selectUser" style="width:47%;height:100%;float:left;">
                         <option value=""></option>
-                        <option v-for="row in roomUserNameList" :value="row">
-                            {{row}}
+                        <option v-for="row in roomUserProfileList" :value="row">
+                            {{row.userName}}
                         </option>
                     </select>
                   <!--选择常用语-->
