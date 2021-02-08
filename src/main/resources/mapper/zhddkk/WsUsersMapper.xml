@@ -27,7 +27,7 @@
         LEFT JOIN
             ws_user_profile t3 ON t3.user_id=t2.id
         <where>
-            <if test="userId != null and userId != ''">
+            <if test="@Ognl@isNotEmpty(userId)">
                 t1.uid=${userId}
             </if>
         </where>
