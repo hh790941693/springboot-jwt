@@ -6,9 +6,11 @@ import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.constants.ChatMsgTypeEnum;
 import com.pjb.springbootjwt.zhddkk.domain.WsChatlogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
+import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
 import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
+import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import java.io.IOException;
@@ -66,6 +68,8 @@ public class ZhddWebSocket {
     public static WsChatlogService wsChatlogService;
 
     public static WsCommonService wsCommonService;
+
+    public static WsUserProfileService wsUserProfileService;
 
     /**
      * 转发消息.
@@ -346,8 +350,10 @@ public class ZhddWebSocket {
     // 获取聊天室在线信息
     public static synchronized Map<String, Object> getRoomOnlineInfo (String roomName) {
         Map<String, Object> map = new HashMap<>();
-        map.put("count", getRoomOnLineCount(roomName));
-        map.put("userList", getRoomClientsUserList(roomName));
+        map.put("roomCount", getRoomOnLineCount(roomName));
+        List<String> roomUserNameList = getRoomClientsUserList(roomName);
+        List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_name", roomUserNameList));
+        map.put("userProfileList", roomUserProfileList);
 
         return map;
     }

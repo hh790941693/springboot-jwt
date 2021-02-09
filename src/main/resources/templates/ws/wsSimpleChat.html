@@ -222,7 +222,6 @@
             el: '#mainDiv',
             data: {
                 roomName: roomName,
-                roomUserNameList: {},
                 roomUserProfileList:{},
                 roomUserCount:0,
                 cyyList: {},
@@ -264,7 +263,6 @@
                                 return;
                             }
                             var jsonObj = result.data;
-                            app.roomUserNameList = jsonObj.roomUserNameList;
                             app.roomUserProfileList = jsonObj.roomUserProfileList;
                             app.cyyList = jsonObj.commonMap.cyy;
                             app.roomUserCount = jsonObj.roomUserCount;
@@ -484,8 +482,8 @@
                 // 广播消息
                 updateChatMsgWithColor(msg, "green", 10);
                 // 更新在线人数等信息
-                app.roomUserCount = extendMap.count;
-                app.roomUserList = extendMap.userList;
+                app.roomUserCount = extendMap.roomCount;
+                app.roomUserProfileList = extendMap.userProfileList;
                 return;
             }
 

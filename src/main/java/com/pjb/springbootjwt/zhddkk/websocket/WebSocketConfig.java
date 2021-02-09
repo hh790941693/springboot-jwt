@@ -2,6 +2,7 @@ package com.pjb.springbootjwt.zhddkk.websocket;
 
 import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
 import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
+import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -54,5 +55,10 @@ public class WebSocketConfig {
     @Autowired
     public void setWsCommonService(WsCommonService wsCommonService) {
         ZhddWebSocket.wsCommonService = wsCommonService;
+    }
+
+    @Autowired
+    public void setWsCommonService(WsUserProfileService wsUserProfileService) {
+        ZhddWebSocket.wsUserProfileService = wsUserProfileService;
     }
 }
