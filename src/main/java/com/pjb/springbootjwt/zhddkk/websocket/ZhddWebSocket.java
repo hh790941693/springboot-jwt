@@ -306,11 +306,6 @@ public class ZhddWebSocket {
             Map<String, Session> userMap = clientsMap.get(roomName);
             if (userMap.containsKey(user)) {
                 userMap.remove(user);
-                try {
-                    userMap.get(user).close();
-                } catch (Exception e) {
-                    // do nothing
-                }
             }
         }
     }
@@ -331,11 +326,6 @@ public class ZhddWebSocket {
             Map<String, Session> roomMap = entry.getValue();
             if (roomMap.containsKey(user)) {
                 roomMap.remove(user);
-                try {
-                    roomMap.get(user).close();
-                } catch (Exception e) {
-                    continue;
-                }
             }
         }
     }
