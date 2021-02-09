@@ -43,10 +43,10 @@ public class ZhddWebSocket {
     private static final SimpleDateFormat SDF_HHMMSS = new SimpleDateFormat("HH:mm:ss");
 
     // <房间号, <用戶名,用户session>>
-    private static Map<String, Map<String, Session>> clientsMap = new ConcurrentHashMap();
+    private static final Map<String, Map<String, Session>> clientsMap = new ConcurrentHashMap();
 
     // <房间号, List<用户名>>
-    private static Map<String, List<String>> roomInputingUserMap = new ConcurrentHashMap();
+    private static final  Map<String, List<String>> roomInputingUserMap = new ConcurrentHashMap();
 
     private Session session;
 
@@ -76,10 +76,9 @@ public class ZhddWebSocket {
      * @param message 消息 {"roomName":"002","from":"admin","to":"无名1","msgTypeId":2,"msgTypeDesc":"在线消息","msg":"hello"}
      * @param session 会话  msgTypeId: 1:广播消息  2:在线消息  4.通知消息  5.状态消息
      * @throws IOException 异常
-     * @throws InterruptedException 异常
      */
     @OnMessage
-    public void onMessage(String message, Session session) throws IOException, InterruptedException {
+    public void onMessage(String message, Session session) throws IOException {
         if (StringUtils.isBlank(message) || this.user == null || this.session == null) {
             return;
         }
@@ -93,7 +92,7 @@ public class ZhddWebSocket {
         String msgFrom = jsonObject.getString("from");
         String msgTo = jsonObject.getString("to");
         String msgTypeId = jsonObject.getString("msgTypeId");
-        String msgTypeDesc = jsonObject.getString("msgTypeDesc");
+        //String msgTypeDesc = jsonObject.getString("msgTypeDesc");
         String msgStr = jsonObject.getString("msg");
 
         //对消息进行敏感字、脏话进行处理
@@ -108,7 +107,7 @@ public class ZhddWebSocket {
         if (msgTypeId.equals(ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId())) {
             // 系统消息(暂时没用到)
             ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), msgFrom, msgTo, msg, new HashMap<>());
-            sendToOne(roomName, msgFrom, chatBean);
+            session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
         } else if (msgTypeId.equals(ChatMsgTypeEnum.CHAT_ONLINE_MSG.getMsgTypeId())){
             // 聊天消息(群发)
             // 发送方信息
@@ -117,13 +116,13 @@ public class ZhddWebSocket {
                 // 禁用
                 if (wsUsersDO.getEnable().equals("0")) {
                     ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), "", "", "你的账号已被禁用了!", new HashMap<>());
-                    sendToOne(roomName, msgFrom, chatBean);
+                    session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     return;
                 }
                 // 禁言
                 if (wsUsersDO.getSpeak().equals("0")) {
                     ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), "", "", "你已被禁言了!", new HashMap<>());
-                    sendToOne(roomName, msgFrom, chatBean);
+                    session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                     return;
                 }
             }
@@ -153,9 +152,7 @@ public class ZhddWebSocket {
                         roomInputingUserList.add(0, msgFrom);
                     }
                 } else {
-                    if (roomInputingUserList.contains(msgFrom)) {
-                        roomInputingUserList.remove(msgFrom);
-                    }
+                    roomInputingUserList.remove(msgFrom);
                 }
                 roomInputingUserMap.put(roomName, roomInputingUserList);
                 Map<String, Object> extendMap = new HashMap<>();
@@ -235,7 +232,7 @@ public class ZhddWebSocket {
 
                 try {
                     ChatMessageBean offlineChatBean = new ChatMessageBean(time, ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getMsgTypeId(), ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getMsgTypeDesc(), wcl.getUser(), "我", UnicodeUtil.unicode2String(wcl.getMsg()), extendMap);
-                    sendToOne(this.roomName, this.user, offlineChatBean);
+                    this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(offlineChatBean));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -280,6 +277,7 @@ public class ZhddWebSocket {
     @OnError
     public void onError(Throwable throwable) {
         logger.info("用户{}: 进入聊天室:{} 失败", this.user, this.roomName);
+        throwable.printStackTrace();
         removeRoomUser(this.roomName, this.user);
         removeRoomInputing(this.roomName, this.user);
     }
@@ -300,9 +298,7 @@ public class ZhddWebSocket {
     public static synchronized void removeRoomUser(String roomName, String user) {
         if (clientsMap.containsKey(roomName)) {
             Map<String, Session> userMap = clientsMap.get(roomName);
-            if (userMap.containsKey(user)) {
-                userMap.remove(user);
-            }
+            userMap.remove(user);
         }
     }
 
@@ -310,9 +306,7 @@ public class ZhddWebSocket {
     public static synchronized void removeRoomInputing(String roomName, String user) {
         if (roomInputingUserMap.containsKey(roomName)) {
             List<String> inputingUserList = roomInputingUserMap.get(roomName);
-            if (inputingUserList.contains(user)) {
-                inputingUserList.remove(user);
-            }
+            inputingUserList.remove(user);
         }
     }
 
@@ -320,17 +314,14 @@ public class ZhddWebSocket {
     public static void removeUserFromAllRoom(String user) {
         for (Entry<String, Map<String, Session>> entry : clientsMap.entrySet()) {
             Map<String, Session> roomMap = entry.getValue();
-            if (roomMap.containsKey(user)) {
-                roomMap.remove(user);
-            }
+            roomMap.remove(user);
         }
     }
 
     // 获取聊天室的人数
     public static synchronized int getRoomOnLineCount(String roomName) {
         Map<String, Session> map = getRoomClientsSessionMap(roomName);
-        int count = map != null ? map.size() : 0;
-        return count;
+        return map != null ? map.size() : 0;
     }
 
     // 获取聊天室在线信息
@@ -390,13 +381,13 @@ public class ZhddWebSocket {
      * @param roomName 房间名称
      * @param chatMessageBean 消息对象
      */
-    public static void sendToAll(String roomName, ChatMessageBean chatMessageBean) throws IOException {
+    public static void sendToAll(String roomName, ChatMessageBean chatMessageBean) {
         Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             try {
                 entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatMessageBean));
             } catch (Exception e) {
-                continue;
+                e.printStackTrace();
             }
         }
     }
