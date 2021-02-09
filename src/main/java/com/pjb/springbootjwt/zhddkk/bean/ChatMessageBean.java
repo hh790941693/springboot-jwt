@@ -12,9 +12,9 @@ public class ChatMessageBean {
     // 时间
     private String curTime;
     // 消息类型id
-    private String typeId;
+    private String msgTypeId;
     // 消息类型
-    private String typeDesc;
+    private String msgTypeDesc;
     // 发送方
     private String from;
     // 接收方
@@ -27,17 +27,17 @@ public class ChatMessageBean {
     /**
      * 构造方法.
      * @param curTime 当前时间
-     * @param typeId 消息类型
-     * @param typeDesc 类型描述
+     * @param msgTypeId 消息类型
+     * @param msgTypeDesc 类型描述
      * @param from 发起方
      * @param to 接收方
      * @param msg 消息
      */
-    public ChatMessageBean(String curTime, String typeId, String typeDesc, String from, String to, String msg) {
+    public ChatMessageBean(String curTime, String msgTypeId, String msgTypeDesc, String from, String to, String msg) {
         super();
         this.curTime = curTime;
-        this.typeId = typeId;
-        this.typeDesc = typeDesc;
+        this.msgTypeId = msgTypeId;
+        this.msgTypeDesc = msgTypeDesc;
         this.from = from;
         this.to = to;
         this.msg = msg;
@@ -46,18 +46,18 @@ public class ChatMessageBean {
     /**
      * 构造方法.
      * @param curTime 当前时间
-     * @param typeId 消息类型
-     * @param typeDesc 类型描述
+     * @param msgTypeId 消息类型
+     * @param msgTypeDesc 类型描述
      * @param from 发起方
      * @param to 接收方
      * @param msg 消息
      * @param extendMap 扩展参数
      */
-    public ChatMessageBean(String curTime, String typeId, String typeDesc, String from, String to, String msg, Map<String, Object> extendMap) {
+    public ChatMessageBean(String curTime, String msgTypeId, String msgTypeDesc, String from, String to, String msg, Map<String, Object> extendMap) {
         super();
         this.curTime = curTime;
-        this.typeId = typeId;
-        this.typeDesc = typeDesc;
+        this.msgTypeId = msgTypeId;
+        this.msgTypeDesc = msgTypeDesc;
         this.from = from;
         this.to = to;
         this.msg = msg;

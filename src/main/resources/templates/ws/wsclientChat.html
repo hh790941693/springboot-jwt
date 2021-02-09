@@ -287,8 +287,6 @@
                     parent.chatRecord = parent.chatRecord + msg;
                     textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
                 } else {
-                    var htmlData = "<p style='color:blue;font-size:10px;line-height:14px;'>[" + getCurrentTime() + "] [在线消息]  [我 -->" + toUser + "] " + msgToServer + "</p>";
-                    updateChatMsg(htmlData);
                     sendMsgToServer(parent.roomName, sessionUser, toUser, msgToServer);
                     $("#msgToServer").val("");
                 }
@@ -302,8 +300,8 @@
         function sendMsgToServer(roomName, from, to, msg) {
             if (parent.connectStatus == "1" && parent.webSocket != null) {
                 var toServerMsgObj = {};
-                toServerMsgObj.typeId = 2;
-                toServerMsgObj.typeDesc = "在线消息";
+                toServerMsgObj.msgTypeId = 2;
+                toServerMsgObj.msgTypeDesc = "在线消息";
                 toServerMsgObj.roomName = roomName;
                 toServerMsgObj.from = from;
                 toServerMsgObj.to = to;

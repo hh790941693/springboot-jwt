@@ -48,14 +48,19 @@ public class ZhddWebSocket {
 
     private Session session;
 
+    // 房间号
     private String roomName;
 
+    // 用户
     private String user;
 
+    // 密码
     private String pass;
 
+    // 客户端类型
     private String userAgent;
 
+    // 通过WebSocketConfig注入
     public static WsUsersService wsUsersService;
 
     public static WsChatlogService wsChatlogService;
@@ -75,16 +80,16 @@ public class ZhddWebSocket {
             return;
         }
 
+        // roomName:002, from:admin, to:无名1, msgTypeId:2, msgTypeDesc:在线消息,msg:hello
+        // typeId: 1:广播消息  2:在线消息  4.通知消息  5.状态消息
         JSONObject jsonObject = JsonUtil.jsonstr2Jsonobject(message);
-        //{time:2019-01-03 16:00:05,typeId:2,typeDesc:在线消息,from:admin,to:无名1,msg:hello}
-        //1:广播消息  2:在线消息  4.通知消息  5.状态消息
 
         if (message.contains("msg")) {
             String roomName = jsonObject.getString("roomName");
             String msgFrom = jsonObject.getString("from");
             String msgTo = jsonObject.getString("to");
-            String typeId = jsonObject.getString("typeId");
-            String typeDesc = jsonObject.getString("typeDesc");
+            String msgTypeId = jsonObject.getString("msgTypeId");
+            String msgTypeDesc = jsonObject.getString("msgTypeDesc");
             String msgStr = jsonObject.getString("msg");
 
             //对消息进行敏感字、脏话进行处理
@@ -96,24 +101,24 @@ public class ZhddWebSocket {
             }
 
             String curTime = SDF_HHMMSS.format(new Date());
-            if (typeId.equals(ChatMsgTypeEnum.SYSTEM_MSG.getTypeId())) {
+            if (msgTypeId.equals(ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId())) {
                 // 系统消息(暂时没用到)
-                ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, ChatMsgTypeEnum.SYSTEM_MSG.getDesc(), msgFrom, msgTo, msg, new HashMap<>());
+                ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), msgFrom, msgTo, msg, new HashMap<>());
                 sendToOne(roomName, msgFrom, chatBean);
-            } else if (typeId.equals(ChatMsgTypeEnum.CHAT_ONLINE_MSG.getTypeId())){
+            } else if (msgTypeId.equals(ChatMsgTypeEnum.CHAT_ONLINE_MSG.getMsgTypeId())){
                 // 聊天消息(群发)
                 // 发送方信息
                 WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", msgFrom));
                 if (null != wsUsersDO) {
                     // 禁用
                     if (wsUsersDO.getEnable().equals("0")) {
-                        ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getDesc(), "", "", "你的账号已被禁用了!", new HashMap<>());
+                        ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), "", "", "你的账号已被禁用了!", new HashMap<>());
                         sendToOne(roomName, msgFrom, chatBean);
                         return;
                     }
                     // 禁言
                     if (wsUsersDO.getSpeak().equals("0")) {
-                        ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getDesc(), "", "", "你已被禁言了!", new HashMap<>());
+                        ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), "", "", "你已被禁言了!", new HashMap<>());
                         sendToOne(roomName, msgFrom, chatBean);
                         return;
                     }
@@ -122,17 +127,17 @@ public class ZhddWebSocket {
                 extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(msgFrom));
 
                 Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
-                ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, ChatMsgTypeEnum.CHAT_ONLINE_MSG.getDesc(), msgFrom, msgTo, msg, extendMap);
+                ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.CHAT_ONLINE_MSG.getMsgTypeDesc(), msgFrom, msgTo, msg, extendMap);
                 sendToAll(roomName, chatBean);
 
                 // 记录聊天日志
                 WsChatlogDO wcl1 = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, msgFrom, msgTo, UnicodeUtil.string2Unicode(msgStr),"");
                 wsChatlogService.insert(wcl1);
-            } else if (typeId.equals(ChatMsgTypeEnum.NOTICE_MSG.getTypeId())){
+            } else if (msgTypeId.equals(ChatMsgTypeEnum.NOTICE_MSG.getMsgTypeId())){
                 // 通知消息(群发)
-                ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, ChatMsgTypeEnum.NOTICE_MSG.getDesc(), "管理员", "", msg, new HashMap<>());
+                ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.NOTICE_MSG.getMsgTypeDesc(), "管理员", "", msg, new HashMap<>());
                 sendToAll(roomName, chatBean);
-            } else if (typeId.equals(ChatMsgTypeEnum.STATUS_MSG.getTypeId())){
+            } else if (msgTypeId.equals(ChatMsgTypeEnum.STATUS_MSG.getMsgTypeId())){
                 // 状态消息(群发)
                 if (msg.contains("input")) {
                     String inputStatus = msg.split(":")[1];
@@ -155,7 +160,7 @@ public class ZhddWebSocket {
                     Map<String, Object> extendMap = new HashMap<>();
                     extendMap.put("inputingUserList", roomInputingUserList);
 
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, typeId, ChatMsgTypeEnum.STATUS_MSG.getDesc(), msgFrom, "", msg, extendMap);
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.STATUS_MSG.getMsgTypeDesc(), msgFrom, "", msg, extendMap);
                     sendToAll(roomName, chatBean);
                 }
             }
@@ -198,15 +203,15 @@ public class ZhddWebSocket {
         logger.info(enterMsg);
 
         // 更新房间人员信息
-        addRoomUser(roomName, user);
+        addRoomUser(this.roomName, this.user);
 
         // 登录日志
-        WsChatlogDO loginLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, this.user, "", "进入了聊天室", this.userAgent);
+        WsChatlogDO loginLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), this.roomName, this.user, "", "进入了聊天室", this.userAgent);
         wsChatlogService.insert(loginLog);
 
         // 广播消息
         try {
-            ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), ChatMsgTypeEnum.SYSTEM_MSG.getTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getDesc(),
+            ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(),
                     "", "", enterMsg, getRoomOnlineInfo(this.roomName));
             sendToAll(roomName, chatBean);
         } catch (Exception e) {
@@ -214,8 +219,8 @@ public class ZhddWebSocket {
         }
 
         //获取离线日志
-        List<WsChatlogDO> chatLogHistoryList = wsChatlogService.selectList(new EntityWrapper<WsChatlogDO>().eq("room_name", roomName)
-                .eq("to_user", user)
+        List<WsChatlogDO> chatLogHistoryList = wsChatlogService.selectList(new EntityWrapper<WsChatlogDO>().eq("room_name", this.roomName)
+                .eq("to_user", this.user)
                 .gt("time", wsUsersDO.getLastLogoutTime()));
         if (null != chatLogHistoryList && chatLogHistoryList.size() > 0) {
             for (WsChatlogDO wcl : chatLogHistoryList) {
@@ -229,7 +234,7 @@ public class ZhddWebSocket {
                 extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(wcl.getUser()));
 
                 try {
-                    ChatMessageBean offlineChatBean = new ChatMessageBean(time, ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getTypeId(), ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getDesc(), wcl.getUser(), "我", UnicodeUtil.unicode2String(wcl.getMsg()), extendMap);
+                    ChatMessageBean offlineChatBean = new ChatMessageBean(time, ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getMsgTypeId(), ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getMsgTypeDesc(), wcl.getUser(), "我", UnicodeUtil.unicode2String(wcl.getMsg()), extendMap);
                     sendToOne(this.roomName, this.user, offlineChatBean);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -252,10 +257,10 @@ public class ZhddWebSocket {
         logger.info(leaveMsg);
 
         // 广播消息
-        ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), ChatMsgTypeEnum.SYSTEM_MSG.getTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getDesc(),
+        ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(),
                 "", "", leaveMsg, getRoomOnlineInfo(this.roomName));
         try {
-            sendToAll(roomName, chatBean);
+            sendToAll(this.roomName, chatBean);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -264,7 +269,7 @@ public class ZhddWebSocket {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", this.user));
         if (null != wsUsersDO) {
             // 记录登出日志
-            WsChatlogDO logoutLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, this.user, "", "离开了聊天室", "");
+            WsChatlogDO logoutLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), this.roomName, this.user, "", "离开了聊天室", "");
             wsChatlogService.insert(logoutLog);
         }
     }
@@ -275,7 +280,7 @@ public class ZhddWebSocket {
     @OnError
     public void onError(Throwable throwable) {
         logger.info("用户{}: 进入聊天室:{} 失败", this.user, this.roomName);
-        removeRoomUser(roomName, this.user);
+        removeRoomUser(this.roomName, this.user);
         removeRoomInputing(this.roomName, this.user);
     }
 

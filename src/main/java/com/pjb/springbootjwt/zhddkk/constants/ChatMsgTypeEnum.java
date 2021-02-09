@@ -11,36 +11,36 @@ public enum ChatMsgTypeEnum {
     NOTICE_MSG("通知消息", "4"),
     STATUS_MSG("状态消息", "5");
 
-    private String desc;
-    private String typeId;
+    private String msgTypeDesc;
+    private String msgTypeId;
 
-    ChatMsgTypeEnum(String desc, String typeId) {
-        this.typeId = typeId;
-        this.desc = desc;
+    ChatMsgTypeEnum(String msgTypeDesc, String msgTypeId) {
+        this.msgTypeId = msgTypeId;
+        this.msgTypeDesc = msgTypeDesc;
     }
 
-    public static String getDesc(String typeId) {
+    public static String getMsgTypeDesc(String msgTypeId) {
         for (ChatMsgTypeEnum c : ChatMsgTypeEnum.values()) {
-            if (c.getTypeId().equals(typeId)) {
-                return c.desc;
+            if (c.getMsgTypeId().equals(msgTypeId)) {
+                return c.msgTypeDesc;
             }
         }
         return "";
     }
 
-    public String getTypeId() {
-        return typeId;
+    public String getMsgTypeDesc() {
+        return msgTypeDesc;
     }
 
-    public void setTypeId(String typeId) {
-        this.typeId = typeId;
+    public void setMsgTypeDesc(String msgTypeDesc) {
+        this.msgTypeDesc = msgTypeDesc;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getMsgTypeId() {
+        return msgTypeId;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setMsgTypeId(String msgTypeId) {
+        this.msgTypeId = msgTypeId;
     }
 }
