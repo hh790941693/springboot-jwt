@@ -73,8 +73,8 @@ public class ZhddWebSocket {
 
     /**
      * 转发消息.
-     * @param message 消息
-     * @param session 会话
+     * @param message 消息 {"roomName":"002","from":"admin","to":"无名1","msgTypeId":2,"msgTypeDesc":"在线消息","msg":"hello"}
+     * @param session 会话  msgTypeId: 1:广播消息  2:在线消息  4.通知消息  5.状态消息
      * @throws IOException 异常
      * @throws InterruptedException 异常
      */
@@ -84,89 +84,85 @@ public class ZhddWebSocket {
             return;
         }
 
-        // roomName:002, from:admin, to:无名1, msgTypeId:2, msgTypeDesc:在线消息,msg:hello
-        // typeId: 1:广播消息  2:在线消息  4.通知消息  5.状态消息
+        if (!message.contains("msg")) {
+            return;
+        }
+
         JSONObject jsonObject = JsonUtil.jsonstr2Jsonobject(message);
+        String roomName = jsonObject.getString("roomName");
+        String msgFrom = jsonObject.getString("from");
+        String msgTo = jsonObject.getString("to");
+        String msgTypeId = jsonObject.getString("msgTypeId");
+        String msgTypeDesc = jsonObject.getString("msgTypeDesc");
+        String msgStr = jsonObject.getString("msg");
 
-        if (message.contains("msg")) {
-            String roomName = jsonObject.getString("roomName");
-            String msgFrom = jsonObject.getString("from");
-            String msgTo = jsonObject.getString("to");
-            String msgTypeId = jsonObject.getString("msgTypeId");
-            String msgTypeDesc = jsonObject.getString("msgTypeDesc");
-            String msgStr = jsonObject.getString("msg");
+        //对消息进行敏感字、脏话进行处理
+        String msg = msgStr;
+        List<WsCommonDO> commonList = CoreCache.getInstance().getCommonList();
+        List<WsCommonDO> allList = commonList.stream().filter(c->c.getType().equals("mgc") || c.getType().equals("zh")).collect(Collectors.toList());
+        for (WsCommonDO wc : allList) {
+            msg = msg.replaceAll(wc.getName(), "***");
+        }
 
-            //对消息进行敏感字、脏话进行处理
-            String msg = msgStr;
-            List<WsCommonDO> commonList = CoreCache.getInstance().getCommonList();
-            List<WsCommonDO> allList = commonList.stream().filter(c->c.getType().equals("mgc") || c.getType().equals("zh")).collect(Collectors.toList());
-            for (WsCommonDO wc : allList) {
-                msg = msg.replaceAll(wc.getName(), "***");
+        String curTime = SDF_HHMMSS.format(new Date());
+        if (msgTypeId.equals(ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId())) {
+            // 系统消息(暂时没用到)
+            ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), msgFrom, msgTo, msg, new HashMap<>());
+            sendToOne(roomName, msgFrom, chatBean);
+        } else if (msgTypeId.equals(ChatMsgTypeEnum.CHAT_ONLINE_MSG.getMsgTypeId())){
+            // 聊天消息(群发)
+            // 发送方信息
+            WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", msgFrom));
+            if (null != wsUsersDO) {
+                // 禁用
+                if (wsUsersDO.getEnable().equals("0")) {
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), "", "", "你的账号已被禁用了!", new HashMap<>());
+                    sendToOne(roomName, msgFrom, chatBean);
+                    return;
+                }
+                // 禁言
+                if (wsUsersDO.getSpeak().equals("0")) {
+                    ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), "", "", "你已被禁言了!", new HashMap<>());
+                    sendToOne(roomName, msgFrom, chatBean);
+                    return;
+                }
             }
+            Map<String, Object> extendMap = new HashMap<>();
+            extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(msgFrom));
+            ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.CHAT_ONLINE_MSG.getMsgTypeDesc(), msgFrom, msgTo, msg, extendMap);
+            sendToAll(roomName, chatBean);
 
-            String curTime = SDF_HHMMSS.format(new Date());
-            if (msgTypeId.equals(ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId())) {
-                // 系统消息(暂时没用到)
-                ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), msgFrom, msgTo, msg, new HashMap<>());
-                sendToOne(roomName, msgFrom, chatBean);
-            } else if (msgTypeId.equals(ChatMsgTypeEnum.CHAT_ONLINE_MSG.getMsgTypeId())){
-                // 聊天消息(群发)
-                // 发送方信息
-                WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", msgFrom));
-                if (null != wsUsersDO) {
-                    // 禁用
-                    if (wsUsersDO.getEnable().equals("0")) {
-                        ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), "", "", "你的账号已被禁用了!", new HashMap<>());
-                        sendToOne(roomName, msgFrom, chatBean);
-                        return;
+            // 记录聊天日志
+            WsChatlogDO wsChatlogDO = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, msgFrom, msgTo, UnicodeUtil.string2Unicode(msgStr),"");
+            wsChatlogService.insert(wsChatlogDO);
+        } else if (msgTypeId.equals(ChatMsgTypeEnum.NOTICE_MSG.getMsgTypeId())){
+            // 通知消息(群发)
+            ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.NOTICE_MSG.getMsgTypeDesc(), "管理员", "", msg, new HashMap<>());
+            sendToAll(roomName, chatBean);
+        } else if (msgTypeId.equals(ChatMsgTypeEnum.STATUS_MSG.getMsgTypeId())){
+            // 状态消息(群发)
+            if (msg.contains("input:")) {
+                String inputStatus = msg.split(":")[1];
+                List<String> roomInputingUserList = roomInputingUserMap.get(roomName);
+                if (null == roomInputingUserList) {
+                    roomInputingUserList = new ArrayList<>();
+                }
+
+                if (inputStatus.equals("1")) {
+                    if (!roomInputingUserList.contains(msgFrom)) {
+                        roomInputingUserList.add(0, msgFrom);
                     }
-                    // 禁言
-                    if (wsUsersDO.getSpeak().equals("0")) {
-                        ChatMessageBean chatBean = new ChatMessageBean(curTime, ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(), "", "", "你已被禁言了!", new HashMap<>());
-                        sendToOne(roomName, msgFrom, chatBean);
-                        return;
+                } else {
+                    if (roomInputingUserList.contains(msgFrom)) {
+                        roomInputingUserList.remove(msgFrom);
                     }
                 }
+                roomInputingUserMap.put(roomName, roomInputingUserList);
                 Map<String, Object> extendMap = new HashMap<>();
-                extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(msgFrom));
+                extendMap.put("inputingUserList", roomInputingUserList);
 
-                Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
-                ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.CHAT_ONLINE_MSG.getMsgTypeDesc(), msgFrom, msgTo, msg, extendMap);
+                ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.STATUS_MSG.getMsgTypeDesc(), msgFrom, "", msg, extendMap);
                 sendToAll(roomName, chatBean);
-
-                // 记录聊天日志
-                WsChatlogDO wcl1 = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, msgFrom, msgTo, UnicodeUtil.string2Unicode(msgStr),"");
-                wsChatlogService.insert(wcl1);
-            } else if (msgTypeId.equals(ChatMsgTypeEnum.NOTICE_MSG.getMsgTypeId())){
-                // 通知消息(群发)
-                ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.NOTICE_MSG.getMsgTypeDesc(), "管理员", "", msg, new HashMap<>());
-                sendToAll(roomName, chatBean);
-            } else if (msgTypeId.equals(ChatMsgTypeEnum.STATUS_MSG.getMsgTypeId())){
-                // 状态消息(群发)
-                if (msg.contains("input")) {
-                    String inputStatus = msg.split(":")[1];
-
-                    List<String> roomInputingUserList = roomInputingUserMap.get(roomName);
-                    if (null == roomInputingUserList) {
-                        roomInputingUserList = new ArrayList<>();
-                    }
-
-                    if (inputStatus.equals("1")) {
-                        if (!roomInputingUserList.contains(msgFrom)) {
-                            roomInputingUserList.add(0, msgFrom);
-                        }
-                    } else {
-                        if (roomInputingUserList.contains(msgFrom)) {
-                            roomInputingUserList.remove(msgFrom);
-                        }
-                    }
-                    roomInputingUserMap.put(roomName, roomInputingUserList);
-                    Map<String, Object> extendMap = new HashMap<>();
-                    extendMap.put("inputingUserList", roomInputingUserList);
-
-                    ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.STATUS_MSG.getMsgTypeDesc(), msgFrom, "", msg, extendMap);
-                    sendToAll(roomName, chatBean);
-                }
             }
         }
     }
