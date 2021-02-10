@@ -231,7 +231,7 @@ public class ZhddWebSocket {
                 extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(wcl.getUser()));
 
                 try {
-                    ChatMessageBean offlineChatBean = new ChatMessageBean(time, ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getMsgTypeId(), ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getMsgTypeDesc(), wcl.getUser(), "我", UnicodeUtil.unicode2String(wcl.getMsg()), extendMap);
+                    ChatMessageBean offlineChatBean = new ChatMessageBean(time, ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getMsgTypeId(), ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getMsgTypeDesc(), wcl.getUser(), wcl.getToUser(), UnicodeUtil.unicode2String(wcl.getMsg()), extendMap);
                     this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(offlineChatBean));
                 } catch (Exception e) {
                     e.printStackTrace();

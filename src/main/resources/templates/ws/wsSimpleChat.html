@@ -11,8 +11,6 @@
    <style>
        body {
            margin: 0;
-           background-image: url(../img/fengjing/fj1.jpg);
-           background-size: 100% 100%;
        }
        
         #mainDiv {
@@ -64,7 +62,8 @@
             height: calc(100% - 90px);
             overflow: auto;
             background-color: white;
-            padding: 3px;
+            background-image: url(../img/fengjing/fj1.jpg);
+            background-size: 100% 100%;
         }
        
        #footerDiv {
@@ -176,7 +175,7 @@
             <div style="width:100%;height:29px;line-height: 29px;padding-left: 5px;background-color: #365e71;color:white;">
                 <span>用户列表</span>
             </div>
-            <div style="width:100%;height:calc(100% - 25px);overflow-y: scroll;background-color: white;padding:3px;">
+            <div style="width:100%;height:calc(100% - 29px);overflow-y: scroll;background-color: white;padding:3px;">
                 <div v-for="row in roomUserProfileList" style="width:100%;height:32px;margin-bottom: 8px;">
                     <div style="width:30px;height:30px;float: left;">
                         <img :src="row.img" width="100%" height="100%"
@@ -284,7 +283,7 @@
                         app.imgIndex = 1;
                     }
                     var newPicUrl = "../img/fengjing/fj" + app.imgIndex + ".jpg";
-                    $("body").css("background-image", "url(" + newPicUrl + ")");
+                    $("#msgFromServerDiv").css("background-image", "url(" + newPicUrl + ")");
                 },
                 // 管理员发布通知消息(聊天窗口顶部滚动消息)
                 sendNotice: function () {
@@ -450,7 +449,7 @@
 
         //连接成功
         function onOpen(event) {
-            updateChatMsgWithColor("您已进入聊天室", "green", 10);
+            updateChatMsgWithColor("您已进入聊天室", "yellow", 10);
         }
 
         //连接失败
@@ -480,7 +479,7 @@
 
             if (msgTypeId == app.msgTypeMap.system.value) {
                 // 广播消息
-                updateChatMsgWithColor(msg, "green", 10);
+                updateChatMsgWithColor(msg, "yellow", 10);
                 // 更新在线人数等信息
                 app.roomUserCount = extendMap.roomCount;
                 app.roomUserProfileList = extendMap.userProfileList;
@@ -529,7 +528,7 @@
                     $("#noticeSpan").html("");
                     $("#noticeDiv").hide();
                 },8000);
-                updateChatMsgWithColor(msg, "green", 10);
+                updateChatMsgWithColor(msg, "yellow", 10);
                 return;
             }
 
@@ -543,13 +542,13 @@
                 defaultCss = "color:black;font-size:10px;line-height:20px;";
             } else if (msgFrom == sessionUser) {
                 // 我发出去的消息
-                defaultCss = "color:white;font-size:10px;line-height:20px;";
+                defaultCss = "color:black;font-size:10px;line-height:20px;";
             }
             
             var htmlDate = "";
             if (msgFrom == sessionUser) {
                 // 右侧--当前用户发出去的消息
-                htmlData = "<div style='width:60%;height:auto;margin-bottom: 10px;margin-left:40%;text-align:right;'>";
+                htmlData = "<div style='width:60%;height:auto;margin-bottom: 10px;margin-left:40%;padding-right: 3px;text-align:right;background-color: white;'>";
                 htmlData += "<p style='height:20px;'>";
                 
                 htmlData += "<span style='display: inline-block;margin-right: 10px;'>" + msgTypeDesc + "</span>";
@@ -559,7 +558,7 @@
                 htmlData += "</p>";
             } else {
                 // 左侧--其他用户发的消息
-                htmlData = "<div style='width:60%;height:auto;margin-bottom: 10px;'>";
+                htmlData = "<div style='width:60%;height:auto;margin-bottom: 10px;padding-left: 3px;background-color: white;'>";
                 htmlData += "<p style='height:20px;'>";
 
                 htmlData += "<img width='15' height='15' style='margin-right: 5px;' src='"+msgFromUserProfile.img+"'>";
@@ -572,7 +571,7 @@
             if (msgFrom == sessionUser) {
                 // 当前用户发出去的消息
                 // 底色蓝色，字体白色，@蓝色
-                htmlData += "<p style='height:auto;border-radius: 5px;padding: 0 5px;background-image: linear-gradient(to left, #0a8fb9 , rgba(38,44,185,0.58));'>";
+                htmlData += "<p style='height:auto;border-radius: 5px;'>";
                 if (msgTo != null && msgTo != "") {
                     htmlData += "<span style='color:blue;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
                 } else {
@@ -581,16 +580,17 @@
             } else {
                 // 别人发出去的消息
                 // 底色灰色，字体黑色，@蓝色
-                htmlData += "<p style='height:auto;border-radius: 5px;padding: 0 5px;background-image: linear-gradient(to right, #ddd , rgba(132,172,221,0.58));'>";
+                htmlData += "<p style='height:auto;border-radius: 5px;'>";
                 if (msgTo != null && msgTo != "") {
+                    var fontColor;
                     if (msgTo == sessionUser) {
                         // 别人@我的消息
-                        msgTo = "我";
-                        htmlData += "<span style='color:red;font-weight:bold;text-indent: 2em;display: inline-block;'>@" + msgTo + "</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
+                        fontColor = "red";
                     } else {
                         // 别人@其他人的消息
-                        htmlData += "<span style='color:blue;font-weight:bold;text-indent: 2em;display: inline-block;'>@" + msgTo + "</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
+                        fontColor = "blue";
                     }
+                    htmlData += "<span style='color:"+fontColor+";font-weight:bold;text-indent: 2em;display: inline-block;'>@" + msgTo + "</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
                 } else {
                     htmlData += "<span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
                 }
