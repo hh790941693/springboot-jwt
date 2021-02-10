@@ -11,6 +11,7 @@
    <style>
        body {
            margin: 0;
+           padding: 0;
        }
        
         #mainDiv {
@@ -32,10 +33,10 @@
         }
         
         #rightUserListDiv {
-            display: none;
             width: calc(20% - 1px);
             height: 100%;
             float: right;
+            display: none;
             border-left: 1px solid grey;
         }
         
@@ -68,7 +69,7 @@
        
        #footerDiv {
            width: 100%;
-           height:60px;
+           height: 60px;
        }
 
        .emoji_icon {
@@ -109,7 +110,7 @@
                             <span class="glyphicon glyphicon-comment"></span>
                         </button>&nbsp;
                     </th:block>
-                    <button id="refreashConlineCount" class='label label-info' th:title="刷新" @click="getOnlineInfo()">
+                    <button class='label label-info' th:title="刷新" @click="getOnlineInfo()">
                         <span class="glyphicon glyphicon-refresh"></span>
                     </button>&nbsp;
                     <button class='label label-success' th:title="切换背景" @click="changeBackgroundImage()">
@@ -118,12 +119,10 @@
                     <button class='label label-danger' th:title="清屏" @click="clearScreen()">
                         <span class="glyphicon glyphicon-ban-circle"></span>
                     </button>&nbsp;
-                    <button id="btnReconnect" class='label label-primary' type="button" th:title="重新连接"
-                            onclick="loginServer()">
+                    <button class='label label-primary' type="button" th:title="重新连接" onclick="loginServer()">
                         <span class="glyphicon glyphicon-retweet"></span>
                     </button>&nbsp;
-                    <button id="btnShowUserList" class='label label-primary' type="button" th:title="用户列表"
-                            @click="showUserList()">
+                    <button class='label label-primary' type="button" th:title="用户列表" @click="showUserList()">
                         <span class="fa fa-users"></span>
                     </button>
                 </div>
@@ -166,7 +165,7 @@
                     <input id="sendMsgInput" autocomplete="off"
                            style="width:69%;float:left;height:100%;border:1px solid grey" placeholder="请输入聊天内容<按Enter键发送>">
                     <!--发送按钮-->
-                    <button id="sendBtn" type="button" class='btn btn-sm btn-success' style="width:31%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
+                    <button type="button" class='btn btn-sm btn-success' style="width:31%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
                 </div>
             </div>
         </div>
