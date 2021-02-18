@@ -2,7 +2,7 @@
 # 腾讯云环境
 #
 server:
-  address: 10.0.4.14
+  address: 10.0.4.7
   port: 8100
   tomcat:
     basedir: ${temp.tomcat.path.linux}
@@ -42,11 +42,11 @@ upload:
     #    autoindex on;
     #  }
     #}
-    view-url: http://81.68.80.210:8101/
+    view-url: http://1.15.116.41:8101/
 
 #websocket聊天服务器配置
 websocket:
   config:
     #如果是内网 就配置成内网IP或者127.0.0.1;如果是外网，配置成公网IP
-    address: 81.68.80.210
+    address: 1.15.116.41
     port: ${server.port}
