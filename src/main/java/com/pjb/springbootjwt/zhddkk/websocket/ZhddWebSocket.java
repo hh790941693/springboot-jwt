@@ -284,8 +284,12 @@ public class ZhddWebSocket {
 
     // 聊天室加人
     public synchronized void addRoomUser(String roomName, String user) {
-        Map<String, Session> roomMap = clientsMap.putIfAbsent(roomName, new HashMap<String, Session>());
+        Map<String, Session> roomMap = new ConcurrentHashMap<>();
+        if (clientsMap.containsKey(roomName)) {
+            roomMap = clientsMap.get(roomName);
+        }
         roomMap.put(user, this.session);
+        clientsMap.put(roomName, roomMap);
     }
 
     // 聊天室减人
