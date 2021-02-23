@@ -271,8 +271,8 @@ public class LoginController {
         String webserverip = webSocketConfig.getAddress();
         String webserverPort = webSocketConfig.getPort();
         logger.info("webserverip:{} webserverPort:{}", webserverip, webserverPort);
-        configMap.put(CommonConstants.S_WEBSERVERIP, webserverip);
-        configMap.put(CommonConstants.S_WEBSERVERPORT, webserverPort);
+        //configMap.put(CommonConstants.S_WEBSERVERIP, webserverip);
+        //configMap.put(CommonConstants.S_WEBSERVERPORT, webserverPort);
 
         // 客户端浏览器类型
         String userAgent = request.getHeader("User-Agent");

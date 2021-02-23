@@ -9,9 +9,9 @@ import com.pjb.springbootjwt.zhddkk.bean.JsonResult;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
-import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
+import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -39,8 +39,6 @@ import org.springframework.web.bind.annotation.*;
 public class WebSocketServerController extends AdminBaseController {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketServerController.class);
 
-    private static final Map<String, String> configMap = WsInterceptor.getConfigMap();
-
     @Autowired
     private WsOperLogService wsOperLogService;
 
@@ -64,6 +62,9 @@ public class WebSocketServerController extends AdminBaseController {
 
     @Autowired
     private WsFileService wsFileService;
+
+    @Autowired
+    private WebSocketConfig webSocketConfig;
 
     /**
      * 让某用户下线.
@@ -163,8 +164,8 @@ public class WebSocketServerController extends AdminBaseController {
     @RequestMapping(value = "wsserverChartMonitor.page", method = RequestMethod.GET)
     public String chatLogMonitor(Model model) {
         logger.debug("访问wsserverChartMonitor.page");
-        model.addAttribute("webserverip", configMap.get(CommonConstants.S_WEBSERVERIP));
-        model.addAttribute("webserverport", configMap.get(CommonConstants.S_WEBSERVERPORT));
+        model.addAttribute("webserverip", webSocketConfig.getAddress());
+        model.addAttribute("webserverport", webSocketConfig.getPort());
         return "ws/wsserverChartMonitor";
     }
 
