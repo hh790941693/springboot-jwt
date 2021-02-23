@@ -12,6 +12,7 @@ import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
 import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -117,44 +118,26 @@ public class WsFileAccessCheckJob {
         String webserverip = webSocketConfig.getAddress();
         List<WsCircleDO> needBatchUpdateList = new ArrayList<>();
         for (WsCircleDO wsCircleDO : wsCircleList) {
-            String pic1 = wsCircleDO.getPic1();
-            if (StringUtils.isNotBlank(pic1) && pic1.contains("//") && pic1.contains(":")) {
-                String oldIp = pic1.substring(pic1.indexOf("//") + 2, pic1.lastIndexOf(":"));
-                if (!oldIp.equals(webserverip)) {
-                    String newUrl = pic1.replace(oldIp, webserverip);
-                    wsCircleDO.setPic1(newUrl);
-                    needBatchUpdateList.add(wsCircleDO);
+            List<String> picList = new ArrayList<>(Arrays.asList(wsCircleDO.getPic1(), wsCircleDO.getPic2(), wsCircleDO.getPic3(), wsCircleDO.getPic4()));
+            int picIndex = 0;
+            for (String pic : picList) {
+                if (StringUtils.isNotBlank(pic) && pic.contains("//") && pic.contains(":")) {
+                    String oldIp = pic.substring(pic.indexOf("//") + 2, pic.lastIndexOf(":"));
+                    if (!oldIp.equals(webserverip)) {
+                        String newUrl = pic.replace(oldIp, webserverip);
+                        if (picIndex == 0) {
+                            wsCircleDO.setPic1(newUrl);
+                        } else if (picIndex == 1) {
+                            wsCircleDO.setPic2(newUrl);
+                        } else if (picIndex == 2) {
+                            wsCircleDO.setPic3(newUrl);
+                        } else if (picIndex == 3) {
+                            wsCircleDO.setPic4(newUrl);
+                        }
+                        needBatchUpdateList.add(wsCircleDO);
+                    }
                 }
-            }
-
-            String pic2 = wsCircleDO.getPic2();
-            if (StringUtils.isNotBlank(pic2) && pic2.contains("//") && pic2.contains(":")) {
-                String oldIp = pic2.substring(pic2.indexOf("//") + 2, pic2.lastIndexOf(":"));
-                if (!oldIp.equals(webserverip)) {
-                    String newUrl = pic2.replace(oldIp, webserverip);
-                    wsCircleDO.setPic2(newUrl);
-                    needBatchUpdateList.add(wsCircleDO);
-                }
-            }
-
-            String pic3 = wsCircleDO.getPic3();
-            if (StringUtils.isNotBlank(pic3) && pic3.contains("//") && pic3.contains(":")) {
-                String oldIp = pic3.substring(pic3.indexOf("//") + 2, pic3.lastIndexOf(":"));
-                if (!oldIp.equals(webserverip)) {
-                    String newUrl = pic3.replace(oldIp, webserverip);
-                    wsCircleDO.setPic3(newUrl);
-                    needBatchUpdateList.add(wsCircleDO);
-                }
-            }
-
-            String pic4 = wsCircleDO.getPic4();
-            if (StringUtils.isNotBlank(pic4) && pic4.contains("//") && pic4.contains(":")) {
-                String oldIp = pic4.substring(pic4.indexOf("//") + 2, pic4.lastIndexOf(":"));
-                if (!oldIp.equals(webserverip)) {
-                    String newUrl = pic4.replace(oldIp, webserverip);
-                    wsCircleDO.setPic4(newUrl);
-                    needBatchUpdateList.add(wsCircleDO);
-                }
+                picIndex++;
             }
         }
         if (needBatchUpdateList.size() > 0) {

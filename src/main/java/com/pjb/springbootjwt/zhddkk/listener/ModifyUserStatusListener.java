@@ -6,7 +6,6 @@ import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.websocket.Session;
@@ -48,20 +47,23 @@ public class ModifyUserStatusListener implements ServletContextListener, Command
     private void updateUser() {
         logger.info("开始检查在线用户状态");
         Map<String, Map<String, Session>> clientsMap = ZhddWebSocket.getClientsMap();
-        logger.info("当前在线用户数:" + clientsMap.size());
+        for (Map.Entry<String, Map<String, Session>> entry : clientsMap.entrySet()) {
+            logger.info("房间号:{},用户数:{}", entry.getKey(), entry.getValue().size());
+        }
+
         List<WsUsersDO> dbUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().eq("state", "1"));
         logger.info("数据库在线人数:" + dbUserList.size());
         for (WsUsersDO wsUsersDO : dbUserList) {
-            boolean userOnline = false;
+            boolean isUserOnline = false;
             for (Map.Entry<String, Map<String, Session>> outEntry : clientsMap.entrySet()) {
                 for (Map.Entry<String, Session> innerEntry : outEntry.getValue().entrySet()) {
                     if (innerEntry.getKey().equals(wsUsersDO.getName())) {
-                        userOnline = true;
+                        isUserOnline = true;
                         break;
                     }
                 }
             }
-            if (!userOnline) {
+            if (!isUserOnline && !wsUsersDO.getState().equals("0")) {
                 wsUsersDO.setState("0");
                 wsUsersService.updateById(wsUsersDO);
             }

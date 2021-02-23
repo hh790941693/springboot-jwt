@@ -23,8 +23,7 @@ public class WeatherUtil {
      * @return 天气信息
      * @throws Exception 异常
      */
-    public static WeatherBean grapWeatherInfo()
-        throws Exception {
+    public static WeatherBean grapWeatherInfo() throws Exception {
         logger.info("调用查询天气接口");
         String weatherInfo = "";
         String lastUpdateTime = "";

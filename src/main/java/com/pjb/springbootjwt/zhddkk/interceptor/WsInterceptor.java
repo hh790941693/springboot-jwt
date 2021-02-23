@@ -216,7 +216,6 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
                 }
             }
         }
-        System.out.println(filename + "配置:" + map);
     }
 
     private void loadDefaultConfigData() {

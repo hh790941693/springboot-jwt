@@ -34,20 +34,23 @@ public class CheckUserStatusJob {
         logger.info("[定时任务]定时检查用户的在线/离线状态");
 
         Map<String, Map<String, Session>> clientsMap = ZhddWebSocket.getClientsMap();
-        logger.info("当前在线用户数:" + clientsMap.size());
+        for (Map.Entry<String, Map<String, Session>> entry : clientsMap.entrySet()) {
+            logger.info("房间号:{},用户数:{}", entry.getKey(), entry.getValue().size());
+        }
+
         List<WsUsersDO> dbUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>().eq("state", "1"));
         logger.info("数据库在线人数:" + dbUserList.size());
         for (WsUsersDO wsUsersDO : dbUserList) {
-            boolean userOnline = false;
+            boolean isUserOnline = false;
             for (Map.Entry<String, Map<String, Session>> outEntry : clientsMap.entrySet()) {
                 for (Map.Entry<String, Session> innerEntry : outEntry.getValue().entrySet()) {
                     if (innerEntry.getKey().equals(wsUsersDO.getName())) {
-                        userOnline = true;
+                        isUserOnline = true;
                         break;
                     }
                 }
             }
-            if (!userOnline) {
+            if (!isUserOnline && !wsUsersDO.getState().equals("0")) {
                 wsUsersDO.setState("0");
                 wsUsersService.updateById(wsUsersDO);
             }
