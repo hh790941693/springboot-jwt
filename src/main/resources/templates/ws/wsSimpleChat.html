@@ -88,7 +88,7 @@
         <div id="leftChatDiv">
             <!--头部按钮组-->
             <div id="headerDiv">
-                <div align="left" style="width:25%;height:100%;float:left;font-size: 20px;color: white;">
+                <div align="left" style="width:130px;height:100%;float:left;font-size: 20px;color: white;">
                     <!--房间号-->
                     <span class="fa fa-home"></span>
                     <span style="height:100%;color: yellow;display:inline-block;margin-right: 10px;">{{roomName}}</span>
@@ -99,12 +99,12 @@
                 </div>
     
                 <!--用户输入状态提示语-->
-                <div style="width:20%;height:100%;float:left;color:white;text-align: center;">
+                <div style="width:calc(100% - 380px);height:100%;float:left;color:white;text-align: center;">
                     <span id="inputStatusSpan"></span>
                 </div>
     
                 <!--按钮组-->
-                <div align="right" style="width:48%;height:100%;float:right;margin-right:3px;">
+                <div align="right" style="width:240px;height:100%;float:right;margin-right:3px;">
                     <th:block th:if="${session.sessionInfo.roleName == '管理员'}">
                         <button class='label label-info' th:title="发布通知" @click="sendNotice()">
                             <span class="glyphicon glyphicon-comment"></span>
