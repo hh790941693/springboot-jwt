@@ -17,19 +17,6 @@ import java.util.List;
 public class ParseXhtmlUtil {
 
     public static void main(String[] args) {
-        String value1 = "#{varAJJCB01LDtl01EntityList.chkBox}";
-        String value2 = "#{varAJJCB01LDtl01EntityList.ninushiCd.concat(__view['split.mark'].concat(varAJJCB01LDtl01EntityList.ninushiCdNm))}";
-        value1 = value1.replaceAll("#","").replaceAll("\\{","").replaceAll("}","");
-        value2 = value2.replaceAll("#","").replaceAll("\\{","")
-                .replaceAll("}","").replaceAll("\\(","").replaceAll("\\)","");
-
-        System.out.println(value1);
-        System.out.println(value2);
-        String[] value1Arr = value1.split("\\.");
-        String[] value2Arr = value2.split("\\.");
-        System.out.println(value1Arr[value1Arr.length-1]);
-        System.out.println(value2Arr[value2Arr.length-1]);
-
         try
         {
             Parser parser = Parser.htmlParser();
