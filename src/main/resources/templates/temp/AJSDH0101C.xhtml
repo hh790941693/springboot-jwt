@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html [<!ENTITY nbsp "&#160;">]>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rx="http://www.rsi.co.jp/jsf/html_extended"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<h:body>
+	<ui:composition template="../template/main.xhtml">
+		<ui:param name="pagecode" value="#{pc_AJSDH0101C}" />
+		<ui:param name="process" value="#{ajsdh01Process}" />
+		<ui:param name="view_name" value="pagecode.sd.view-AJSDH0101" />
+		<ui:define name="extra_head">
+			<script>
+				function user_onLoad(thisObj, thisEvent) {
+					// 定定船以外は請求関連を表示しない
+					if ("#{ajsdh01Process.ajsdh0101iEntity.unkoFormKbn}" != "3") {
+						//請求情報エリア
+						proto("seikyu-check").checked = true;
+						document.getElementById("seikyuArea").style.display="none";
+						//請求明細一覧
+						proto("seikyuIchiran-check").checked = true;
+						document.getElementById("seikyuIchiranArea").style.display="none";
+					}
+					// 受払明細一覧エリア折り畳み
+					if ("#{ajsdh01Process.ajsdh0101iEntity.shinkiSeisanKbn}" == "2") {
+						proto("ukebarai-check").checked = true;
+						proto("ukebarai-check").disabled = true;
+						document.getElementById("ukebaraiArea").style.display="none";
+					}
+				}
+			</script>
+			<style>
+
+				.scroll-width1 {
+					width: 1100px;
+				}
+
+				.scroll-width2 {
+					width: 1210px;
+				}
+
+				.scroll-width3 {
+					width: 750px;
+				}
+
+				.data-table {
+					width: 1170px;
+				}
+				.yudane {
+					width: 100px;
+				}
+				.paysaki-nm {
+					width: 160px;
+				}
+				.date {
+					width: 90px;
+				}
+				.num {
+					width: 120px;
+				}
+				.tanka {
+					width: 120px;
+				}
+				.amt {
+					width: 120px;
+				}
+				.num_short {
+					width: 110px;
+				}
+				.tanka_short {
+					width: 110px;
+				}
+				.amt_short {
+					width: 110px;
+				}
+				.taxKbnNm {
+					width: 50px;
+				}
+				.gnKbn {
+					width: 40px;
+				}
+				.autoNumCalc {
+					width: 50px;
+				}
+			</style>
+		</ui:define>
+
+		<ui:define name="contents">
+			<div class="head-button-area">
+				<h:commandButton id="bottonBack" type="submit"
+					value="#{_view['button.back']}"
+					styleClass="button button-cancel"
+					action="#{pc_AJSDH0101C.doButtonBack}" />
+			</div>
+
+			<!-- 基本情報 -->
+			<div class="detail-area">
+				<input type="checkbox" class="expand-checkbox" id="basic-check" />
+				<label class="area-title expand-header" for="basic-check">
+				 	<h:outputText value="#{__view['title.BasicInfo']}" />
+				</label>
+				<div class="search-contents expand-contents">
+					<table style="width: 100%; table-layout: fixed;">
+						<tbody>
+							<!-- 1行目 -->
+							<tr>
+								<!-- 整理物流番号 -->
+								<td class="head">
+									<h:outputText value="#{__view['message.condition.btrSeiriNo9Keta']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textBtrSeiriNo9Keta"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.btrSeiriNo9Keta}" />
+								</td>
+
+								<!-- 組織コード -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.BasicInfo.orgCd']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textOrgCd" value="#{ajsdh01Process.ajsdh0101iEntity.orgCd}" />
+									<h:outputText value="#{__view['kigo.colon']}" rendered="#{!empty ajsdh01Process.ajsdh0101iEntity.orgNm}" />
+									<h:outputText id="textOrgNm" value="#{ajsdh01Process.ajsdh0101iEntity.orgNm}" />
+								</td>
+							</tr>
+
+							<!-- 2行目 -->
+							<tr>
+								<!-- 発生年月 -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.BasicInfo.hasseiYm']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textHasseiYm"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.hasseiYmDisp}" />
+								</td>
+								<!-- 計上年月 -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.BasicInfo.keijoYm']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textKeijoYm"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.keijoYmDisp}" />
+								</td>
+							</tr>
+
+							<!-- 3行目 -->
+							<tr>
+								<!-- 船舶コード -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.BasicInfo.ukbrTankCd']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textUkbrTankCd"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.ukbrTankCd}" />
+									<h:outputText value="#{__view['kigo.colon']}" rendered="#{!empty ajsdh01Process.ajsdh0101iEntity.ukbrTankRm}" />
+									<h:outputText id="textUkbrTankRm"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.ukbrTankRm}" />
+								</td>
+								<!-- 運航形態 -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.BasicInfo.unkoFormKbn']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textUnkoFormKbn"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.unkoFormKbn}" />
+									<h:outputText value="#{__view['kigo.colon']}" rendered="#{!empty ajsdh01Process.ajsdh0101iEntity.unkoFormKbnNm}" />
+									<h:outputText id="textUnkoFormKbnNm" value="#{ajsdh01Process.ajsdh0101iEntity.unkoFormKbnNm}" />
+								</td>
+							</tr>
+
+							<!-- 4行目 -->
+							<tr>
+								<!-- 新規／精算 -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.BasicInfo.shinkiSeisanKbn']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textShinkiSeisanKbn"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.shinkiSeisanKbn}" />
+									<h:outputText value="#{__view['kigo.colon']}" rendered="#{!empty ajsdh01Process.ajsdh0101iEntity.shinkiSeisanKbnNm}" />
+									<h:outputText id="textShinkiSeisanKbnNm" value="#{ajsdh01Process.ajsdh0101iEntity.shinkiSeisanKbnNm}" />
+								</td>
+								<!-- 内外航区分 -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.BasicInfo.naigaiKoKbn']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textNaigaiKoKbn"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.naigaiKoKbn}" />
+									<h:outputText value="#{__view['kigo.colon']}" rendered="#{!empty ajsdh01Process.ajsdh0101iEntity.naigaiKoKbnNm}" />
+									<h:outputText id="textNaigaiKoKbnNm" value="#{ajsdh01Process.ajsdh0101iEntity.naigaiKoKbnNm}" />
+								</td>
+							</tr>
+							<!-- 5行目 -->
+							<tr>
+								<!-- 燃料油数量単位 -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.BasicInfo.nenryoNumTani']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textNenryoNumTaniNm" value="#{ajsdh01Process.ajsdh0101iEntity.nenryoNumTaniNm}" />
+								</td>
+								<!-- 荷主コード -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.BasicInfo.ninushiCd']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textNinushiCd"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.ninushiCd}" />
+									<h:outputText value="#{__view['kigo.colon']}" rendered="#{!empty ajsdh01Process.ajsdh0101iEntity.ninushiRm}" />
+									<h:outputText id="textNinushiRm"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.ninushiRm}" />
+								</td>
+							</tr>
+							<!-- 6行目 -->
+							<tr>
+								<!-- 原価部門コード -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.BasicInfo.costBumonCd']}" />
+								</td>
+								<td class="value nowrapClass" colspan="3">
+									<h:outputText id="textCostBumonCd"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.costBumonCd}" />
+									<h:outputText value="#{__view['kigo.colon']}" rendered="#{!empty ajsdh01Process.ajsdh0101iEntity.costBumonRm}" />
+									<h:outputText id="textCostBumonRm"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.costBumonRm}" />
+								</td>
+							</tr>
+							<!-- 7行目 -->
+							<tr>
+								<!-- 備考 -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.BasicInfo.biko']}" />
+								</td>
+								<td class="value nowrapClass" colspan="3">
+									<h:outputText id="textBiko"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.biko}" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<p/>
+
+			<!-- 請求情報 -->
+			<div class="detail-area" id="seikyuArea">
+				<input type="checkbox" class="expand-checkbox" id="seikyu-check" />
+				<label class="area-title expand-header" for="seikyu-check">
+					<h:outputText value="#{__view['title.SeikyuInfo']}" />
+				</label>
+				<div class="search-contents expand-contents">
+					<table style="width: 100%; table-layout: fixed;">
+						<tbody>
+							<!-- 1行目 -->
+							<tr>
+								<!-- 請求先コード -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.SeikyuInfo.seikyuSakiCd']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textSeikyuSakiCd"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.seikyuSakiCd}" />
+									<h:outputText value="#{__view['kigo.colon']}" rendered="#{!empty ajsdh01Process.ajsdh0101iEntity.seikyuSakiRm}" />
+									<h:outputText id="textSeikyuSakiRm"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.seikyuSakiRm}" />
+								</td>
+								<!-- 請求決済条件 -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.SeikyuInfo.seikyuKessaiCnd']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="seikyuKessaiCnd"
+										styleClass="input-text-middle"
+										value="#{ajsdh01Process.ajsdh0101iEntity.seikyuKessaiCnd}" />
+								</td>
+							</tr>
+
+							<!--2行目 -->
+							<tr>
+								<!-- 請求書集約区分 -->
+								<td class="head">
+								<h:outputText value="#{__view['condition.SeikyuInfo.billAggKbn']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textBillAggKbn" value="#{ajsdh01Process.ajsdh0101iEntity.billAggKbn}" />
+									<h:outputText value="#{__view['kigo.colon']}" rendered="#{!empty ajsdh01Process.ajsdh0101iEntity.billAggKbnNm}" />
+									<h:outputText id="textBillAggKbnNm" value="#{ajsdh01Process.ajsdh0101iEntity.billAggKbnNm}" />
+								</td>
+								<!-- 燃料油請求区分 -->
+								<td class="head">
+									<h:outputText value="#{__view['condition.SeikyuInfo.nenryoSeikyuKbn']}" />
+								</td>
+								<td class="value nowrapClass">
+									<h:outputText id="textNenryoSeikyuKbn" value="#{ajsdh01Process.ajsdh0101iEntity.nenryoSeikyuKbn}" />
+									<h:outputText value="#{__view['kigo.colon']}" rendered="#{!empty ajsdh01Process.ajsdh0101iEntity.nenryoSeikyuKbnNm}" />
+									<h:outputText id="textNenryoSeikyuKbnNm" value="#{ajsdh01Process.ajsdh0101iEntity.nenryoSeikyuKbnNm}" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<p/>
+
+			<!-- 給油明細(支払)一覧 -->
+			<div class="detail-area"  id="kyuyuArea">
+				<input type="checkbox" class="expand-checkbox" id="kyuyu-check" />
+				<label class="area-title expand-header" for="kyuyu-check">
+					<h:outputText value="#{__view['title.KyuyuInfo']}" />
+				</label>
+
+				<div class="search-contents expand-contents">
+					<div id="kyuyu-header">
+						<table style="table-layout: fixed; width:30%; margin: 0 auto;">
+							<tbody>
+								<tr>
+									<td class="head" style="width:40%;">
+										<h:outputText value="#{__view['condition.KyuyuInfo.ttlKyuyuAmt']}" />
+									</td>
+									<td class="value nowrapClass" style="text-align: right;">
+										<h:outputText styleClass="outputText" value="#{ajsdh01Process.ajsdh0101iEntity.ttlKyuyuAmt}" >
+											<rx:numberExConverter pattern="##,###,###,##0" />
+										</h:outputText>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<p/>
+
+					<div class="list-scroll-header scroll-width1">
+						<table class="data-table">
+							<tbody>
+								<tr>
+									<th class="table-header yudane">
+										<!-- 油種 -->
+										<h:outputText value="#{__view['condition.KyuyuInfo.kyuyuDtlYudaneNm']}" />
+									</th>
+									<th class="table-header paysaki-nm">
+										<!-- 支払先 -->
+										<h:outputText value="#{__view['condition.KyuyuInfo.paySakiNm']}" />
+									</th>
+									<th class="table-header date">
+										<!-- 支払日 -->
+										<h:outputText styleClass="outputText" value="#{__view['condition.KyuyuInfo.payDate']}" />
+									</th>
+									<th class="table-header date">
+										<!-- 給油日 -->
+										<h:outputText styleClass="outputText" value="#{__view['condition.KyuyuInfo.kyuyuDate']}" />
+									</th>
+									<th class="table-header num">
+										<!-- 数量 -->
+										<h:outputText value="#{__view['condition.KyuyuInfo.kyuyuDtlNum']}"/>
+									</th>
+									<th class="table-header tanka">
+										<!-- 単価 -->
+										<h:outputText value="#{__view['condition.KyuyuInfo.kyuyuDtlTanka']}"/>
+									</th>
+									<th class="table-header amt">
+										<!-- 金額 -->
+										<h:outputText value="#{__view['condition.KyuyuInfo.kyuyuDtlAmt']}"/>
+									</th>
+									<th class="table-header taxKbnNm">
+										<!-- 税区分 -->
+										<h:outputText value="#{__view['condition.KyuyuInfo.kyuyuDtlTaxKbnNm']}" />
+									</th>
+									<th class="table-header gnKbn">
+										<!-- GN -->
+										<h:outputText value="#{__view['condition.KyuyuInfo.kyuyuDtlGnKbn']}" />
+									</th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="list-scroll-content scroll-width1">
+						<p:dataTable value="#{ajsdh01Process.ajsdh0101IDtl01List}"
+							var="varsearchResult01" styleClass="data-table"
+							headerClass="table-header" footerClass="table-footer"
+							rowClasses="rowClass1,rowClass2" columnClasses="columnClass">
+							<p:column   styleClass="yudane align-left">
+								<!-- 油種 -->
+								<h:outputText value="#{varsearchResult01.yudaneNm}" styleClass="outputText" />
+							</p:column>
+							<p:column styleClass="paysaki-nm align-left">
+								<!-- 支払先 -->
+								<h:outputText value="#{varsearchResult01.toriRm}" styleClass="outputText" />
+							</p:column>
+							<p:column  styleClass="date align-center">
+								<!-- 支払日-->
+								<h:outputText value="#{varsearchResult01.payDate}" styleClass="outputText">
+									<rx:dateTimeExConverter type="date" pattern="yyyy/MM/dd"/>
+								</h:outputText>
+							</p:column>
+							<p:column styleClass="date align-center">
+								<!-- 給油日 -->
+								<h:outputText value="#{varsearchResult01.kyuyuDate}" styleClass="outputText">
+									<rx:dateTimeExConverter type="date" pattern="yyyy/MM/dd"/>
+								</h:outputText>
+							</p:column>
+							<p:column styleClass="num align-right">
+								<!-- 数量 -->
+								<h:outputText value="#{varsearchResult01.num}" styleClass="outputText">
+									<rx:numberExConverter pattern="#,###,##0.000" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="tanka align-right">
+								<!-- 単価 -->
+								<h:outputText value="#{varsearchResult01.tanka}" styleClass="outputText">
+									<rx:numberExConverter pattern="###,##0.00" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="amt align-right">
+								<!-- 金額 -->
+								<h:outputText value="#{varsearchResult01.amt}" styleClass="outputText">
+									<rx:numberExConverter pattern="#,###,###,##0.###" />
+								</h:outputText>
+							</p:column>
+							<p:column styleClass="taxKbnNm align-center">
+								<!-- 税区分 -->
+								<h:outputText value="#{varsearchResult01.taxKbnNm}" styleClass="outputText" />
+							</p:column>
+							<p:column styleClass="gnKbn align-center">
+								<!-- GN -->
+								<h:outputText value="#{varsearchResult01.gnKbn}" styleClass="outputText" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+
+			<p/>
+
+			<!-- 受払明細一覧 -->
+			<div class="detail-area" id="ukebaraiArea">
+				<input type="checkbox" class="expand-checkbox" id="ukebarai-check"  />
+				<label class="area-title expand-header" for="ukebarai-check">
+					<h:outputText value="#{__view['title.UkebaraiInfo']}" />
+				</label>
+
+				<div class="search-contents expand-contents">
+					<div id="ukebarai-header">
+						<table style="table-layout: fixed; width:30%; margin: 0 auto;">
+							<tbody>
+								<tr>
+									<td class="head" style="width:40%;">
+										<h:outputText value="#{__view['condition.UkebaraiInfo.ttlShohiAmt']}" />
+									</td>
+									<td class="value nowrapClass" style="text-align: right;">
+										<h:outputText styleClass="outputText" value="#{ajsdh01Process.ajsdh0101iEntity.ttlShohiAmt}" >
+											<rx:numberExConverter pattern="##,###,###,##0" />
+										</h:outputText>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<p/>
+
+					<div class="list-scroll-header scroll-width2">
+						<table class="data-table">
+							<tbody>
+								<tr>
+									<th class="table-header yudane">
+										<!-- 油種 -->
+										<h:outputText value="#{__view['condition.UkebaraiInfo.ukebaraiDtlYudaneNm']}" />
+									</th>
+									<th class="table-header num_short">
+										<!-- 繰越数量 -->
+										<h:outputText value="#{__view['condition.UkebaraiInfo.kurikoshiNum']}"/>
+									</th>
+									<th class="table-header tanka_short">
+										<!-- 繰越単価 -->
+										<h:outputText value="#{__view['condition.UkebaraiInfo.kurikoshiTanka']}" />
+									</th>
+									<th class="table-header amt_short">
+										<!-- 繰越金額 -->
+										<h:outputText value="#{__view['condition.UkebaraiInfo.kurikoshiAmt']}"/>
+									</th>
+									<th class="table-header num_short">
+										<!-- 消費数量 -->
+										<h:outputText value="#{__view['condition.UkebaraiInfo.shohiNum']}"/>
+									</th>
+									<th class="table-header tanka_short">
+										<!-- 消費単価 -->
+										<h:outputText value="#{__view['condition.UkebaraiInfo.shohiTanka']}"/>
+									</th>
+									<th class="table-header amt_short">
+										<!-- 消費金額 -->
+										<h:outputText value="#{__view['condition.UkebaraiInfo.shohiAmt']}"/>
+									</th>
+									<th class="table-header num_short">
+										<!-- 残高数量 -->
+										<h:outputText value="#{__view['condition.UkebaraiInfo.zandakaNum']}"/>
+									</th>
+									<th class="table-header tanka_short">
+										<!-- 残高単価 -->
+										<h:outputText value="#{__view['condition.UkebaraiInfo.zandakaTanka']}"/>
+									</th>
+									<th class="table-header amt_short">
+										<!-- 残高金額 -->
+										<h:outputText value="#{__view['condition.UkebaraiInfo.zandakaAmt']}"/>
+									</th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="list-scroll-content scroll-width2">
+						<p:dataTable value="#{ajsdh01Process.ajsdh0101IDtl02List}"
+							var="varsearchResult02" styleClass="data-table"
+							headerClass="table-header" footerClass="table-footer"
+							rowClasses="rowClass1,rowClass2" columnClasses="columnClass">
+							<p:column  styleClass="yudane align-left">
+								<!-- 油種 -->
+								<h:outputText value="#{varsearchResult02.yudaneNm}" styleClass="outputText" />
+							</p:column>
+							<p:column  styleClass="num_short align-right">
+								<!-- 繰越数量 -->
+								<h:outputText value="#{varsearchResult02.kurikoshiNum}" styleClass="outputText">
+									<rx:numberExConverter pattern="#,###,##0.000" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="tanka_short align-right">
+								<!-- 繰越単価 -->
+								<h:outputText value="#{varsearchResult02.kurikoshiTanka}" styleClass="outputText">
+									<rx:numberExConverter pattern="###,##0.00" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="amt_short align-right">
+								<!-- 繰越金額 -->
+								<h:outputText value="#{varsearchResult02.kurikoshiAmt}" styleClass="outputText">
+									<rx:numberExConverter pattern="#,###,###,##0" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="num_short align-right">
+								<!-- 消費数量 -->
+								<h:outputText value="#{varsearchResult02.shohiNum}" styleClass="outputText">
+									<rx:numberExConverter pattern="#,###,##0.000" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="tanka_short align-right">
+								<!-- 消費単価 -->
+								<h:outputText value="#{varsearchResult02.shohiTanka}" styleClass="outputText">
+									<rx:numberExConverter pattern="###,##0.00" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="amt_short align-right">
+								<!-- 消費金額 -->
+								<h:outputText value="#{varsearchResult02.shohiAmt}" styleClass="outputText">
+									<rx:numberExConverter pattern="#,###,###,##0" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="num_short align-right">
+								<!-- 残高数量 -->
+								<h:outputText value="#{varsearchResult02.zandakaNum}" styleClass="outputText">
+									<rx:numberExConverter pattern="#,###,##0.000" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="tanka_short align-right">
+								<!-- 残高単価 -->
+								<h:outputText value="#{varsearchResult02.zandakaTanka}" styleClass="outputText">
+									<rx:numberExConverter pattern="###,##0.00" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="amt_short align-right">
+								<!-- 残高金額 -->
+								<h:outputText value="#{varsearchResult02.zandakaAmt}" styleClass="outputText">
+									<rx:numberExConverter pattern="#,###,###,##0" />
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+
+			<p/>
+
+			<!-- 請求明細一覧 -->
+			<div class="detail-area"  id="seikyuIchiranArea">
+				<input type="checkbox" class="expand-checkbox" id="seikyuIchiran-check" />
+				<label class="area-title expand-header" for="seikyuIchiran-check">
+					<h:outputText value="#{__view['title.SeikyuIchiranInfo']}" />
+				</label>
+
+				<div class="search-contents expand-contents">
+					<div id="seikyu-header" >
+						<table style="table-layout: fixed; width:30%; margin: 0 auto;">
+							<tbody>
+								<tr>
+									<td class="head" style="width:40%;">
+										<h:outputText value="#{__view['condition.SeikyuIchiranInfo.ttlSeikyuAmt']}" />
+									</td>
+									<td class="value nowrapClass" style="text-align: right;">
+										<h:outputText styleClass="outputText" value="#{ajsdh01Process.ajsdh0101iEntity.ttlSeikyuAmt}" >
+											<rx:numberExConverter pattern="##,###,###,##0" />
+										</h:outputText>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<p/>
+
+					<div class="list-scroll-header scroll-width3">
+						<table class="data-table">
+							<tbody>
+								<tr>
+									<th class="table-header yudane">
+										<!-- 油種 -->
+										<h:outputText value="#{__view['condition.SeikyuIchiranInfo.seikyuDtlYudaneNm']}" />
+									</th>
+									<th class="table-header num">
+										<!-- 請求数量 -->
+										<h:outputText value="#{__view['condition.SeikyuIchiranInfo.seikyuDtlNum']}"/>
+									</th>
+									<th class="table-header tanka">
+										<!-- 単価-->
+										<h:outputText value="#{__view['condition.SeikyuIchiranInfo.seikyuDtlTanka']}"/>
+									</th>
+									<th class="table-header amt">
+										<!-- 金額 -->
+										<h:outputText value="#{__view['condition.SeikyuIchiranInfo.seikyuDtlAmt']}"/>
+									</th>
+									<th class="table-header taxKbnNm">
+										<!-- 税区分 -->
+										<h:outputText value="#{__view['condition.SeikyuIchiranInfo.seikyuDtlTaxKbnNm']}" />
+									</th>
+									<th class="table-header gnKbn">
+										<!-- GN -->
+										<h:outputText value="#{__view['condition.SeikyuIchiranInfo.seikyuDtlGnKbn']}" />
+									</th>
+									<th class="table-header autoNumCalc">
+										<!-- 自動数量計算 -->
+										<h:outputText value="#{__view['condition.SeikyuIchiranInfo.seikyuautoNumCalc']}" />
+									</th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="list-scroll-content scroll-width3">
+						<p:dataTable value="#{ajsdh01Process.ajsdh0101IDtl03List}"
+							var="varsearchResult03" styleClass="data-table"
+							headerClass="table-header" footerClass="table-footer"
+							rowClasses="rowClass1,rowClass2" columnClasses="columnClass">
+							<p:column  styleClass="yudane align-left">
+								<!-- 油種 -->
+								<h:outputText value="#{varsearchResult03.yudaneNm}" styleClass="outputText" />
+							</p:column>
+							<p:column  styleClass="num align-right">
+								<!-- 請求数量 -->
+								<h:outputText value="#{varsearchResult03.num}" styleClass="outputText">
+									<rx:numberExConverter pattern="#,###,##0.000" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="tanka align-right">
+								<!-- 単価 -->
+								<h:outputText value="#{varsearchResult03.tanka}" styleClass="outputText">
+									<rx:numberExConverter pattern="###,##0.00" />
+								</h:outputText>
+							</p:column>
+							<p:column  styleClass="amt align-right">
+								<!-- 金額 -->
+								<h:outputText value="#{varsearchResult03.amt}" styleClass="outputText">
+									<rx:numberExConverter pattern="#,###,###,##0.###" />
+								</h:outputText>
+							</p:column>
+							<p:column styleClass="taxKbnNm align-center">
+								<!-- 税区分 -->
+								<h:outputText value="#{varsearchResult03.taxKbnNm}" styleClass="outputText">
+								</h:outputText>
+							</p:column>
+							<p:column styleClass="gnKbn align-center">
+								<!-- GN -->
+								<h:outputText value="#{varsearchResult03.gnKbn}" styleClass="outputText">
+								</h:outputText>
+							</p:column>
+							<p:column styleClass="autoNumCalc align-center">
+								<!-- 自動数量 -->
+								<h:outputText value="#{varsearchResult03.autoNumCalcFlgNm}" styleClass="outputText">
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+
+			<!-- ボタンフッダエリア -->
+			<div class="foot-button-area">
+				<!-- 実行ボタン -->
+				<h:commandButton type="submit" value="#{__view['button.execute']}"
+					id="executeBotton"
+					styleClass="button button-execute"
+					rendered="#{ajsdh01Process.ajsdh0101iEntityTrans.gamenMode != '60'}"
+					onclick="return confirm('#{_view['javascript.confirm.execute']}');"
+					action="#{pc_AJSDH0101C.doButtonExec}">
+				</h:commandButton>
+			</div>
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+</html>

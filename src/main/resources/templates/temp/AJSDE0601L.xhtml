@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html [<!ENTITY nbsp "&#160;">]>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rx="http://www.rsi.co.jp/jsf/html_extended"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<h:body>
+	<ui:composition template="../template/main.xhtml">
+		<ui:param name="pagecode" value="#{pc_AJSDE0601L}" />
+		<ui:param name="process" value="#{ajsde06Process}" />
+		<ui:param name="view_name" value="pagecode.sd.view-AJSDE0601" />
+		<ui:define name="extra_head">
+			<script>
+				function user_onLoad(thisObj, thisEvent) {
+				}
+			</script>
+<style>
+.scroll-width {
+	width: 1210px;
+}
+
+.data-table {
+	width: 1190px;
+}
+
+.button-column {
+	width: 18px;
+}
+
+.reprHinCd {
+	width: 30px;
+}
+
+.reprHinRm {
+	width: 150px;
+}
+
+.hinGrpKbn {
+	width: 40px;
+}
+
+.applFrYmd {
+	width: 40px;
+}
+
+.applToYmd {
+	width: 40px;
+}
+
+</style>
+	</ui:define>
+		<ui:define name="contents">
+			<div class="head-button-area">
+				<h:commandButton type="submit" immediate="true"
+					value="#{_view['button.back']}" styleClass="button button-cancel"
+					action="#{pc_AJSDE0601L.doButtonBack}">
+				</h:commandButton>
+			</div>
+			<div class="search-area">
+				<input type="checkbox" class="expand-checkbox" id="search-head-check" />
+				<label class="area-title expand-header" for="search-head-check">検索条件</label>
+				<div class="search-contents expand-contents">
+					<!-- 非表示項目 -->
+					<h:commandButton type="submit" value="doRefresh" id="doRefresh"
+						style="display:none" action="#{pc_AJSDB0601L.doRefresh}" />
+					<table>
+						<tbody>
+							<!-- 1行目 -->
+							<tr>
+								<!-- 代表品名コード -->
+								<td class="head">
+									<h:outputText id="textConditionTitle01"
+										value="#{__view['condition.ajsde0601LCondEntity.reprHinCd']}" />
+								</td>
+								<td class="value-large" colspan="3">
+									<h:inputText
+										id="reprHinCd" maxlength="10"
+										styleClass="inputTextCondition input-text-middle"
+										value="#{ajsde06Process.ajsde0601LCondEntity.reprHinCd}">
+										<rx:stringConverter toUpperCase="true"
+											itemName="#{__view['condition.ajsde0601LCondEntity.reprHinCd']}" />
+										<rx:regExpValidator
+											itemName="#{__view['condition.ajsde0601LCondEntity.reprHinCd']}"
+											regExpType="alphanumeric"
+											target="#{fn:split('form1:search',',')}">
+										</rx:regExpValidator>
+									</h:inputText>
+								</td>
+							</tr>
+							<!-- 2行目 -->
+							<tr>
+								<!-- 代表品名名称 -->
+								<td class="head">
+									<h:outputText id="textConditionTitle02"
+										value="#{__view['condition.ajsde0601LCondEntity.reprHinNm']}" />
+								</td>
+								<td class="value" colspan="3">
+									<h:inputText
+										styleClass="inputTextCondition input-text-extra-large" id="reprHinNm"
+										maxlength="50"
+										value="#{ajsde06Process.ajsde0601LCondEntity.reprHinNm}">
+										<rx:bytesValidator
+											itemName="#{__view['condition.ajsde0601LCondEntity.reprHinNm']}"
+											target="#{fn:split('form1:search',',')}" max="50"
+											unicode="true">
+										</rx:bytesValidator>
+									</h:inputText>
+								</td>
+							</tr>
+							<!-- 3行目 -->
+							<tr>
+								<!-- 代表品名略称 -->
+								<td class="head">
+									<h:outputText id="textConditionTitle03"
+										value="#{__view['condition.ajsde0601LCondEntity.reprHinRm']}" />
+								</td>
+								<td class="value" colspan="3">
+									<h:inputText
+										styleClass="inputTextCondition input-text-large" id="reprHinRm"
+										maxlength="20"
+										value="#{ajsde06Process.ajsde0601LCondEntity.reprHinRm}">
+										<rx:bytesValidator
+											itemName="#{__view['condition.ajsde0601LCondEntity.reprHinRm']}"
+											target="#{fn:split('form1:search',',')}" max="20"
+											unicode="true">
+										</rx:bytesValidator>
+									</h:inputText>
+								</td>
+							</tr>
+							<!-- 4行目 -->
+							<tr>
+								<!-- 品名グループ -->
+								<td class="head">
+									<h:outputText
+										value="#{__view['condition.ajsde0601LCondEntity.hinGrpKbn']}" />
+								</td>
+								<td class="value">
+									<rx:selectOneMenu
+										id="hinGrpKbn"
+										value="#{ajsde06Process.ajsde0601LCondEntity.hinGrpKbn}">
+										<f:selectItems value="#{ajsde06Process.hinGrpKbnList}" />
+										<rx:stringConverter
+											itemName="#{__view['condition.ajsde0601LCondEntity.hinGrpKbn']}"
+											target="#{fn:split('form1:search',',')}" />
+									</rx:selectOneMenu>
+								</td>
+							</tr>
+							<tr>
+								<!-- 適用日 -->
+								<td class="head required">
+									<h:outputText value="#{__view['condition.ajsde0601LCondEntity.applYmd']}" />
+								</td>
+								<td class="value-large" colspan="3">
+									<p:calendar id="textApplYmd"
+										maxlength="10"
+										value="#{ajsde06Process.ajsde0601LCondEntity.applYmd}" mode="popup"
+										showWeek="false" showOtherMonths="true" selectOtherMonths="true"
+										readonly="false"
+										pattern="yyyy/MM/dd"
+										locale="ja"
+										navigator="true"
+										focusOnSelect="true"
+										showOn="button"
+										showButtonPanel="true">
+										<rx:dateTimeExConverter
+											itemName="#{__view['condition.ajsde0601LCondEntity.applYmd']}"
+											required="true" type="date"
+											target="#{fn:split('form1:search',',')}">
+										</rx:dateTimeExConverter>
+									</p:calendar>
+								</td>
+							</tr>
+						</tbody>
+						<tfoot class="table-footer">
+							<tr>
+								<td colspan="4">
+									<h:commandButton type="submit" id="search"
+										value="#{_view['button.search']}"
+										styleClass="button button-search"
+										action="#{pc_AJSDE0601L.doButtonSearch}" />
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+			<!-- 検索結果エリア -->
+			<div class="list-area">
+				<div class="area-title">検索結果</div>
+				<!-- 新規 -->
+				<div class="list-button-area">
+					<h:commandButton type="submit" value="#{_view['button.new']}"
+						immediate="true" styleClass="button button-new"
+						action="#{pc_AJSDE0601L.doButtonNew}"
+						rendered="#{ajsde06Process.authScrEntity.creatBtnFlg}" />
+				</div>
+				<div class="list-scroll-header scroll-width">
+					<table class="data-table">
+						<tbody>
+							<tr class="">
+								<!-- ボタンエリア -->
+								<th class="table-header button-column" colspan="2"></th>
+								<!-- 代表品名コード -->
+								<th class="table-header reprHinCd"><h:outputText
+										value="#{__view['table.ajsde0601LDTL01Entity.reprHinCd']}" /></th>
+								<!-- 代表品名略称 -->
+								<th class="table-header reprHinRm"><h:outputText
+										value="#{__view['table.ajsde0601LDTL01Entity.reprHinRm']}" /></th>
+								<!-- 品名グループ区分 -->
+								<th class="table-header hinGrpKbn"><h:outputText
+										value="#{__view['table.ajsde0601LDTL01Entity.hinGrpKbn']}" /></th>
+								<!-- 適用開始日 -->
+								<th class="table-header applFrYmd"><h:outputText
+										value="#{__view['table.ajsde0601LDTL01Entity.applFrYmd']}" /></th>
+								<!-- 適用終了日 -->
+								<th class="table-header applToYmd"><h:outputText
+										value="#{__view['table.ajsde0601LDTL01Entity.applToYmd']}" /></th>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="list-scroll-content scroll-width">
+					<p:dataTable id="table1"
+						value="#{ajsde06Process.ajsde0601LDTL01EntityList}"
+						var="varAjsde0601LDTL01EntityList" styleClass="data-table"
+						headerClass="table-header" footerClass="table-footer"
+						rowClasses="rowClass1,rowClass2" columnClasses="columnClass">
+						<!-- ボタンエリア -->
+						<p:column styleClass="button-column align-center">
+							<h:commandButton type="submit" image="../../icons/Update.gif"
+								alt="#{_view['button.edit.alt']}" immediate="true"
+								action="#{pc_AJSDE0601L.doButtonUpdate}">
+							</h:commandButton>
+							<h:commandButton type="submit" image="../../icons/Copy.gif"
+								alt="#{_view['button.revise.alt']}" immediate="true"
+								action="#{pc_AJSDE0601L.doButtonRevise}">
+							</h:commandButton>
+						</p:column>
+						<!-- 代表品名コード -->
+						<p:column styleClass="reprHinCd align-center">
+							<h:commandButton type="submit"
+								value="#{varAjsde0601LDTL01EntityList.reprHinCd}"
+								immediate="true" styleClass="anchor-link"
+								action="#{pc_AJSDE0601L.doButtonRefer}" />
+						</p:column>
+						<!-- 代表品名略称 -->
+						<p:column styleClass="reprHinRm align-left">
+							<h:outputText id="text01"
+								value="#{varAjsde0601LDTL01EntityList.reprHinRm}">
+							</h:outputText>
+						</p:column>
+						<!-- 品名グループ区分 -->
+						<p:column styleClass="hinGrpKbn align-left">
+							<h:outputText id="text02" value="#{varAjsde0601LDTL01EntityList.hinGrpKbn}"></h:outputText>
+							<h:outputText value="#{__view['kigo.colon']}" />
+							<h:outputText id="text03" value="#{varAjsde0601LDTL01EntityList.hinGrpKbnNm}"></h:outputText>
+						</p:column>
+						<!-- 適用開始日 -->
+						<p:column styleClass="applFrYmd align-center">
+							<h:outputText id="text04"
+								value="#{varAjsde0601LDTL01EntityList.applFrYmd}">
+								<rx:dateTimeExConverter
+									itemName="#{__view['condition.#condition:instance#.#property:name#']}"
+									pattern="yyyy/MM/dd"></rx:dateTimeExConverter>
+							</h:outputText>
+						</p:column>
+						<!-- 適用終了日 -->
+						<p:column styleClass="applToYmd align-center">
+							<h:outputText id="text05"
+								value="#{varAjsde0601LDTL01EntityList.applToYmd}">
+								<rx:dateTimeExConverter
+									itemName="#{__view['condition.#condition:instance#.#property:name#']}"
+									pattern="yyyy/MM/dd"></rx:dateTimeExConverter>
+							</h:outputText>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
