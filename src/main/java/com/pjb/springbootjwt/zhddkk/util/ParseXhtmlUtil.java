@@ -13,19 +13,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ParseXhtmlUtil {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         try
         {
             Parser parser = Parser.htmlParser();
             parser.settings(new ParseSettings(true, true));
             //Document document = parser.parseInput(new FileReader(new File( "F:/AJWHD0100L.xhtml" )), "");
-            Document document = Jsoup.parse( new File( "F:/AJWHD0100L.xhtml" ) , "utf-8" );
+            Document document = Jsoup.parse( new File( "G:\\workspace\\ajios\\WebContent\\wh\\AJWHD0100L.xhtml" ) , "utf-8" );
             Elements tableEles = document.getElementsByTag("p:dataTable");
             for (Element tableEle : tableEles) {
-                System.out.println(tableEles.attr("id"));
                 tableEle.removeAttr("headerClass").removeAttr("footerClass").removeAttr("columnClasses");
 
                 if (tableEle.hasAttr("styleClass")) {
@@ -54,6 +55,14 @@ public class ParseXhtmlUtil {
                     columnList.add(columnEle);
                 }
 
+                // body注释列表
+                List<String> bodyComentList = new ArrayList<>();
+                Pattern pattern = Pattern.compile("\\<!--(.+)--\\>");
+                Matcher bodyMatcher=pattern.matcher(columnGroupEle.html());
+                while (bodyMatcher.find()){
+                    bodyComentList.add(bodyMatcher.group());
+                }
+
                 // 获取相邻的tbody
                 Element siblingEle = tableEle.parent().previousElementSibling();
                 Elements tbodyEles = siblingEle.getElementsByTag("tbody");
@@ -77,10 +86,22 @@ public class ParseXhtmlUtil {
                     continue;
                 }
 
+                // tr注释列表
+                List<String> thComentList = new ArrayList<>();
+                Matcher headMatcher = pattern.matcher(tbodyEle.html());
+                while (headMatcher.find()){
+                    thComentList.add(headMatcher.group());
+                }
+
                 // 设置<p:columnGroup><p:row></p:row>
                 for (Element trEle : trElements) {
                     Element pRowElement = columnGroupEle.appendElement("p:row");
+                    int outerIndex = trElements.indexOf(trEle);
                     for (Element thEle : trEle.children()) {
+                        // 设置头comment
+                        int innerIndex = trEle.children().indexOf(thEle);
+                        int commentIndex = outerIndex * trElements.get(outerIndex).children().size() + innerIndex+1;
+                        pRowElement.append(thComentList.get(commentIndex));
                         Element pColumnElement = pRowElement.appendElement("p:column");
                         // 拷贝p:column属性
                         copyAttrs(thEle, pColumnElement);
@@ -101,16 +122,44 @@ public class ParseXhtmlUtil {
                 if (trEleCnt == 1) {
                     // 直接拷贝
                     for (Element columnEle : columnList) {
+                        // 设置body注释
+                        columnEle.append(bodyComentList.get(columnList.indexOf(columnEle)));
                         columnEle.appendTo(tableEle);
                     }
                 } else if (trEleCnt == 2) {
                     //设置<p:column>
                     Element tr1Element = trElements.get(0);
                     Element tr2Element = trElements.get(1);
+
+                    // check rowspan
+                    int tr1RowspanCnt = 0;
+                    for (Element thEle : tr1Element.children()) {
+                        if (thEle.hasAttr("rowspan")) {
+                            tr1RowspanCnt++;
+                        }
+                    }
+
+                    for (Element thEle : tr2Element.children()) {
+                        if (thEle.hasAttr("rowspan")) {
+                            System.out.println("==============================,tr2下面发现有rowspan属性");
+                            continue;
+                        }
+                    }
+                    int trChildTotalNum1 = tr1Element.children().size() - tr1RowspanCnt;
+                    int trChildTotalNum2 = tr2Element.children().size();
+                    System.out.println("****************** <p:column> size  = " + columnEles.size());
+                    System.out.println("****************** tr1   totalSize  = " + tr1Element.children().size());
+                    System.out.println("****************** tr1        Size  = " + trChildTotalNum1);
+                    System.out.println("****************** tr2        Size  = " + trChildTotalNum2);
+                    System.out.println("****************** head CommentSize = " + thComentList.size());
+                    System.out.println("****************** body CommentSize = " + bodyComentList.size());
+
                     int tr1Start=0, tr2Start = tr1Element.children().size();
                     for (Element thEle : tr1Element.children()) {
                         if (thEle.hasAttr("rowspan")) {
                             Element targetElement = columnList.get(tr1Start);
+                            // 设置body注释
+                            tableEle.append(bodyComentList.get(tr1Start));
                             targetElement.appendTo(tableEle);
                             tr1Start++;
                             continue;
@@ -118,12 +167,17 @@ public class ParseXhtmlUtil {
 
                         Element pColumnEle = tableEle.appendElement("p:column");
                         copyAttrs(columnList.get(tr1Start), pColumnEle);
+
+                        // 添加body注释
+                        pColumnEle.append(bodyComentList.get(tr1Start));
                         Element divUpEle = pColumnEle.appendElement("div");
                         divUpEle.attr("class", "up");
 
                         Element upElement = columnList.get(tr1Start);
                         divUpEle.html(upElement.html());
 
+                        // 添加body注释
+                        pColumnEle.append(bodyComentList.get(tr2Start));
                         Element divDownEle = pColumnEle.appendElement("div");
                         divDownEle.attr("class", "down");
 
