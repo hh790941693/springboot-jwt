@@ -24,7 +24,7 @@ public class ParseXhtmlUtil {
             Parser parser = Parser.htmlParser();
             parser.settings(new ParseSettings(true, true));
             //Document document = parser.parseInput(new FileReader(new File( "F:/AJWHD0100L.xhtml" )), "");
-            Document document = Jsoup.parse( new File( "G:\\workspace\\ajios\\WebContent\\wh\\AJWHD0100L.xhtml" ) , "utf-8" );
+            Document document = Jsoup.parse( new File( "G:\\workspace\\ajios\\WebContent\\bc\\AJBCA0101L.xhtml" ) , "utf-8" );
             Elements tableEles = document.getElementsByTag("p:dataTable");
             for (Element tableEle : tableEles) {
                 tableEle.removeAttr("headerClass").removeAttr("footerClass").removeAttr("columnClasses");
@@ -100,7 +100,13 @@ public class ParseXhtmlUtil {
                     for (Element thEle : trEle.children()) {
                         // 设置头comment
                         int innerIndex = trEle.children().indexOf(thEle);
-                        int commentIndex = outerIndex * trElements.get(outerIndex).children().size() + innerIndex+1;
+                        int commentIndex = 0;
+                        if (outerIndex == 0) {
+                            commentIndex = innerIndex;
+                        } else {
+                            commentIndex = outerIndex * trElements.get(0).children().size() + innerIndex;
+                        }
+
                         pRowElement.append(thComentList.get(commentIndex));
                         Element pColumnElement = pRowElement.appendElement("p:column");
                         // 拷贝p:column属性
@@ -123,9 +129,12 @@ public class ParseXhtmlUtil {
                     // 直接拷贝
                     for (Element columnEle : columnList) {
                         // 设置body注释
-                        columnEle.append(bodyComentList.get(columnList.indexOf(columnEle)));
+                        tableEle.append(bodyComentList.get(columnList.indexOf(columnEle)));
                         columnEle.appendTo(tableEle);
                     }
+
+                    //移除tbody
+                    tbodyEle.parent().remove();
                 } else if (trEleCnt == 2) {
                     //设置<p:column>
                     Element tr1Element = trElements.get(0);
