@@ -24,7 +24,7 @@ public class ParseXhtmlUtil {
             Parser parser = Parser.htmlParser();
             parser.settings(new ParseSettings(true, true));
             //Document document = parser.parseInput(new FileReader(new File( "F:/AJWHD0100L.xhtml" )), "");
-            Document document = Jsoup.parse( new File( "G:\\workspace\\ajios\\WebContent\\bc\\AJBCA0101L.xhtml" ) , "utf-8" );
+            Document document = Jsoup.parse( new File( "G:\\workspace\\ajios\\WebContent\\fb\\AJFBA0101C.xhtml" ) , "utf-8" );
             Elements tableEles = document.getElementsByTag("p:dataTable");
             for (Element tableEle : tableEles) {
                 tableEle.removeAttr("headerClass").removeAttr("footerClass").removeAttr("columnClasses");
@@ -49,8 +49,14 @@ public class ParseXhtmlUtil {
                 }
 
                 List<Element> columnList = new ArrayList<>();
-                Element columnGroupEle = columnGroupEles.get(0);
-                Elements columnEles = columnGroupEle.getElementsByTag("p:column");
+                Elements columnEles;
+                Element columnGroupEle = null;
+                if (columnGroupEles.size() > 0) {
+                    columnGroupEle = columnGroupEles.get(0);
+                    columnEles = columnGroupEle.getElementsByTag("p:column");
+                } else {
+                    columnEles = tableEle.getElementsByTag("p:column");
+                }
                 for (Element columnEle : columnEles) {
                     columnList.add(columnEle);
                 }
@@ -58,7 +64,7 @@ public class ParseXhtmlUtil {
                 // body注释列表
                 List<String> bodyComentList = new ArrayList<>();
                 Pattern pattern = Pattern.compile("\\<!--(.+)--\\>");
-                Matcher bodyMatcher=pattern.matcher(columnGroupEle.html());
+                Matcher bodyMatcher=pattern.matcher(tableEle.html());
                 while (bodyMatcher.find()){
                     bodyComentList.add(bodyMatcher.group());
                 }
@@ -73,7 +79,12 @@ public class ParseXhtmlUtil {
                 Element tbodyEle = tbodyEles.get(0);
 
                 //移除p:columnGroup
-                columnGroupEle.children().remove();
+                if (null != columnGroupEle) {
+                    columnGroupEle.children().remove();
+                } else {
+                    tableEle.children().remove();
+                    columnGroupEle = tableEle.appendElement("p:columnGroup");
+                }
                 columnGroupEle.attr("type", "header");
 
                 Elements trElements = tbodyEle.getElementsByTag("tr");
