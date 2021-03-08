@@ -173,6 +173,9 @@
         // 修改地址栏地址,不显示多余的参数或者页面信息
         history.replaceState(null, null, "/");
 
+        // 聊天室房间号
+        var roomName = "001";
+
         var DEFAULT_WIDTH = 1318;
         var DEFAULT_HEIGHT = 720;
 
@@ -277,7 +280,7 @@
 
         function loginServer() {
             if (webSocket == null) {
-                var socketUrl = "ws://" + sessionWebserverIp + ":" + sessionWebserverport + "/zhddWebSocket/" + sessionUser + "/" + sessionPassword + "/" + sessionUseragent;
+                var socketUrl = "ws://" + sessionWebserverIp + ":" + sessionWebserverport + "/zhddWebSocket/" + roomName + "/" + sessionUser + "/" + sessionPassword + "/" + sessionUseragent;
                 webSocket = new WebSocket(socketUrl);
                 webSocket.onerror = function (event) {
                     onError(event);
