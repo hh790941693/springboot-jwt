@@ -41,7 +41,8 @@ public class SesstionTimeoutFilter implements Filter {
             "/sessionInfo.page",
             "/generateVerifyCode.do",
             "/upload/app",
-            "/wsregister.do"));
+            "/wsregister.do",
+            "/getChatRoomInfo.json"));
 
     // 忽略的URL前缀列表
     private static final List<String> IGNORE_URL_PREFIX_LIST = new ArrayList<>(Arrays.asList(

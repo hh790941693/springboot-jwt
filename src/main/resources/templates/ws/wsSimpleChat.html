@@ -88,7 +88,7 @@
         <div id="leftChatDiv">
             <!--头部按钮组-->
             <div id="headerDiv">
-                <div align="left" style="width:130px;height:100%;float:left;font-size: 20px;color: white;">
+                <div align="left" style="width:130px;height:100%;float:left;font-size: 17px;color: white;">
                     <!--房间号-->
                     <span class="fa fa-home"></span>
                     <span style="height:100%;color: yellow;display:inline-block;margin-right: 10px;">{{roomName}}</span>
@@ -110,7 +110,7 @@
                             <span class="glyphicon glyphicon-comment"></span>
                         </button>&nbsp;
                     </th:block>
-                    <button class='label label-info' th:title="刷新" @click="getOnlineInfo()">
+                    <button class='label label-info' th:title="刷新" @click="getChatRoomInfo()">
                         <span class="glyphicon glyphicon-refresh"></span>
                     </button>&nbsp;
                     <button class='label label-success' th:title="切换背景" @click="changeBackgroundImage()">
@@ -251,11 +251,11 @@
             },
             methods: {
                 // 获取房间人数、聊天常用语言、房间人详细信息
-                getOnlineInfo: function () {
+                getChatRoomInfo: function () {
                     $.ajax({
                         type: 'GET',
-                        url: 'getOnlineInfo.json',
-                        data: {"roomName":roomName, "user": sessionUser},
+                        url: rootUrl+ '/getChatRoomInfo.json',
+                        data: {"roomName":roomName},
                         success: function (result) {
                             if (result.code != 1) {
                                 return;

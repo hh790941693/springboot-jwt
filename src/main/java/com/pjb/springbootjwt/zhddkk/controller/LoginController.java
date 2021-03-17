@@ -10,6 +10,7 @@ import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
+import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
 import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.service.SysRoleService;
@@ -25,19 +26,15 @@ import com.pjb.springbootjwt.zhddkk.util.OsUtil;
 import com.pjb.springbootjwt.zhddkk.util.QRCodeUtil;
 import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
+import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import com.wf.captcha.ArithmeticCaptcha;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -688,6 +685,26 @@ public class LoginController {
         response.addCookie(localeCookie);
 
         return "redirect:/";
+    }
+
+    /**
+     * 获取聊天室用户信息.
+     *
+     * @return 聊天室用户信息
+     */
+    @RequestMapping(value = "getChatRoomInfo.json")
+    @ResponseBody
+    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value = "roomName") String roomName) {
+        WsOnlineInfo woi = new WsOnlineInfo();
+        woi.setCommonMap(buildCommonData());
+
+        // 房间用户列表
+        List<String> roomUserNameList = ZhddWebSocket.getRoomClientsUserList(roomName);
+        List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_name", roomUserNameList));
+        woi.setRoomUserProfileList(roomUserProfileList);
+        woi.setRoomUserCount(roomUserNameList.size());
+
+        return Result.ok(woi);
     }
 
     /**
