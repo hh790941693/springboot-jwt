@@ -245,6 +245,9 @@ public class ZhddWebSocket {
      */
     @javax.websocket.OnClose
     public void OnClose() {
+        if (StringUtils.isBlank(this.user)) {
+            return;
+        }
         // 删除房间相关人信息
         removeRoomUser(this.roomName, this.user);
         removeRoomInputing(this.roomName, this.user);
@@ -259,7 +262,7 @@ public class ZhddWebSocket {
         try {
             sendToAll(this.roomName, chatBean);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
 
         // 记录登出日志
@@ -276,6 +279,10 @@ public class ZhddWebSocket {
      */
     @OnError
     public void onError(Throwable throwable) {
+        if (StringUtils.isBlank(this.user)) {
+            return;
+        }
+
         logger.info("用户{}: 进入聊天室:{} 失败", this.user, this.roomName);
         throwable.printStackTrace();
         removeRoomUser(this.roomName, this.user);
@@ -385,7 +392,7 @@ public class ZhddWebSocket {
             try {
                 entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatMessageBean));
             } catch (Exception e) {
-                e.printStackTrace();
+
             }
         }
     }
