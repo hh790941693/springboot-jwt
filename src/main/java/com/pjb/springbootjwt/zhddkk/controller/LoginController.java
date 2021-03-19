@@ -40,7 +40,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,22 +64,6 @@ public class LoginController {
     //          wsclientIndex_v2 头、底、导航栏、iframe都在一个页面
     //          wsclientIndex_v3 采用jquery easyUI重新设计
     private static String INDEX_PAGE_NAME = "wsclientIndex_v3";
-
-    // 数据库驱动
-    @Value("${spring.datasource.driver-class-name}")
-    private String dbDriver;
-
-    // 数据库用户名
-    @Value("${spring.datasource.username}")
-    private String dbUser;
-
-    // 数据库密码
-    @Value("${spring.datasource.password}")
-    private String dbPassword;
-
-    // 数据库连接url
-    @Value("${spring.datasource.url}")
-    private String dbUrl;
 
     /**
      * webSocketConfig.
@@ -525,7 +508,7 @@ public class LoginController {
         systemInfoBean.setOsName(System.getProperty("os.name"));
         systemInfoBean.setJavaHome(System.getProperty("java.home"));
         systemInfoBean.setJavaVersion(System.getProperty("java.version"));
-        systemInfoBean.setDbVersion(OsUtil.queryMysqlVersion(dbDriver, dbUrl, dbUser, dbPassword));
+        systemInfoBean.setDbVersion("No Check");
 
         Properties props = System.getProperties();
         String osName = props.getProperty("os.name");
@@ -534,7 +517,6 @@ public class LoginController {
             nginxPs = OsUtil.findWindowProcess("nginx.exe");
         } else {
             String result = ExcuteLinuxCmdUtil.executeLinuxCmd("ps -ef | grep nginx | grep -v grep");
-            System.out.println(result);
             if (StringUtils.isNotBlank(result) && result.contains("nginx")) {
                 nginxPs = true;
             }
