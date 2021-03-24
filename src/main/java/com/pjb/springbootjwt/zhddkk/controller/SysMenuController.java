@@ -1,10 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.zhddkk.bean.Tree;
@@ -13,8 +10,11 @@ import com.pjb.springbootjwt.zhddkk.domain.SysRoleMenuDO;
 import com.pjb.springbootjwt.zhddkk.domain.SysUserRoleDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
+import com.pjb.springbootjwt.zhddkk.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -32,6 +32,9 @@ import com.pjb.springbootjwt.zhddkk.service.SysRoleMenuService;
 import com.pjb.springbootjwt.common.vo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 菜单表.
@@ -65,6 +68,12 @@ public class SysMenuController extends AdminBaseController {
     
     @Autowired
     private SysUserRoleService sysUserRoleService;
+
+    /**
+     * messageSource.
+     */
+    @Autowired
+    private MessageSource messageSource;
     
     /**
      * 跳转到菜单表页面.
@@ -210,7 +219,7 @@ public class SysMenuController extends AdminBaseController {
      */
     @GetMapping("/getRoleMenuList")
     @ResponseBody
-    public Result<List<SysMenuDO>> queryRoleMenuList(int userId) {
+    public Result<List<SysMenuDO>> queryRoleMenuList(int userId, HttpServletRequest request) {
         List<SysMenuDO> targetList = new ArrayList<>();
         WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
         if (null != wsUsersDO) {
@@ -238,6 +247,15 @@ public class SysMenuController extends AdminBaseController {
                 }
             } else {
                 List<SysMenuDO> srcList = sysMenuService.queryRoleMenuList(sysUserRoleDO.getRoleId());
+                Locale locale = (Locale) request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+                for (SysMenuDO sysMenuDO : srcList) {
+                    if (StringUtils.isNotBlank(sysMenuDO.getI18nKey())) {
+                        String i18nValue = messageSource.getMessage(sysMenuDO.getI18nKey(), null, locale);
+                        if (StringUtils.isNotBlank(i18nValue)) {
+                            sysMenuDO.setName(i18nValue);
+                        }
+                    }
+                }
                 targetList = adjustMenuList(srcList);
             }
         }
