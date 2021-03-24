@@ -11,16 +11,24 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * 日志打印.
  */
 @Configuration
-public class ActionLogInterceptor implements HandlerInterceptor {
+public class ActionLogInterceptor implements WebMvcConfigurer,HandlerInterceptor {
 
     private boolean logSwitch = true;
     private long startTime = 0;
     private String viewName = "";
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(this)
+                .addPathPatterns("/**");
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o) {

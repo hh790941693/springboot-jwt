@@ -9,14 +9,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class InterceptorConfigNew implements WebMvcConfigurer {
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(actionLogInterceptor())
-                .addPathPatterns("/**");
-    }
-
-    @Bean
-    public ActionLogInterceptor actionLogInterceptor() {
-        return new ActionLogInterceptor();
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(actionLogInterceptor())
+//                .addPathPatterns("/**");
+//    }
+//
+//    @Bean
+//    public ActionLogInterceptor actionLogInterceptor() {
+//        return new ActionLogInterceptor();
+//    }
 }

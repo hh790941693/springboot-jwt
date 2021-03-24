@@ -38,6 +38,9 @@ public class SysMenuDO implements Serializable {
     //父菜单id
     @ApiModelProperty(value = "parentId", name = "父菜单id")
     private Integer parentId;
+    //国际化key
+    @ApiModelProperty(value = "i18nKey", name = "国际化key")
+    private String i18nKey;
     //url
     @ApiModelProperty(value = "url", name = "url")
     private String url;

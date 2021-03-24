@@ -24,14 +24,30 @@ function initLeftMenu() {
     var menujson = {};
     $.each(_menus.menus, function(i, n) {
         menujson = {};
-        menujson.title = n.name;
+        var parentMenuName = n.name;
+        if (n.i18nKey != "" && n.i18nKey != null) {
+			try {
+				parentMenuName = $.ws.i18n(n.i18nKey);
+			} catch (e) {
+
+			}
+		}
+        menujson.title = parentMenuName;
         menujson.iconCls = "icon-menu-folder-close";
         var contentHtml = "<ul>";
         $.each(n.childrenList, function(j, o) {
         	var urlNew = o.url + "?userId=" + sessionUserId
 				               + "&user=" + sessionUser
 				               + "&roleId=" + sessionRoleId;
-            contentHtml += '<li><div closable="'+o.extColumn1+'"><a target="mainFrame" href="' + urlNew + '" ><span class="'+o.icon+'" ></span>' + o.name + '</a></div></li> ';
+        	var sonMenuName = o.name;
+			if (o.i18nKey != "" && o.i18nKey != null) {
+				try {
+					sonMenuName = $.ws.i18n(o.i18nKey);
+				} catch (e) {
+
+				}
+			}
+            contentHtml += '<li><div closable="'+o.extColumn1+'"><a target="mainFrame" href="' + urlNew + '" ><span class="'+o.icon+'" ></span>' + sonMenuName + '</a></div></li> ';
         });
         contentHtml += '</ul>';
         menujson.content = contentHtml;
