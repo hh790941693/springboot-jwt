@@ -13,7 +13,7 @@
                         <form class="form-horizontal m-t" id="form">
 							<!-- 主键 -->
                             <input type="hidden" id="id" name="id" th:value="${sysMenu.id}">
-																													<div class="form-group">
+							<div class="form-group">
 								<label class="col-sm-3 control-label" for="name"><span style="color:red">*</span>&nbsp;菜单名称：</label>
 								<div class="col-sm-8">
 									<input type="text" id="name" name="name" th:value="${sysMenu.name}" class="form-control" />
@@ -31,7 +31,13 @@
 									</select>
 								</div>
 							</div>
-																								<div class="form-group">
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="name"><span style="color:red">*</span>&nbsp;国际化key：</label>
+								<div class="col-sm-8">
+									<input type="text" id="i18nKey" name="i18nKey" th:value="${sysMenu.i18nKey}" class="form-control" />
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-sm-3 control-label" for="url">url：</label>
 								<div class="col-sm-8">
 									<input type="text" id="url" name="url" th:value="${sysMenu.url}" class="form-control" />
@@ -39,7 +45,7 @@
 							</div>
 							
 							<div class="form-group">
-								<label class="col-sm-3 control-label">图标：</label>
+								<label class="col-sm-3 control-label"><span style="color:red">*</span>图标：</label>
 								<div class="col-sm-5">
 									<input id="icon" name="icon" th:value="${sysMenu.icon}" class="form-control" type="text"
 										   placeholder="例如：icon icon-edit">

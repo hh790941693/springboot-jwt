@@ -45,21 +45,27 @@ function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
     $("#form").validate({
         rules : {
-                                    name : {
+            name : {
                 required : true
             },
-                                icon : {
+            icon : {
                 required : true
             },
-                    },
+            i18nKey : {
+                required : true
+            },
+        },
         messages : {
-                                    name : {
+            name : {
                 required : icon + "请输入菜单名称"
             },
-                                icon : {
-                required : icon + "请输入图标名称"
+            icon : {
+                required : icon + "请选择图标"
             },
-                    }
+            i18nKey : {
+                required : icon + "请输入国际化key"
+            },
+        }
     })
 }
 
