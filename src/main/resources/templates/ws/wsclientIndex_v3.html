@@ -132,7 +132,7 @@
                 </div>
                 
                 <!--右侧-->
-                 <div data-options="region:'east',split:false,border:false" style="width:520px">
+                 <div data-options="region:'east',split:false,border:false" style="width:600px">
                         <div class="easyui-layout" data-options="fit:true">
                             <!--右侧时间-->
                             <div data-options="region:'north',split:false,border:false" style="height:40%;padding-top:4px;">
@@ -303,7 +303,7 @@
             </div>
             <div region="south" border="false" style="text-align: right; height: 36px; line-height: 30px;">
                 <a class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" onclick="modifyPassword()">确定</a>
-                <a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" onclick="cancel()">取消</a>
+                <a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" onclick="cancelPassword()">取消</a>
             </div>
         </div>
     </div>
@@ -726,7 +726,7 @@
     });
     
     // 取消修改密码
-    function cancel() {
+    function cancelPassword() {
         $('#modifyPasswordDiv').window('close');
     }
 
@@ -747,7 +747,7 @@
                 } else {
                     layer.msg(result.data);
                 }
-                setTimeout(cancel, 2500);
+                setTimeout(cancelPassword, 2500);
             }
         });
     }
