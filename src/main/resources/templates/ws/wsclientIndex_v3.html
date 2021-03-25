@@ -154,6 +154,7 @@
 
                             <!--右侧按钮组-->
                             <div data-options="region:'center',split:false,border:false" style="height:60%;padding-top: 4px;text-align: right;padding-right: 5px;">
+                                <a href="#" id="modifyLanguageBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-22-7'">[[#{btn.language.tips}]]&nbsp;&nbsp;</a>
                                 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon icon-15-1'" id="playMusicBtn">[[#{btn.music.tips}]]</a>
                                 <a href="#" id="signBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-7-20'">[[#{btn.signin.tips}]]&nbsp;&nbsp;</a>
                                  <a href="#" id="qrcodeBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-14-13'">[[#{btn.qrcode.tips}]]&nbsp;&nbsp;</a>
@@ -307,6 +308,32 @@
         </div>
     </div>
 
+    <!--修改语言窗口 默认不显示-->
+    <div id="modifyLanguageDiv" class="easyui-window" title="设置语言" collapsible="false" minimizable="false"
+         maximizable="false" data-options="iconCls:'icon-save'" closed="true" style="width: 300px; height: 160px; padding: 1px;display: none;">
+        <div class="easyui-layout" fit="true">
+            <div region="center" border="true" style="padding: 10px;">
+                <table cellpadding=3 style="border-collapse:separate; border-spacing:10px;">
+                    <tr>
+                        <td>中文：</td>
+                        <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="zh_CN"/></td>
+                    </tr>
+                    <tr>
+                        <td>英文：</td>
+                        <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="en_US"/></td>
+                    </tr>
+                    <tr>
+                        <td>韩文：</td>
+                        <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="ko_KR"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div region="south" border="false" style="text-align: right; height: 36px; line-height: 30px;">
+                <a class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" onclick="confirmLanguage()">确定</a>
+            </div>
+        </div>
+    </div>
+
     <!--tab框区域右键菜单栏 默认不显示-->
     <div id="mm" class="easyui-menu" style="width:150px;display: none;">
         <div id="mm-tabclose">关闭</div>
@@ -419,6 +446,17 @@
             resizable:false
         });
 
+        // 设置语言对话框
+        $('#modifyLanguageDiv').window({
+            title: '设置语言',
+            width: 300,
+            modal: true,
+            shadow: true,
+            closed: true,
+            height: 240,
+            resizable:false
+        });
+
         // 设置网页标题
         setPageTitle();
         function setPageTitle() {
@@ -519,6 +557,11 @@
         // 修改密码
         $("#modifyPasswordBtn").click(function (){
             $('#modifyPasswordDiv').window('open');
+        })
+
+        // 设置语言
+        $("#modifyLanguageBtn").click(function (){
+            $('#modifyLanguageDiv').window('open');
         })
 
         // 退出
@@ -707,6 +750,16 @@
                 setTimeout(cancel, 2500);
             }
         });
+    }
+
+    // 设置语言
+    function confirmLanguage() {
+        var language = $("input[name='language']:checked").val();
+        if (language != null && language != "") {
+            $('#modifyLanguageDiv').window('close');
+            var tmpUrl = window.location.href;
+            window.location.href = tmpUrl.replace("#","") + "?lang="+language;
+        }
     }
 
     /**
