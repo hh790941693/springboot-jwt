@@ -72,7 +72,7 @@ function load() {
 			},
 						{
 				field : 'extColumn1',
-				title : '是否可关闭(true|false)'
+				title : '是否可关闭'
 			},
 						{
 				field : 'extColumn2',

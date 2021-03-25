@@ -105,7 +105,6 @@ public class SysMenuController extends AdminBaseController {
         
         List<SysMenuDO> parentMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().eq("parent_id", 0));
         model.addAttribute("pMenuList", parentMenuList);
-        
         return "zhddkk/sysMenu/sysMenuForm";
     }
     
@@ -120,6 +119,9 @@ public class SysMenuController extends AdminBaseController {
     public String edit(@PathVariable("id") Integer id, Model model) {
         SysMenuDO sysMenu = sysMenuService.selectById(id);
         model.addAttribute("sysMenu", sysMenu);
+
+        List<SysMenuDO> parentMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().eq("parent_id", 0));
+        model.addAttribute("pMenuList", parentMenuList);
         return "zhddkk/sysMenu/sysMenuForm";
     }
     
