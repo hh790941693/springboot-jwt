@@ -249,8 +249,15 @@ public class SysMenuController extends AdminBaseController {
                 List<SysMenuDO> srcList = sysMenuService.queryRoleMenuList(sysUserRoleDO.getRoleId());
                 Locale locale = (Locale) request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
                 for (SysMenuDO sysMenuDO : srcList) {
-                    if (StringUtils.isNotBlank(sysMenuDO.getI18nKey())) {
-                        String i18nValue = messageSource.getMessage(sysMenuDO.getI18nKey(), null, locale);
+                    String i18nKey = sysMenuDO.getI18nKey();
+                    if (StringUtils.isNotBlank(i18nKey)) {
+                        String i18nValue = "";
+                        try {
+                            i18nValue = messageSource.getMessage(i18nKey, null, locale);
+                        } catch (Exception e) {
+                            System.out.println("解析i18nKey异常:" + i18nKey + " "+e.getMessage());
+                            logger.error("解析i18nKey异常", e);
+                        }
                         if (StringUtils.isNotBlank(i18nValue)) {
                             sysMenuDO.setName(i18nValue);
                         }
