@@ -324,11 +324,8 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "登录成功页面")
     @RequestMapping(value = "wsclientIndex.page")
-    public String wsclientIndex(Model model, HttpServletRequest request) {
+    public String wsclientIndex() {
         logger.debug("访问wsclientIndex.page");
-        Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
-        model.addAttribute("languageInit",locale.getLanguage());
-        model.addAttribute("countryInit",locale.getCountry());
         return "ws/" + INDEX_PAGE_NAME;
     }
 

@@ -564,6 +564,7 @@
         // 设置语言
         $("#modifyLanguageBtn").click(function (){
             $('#modifyLanguageDiv').window('open');
+            $("input[name='language'][value='"+language+"_"+counrty+"']").prop("checked", "checked");
         })
 
         // 退出
