@@ -311,21 +311,21 @@
     </div>
 
     <!--修改语言窗口 默认不显示-->
-    <div id="modifyLanguageDiv" class="easyui-window" title="设置语言" collapsible="false" minimizable="false"
-         maximizable="false" data-options="iconCls:'icon-save'" closed="true" style="width: 300px; height: 160px; padding: 1px;display: none;">
+    <div id="modifyLanguageDiv" class="easyui-window" th:title="#{btn.language.tips}" collapsible="false" minimizable="false"
+         maximizable="false" data-options="iconCls:'icon-save'" closed="true" style="width: 250px; height: 160px; padding: 1px;display: none;">
         <div class="easyui-layout" fit="true">
             <div region="center" border="true" style="padding: 10px;">
-                <table cellpadding=3 style="border-collapse:separate; border-spacing:10px;">
+                <table cellpadding=5 style="border-collapse:separate; border-spacing:20px;">
                     <tr>
-                        <td>中文：</td>
+                        <td th:text="#{td.chinese.text}"></td>
                         <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="zh_CN"/></td>
                     </tr>
                     <tr>
-                        <td>英文：</td>
+                        <td th:text="#{td.english.text}"></td>
                         <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="en_US"/></td>
                     </tr>
                     <tr>
-                        <td>韩文：</td>
+                        <td th:text="#{td.korean.text}"></td>
                         <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="ko_KR"/></td>
                     </tr>
                 </table>
