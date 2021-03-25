@@ -318,15 +318,15 @@
                 <table cellpadding=5 style="border-collapse:separate; border-spacing:20px;">
                     <tr>
                         <td th:text="#{td.chinese.text}"></td>
-                        <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="zh_CN"/></td>
+                        <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="zh_CN" th:checked="${languageInit == 'zh'}"/></td>
                     </tr>
                     <tr>
                         <td th:text="#{td.english.text}"></td>
-                        <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="en_US"/></td>
+                        <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="en_US" th:checked="${languageInit == 'en'}"/></td>
                     </tr>
                     <tr>
                         <td th:text="#{td.korean.text}"></td>
-                        <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="ko_KR"/></td>
+                        <td><input type="radio" name="language" class="txt01 easyui-validatebox" th:value="ko_KR" th:checked="${languageInit == 'ko'}"/></td>
                     </tr>
                 </table>
             </div>

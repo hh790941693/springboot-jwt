@@ -251,8 +251,6 @@ public class LoginController {
         String webserverip = webSocketConfig.getAddress();
         String webserverPort = webSocketConfig.getPort();
         logger.info("webserverip:{} webserverPort:{}", webserverip, webserverPort);
-        //configMap.put(CommonConstants.S_WEBSERVERIP, webserverip);
-        //configMap.put(CommonConstants.S_WEBSERVERPORT, webserverPort);
 
         // 客户端浏览器类型
         String userAgent = request.getHeader("User-Agent");
@@ -326,8 +324,11 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "登录成功页面")
     @RequestMapping(value = "wsclientIndex.page")
-    public String wsclientIndex() {
+    public String wsclientIndex(Model model, HttpServletRequest request) {
         logger.debug("访问wsclientIndex.page");
+        Locale locale = (Locale)request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        model.addAttribute("languageInit",locale.getLanguage());
+        model.addAttribute("countryInit",locale.getCountry());
         return "ws/" + INDEX_PAGE_NAME;
     }
 
