@@ -280,25 +280,25 @@
     </div>
     
     <!--修改密码窗口 默认不显示-->
-    <div id="modifyPasswordDiv" class="easyui-window" title="修改密码" collapsible="false" minimizable="false"
+    <div id="modifyPasswordDiv" class="easyui-window" th:title="#{btn.modifypasswd.tips}" collapsible="false" minimizable="false"
          maximizable="false" data-options="iconCls:'icon-save'" closed="true" style="width: 300px; height: 160px; padding: 1px;display: none;">
         <div class="easyui-layout" fit="true">
             <div region="center" border="true" style="padding: 10px;">
                 <table cellpadding=3 style="border-collapse:separate; border-spacing:10px;">
                     <tr>
-                        <td>用户名：</td>
+                        <td th:text="#{td.username.text}"></td>
                         <td><input name="user" type="text" class="txt01 easyui-validatebox tb" readonly th:value="${session.sessionInfo.user}"/></td>
                     </tr>
                     <tr>
-                        <td>旧密码：</td>
+                        <td th:text="#{td.oldpassword.text}"></td>
                         <td><input name="oldPass" type="password" class="txt01 easyui-validatebox tb" data-options="required:true"/></td>
                     </tr>
                     <tr>
-                        <td>新密码：</td>
+                        <td th:text="#{td.newpassword.text}"></td>
                         <td><input id="newPass" name="newPass" type="password" class="txt01 easyui-validatebox tb" data-options="required:true"/></td>
                     </tr>
                     <tr>
-                        <td>确认密码：</td>
+                        <td th:text="#{td.confirmpassword.text}"></td>
                         <td><input id="confirmPass" name="confirmPass" type="password" class="txt01 easyui-validatebox tb" required="required" validType="equals['#newPass']"/></td>
                     </tr>
                 </table>
