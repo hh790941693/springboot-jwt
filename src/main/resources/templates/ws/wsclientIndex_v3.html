@@ -132,7 +132,7 @@
                 </div>
                 
                 <!--右侧-->
-                 <div data-options="region:'east',split:false,border:false" style="width:600px">
+                 <div data-options="region:'east',split:false,border:false" style="width:520px">
                         <div class="easyui-layout" data-options="fit:true">
                             <!--右侧时间-->
                             <div data-options="region:'north',split:false,border:false" style="height:40%;padding-top:4px;">
@@ -154,7 +154,6 @@
 
                             <!--右侧按钮组-->
                             <div data-options="region:'center',split:false,border:false" style="height:60%;padding-top: 4px;text-align: right;padding-right: 5px;">
-                                <a href="#" id="modifyLanguageBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-22-7'">[[#{btn.language.tips}]]&nbsp;&nbsp;</a>
                                 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon icon-15-1'" id="playMusicBtn">[[#{btn.music.tips}]]</a>
                                 <a href="#" id="signBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-7-20'">[[#{btn.signin.tips}]]&nbsp;&nbsp;</a>
                                  <a href="#" id="qrcodeBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-14-13'">[[#{btn.qrcode.tips}]]&nbsp;&nbsp;</a>
@@ -176,6 +175,9 @@
                 </div>
 
                 <div style="width:38%;float:right;text-align:right;">
+                    <a href="#" id="modifyLanguageBtn">
+                        <span class="icon icon-22-7"></span>[[#{btn.language.tips}]]&nbsp;
+                    </a>
                     <a href="#" id="sessionInfoBtn">
                         <span class="icon icon-11-3"></span>[[#{a.sessioninfo.label}]]&nbsp;
                     </a>
