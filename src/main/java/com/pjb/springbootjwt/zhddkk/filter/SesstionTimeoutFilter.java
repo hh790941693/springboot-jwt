@@ -117,14 +117,19 @@ public class SesstionTimeoutFilter implements Filter {
         // 拦截 返回到登录页面
         logger.info("session user:" + user);
         logger.info("servletPath:" + servletPath);
-        // JSP格式返回
-        if (!(httpServletRequest.getHeader("accept").indexOf("application/json") > -1 || (httpServletRequest
-                .getHeader("X-Requested-With") != null && httpServletRequest.getHeader("X-Requested-With").indexOf(
-                "XMLHttpRequest") > -1))) {
 
-            // 如果不是异步请求
+        String headerAccept = httpServletRequest.getHeader("accept");
+        String headerXRequestedWidth = httpServletRequest.getHeader("X-Requested-With");
+
+        logger.info("accept:" + headerAccept);
+        logger.info("X-Requested-With:" + headerXRequestedWidth);
+        // JSP格式返回
+        if (!(headerAccept.indexOf("application/json") > -1 || (headerXRequestedWidth != null && headerXRequestedWidth.indexOf(
+                "XMLHttpRequest") > -1))) {
+            // http请求
             httpServletResponse.sendRedirect(contextPath + "/");
         } else {
+            // ajax请求
             try {
                 Map<String, String> map = new HashMap<>();
                 map.put("resultCode", "-1");
