@@ -1,6 +1,5 @@
 package com.pjb.springbootjwt.zhddkk.filter;
 
-import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
