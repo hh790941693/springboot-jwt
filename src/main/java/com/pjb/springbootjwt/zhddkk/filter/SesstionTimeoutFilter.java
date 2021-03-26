@@ -1,5 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.filter;
 
+import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
@@ -132,8 +133,8 @@ public class SesstionTimeoutFilter implements Filter {
             // ajax请求
             try {
                 Map<String, String> map = new HashMap<>();
-                map.put("resultCode", "-1");
-                map.put("resultMsg", "session invalid");
+                map.put("code", "-1");
+                map.put("msg", "session invalid");
                 PrintWriter writer = httpServletResponse.getWriter();
                 // JSON格式返回
                 writer.write(JsonUtil.javaobject2Jsonstr(map));
