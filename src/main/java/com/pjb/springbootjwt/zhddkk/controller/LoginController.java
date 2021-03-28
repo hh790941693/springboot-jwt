@@ -11,7 +11,7 @@ import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
-import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
+import com.pjb.springbootjwt.zhddkk.bean.LoadConfigFileBean;
 import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.service.SysRoleService;
 import com.pjb.springbootjwt.zhddkk.service.SysUserRoleService;
@@ -56,7 +56,7 @@ public class LoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    private static final Map<String, String> configMap = WsInterceptor.getConfigMap();
+    private static final Map<String, String> configMap = LoadConfigFileBean.getConfigMap();
 
     // 登陆成功后的页面前缀
     // 目前可用值:wsclientIndex 比v2更新一点的版本

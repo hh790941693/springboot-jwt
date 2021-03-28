@@ -15,7 +15,7 @@ import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
-import com.pjb.springbootjwt.zhddkk.interceptor.WsInterceptor;
+import com.pjb.springbootjwt.zhddkk.bean.LoadConfigFileBean;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
@@ -51,9 +51,9 @@ public class WebSocketClientController extends AdminBaseController {
 
     private static final SimpleDateFormat SDF_STANDARD = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private static final Map<String, String> configMap = WsInterceptor.getConfigMap();
+    private static final Map<String, String> configMap = LoadConfigFileBean.getConfigMap();
 
-    private static final Map<String, String> chatMappingMap = WsInterceptor.getChatMappingMap();
+    private static final Map<String, String> chatMappingMap = LoadConfigFileBean.getChatMappingMap();
 
     @Autowired
     private RedisUtil redisUtil;

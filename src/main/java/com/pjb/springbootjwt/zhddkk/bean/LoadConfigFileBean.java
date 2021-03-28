@@ -1,4 +1,4 @@
-package com.pjb.springbootjwt.zhddkk.interceptor;
+package com.pjb.springbootjwt.zhddkk.bean;
 
 import com.pjb.springbootjwt.zhddkk.util.UnicodeUtil;
 import java.io.*;
@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
  * 初始化数据用.
  */
 @Configuration
-public class WsInterceptor implements InitializingBean {
+public class LoadConfigFileBean implements InitializingBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(WsInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoadConfigFileBean.class);
 
     // config.properties中的记录
     public static Map<String, String> configMap = new HashMap<String, String>();
@@ -29,7 +29,7 @@ public class WsInterceptor implements InitializingBean {
     }
 
     public static void setConfigMap(Map<String, String> configMap) {
-        WsInterceptor.configMap = configMap;
+        LoadConfigFileBean.configMap = configMap;
     }
 
     public static Map<String, String> getChatMappingMap() {
@@ -37,7 +37,7 @@ public class WsInterceptor implements InitializingBean {
     }
 
     public static void setChatMappingMap(Map<String, String> chatMappingMap) {
-        WsInterceptor.chatMappingMap = chatMappingMap;
+        LoadConfigFileBean.chatMappingMap = chatMappingMap;
     }
 
     @Override
