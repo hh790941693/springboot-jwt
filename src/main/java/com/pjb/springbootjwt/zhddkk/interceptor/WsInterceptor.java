@@ -4,21 +4,17 @@ import com.pjb.springbootjwt.zhddkk.util.UnicodeUtil;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
  * 初始化数据用.
  */
 @Configuration
-public class WsInterceptor extends HandlerInterceptorAdapter implements InitializingBean {
+public class WsInterceptor implements InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(WsInterceptor.class);
 
@@ -48,24 +44,6 @@ public class WsInterceptor extends HandlerInterceptorAdapter implements Initiali
     public void afterPropertiesSet() {
         logger.info("WsInterceptor call afterPropertiesSet()");
         loadData();
-    }
-
-    /**
-     * 前处理.
-     * @return bool
-     */
-    public boolean preHandle() {
-        logger.info("WsInterceptor call preHandle()");
-        return true;
-    }
-
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-        logger.info("WsInterceptor call postHandle()");
-    }
-
-    public void afterCompletion(
-            HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        logger.info("WsInterceptor call afterCompletion()");
     }
 
     private void loadData() {
