@@ -190,6 +190,9 @@
                     <a href="#" id="feedbackBtn">
                         <span class="icon icon-12-9"></span>[[#{a.feedback.label}]]&nbsp;
                     </a>&nbsp;
+                    <a href="#" id="easyUI">
+                        <span class="icon icon-1-19"></span>easyUI&nbsp;
+                    </a>&nbsp;
                     <a href="#" id="aboutUsBtn">
                         <span class="icon icon-12-11"></span>[[#{a.aboutus.label}]]&nbsp;
                     </a>
@@ -636,6 +639,19 @@
             });
         });
 
+        // EasyUI Demo
+        $("#easyUI").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: 'easyUI Demo',
+                maxmin: false,
+                shadeClose: true,//点击遮罩关闭层
+                area: ['800px', '500px'],
+                anim: 1,
+                content: 'index/easyUIDemo.page'
+            });
+        });
+        
         //关于我们
         $("#aboutUsBtn").click(function() {
             parent.layer.open({

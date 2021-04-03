@@ -75,4 +75,13 @@ public class WsIndexController {
     public String aboutUs() {
         return "ws/aboutUs";
     }
+
+    /**
+     * easyUI Demo.
+     */
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.OTHER, subModule = "", describe = "easyUI Demo")
+    @RequestMapping("/easyUIDemo.page")
+    public String easyUI() {
+        return "ws/easyuiDemo";
+    }
 }

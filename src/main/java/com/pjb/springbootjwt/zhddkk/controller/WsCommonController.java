@@ -1,6 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -183,5 +184,22 @@ public class WsCommonController extends AdminBaseController {
         // 刷新缓存
         cacheService.cacheData();
         return Result.ok();
+    }
+
+    @ResponseBody
+    @GetMapping("/jsonlist")
+    public String queryCommonList(String type, String name){
+        Wrapper<WsCommonDO> wrapper = new EntityWrapper<WsCommonDO>();
+        if (StringUtils.isNotBlank(type)) {
+            wrapper.eq("type", type);
+        }
+        if (StringUtils.isNotBlank(name)) {
+            wrapper.like("name", name, SqlLike.DEFAULT);
+        }
+        wrapper.orderBy("orderby");
+        Page<WsCommonDO> page = wsCommonService.selectPage(new Page<>(1,99), wrapper);
+        List<WsCommonDO> list = page.getRecords();
+
+        return JSON.toJSONString(list);
     }
 }

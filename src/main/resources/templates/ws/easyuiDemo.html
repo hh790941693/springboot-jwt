@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>easyUI Demo</title>
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/themes/default/easyui.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/themes/icon.css}" />
+    <script type="text/javascript" th:src="@{/js/easyui-1.9.11/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/easyui-1.9.11/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src='@{/js/easyui-1.9.11/locale/easyui-lang-zh_CN.js}'> </script>
+    <script type="text/javascript" th:src="@{/js/common/rootPath.js}"></script>
+    
+    <style>
+        form label {
+            width: 67px;
+            display: inline-block;
+        }
+
+        .ftitle {
+            margin-bottom: 3px;
+        }
+
+        .fitem {
+            height: 33px;
+        }
+    </style>
+</head>
+    <body>
+        <table id="dg" title="通用配置" class="easyui-datagrid" style="width:95%;height:95%;"
+               url="/zhddkk/wsCommon/jsonlist"
+               method="get"
+               toolbar="#toolbar"
+               rownumbers="true" fitColumns="true" singleSelect="true">
+            <thead>
+                <tr>
+                    <th field="type" width="50">type</th>
+                    <th field="name" width="50">name</th>
+                    <th field="orderby" width="50">orderby</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="toolbar">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addCommon()">新增</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editCommon()">编辑</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteCommon()">删除</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reloadCommon()">刷新</a>
+        </div>
+        
+        <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+             closed="true" buttons="#dlg-buttons">
+            <div class="ftitle">通用配置信息</div>
+            <form id="fm" method="post">
+                <div class="fitem" style="display: none;">
+                    <label>id:</label>
+                    <input name="id" type="hidden">
+                </div>
+                <div class="fitem">
+                    <label>type:</label>
+                    <input name="type" class="easyui-validatebox" required="true">
+                </div>
+                <div class="fitem">
+                    <label>name:</label>
+                    <input name="name" class="easyui-validatebox" required="true">
+                </div>
+                <div class="fitem">
+                    <label>orderby:</label>
+                    <input name="orderby" class="easyui-validatebox" required="true">
+                </div>
+            </form>
+        </div>
+        <div id="dlg-buttons">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveCommon()">保存</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
+        </div>
+    </body>
+    
+    <script>
+          var url = "";
+          function addCommon() {
+              $('#dlg').dialog('open').dialog('setTitle', '新增');
+              $('#fm').form('clear');
+              url = rootUrl + '/zhddkk/wsCommon/save';
+          }
+          
+          function editCommon() {
+              var row = $('#dg').datagrid('getSelected');
+              if (row){
+                  console.log(row);
+                  $('#dlg').dialog('open').dialog('setTitle','编辑');
+                  $('#fm').form('load',row);
+                  url = rootUrl + '/zhddkk/wsCommon/update';
+              }
+          }
+    
+          function saveCommon(){
+              $('#fm').form('submit',{
+                  url: url,
+                  onSubmit: function(){
+                      return $(this).form('validate');
+                  },
+                  success: function(result){
+                      var result = eval('('+result+')');
+                      if (result.code == 0){
+                          $.messager.show({
+                              title: 'Error',
+                              msg: result.msg
+                          });
+                      } else {
+                          $('#dlg').dialog('close');        // close the dialog
+                          $('#dg').datagrid('reload');    // reload the user data
+                      }
+                  }
+              });
+          }
+    
+          function deleteCommon(){
+              var row = $('#dg').datagrid('getSelected');
+              if (row){
+                  $.messager.confirm('删除确认','确认要删除这条记录吗?',function(r){
+                      if (r){
+                          $.post('/zhddkk/wsCommon/remove',{id:row.id},function(result){
+                              if (result.code == 1){
+                                  $('#dg').datagrid('reload');
+                              } else {
+                                  $.messager.show({
+                                      title: 'Error',
+                                      msg: result.msg
+                                  });
+                              }
+                          },'json');
+                      }
+                  });
+              }
+          }
+          
+          function reloadCommon() {
+              $('#dg').datagrid('reload');
+          }
+    </script>
+</html>
