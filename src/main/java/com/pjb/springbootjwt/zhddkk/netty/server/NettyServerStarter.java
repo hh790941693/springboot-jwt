@@ -1,4 +1,4 @@
-package com.pjb.springbootjwt.zhddkk.netty;
+package com.pjb.springbootjwt.zhddkk.netty.server;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +10,9 @@ import java.net.InetSocketAddress;
 
 @Component
 @Order(value = 1)
-public class NettyStarter implements CommandLineRunner {
+public class NettyServerStarter implements CommandLineRunner {
 
-    private static Logger logger = LoggerFactory.getLogger(NettyStarter.class);
+    private static Logger logger = LoggerFactory.getLogger(NettyServerStarter.class);
 
     @Autowired
     private NettyServer nettyServer;

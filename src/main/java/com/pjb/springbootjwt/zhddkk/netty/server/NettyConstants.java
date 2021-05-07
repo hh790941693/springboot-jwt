@@ -1,4 +1,4 @@
-package com.pjb.springbootjwt.zhddkk.netty;
+package com.pjb.springbootjwt.zhddkk.netty.server;
 
 public class NettyConstants {
 

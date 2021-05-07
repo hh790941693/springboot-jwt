@@ -1,4 +1,4 @@
-package com.pjb.springbootjwt.zhddkk.netty;
+package com.pjb.springbootjwt.zhddkk.netty.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

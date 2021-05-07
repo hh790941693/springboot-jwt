@@ -1,4 +1,4 @@
-package com.pjb.springbootjwt.zhddkk.netty;
+package com.pjb.springbootjwt.zhddkk.netty.server;
 
 import com.pjb.springbootjwt.common.utils.SpringContextHolder;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
