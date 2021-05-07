@@ -18,6 +18,7 @@ import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.websocket.Session;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -58,7 +59,17 @@ public class WsAdsController extends AdminBaseController {
     */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.AD_PUBLISH, subModule = "", describe = "广告列表页面")
     @GetMapping()
-    public String wsAds() {
+    public String wsAds(HttpServletRequest request, Model model) {
+        // 获取get请求参数
+        String userId = request.getParameter("userId");
+        String userName = request.getParameter("userName");
+        String roleId = request.getParameter("roleId");
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("userName", userName);
+        model.addAttribute("roleId", roleId);
+        Map<String, String[]> paraMap = request.getParameterMap();
+
         return "zhddkk/wsAds/wsAds";
     }
 
