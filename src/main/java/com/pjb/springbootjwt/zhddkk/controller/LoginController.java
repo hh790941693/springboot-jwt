@@ -59,10 +59,11 @@ public class LoginController {
     private static final Map<String, String> configMap = LoadConfigFileBean.getConfigMap();
 
     // 登陆成功后的页面前缀
-    // 目前可用值:wsclientIndex 比v2更新一点的版本
-    //          wsclientIndex_v1 头、底、导航栏、iframe分离
-    //          wsclientIndex_v2 头、底、导航栏、iframe都在一个页面
-    //          wsclientIndex_v3 采用jquery easyUI重新设计
+    // 目前可用值:
+    //          v=1 wsclientIndex_v1 头、底、导航栏、iframe分离
+    //          v=2 wsclientIndex_v2 头、底、导航栏、iframe都在一个页面
+    //          v=0 wsclientIndex 比v2更新一点的版本
+    //          默认 wsclientIndex_v3 采用jquery easyUI重新设计
     private static String INDEX_PAGE_NAME = "wsclientIndex_v3";
 
     /**
@@ -141,9 +142,8 @@ public class LoginController {
                 case "2":
                     INDEX_PAGE_NAME = "wsclientIndex_v2";
                     break;
-                case "3":
+                default:
                     INDEX_PAGE_NAME = "wsclientIndex_v3";
-                    break;
             }
         }
 
