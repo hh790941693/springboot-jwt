@@ -204,7 +204,7 @@ public class LoginController {
         if (null == curUserObj) {
             // 用户未注册
             request.setAttribute("user", user);
-            request.setAttribute("detail", "该用户不存在，请先注册!");
+            request.setAttribute("detail", getLocaleMessage("login.err.user.not.exist", request));
             request.getRequestDispatcher("index").forward(request, response);
             //request.getRequestDispatcher("loginfail.page").forward(request, response);
             return;
@@ -215,7 +215,7 @@ public class LoginController {
         if (isEnable.equals("0")) {
             // 此账号已被禁用
             request.setAttribute("user", user);
-            request.setAttribute("detail", "该用户已被禁用!");
+            request.setAttribute("detail", getLocaleMessage("login.err.user.disable", request));
             request.getRequestDispatcher("index").forward(request, response);
             return;
         }
@@ -234,7 +234,7 @@ public class LoginController {
         // 如果密码不对
         if (!pass.equals(dbPassDecrypted)) {
             request.setAttribute("user", user);
-            request.setAttribute("detail", "密码错误!");
+            request.setAttribute("detail", getLocaleMessage("login.err.password.wrong", request));
             request.getRequestDispatcher("index").forward(request, response);
             return;
         }
@@ -243,7 +243,7 @@ public class LoginController {
         String verifyCode = (String) request.getSession().getAttribute(CommonConstants.VERIFY_CODE);
         if (!verifyCodeInput.equals(verifyCode)) {
             request.setAttribute("user", user);
-            request.setAttribute("detail", "验证码错误!");
+            request.setAttribute("detail", getLocaleMessage("login.err.verifycode.wrong", request));
             request.getRequestDispatcher("index").forward(request, response);
             return;
         }
