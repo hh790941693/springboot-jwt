@@ -129,7 +129,7 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "登陆首页页面")
     @RequestMapping({"", "/", "/index"})
-    public String home(Model model, HttpServletRequest request) {
+    public String home(Model model, HttpServletRequest request, String errorMsg) {
         String version = request.getParameter("v");
         if (StringUtils.isNotBlank(version)) {
             switch(version){
@@ -191,6 +191,9 @@ public class LoginController {
         }
 
         request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+        if (StringUtils.isNotBlank(errorMsg)) {
+            model.addAttribute("errorMsg", errorMsg);
+        }
         return "ws/login";
     }
 
@@ -209,7 +212,7 @@ public class LoginController {
         if (null == curUserObj) {
             // 用户未注册
             request.setAttribute("user", user);
-            request.setAttribute("detail", getLocaleMessage("login.err.user.not.exist", request));
+            request.setAttribute("errorMsg", getLocaleMessage("login.err.user.not.exist", request));
             request.getRequestDispatcher("index").forward(request, response);
             //request.getRequestDispatcher("loginfail.page").forward(request, response);
             return;
@@ -220,7 +223,7 @@ public class LoginController {
         if (isEnable.equals("0")) {
             // 此账号已被禁用
             request.setAttribute("user", user);
-            request.setAttribute("detail", getLocaleMessage("login.err.user.disable", request));
+            request.setAttribute("errorMsg", getLocaleMessage("login.err.user.disable", request));
             request.getRequestDispatcher("index").forward(request, response);
             return;
         }
@@ -239,7 +242,7 @@ public class LoginController {
         // 如果密码不对
         if (!pass.equals(dbPassDecrypted)) {
             request.setAttribute("user", user);
-            request.setAttribute("detail", getLocaleMessage("login.err.password.wrong", request));
+            request.setAttribute("errorMsg", getLocaleMessage("login.err.password.wrong", request));
             request.getRequestDispatcher("index").forward(request, response);
             return;
         }
@@ -248,7 +251,7 @@ public class LoginController {
         String verifyCode = (String) request.getSession().getAttribute(CommonConstants.VERIFY_CODE);
         if (!verifyCodeInput.equals(verifyCode)) {
             request.setAttribute("user", user);
-            request.setAttribute("detail", getLocaleMessage("login.err.verifycode.wrong", request));
+            request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong", request));
             request.getRequestDispatcher("index").forward(request, response);
             return;
         }

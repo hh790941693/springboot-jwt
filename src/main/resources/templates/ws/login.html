@@ -116,7 +116,7 @@
         <form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
             <!--错误信息提示区域-->
             <div style="height:25px;border:margin-bottom: 5px;">
-                <span style="color:red;font-weight: bold;" th:text="${detail}"></span>
+                <span style="color:red;font-weight: bold;" th:text="${errorMsg}"></span>
             </div>
 
             <!--用户名-->

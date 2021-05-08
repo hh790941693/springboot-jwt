@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 
 @WebFilter(filterName = "sesstionTimeoutFilter", urlPatterns = {"/*"})
 public class SesstionTimeoutFilter implements Filter {
@@ -133,13 +135,15 @@ public class SesstionTimeoutFilter implements Filter {
             try {
                 Map<String, String> map = new HashMap<>();
                 map.put("code", "-1");
-                map.put("msg", "session invalid");
+                map.put("msg", "session timeout");
 
                 //这里并不是设置跳转页面，而是将重定向的地址发给前端，让前端执行重定向
                 //设置跳转地址
                 httpServletResponse.setHeader("redirectUrl", "/index");
                 //设置跳转使能
                 httpServletResponse.setHeader("enableRedirect","true");
+                // 设置错误信息
+                httpServletResponse.setHeader("errorMsg", "session timeout!");
                 httpServletResponse.flushBuffer();
 
                 PrintWriter writer = httpServletResponse.getWriter();
