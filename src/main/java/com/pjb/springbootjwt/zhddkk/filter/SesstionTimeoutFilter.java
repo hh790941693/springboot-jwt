@@ -134,6 +134,14 @@ public class SesstionTimeoutFilter implements Filter {
                 Map<String, String> map = new HashMap<>();
                 map.put("code", "-1");
                 map.put("msg", "session invalid");
+
+                //这里并不是设置跳转页面，而是将重定向的地址发给前端，让前端执行重定向
+                //设置跳转地址
+                httpServletResponse.setHeader("redirectUrl", "/index");
+                //设置跳转使能
+                httpServletResponse.setHeader("enableRedirect","true");
+                httpServletResponse.flushBuffer();
+
                 PrintWriter writer = httpServletResponse.getWriter();
                 // JSON格式返回
                 writer.write(JsonUtil.javaobject2Jsonstr(map));
