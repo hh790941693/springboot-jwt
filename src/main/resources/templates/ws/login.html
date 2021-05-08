@@ -44,7 +44,7 @@
 
     #loginForm {
         padding-left: 45px;
-        padding-top: 30px;
+        padding-top: 10px;
     }
 
     input {
@@ -75,6 +75,8 @@
 <body>
     <div id="mainDiv">
         <input id="locale" type="hidden" th:value="${locale}">
+
+        <!--顶部标题-->
         <div style="height:50px;background-color: #428BCA;padding-top: 5px;">
             <div style="text-align: center;font-size: 30px;color:white;">
                 <p>[[#{web.title}]]</p>
@@ -84,7 +86,7 @@
         <div id="phonelogin" style="position:absolute;top:3px;left:2px;font-size: 15px;cursor: pointer;">
             <span class="fa fa-qrcode fa-3x" th:title="#{btn.qrcode.tips}"></span>
         </div>
-        <!--选择语言-->
+        <!--语言切换-->
         <div style="position:absolute;top:6px;right:2px;width:192px;" th:title="#{select.choose.language}">
             <div class="layui-form">
               <div class="layui-form-item">
@@ -112,18 +114,28 @@
         -->
         <img id="backgroundImg" src="../img/fengjing/fj9.jpg" hidden>
         <form id="loginForm" action="wslogin.do" method="post" onsubmit="return checkEnvironment()">
+            <!--错误信息提示区域-->
+            <div style="height:25px;border:margin-bottom: 5px;">
+                <span style="color:red;font-weight: bold;" th:text="${detail}"></span>
+            </div>
+
+            <!--用户名-->
             <div class="input-group margin-bottom-sm">
                 <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
                 <input id="user" name="user" type="text" class="form-control" th:value="${user}"
                        th:placeholder="#{input.user.helper}" autocomplete="off" style="width:227px;">
             </div>
             <div class="errorMsgDiv"></div>
+
+            <!--密码-->
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
                 <input id="pass" name="pass" type="password" class="form-control" th:value="${pass}"
                        th:placeholder="#{input.password.helper}" autocomplete="off" style="width:227px;">
             </div>
             <div class="errorMsgDiv"></div>
+
+            <!--验证码-->
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-briefcase fa-fw"></i></span>
                 <input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}"
@@ -131,6 +143,8 @@
                 <img id="verifyCodeImg" style="margin-left:2px;cursor: pointer;"/>
             </div>
             <div class="errorMsgDiv"></div>
+
+            <!--底部相关按钮-->
             <div id="helpDiv" style="height:25px;margin-top:10px;">
                 <a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:0;"
                    th:text="#{a.register.label}"></a>
@@ -142,6 +156,7 @@
                    th:text="#{a.playgame.label}"></a>
             </div>
 
+            <!--提交按钮-->
             <div align="center" style="margin-top:10px;">
                 <button id="btnlogin" class='btn btn-success btn-large' type="submit"
                         style="width:130px;margin-right: 15px;">
@@ -150,16 +165,19 @@
                 <a id="securityCheck"><span class="fa fa-toggle-off" style="font-size: 18px;"></span> [[#{checkbox.check.label}]]</a>
             </div>
         </form>
-        
+
+        <!--右上角二维码-->
         <div style="position:absolute;width:180px;height:180px;left:360px;top:1px;">
             <img id="qrImg" style="width:160px;height:160px;display:none;">
         </div>
-        
+
+        <!--底部进度条-->
         <div class="layui-progress" lay-filter="checkProgress" style="top:15px;">
             <div class="layui-progress-bar layui-bg-black" lay-percent="0%"></div>
         </div>
     </div>
 
+    <!--左上角安全检查滚屏-->
     <div id="checkDiv"
          style="width:200px;height:400px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
         <div id="checkContentDiv"
