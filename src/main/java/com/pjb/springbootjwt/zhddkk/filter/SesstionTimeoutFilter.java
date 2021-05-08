@@ -83,49 +83,49 @@ public class SesstionTimeoutFilter implements Filter {
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 
         SessionInfoBean sessionInfoBean = (SessionInfoBean) httpServletRequest.getSession().getAttribute(CommonConstants.SESSION_INFO);
-        String user = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
+        String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
 
-        String servletPath = httpServletRequest.getServletPath();
-        // 是否要过滤 true:过滤 false:不过滤
-        boolean filterFlag = false;
-        if (IGNORE_URL_LIST.contains(servletPath) || StringUtils.isNotBlank(user)) {
-            filterFlag = true;
-        }
-        if (!filterFlag) {
-            for (String prefix : IGNORE_URL_PREFIX_LIST) {
-                if (servletPath.startsWith(prefix)) {
-                    filterFlag = true;
-                    break;
-                }
-            }
-
-            if (!filterFlag) {
-                for (String suffix : IGNORE_URL_SUFFIX_LIST) {
-                    if (servletPath.endsWith(suffix)) {
-                        filterFlag = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (filterFlag) {
+        // 如果session信息存在,放行
+        if (StringUtils.isNotBlank(sessionUser)) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
 
+        // 如果是忽略的url,放行
+        String servletPath = httpServletRequest.getServletPath();
+        if (IGNORE_URL_LIST.contains(servletPath)) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
+        // 如果是忽略的前缀url,放行
+        for (String prefix : IGNORE_URL_PREFIX_LIST) {
+            if (servletPath.startsWith(prefix)) {
+                filterChain.doFilter(servletRequest, servletResponse);
+                return;
+            }
+        }
+
+        // 如果是忽略的后缀url,放行
+        for (String suffix : IGNORE_URL_SUFFIX_LIST) {
+            if (servletPath.endsWith(suffix)) {
+                filterChain.doFilter(servletRequest, servletResponse);
+                return;
+            }
+        }
+
         // 拦截 返回到登录页面
-        logger.info("session user:" + user);
-        logger.info("servletPath:" + servletPath);
+        logger.info("session user:{}", sessionUser);
+        logger.info("servletPath:{}", servletPath);
 
         String headerAccept = httpServletRequest.getHeader("accept");
         String headerXRequestedWidth = httpServletRequest.getHeader("X-Requested-With");
 
-        logger.info("accept:" + headerAccept);
-        logger.info("X-Requested-With:" + headerXRequestedWidth);
-        // JSP格式返回
-        if (!(headerAccept.indexOf("application/json") > -1 || (headerXRequestedWidth != null && headerXRequestedWidth.indexOf(
-                "XMLHttpRequest") > -1))) {
+        logger.info("accept:{}", headerAccept);
+        logger.info("X-Requested-With:{}", headerXRequestedWidth);
+
+        if (!(headerAccept.contains("application/json")
+                || (headerXRequestedWidth != null && headerXRequestedWidth.contains("XMLHttpRequest")))) {
             // http请求
             httpServletResponse.sendRedirect(contextPath + "/");
         } else {
@@ -145,7 +145,7 @@ public class SesstionTimeoutFilter implements Filter {
                 httpServletResponse.flushBuffer();
 
                 PrintWriter writer = httpServletResponse.getWriter();
-                // JSON格式返回
+                // JSON格式返回给前端
                 writer.write(JsonUtil.javaobject2Jsonstr(map));
                 writer.flush();
             } catch (IOException e) {
