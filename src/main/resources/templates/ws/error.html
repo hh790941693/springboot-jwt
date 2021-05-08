@@ -45,9 +45,7 @@
 </head>
 <body>
     <div id="emojiDiv">
-        <img th:src="@{../../img/emoji/qqs/11.png}">
-        <img th:src="@{../../img/emoji/qqs/11.png}">
-        <img th:src="@{../../img/emoji/qqs/11.png}">
+        <img th:each="count:${#numbers.sequence(1,3)}" th:src="@{../../img/emoji/qqs/11.png}">
     </div>
 
     <div id="mainDiv">
