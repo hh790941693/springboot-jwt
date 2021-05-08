@@ -53,4 +53,9 @@ public class CommonConstants {
     public static final String USER_TYPE_COMMON = "1";
     // cookie(locale)的过期时间(20年)
     public static final int LOCALE_COOKIE_EXPIRE = 20 * 365 * 24 * 60 * 60;
+
+    //session过期相关配置
+    public static final String SESSION_TIMEOUT_MSG = "Session timeout";
+    public static final String SESSION_TIMEOUT_CODE = "-255";
+    public static final String SESSION_TIMEOUT_REDIRECT_URL = "/index";
 }

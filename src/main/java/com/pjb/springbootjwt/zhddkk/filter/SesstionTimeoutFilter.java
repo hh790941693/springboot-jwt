@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 
 @WebFilter(filterName = "sesstionTimeoutFilter", urlPatterns = {"/*"})
 public class SesstionTimeoutFilter implements Filter {
@@ -134,16 +132,16 @@ public class SesstionTimeoutFilter implements Filter {
             // ajax请求
             try {
                 Map<String, String> map = new HashMap<>();
-                map.put("code", "-1");
-                map.put("msg", "session timeout");
+                map.put("redirectUrl", CommonConstants.SESSION_TIMEOUT_REDIRECT_URL);
+                map.put("code", CommonConstants.SESSION_TIMEOUT_CODE);
+                map.put("msg", CommonConstants.SESSION_TIMEOUT_MSG);
 
                 //这里并不是设置跳转页面，而是将重定向的地址发给前端，让前端执行重定向
                 //设置跳转地址
-                httpServletResponse.setHeader("redirectUrl", "/index");
-                //设置跳转使能
-                httpServletResponse.setHeader("enableRedirect","true");
+                httpServletResponse.setHeader("redirectUrl", CommonConstants.SESSION_TIMEOUT_REDIRECT_URL);
                 // 设置错误信息
-                httpServletResponse.setHeader("errorMsg", "session timeout!");
+                httpServletResponse.setHeader("errorMsg", CommonConstants.SESSION_TIMEOUT_MSG);
+                httpServletResponse.setHeader("errorCode", CommonConstants.SESSION_TIMEOUT_CODE);
                 httpServletResponse.flushBuffer();
 
                 PrintWriter writer = httpServletResponse.getWriter();
