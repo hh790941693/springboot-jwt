@@ -131,14 +131,19 @@ public class LoginController {
     public String home(Model model, HttpServletRequest request) {
         String version = request.getParameter("v");
         if (StringUtils.isNotBlank(version)) {
-            if (version.equals("0")) {
-                INDEX_PAGE_NAME = "wsclientIndex";
-            } else if (version.equals("1")) {
-                INDEX_PAGE_NAME = "wsclientIndex_v1";
-            } else if (version.equals("2")) {
-                INDEX_PAGE_NAME = "wsclientIndex_v2";
-            } else if (version.equals("3")) {
-                INDEX_PAGE_NAME = "wsclientIndex_v3";
+            switch(version){
+                case "0":
+                    INDEX_PAGE_NAME = "wsclientIndex";
+                    break;
+                case "1":
+                    INDEX_PAGE_NAME = "wsclientIndex_v1";
+                    break;
+                case "2":
+                    INDEX_PAGE_NAME = "wsclientIndex_v2";
+                    break;
+                case "3":
+                    INDEX_PAGE_NAME = "wsclientIndex_v3";
+                    break;
             }
         }
 
@@ -248,11 +253,6 @@ public class LoginController {
             return;
         }
 
-        // websocket聊天用的服务器ip和端口
-        String webserverip = webSocketConfig.getAddress();
-        String webserverPort = webSocketConfig.getPort();
-        logger.info("webserverip:{} webserverPort:{}", webserverip, webserverPort);
-
         // 客户端浏览器类型
         String userAgent = request.getHeader("User-Agent");
         logger.info("userAgent:{}", userAgent);
@@ -271,7 +271,6 @@ public class LoginController {
         }
 
         //session
-        System.out.println("创建SESSION:" + request.getSession().getId());
         logger.info("创建SESSION: {}", request.getSession().getId());
 
         //记录cookie
@@ -287,7 +286,7 @@ public class LoginController {
 
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(request.getSession().getId(),
-                String.valueOf(curUserObj.getId()), user, curUserObj.getPassword(), webserverip, webserverPort, selfImg, shortAgent, roleId, roleName);
+                String.valueOf(curUserObj.getId()), user, curUserObj.getPassword(), webSocketConfig.getAddress(), webSocketConfig.getPort(), selfImg, shortAgent, roleId, roleName);
         String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
         JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
         sessionInfoBean.setJsonStr(jsonStr);
@@ -298,8 +297,6 @@ public class LoginController {
         // 往redis中存储用户信息
         String redisKey = REDIS_KEY_PREFIX + user;
         try {
-            //在线
-            curUserObj.setState("1");
             String redisValue = JsonUtil.javaobject2Jsonstr(curUserObj);
             logger.debug("设置redis缓存,key:" + redisKey + "  value:" + redisValue);
             //redisUtil.set(redisKey, redisValue);
