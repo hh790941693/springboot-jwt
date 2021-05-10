@@ -171,8 +171,11 @@
     <div region="south" split="false" style="height: 48px; background: #D2E0F2;">
         <div class="footer" style="height:100%;">
             <div style="height:50%;">
-                <div style="width:30%;float:left;text-align:left;">
-                    <span>COPYRIGHT 2019 – 2030 版权归作者所有，侵权必究 1.0-Snapshot</span>
+                <div style="width:60%;float:left;text-align:left;">
+                    <span>COPYRIGHT 2019 – 2030 版权归作者所有，侵权必究 1.0-Snapshot</span><br />
+                    请求URL：<span th:text="${#request.getRequestURL()}"></span>&nbsp;&nbsp;&nbsp;
+                    会话超时时间：<span th:text="${#session.getMaxInactiveInterval()}"></span>&nbsp;&nbsp;&nbsp;
+                    服务器信息：<span th:text="${#servletContext.getServerInfo()}"></span>
                 </div>
 
                 <div style="width:38%;float:right;text-align:right;">

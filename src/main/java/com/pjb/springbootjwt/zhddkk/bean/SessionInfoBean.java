@@ -31,6 +31,8 @@ public class SessionInfoBean {
 
     private String roleName;
 
+    private int maxInactiveInterval;
+
     private JSONObject jsonObject;
 
     private String jsonStr;
@@ -51,9 +53,10 @@ public class SessionInfoBean {
      * @param userAgent 浏览器类型
      * @param roleId 用户角色id
      * @param roleName 角色名
+     * @param maxInactiveInterval session超时时间(秒)
      */
     public SessionInfoBean(String id, String userId, String user, String password, String webserverIp,
-                           String webserverPort, String selfImg, String userAgent, String roleId, String roleName) {
+                           String webserverPort, String selfImg, String userAgent, String roleId, String roleName, int maxInactiveInterval) {
         this.id = id;
         this.userId = userId;
         this.user = user;
@@ -64,5 +67,6 @@ public class SessionInfoBean {
         this.userAgent = userAgent;
         this.roleId = roleId;
         this.roleName = roleName;
+        this.maxInactiveInterval = maxInactiveInterval;
     }
 }

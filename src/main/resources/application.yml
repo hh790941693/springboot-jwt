@@ -27,7 +27,7 @@ debug: true
 
 spring:
   thymeleaf:
-    mode: HTML
+    mode: HTML5
     cache: false
   resources:
     static-locations:

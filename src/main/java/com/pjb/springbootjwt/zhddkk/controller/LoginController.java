@@ -289,7 +289,8 @@ public class LoginController {
 
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(request.getSession().getId(),
-                String.valueOf(curUserObj.getId()), user, curUserObj.getPassword(), webSocketConfig.getAddress(), webSocketConfig.getPort(), selfImg, shortAgent, roleId, roleName);
+                String.valueOf(curUserObj.getId()), user, curUserObj.getPassword(), webSocketConfig.getAddress(),
+                webSocketConfig.getPort(), selfImg, shortAgent, roleId, roleName, request.getSession().getMaxInactiveInterval());
         String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
         JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
         sessionInfoBean.setJsonStr(jsonStr);
