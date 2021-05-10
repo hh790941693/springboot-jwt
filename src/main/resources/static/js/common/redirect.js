@@ -30,13 +30,15 @@ $(function () {
             }
         },
         dataFilter : function (data,type) {
-            var dataJson = JSON.parse(data);
-            if (dataJson.code == "-255") {
-                var win = window;
-                while(win != win.top){
-                    win = win.top;
+            if (data.indexOf("code") != -1) {
+                var dataJson = JSON.parse(data);
+                if (dataJson.code == "-255") {
+                    var win = window;
+                    while (win != win.top) {
+                        win = win.top;
+                    }
+                    win.location.href = dataJson.redirectUrl + "?errorMsg=" + dataJson.msg;
                 }
-                win.location.href = dataJson.redirectUrl+"?errorMsg="+dataJson.msg;
             } else {
                 return data;
             }

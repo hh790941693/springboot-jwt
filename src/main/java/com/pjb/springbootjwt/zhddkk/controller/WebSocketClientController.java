@@ -86,7 +86,7 @@ public class WebSocketClientController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGOUT, subModule = "", describe = "退出")
     @RequestMapping(value = "logout.do", method = RequestMethod.POST)
     @ResponseBody
-    public String logout(@RequestParam("user")String user, HttpServletRequest request) {
+    public Result<String> logout(@RequestParam("user")String user, HttpServletRequest request) {
         HttpSession httpSession = request.getSession(false);
         System.out.println("退出前SESSION:" + httpSession.getId());
         httpSession.invalidate();
@@ -98,7 +98,7 @@ public class WebSocketClientController extends AdminBaseController {
             wsUsersDO.setLastLogoutTime(SDF_STANDARD.format(new Date()));
             wsUsersService.updateById(wsUsersDO);
         }
-        return CommonConstants.SUCCESS;
+        return Result.ok();
     }
 
     /**
