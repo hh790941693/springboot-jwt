@@ -142,7 +142,7 @@ public class FileOperationController {
     
     @RequestMapping("uploadFiles.do")
     @Deprecated
-    public Object uploadFiles(@RequestParam MultipartFile[] files, @RequestParam("user") String user,
+    public String uploadFiles(@RequestParam MultipartFile[] files, @RequestParam("user") String user,
         @RequestParam("fileType") String fileType, HttpServletRequest request, Model model) {
         List<FileUploadResultBean> uploadResultList = new ArrayList<FileUploadResultBean>();
         
@@ -169,8 +169,8 @@ public class FileOperationController {
             }
             
             String finalSavaPath = saveRootPath + File.separator + user;
-            String storeResult = ServiceUtil.storeFile(request, finalSavaPath, file, filename);
-            if (storeResult.equals(CommonConstants.SUCCESS)) {
+            Result<String> storeResult = ServiceUtil.storeFile(request, finalSavaPath, file, filename);
+            if (storeResult.getCode() == Result.CODE_SUCCESS) {
                 if (user != null) {
                     WsFileDO wf = new WsFileDO();
                     wf.setUser(user);

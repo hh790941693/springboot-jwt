@@ -1,6 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.util;
 
 import com.alibaba.druid.util.StringUtils;
+import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.entity.PageEntity;
 import java.io.File;
@@ -8,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.data.redis.core.script.ReactiveScriptExecutor;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -21,11 +24,11 @@ public class ServiceUtil {
      * @param filename
      * @return
      */
-    public static String storeFile(HttpServletRequest request, String savePath, MultipartFile fileObj,
-        String filename) {
+    public static Result<String> storeFile(HttpServletRequest request, String savePath, MultipartFile fileObj,
+                                          String filename) {
         
         if (fileObj.getSize() == 0 || StringUtils.isEmpty(fileObj.getOriginalFilename())) {
-            return CommonConstants.FAIL;
+            return Result.fail();
         }
         
         File savefile = new File(savePath);
@@ -35,7 +38,6 @@ public class ServiceUtil {
         
         FileOutputStream out = null;
         InputStream in = null;
-        String result = "";
         if (StringUtils.isEmpty(filename)) {
             filename = fileObj.getOriginalFilename();
         }
@@ -47,12 +49,11 @@ public class ServiceUtil {
             while ((len = in.read(buffer)) > 0) {
                 out.write(buffer, 0, len);
             }
-            result = CommonConstants.SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
-            result = CommonConstants.FAIL;
+            return Result.fail();
         }
-        return result;
+        return Result.ok();
     }
     
     /**
