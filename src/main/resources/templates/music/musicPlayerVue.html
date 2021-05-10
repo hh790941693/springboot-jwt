@@ -379,7 +379,7 @@
                                 url: rootUrl + "file/delFile.do",
                                 data: {id: id},
                                 success: function (result) {
-                                    if (result == "success") {
+                                    if (result.code == 1) {
                                         layer.msg("删除成功");
                                         app.queryMusicList();
                                     }
@@ -401,7 +401,7 @@
                                     url: rootUrl + "file/delFile.do",
                                     data: {'id': item.id},
                                     success: function (result) {
-                                        if (result == "success") {
+                                        if (result.code == 1) {
                                             layer.msg(item.filename + ":删除成功");
                                         }
                                     }

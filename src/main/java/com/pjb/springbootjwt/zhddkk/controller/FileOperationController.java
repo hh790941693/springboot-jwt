@@ -112,7 +112,7 @@ public class FileOperationController {
     @RequestMapping("delFile.do")
     @ResponseBody
     @Transactional
-    public Object delFile(HttpServletRequest request, @RequestParam(value = "id", required = true) int id) {
+    public Result<String> delFile(@RequestParam(value = "id", required = true) int id) {
         WsFileDO wsFileDO = wsFileService.selectById(id);
         if (null != wsFileDO) {
             boolean delFlag = wsFileService.deleteById(id);
@@ -134,10 +134,10 @@ public class FileOperationController {
                     logger.info("删除文件:{} " + file.getAbsolutePath());
                     file.delete();
                 }
-                return CommonConstants.SUCCESS;
+                return Result.ok();
             }
         }
-        return CommonConstants.FAIL;
+        return Result.fail();
     }
     
     @RequestMapping("uploadFiles.do")
