@@ -562,12 +562,13 @@ public class LoginController {
     @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.OTHER, subModule = "", describe = "获取用户密保信息")
     @RequestMapping(value = "getUserQuestion.json")
     @ResponseBody
-    public Object getUserQuestion(@RequestParam("user")String user) {
+    public Result<WsUsersDO> getUserQuestion(@RequestParam("user")String user) {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {
-            return JsonUtil.javaobject2Jsonobject(wsUsersDO);
+            //return JsonUtil.javaobject2Jsonobject(wsUsersDO);
+            return Result.ok(wsUsersDO);
         } else {
-            return CommonConstants.FAIL;
+            return Result.fail();
         }
     }
 

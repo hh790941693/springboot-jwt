@@ -411,7 +411,7 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "addFriend.do", method = RequestMethod.POST)
     @ResponseBody
-    public String addFriend(@RequestParam("fromUserName")String fromUserName,
+    public Result<String> addFriend(@RequestParam("fromUserName")String fromUserName,
                                          @RequestParam("toUserId")Integer toUserId) {
         Integer fromUserId = querySpecityUserName(fromUserName).getId();
         String toUserName = querySpecityUserId(toUserId).getName();
@@ -430,7 +430,7 @@ public class WebSocketClientController extends AdminBaseController {
         } else {
             logger.info(toUserName + "已是你的好友了,无需再次申请");
         }
-        return CommonConstants.SUCCESS;
+        return Result.ok();
     }
 
     /**
@@ -440,13 +440,13 @@ public class WebSocketClientController extends AdminBaseController {
     @RequestMapping(value = "agreeFriend.do", method = RequestMethod.POST)
     @ResponseBody
     @Transactional
-    public String agreeFriend(@RequestParam("recordId")Integer recordId) {
+    public Result<String> agreeFriend(@RequestParam("recordId")Integer recordId) {
         WsFriendsApplyDO wfa = wsFriendsApplyService.selectById(recordId);
         if (null == wfa) {
-            return CommonConstants.FAIL;
+            return Result.fail();
         }
         if (wfa.getProcessStatus().intValue() != 1) {
-            return CommonConstants.FAIL;
+            return Result.fail();
         }
 
         wfa.setProcessStatus(3);
@@ -474,7 +474,7 @@ public class WebSocketClientController extends AdminBaseController {
                 wsFriendsService.insert(wf2);
             }
         }
-        return CommonConstants.SUCCESS;
+        return Result.ok();
     }
 
     /**
@@ -483,22 +483,22 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "deagreeFriend.do", method = RequestMethod.POST)
     @ResponseBody
-    public String deagreeFriend(@RequestParam("recordId")Integer recordId) {
+    public Result<String> deagreeFriend(@RequestParam("recordId")Integer recordId) {
         WsFriendsApplyDO wfa = wsFriendsApplyService.selectById(recordId);
         if (null == wfa) {
-            return CommonConstants.FAIL;
+            return Result.fail();
         }
         if (wfa.getProcessStatus().intValue() != 1) {
-            return CommonConstants.FAIL;
+            return Result.fail();
         }
 
         wfa.setProcessStatus(2);
         boolean updateFlag = wsFriendsApplyService.updateById(wfa);
         if (updateFlag) {
-            return CommonConstants.SUCCESS;
+            return Result.ok();
         }
 
-        return CommonConstants.FAIL;
+        return Result.fail();
     }
 
     /**
@@ -507,10 +507,10 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "deleteFriend.do", method = RequestMethod.POST)
     @ResponseBody
-    public String deleteFriend(@RequestParam("id")Integer id) {
+    public Result<String> deleteFriend(@RequestParam("id")Integer id) {
         WsFriendsDO wsFriendsDO = wsFriendsService.selectById(id);
         if (null == wsFriendsDO) {
-            return CommonConstants.FAIL;
+            return Result.fail();
         }
 
         String uname = wsFriendsDO.getUname();
@@ -527,7 +527,7 @@ public class WebSocketClientController extends AdminBaseController {
                     .eq("to_name", fname));
         }
 
-        return CommonConstants.SUCCESS;
+        return Result.ok();
     }
 
     /**
@@ -776,7 +776,7 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "setPersonInfo.do", method = RequestMethod.POST)
     @ResponseBody
-    public String setPersonInfo(@RequestParam(value = "userName") String userName,
+    public Result<String> setPersonInfo(@RequestParam(value = "userName") String userName,
                                 @RequestParam(value = "realName", required = false) String realName,
                                 @RequestParam(value = "headImg", required = false) String headImg,
                                 @RequestParam(value = "sign", required = false) String sign,
@@ -832,9 +832,9 @@ public class WebSocketClientController extends AdminBaseController {
             }
         } catch (Exception e) {
             logger.error("更新个人信息失败!" + e.getMessage());
-            return CommonConstants.FAIL;
+            return Result.fail();
         }
-        return CommonConstants.SUCCESS;
+        return Result.ok();
     }
 
     /**
@@ -844,14 +844,14 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "queryPersonInfo.json", method = RequestMethod.POST)
     @ResponseBody
-    public Object queryPersonInfo(@RequestParam("user") String user) {
+    public Result<WsUserProfileDO> queryPersonInfo(@RequestParam("user") String user) {
         WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>()
                     .eq("user_name", user));
         if (null != wsUserProfileDO) {
-            return JsonUtil.javaobject2Jsonobject(wsUserProfileDO);
+            return Result.ok(wsUserProfileDO);
         }
 
-        return CommonConstants.FAIL;
+        return Result.fail();
     }
 
     /**
