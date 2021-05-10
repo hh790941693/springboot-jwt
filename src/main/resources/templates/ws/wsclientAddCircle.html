@@ -125,7 +125,8 @@
 
         $("#hidden_frame").load(function () {
             var text = $(this).contents().find("body").text();
-            if (text.indexOf("操作成功") != -1) {
+            var jsonObj = JSON.parse(text);
+            if (jsonObj.code == 1) {
                 layer.msg('新增朋友圈成功');
                 var timeout = 0.7;
                 var index = parent.layer.getFrameIndex(window.name);

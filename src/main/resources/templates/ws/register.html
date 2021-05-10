@@ -172,7 +172,8 @@
 
         $("#hidden_frame").load(function () {
             var text = $(this).contents().find("body").text();
-            if (text.indexOf("操作成功") != -1) {
+            var jsonObj = JSON.parse(text);
+            if (jsonObj.code == 1) {
                 var timeout = 3;
                 layer.msg('注册成功,' + timeout + "秒后返回登录页面");
                 var index = parent.layer.getFrameIndex(window.name);
