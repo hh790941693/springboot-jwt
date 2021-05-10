@@ -11,7 +11,6 @@ import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
-import com.pjb.springbootjwt.zhddkk.bean.LoadConfigFileBean;
 import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.service.SysRoleService;
 import com.pjb.springbootjwt.zhddkk.service.SysUserRoleService;
@@ -50,13 +49,12 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 @Controller
 public class LoginController {
 
-    private static final String REDIS_KEY_PREFIX = "ws_"; //登陆用户的redis缓存前缀
+    //登陆用户的redis缓存前缀
+    private static final String REDIS_KEY_PREFIX = "ws_";
 
     private static final SimpleDateFormat SDF_STANDARD = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
-    private static final Map<String, String> configMap = LoadConfigFileBean.getConfigMap();
 
     // 登陆成功后的页面前缀
     // 目前可用值:
@@ -66,51 +64,27 @@ public class LoginController {
     //          默认 wsclientIndex_v3 采用jquery easyUI重新设计
     private static String INDEX_PAGE_NAME = "wsclientIndex_v3";
 
-    /**
-     * webSocketConfig.
-     */
     @Autowired
     private WebSocketConfig webSocketConfig;
 
-    /**
-     * wsUsersService.
-     */
     @Autowired
     private WsUsersService wsUsersService;
 
-    /**
-     * wsUserProfileService.
-     */
     @Autowired
     private WsUserProfileService wsUserProfileService;
 
-    /**
-     * uploadConfig.
-     */
     @Autowired
     private UploadConfig uploadConfig;
 
-    /**
-     * wsCommonService.
-     */
     @Autowired
     private WsCommonService wsCommonService;
 
-    /**
-     * wsChatlogService.
-     */
     @Autowired
     private WsChatlogService wsChatlogService;
 
-    /**
-     * messageSource.
-     */
     @Autowired
     private MessageSource messageSource;
 
-    /**
-     * 缓存.
-     */
     @Autowired
     private CacheService cacheService;
 
@@ -202,16 +176,16 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGIN, subModule = "", describe = "登录")
     @RequestMapping(value = "wslogin.do", method = RequestMethod.POST)
-    public void wsclient(@RequestParam("user")String user, @RequestParam("pass")String pass,
+    public void wsclient(@RequestParam("user")String userName, @RequestParam("pass")String password,
                          @RequestParam("verifyCode")String verifyCodeInput,
                            HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 获取用户信息
-        WsUsersDO curUserObj = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+        WsUsersDO curUserObj = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
 
         // 如果用户信息不存在,提示用户去注册
         if (null == curUserObj) {
             // 用户未注册
-            request.setAttribute("user", user);
+            request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.user.not.exist", request));
             request.getRequestDispatcher("index").forward(request, response);
             //request.getRequestDispatcher("loginfail.page").forward(request, response);
@@ -222,7 +196,7 @@ public class LoginController {
         String isEnable = curUserObj.getEnable();
         if (isEnable.equals("0")) {
             // 此账号已被禁用
-            request.setAttribute("user", user);
+            request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.user.disable", request));
             request.getRequestDispatcher("index").forward(request, response);
             return;
@@ -240,8 +214,8 @@ public class LoginController {
         //数据库明文密码
         String dbPassDecrypted = SecurityAESUtil.decryptAES(curUserObj.getPassword(), CommonConstants.AES_PASSWORD);
         // 如果密码不对
-        if (!pass.equals(dbPassDecrypted)) {
-            request.setAttribute("user", user);
+        if (!password.equals(dbPassDecrypted)) {
+            request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.password.wrong", request));
             request.getRequestDispatcher("index").forward(request, response);
             return;
@@ -250,7 +224,7 @@ public class LoginController {
         // 校验验证码
         String verifyCode = (String) request.getSession().getAttribute(CommonConstants.VERIFY_CODE);
         if (!verifyCodeInput.equals(verifyCode)) {
-            request.setAttribute("user", user);
+            request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong", request));
             request.getRequestDispatcher("index").forward(request, response);
             return;
@@ -267,7 +241,7 @@ public class LoginController {
         }
 
         //个人头像
-        WsUserProfileDO wup = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_name", user));
+        WsUserProfileDO wup = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_name", userName));
         String selfImg = "";
         if (null != wup) {
             selfImg = wup.getImg();
@@ -289,7 +263,7 @@ public class LoginController {
 
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(request.getSession().getId(),
-                String.valueOf(curUserObj.getId()), user, curUserObj.getPassword(), webSocketConfig.getAddress(),
+                String.valueOf(curUserObj.getId()), userName, curUserObj.getPassword(), webSocketConfig.getAddress(),
                 webSocketConfig.getPort(), selfImg, shortAgent, roleId, roleName, request.getSession().getMaxInactiveInterval());
         String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
         JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
@@ -299,7 +273,7 @@ public class LoginController {
         request.getSession().setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
         // 往redis中存储用户信息
-        String redisKey = REDIS_KEY_PREFIX + user;
+        String redisKey = REDIS_KEY_PREFIX + userName;
         try {
             String redisValue = JsonUtil.javaobject2Jsonstr(curUserObj);
             logger.debug("设置redis缓存,key:" + redisKey + "  value:" + redisValue);

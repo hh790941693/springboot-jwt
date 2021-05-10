@@ -66,7 +66,7 @@ public class OperationLogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String requestUrl = request.getRequestURL().toString();
         SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession().getAttribute(CommonConstants.SESSION_INFO);
-        String userName = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
+        String userName = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
 
         if (StringUtils.isNotBlank(userName)) {
             WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));

@@ -97,7 +97,7 @@ public class ActionLogInterceptor implements WebMvcConfigurer,HandlerInterceptor
         System.out.println("操作时间: " + dateFormat.format(new Date()));
         SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession(false).getAttribute(CommonConstants.SESSION_INFO);
         if (null != sessionInfoBean) {
-            String user = sessionInfoBean.getUser();
+            String user = sessionInfoBean.getUserName();
             System.out.println("操作用户: " + user);
         }
         if (StringUtils.isNotBlank(viewName)) {

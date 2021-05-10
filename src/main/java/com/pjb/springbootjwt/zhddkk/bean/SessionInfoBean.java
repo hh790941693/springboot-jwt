@@ -15,7 +15,7 @@ public class SessionInfoBean {
     private String userId;
 
     // 用户名
-    private String user;
+    private String userName;
 
     private String password;
 
@@ -45,7 +45,7 @@ public class SessionInfoBean {
      * 构造方法.
      * @param id  会话id
      * @param userId 用户id
-     * @param user 用户名
+     * @param userName 用户名
      * @param password 密码密文
      * @param webserverIp 服务器ip
      * @param webserverPort 端口
@@ -55,11 +55,11 @@ public class SessionInfoBean {
      * @param roleName 角色名
      * @param maxInactiveInterval session超时时间(秒)
      */
-    public SessionInfoBean(String id, String userId, String user, String password, String webserverIp,
+    public SessionInfoBean(String id, String userId, String userName, String password, String webserverIp,
                            String webserverPort, String selfImg, String userAgent, String roleId, String roleName, int maxInactiveInterval) {
         this.id = id;
         this.userId = userId;
-        this.user = user;
+        this.userName = userName;
         this.password = password;
         this.webserverIp = webserverIp;
         this.webserverPort = webserverPort;

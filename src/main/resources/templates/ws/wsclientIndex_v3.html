@@ -107,7 +107,7 @@
                             <div class="easyui-layout" data-options="fit:true" border="false">
                                 <!--登陆用户-->
                                 <div data-options="region:'north',split:false,border:false" style="height:35%;padding: 1px 0 0 5px;overflow: hidden;">
-                                    <span th:text="${session.sessionInfo.user}" style="font-size: 23px;"></span>
+                                    <span th:text="${session.sessionInfo.userName}" style="font-size: 23px;"></span>
                                 </div>
                                 <!--角色名-->
                                 <div data-options="region:'center',split:false,border:false" style="height:28%;padding: 1px 0 0 5px;margin-left: -7px;overflow: hidden;">
@@ -294,7 +294,7 @@
                 <table cellpadding=3 style="border-collapse:separate; border-spacing:10px;">
                     <tr>
                         <td th:text="#{td.username.text}"></td>
-                        <td><input name="user" type="text" class="txt01 easyui-validatebox tb" readonly th:value="${session.sessionInfo.user}"/></td>
+                        <td><input name="user" type="text" class="txt01 easyui-validatebox tb" readonly th:value="${session.sessionInfo.userName}"/></td>
                     </tr>
                     <tr>
                         <td th:text="#{td.oldpassword.text}"></td>

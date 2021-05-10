@@ -65,7 +65,7 @@
     <!-- session信息 -->
     <div th:fragment="sessionInfo">
         <input type="hidden" id="sessionUserId" th:value="${session.sessionInfo.userId}">
-        <input type="hidden" id="sessionUser" th:value="${session.sessionInfo.user}">
+        <input type="hidden" id="sessionUser" th:value="${session.sessionInfo.userName}">
         <input type="hidden" id="sessionPassword" th:value="${session.sessionInfo.password}">
         <input type="hidden" id="sessionWebserverIp" th:value="${session.sessionInfo.webserverIp}">
         <input type="hidden" id="sessionWebserverport" th:value="${session.sessionInfo.webserverPort}">

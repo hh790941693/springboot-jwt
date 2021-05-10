@@ -83,7 +83,7 @@ public class SesstionTimeoutFilter implements Filter {
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 
         SessionInfoBean sessionInfoBean = (SessionInfoBean) httpServletRequest.getSession().getAttribute(CommonConstants.SESSION_INFO);
-        String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
+        String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
 
         // 如果session信息存在,放行
         if (StringUtils.isNotBlank(sessionUser)) {

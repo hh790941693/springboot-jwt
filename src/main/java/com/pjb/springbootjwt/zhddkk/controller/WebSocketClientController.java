@@ -988,7 +988,7 @@ public class WebSocketClientController extends AdminBaseController {
         Object sessionPass = "";
         try {
             SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession().getAttribute(CommonConstants.SESSION_INFO);
-            sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
+            sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
             sessionPass = sessionInfoBean == null ? "" : sessionInfoBean.getPassword();
         } catch (Exception e) {
             e.printStackTrace();
