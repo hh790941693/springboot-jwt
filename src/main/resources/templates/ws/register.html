@@ -172,7 +172,7 @@
 
         $("#hidden_frame").load(function () {
             var text = $(this).contents().find("body").text();
-            if (text.indexOf("success") != -1) {
+            if (text.indexOf("操作成功") != -1) {
                 var timeout = 3;
                 layer.msg('注册成功,' + timeout + "秒后返回登录页面");
                 var index = parent.layer.getFrameIndex(window.name);
@@ -180,7 +180,7 @@
                     parent.layer.close(index);
                     window.location.href = "login.page";
                 }, timeout * 1000);
-            } else if (text.indexOf("failed") != -1) {
+            } else {
                 layer.msg('注册失败');
             }
         });

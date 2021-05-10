@@ -339,7 +339,7 @@ public class LoginController {
     @RequestMapping(value = "wsregister.do", method = RequestMethod.POST)
     @ResponseBody
     @Transactional
-    public String wsregister(Model model, @RequestParam("user")String user,
+    public Result<String> wsregister(Model model, @RequestParam("user")String user,
                              @RequestParam("pass")String pass,
                              @RequestParam("headImg")String headImg,
                              @RequestParam("confirmPass")String confirmPass,
@@ -351,14 +351,14 @@ public class LoginController {
             // 如果已经注册
             model.addAttribute("user", user);
             model.addAttribute("detail", "当前用户已注册,请直接登录!");
-            return CommonConstants.FAIL;
+            return Result.fail();
         }
 
         if (!pass.equals(confirmPass)) {
             // 如果密码不一致
             model.addAttribute("user", user);
             model.addAttribute("detail", "两次密码不一致!");
-            return CommonConstants.FAIL;
+            return Result.ok();
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -410,7 +410,7 @@ public class LoginController {
 
         model.addAttribute("user", user);
         model.addAttribute("pass", pass);
-        return CommonConstants.SUCCESS;
+        return Result.ok();
     }
 
     /**

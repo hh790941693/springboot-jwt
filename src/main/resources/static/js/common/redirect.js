@@ -38,6 +38,8 @@ $(function () {
                         win = win.top;
                     }
                     win.location.href = dataJson.redirectUrl + "?errorMsg=" + dataJson.msg;
+                } else {
+                    return data;
                 }
             } else {
                 return data;
