@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
+import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.bean.JsonResult;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
@@ -73,7 +74,7 @@ public class WebSocketServerController extends AdminBaseController {
      */
     @RequestMapping(value = "offlineUser.do")
     @ResponseBody
-    public String offlineUser(@RequestParam("user") String user) {
+    public Result<String> offlineUser(@RequestParam("user") String user) {
         ZhddWebSocket.removeUserFromAllRoom(user);
 
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
@@ -81,9 +82,9 @@ public class WebSocketServerController extends AdminBaseController {
             wsUsersDO.setState("0");
             wsUsersDO.setLastLogoutTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             wsUsersService.updateById(wsUsersDO);
-            return CommonConstants.SUCCESS;
+            return Result.ok();
         }
-        return CommonConstants.FAIL;
+        return Result.fail();
     }
 
     /**
@@ -93,14 +94,14 @@ public class WebSocketServerController extends AdminBaseController {
      */
     @RequestMapping(value = "enableUser.do")
     @ResponseBody
-    public String enableUser(@RequestParam("user") String user, @RequestParam("enable") String enable) {
+    public Result<String> enableUser(@RequestParam("user") String user, @RequestParam("enable") String enable) {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {
             wsUsersDO.setEnable(enable);
             wsUsersService.updateById(wsUsersDO);
-            return CommonConstants.SUCCESS;
+            return Result.ok();
         }
-        return CommonConstants.FAIL;
+        return Result.fail();
     }
 
     /**
@@ -110,14 +111,14 @@ public class WebSocketServerController extends AdminBaseController {
      */
     @RequestMapping(value = "enableSpeak.do")
     @ResponseBody
-    public String enableSpeak(@RequestParam("user") String user, @RequestParam("speak") String speak) {
+    public Result<String> enableSpeak(@RequestParam("user") String user, @RequestParam("speak") String speak) {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {
             wsUsersDO.setSpeak(speak);
             wsUsersService.updateById(wsUsersDO);
-            return CommonConstants.SUCCESS;
+            return Result.ok();
         }
-        return CommonConstants.FAIL;
+        return Result.fail();
     }
 
     /**
@@ -127,8 +128,8 @@ public class WebSocketServerController extends AdminBaseController {
      */
     @RequestMapping(value = "sendText.do")
     @ResponseBody
-    public String sendText(@RequestParam("user") String user, @RequestParam("msg") String message) {
-        String result = "offline";
+    public Result<String> sendText(@RequestParam("user") String user, @RequestParam("msg") String message) {
+        Result<String> result = Result.ok();
 
         String msgFrom = message.split("from:")[1].split(";")[0].trim();
         String msgTo = message.split("to:")[1].split(";")[0].trim();
@@ -145,10 +146,9 @@ public class WebSocketServerController extends AdminBaseController {
             if (entry.getValue().containsKey(user)) {
                 try {
                     entry.getValue().get(user).getBasicRemote().sendText(chatBean.toString());
-                    result = CommonConstants.SUCCESS;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    result = CommonConstants.FAIL;
+                    result = Result.fail();
                 }
             }
         }
@@ -178,7 +178,7 @@ public class WebSocketServerController extends AdminBaseController {
      */
     @RequestMapping(value = "addAd.do", method = RequestMethod.POST)
     @ResponseBody
-    public String addAd(@RequestParam("adTitle") String adTitle,
+    public Result<String> addAd(@RequestParam("adTitle") String adTitle,
                         @RequestParam("adContent") String adContent,
                         HttpServletRequest req) {
 
@@ -218,10 +218,10 @@ public class WebSocketServerController extends AdminBaseController {
             result = wsAdsService.insert(wsAdsDO);
         }
         if (result) {
-            return CommonConstants.SUCCESS;
-        } else {
-            return CommonConstants.FAIL;
+            return Result.ok();
         }
+
+        return Result.fail();
     }
 
     /**
@@ -269,13 +269,7 @@ public class WebSocketServerController extends AdminBaseController {
         } else {
             totalPage = totalCount / numPerPage;
         }
-
-        int start;
-        if (curPage == 1) {
-            start = 0;
-        } else {
-            start = (curPage - 1) * numPerPage;
-        }
+        int start = 0;
         List<WsUsersDO> userList = wsUsersService.selectPage(new Page<>(start, numPerPage)).getRecords();
         PageResponseEntity rqe = new PageResponseEntity();
         rqe.setTotalCount(totalCount);
@@ -341,9 +335,9 @@ public class WebSocketServerController extends AdminBaseController {
      */
     @PostMapping("clearOperationLog.do")
     @ResponseBody
-    public String clearOperationLog() {
+    public Result<String> clearOperationLog() {
         wsOperLogService.delete(null);
-        return CommonConstants.SUCCESS;
+        return Result.ok();
     }
 
     /**
@@ -355,7 +349,7 @@ public class WebSocketServerController extends AdminBaseController {
     @ResponseBody
     public Object getCommonByPage(@RequestBody WsCommonDO params) {
         Page<WsCommonDO> page = wsCommonService.selectPage(
-                new Page<WsCommonDO>(1, 15),
+                new Page<>(1, 15),
                 new EntityWrapper<WsCommonDO>().eq("type", params.getType()));
         List<WsCommonDO> wsCommonList = new ArrayList<>();
         if (null != page) {
@@ -367,23 +361,23 @@ public class WebSocketServerController extends AdminBaseController {
     @RequestMapping(value = "addCommonItem.do",
             method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public String addCommonItem(@RequestBody WsCommonDO params) {
+    public Result<String> addCommonItem(@RequestBody WsCommonDO params) {
         wsCommonService.insert(params);
-        return CommonConstants.SUCCESS;
+        return Result.ok();
     }
 
     @RequestMapping(value = "deleteCommonItem.do", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public String deleteCommonItem(@RequestBody WsCommonDO params) {
+    public Result<String> deleteCommonItem(@RequestBody WsCommonDO params) {
         wsCommonService.deleteById(params.getId());
-        return CommonConstants.SUCCESS;
+        return Result.ok();
     }
 
     @RequestMapping(value = "updateCommonItem.do", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public String updateCommonItem(@RequestBody WsCommonDO params) {
+    public Result<String> updateCommonItem(@RequestBody WsCommonDO params) {
         wsCommonService.updateById(params);
-        return CommonConstants.SUCCESS;
+        return Result.ok();
     }
 
     /**
