@@ -190,7 +190,7 @@
             <div id="leftAndRightIframeDiv">
                 <!--左侧导航栏-->
                 <div id="leftNaviDiv">
-                    <div th:if="${session.sessionInfo.user == 'admin'}">
+                    <div th:if="${session.sessionInfo.userName == 'admin'}">
                         <div id="leftSerNavi">
                             <img id="leftNavBackgroundImg" src="../img/headerY.jpg" hidden>
                             <ul>
@@ -253,7 +253,7 @@
                             </div>
                         </div>
                     </div>
-                    <div th:if="${session.sessionInfo.user != 'admin'}">
+                    <div th:if="${session.sessionInfo.userName != 'admin'}">
                         <div id="leftCliNavi">
                             <img id="leftNavBackgroundImg" src="../img/headerY.jpg" hidden>
                             <ul>

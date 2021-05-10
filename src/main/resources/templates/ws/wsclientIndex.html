@@ -3,10 +3,10 @@
     <th:block th:include="common :: header"></th:block>
     <link rel="stylesheet" type="text/css" th:href="@{/css/index/header.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/index/footer.css}">
-    <th:block th:if="${session.sessionInfo.user == 'admin'}">
+    <th:block th:if="${session.sessionInfo.userName == 'admin'}">
         <link rel="stylesheet" type="text/css" th:href="@{/css/index/leftSerNavi.css}">
     </th:block>
-    <th:block th:if="${session.sessionInfo.user != 'admin'}">
+    <th:block th:if="${session.sessionInfo.userName != 'admin'}">
         <link rel="stylesheet" type="text/css" th:href="@{/css/index/leftCliNavi.css}">
     </th:block>
 
@@ -191,7 +191,7 @@
             <div id="leftAndRightIframeDiv">
                 <!--左侧导航栏-->
                 <div id="leftNaviDiv">
-                    <th:block th:if="${session.sessionInfo.user == 'admin'}">
+                    <th:block th:if="${session.sessionInfo.userName == 'admin'}">
                         <div id="leftSerNavi">
                             <img id="leftSerNavBackgroundImg" src="../img/headerY.jpg" hidden>
                             <ul>
@@ -254,7 +254,7 @@
                             </div>
                         </div>
                     </th:block>
-                    <th:block th:if="${session.sessionInfo.user != 'admin'}">
+                    <th:block th:if="${session.sessionInfo.userName != 'admin'}">
                         <div id="leftCliNavi">
                             <img id="leftCliNavBackgroundImg" src="../img/headerY.jpg" hidden>
                             <ul>
@@ -386,10 +386,10 @@
     <th:block th:include="common :: sessionInfo"></th:block>
     <script type="text/javascript" th:src="@{/js/appjs/index/header.js}"></script>
     <script type="text/javascript" th:src="@{/js/appjs/index/footer.js}"></script>
-    <th:block th:if="${session.sessionInfo.user == 'admin'}">
+    <th:block th:if="${session.sessionInfo.userName == 'admin'}">
         <script type="text/javascript" th:src="@{/js/appjs/index/leftSerNavi.js}"></script>
     </th:block>
-    <th:block th:if="${session.sessionInfo.user != 'admin'}">
+    <th:block th:if="${session.sessionInfo.userName != 'admin'}">
         <script type="text/javascript" th:src="@{/js/appjs/index/leftCliNavi.js}"></script>
     </th:block>
 </body>
