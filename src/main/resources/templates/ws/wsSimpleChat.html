@@ -214,13 +214,13 @@
         // 房间名称
         var roomName = "002";
 
-        // 连接状态
+        // 连接状态  0:未连接 1:已连接
         var connectStatus = "0";
-        //重试连接服务器次数
+        // 当前连接次数
         var checkCount = 1;
-        //最大连接次数
+        // 最大重连次数
         var checkMaxCount = 20;
-        //连接服务器定时器
+        // 定时器:检查连接
         var checkTimer = undefined;
 
         //定时检查连接
@@ -309,6 +309,7 @@
                         }
                     });
                 },
+                // 显示聊天室人员列表
                 showUserList: function () {
                     $("#rightUserListDiv").toggle();
                     var rdisp = $("#rightUserListDiv").css("display");
@@ -424,19 +425,31 @@
                 webSocket.send(jsonObj);
             }
         }
-        
+
+        /**
+         * 聊天窗口显示自定义格式内容.
+         *
+         * @param msg html格式内容 eg:"<div> <span color='red'>hello world</span> </div>"
+         */
         function updateChatMsg(msg) {
             var textArea = $('#msgFromServerDiv').append(msg);
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
 
+        /**
+         * 聊天窗口显示内容.
+         *
+         * @param msg      消息内容
+         * @param color    颜色  eg:red
+         * @param fontSize 字体大小 eg:15
+         */
         function updateChatMsgWithColor(msg, color, fontSize) {
             var newMsg = "<p style='color:" + color + ";font-size:" + fontSize + "px;line-height:14px;text-align: center;margin-bottom: 5px;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] " + msg + "</p>";
             var textArea = $("#msgFromServerDiv").append(newMsg);
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
 
-        //定时检查连接
+        //启动定时器检查连接
         function startCheckTimer(){
             if (checkTimer == undefined) {
                 checkTimer = setInterval(function () {
@@ -445,30 +458,31 @@
             }
         }
 
+        // 清除定时器
+        function clearCheckTimer(){
+            if (checkTimer != undefined) {
+                clearInterval(checkTimer);
+                checkTimer = undefined;
+            }
+        }
+
         //检查服务器连接
         function checkConnection() {
             if (connectStatus == "0") {
                 if (checkCount > checkMaxCount) {
                     checkCount = 1;
-                    if (checkTimer != undefined) {
-                        //达到最大连接数后关闭定时器
-                        clearInterval(checkTimer);
-                        checkTimer = undefined;
-                    }
+                    clearCheckTimer();
                     return;
                 }
                 updateChatMsgWithColor("正在连接服务器" + sessionWebserverIp + ":" + sessionWebserverport + " [ " + checkCount + " ]" + "次 请稍等...", "yellow", 10);
                 checkCount++;
                 loginServer();
             } else {
-                if (checkTimer != undefined) {
-                    clearInterval(checkTimer);
-                    checkTimer = undefined;
-                }
+                clearCheckTimer();
             }
         }
 
-        //登录服务器
+        // 启用websocket服务器
         function loginServer() {
             if (webSocket == null) {
                 var socketUrl = "ws://" + sessionWebserverIp + ":" + sessionWebserverport + "/zhddWebSocket/" + roomName + "/" + sessionUser + "/" + sessionPassword + "/" + sessionUseragent;
@@ -494,7 +508,7 @@
             connectStatus = "1";
         }
 
-        //连接失败
+        //连接异常
         function onError(event) {
             updateChatMsgWithColor("连接聊天室服务器异常!", "red", 10);
             connectStatus = "0";
