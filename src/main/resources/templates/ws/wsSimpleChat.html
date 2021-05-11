@@ -329,18 +329,18 @@
         // 发送消息给服务器
         function send() {
             if (webSocket == null) {
-                var msg = "服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
+                let msg = "服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
                 updateChatMsgWithColor(msg, "red", 10);
                 return;
             }
 
-            var toUser = $("#selectUser").val();
+            let toUser = $("#selectUser").val();
             if (sessionUser == toUser) {
                 updateChatMsgWithColor("不能给自己发消息!", "red", 10);
                 return false;
             }
 
-            var msg = $("#sendMsgInput").val();
+            let msg = $("#sendMsgInput").val();
             if (msg == null || msg == "") {
                 updateChatMsgWithColor("不允许发送空消息!", "red", 10);
                 return;
@@ -555,14 +555,7 @@
                 $("#inputStatusSpan").text(inputMsg);
                 return;
             }
-            
-            // 发送方用户相关信息
-            var msgFromUserProfile = null;
-            if (msgTypeId == app.msgTypeMap.onlinechat.value || msgTypeId == app.msgTypeMap.offlinechat.value) {
-                // 聊天消息/离线消息
-                msgFromUserProfile = extendMap.userProfile;
-            }
-            
+
             if (msgTypeId == app.msgTypeMap.notice.value) {
                 // 通知消息
                 $("#noticeDiv").show();
@@ -590,45 +583,47 @@
                 // 我发出去的消息
                 defaultCss = "color:black;font-size:10px;line-height:20px;";
             }
-            
-            var htmlDate = "";
+
+            // 发送方用户相关信息
+            var msgFromUserProfile = null;
+            if (msgTypeId == app.msgTypeMap.onlinechat.value || msgTypeId == app.msgTypeMap.offlinechat.value) {
+                // 聊天消息/离线消息
+                msgFromUserProfile = extendMap.userProfile;
+            }
+
+            let htmlData = "";
             if (msgFrom == sessionUser) {
                 // 右侧--当前用户发出去的消息
                 htmlData = "<div style='width:60%;height:auto;margin-bottom: 10px;margin-left:40%;padding-right: 3px;text-align:right;background-color: #85efb4e0;'>";
-                htmlData += "<p style='height:20px;'>";
+                htmlData += "   <p style='height:20px;'>";
                 
-                htmlData += "<span style='display: inline-block;margin-right: 10px;'>" + msgTypeDesc + "</span>";
-                htmlData += "<span style='display: inline-block;margin-right: 10px;color: black;'>" + curTime + "</span>";
-                htmlData += "<a style='display: inline-block;margin-right: 5px;font-weight: bold;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
-                htmlData += "<img width='15' height='15' src='"+msgFromUserProfile.img+"'>";
-                htmlData += "</p>";
+                htmlData += "       <span style='display: inline-block;margin-right: 10px;'>" + msgTypeDesc + "</span>";
+                htmlData += "       <span style='display: inline-block;margin-right: 10px;color: black;'>" + curTime + "</span>";
+                htmlData += "       <a style='display: inline-block;margin-right: 5px;font-weight: bold;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
+                htmlData += "       <img width='15' height='15' src='"+msgFromUserProfile.img+"'>";
+                htmlData += "   </p>";
+
+                htmlData += "   <p style='height:auto;border-radius: 5px;'>";
+                if (msgTo != null && msgTo != "") {
+                    htmlData += "   <span style='color:blue;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
+                } else {
+                    htmlData += "   <span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
+                }
+                htmlData += "   </p>";
             } else {
                 // 左侧--其他用户发的消息
                 htmlData = "<div style='width:60%;height:auto;margin-bottom: 10px;padding-left: 3px;background-color: #85efb4e0;'>";
-                htmlData += "<p style='height:20px;'>";
+                htmlData += "   <p style='height:20px;'>";
 
-                htmlData += "<img width='15' height='15' style='margin-right: 5px;' src='"+msgFromUserProfile.img+"'>";
-                htmlData += "<a style='display: inline-block;margin-right: 10px;font-weight: bold;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
-                htmlData += "<span style='display: inline-block;margin-right: 10px;color: black;'>" + curTime + "</span>";
-                htmlData += "<span style='display: inline-block;'>" + msgTypeDesc + "</span>";
-                htmlData += "</p>";
-            }
-            
-            if (msgFrom == sessionUser) {
-                // 当前用户发出去的消息
-                // 底色蓝色，字体白色，@蓝色
-                htmlData += "<p style='height:auto;border-radius: 5px;'>";
+                htmlData += "       <img width='15' height='15' style='margin-right: 5px;' src='"+msgFromUserProfile.img+"'>";
+                htmlData += "       <a style='display: inline-block;margin-right: 10px;font-weight: bold;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
+                htmlData += "       <span style='display: inline-block;margin-right: 10px;color: black;'>" + curTime + "</span>";
+                htmlData += "       <span style='display: inline-block;'>" + msgTypeDesc + "</span>";
+                htmlData += "   </p>";
+
+                htmlData += "   <p style='height:auto;border-radius: 5px;'>";
                 if (msgTo != null && msgTo != "") {
-                    htmlData += "<span style='color:blue;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
-                } else {
-                    htmlData += "<span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
-                }
-            } else {
-                // 别人发出去的消息
-                // 底色灰色，字体黑色，@蓝色
-                htmlData += "<p style='height:auto;border-radius: 5px;'>";
-                if (msgTo != null && msgTo != "") {
-                    var fontColor;
+                    let fontColor;
                     if (msgTo == sessionUser) {
                         // 别人@我的消息
                         fontColor = "red";
@@ -636,13 +631,13 @@
                         // 别人@其他人的消息
                         fontColor = "blue";
                     }
-                    htmlData += "<span style='color:"+fontColor+";font-weight:bold;text-indent: 2em;display: inline-block;'>@" + msgTo + "</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
+                    htmlData += "   <span style='color:"+fontColor+";font-weight:bold;text-indent: 2em;display: inline-block;'>@" + msgTo + "</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
                 } else {
-                    htmlData += "<span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
+                    htmlData += "   <span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
                 }
+                htmlData += "   </p>";
             }
-            htmlData += "</p>";
-            htmlData += "</div>";
+            htmlData += "   </div>";
             updateChatMsg(htmlData);
         }
 
