@@ -499,6 +499,7 @@
             updateChatMsgWithColor("连接聊天室服务器异常!", "red", 10);
             connectStatus = "0";
             webSocket = null;
+            startCheckTimer();
         }
 
         //连接关闭
@@ -506,6 +507,7 @@
             updateChatMsgWithColor("聊天室已断开!", "red", 10);
             connectStatus = "0";
             webSocket = null;
+            startCheckTimer();
         }
 
         //接收消息
