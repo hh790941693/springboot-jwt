@@ -120,7 +120,7 @@
                     <button class='label label-danger' th:title="清屏" @click="clearScreen()">
                         <span class="glyphicon glyphicon-ban-circle"></span>
                     </button>&nbsp;
-                    <button class='label label-primary' type="button" th:title="重新连接" onclick="loginServer()">
+                    <button class='label label-primary' type="button" th:title="重新连接" onclick="startCheckTimer()">
                         <span class="glyphicon glyphicon-retweet"></span>
                     </button>&nbsp;
                     <button class='label label-primary' type="button" th:title="用户列表" @click="showUserList()">
@@ -214,9 +214,18 @@
         // 房间名称
         var roomName = "002";
 
-        // 登陆聊天服务器
-        loginServer();
-        
+        // 连接状态
+        var connectStatus = "0";
+        //重试连接服务器次数
+        var checkCount = 1;
+        //最大连接次数
+        var checkMaxCount = 20;
+        //连接服务器定时器
+        var checkTimer = undefined;
+
+        //定时检查连接
+        startCheckTimer();
+
         var app = new Vue({
             el: '#mainDiv',
             data: {
@@ -427,6 +436,38 @@
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
 
+        //定时检查连接
+        function startCheckTimer(){
+            if (checkTimer == undefined) {
+                checkTimer = setInterval(function () {
+                    checkConnection();
+                }, 1000);
+            }
+        }
+
+        //检查服务器连接
+        function checkConnection() {
+            if (connectStatus == "0") {
+                if (checkCount > checkMaxCount) {
+                    checkCount = 1;
+                    if (checkTimer != undefined) {
+                        //达到最大连接数后关闭定时器
+                        clearInterval(checkTimer);
+                        checkTimer = undefined;
+                    }
+                    return;
+                }
+                updateChatMsgWithColor("正在连接服务器" + sessionWebserverIp + ":" + sessionWebserverport + " [ " + checkCount + " ]" + "次 请稍等...", "yellow", 10);
+                checkCount++;
+                loginServer();
+            } else {
+                if (checkTimer != undefined) {
+                    clearInterval(checkTimer);
+                    checkTimer = undefined;
+                }
+            }
+        }
+
         //登录服务器
         function loginServer() {
             if (webSocket == null) {
@@ -450,17 +491,20 @@
         //连接成功
         function onOpen(event) {
             updateChatMsgWithColor("您已进入聊天室", "yellow", 10);
+            connectStatus = "1";
         }
 
         //连接失败
         function onError(event) {
             updateChatMsgWithColor("连接聊天室服务器异常!", "red", 10);
+            connectStatus = "0";
             webSocket = null;
         }
 
         //连接关闭
         function OnClose(event) {
             updateChatMsgWithColor("聊天室已断开!", "red", 10);
+            connectStatus = "0";
             webSocket = null;
         }
 
