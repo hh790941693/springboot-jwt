@@ -191,7 +191,7 @@ public class ZhddWebSocket {
                        @PathParam("user") String user,
                        @PathParam("pass") String pass,
                        @PathParam("userAgent") String userAgent,
-                       Session session, EndpointConfig endpointConfig) {
+                       Session session, EndpointConfig endpointConfig) throws Exception {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user).eq("password", pass));
         if (null == wsUsersDO) {
             logger.info("用户{}不存在或者密码错误", user);
@@ -200,7 +200,7 @@ public class ZhddWebSocket {
             this.user = null;
             this.pass = null;
             this.userAgent = null;
-            return;
+            throw new Exception("用户不存在或密码错误");
         }
         this.session = session;
         this.roomName = roomName;
