@@ -16,7 +16,7 @@ public class InterceptorConfigNew implements WebMvcConfigurer {
                 .addPathPatterns("/**");
 
         registry.addInterceptor(loginInterceptor())
-                .addPathPatterns("/**");
+                .addPathPatterns("/login.do");
     }
 
     @Bean
