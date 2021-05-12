@@ -53,11 +53,12 @@ public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     // 登陆成功后的页面前缀
+    // 访问样例:http://127.0.0.1:8100?v=1
     // 目前可用值:
     //          v=1 wsclientIndex_v1 头、底、导航栏、iframe分离
     //          v=2 wsclientIndex_v2 头、底、导航栏、iframe都在一个页面
-    //          v=0 wsclientIndex_v3 比v2更新一点的版本
-    //          默认 wsclientIndex_v4 采用jquery easyUI重新设计
+    //          v=3 wsclientIndex_v3 比v2更新一点的版本
+    //          v=4 wsclientIndex_v4 采用jquery easyUI重新设计(默认)
     private static String HOME_PAGE_NAME = "wsclientIndex_v4";
 
     @Autowired
@@ -290,7 +291,7 @@ public class LoginController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "登录成功页面")
     @RequestMapping(value = "home.page")
     public String wsclientIndex() {
-        logger.debug("home.page");
+        logger.debug("访问home.page");
         return "ws/" + HOME_PAGE_NAME;
     }
 
