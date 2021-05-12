@@ -1,7 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.interceptor;
 
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
-import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -22,10 +21,7 @@ public class ActionLogInterceptor implements HandlerInterceptor {
 
     // 接口日志开关
     private boolean logSwitch = true;
-    // 请求开始时间
-    private long startTime = 0;
-    // 页面名称
-    private String viewName = "";
+
     // 忽略的接口url后缀
     private static final List<String> IGNORE_URL_SUFFIX_LIST = new ArrayList<>(Arrays.asList(
             ".js",
@@ -41,7 +37,7 @@ public class ActionLogInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o) {
-        startTime = System.currentTimeMillis();
+        request.setAttribute("startTime", System.currentTimeMillis());
         return true;
     }
 
@@ -50,7 +46,7 @@ public class ActionLogInterceptor implements HandlerInterceptor {
                            HttpServletResponse httpServletResponse,
                            Object o, ModelAndView modelAndView) {
         if (modelAndView != null) {
-            viewName = modelAndView.getViewName();
+            httpServletRequest.setAttribute("viewName", modelAndView.getViewName());
         }
     }
 
@@ -61,6 +57,7 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         }
 
         String url = request.getRequestURI();
+        String servletPath = request.getServletPath();
         for (String suffix : IGNORE_URL_SUFFIX_LIST) {
             if (url.endsWith(suffix)) {
                 return;
@@ -68,7 +65,6 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         }
 
         System.out.println("-----------------------------------action请求-------------------------------------");
-
         String functionName =  handler.toString().trim();
         //去掉修饰符和参数
         int index = functionName.indexOf(" ");
@@ -97,6 +93,7 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         System.out.println("接口地址: " + url);
         System.out.println("调用方法: " + functionName);
         System.out.println("参数列表: " + paramsSb.toString());
+        long startTime = (long)request.getAttribute("startTime");
         System.out.println("耗时    : " + (System.currentTimeMillis() - startTime) + "ms");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss S");
         System.out.println("操作时间: " + dateFormat.format(new Date()));
@@ -105,6 +102,7 @@ public class ActionLogInterceptor implements HandlerInterceptor {
             String user = sessionInfoBean.getUserName();
             System.out.println("操作用户: " + user);
         }
+        String viewName = (String)request.getAttribute("viewName");
         if (StringUtils.isNotBlank(viewName)) {
             System.out.println("页面    : " + viewName);
         }
