@@ -652,7 +652,7 @@ public class LoginController {
     @RequestMapping(value = "getChatRoomInfo.json")
     @ResponseBody
     @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.CHAT, subModule = "", describe = "获取房间人员列表")
-    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value = "roomName") String roomName) {
+    public Result<WsOnlineInfo> getChatRoomInfo(@RequestParam(value = "roomName") String roomName) {
         WsOnlineInfo woi = new WsOnlineInfo();
         woi.setCommonMap(buildCommonData());
 
