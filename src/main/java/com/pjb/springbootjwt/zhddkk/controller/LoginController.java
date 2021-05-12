@@ -171,12 +171,15 @@ public class LoginController {
 
     /**
      * 登录按钮事件.
+     * @param userName 用户名
+     * @param password 密码
+     * @param verifyCodeInput 验证码
      */
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGIN, subModule = "", describe = "登录")
     @RequestMapping(value = "wslogin.do", method = RequestMethod.POST)
     public void wsclient(@RequestParam("user")String userName, @RequestParam("pass")String password,
                          @RequestParam("verifyCode")String verifyCodeInput,
-                           HttpServletRequest request, HttpServletResponse response) throws Exception {
+                         HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 获取用户信息
         WsUsersDO curUserObj = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
 
@@ -204,8 +207,8 @@ public class LoginController {
 //        if (curUserObj.getState().equals("1")) {
 //            // 如果已登录
 //            request.setAttribute("user", user);
-//            request.setAttribute("detail", "当前用户已经登录了,请不要重复登录!");
-//            request.getRequestDispatcher("loginfail.page").forward(request, response);
+//            request.setAttribute("errorMsg", "当前用户已经登录了,请不要重复登录!");
+//            request.getRequestDispatcher("index").forward(request, response);
 //            return;
 //        }
 
