@@ -122,39 +122,25 @@ public class LoginController {
 
         // 检查cookie
         Cookie[] cookies = request.getCookies();
-        Locale locale = null;
-        boolean hasUserCookie = false;
-        boolean hasPassCookie = false;
-        boolean hasLangCookie = false;
+        Locale locale = new Locale("zh", "CN");
+        model.addAttribute(CommonConstants.S_USER, "");
+        model.addAttribute(CommonConstants.S_PASS, "");
+        model.addAttribute(CommonConstants.C_LANG, CommonConstants.LANG_ZH);
         if (null != cookies) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(CommonConstants.S_USER) && cookie.getMaxAge() != 0) {
-                    hasUserCookie = true;
                     model.addAttribute(CommonConstants.S_USER, cookie.getValue());
                 } else if (cookie.getName().equals(CommonConstants.S_PASS) && cookie.getMaxAge() != 0) {
-                    hasPassCookie = true;
                     //对密码进行解密
                     String passDecrypt = SecurityAESUtil.decryptAES(cookie.getValue(), CommonConstants.AES_PASSWORD);
                     model.addAttribute(CommonConstants.S_PASS, passDecrypt);
                 } else if (cookie.getName().equals(CommonConstants.C_LANG) && cookie.getMaxAge() != 0) {
-                    hasLangCookie = true;
                     model.addAttribute(CommonConstants.C_LANG, cookie.getValue());
                     String language = cookie.getValue().split("_")[0];
                     String country = cookie.getValue().split("_")[1];
                     locale = new Locale(language, country);
                 }
             }
-        }
-        if (!hasUserCookie) {
-            model.addAttribute(CommonConstants.S_USER, "");
-        }
-        if (!hasPassCookie) {
-            model.addAttribute(CommonConstants.S_PASS, "");
-        }
-
-        if (!hasLangCookie) {
-            model.addAttribute(CommonConstants.C_LANG, CommonConstants.LANG_ZH);
-            locale = new Locale("zh", "CN");
         }
 
         // 创建session
