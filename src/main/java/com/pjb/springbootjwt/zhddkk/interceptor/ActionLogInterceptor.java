@@ -11,24 +11,31 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * 日志打印.
+ * 接口日志打印.
  */
 @Configuration
-public class ActionLogInterceptor implements WebMvcConfigurer,HandlerInterceptor {
+public class ActionLogInterceptor implements HandlerInterceptor {
 
+    // 接口日志开关
     private boolean logSwitch = true;
+    // 请求开始时间
     private long startTime = 0;
+    // 页面名称
     private String viewName = "";
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(this)
-                .addPathPatterns("/**");
-    }
+    // 忽略的接口url后缀
+    private static final List<String> IGNORE_URL_SUFFIX_LIST = new ArrayList<>(Arrays.asList(
+            ".js",
+            ".css",
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".PNG",
+            ".gif",
+            ".GIF",
+            ".properties",
+            ".mp3"));
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o) {
@@ -46,22 +53,18 @@ public class ActionLogInterceptor implements WebMvcConfigurer,HandlerInterceptor
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request,
-                                HttpServletResponse response,
-                                Object handler, Exception e) {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) {
         if (!logSwitch) {
             return;
         }
 
         String url = request.getRequestURI();
-        if (!url.startsWith("/zhddkk") && !url.startsWith("/ws") && !url.startsWith("/file")) {
-            return;
+        for (String suffix : IGNORE_URL_SUFFIX_LIST) {
+            if (url.endsWith(suffix)) {
+                return;
+            }
         }
-        if (url.endsWith("jpg") || url.endsWith("jpeg") || url.endsWith("JPG")
-                || url.endsWith("JPEG") || url.endsWith("png") || url.endsWith("PNG")
-                || url.endsWith("gif") || url.endsWith("GIF")) {
-            return;
-        }
+
         System.out.println("-----------------------------------action请求-------------------------------------");
 
         String functionName =  handler.toString().trim();
@@ -83,7 +86,7 @@ public class ActionLogInterceptor implements WebMvcConfigurer,HandlerInterceptor
         Map parameterMap = request.getParameterMap();
         for (Object key:parameterMap.keySet()) {
             String name = (String) key;
-            if (StringUtils.isNotBlank(name) && (name.equals("password") || name.equals("passwd"))) {
+            if (StringUtils.isNotBlank(name) && (name.equals("password") || name.equals("passwd") || name.equals("pass"))) {
                 continue;
             }
             String value = request.getParameter(name);
