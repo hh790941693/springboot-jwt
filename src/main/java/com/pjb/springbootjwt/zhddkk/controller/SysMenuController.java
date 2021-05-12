@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * 菜单表.
@@ -249,7 +250,11 @@ public class SysMenuController extends AdminBaseController {
                 }
             } else {
                 List<SysMenuDO> srcList = sysMenuService.queryRoleMenuList(sysUserRoleDO.getRoleId());
-                Locale locale = (Locale) request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+                HttpSession httpSession = request.getSession(false);
+                Locale locale = new Locale("zh", "CN");
+                if (null != httpSession) {
+                    locale = (Locale) httpSession.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+                }
                 for (SysMenuDO sysMenuDO : srcList) {
                     String i18nKey = sysMenuDO.getI18nKey();
                     if (StringUtils.isNotBlank(i18nKey)) {

@@ -10,6 +10,9 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +85,7 @@ public class SesstionTimeoutFilter implements Filter {
         httpServletResponse.setHeader("Access-Control-Allow-Credentials", "*");
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 
-        SessionInfoBean sessionInfoBean = (SessionInfoBean) httpServletRequest.getSession().getAttribute(CommonConstants.SESSION_INFO);
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionInfo(httpServletRequest);
         String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
 
         // 如果session信息存在,放行

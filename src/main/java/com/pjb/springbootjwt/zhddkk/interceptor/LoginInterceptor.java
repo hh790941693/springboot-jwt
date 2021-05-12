@@ -2,11 +2,13 @@ package com.pjb.springbootjwt.zhddkk.interceptor;
 
 import com.alibaba.druid.util.StringUtils;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
-import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Configuration;
@@ -36,9 +38,10 @@ public class LoginInterceptor implements HandlerInterceptor {
 //            }
 //        }
 //
-//        SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession().getAttribute(CommonConstants.SESSION_INFO);
-//        String user = sessionInfoBean == null ? "" : sessionInfoBean.getUser();
+//        SessionInfoBean sessionInfoBean = SessionUtil.getSessionInfo(request);
+//        String user = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
 //        String pass = sessionInfoBean == null ? "" : sessionInfoBean.getPassword();
+//
 //        String url = request.getRequestURL().toString();
 //        logger.debug("用户" + user + "访问:" + url);
 //

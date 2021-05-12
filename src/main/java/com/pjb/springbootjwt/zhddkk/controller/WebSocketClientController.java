@@ -984,15 +984,11 @@ public class WebSocketClientController extends AdminBaseController {
     @GetMapping("/querySessionData")
     public String querySessionData(String user, HttpServletRequest request) {
         logger.info("查询session数据, user:{}", user);
-        Object sessionUser = "";
-        Object sessionPass = "";
-        try {
-            SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession().getAttribute(CommonConstants.SESSION_INFO);
-            sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
-            sessionPass = sessionInfoBean == null ? "" : sessionInfoBean.getPassword();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionInfo(request);
+        Object sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
+        Object sessionPass = sessionInfoBean == null ? "" : sessionInfoBean.getPassword();
+
         logger.info("sessionUser:" + sessionUser);
         logger.info("sessionPass:" + sessionPass);
 

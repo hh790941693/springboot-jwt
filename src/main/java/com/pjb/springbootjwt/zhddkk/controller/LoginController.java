@@ -18,12 +18,7 @@ import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
 import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
 import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
-import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
-import com.pjb.springbootjwt.zhddkk.util.ExcuteLinuxCmdUtil;
-import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
-import com.pjb.springbootjwt.zhddkk.util.OsUtil;
-import com.pjb.springbootjwt.zhddkk.util.QRCodeUtil;
-import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
+import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import com.wf.captcha.ArithmeticCaptcha;
@@ -33,6 +28,7 @@ import java.util.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -122,7 +118,7 @@ public class LoginController {
         }
 
         // 如果用户已登陆过，则直接跳转登陆成功首页
-        SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession().getAttribute(CommonConstants.SESSION_INFO);
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionInfo(request);
         if (null != sessionInfoBean) {
             return "ws/" + INDEX_PAGE_NAME;
         }
@@ -164,7 +160,10 @@ public class LoginController {
             locale = new Locale("zh", "CN");
         }
 
-        request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+        HttpSession httpSession = request.getSession(false);
+        if (null != httpSession) {
+            httpSession.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+        }
         if (StringUtils.isNotBlank(errorMsg)) {
             model.addAttribute("errorMsg", errorMsg);
         }
@@ -222,7 +221,7 @@ public class LoginController {
         }
 
         // 校验验证码
-        String verifyCode = (String) request.getSession().getAttribute(CommonConstants.VERIFY_CODE);
+        String verifyCode = (String) request.getSession(false).getAttribute(CommonConstants.VERIFY_CODE);
         if (!verifyCodeInput.equals(verifyCode)) {
             request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong", request));
@@ -248,13 +247,13 @@ public class LoginController {
         }
 
         //session
-        logger.info("创建SESSION: {}", request.getSession().getId());
+        logger.info("创建SESSION: {}", request.getSession(false).getId());
 
         //记录cookie
         saveCookie(request, response, curUserObj);
 
         // 设置session非活动失效时间(30分钟)
-        request.getSession().setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
+        request.getSession(false).setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
         // 角色信息
         SysRoleDO sysRoleInfo = queryRoleInfo(curUserObj.getId());
@@ -262,15 +261,15 @@ public class LoginController {
         String roleName = sysRoleInfo != null ? String.valueOf(sysRoleInfo.getName()) : "";
 
         // 往session中存储用户信息
-        SessionInfoBean sessionInfoBean = new SessionInfoBean(request.getSession().getId(),
+        SessionInfoBean sessionInfoBean = new SessionInfoBean(request.getSession(false).getId(),
                 String.valueOf(curUserObj.getId()), userName, curUserObj.getPassword(), webSocketConfig.getAddress(),
-                webSocketConfig.getPort(), selfImg, shortAgent, roleId, roleName, request.getSession().getMaxInactiveInterval());
+                webSocketConfig.getPort(), selfImg, shortAgent, roleId, roleName, request.getSession(false).getMaxInactiveInterval());
         String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
         JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
         sessionInfoBean.setJsonStr(jsonStr);
         sessionInfoBean.setJsonObject(jsonObj);
         // 页面通过th:value="${session.sessionInfo.jsonStr}"来获取session信息
-        request.getSession().setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
+        request.getSession(false).setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
         // 往redis中存储用户信息
         String redisKey = REDIS_KEY_PREFIX + userName;
@@ -616,7 +615,7 @@ public class LoginController {
 
         // 获取运算的结果
         String verifyCode = captcha.text();
-        request.getSession().setAttribute(CommonConstants.VERIFY_CODE, verifyCode);
+        request.getSession(true).setAttribute(CommonConstants.VERIFY_CODE, verifyCode);
         String base64String = captcha.toBase64("data:image/png;base64,");
         return Result.ok(base64String);
     }
@@ -633,7 +632,7 @@ public class LoginController {
         String language = lang.split("_")[0];
         String country = lang.split("_")[1];
         Locale locale = new Locale(language, country);
-        request.getSession().setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+        request.getSession(false).setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
 
         // 设置cookie
         Cookie localeCookie = new Cookie(CommonConstants.C_LANG, lang);
@@ -700,7 +699,7 @@ public class LoginController {
      * @return 国际化后的信息
      */
     private  String getLocaleMessage(String messageId, HttpServletRequest request) {
-        Locale locale = (Locale) request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        Locale locale = (Locale) request.getSession(false).getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         return messageSource.getMessage(messageId, null, locale);
     }
 
@@ -739,7 +738,7 @@ public class LoginController {
         response.addCookie(webserverportCookie);
 
         // 设置语言cookie
-        Locale locale = (Locale) request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        Locale locale = (Locale) request.getSession(false).getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         if (null != locale) {
             Cookie localeCookie = new Cookie(CommonConstants.C_LANG, locale.toString());
             localeCookie.setPath("/");

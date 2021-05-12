@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -98,7 +100,7 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         System.out.println("耗时    : " + (System.currentTimeMillis() - startTime) + "ms");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss S");
         System.out.println("操作时间: " + dateFormat.format(new Date()));
-        SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession(false).getAttribute(CommonConstants.SESSION_INFO);
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionInfo(request);
         if (null != sessionInfoBean) {
             String user = sessionInfoBean.getUserName();
             System.out.println("操作用户: " + user);

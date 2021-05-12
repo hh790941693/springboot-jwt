@@ -12,6 +12,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -65,8 +68,10 @@ public class OperationLogAspect {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String requestUrl = request.getRequestURL().toString();
-        SessionInfoBean sessionInfoBean = (SessionInfoBean) request.getSession().getAttribute(CommonConstants.SESSION_INFO);
+
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionInfo(request);
         String userName = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
+
 
         if (StringUtils.isNotBlank(userName)) {
             WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
