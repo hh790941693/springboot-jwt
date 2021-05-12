@@ -160,10 +160,9 @@ public class LoginController {
             locale = new Locale("zh", "CN");
         }
 
-        HttpSession httpSession = request.getSession(false);
-        if (null != httpSession) {
-            httpSession.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
-        }
+        // 创建session
+        request.getSession(true).setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+
         if (StringUtils.isNotBlank(errorMsg)) {
             model.addAttribute("errorMsg", errorMsg);
         }
@@ -220,8 +219,10 @@ public class LoginController {
             return;
         }
 
+        HttpSession session = request.getSession(false);
+
         // 校验验证码
-        String verifyCode = (String) request.getSession(false).getAttribute(CommonConstants.VERIFY_CODE);
+        String verifyCode = (String) session.getAttribute(CommonConstants.VERIFY_CODE);
         if (!verifyCodeInput.equals(verifyCode)) {
             request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong", request));
@@ -246,14 +247,11 @@ public class LoginController {
             selfImg = wup.getImg();
         }
 
-        //session
-        logger.info("创建SESSION: {}", request.getSession(false).getId());
-
         //记录cookie
         saveCookie(request, response, curUserObj);
 
         // 设置session非活动失效时间(30分钟)
-        request.getSession(false).setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
+        session.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
         // 角色信息
         SysRoleDO sysRoleInfo = queryRoleInfo(curUserObj.getId());
@@ -261,15 +259,15 @@ public class LoginController {
         String roleName = sysRoleInfo != null ? String.valueOf(sysRoleInfo.getName()) : "";
 
         // 往session中存储用户信息
-        SessionInfoBean sessionInfoBean = new SessionInfoBean(request.getSession(false).getId(),
+        SessionInfoBean sessionInfoBean = new SessionInfoBean(session.getId(),
                 String.valueOf(curUserObj.getId()), userName, curUserObj.getPassword(), webSocketConfig.getAddress(),
-                webSocketConfig.getPort(), selfImg, shortAgent, roleId, roleName, request.getSession(false).getMaxInactiveInterval());
+                webSocketConfig.getPort(), selfImg, shortAgent, roleId, roleName, session.getMaxInactiveInterval());
         String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
         JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
         sessionInfoBean.setJsonStr(jsonStr);
         sessionInfoBean.setJsonObject(jsonObj);
         // 页面通过th:value="${session.sessionInfo.jsonStr}"来获取session信息
-        request.getSession(false).setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
+        session.setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
         // 往redis中存储用户信息
         String redisKey = REDIS_KEY_PREFIX + userName;
@@ -615,7 +613,7 @@ public class LoginController {
 
         // 获取运算的结果
         String verifyCode = captcha.text();
-        request.getSession(true).setAttribute(CommonConstants.VERIFY_CODE, verifyCode);
+        request.getSession(false).setAttribute(CommonConstants.VERIFY_CODE, verifyCode);
         String base64String = captcha.toBase64("data:image/png;base64,");
         return Result.ok(base64String);
     }
