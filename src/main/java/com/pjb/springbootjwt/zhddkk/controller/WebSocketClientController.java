@@ -88,8 +88,10 @@ public class WebSocketClientController extends AdminBaseController {
     @ResponseBody
     public Result<String> logout(@RequestParam("user")String user, HttpServletRequest request) {
         HttpSession httpSession = request.getSession(false);
-        System.out.println("退出前SESSION:" + httpSession.getId());
-        httpSession.invalidate();
+        // 销毁session
+        if (null != httpSession) {
+            httpSession.invalidate();
+        }
         ZhddWebSocket.removeUserFromAllRoom(user);
 
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
