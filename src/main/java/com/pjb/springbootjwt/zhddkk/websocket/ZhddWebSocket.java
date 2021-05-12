@@ -98,6 +98,9 @@ public class ZhddWebSocket {
         //对消息进行敏感字、脏话进行处理
         String msg = msgStr;
         List<WsCommonDO> commonList = CoreCache.getInstance().getCommonList();
+        if (null == commonList) {
+            commonList = wsCommonService.selectList(null);
+        }
         List<WsCommonDO> allList = commonList.stream().filter(c->c.getType().equals("mgc") || c.getType().equals("zh")).collect(Collectors.toList());
         for (WsCommonDO wc : allList) {
             msg = msg.replaceAll(wc.getName(), "***");
@@ -127,7 +130,17 @@ public class ZhddWebSocket {
                 }
             }
             Map<String, Object> extendMap = new HashMap<>();
-            extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(msgFrom));
+            WsUserProfileDO wsUserProfileDO = CoreCache.getInstance().getUserProfile(msgFrom);
+            if (null == wsUserProfileDO) {
+                List<WsUserProfileDO> userProfileList = wsUserProfileService.selectList(null);
+                for (WsUserProfileDO wupd : userProfileList) {
+                    if (wupd.getUserName().equals(msgFrom)) {
+                        wsUserProfileDO = wupd;
+                        break;
+                    }
+                }
+            }
+            extendMap.put("userProfile", wsUserProfileDO);
             ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.CHAT_ONLINE_MSG.getMsgTypeDesc(), msgFrom, msgTo, msg, extendMap);
             sendToAll(roomName, chatBean);
 
@@ -228,8 +241,17 @@ public class ZhddWebSocket {
 
                 // 发送方相关信息
                 Map<String, Object> extendMap = new HashMap<>();
-                extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(wcl.getUser()));
-
+                WsUserProfileDO wsUserProfileDO = CoreCache.getInstance().getUserProfile(wcl.getUser());
+                if (null == wsUserProfileDO) {
+                    List<WsUserProfileDO> userProfileList = wsUserProfileService.selectList(null);
+                    for (WsUserProfileDO wupd : userProfileList) {
+                        if (wupd.getUserName().equals(wcl.getUser())) {
+                            wsUserProfileDO = wupd;
+                            break;
+                        }
+                    }
+                }
+                extendMap.put("userProfile", wsUserProfileDO);
                 try {
                     ChatMessageBean offlineChatBean = new ChatMessageBean(time, ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getMsgTypeId(), ChatMsgTypeEnum.CHAT_OFFLINE_MSG.getMsgTypeDesc(), wcl.getUser(), wcl.getToUser(), UnicodeUtil.unicode2String(wcl.getMsg()), extendMap);
                     this.session.getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(offlineChatBean));
