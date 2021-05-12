@@ -30,4 +30,9 @@ public class WsUsersServiceImpl extends CoreServiceImpl<WsUsersDao, WsUsersDO> i
     public List<WsUsersDO> queryMyFriendList(Integer userId) {
         return this.baseMapper.queryMyFriendList(userId);
     }
+
+    @Override
+    public WsUsersDO queryUserByName(String name) {
+        return this.baseMapper.queryUserByName(name);
+    }
 }

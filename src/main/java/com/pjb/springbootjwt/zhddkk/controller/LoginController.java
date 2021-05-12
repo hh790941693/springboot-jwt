@@ -181,7 +181,7 @@ public class LoginController {
                          @RequestParam("verifyCode")String verifyCodeInput,
                          HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 获取用户信息
-        WsUsersDO curUserObj = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
+        WsUsersDO curUserObj = wsUsersService.queryUserByName(userName);
 
         // 如果用户信息不存在,提示用户去注册
         if (null == curUserObj) {
@@ -243,13 +243,6 @@ public class LoginController {
             logger.warn("获取客户端信息失败!" + e.getMessage());
         }
 
-        //个人头像
-        WsUserProfileDO wup = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_name", userName));
-        String selfImg = "";
-        if (null != wup) {
-            selfImg = wup.getImg();
-        }
-
         //记录cookie
         saveCookie(request, response, curUserObj);
 
@@ -264,7 +257,7 @@ public class LoginController {
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(session.getId(),
                 String.valueOf(curUserObj.getId()), userName, curUserObj.getPassword(), webSocketConfig.getAddress(),
-                webSocketConfig.getPort(), selfImg, shortAgent, roleId, roleName, session.getMaxInactiveInterval());
+                webSocketConfig.getPort(), curUserObj.getHeadImage(), shortAgent, roleId, roleName, session.getMaxInactiveInterval());
         String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
         JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
         sessionInfoBean.setJsonStr(jsonStr);

@@ -16,4 +16,6 @@ public interface WsUsersService extends CoreService<WsUsersDO> {
 
     //我的好友列表
     List<WsUsersDO> queryMyFriendList(Integer userId);
+
+    WsUsersDO queryUserByName(String name);
 }
