@@ -57,8 +57,8 @@ public class LoginController {
     //          v=1 wsclientIndex_v1 头、底、导航栏、iframe分离
     //          v=2 wsclientIndex_v2 头、底、导航栏、iframe都在一个页面
     //          v=0 wsclientIndex 比v2更新一点的版本
-    //          默认 wsclientIndex_v3 采用jquery easyUI重新设计
-    private static String INDEX_PAGE_NAME = "wsclientIndex_v3";
+    //          默认 wsclientIndex_v4 采用jquery easyUI重新设计
+    private static String HOME_PAGE_NAME = "wsclientIndex_v4";
 
     @Autowired
     private WebSocketConfig webSocketConfig;
@@ -104,23 +104,23 @@ public class LoginController {
         if (StringUtils.isNotBlank(version)) {
             switch(version){
                 case "0":
-                    INDEX_PAGE_NAME = "wsclientIndex";
+                    HOME_PAGE_NAME = "wsclientIndex";
                     break;
                 case "1":
-                    INDEX_PAGE_NAME = "wsclientIndex_v1";
+                    HOME_PAGE_NAME = "wsclientIndex_v1";
                     break;
                 case "2":
-                    INDEX_PAGE_NAME = "wsclientIndex_v2";
+                    HOME_PAGE_NAME = "wsclientIndex_v2";
                     break;
                 default:
-                    INDEX_PAGE_NAME = "wsclientIndex_v3";
+                    HOME_PAGE_NAME = "wsclientIndex_v4";
             }
         }
 
         // 如果用户已登陆过，则直接跳转登陆成功首页
         SessionInfoBean sessionInfoBean = SessionUtil.getSessionInfo(request);
         if (null != sessionInfoBean) {
-            return "ws/" + INDEX_PAGE_NAME;
+            return "ws/" + HOME_PAGE_NAME;
         }
 
         // 检查cookie
@@ -176,8 +176,8 @@ public class LoginController {
      * @param verifyCodeInput 验证码
      */
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGIN, subModule = "", describe = "登录")
-    @RequestMapping(value = "wslogin.do", method = RequestMethod.POST)
-    public void wsclient(@RequestParam("user")String userName, @RequestParam("pass")String password,
+    @RequestMapping(value = "login.do", method = RequestMethod.POST)
+    public void login(@RequestParam("user")String userName, @RequestParam("pass")String password,
                          @RequestParam("verifyCode")String verifyCodeInput,
                          HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 获取用户信息
@@ -283,7 +283,7 @@ public class LoginController {
         curUserObj.setLastLoginTime(SDF_STANDARD.format(new Date()));
         wsUsersService.updateById(curUserObj);
 
-        response.sendRedirect("wsclientIndex.page");
+        response.sendRedirect("home.page");
     }
 
     /**
@@ -292,10 +292,10 @@ public class LoginController {
      * @return 首页
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "登录成功页面")
-    @RequestMapping(value = "wsclientIndex.page")
+    @RequestMapping(value = "home.page")
     public String wsclientIndex() {
-        logger.debug("访问wsclientIndex.page");
-        return "ws/" + INDEX_PAGE_NAME;
+        logger.debug("home.page");
+        return "ws/" + HOME_PAGE_NAME;
     }
 
     /**
