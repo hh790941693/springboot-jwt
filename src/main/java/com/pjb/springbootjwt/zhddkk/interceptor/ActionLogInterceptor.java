@@ -57,7 +57,6 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         }
 
         String url = request.getRequestURI();
-        String servletPath = request.getServletPath();
         for (String suffix : IGNORE_URL_SUFFIX_LIST) {
             if (url.endsWith(suffix)) {
                 return;
