@@ -55,10 +55,10 @@ public class LoginController {
     // 登陆成功后的页面前缀
     // 访问样例:http://127.0.0.1:8100?v=1
     // 目前可用值:
-    //          v=1 wsclientIndex_v1 头、底、导航栏、iframe分离
-    //          v=2 wsclientIndex_v2 头、底、导航栏、iframe都在一个页面
-    //          v=3 wsclientIndex_v3 比v2更新一点的版本
-    //          v=4 wsclientIndex_v4 采用jquery easyUI重新设计(默认)
+    //          v=1 -> wsclientIndex_v1.html 头、底、导航栏、iframe分离
+    //          v=2 -> wsclientIndex_v2.html 头、底、导航栏、iframe都在一个页面
+    //          v=3 -> wsclientIndex_v3.html 比v2更新一点的版本
+    //          v=4 -> wsclientIndex_v4.html 采用jquery easyUI重新设计(默认)
     private static String HOME_PAGE_NAME = "wsclientIndex_v4";
 
     @Autowired
@@ -145,6 +145,8 @@ public class LoginController {
 
         // 创建session
         request.getSession(true).setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+        // 设置session非活动失效时间(30分钟)
+        request.getSession(false).setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
         if (StringUtils.isNotBlank(errorMsg)) {
             model.addAttribute("errorMsg", errorMsg);
@@ -205,6 +207,7 @@ public class LoginController {
             return;
         }
 
+        // 获取session
         HttpSession session = request.getSession(false);
 
         // 校验验证码
@@ -228,9 +231,6 @@ public class LoginController {
 
         //记录cookie
         saveCookie(request, response, curUserObj);
-
-        // 设置session非活动失效时间(30分钟)
-        session.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
         // 角色信息
         SysRoleDO sysRoleInfo = queryRoleInfo(curUserObj.getId());
