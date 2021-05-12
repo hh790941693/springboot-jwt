@@ -56,7 +56,7 @@ public class LoginController {
     // 目前可用值:
     //          v=1 wsclientIndex_v1 头、底、导航栏、iframe分离
     //          v=2 wsclientIndex_v2 头、底、导航栏、iframe都在一个页面
-    //          v=0 wsclientIndex 比v2更新一点的版本
+    //          v=0 wsclientIndex_v3 比v2更新一点的版本
     //          默认 wsclientIndex_v4 采用jquery easyUI重新设计
     private static String HOME_PAGE_NAME = "wsclientIndex_v4";
 
@@ -103,14 +103,10 @@ public class LoginController {
         String version = request.getParameter("v");
         if (StringUtils.isNotBlank(version)) {
             switch(version){
-                case "0":
-                    HOME_PAGE_NAME = "wsclientIndex";
-                    break;
                 case "1":
-                    HOME_PAGE_NAME = "wsclientIndex_v1";
-                    break;
                 case "2":
-                    HOME_PAGE_NAME = "wsclientIndex_v2";
+                case "3":
+                    HOME_PAGE_NAME = "wsclientIndex_v" +version;
                     break;
                 default:
                     HOME_PAGE_NAME = "wsclientIndex_v4";
