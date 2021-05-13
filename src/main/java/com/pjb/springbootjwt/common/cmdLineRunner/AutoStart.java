@@ -13,6 +13,6 @@ public class AutoStart implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        logger.info("---------------auto run------------------------");
+        // do nothing
     }
 }
