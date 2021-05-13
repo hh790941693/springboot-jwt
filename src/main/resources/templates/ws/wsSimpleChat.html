@@ -97,6 +97,9 @@
                     <!--聊天室人数-->
                     <span class="fa fa-user"></span>
                     <span id="onlineNum">{{roomUserCount}}</span>&nbsp;&nbsp;
+
+                    <!-- 服务器状态-->
+                    <span id="serverStatusSpan" style="width:10px;height:10px;display:inline-block;border-radius:5px;background-color:grey;"></span>
                 </div>
     
                 <!--用户输入状态提示语-->
@@ -506,6 +509,7 @@
         function onOpen(event) {
             updateChatMsgWithColor("您已进入聊天室", "yellow", 10);
             connectStatus = "1";
+            setServerStatus("#00fb00");
         }
 
         //连接异常
@@ -514,6 +518,7 @@
             connectStatus = "0";
             webSocket = null;
             startCheckTimer();
+            setServerStatus("#f70606");
         }
 
         //连接关闭
@@ -522,6 +527,7 @@
             connectStatus = "0";
             webSocket = null;
             startCheckTimer();
+            setServerStatus("grey");
         }
 
         //接收消息
@@ -673,6 +679,11 @@
                 send();
             }
         });
+
+        // 设置服务器状态图标颜色
+        function setServerStatus(bgColor){
+            $("#serverStatusSpan").css("background-color", bgColor);
+        }
 
         // 输入框聚焦事件(发送状态消息,告诉服务器某用户正在输入中)
         $("#sendMsgInput").focus(function() {
