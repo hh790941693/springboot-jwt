@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+/**
+ * tomcat启动后启动完后自动执行缓存操作.
+ */
 @Component
 public class CacheDataRunner implements CommandLineRunner {
 

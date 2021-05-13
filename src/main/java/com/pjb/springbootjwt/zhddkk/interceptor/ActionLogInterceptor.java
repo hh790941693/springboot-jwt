@@ -14,7 +14,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * 接口日志打印.
+ * 接口日志拦截器.
  */
 @Configuration
 public class ActionLogInterceptor implements HandlerInterceptor {

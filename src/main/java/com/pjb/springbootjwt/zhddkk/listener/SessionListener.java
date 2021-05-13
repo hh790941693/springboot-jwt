@@ -38,9 +38,9 @@ public class SessionListener implements HttpSessionListener {
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
         HttpSession session = httpSessionEvent.getSession();
         String strFormat1 = "★★★★★★★★★★★★★Session Destroyed★★★★★★★★★★★★★\n"
-                + "          id: %s\n"
-                + "          destroyed: %s\n"
-                + "★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★";
+                          + "          id: %s\n"
+                          + "          destroyed: %s\n"
+                          + "★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★";
         String strFormat2 = "★★★★★★★ session destroyed: %s destroyed time: %s ★★★★★★★";
         String str1 = String.format(strFormat1, session.getId(), SDF.format(new Date()));
         String str2 = String.format(strFormat2, session.getId(), SDF.format(new Date()));

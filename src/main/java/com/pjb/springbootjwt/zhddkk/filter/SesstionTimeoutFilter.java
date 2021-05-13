@@ -10,13 +10,15 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * session超时与否、存在与否过滤器
+ */
 @WebFilter(filterName = "sesstionTimeoutFilter", urlPatterns = {"/*"})
 public class SesstionTimeoutFilter implements Filter {
 
