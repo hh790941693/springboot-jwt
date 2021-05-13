@@ -181,7 +181,7 @@ public class ZhddWebSocket {
                        Session session, EndpointConfig endpointConfig) throws Exception {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user).eq("password", pass));
         if (null == wsUsersDO) {
-            logger.info("用户{}不存在或者密码错误", user);
+            logger.info("用户{}进入聊天室%s失败,原因是用户不存在或者密码错误", user, roomName);
             this.session = null;
             this.roomName = null;
             this.user = null;
