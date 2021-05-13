@@ -167,7 +167,6 @@ public class LoginController {
                          HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 获取用户信息
         WsUsersDO curUserObj = wsUsersService.queryUserByName(userName);
-        String sss = (String)request.getAttribute("rolesIdssss");
 
         // 如果用户信息不存在,提示用户去注册
         if (null == curUserObj) {
