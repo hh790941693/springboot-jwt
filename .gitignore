@@ -27,3 +27,11 @@
 /log.path_IS_UNDEFINED/error.log
 /log.path_IS_UNDEFINED/info.log
 /log.path_IS_UNDEFINED/warn.log
+/.gradle/buildOutputCleanup/buildOutputCleanup.lock
+/.gradle/buildOutputCleanup/cache.properties
+/.gradle/checksums/checksums.lock
+/.gradle/6.7/fileHashes/fileHashes.lock
+/.gradle/6.7/gc.properties
+/.gradle/configuration-cache/gc.properties
+/.gradle/vcs-1/gc.properties
+/.gradle/6.7/fileChanges/last-build.bin
