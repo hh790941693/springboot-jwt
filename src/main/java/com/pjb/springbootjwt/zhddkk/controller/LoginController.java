@@ -144,7 +144,9 @@ public class LoginController {
         }
 
         // 创建session
-        request.getSession(true).setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+        request.getSession(true);
+        // session中存储国际化配置
+        SessionUtil.setSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
         // 设置session非活动失效时间(30分钟)
         request.getSession(false).setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
@@ -536,7 +538,6 @@ public class LoginController {
     public Result<WsUsersDO> getUserQuestion(@RequestParam("user")String user) {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {
-            //return JsonUtil.javaobject2Jsonobject(wsUsersDO);
             return Result.ok(wsUsersDO);
         } else {
             return Result.fail();
@@ -587,7 +588,7 @@ public class LoginController {
 
         // 获取运算的结果
         String verifyCode = captcha.text();
-        request.getSession(false).setAttribute(CommonConstants.VERIFY_CODE, verifyCode);
+        SessionUtil.setSessionAttribute(request, CommonConstants.VERIFY_CODE, verifyCode);
         String base64String = captcha.toBase64("data:image/png;base64,");
         return Result.ok(base64String);
     }
@@ -604,7 +605,7 @@ public class LoginController {
         String language = lang.split("_")[0];
         String country = lang.split("_")[1];
         Locale locale = new Locale(language, country);
-        request.getSession(false).setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+        SessionUtil.setSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
 
         // 设置cookie
         Cookie localeCookie = new Cookie(CommonConstants.C_LANG, lang);
@@ -742,19 +743,5 @@ public class LoginController {
             localeCookie.setMaxAge(CommonConstants.LOCALE_COOKIE_EXPIRE);
             response.addCookie(localeCookie);
         }
-    }
-
-    /**
-     * 获取用户角色信息.
-     * @param userId 用户id
-     * @return 角色信息
-     */
-    private SysRoleDO queryRoleInfo(Integer userId) {
-        SysRoleDO sysRoleDO = null;
-        SysUserRoleDO sysUserRoleDO = sysUserRoleService.selectOne(new EntityWrapper<SysUserRoleDO>().eq("user_id", userId));
-        if (null != sysUserRoleDO) {
-            sysRoleDO = sysRoleService.selectById(sysUserRoleDO.getRoleId());
-        }
-        return sysRoleDO;
     }
 }

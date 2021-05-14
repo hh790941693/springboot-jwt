@@ -12,4 +12,11 @@ public class SessionUtil {
         }
         return null;
     }
+
+    public static void setSessionAttribute(HttpServletRequest request, String name, Object value) {
+        HttpSession httpSession = request.getSession(false);
+        if (null != httpSession) {
+            httpSession.setAttribute(name, value);
+        }
+    }
 }
