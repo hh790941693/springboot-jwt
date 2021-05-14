@@ -143,12 +143,8 @@ public class LoginController {
             }
         }
 
-        // 创建session
-        request.getSession(true);
         // session中存储国际化配置
         SessionUtil.setSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
-        // 设置session非活动失效时间(30分钟)
-        request.getSession(false).setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
         if (StringUtils.isNotBlank(errorMsg)) {
             model.addAttribute("errorMsg", errorMsg);
@@ -210,10 +206,14 @@ public class LoginController {
         }
 
         // 获取session
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(true);
+
+        // 设置session非活动失效时间(30分钟)
+        session.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
         // 校验验证码
-        String verifyCode = (String) session.getAttribute(CommonConstants.VERIFY_CODE);
+        Cookie verifyCodeCookie = getCookieObj(request, CommonConstants.VERIFY_CODE);
+        String verifyCode = null != verifyCodeCookie ? verifyCodeCookie.getValue() : "";
         if (!verifyCodeInput.equals(verifyCode)) {
             request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong", request));
@@ -568,7 +568,7 @@ public class LoginController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "获取验证码")
     @GetMapping("/generateVerifyCode.do")
     @ResponseBody
-    public Result<String> getCode(HttpServletRequest request) {
+    public Result<String> getCode(HttpServletRequest request, HttpServletResponse response) {
         //算术验证码 数字加减乘除. 建议2位运算就行:captcha.setLen(2);
         ArithmeticCaptcha captcha = new ArithmeticCaptcha(100, 34);
         // 几位数运算，默认是两位
@@ -588,7 +588,13 @@ public class LoginController {
 
         // 获取运算的结果
         String verifyCode = captcha.text();
-        SessionUtil.setSessionAttribute(request, CommonConstants.VERIFY_CODE, verifyCode);
+        // 使用cookie存储验证码答案
+        Cookie verifyCodeCookie = new Cookie(CommonConstants.VERIFY_CODE, verifyCode);
+        verifyCodeCookie.setPath("/");
+        verifyCodeCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
+        response.addCookie(verifyCodeCookie);
+
+        //SessionUtil.setSessionAttribute(request, CommonConstants.VERIFY_CODE, verifyCode);
         String base64String = captcha.toBase64("data:image/png;base64,");
         return Result.ok(base64String);
     }
@@ -743,5 +749,23 @@ public class LoginController {
             localeCookie.setMaxAge(CommonConstants.LOCALE_COOKIE_EXPIRE);
             response.addCookie(localeCookie);
         }
+    }
+
+    /**
+     * 获取cookie对象.
+     * @param request 请求对象
+     * @param name    cookie对应的key
+     * @return cookie对象
+     */
+    private static Cookie getCookieObj(HttpServletRequest request, String name) {
+        Cookie[] cookies = request.getCookies();
+        if (null != cookies) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name) && cookie.getMaxAge() != 0) {
+                    return cookie;
+                }
+            }
+        }
+        return null;
     }
 }
