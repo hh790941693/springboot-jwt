@@ -41,7 +41,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.LocaleResolver;
 
 @Controller
 public class LoginController {
@@ -91,9 +90,6 @@ public class LoginController {
 
     @Autowired
     private SysRoleService sysRoleService;
-
-    @Autowired
-    private LocaleResolver localeResolver;
 
     /**
      * 首页登录.
@@ -606,7 +602,7 @@ public class LoginController {
         String country = lang.split("_")[1];
         Locale locale = new Locale(language, country);
 
-        localeResolver.setLocale(request, response, locale);
+        LocaleContextHolder.setLocale(locale);
         return "redirect:/";
     }
 
