@@ -90,10 +90,10 @@
               <div class="layui-form-item">
                 <div class="layui-input-block">
                   <select lay-verify="required" lay-filter="langSelect">
-                        <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${#locale == 'zh_CN'}"></option>
+                        <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${#locale.getCountry() == 'CN'}"></option>
                         <option value="en_US" data-icon="fa fa-dollar" th:text="English"
-                                th:selected="${#locale == 'en_US'}"></option>
-                        <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${#locale == 'ko_KR'}"></option>
+                                th:selected="${#locale.getCountry() == 'US'}"></option>
+                        <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${#locale.getCountry() == 'KR'}"></option>
                   </select>
                 </div>
               </div>
