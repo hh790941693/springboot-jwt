@@ -8,6 +8,8 @@ import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
@@ -30,6 +32,9 @@ public class SessionController {
     @ResponseBody
     public void querySessionInfo(HttpServletRequest request, HttpServletResponse response) {
         HttpSession httpSession = request.getSession(false);
+        if (null == httpSession) {
+            return;
+        }
         Enumeration<String> enumeration = httpSession.getAttributeNames();
         
         response.setCharacterEncoding("UTF-8");
@@ -69,8 +74,7 @@ public class SessionController {
      */
     @RequestMapping("/sessionInfo.page")
     public String sessionInfoPage(HttpServletRequest request, Model model) {
-        HttpSession httpSession = request.getSession(false);
-        SessionInfoBean sessionInfoBean = (SessionInfoBean)httpSession.getAttribute(CommonConstants.SESSION_INFO);
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(request, CommonConstants.SESSION_INFO);
         
         if (null != sessionInfoBean) {
             SessionInfoBean copyBean = new SessionInfoBean();

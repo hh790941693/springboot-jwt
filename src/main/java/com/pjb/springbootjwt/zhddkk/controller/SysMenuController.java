@@ -10,7 +10,7 @@ import com.pjb.springbootjwt.zhddkk.domain.SysRoleMenuDO;
 import com.pjb.springbootjwt.zhddkk.domain.SysUserRoleDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
-import com.pjb.springbootjwt.zhddkk.util.StringUtil;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -22,8 +22,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.domain.SysMenuDO;
 import com.pjb.springbootjwt.zhddkk.service.SysMenuService;
@@ -35,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * 菜单表.
@@ -250,10 +247,9 @@ public class SysMenuController extends AdminBaseController {
                 }
             } else {
                 List<SysMenuDO> srcList = sysMenuService.queryRoleMenuList(sysUserRoleDO.getRoleId());
-                HttpSession httpSession = request.getSession(false);
-                Locale locale = new Locale("zh", "CN");
-                if (null != httpSession) {
-                    locale = (Locale) httpSession.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+                Locale locale = SessionUtil.getSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+                if (null == locale) {
+                    locale = new Locale("zh", "CN");
                 }
                 for (SysMenuDO sysMenuDO : srcList) {
                     String i18nKey = sysMenuDO.getI18nKey();

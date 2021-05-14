@@ -205,12 +205,6 @@ public class LoginController {
             return;
         }
 
-        // 获取session
-        HttpSession session = request.getSession(true);
-
-        // 设置session非活动失效时间(30分钟)
-        session.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
-
         // 校验验证码
         Cookie verifyCodeCookie = getCookieObj(request, CommonConstants.VERIFY_CODE);
         String verifyCode = null != verifyCodeCookie ? verifyCodeCookie.getValue() : "";
@@ -230,6 +224,11 @@ public class LoginController {
         } catch (Exception e) {
             logger.warn("获取客户端信息失败!" + e.getMessage());
         }
+
+        // 获取session
+        HttpSession session = request.getSession(true);
+        // 设置session非活动失效时间(30分钟)
+        session.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
         //记录cookie
         saveCookie(request, response, curUserObj);
@@ -703,7 +702,10 @@ public class LoginController {
      * @return 国际化后的信息
      */
     private  String getLocaleMessage(String messageId, HttpServletRequest request) {
-        Locale locale = (Locale) request.getSession(false).getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        Locale locale = SessionUtil.getSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        if (null == locale) {
+            locale = new Locale("zh", "CN");
+        }
         return messageSource.getMessage(messageId, null, locale);
     }
 
@@ -742,7 +744,7 @@ public class LoginController {
         response.addCookie(webserverportCookie);
 
         // 设置语言cookie
-        Locale locale = (Locale) request.getSession(false).getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        Locale locale = SessionUtil.getSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         if (null != locale) {
             Cookie localeCookie = new Cookie(CommonConstants.C_LANG, locale.toString());
             localeCookie.setPath("/");
