@@ -222,7 +222,7 @@ public class LoginController {
         // 客户端浏览器类型
         String userAgent = request.getHeader("User-Agent");
         logger.info("userAgent:{}", userAgent);
-        String shortAgent = "unknown device";
+        String shortAgent = "unknown user agent";
         try {
             shortAgent = userAgent.split("\\(")[1].split("\\)")[0].replaceAll("\\(", "").replaceAll("\\)", "");
         } catch (Exception e) {
@@ -232,15 +232,10 @@ public class LoginController {
         //记录cookie
         saveCookie(request, response, curUserObj);
 
-        // 角色信息
-        SysRoleDO sysRoleInfo = queryRoleInfo(curUserObj.getId());
-        String roleId = sysRoleInfo != null ? String.valueOf(sysRoleInfo.getId()) : "";
-        String roleName = sysRoleInfo != null ? String.valueOf(sysRoleInfo.getName()) : "";
-
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(session.getId(),
                 String.valueOf(curUserObj.getId()), userName, curUserObj.getPassword(), webSocketConfig.getAddress(),
-                webSocketConfig.getPort(), curUserObj.getHeadImage(), shortAgent, roleId, roleName, session.getMaxInactiveInterval());
+                webSocketConfig.getPort(), curUserObj.getHeadImage(), shortAgent, String.valueOf(curUserObj.getRoleId()), curUserObj.getRoleName(), session.getMaxInactiveInterval());
         String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
         JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
         sessionInfoBean.setJsonStr(jsonStr);
