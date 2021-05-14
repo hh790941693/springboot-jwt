@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -691,7 +692,7 @@ public class LoginController {
      * @return 国际化后的信息
      */
     private  String getLocaleMessage(String messageId, HttpServletRequest request) {
-        Locale locale = SessionUtil.getSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+        Locale locale = LocaleContextHolder.getLocale();
         if (null == locale) {
             locale = new Locale("zh", "CN");
         }
@@ -731,15 +732,6 @@ public class LoginController {
         response.addCookie(passCookie);
         response.addCookie(webserveripCookie);
         response.addCookie(webserverportCookie);
-
-        // 设置语言cookie
-        Locale locale = SessionUtil.getSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
-        if (null != locale) {
-            Cookie localeCookie = new Cookie(CommonConstants.C_LANG, locale.toString());
-            localeCookie.setPath("/");
-            localeCookie.setMaxAge(CommonConstants.LOCALE_COOKIE_EXPIRE);
-            response.addCookie(localeCookie);
-        }
     }
 
     /**
