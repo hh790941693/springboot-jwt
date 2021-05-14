@@ -987,7 +987,7 @@ public class WebSocketClientController extends AdminBaseController {
     public String querySessionData(String user, HttpServletRequest request) {
         logger.info("查询session数据, user:{}", user);
 
-        SessionInfoBean sessionInfoBean = SessionUtil.getSessionInfo(request);
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(request, CommonConstants.SESSION_INFO);
         Object sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
         Object sessionPass = sessionInfoBean == null ? "" : sessionInfoBean.getPassword();
 

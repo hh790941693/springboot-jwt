@@ -115,7 +115,7 @@ public class LoginController {
         }
 
         // 如果用户已登陆过，则直接跳转登陆成功首页
-        SessionInfoBean sessionInfoBean = SessionUtil.getSessionInfo(request);
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(request, CommonConstants.SESSION_INFO);
         if (null != sessionInfoBean) {
             return "ws/" + HOME_PAGE_NAME;
         }
