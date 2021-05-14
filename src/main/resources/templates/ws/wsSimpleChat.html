@@ -334,19 +334,19 @@
         function send() {
             if (webSocket == null) {
                 let msg = "服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
-                updateChatMsgWithColor(msg, "red", 10);
+                updateChatMsgWithColor(app.msgTypeMap.system.desc, msg, "red", 10);
                 return;
             }
 
             let toUser = $("#selectUser").val();
             if (sessionUser == toUser) {
-                updateChatMsgWithColor("不能给自己发消息!", "red", 10);
+                updateChatMsgWithColor(app.msgTypeMap.system.desc, "不能给自己发消息!", "red", 10);
                 return false;
             }
 
             let msg = $("#sendMsgInput").val();
             if (msg == null || msg == "") {
-                updateChatMsgWithColor("不允许发送空消息!", "red", 10);
+                updateChatMsgWithColor(app.msgTypeMap.system.desc, "不允许发送空消息!", "red", 10);
                 return;
             }
 
@@ -367,7 +367,7 @@
         function sendMsgToServer(roomName, userFrom, userTo, msg) {
             if (webSocket == null) {
                 var msg = "连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
-                updateChatMsgWithColor(msg, "red", 10);
+                updateChatMsgWithColor(app.msgTypeMap.system.desc, msg, "red", 10);
                 return;
             }
 
@@ -392,7 +392,7 @@
         function sendNoticeToServer(roomName, msg) {
             if (webSocket == null) {
                 var msg = "连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
-                updateChatMsgWithColor(msg, "red", 10);
+                updateChatMsgWithColor(app.msgTypeMap.system.desc ,msg, "red", 10);
                 return;
             }
 
@@ -442,12 +442,13 @@
         /**
          * 聊天窗口显示内容.
          *
+         * @param msgType  消息类型
          * @param msg      消息内容
          * @param color    颜色  eg:red
          * @param fontSize 字体大小 eg:15
          */
-        function updateChatMsgWithColor(msg, color, fontSize) {
-            var newMsg = "<p style='color:" + color + ";font-size:" + fontSize + "px;line-height:14px;text-align: center;margin-bottom: 5px;'>[" + getCurrentTimeOfHHMMSS() + "] [系统信息] " + msg + "</p>";
+        function updateChatMsgWithColor(msgType, msg, color, fontSize) {
+            var newMsg = "<p style='color:" + color + ";font-size:" + fontSize + "px;line-height:14px;text-align: center;margin-bottom: 5px;'>[" + getCurrentTimeOfHHMMSS() + "] ["+msgType+"] " + msg + "</p>";
             var textArea = $("#msgFromServerDiv").append(newMsg);
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
@@ -477,7 +478,7 @@
                     clearCheckTimer();
                     return;
                 }
-                updateChatMsgWithColor("正在连接服务器" + sessionWebserverIp + ":" + sessionWebserverport + " [ " + checkCount + " ]" + "次 请稍等...", "yellow", 10);
+                updateChatMsgWithColor(app.msgTypeMap.system.desc, "正在连接服务器" + sessionWebserverIp + ":" + sessionWebserverport + " [ " + checkCount + " ]" + "次 请稍等...", "yellow", 10);
                 checkCount++;
                 loginServer();
             } else {
@@ -507,14 +508,14 @@
 
         //连接成功
         function onOpen(event) {
-            updateChatMsgWithColor("您已进入聊天室", "yellow", 10);
+            updateChatMsgWithColor(app.msgTypeMap.system.desc, "您已进入聊天室", "yellow", 10);
             connectStatus = "1";
             setServerStatus("#00fb00");
         }
 
         //连接异常
         function onError(event) {
-            updateChatMsgWithColor("连接聊天室服务器异常!", "red", 10);
+            updateChatMsgWithColor(app.msgTypeMap.system.desc, "连接聊天室服务器异常!", "red", 10);
             connectStatus = "0";
             webSocket = null;
             startCheckTimer();
@@ -523,7 +524,7 @@
 
         //连接关闭
         function OnClose(event) {
-            updateChatMsgWithColor("聊天室已断开!", "red", 10);
+            updateChatMsgWithColor(app.msgTypeMap.system.desc, "聊天室已断开!", "red", 10);
             connectStatus = "0";
             webSocket = null;
             startCheckTimer();
@@ -545,7 +546,7 @@
 
             if (msgTypeId == app.msgTypeMap.system.value) {
                 // 广播消息
-                updateChatMsgWithColor(msg, "yellow", 10);
+                updateChatMsgWithColor(app.msgTypeMap.system.desc, msg, "yellow", 10);
                 // 更新在线人数等信息
                 app.roomUserCount = extendMap.roomCount;
                 app.roomUserProfileList = extendMap.userProfileList;
@@ -587,7 +588,7 @@
                     $("#noticeSpan").html("");
                     $("#noticeDiv").hide();
                 },8000);
-                updateChatMsgWithColor(msg, "yellow", 10);
+                updateChatMsgWithColor(app.msgTypeMap.notice.desc, msg, "yellow", 10);
                 return;
             }
 
