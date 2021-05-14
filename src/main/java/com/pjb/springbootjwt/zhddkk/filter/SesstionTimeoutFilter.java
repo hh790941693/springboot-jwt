@@ -30,6 +30,7 @@ public class SesstionTimeoutFilter implements Filter {
             "/",
             "/index",
             "/login.do",
+            "/verifyUser.do",
             "/canvas/snow.page",
             "/querySystemInfo",
             "/register.page",

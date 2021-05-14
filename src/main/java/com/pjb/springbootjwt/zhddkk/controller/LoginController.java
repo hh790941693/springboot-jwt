@@ -637,6 +637,31 @@ public class LoginController {
     }
 
     /**
+     * 校验用户密码正确性.
+     * @param userName 用户名
+     * @param password 密码(明文)
+     *
+     * @return 聊天室用户信息
+     */
+    @PostMapping(value = "verifyUser.do")
+    @ResponseBody
+    public Result<String> verifyUser(@RequestParam(value = "userName") String userName, @RequestParam(value = "password") String password) {
+        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
+        if (null == wsUsersDO) {
+            return Result.fail("用户不存在");
+        }
+
+        //数据库明文密码
+        String dbPassDecrypted = SecurityAESUtil.decryptAES(wsUsersDO.getPassword(), CommonConstants.AES_PASSWORD);
+        // 如果密码不对
+        if (!password.equals(dbPassDecrypted)) {
+            return Result.fail("密码不正确");
+        }
+
+        return Result.ok(wsUsersDO.getPassword());
+    }
+
+    /**
      * 构造常用语对象.
      * @return map
      */
