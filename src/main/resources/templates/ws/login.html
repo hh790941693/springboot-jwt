@@ -90,10 +90,10 @@
               <div class="layui-form-item">
                 <div class="layui-input-block">
                   <select lay-verify="required" lay-filter="langSelect">
-                        <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${lang == 'zh_CN'}"></option>
+                        <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${#locale == 'zh_CN'}"></option>
                         <option value="en_US" data-icon="fa fa-dollar" th:text="English"
-                                th:selected="${lang == 'en_US'}"></option>
-                        <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${lang == 'ko_KR'}"></option>
+                                th:selected="${#locale == 'en_US'}"></option>
+                        <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${#locale == 'ko_KR'}"></option>
                   </select>
                 </div>
               </div>
@@ -192,6 +192,9 @@
 
 <script th:inline="javascript">
     // 加载国际化
+    console.log("getCountry:"+[[${#locale.getCountry()}]]);
+    console.log("getLanguage:"+[[${#locale.getLanguage()}]]);
+    console.log("locale:"+[[${#locale}]]);
     $.ws.i18nInit([[${#locale.language}]], [[${#locale.country}]]);
 
     // 切换语言

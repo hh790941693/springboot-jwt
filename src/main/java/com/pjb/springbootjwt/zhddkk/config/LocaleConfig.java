@@ -29,6 +29,11 @@ public class LocaleConfig implements WebMvcConfigurer {
         CookieLocaleResolver slr = new CookieLocaleResolver();
         // 默认语言
         slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
+        // cookie名称
+        slr.setCookieName("lang");
+        // 失效时间
+        slr.setCookieMaxAge(3600);
+
         return slr;
     }
 

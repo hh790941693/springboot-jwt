@@ -40,6 +40,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Controller
@@ -91,6 +92,9 @@ public class LoginController {
     @Autowired
     private SysRoleService sysRoleService;
 
+    @Autowired
+    private LocaleResolver localeResolver;
+
     /**
      * 首页登录.
      *
@@ -125,7 +129,6 @@ public class LoginController {
         Locale locale = new Locale("zh", "CN");
         model.addAttribute(CommonConstants.S_USER, "");
         model.addAttribute(CommonConstants.S_PASS, "");
-        model.addAttribute(CommonConstants.C_LANG, CommonConstants.LANG_ZH);
         if (null != cookies) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(CommonConstants.S_USER) && cookie.getMaxAge() != 0) {
@@ -134,17 +137,9 @@ public class LoginController {
                     //对密码进行解密
                     String passDecrypt = SecurityAESUtil.decryptAES(cookie.getValue(), CommonConstants.AES_PASSWORD);
                     model.addAttribute(CommonConstants.S_PASS, passDecrypt);
-                } else if (cookie.getName().equals(CommonConstants.C_LANG) && cookie.getMaxAge() != 0) {
-                    model.addAttribute(CommonConstants.C_LANG, cookie.getValue());
-                    String language = cookie.getValue().split("_")[0];
-                    String country = cookie.getValue().split("_")[1];
-                    locale = new Locale(language, country);
                 }
             }
         }
-
-        // session中存储国际化配置
-        SessionUtil.setSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
 
         if (StringUtils.isNotBlank(errorMsg)) {
             model.addAttribute("errorMsg", errorMsg);
@@ -610,14 +605,8 @@ public class LoginController {
         String language = lang.split("_")[0];
         String country = lang.split("_")[1];
         Locale locale = new Locale(language, country);
-        SessionUtil.setSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
 
-        // 设置cookie
-        Cookie localeCookie = new Cookie(CommonConstants.C_LANG, lang);
-        localeCookie.setPath("/");
-        localeCookie.setMaxAge(CommonConstants.LOCALE_COOKIE_EXPIRE);
-        response.addCookie(localeCookie);
-
+        localeResolver.setLocale(request, response, locale);
         return "redirect:/";
     }
 

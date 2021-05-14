@@ -10,11 +10,11 @@ import com.pjb.springbootjwt.zhddkk.domain.SysRoleMenuDO;
 import com.pjb.springbootjwt.zhddkk.domain.SysUserRoleDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
-import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -30,7 +30,6 @@ import com.pjb.springbootjwt.zhddkk.service.SysRoleMenuService;
 import com.pjb.springbootjwt.common.vo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -72,7 +71,7 @@ public class SysMenuController extends AdminBaseController {
      */
     @Autowired
     private MessageSource messageSource;
-    
+
     /**
      * 跳转到菜单表页面.
      */
@@ -247,7 +246,7 @@ public class SysMenuController extends AdminBaseController {
                 }
             } else {
                 List<SysMenuDO> srcList = sysMenuService.queryRoleMenuList(sysUserRoleDO.getRoleId());
-                Locale locale = SessionUtil.getSessionAttribute(request, SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+                Locale locale = LocaleContextHolder.getLocale();
                 if (null == locale) {
                     locale = new Locale("zh", "CN");
                 }
