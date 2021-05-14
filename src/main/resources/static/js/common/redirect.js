@@ -30,7 +30,7 @@ $(function () {
             }
         },
         dataFilter : function (data,type) {
-            if (data.indexOf("code") != -1) {
+            if (data.indexOf("\"code\":") != -1) {
                 var dataJson = JSON.parse(data);
                 if (dataJson.code == "-255") {
                     var win = window;

@@ -165,7 +165,7 @@
         </form>
 
         <!--右上角二维码-->
-        <div style="position:absolute;width:180px;height:180px;left:360px;top:1px;">
+        <div style="position:absolute;width:180px;height:180px;left:400px;top:1px;">
             <img id="qrImg" style="width:160px;height:160px;display:none;">
         </div>
 
@@ -192,9 +192,6 @@
 
 <script th:inline="javascript">
     // 加载国际化
-    console.log("getCountry:"+[[${#locale.getCountry()}]]);
-    console.log("getLanguage:"+[[${#locale.getLanguage()}]]);
-    console.log("locale:"+[[${#locale}]]);
     $.ws.i18nInit([[${#locale.language}]], [[${#locale.country}]]);
 
     // 切换语言
