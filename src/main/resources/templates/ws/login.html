@@ -103,10 +103,10 @@
         <!--
         <div style="position:absolute;top:6px;right:2px;" th:title="#{select.choose.language}">
             <select class="selectpicker" data-style="btn-info" data-width="80px">
-                <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${lang == 'zh_CN'}"></option>
+                <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${#locale.getCountry() == 'CN'}"></option>
                 <option value="en_US" data-icon="fa fa-dollar" th:text="English"
-                        th:selected="${lang == 'en_US'}"></option>
-                <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${lang == 'ko_KR'}"></option>
+                        th:selected="${#locale.getCountry() == 'US'}"></option>
+                <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${#locale.getCountry() == 'KR'}"></option>
             </select>
         </div>
         -->
