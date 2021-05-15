@@ -248,7 +248,7 @@ public class SysMenuController extends AdminBaseController {
                 List<SysMenuDO> srcList = sysMenuService.queryRoleMenuList(sysUserRoleDO.getRoleId());
                 Locale locale = LocaleContextHolder.getLocale();
                 if (null == locale) {
-                    locale = new Locale("zh", "CN");
+                    locale = Locale.SIMPLIFIED_CHINESE;
                 }
                 for (SysMenuDO sysMenuDO : srcList) {
                     String i18nKey = sysMenuDO.getI18nKey();

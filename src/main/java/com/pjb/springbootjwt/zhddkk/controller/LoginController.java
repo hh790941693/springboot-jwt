@@ -122,7 +122,6 @@ public class LoginController {
 
         // 检查cookie
         Cookie[] cookies = request.getCookies();
-        Locale locale = new Locale("zh", "CN");
         model.addAttribute(CommonConstants.S_USER, "");
         model.addAttribute(CommonConstants.S_PASS, "");
         if (null != cookies) {
@@ -689,7 +688,7 @@ public class LoginController {
     private  String getLocaleMessage(String messageId, HttpServletRequest request) {
         Locale locale = LocaleContextHolder.getLocale();
         if (null == locale) {
-            locale = new Locale("zh", "CN");
+            locale = Locale.SIMPLIFIED_CHINESE;
         }
         return messageSource.getMessage(messageId, null, locale);
     }
