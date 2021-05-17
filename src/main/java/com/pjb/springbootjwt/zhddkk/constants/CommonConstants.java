@@ -41,16 +41,6 @@ public class CommonConstants {
     // admin管理员账号密码
     public static final String ADMIN_USER = "admin";
 
-    //语言
-    public static final String LANG_ZH = "zh_CN";
-    public static final String LANG_EN = "en_US";
-    public static final String LANG_KR = "ko_KR";
-
-    // 用户类型
-    // 管理员用户
-    public static final String USER_TYPE_MANAGER = "0";
-    // 普通用户
-    public static final String USER_TYPE_COMMON = "1";
     // cookie(locale)的过期时间(20年)
     public static final int LOCALE_COOKIE_EXPIRE = 20 * 365 * 24 * 60 * 60;
 

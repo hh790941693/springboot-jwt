@@ -1,6 +1,8 @@
 package com.pjb.springbootjwt.zhddkk.config;
 
 import java.util.Locale;
+
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,9 +32,9 @@ public class LocaleConfig implements WebMvcConfigurer {
         // 默认语言
         slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
         // cookie名称
-        slr.setCookieName("lang");
+        slr.setCookieName(CommonConstants.C_LANG);
         // 失效时间
-        slr.setCookieMaxAge(3600);
+        slr.setCookieMaxAge(CommonConstants.LOCALE_COOKIE_EXPIRE);
 
         return slr;
     }
