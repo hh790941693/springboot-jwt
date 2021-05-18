@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Configuration
 public class InterceptorConfigNew implements WebMvcConfigurer {
-    // 登录拦截器
+    // 登录拦截忽略的URL
     private static final List<String> IGNORE_URL_LIST = new ArrayList<>(Arrays.asList(
             "",
             "/",
@@ -43,12 +43,11 @@ public class InterceptorConfigNew implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
         // 接口日志拦截器
         registry.addInterceptor(actionLogInterceptor())
                 .addPathPatterns("/**").excludePathPatterns("/js/**", "/img/**", "/css/**", "/i18n/**");
 
-
+        // 登录拦截器 检查session是否存在
         registry.addInterceptor(loginInterceptor())
                 .addPathPatterns("/**").excludePathPatterns(IGNORE_URL_LIST);
     }
