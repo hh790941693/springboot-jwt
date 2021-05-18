@@ -22,7 +22,7 @@ public class InterceptorConfigNew implements WebMvcConfigurer {
 
         // 登录拦截器
         registry.addInterceptor(loginInterceptor())
-                .addPathPatterns("/login.do");
+                .addPathPatterns("/**");
     }
 
     @Bean

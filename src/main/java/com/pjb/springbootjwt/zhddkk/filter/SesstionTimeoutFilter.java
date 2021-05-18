@@ -1,18 +1,12 @@
 package com.pjb.springbootjwt.zhddkk.filter;
 
-import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
-import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
-import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,32 +17,6 @@ import org.slf4j.LoggerFactory;
 public class SesstionTimeoutFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(SesstionTimeoutFilter.class);
-
-    // 忽略的URL地址列表
-    private static final List<String> IGNORE_URL_LIST = new ArrayList<>(Arrays.asList(
-            "",
-            "/",
-            "/index",
-            "/login.do",
-            "/verifyUser.do",
-            "/canvas/snow.page",
-            "/querySystemInfo",
-            "/register.page",
-            "/forgetPassword.page",
-            "/canvas/canvasIndex.page",
-            "/queryAllCommonData.do",
-            "/favicon.ico",
-            "/getUserQuestion.json",
-            "/showQRCode.do",
-            "/checkUserRegisterStatus.json",
-            "/updatePassword.do",
-            "/loginfail.page",
-            "/sessionInfo",
-            "/sessionInfo.page",
-            "/generateVerifyCode.do",
-            "/upload/app",
-            "/wsregister.do",
-            "/getChatRoomInfo.json"));
 
     // 忽略的URL前缀列表
     private static final List<String> IGNORE_URL_PREFIX_LIST = new ArrayList<>(Arrays.asList(
@@ -68,7 +36,9 @@ public class SesstionTimeoutFilter implements Filter {
             ".jpg",
             ".jpeg",
             ".png",
-            ".mp3"));
+            ".mp3",
+            ".ico",
+            ".properties"));
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -80,33 +50,20 @@ public class SesstionTimeoutFilter implements Filter {
                          FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-        String contextPath = httpServletRequest.getContextPath();
 
         httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpServletResponse.setHeader("Access-Control-Allow-Headers",
                 "User-Agent,Origin,Cache-Control,Content-type,Date,Server,withCredentials,AccessToken,username,offlineticket,Authorization");
         httpServletResponse.setHeader("Access-Control-Allow-Credentials", "*");
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+        httpServletRequest.setCharacterEncoding("UTF-8");
+        httpServletResponse.setCharacterEncoding("UTF-8");
 
-        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(httpServletRequest, CommonConstants.SESSION_INFO);
-        String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
-
-        // 如果session信息存在,放行
-        if (StringUtils.isNotBlank(sessionUser)) {
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        }
-
-        // 如果是忽略的url,放行
         String servletPath = httpServletRequest.getServletPath();
-        if (IGNORE_URL_LIST.contains(servletPath)) {
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        }
-
         // 如果是忽略的前缀url,放行
         for (String prefix : IGNORE_URL_PREFIX_LIST) {
             if (servletPath.startsWith(prefix)) {
+                httpServletRequest.setAttribute("filter", false);
                 filterChain.doFilter(servletRequest, servletResponse);
                 return;
             }
@@ -115,49 +72,14 @@ public class SesstionTimeoutFilter implements Filter {
         // 如果是忽略的后缀url,放行
         for (String suffix : IGNORE_URL_SUFFIX_LIST) {
             if (servletPath.endsWith(suffix)) {
+                httpServletRequest.setAttribute("filter", false);
                 filterChain.doFilter(servletRequest, servletResponse);
                 return;
             }
         }
 
-        // 拦截 返回到登录页面
-        logger.info("session user:{}", sessionUser);
-        logger.info("servletPath:{}", servletPath);
-
-        String headerAccept = httpServletRequest.getHeader("accept");
-        String headerXRequestedWidth = httpServletRequest.getHeader("X-Requested-With");
-
-        logger.info("accept:{}", headerAccept);
-        logger.info("X-Requested-With:{}", headerXRequestedWidth);
-
-        if (!(headerAccept.contains("application/json")
-                || (headerXRequestedWidth != null && headerXRequestedWidth.contains("XMLHttpRequest")))) {
-            // http请求
-            httpServletResponse.sendRedirect(contextPath + "/");
-        } else {
-            // ajax请求
-            try {
-                Map<String, String> map = new HashMap<>();
-                map.put("redirectUrl", CommonConstants.SESSION_TIMEOUT_REDIRECT_URL);
-                map.put("code", CommonConstants.SESSION_TIMEOUT_CODE);
-                map.put("msg", CommonConstants.SESSION_TIMEOUT_MSG);
-
-                //这里并不是设置跳转页面，而是将重定向的地址发给前端，让前端执行重定向
-                //设置跳转地址
-                httpServletResponse.setHeader("redirectUrl", CommonConstants.SESSION_TIMEOUT_REDIRECT_URL);
-                // 设置错误信息
-                httpServletResponse.setHeader("errorMsg", CommonConstants.SESSION_TIMEOUT_MSG);
-                httpServletResponse.setHeader("errorCode", CommonConstants.SESSION_TIMEOUT_CODE);
-                httpServletResponse.flushBuffer();
-
-                PrintWriter writer = httpServletResponse.getWriter();
-                // JSON格式返回给前端
-                writer.write(JsonUtil.javaobject2Jsonstr(map));
-                writer.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        httpServletRequest.setAttribute("filter", true);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
