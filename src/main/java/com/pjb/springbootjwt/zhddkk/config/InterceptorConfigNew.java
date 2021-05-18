@@ -7,22 +7,50 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 拦截器注册.
  */
 @Configuration
 public class InterceptorConfigNew implements WebMvcConfigurer {
+    // 登录拦截器
+    private static final List<String> IGNORE_URL_LIST = new ArrayList<>(Arrays.asList(
+            "",
+            "/",
+            "/index",
+            "/login.do",
+            "/verifyUser.do",
+            "/canvas/snow.page",
+            "/querySystemInfo",
+            "/register.page",
+            "/forgetPassword.page",
+            "/canvas/canvasIndex.page",
+            "/queryAllCommonData.do",
+            "/getUserQuestion.json",
+            "/showQRCode.do",
+            "/checkUserRegisterStatus.json",
+            "/updatePassword.do",
+            "/loginfail.page",
+            "/sessionInfo",
+            "/sessionInfo.page",
+            "/generateVerifyCode.do",
+            "/upload/app",
+            "/wsregister.do",
+            "/getChatRoomInfo.json"));
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
         // 接口日志拦截器
         registry.addInterceptor(actionLogInterceptor())
-                .addPathPatterns("/**");
+                .addPathPatterns("/**").excludePathPatterns("/js/**", "/img/**", "/css/**", "/i18n/**");
 
-        // 登录拦截器
+
         registry.addInterceptor(loginInterceptor())
-                .addPathPatterns("/**");
+                .addPathPatterns("/**").excludePathPatterns(IGNORE_URL_LIST);
     }
 
     @Bean

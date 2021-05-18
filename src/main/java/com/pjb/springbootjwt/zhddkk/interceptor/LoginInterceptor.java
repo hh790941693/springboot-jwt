@@ -26,43 +26,13 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
 
-    // 忽略的URL地址列表
-    private static final List<String> IGNORE_URL_LIST = new ArrayList<>(Arrays.asList(
-            "",
-            "/",
-            "/index",
-            "/login.do",
-            "/verifyUser.do",
-            "/canvas/snow.page",
-            "/querySystemInfo",
-            "/register.page",
-            "/forgetPassword.page",
-            "/canvas/canvasIndex.page",
-            "/queryAllCommonData.do",
-            "/getUserQuestion.json",
-            "/showQRCode.do",
-            "/checkUserRegisterStatus.json",
-            "/updatePassword.do",
-            "/loginfail.page",
-            "/sessionInfo",
-            "/sessionInfo.page",
-            "/generateVerifyCode.do",
-            "/upload/app",
-            "/wsregister.do",
-            "/getChatRoomInfo.json"));
-
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
         boolean filter = (boolean)httpServletRequest.getAttribute("filter");
         if (!filter) {
             return true;
         }
 
-        // 如果是忽略的url,放行
         String servletPath = httpServletRequest.getServletPath();
-        if (IGNORE_URL_LIST.contains(servletPath)) {
-            return true;
-        }
-
         // 检查session
         SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(httpServletRequest, CommonConstants.SESSION_INFO);
         String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();

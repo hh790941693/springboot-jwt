@@ -23,25 +23,6 @@ public class ActionLogInterceptor implements HandlerInterceptor {
     // 接口日志开关
     private boolean logSwitch = true;
 
-    // 忽略的接口url后缀
-    private static final List<String> IGNORE_URL_SUFFIX_LIST = new ArrayList<>(Arrays.asList(
-            ".js",
-            ".css",
-            ".jpg",
-            ".jpeg",
-            ".png",
-            ".PNG",
-            ".gif",
-            ".GIF",
-            ".properties",
-            ".mp3"));
-
-    // 忽略的接口url前缀
-    private static final List<String> IGNORE_URL_PREFIX_LIST = new ArrayList<>(Arrays.asList(
-            "/js/",
-            "/css/"
-            ));
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o) {
         request.setAttribute("startTime", System.currentTimeMillis());
@@ -64,17 +45,6 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         }
 
         String url = request.getRequestURI();
-        for (String suffix : IGNORE_URL_SUFFIX_LIST) {
-            if (url.endsWith(suffix)) {
-                return;
-            }
-        }
-
-        for (String prefix : IGNORE_URL_PREFIX_LIST) {
-            if (url.startsWith(prefix)) {
-                return;
-            }
-        }
 
         System.out.println("-----------------------------------action请求-------------------------------------");
         String functionName =  handler.toString().trim();
