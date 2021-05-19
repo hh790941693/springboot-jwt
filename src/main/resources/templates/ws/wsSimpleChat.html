@@ -167,7 +167,7 @@
               <!--输入框、发送按钮-->
                 <div style="height:35px;">
                     <!--输入框-->
-                    <input id="sendMsgInput" autocomplete="off"
+                    <input id="sendMsgInput" autocomplete="off" v-model="msgSend"
                            style="width:69%;float:left;height:100%;border:1px solid grey" placeholder="请输入聊天内容<按Enter键发送>">
                     <!--发送按钮-->
                     <button type="button" class='btn btn-sm btn-success' style="width:31%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
@@ -234,11 +234,11 @@
         var app = new Vue({
             el: '#mainDiv',
             data: {
+                msgSend: "",
                 roomName: roomName,
                 roomUserProfileList:{},
                 roomUserCount:0,
                 cyyList: {},
-                loginUser: sessionUser,
                 imgIndex: 1,
                 imgMaxIndex: 10,
                 msgTypeMap: {
@@ -284,7 +284,7 @@
                 },
                 // 选择常用语下拉框事件
                 selectText: function (e) {
-                    $("#sendMsgInput").val(e.target.value);
+                    app.msgSend = e.target.value;
                 },
                 // 清屏
                 clearScreen: function() {
@@ -346,7 +346,7 @@
                 return false;
             }
 
-            let msg = $("#sendMsgInput").val();
+            let msg = app.$data.msgSend;
             if (msg == null || msg == "") {
                 updateChatMsgWithColor(app.msgTypeMap.system.desc, "不允许发送空消息!", "red", 10);
                 return;
@@ -354,7 +354,7 @@
 
             sendMsgToServer(app.roomName, sessionUser, toUser, msg);
             // 清空输入框内容
-            $("#sendMsgInput").val("");
+            app.$data.msgSend = "";
         }
 
         /**
