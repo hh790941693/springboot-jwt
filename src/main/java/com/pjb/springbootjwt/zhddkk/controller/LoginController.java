@@ -198,6 +198,12 @@ public class LoginController {
         // 校验验证码
         Cookie verifyCodeCookie = getCookieObj(request, CommonConstants.VERIFY_CODE);
         String verifyCode = null != verifyCodeCookie ? verifyCodeCookie.getValue() : "";
+        if (StringUtils.isBlank(verifyCode)) {
+            request.setAttribute("user", userName);
+            request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.invalid", request));
+            request.getRequestDispatcher("index").forward(request, response);
+            return;
+        }
         if (!verifyCodeInput.equals(verifyCode)) {
             request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong", request));
