@@ -422,28 +422,19 @@
                 return;
             }
             onlineData = result.data;
-            var currentUserOnlineInfo = onlineData.currentOnlineUserInfo;
-            var coinNum = currentUserOnlineInfo.coinNum;
+            var coinNum = onlineData.currentOnlineUserInfo.coinNum;
             var onlineNum = onlineData.onlineUserList.length;
-            var headImage = currentUserOnlineInfo.headImage;
 
             // 左上角头像、积分、在线人数
             $("#coinNum").text(coinNum);
             $("#onlineNum").text(onlineNum);
-            if (headImage == null || headImage == "") {
+            if (sessionSelfimg == null || sessionSelfimg == "") {
                 $("#headImage").attr("src", rootUrl + "../img/" + $.ws.errorImageName);
-            } else {
-                $("#headImage").attr("src", headImage);
             }
         }
     });
 
-    
     $(function() {
-        console.log("主页获取session数据:" + sessionUser);
-        // 修改地址栏地址,不显示多余的参数或者页面信息
-        history.replaceState(null, null, "/");
-
         // 修改密码对话框
         $('#modifyPasswordDiv').window({
             title: '[[#{easy.modify.password.title}]]',
@@ -452,7 +443,7 @@
             shadow: true,
             closed: true,
             height: 260,
-            resizable:false
+            resizable: false
         });
 
         // 设置语言对话框
@@ -463,305 +454,140 @@
             shadow: true,
             closed: true,
             height: 240,
-            resizable:false
+            resizable: false
         });
+    });
 
-        // 设置网页标题
-        setPageTitle();
-        function setPageTitle() {
-            var title = "";
-            if (sessionRoleId == "1") {
-                title = "page.serverindex.title";
-            } else {
-                title = "page.clientindex.title";
-            }
-            $("title").text($.ws.i18n(title));
+    console.log("主页获取session数据:" + sessionUser);
+    // 修改地址栏地址,不显示多余的参数或者页面信息
+    history.replaceState(null, null, "/");
+
+    // 设置网页标题
+    setPageTitle();
+    function setPageTitle() {
+        var title = "";
+        if (sessionRoleId == "1") {
+            title = "page.serverindex.title";
+        } else {
+            title = "page.clientindex.title";
         }
+        $("title").text($.ws.i18n(title));
+    }
 
-        //定时获取天气
-        grapWeatherInfo();
-        function grapWeatherInfo() {
-            $.ajax({
-                type: 'GET',
-                url: rootUrl + 'index/grapWetherInfo',
-                async: false,
-                success: function (result) {
-                    if (result.code == 1) {
-                        $("#weatherInfo").text(result.data.remark);
-                        $("#lastUpdateTime").text(result.data.lastUpdateTime);
-                        $("#location").text(result.data.location);
-                    }
+    //定时获取天气
+    grapWeatherInfo();
+    function grapWeatherInfo() {
+        $.ajax({
+            type: 'GET',
+            url: rootUrl + 'index/grapWetherInfo',
+            async: false,
+            success: function (result) {
+                if (result.code == 1) {
+                    $("#weatherInfo").text(result.data.remark);
+                    $("#lastUpdateTime").text(result.data.lastUpdateTime);
+                    $("#location").text(result.data.location);
                 }
-            });
-        }
-
-        //定时切换header标题
-        var headerTitle = $.ws.i18n("web.title");
-        $("#titleLabel").text(headerTitle);
-
-        //定时更新时间
-        setInterval(function () {
-            var curTime = getCurrentTime();
-            $("#curTimeSpan").text(curTime);
-        }, 1000);
-
-        // 音乐播放
-        $("#playMusicBtn").click(function (){
-            var displayStatus = $("#musicIframeDiv").css("display");
-            if (displayStatus == "none") {
-                $("#musicIframeDiv").css("display", "block");
-            } else {
-                $("#musicIframeDiv").css("display", "none");
             }
         });
+    }
 
-        // 每日签到
-        $("#signBtn").click(function() {
+    //定时切换header标题
+    var headerTitle = $.ws.i18n("web.title");
+    $("#titleLabel").text(headerTitle);
+
+    //------------------------------------------------------头部-------------------------------------------------
+    //定时更新时间
+    setInterval(function () {
+        var curTime = getCurrentTime();
+        $("#curTimeSpan").text(curTime);
+    }, 1000);
+
+    // 音乐播放
+    $("#playMusicBtn").click(function (){
+        var displayStatus = $("#musicIframeDiv").css("display");
+        if (displayStatus == "none") {
+            $("#musicIframeDiv").css("display", "block");
+        } else {
+            $("#musicIframeDiv").css("display", "none");
+        }
+    });
+
+    // 简易音乐播放器复位
+    $("#resetMusicIframeDivPosBtn").click(adjustMusicWindowPosition);
+    function adjustMusicWindowPosition() {
+        $("#musicIframeDiv").css("bottom", "150px");
+        $("#musicIframeDiv").css("left", "1px");
+    }
+    //音乐播放器可拖动代码
+    $.ws.dragPanelMove("#musicIframeHeader", "#musicIframeDiv");
+
+    // 每日签到
+    $("#signBtn").click(function() {
+        $.ajax({
+            type: 'POST',
+            url: '/zhddkk/wsSign/sign',
+            data: {"user": sessionUser},
+            async: false,
+            success: function (result) {
+                layer.msg(result.msg);
+            }
+        });
+    });
+
+    // 手机登录
+    $("#qrcodeBtn").click(function() {
+        var imgSrc = $("#qrcodeImg").attr("src");
+        if (imgSrc == "" || imgSrc == undefined) {
             $.ajax({
                 type: 'POST',
-                url: '/zhddkk/wsSign/sign',
-                data: {"user": sessionUser},
+                url: '/showQRCode.do',
+                //dataType: 'json',
                 async: false,
                 success: function (result) {
-                    layer.msg(result.msg);
+                    $("#qrDiv").css("display", "block");
+                    $("#qrcodeImg").css("display", "block");
+                    $("#qrcodeImg").attr("src", result);
                 }
             });
-        });
-
-        // 手机登录
-        $("#qrcodeBtn").click(function() {
-            var imgSrc = $("#qrcodeImg").attr("src");
-            if (imgSrc == "" || imgSrc == undefined) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/showQRCode.do',
-                    //dataType: 'json',
-                    async: false,
-                    success: function (result) {
-                        $("#qrDiv").css("display", "block");
-                        $("#qrcodeImg").css("display", "block");
-                        $("#qrcodeImg").attr("src", result);
-                    }
-                });
-            } else {
-                $("#qrcodeImg").attr("src", "");
-                $("#qrDiv").css("display", "none");
-                $("#qrcodeImg").css("display", "none");
-            }
-        });
-
-        // 设置
-        $("#settingBtn").click(function() {
-            layer.open({
-                type: 2,
-                title: '设置个人信息',
-                shadeClose: true,
-                shade: 0.2,
-                area: ['540px', '580px'],
-                anim: 1,
-                content: '/zhddkk/wsUsers/setPersonalInfo.page?user=' + sessionUser
-            });
-        });
-
-        // 修改密码
-        $("#modifyPasswordBtn").click(function (){
-            $('#modifyPasswordDiv').window('open');
-        })
-
-        // 设置语言
-        $("#modifyLanguageBtn").click(function (){
-            $('#modifyLanguageDiv').window('open');
-            $("input[name='language'][value='"+language+"_"+counrty+"']").prop("checked", "checked");
-        })
-
-        // 退出
-        $("#loginOutBtn").click(function() {
-            $.messager.confirm('退出', '确认退出吗?', function(r){
-                if (r){
-                    $.ajax({
-                        type: 'POST',
-                        url: 'ws/logout.do',
-                        data: {"user": sessionUser},
-                        async: false,
-                        success: function (result) {
-                            top.location.href = rootUrl;
-                        }
-                    });
-                }
-            });
-        });
-
-        // 会话信息
-        $("#sessionInfoBtn").click(function() {
-            layer.open({
-                type: 2,
-                title: '会话信息',
-                maxmin: false,
-                shadeClose: true,//点击遮罩关闭层
-                area: ['630px', '500px'],
-                anim: 1,
-                content: '/sessionInfo.page'
-            });
-        });
-
-        // 联系作者
-        $("#contactBtn").click(function() {
-            layer.open({
-                type: 2,
-                title: '联系作者',
-                maxmin: false,
-                shadeClose: true,//点击遮罩关闭层
-                area: ['530px', '300px'],
-                anim: 1,
-                content: 'index/contactAuthor.page'
-            });
-        });
-
-        //捐赠作者
-        $("#donateBtn").click(function() {
-            layer.open({
-                type: 2,
-                title: '捐赠作者',
-                maxmin: false,
-                shadeClose: true,//点击遮罩关闭层
-                area: ['530px', '300px'],
-                anim: 1,
-                content: 'index/donate.page'
-            });
-        });
-
-        //提出疑问
-        $("#feedbackBtn").click(function() {
-            parent.layer.open({
-                type: 2,
-                title: '提出疑问',
-                maxmin: false,
-                shadeClose: true,//点击遮罩关闭层
-                area: ['530px', '300px'],
-                anim: 1,
-                content: 'index/feedbackUs.page'
-            });
-        });
-
-        // EasyUI Demo
-        $("#easyUIDemo").click(function () {
-            parent.layer.open({
-                type: 2,
-                title: 'easyUI Demo',
-                maxmin: false,
-                shadeClose: true,//点击遮罩关闭层
-                area: ['800px', '500px'],
-                anim: 1,
-                content: 'index/easyUIDemo.page'
-            });
-        });
-        
-        //关于我们
-        $("#aboutUsBtn").click(function() {
-            parent.layer.open({
-                type: 2,
-                title: '关于我们',
-                maxmin: false,
-                shadeClose: true,//点击遮罩关闭层
-                area: ['530px', '300px'],
-                anim: 1,
-                content: 'index/aboutUs.page'
-            });
-        });
-
-        // 简易音乐播放器复位
-        $("#resetMusicIframeDivPosBtn").click(adjustMusicWindowPosition);
-        function adjustMusicWindowPosition() {
-            $("#musicIframeDiv").css("bottom", "150px");
-            $("#musicIframeDiv").css("left", "1px");
-        }
-        //音乐播放器可拖动代码
-        $.ws.dragPanelMove("#musicIframeHeader", "#musicIframeDiv");
-
-        // 首页--我的好友列表
-        var app = new Vue({
-            el: '#friendsListDiv',
-            data: {
-                friendList: {},
-                loginUser: sessionUser,
-                onlineFriendCount: 0,
-                offlineFriendCount: 0,
-                friendList: onlineData.friendsList,
-                onlineFriendCount: onlineData.onlineFriendCount,
-                offlineFriendCount: onlineData.offlineFriendCount,
-            },
-            methods: {
-                showPersonInfo: function (userName) {
-                    layer.open({
-                        type: 2,
-                        title: '用户个人信息',
-                        shadeClose: true,
-                        shade: 0.2,
-                        area: ['390px', '420px'],
-                        content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + userName
-                    });
-                }
-            },
-            created: function (e) {
-                // do nothing
-            }
-        });
-
-        //获取最新广告
-        queryRecentAdsList();
-        function queryRecentAdsList() {
-            $.ajax({
-                type: 'GET',
-                url: '/zhddkk/wsAds/queryRecentAdsList?count=5',
-                async: false,
-                success: function (result) {
-                    if (result.code == 1) {
-                        var totalAds = "";
-                        var data = result.data;
-                        if (data.length == 0) {
-                            totalAds = "&lt;span style='font-weight: bold;font-size:14px;color:red;'>暂无消息&lt;/span>";
-                        } else {
-                            $.each(data, function (i, val) {
-                                // 首页底部滚动消息用
-                                var spanHtml = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;margin-right: 200px;'>"+val.createTime+"</span>";
-                                totalAds += spanHtml;
-
-                                // 首页 左侧 消息列表用
-                                var spanHtml2 = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;'>"+val.createTime+"</span>";
-                                $("#recentNewsPanel ul").append("<li>"+spanHtml2+"</li>");
-                            });
-                        }
-                        $("#adsSpan").html(totalAds);
-                    }
-                }
-            });
+        } else {
+            $("#qrcodeImg").attr("src", "");
+            $("#qrDiv").css("display", "none");
+            $("#qrcodeImg").css("display", "none");
         }
     });
 
-    // 新密码与确认密码是否一致
-    $.extend($.fn.validatebox.defaults.rules, {
-        equals: {
-            validator: function(value,param){
-                return value == $(param[0]).val();
-            },
-            message: '两次密码不一致.'
-        }
+    // 设置
+    $("#settingBtn").click(function() {
+        layer.open({
+            type: 2,
+            title: '设置个人信息',
+            shadeClose: true,
+            shade: 0.2,
+            area: ['540px', '580px'],
+            anim: 1,
+            content: '/zhddkk/wsUsers/setPersonalInfo.page?user=' + sessionUser
+        });
     });
-    
+
+    // 修改密码对话框打开
+    $("#modifyPasswordBtn").click(function (){
+        $('#modifyPasswordDiv').window('open');
+    });
+
     // 取消修改密码
     function cancelPassword() {
         $('#modifyPasswordDiv').window('close');
     }
 
-    // 修改密码
+    // 确认修改密码
     function modifyPassword() {
         $.ajax({
             type: 'POST',
             url: '/zhddkk/wsUsers/updatePassword.do',
             data: {"user": sessionUser,
-                    "oldPass": $("input[name='oldPass']").val(),
-                    "newPass": $("input[name='newPass']").val(),
-                    "confirmPass": $("input[name='confirmPass']").val(),
+                "oldPass": $("input[name='oldPass']").val(),
+                "newPass": $("input[name='newPass']").val(),
+                "confirmPass": $("input[name='confirmPass']").val(),
             },
             //dataType: 'json',
             success: function (result) {
@@ -775,7 +601,41 @@
         });
     }
 
-    // 设置语言
+    // 新密码与确认密码是否一致
+    $.extend($.fn.validatebox.defaults.rules, {
+        equals: {
+            validator: function(value,param){
+                return value == $(param[0]).val();
+            },
+            message: '两次密码不一致.'
+        }
+    });
+
+    // 退出
+    $("#loginOutBtn").click(function() {
+        $.messager.confirm('退出', '确认退出吗?', function(r){
+            if (r){
+                $.ajax({
+                    type: 'POST',
+                    url: 'ws/logout.do',
+                    data: {"user": sessionUser},
+                    async: false,
+                    success: function (result) {
+                        top.location.href = rootUrl;
+                    }
+                });
+            }
+        });
+    });
+
+    //------------------------------------------------------底部-------------------------------------------------
+    // 设置语言对话框打开
+    $("#modifyLanguageBtn").click(function (){
+        $('#modifyLanguageDiv').window('open');
+        $("input[name='language'][value='"+language+"_"+counrty+"']").prop("checked", "checked");
+    });
+
+    // 设置语言确定
     function confirmLanguage() {
         var language = $("input[name='language']:checked").val();
         if (language != null && language != "") {
@@ -783,6 +643,143 @@
             var tmpUrl = window.location.href;
             window.location.href = tmpUrl.replace("#","") + "/i18n?lang="+language;
         }
+    }
+
+    // 会话信息
+    $("#sessionInfoBtn").click(function() {
+        layer.open({
+            type: 2,
+            title: '会话信息',
+            maxmin: false,
+            shadeClose: true,//点击遮罩关闭层
+            area: ['630px', '500px'],
+            anim: 1,
+            content: '/sessionInfo.page'
+        });
+    });
+
+    // 联系作者
+    $("#contactBtn").click(function() {
+        layer.open({
+            type: 2,
+            title: '联系作者',
+            maxmin: false,
+            shadeClose: true,//点击遮罩关闭层
+            area: ['530px', '300px'],
+            anim: 1,
+            content: 'index/contactAuthor.page'
+        });
+    });
+
+    //捐赠作者
+    $("#donateBtn").click(function() {
+        layer.open({
+            type: 2,
+            title: '捐赠作者',
+            maxmin: false,
+            shadeClose: true,//点击遮罩关闭层
+            area: ['530px', '300px'],
+            anim: 1,
+            content: 'index/donate.page'
+        });
+    });
+
+    //提出疑问
+    $("#feedbackBtn").click(function() {
+        parent.layer.open({
+            type: 2,
+            title: '提出疑问',
+            maxmin: false,
+            shadeClose: true,//点击遮罩关闭层
+            area: ['530px', '300px'],
+            anim: 1,
+            content: 'index/feedbackUs.page'
+        });
+    });
+
+    // EasyUI Demo
+    $("#easyUIDemo").click(function () {
+        parent.layer.open({
+            type: 2,
+            title: 'easyUI Demo',
+            maxmin: false,
+            shadeClose: true,//点击遮罩关闭层
+            area: ['800px', '500px'],
+            anim: 1,
+            content: 'index/easyUIDemo.page'
+        });
+    });
+
+    //关于我们
+    $("#aboutUsBtn").click(function() {
+        parent.layer.open({
+            type: 2,
+            title: '关于我们',
+            maxmin: false,
+            shadeClose: true,//点击遮罩关闭层
+            area: ['530px', '300px'],
+            anim: 1,
+            content: 'index/aboutUs.page'
+        });
+    });
+
+    // 首页--我的好友列表
+    var app = new Vue({
+        el: '#friendsListDiv',
+        data: {
+            friendList: {},
+            loginUser: sessionUser,
+            onlineFriendCount: 0,
+            offlineFriendCount: 0,
+            friendList: onlineData.friendsList,
+            onlineFriendCount: onlineData.onlineFriendCount,
+            offlineFriendCount: onlineData.offlineFriendCount,
+        },
+        methods: {
+            showPersonInfo: function (userName) {
+                layer.open({
+                    type: 2,
+                    title: '用户个人信息',
+                    shadeClose: true,
+                    shade: 0.2,
+                    area: ['390px', '420px'],
+                    content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + userName
+                });
+            }
+        },
+        created: function (e) {
+            // do nothing
+        }
+    });
+
+    //获取最新广告
+    queryRecentAdsList();
+    function queryRecentAdsList() {
+        $.ajax({
+            type: 'GET',
+            url: '/zhddkk/wsAds/queryRecentAdsList?count=5',
+            async: false,
+            success: function (result) {
+                if (result.code == 1) {
+                    var totalAds = "";
+                    var data = result.data;
+                    if (data.length == 0) {
+                        totalAds = "&lt;span style='font-weight: bold;font-size:14px;color:red;'>暂无消息&lt;/span>";
+                    } else {
+                        $.each(data, function (i, val) {
+                            // 首页底部滚动消息用
+                            var spanHtml = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;margin-right: 200px;'>"+val.createTime+"</span>";
+                            totalAds += spanHtml;
+
+                            // 首页 左侧 消息列表用
+                            var spanHtml2 = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;'>"+val.createTime+"</span>";
+                            $("#recentNewsPanel ul").append("<li>"+spanHtml2+"</li>");
+                        });
+                    }
+                    $("#adsSpan").html(totalAds);
+                }
+            }
+        });
     }
 
     /**
