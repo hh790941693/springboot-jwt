@@ -151,7 +151,7 @@
                     <img id="emojiBtn" style="width:25px;height:100%;float:left;border:1px solid grey;background-color: white;">
     
                     <!--选择@对象-->
-                    <select id="selectUser" style="width:47%;height:100%;float:left;">
+                    <select v-model="selectedUser" style="width:47%;height:100%;float:left;">
                         <option value=""></option>
                         <option v-for="row in roomUserProfileList" :key="row.userName" :value="row.userName" :disabled="row.userName == sessionUser">
                             {{row.userName}}
@@ -234,14 +234,15 @@
         var app = new Vue({
             el: '#mainDiv',
             data: {
-                msgSend: "",
-                roomName: roomName,
-                roomUserProfileList:{},
-                roomUserCount:0,
-                cyyList: {},
-                imgIndex: 1,
-                imgMaxIndex: 10,
-                msgTypeMap: {
+                msgSend: "",            //发送消息内容
+                selectedUser: "",        //@对象
+                roomName: roomName,      //聊天室房间号
+                roomUserProfileList:{},  //聊天室人附加信息
+                roomUserCount:0,         //聊天室人数
+                cyyList: {},             //聊天常用语
+                imgIndex: 1,             //聊天窗口背景图片初始索引
+                imgMaxIndex: 10,         //聊天窗口背景图片最大索引
+                msgTypeMap: {            //消息类型
                     "system":{
                         "desc":"系统消息",
                         "value":"1"
@@ -276,15 +277,15 @@
                                 return;
                             }
                             var jsonObj = result.data;
-                            app.roomUserProfileList = jsonObj.roomUserProfileList;
-                            app.cyyList = jsonObj.commonMap.cyy;
-                            app.roomUserCount = jsonObj.roomUserCount;
+                            this.roomUserProfileList = jsonObj.roomUserProfileList;
+                            this.cyyList = jsonObj.commonMap.cyy;
+                            this.roomUserCount = jsonObj.roomUserCount;
                         }
                     });
                 },
                 // 选择常用语下拉框事件
                 selectText: function (e) {
-                    app.msgSend = e.target.value;
+                    this.msgSend = e.target.value;
                 },
                 // 清屏
                 clearScreen: function() {
@@ -292,11 +293,11 @@
                 },
                 // 切换背景图片
                 changeBackgroundImage: function () {
-                    app.imgIndex++;
-                    if (app.imgIndex > app.imgMaxIndex) {
-                        app.imgIndex = 1;
+                    this.imgIndex++;
+                    if (this.imgIndex > this.imgMaxIndex) {
+                        this.imgIndex = 1;
                     }
-                    var newPicUrl = "../img/fengjing/fj" + app.imgIndex + ".jpg";
+                    var newPicUrl = "../img/fengjing/fj" + this.imgIndex + ".jpg";
                     $("#msgFromServerDiv").css("background-image", "url(" + newPicUrl + ")");
                 },
                 // 管理员发布通知消息(聊天窗口顶部滚动消息)
@@ -308,7 +309,7 @@
                     }, function (value, index) {
                         layer.close(index);
                         if (value != "") {
-                            sendNoticeToServer(app.roomName, value);
+                            sendNoticeToServer(this.roomName, value);
                         } else {
                             alert("通知内容不能为空!");
                         }
@@ -336,23 +337,23 @@
         function send() {
             if (webSocket == null) {
                 let msg = "服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
-                updateChatMsgWithColor(app.msgTypeMap.system.desc, msg, "red", 10);
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, msg, "red", 10);
                 return;
             }
 
-            let toUser = $("#selectUser").val();
+            let toUser = app.$data.selectedUser;
             if (sessionUser == toUser) {
-                updateChatMsgWithColor(app.msgTypeMap.system.desc, "不能给自己发消息!", "red", 10);
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "不能给自己发消息!", "red", 10);
                 return false;
             }
 
             let msg = app.$data.msgSend;
             if (msg == null || msg == "") {
-                updateChatMsgWithColor(app.msgTypeMap.system.desc, "不允许发送空消息!", "red", 10);
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "不允许发送空消息!", "red", 10);
                 return;
             }
 
-            sendMsgToServer(app.roomName, sessionUser, toUser, msg);
+            sendMsgToServer(app.$data.roomName, sessionUser, toUser, msg);
             // 清空输入框内容
             app.$data.msgSend = "";
         }
@@ -369,13 +370,13 @@
         function sendMsgToServer(roomName, userFrom, userTo, msg) {
             if (webSocket == null) {
                 var msg = "连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
-                updateChatMsgWithColor(app.msgTypeMap.system.desc, msg, "red", 10);
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, msg, "red", 10);
                 return;
             }
 
             var toServerMsgObj = {};
-            toServerMsgObj.msgTypeId = app.msgTypeMap.onlinechat.value;
-            toServerMsgObj.msgTypeDesc = app.msgTypeMap.onlinechat.desc;
+            toServerMsgObj.msgTypeId = app.$data.msgTypeMap.onlinechat.value;
+            toServerMsgObj.msgTypeDesc = app.$data.msgTypeMap.onlinechat.desc;
             toServerMsgObj.roomName = roomName;
             toServerMsgObj.from = userFrom;
             toServerMsgObj.to = userTo;
@@ -394,13 +395,13 @@
         function sendNoticeToServer(roomName, msg) {
             if (webSocket == null) {
                 var msg = "连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
-                updateChatMsgWithColor(app.msgTypeMap.system.desc ,msg, "red", 10);
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc ,msg, "red", 10);
                 return;
             }
 
             var toServerMsgObj = {};
-            toServerMsgObj.msgTypeId = app.msgTypeMap.notice.value;
-            toServerMsgObj.msgTypeDesc = app.msgTypeMap.notice.desc;
+            toServerMsgObj.msgTypeId = app.$data.msgTypeMap.notice.value;
+            toServerMsgObj.msgTypeDesc = app.$data.msgTypeMap.notice.desc;
             toServerMsgObj.roomName = roomName;
             toServerMsgObj.from = "";
             toServerMsgObj.to = "";
@@ -420,8 +421,8 @@
         function sendStatusToServer(roomName, userFrom, msg) {
             if (webSocket != null) {
                 var toServerMsgObj = {};
-                toServerMsgObj.msgTypeId = app.msgTypeMap.status.value;
-                toServerMsgObj.msgTypeDesc = app.msgTypeMap.status.desc;
+                toServerMsgObj.msgTypeId = app.$data.msgTypeMap.status.value;
+                toServerMsgObj.msgTypeDesc = app.$data.msgTypeMap.status.desc;
                 toServerMsgObj.roomName = roomName;
                 toServerMsgObj.from = userFrom;
                 toServerMsgObj.to = "";
@@ -480,7 +481,7 @@
                     clearCheckTimer();
                     return;
                 }
-                updateChatMsgWithColor(app.msgTypeMap.system.desc, "正在连接服务器" + sessionWebserverIp + ":" + sessionWebserverport + " [ " + checkCount + " ]" + "次 请稍等...", "yellow", 10);
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "正在连接服务器" + sessionWebserverIp + ":" + sessionWebserverport + " [ " + checkCount + " ]" + "次 请稍等...", "yellow", 10);
                 checkCount++;
                 loginServer();
             } else {
@@ -510,14 +511,14 @@
 
         //连接成功
         function onOpen(event) {
-            updateChatMsgWithColor(app.msgTypeMap.system.desc, "您已进入聊天室", "yellow", 10);
+            updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "您已进入聊天室", "yellow", 10);
             connectStatus = "1";
             setServerStatus("#00fb00");
         }
 
         //连接异常
         function onError(event) {
-            updateChatMsgWithColor(app.msgTypeMap.system.desc, "连接聊天室服务器异常!", "red", 10);
+            updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "连接聊天室服务器异常!", "red", 10);
             connectStatus = "0";
             webSocket = null;
             startCheckTimer();
@@ -526,7 +527,7 @@
 
         //连接关闭
         function OnClose(event) {
-            updateChatMsgWithColor(app.msgTypeMap.system.desc, "聊天室已断开!", "red", 10);
+            updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "聊天室已断开!", "red", 10);
             connectStatus = "0";
             webSocket = null;
             startCheckTimer();
@@ -546,16 +547,16 @@
             // 扩展数据 发送人相关信息
             var extendMap = jsonObj.extendMap;
 
-            if (msgTypeId == app.msgTypeMap.system.value) {
+            if (msgTypeId == app.$data.msgTypeMap.system.value) {
                 // 广播消息
-                updateChatMsgWithColor(app.msgTypeMap.system.desc, msg, "yellow", 10);
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, msg, "yellow", 10);
                 // 更新在线人数等信息
-                app.roomUserCount = extendMap.roomCount;
-                app.roomUserProfileList = extendMap.userProfileList;
+                app.$data.roomUserCount = extendMap.roomCount;
+                app.$data.roomUserProfileList = extendMap.userProfileList;
                 return;
             }
 
-            if (msgTypeId == app.msgTypeMap.status.value) {
+            if (msgTypeId == app.$data.msgTypeMap.status.value) {
                 // 状态消息
                 var inputingUserList = extendMap.inputingUserList;
                 if (inputingUserList.length == 0) {
@@ -579,7 +580,7 @@
                 return;
             }
 
-            if (msgTypeId == app.msgTypeMap.notice.value) {
+            if (msgTypeId == app.$data.msgTypeMap.notice.value) {
                 // 通知消息
                 $("#noticeDiv").show();
                 setTimeout(function () {
@@ -590,7 +591,7 @@
                     $("#noticeSpan").html("");
                     $("#noticeDiv").hide();
                 },8000);
-                updateChatMsgWithColor(app.msgTypeMap.notice.desc, msg, "yellow", 10);
+                updateChatMsgWithColor(app.$data.msgTypeMap.notice.desc, msg, "yellow", 10);
                 return;
             }
 
@@ -609,7 +610,7 @@
 
             // 发送方用户相关信息
             var msgFromUserProfile = null;
-            if (msgTypeId == app.msgTypeMap.onlinechat.value || msgTypeId == app.msgTypeMap.offlinechat.value) {
+            if (msgTypeId == app.$data.msgTypeMap.onlinechat.value || msgTypeId == app.$data.msgTypeMap.offlinechat.value) {
                 // 聊天消息/离线消息
                 msgFromUserProfile = extendMap.userProfile;
             }
@@ -690,12 +691,12 @@
 
         // 输入框聚焦事件(发送状态消息,告诉服务器某用户正在输入中)
         $("#sendMsgInput").focus(function() {
-            sendStatusToServer(app.roomName, sessionUser, "input:1");
+            sendStatusToServer(app.$data.roomName, sessionUser, "input:1");
         });
 
         // 输入框失去焦点事件(发送状态消息,告诉服务器某用户已停止输入)
         $("#sendMsgInput").blur(function() {
-            sendStatusToServer(app.roomName, sessionUser, "input:0");
+            sendStatusToServer(app.$data.roomName, sessionUser, "input:0");
         });
 
         // 加载表情
