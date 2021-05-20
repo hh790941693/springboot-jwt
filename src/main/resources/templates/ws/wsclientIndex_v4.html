@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8">
 <head>
-    <title></title>
+    <title th:text="#{page.serverindex.title}"></title>
     <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/themes/default/easyui.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/themes/icon.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/css/default.css}" />
@@ -128,7 +128,7 @@
                 <!--中间部分-->
                 <div data-options="region:'center',split:false,border:false" style="text-align: center;">
                     <div id="headerTitleDiv" style="height:100%;font-size:20px;padding-top:20px;display: block;">
-                        <label id="titleLabel" style="color:white;">websocket客户端</label>
+                        <label id="titleLabel" style="color:white;">[[#{web.title}]]</label>
                     </div>
                 </div>
                 
@@ -218,7 +218,7 @@
     </div>
     
     <!--网页中间区域：内容部分-->
-    <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
+    <div id="centerRegionDiv" region="center" style="background: #eee; overflow-y:hidden">
         <div region="north" split="false" title="内容部分" id="centerDiv" style="height:calc(100% - 20px);width:100%;">
             <div id="tabs" class="easyui-tabs"  fit="true" border="false" style="height:100%;width:100%;">
                 <div th:title="#{div.title.index}" data-options="iconCls:'icon icon-12-11',closable:false" style="padding:20px;overflow:hidden;" id="home">
@@ -226,6 +226,13 @@
                         <div th:title="#{div.title.top.news}" data-options="region:'west',collapsed:false,split:false,border:true,iconCls:'icon icon-13-4'" style="width:30%;">
                             <div id="recentNewsPanel" style="width:100%;height:200px;padding: 10px 0 0 10px;">
                                 <ul>
+                                    <li v-for="news in recentNewsList">
+                                        <span>
+                                            <a style='color:blue;font-weight: bold;' @click="showAdsDetail(news.id)">【查看详情】</a>
+                                        </span>
+                                        <span style='font-size:14px;font-weight: bold;'>{{news.title}} </span>
+                                        <span style='font-size:9px;color: grey;margin-left:5px;'>{{news.createTime}}</span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -254,7 +261,7 @@
                                                      onerror="this.onerror='';this.src=$.ws.errorImgUrl">
                                             </div>
                                             <div style="width:67%;height:50px;float:left;margin-left: 5px;">
-                                                <div>
+                                                <div style="height:65%">
                                                     <template v-if="row.state == '0'">
                                                         <p style="font-size: 14px;color:grey;cursor: pointer;"
                                                            @click="showPersonInfo(row.name)">{{row.name}}</p>
@@ -265,7 +272,7 @@
                                                     </template>
                                                     <p style="font-size: 12px;">{{row.lastLoginTime}}</p>
                                                 </div>
-                                                <div>
+                                                <div style="height:35%">
                                                     <span style="font-size: 12px;">{{row.sign}}</span>
                                                 </div>
                                             </div>
@@ -461,19 +468,7 @@
     console.log("主页获取session数据:" + sessionUser);
     // 修改地址栏地址,不显示多余的参数或者页面信息
     history.replaceState(null, null, "/");
-
-    // 设置网页标题
-    setPageTitle();
-    function setPageTitle() {
-        var title = "";
-        if (sessionRoleId == "1") {
-            title = "page.serverindex.title";
-        } else {
-            title = "page.clientindex.title";
-        }
-        $("title").text($.ws.i18n(title));
-    }
-
+    
     //定时获取天气
     grapWeatherInfo();
     function grapWeatherInfo() {
@@ -490,11 +485,7 @@
             }
         });
     }
-
-    //定时切换header标题
-    var headerTitle = $.ws.i18n("web.title");
-    $("#titleLabel").text(headerTitle);
-
+    
     //------------------------------------------------------头部-------------------------------------------------
     //定时更新时间
     setInterval(function () {
@@ -723,14 +714,48 @@
         });
     });
 
-    // 首页--我的好友列表
-    var app = new Vue({
-        el: '#friendsListDiv',
+    // 首页--最新消息列表
+    var newsListApp = new Vue({
+        el: '#recentNewsPanel',
         data: {
-            friendList: {},
-            loginUser: sessionUser,
-            onlineFriendCount: 0,
-            offlineFriendCount: 0,
+            recentNewsList: {},
+        },
+        methods: {
+            queryRecentAdsList: function () {
+                var that = this;
+                $.ajax({
+                    type: 'GET',
+                    url: '/zhddkk/wsAds/queryRecentAdsList?count=5',
+                    success: function (result) {
+                        if (result.code == 1) {
+                            that.recentNewsList = result.data;
+                        }
+
+                        var totalAds = "";
+                        $.each(result.data, function (i, val) {
+                            // 首页底部滚动消息用
+                            var spanHtml = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;margin-right: 200px;'>"+val.createTime+"</span>";
+                            totalAds += spanHtml;
+                        });
+
+                        $("#adsSpan").html(totalAds);
+                    }
+                });
+            },
+            showAdsDetail: function(adId) {
+                window.open("./zhddkk/wsAds/adsDetail.page?id=" + adId);
+            }
+        },
+        created: function (e) {
+            // do nothing
+            this.queryRecentAdsList();
+        }
+    });
+    
+    // 首页--我的好友列表
+    var friendsListApp = new Vue({
+        el: '#myFriendsDiv',
+        data: {
             friendList: onlineData.friendsList,
             onlineFriendCount: onlineData.onlineFriendCount,
             offlineFriendCount: onlineData.offlineFriendCount,
@@ -751,43 +776,13 @@
             // do nothing
         }
     });
-
-    //获取最新广告
-    queryRecentAdsList();
-    function queryRecentAdsList() {
-        $.ajax({
-            type: 'GET',
-            url: '/zhddkk/wsAds/queryRecentAdsList?count=5',
-            async: false,
-            success: function (result) {
-                if (result.code == 1) {
-                    var totalAds = "";
-                    var data = result.data;
-                    if (data.length == 0) {
-                        totalAds = "&lt;span style='font-weight: bold;font-size:14px;color:red;'>暂无消息&lt;/span>";
-                    } else {
-                        $.each(data, function (i, val) {
-                            // 首页底部滚动消息用
-                            var spanHtml = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;margin-right: 200px;'>"+val.createTime+"</span>";
-                            totalAds += spanHtml;
-
-                            // 首页 左侧 消息列表用
-                            var spanHtml2 = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;'>"+val.createTime+"</span>";
-                            $("#recentNewsPanel ul").append("<li>"+spanHtml2+"</li>");
-                        });
-                    }
-                    $("#adsSpan").html(totalAds);
-                }
-            }
-        });
-    }
-
+    
     /**
      * 查看广告详情页
      * @param adId
      */
     function showAdsDetail(adId) {
-        window.open("./zhddkk/wsAds/adsDetail.page?id=" + adId);
+        newsListApp.showAdsDetail(adId);
     }
 
     // 首页-中间部分-切换游戏
