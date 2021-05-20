@@ -278,7 +278,7 @@
                             }
                             var jsonObj = result.data;
                             this.roomUserProfileList = jsonObj.roomUserProfileList;
-                            this.cyyList = jsonObj.commonMap.cyy;
+                            app.cyyList = jsonObj.commonMap.cyy;
                             this.roomUserCount = jsonObj.roomUserCount;
                         }
                     });
@@ -341,21 +341,23 @@
                 return;
             }
 
-            let toUser = app.$data.selectedUser;
+            var toUser = app.$data.selectedUser;
             if (sessionUser == toUser) {
                 updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "不能给自己发消息!", "red", 10);
                 return false;
             }
 
-            let msg = app.$data.msgSend;
+            var msg = app.$data.msgSend || $("#sendMsgInput").val();
             if (msg == null || msg == "") {
                 updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "不允许发送空消息!", "red", 10);
                 return;
             }
 
             sendMsgToServer(app.$data.roomName, sessionUser, toUser, msg);
+
             // 清空输入框内容
             app.$data.msgSend = "";
+            $("#sendMsgInput").val("");
         }
 
         /**
