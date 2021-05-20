@@ -172,7 +172,7 @@
         <div class="footer" style="height:100%;">
             <div style="height:50%;">
                 <div style="width:60%;float:left;text-align:left;">
-                    <span>COPYRIGHT 2019 – 2030 版权归作者所有，侵权必究 1.0-Snapshot</span><br />
+                    <span>[[#{span.copyright}]]</span><br />
                     请求URL：<span th:text="${#request.getRequestURL()}"></span>&nbsp;&nbsp;&nbsp;
                     会话超时时间：<span th:text="${#session.getMaxInactiveInterval()}"></span>&nbsp;&nbsp;&nbsp;
                     服务器信息：<span th:text="${#servletContext.getServerInfo()}"></span>
@@ -244,7 +244,7 @@
                             <div style="width: 100%;height:100%;border:2px solid green;background-color: white;">
                                 <div id="friendsListDiv" style="width: 100%;height: 100%;">
                                     <div style="width:100%;height:25px;background-color: #365e71;color:white;">
-                                        <span>我的好友</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span>[[#{span.my.friends}]]</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <span>{{onlineFriendCount}}/{{friendList.length}}</span>
                                     </div>
                                     <div style="width:100%;height:calc(100% - 25px);overflow-y: scroll;padding:3px;">
