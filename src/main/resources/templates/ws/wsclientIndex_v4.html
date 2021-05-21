@@ -285,10 +285,17 @@
                 </div>
             </div>
         </div>
-        
+
+        <!--滚动消息-->
         <div region="south" split="false" title="滚动消息" style="width: 100%;height:20px;background-color: white;border-top: 1px solid #8DB2E3;">
             <marquee direction="left" scrolldelay="10" scrollamount="7" onMouseOver="this.stop()" onMouseOut="this.start()">
-                <span id="adsSpan"></span>
+                <span v-for="news in recentNewsList">
+                    <span>
+                        <a style='color:blue;font-weight: bold;' @click="showAdsDetail(news.id)">【查看详情】</a>
+                    </span>
+                    <span style='font-size:14px;font-weight: bold;'>{{news.title}}</span>
+                    <span style='font-size:9px;color: grey;margin-left:5px;margin-right: 200px;'>{{news.createTime}}</span>
+                </span>
             </marquee>
         </div>
     </div>
@@ -749,14 +756,6 @@
                         if (result.code == 1) {
                             that.recentNewsList = result.data;
                         }
-
-                        var totalAds = "";
-                        $.each(result.data, function (i, val) {
-                            // 首页底部滚动消息用
-                            var spanHtml = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;margin-right: 200px;'>" + val.createTime + "</span>";
-                            totalAds += spanHtml;
-                        });
-                        $("#adsSpan").html(totalAds);
                     }
                 });
             },
