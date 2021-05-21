@@ -403,43 +403,12 @@
     // 聊天室房间号
     var roomName = "001";
 
-    // 获取左侧导航栏菜单列表
-    $.ajax({
-        type: 'GET',
-        url: rootUrl + '/zhddkk/sysMenu/getRoleMenuList?userId=' + sessionUserId,
-        async: false,
-        dataType: 'json',
-        success: function (result) {
-            if (result.code == 1) {
-                _menus.menus = result.data;
-            }
-        }
-    });
-
-    //获取在线人数和积分数量
+    // 在线人数和积分数量
     var onlineData = {};
-    $.ajax({
-        type: 'GET',
-        url: 'ws/getOnlineInfo.json',
-        async: false,
-        data: {"roomName":roomName,"user": sessionUser},
-        //dataType: 'json',
-        success: function (result) {
-            if (result.code != 1) {
-                return;
-            }
-            onlineData = result.data;
-            var coinNum = onlineData.currentOnlineUserInfo.coinNum;
-            var onlineNum = onlineData.onlineUserList.length;
 
-            // 左上角头像、积分、在线人数
-            $("#coinNum").text(coinNum);
-            $("#onlineNum").text(onlineNum);
-            if (sessionSelfimg == null || sessionSelfimg == "") {
-                $("#headImage").attr("src", rootUrl + "../img/" + $.ws.errorImageName);
-            }
-        }
-    });
+    console.log("主页获取session数据:" + sessionUser);
+    // 修改地址栏地址,不显示多余的参数或者页面信息
+    history.replaceState(null, null, "/");
 
     $(function() {
         // 修改密码对话框
@@ -465,12 +434,51 @@
         });
     });
 
-    console.log("主页获取session数据:" + sessionUser);
-    // 修改地址栏地址,不显示多余的参数或者页面信息
-    history.replaceState(null, null, "/");
-    
-    //定时获取天气
+    getNaviMenuList();
+    getOnlineInfo();
     grapWeatherInfo();
+
+    // 获取左侧导航栏菜单列表
+    function getNaviMenuList() {
+        $.ajax({
+            type: 'GET',
+            url: rootUrl + '/zhddkk/sysMenu/getRoleMenuList?userId=' + sessionUserId,
+            async: true,
+            dataType: 'json',
+            success: function (result) {
+                if (result.code == 1) {
+                    _menus.menus = result.data;
+                }
+            }
+        });
+    }
+
+    //获取在线人数和积分数量
+    function getOnlineInfo() {
+        $.ajax({
+            type: 'GET',
+            url: 'ws/getOnlineInfo.json',
+            async: false,
+            data: {"roomName": roomName, "user": sessionUser},
+            success: function (result) {
+                if (result.code != 1) {
+                    return;
+                }
+                onlineData = result.data;
+                var coinNum = onlineData.currentOnlineUserInfo.coinNum;
+                var onlineNum = onlineData.onlineUserList.length;
+
+                // 左上角头像、积分、在线人数
+                $("#coinNum").text(coinNum);
+                $("#onlineNum").text(onlineNum);
+                if (sessionSelfimg == null || sessionSelfimg == "") {
+                    $("#headImage").attr("src", rootUrl + "../img/" + $.ws.errorImageName);
+                }
+            }
+        });
+    }
+
+    //获取天气
     function grapWeatherInfo() {
         $.ajax({
             type: 'GET',
@@ -485,12 +493,11 @@
             }
         });
     }
-    
+
     //------------------------------------------------------头部-------------------------------------------------
     //定时更新时间
     setInterval(function () {
-        var curTime = getCurrentTime();
-        $("#curTimeSpan").text(curTime);
+        $("#curTimeSpan").text(getCurrentTime());
     }, 1000);
 
     // 音乐播放
@@ -714,14 +721,17 @@
         });
     });
 
-    // 首页--最新消息列表
-    var newsListApp = new Vue({
-        el: '#recentNewsPanel',
+    // 首页--我的好友列表
+    var app = new Vue({
+        el: '#centerRegionDiv',
         data: {
-            recentNewsList: {},
+            recentNewsList: {},  //最新消息列表
+            friendList: onlineData.friendsList, //好友列表
+            onlineFriendCount: onlineData.onlineFriendCount,
+            offlineFriendCount: onlineData.offlineFriendCount,
         },
         methods: {
-            queryRecentAdsList: function () {
+            queryRecentNews: function () {
                 var that = this;
                 $.ajax({
                     type: 'GET',
@@ -734,33 +744,16 @@
                         var totalAds = "";
                         $.each(result.data, function (i, val) {
                             // 首页底部滚动消息用
-                            var spanHtml = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;margin-right: 200px;'>"+val.createTime+"</span>";
+                            var spanHtml = "<span><a style='color:blue;font-weight: bold;' onclick='showAdsDetail(" + val.id + ")'>【查看详情】</a></span><span style='font-size:14px;font-weight: bold;'>" + val.title + "</span><span style='font-size:9px;color: grey;margin-left:5px;margin-right: 200px;'>" + val.createTime + "</span>";
                             totalAds += spanHtml;
                         });
-
                         $("#adsSpan").html(totalAds);
                     }
                 });
             },
             showAdsDetail: function(adId) {
                 window.open("./zhddkk/wsAds/adsDetail.page?id=" + adId);
-            }
-        },
-        created: function (e) {
-            // do nothing
-            this.queryRecentAdsList();
-        }
-    });
-    
-    // 首页--我的好友列表
-    var friendsListApp = new Vue({
-        el: '#myFriendsDiv',
-        data: {
-            friendList: onlineData.friendsList,
-            onlineFriendCount: onlineData.onlineFriendCount,
-            offlineFriendCount: onlineData.offlineFriendCount,
-        },
-        methods: {
+            },
             showPersonInfo: function (userName) {
                 layer.open({
                     type: 2,
@@ -774,16 +767,9 @@
         },
         created: function (e) {
             // do nothing
+            this.queryRecentNews();
         }
     });
-    
-    /**
-     * 查看广告详情页
-     * @param adId
-     */
-    function showAdsDetail(adId) {
-        newsListApp.showAdsDetail(adId);
-    }
 
     // 首页-中间部分-切换游戏
     function changeGame() {
