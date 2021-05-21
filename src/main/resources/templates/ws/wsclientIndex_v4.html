@@ -94,77 +94,77 @@
     <!--网页北部区域：头像、时间等信息-->
     <div id="northRegionDiv" region="north" split="false" border="true">
 
-            <div class="easyui-layout" data-options="fit:true">
-                <!--左侧-->
-                <div data-options="region:'west',split:false,border:false" style="width:178px;">
-                    <div class="easyui-layout" data-options="fit:true">
-                        <!--左侧头像-->
-                        <div data-options="region:'west',split:false,border:false" style="width:62px;padding:1px;">
-                            <img id="headImage" :src="headImage" width="100%" height="100%">
-                        </div>
-                        <!--右侧-->
-                        <div data-options="region:'center',split:false,border:false">
-                            <div class="easyui-layout" data-options="fit:true" border="false">
-                                <!--登陆用户-->
-                                <div data-options="region:'north',split:false,border:false" style="height:35%;padding: 1px 0 0 5px;overflow: hidden;">
-                                    <span th:text="${session.sessionInfo.userName}" style="font-size: 23px;"></span>
-                                </div>
-                                <!--角色名-->
-                                <div data-options="region:'center',split:false,border:false" style="height:28%;padding: 1px 0 0 5px;margin-left: -7px;overflow: hidden;">
-                                    【<span th:text="${session.sessionInfo.roleName == '' ? '尚无角色' : session.sessionInfo.roleName}" style="font-size: 13px;"></span>】
-                                </div>
-                                <!--在线用户数、积分数-->
-                                <div data-options="region:'south',split:false,border:false" style="height:37%;padding: 5px 0 0 5px;overflow: hidden;">
-                                      <span class="icon icon-11-19" th:title="#{span.onlinecount.tips}"></span>
-                                      <label>{{onlineNum}}</label>&nbsp;&nbsp;
-                                      <span class="icon icon-22-3" th:title="#{span.coinnum.tips}"></span>
-                                      <label>{{coinNum}}</label>
-                                </div>
+        <div class="easyui-layout" data-options="fit:true">
+            <!--左侧-->
+            <div data-options="region:'west',split:false,border:false" style="width:178px;">
+                <div class="easyui-layout" data-options="fit:true">
+                    <!--左侧头像-->
+                    <div data-options="region:'west',split:false,border:false" style="width:62px;padding:1px;">
+                        <img id="headImage" :src="headImage" width="100%" height="100%">
+                    </div>
+                    <!--右侧-->
+                    <div data-options="region:'center',split:false,border:false">
+                        <div class="easyui-layout" data-options="fit:true" border="false">
+                            <!--登陆用户-->
+                            <div data-options="region:'north',split:false,border:false" style="height:35%;padding: 1px 0 0 5px;overflow: hidden;">
+                                <span th:text="${session.sessionInfo.userName}" style="font-size: 23px;"></span>
+                            </div>
+                            <!--角色名-->
+                            <div data-options="region:'center',split:false,border:false" style="height:28%;padding: 1px 0 0 5px;margin-left: -7px;overflow: hidden;">
+                                【<span th:text="${session.sessionInfo.roleName == '' ? '尚无角色' : session.sessionInfo.roleName}" style="font-size: 13px;"></span>】
+                            </div>
+                            <!--在线用户数、积分数-->
+                            <div data-options="region:'south',split:false,border:false" style="height:37%;padding: 5px 0 0 5px;overflow: hidden;">
+                                  <span class="icon icon-11-19" th:title="#{span.onlinecount.tips}"></span>
+                                  <label>{{onlineNum}}</label>&nbsp;&nbsp;
+                                  <span class="icon icon-22-3" th:title="#{span.coinnum.tips}"></span>
+                                  <label>{{coinNum}}</label>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!--中间部分-->
-                <div data-options="region:'center',split:false,border:false" style="text-align: center;">
-                    <div id="headerTitleDiv" style="height:100%;font-size:20px;padding-top:20px;display: block;">
-                        <label id="titleLabel" style="color:white;">[[#{web.title}]]</label>
-                    </div>
-                </div>
-                
-                <!--右侧-->
-                 <div data-options="region:'east',split:false,border:false" style="width:520px">
-                        <div class="easyui-layout" data-options="fit:true">
-                            <!--右侧时间-->
-                            <div data-options="region:'north',split:false,border:false" style="height:40%;padding-top:4px;">
-                                <div class="easyui-layout" data-options="fit:true">
-                                    <!--天气-->
-                                    <div data-options="region:'west',split:false,border:false" style="width:340px;text-align: center;">
-                                        <div id="weatherDiv" style="height:100%;padding-top:1px;display: block;">
-                                            <label style="color:white;">{{weatherObj.remark}}</label>&nbsp;&nbsp;
-                                            <label style="color:white;">{{weatherObj.lastUpdateTime}}</label>&nbsp;&nbsp;
-                                            <label style="color:white;">{{weatherObj.location}}</label>
-                                        </div>
-                                    </div>
-                                    <!--时间-->
-                                     <div data-options="region:'center',split:false,border:false" style="text-align: right;padding-right: 5px;">
-                                        <span id="curTimeSpan" style="font-size:14px;color: white;">0000-00-00 00:00:00</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!--右侧按钮组-->
-                            <div data-options="region:'center',split:false,border:false" style="height:60%;padding-top: 4px;text-align: right;padding-right: 5px;">
-                                <a href="#" id="playMusicBtn" @click="playMusic" class="easyui-linkbutton" data-options="iconCls:'icon icon-15-1'">[[#{btn.music.tips}]]</a>
-                                <a href="#" id="signBtn" @click="signUp" class="easyui-linkbutton" data-options="iconCls:'icon icon-7-20'">[[#{btn.signin.tips}]]&nbsp;&nbsp;</a>
-                                 <a href="#" id="qrcodeBtn" @click="showQRCode" class="easyui-linkbutton" data-options="iconCls:'icon icon-14-13'">[[#{btn.qrcode.tips}]]&nbsp;&nbsp;</a>
-                                <a href="#" id="settingBtn" @click="setting" class="easyui-linkbutton" data-options="iconCls:'icon icon-6-2'">[[#{btn.setting.tips}]]&nbsp;&nbsp;</a>
-                                <a href="#" id="modifyPasswordBtn" @click="modifyPassword" class="easyui-linkbutton" data-options="iconCls:'icon icon-12-20'">[[#{btn.modifypasswd.tips}]]&nbsp;&nbsp;</a>
-                                <a href="#" id="loginOutBtn" @click="logout" class="easyui-linkbutton" data-options="iconCls:'icon icon-9-12'">[[#{btn.logout.tips}]]&nbsp;&nbsp;</a>
-                            </div>
-                        </div>
-                 </div>
             </div>
+            
+            <!--中间部分-->
+            <div data-options="region:'center',split:false,border:false" style="text-align: center;">
+                <div id="headerTitleDiv" style="height:100%;font-size:20px;padding-top:20px;display: block;">
+                    <label id="titleLabel" style="color:white;">[[#{web.title}]]</label>
+                </div>
+            </div>
+            
+            <!--右侧-->
+             <div data-options="region:'east',split:false,border:false" style="width:520px">
+                <div class="easyui-layout" data-options="fit:true">
+                    <!--右侧时间-->
+                    <div data-options="region:'north',split:false,border:false" style="height:40%;padding-top:4px;">
+                        <div class="easyui-layout" data-options="fit:true">
+                            <!--天气-->
+                            <div data-options="region:'west',split:false,border:false" style="width:340px;text-align: center;">
+                                <div id="weatherDiv" style="height:100%;padding-top:1px;display: block;">
+                                    <label style="color:white;">{{weatherObj.remark}}</label>&nbsp;&nbsp;
+                                    <label style="color:white;">{{weatherObj.lastUpdateTime}}</label>&nbsp;&nbsp;
+                                    <label style="color:white;">{{weatherObj.location}}</label>
+                                </div>
+                            </div>
+                            <!--时间-->
+                             <div data-options="region:'center',split:false,border:false" style="text-align: right;padding-right: 5px;">
+                                <span id="curTimeSpan" style="font-size:14px;color: white;">0000-00-00 00:00:00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--右侧按钮组-->
+                    <div data-options="region:'center',split:false,border:false" style="height:60%;padding-top: 4px;text-align: right;padding-right: 5px;">
+                        <a href="#" id="playMusicBtn" @click="playMusic" class="easyui-linkbutton" data-options="iconCls:'icon icon-15-1'">[[#{btn.music.tips}]]</a>
+                        <a href="#" id="signBtn" @click="signUp" class="easyui-linkbutton" data-options="iconCls:'icon icon-7-20'">[[#{btn.signin.tips}]]&nbsp;&nbsp;</a>
+                         <a href="#" id="qrcodeBtn" @click="showQRCode" class="easyui-linkbutton" data-options="iconCls:'icon icon-14-13'">[[#{btn.qrcode.tips}]]&nbsp;&nbsp;</a>
+                        <a href="#" id="settingBtn" @click="setting" class="easyui-linkbutton" data-options="iconCls:'icon icon-6-2'">[[#{btn.setting.tips}]]&nbsp;&nbsp;</a>
+                        <a href="#" id="modifyPasswordBtn" @click="modifyPassword" class="easyui-linkbutton" data-options="iconCls:'icon icon-12-20'">[[#{btn.modifypasswd.tips}]]&nbsp;&nbsp;</a>
+                        <a href="#" id="loginOutBtn" @click="logout" class="easyui-linkbutton" data-options="iconCls:'icon icon-9-12'">[[#{btn.logout.tips}]]&nbsp;&nbsp;</a>
+                    </div>
+                </div>
+             </div>
+        </div>
     </div>
     
     <!--网页南部区域：网页底部，版权等信息-->
