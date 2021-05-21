@@ -155,12 +155,12 @@
 
                             <!--右侧按钮组-->
                             <div data-options="region:'center',split:false,border:false" style="height:60%;padding-top: 4px;text-align: right;padding-right: 5px;">
-                                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon icon-15-1'" id="playMusicBtn">[[#{btn.music.tips}]]</a>
-                                <a href="#" id="signBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-7-20'">[[#{btn.signin.tips}]]&nbsp;&nbsp;</a>
-                                 <a href="#" id="qrcodeBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-14-13'">[[#{btn.qrcode.tips}]]&nbsp;&nbsp;</a>
-                                <a href="#" id="settingBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-6-2'">[[#{btn.setting.tips}]]&nbsp;&nbsp;</a>
-                                <a href="#" id="modifyPasswordBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-12-20'">[[#{btn.modifypasswd.tips}]]&nbsp;&nbsp;</a>
-                                <a href="#" id="loginOutBtn" class="easyui-linkbutton" data-options="iconCls:'icon icon-9-12'">[[#{btn.logout.tips}]]&nbsp;&nbsp;</a>
+                                <a href="#" id="playMusicBtn" @click="playMusic" class="easyui-linkbutton" data-options="iconCls:'icon icon-15-1'">[[#{btn.music.tips}]]</a>
+                                <a href="#" id="signBtn" @click="signUp" class="easyui-linkbutton" data-options="iconCls:'icon icon-7-20'">[[#{btn.signin.tips}]]&nbsp;&nbsp;</a>
+                                 <a href="#" id="qrcodeBtn" @click="showQRCode" class="easyui-linkbutton" data-options="iconCls:'icon icon-14-13'">[[#{btn.qrcode.tips}]]&nbsp;&nbsp;</a>
+                                <a href="#" id="settingBtn" @click="setting" class="easyui-linkbutton" data-options="iconCls:'icon icon-6-2'">[[#{btn.setting.tips}]]&nbsp;&nbsp;</a>
+                                <a href="#" id="modifyPasswordBtn" @click="modifyPassword" class="easyui-linkbutton" data-options="iconCls:'icon icon-12-20'">[[#{btn.modifypasswd.tips}]]&nbsp;&nbsp;</a>
+                                <a href="#" id="loginOutBtn" @click="logout" class="easyui-linkbutton" data-options="iconCls:'icon icon-9-12'">[[#{btn.logout.tips}]]&nbsp;&nbsp;</a>
                             </div>
                         </div>
                  </div>
@@ -325,7 +325,7 @@
                 </table>
             </div>
             <div region="south" border="false" style="text-align: right; height: 36px; line-height: 30px;">
-                <a class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" onclick="modifyPassword()">[[#{btn.confirm.text}]]</a>
+                <a class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" onclick="confirmPassword()">[[#{btn.confirm.text}]]</a>
                 <a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" onclick="cancelPassword()">[[#{btn.cancel.text}]]</a>
             </div>
         </div>
@@ -480,16 +480,6 @@
         $("#curTimeSpan").text(getCurrentTime());
     }, 1000);
 
-    // 音乐播放
-    $("#playMusicBtn").click(function (){
-        var displayStatus = $("#musicIframeDiv").css("display");
-        if (displayStatus == "none") {
-            $("#musicIframeDiv").css("display", "block");
-        } else {
-            $("#musicIframeDiv").css("display", "none");
-        }
-    });
-
     // 简易音乐播放器复位
     $("#resetMusicIframeDivPosBtn").click(adjustMusicWindowPosition);
     function adjustMusicWindowPosition() {
@@ -499,66 +489,13 @@
     //音乐播放器可拖动代码
     $.ws.dragPanelMove("#musicIframeHeader", "#musicIframeDiv");
 
-    // 每日签到
-    $("#signBtn").click(function() {
-        $.ajax({
-            type: 'POST',
-            url: '/zhddkk/wsSign/sign',
-            data: {"user": sessionUser},
-            async: true,
-            success: function (result) {
-                layer.msg(result.msg);
-            }
-        });
-    });
-
-    // 手机登录
-    $("#qrcodeBtn").click(function() {
-        var imgSrc = $("#qrcodeImg").attr("src");
-        if (imgSrc == "" || imgSrc == undefined) {
-            $.ajax({
-                type: 'POST',
-                url: '/showQRCode.do',
-                //dataType: 'json',
-                async: false,
-                success: function (result) {
-                    $("#qrDiv").css("display", "block");
-                    $("#qrcodeImg").css("display", "block");
-                    $("#qrcodeImg").attr("src", result);
-                }
-            });
-        } else {
-            $("#qrcodeImg").attr("src", "");
-            $("#qrDiv").css("display", "none");
-            $("#qrcodeImg").css("display", "none");
-        }
-    });
-
-    // 设置
-    $("#settingBtn").click(function() {
-        layer.open({
-            type: 2,
-            title: '设置个人信息',
-            shadeClose: true,
-            shade: 0.2,
-            area: ['540px', '580px'],
-            anim: 1,
-            content: '/zhddkk/wsUsers/setPersonalInfo.page?user=' + sessionUser
-        });
-    });
-
-    // 修改密码对话框打开
-    $("#modifyPasswordBtn").click(function (){
-        $('#modifyPasswordDiv').window('open');
-    });
-
     // 取消修改密码
     function cancelPassword() {
         $('#modifyPasswordDiv').window('close');
     }
 
     // 确认修改密码
-    function modifyPassword() {
+    function confirmPassword() {
         $.ajax({
             type: 'POST',
             url: '/zhddkk/wsUsers/updatePassword.do',
@@ -587,23 +524,6 @@
             },
             message: '两次密码不一致.'
         }
-    });
-
-    // 退出
-    $("#loginOutBtn").click(function() {
-        $.messager.confirm('退出', '确认退出吗?', function(r){
-            if (r){
-                $.ajax({
-                    type: 'POST',
-                    url: 'ws/logout.do',
-                    data: {"user": sessionUser},
-                    async: false,
-                    success: function (result) {
-                        top.location.href = rootUrl;
-                    }
-                });
-            }
-        });
     });
 
     //------------------------------------------------------底部-------------------------------------------------
@@ -725,6 +645,78 @@
                     }
                 });
             },
+            playMusic: function (){
+                var displayStatus = $("#musicIframeDiv").css("display");
+                if (displayStatus == "none") {
+                    $("#musicIframeDiv").css("display", "block");
+                } else {
+                    $("#musicIframeDiv").css("display", "none");
+                }
+            },
+            // 签到
+            signUp: function (){
+                $.ajax({
+                    type: 'POST',
+                    url: '/zhddkk/wsSign/sign',
+                    data: {"user": sessionUser},
+                    async: true,
+                    success: function (result) {
+                        layer.msg(result.msg);
+                    }
+                });
+            },
+            // 二维码登录
+            showQRCode: function (){
+                var imgSrc = $("#qrcodeImg").attr("src");
+                if (imgSrc == "" || imgSrc == undefined) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/showQRCode.do',
+                        async: false,
+                        success: function (result) {
+                            $("#qrDiv").css("display", "block");
+                            $("#qrcodeImg").css("display", "block");
+                            $("#qrcodeImg").attr("src", result);
+                        }
+                    });
+                } else {
+                    $("#qrcodeImg").attr("src", "");
+                    $("#qrDiv").css("display", "none");
+                    $("#qrcodeImg").css("display", "none");
+                }
+            },
+            // 设置
+            setting: function (){
+                layer.open({
+                    type: 2,
+                    title: '设置个人信息',
+                    shadeClose: true,
+                    shade: 0.2,
+                    area: ['540px', '580px'],
+                    anim: 1,
+                    content: '/zhddkk/wsUsers/setPersonalInfo.page?user=' + sessionUser
+                });
+            },
+            // 修改密码
+            modifyPassword: function (){
+                $('#modifyPasswordDiv').window('open');
+            },
+            // 退出
+            logout: function (){
+                $.messager.confirm('退出', '确认退出吗?', function(r){
+                    if (r){
+                        $.ajax({
+                            type: 'POST',
+                            url: 'ws/logout.do',
+                            data: {"user": sessionUser},
+                            async: false,
+                            success: function (result) {
+                                top.location.href = rootUrl;
+                            }
+                        });
+                    }
+                });
+            }
         },
         created: function (e) {
             this.grapWeatherInfo();
