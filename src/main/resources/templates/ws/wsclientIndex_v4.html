@@ -69,7 +69,7 @@
             margin: 0 6px;
         }
 
-        #northDiv {
+        #northRegionDiv {
             overflow: hidden; height: 67px;
             background: url(/js/easyui-1.9.11/images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
             line-height: 20px;
@@ -77,7 +77,7 @@
             font-family: Verdana, 微软雅黑,黑体;
         }
 
-        #northDiv .panel-body {
+        #northRegionDiv .panel-body {
             background-color: transparent;
             color: white;
         }
@@ -92,7 +92,7 @@
 
 <body class="easyui-layout" style="overflow-y: hidden"  scroll="no">
     <!--网页北部区域：头像、时间等信息-->
-    <div id="northDiv" region="north" split="false" border="true">
+    <div id="northRegionDiv" region="north" split="false" border="true">
 
             <div class="easyui-layout" data-options="fit:true">
                 <!--左侧-->
@@ -100,7 +100,7 @@
                     <div class="easyui-layout" data-options="fit:true">
                         <!--左侧头像-->
                         <div data-options="region:'west',split:false,border:false" style="width:62px;padding:1px;">
-                            <img id="headImage" th:src="${session.sessionInfo.selfImg}" width="100%" height="100%">
+                            <img id="headImage" :src="headImage" width="100%" height="100%">
                         </div>
                         <!--右侧-->
                         <div data-options="region:'center',split:false,border:false">
@@ -116,9 +116,9 @@
                                 <!--在线用户数、积分数-->
                                 <div data-options="region:'south',split:false,border:false" style="height:37%;padding: 5px 0 0 5px;overflow: hidden;">
                                       <span class="icon icon-11-19" th:title="#{span.onlinecount.tips}"></span>
-                                      <label id="onlineNum">0</label>&nbsp;&nbsp;
+                                      <label>{{onlineNum}}</label>&nbsp;&nbsp;
                                       <span class="icon icon-22-3" th:title="#{span.coinnum.tips}"></span>
-                                      <label id="coinNum">0</label>
+                                      <label>{{coinNum}}</label>
                                 </div>
                             </div>
                         </div>
@@ -141,9 +141,9 @@
                                     <!--天气-->
                                     <div data-options="region:'west',split:false,border:false" style="width:340px;text-align: center;">
                                         <div id="weatherDiv" style="height:100%;padding-top:1px;display: block;">
-                                            <label id="weatherInfo" style="color:white;"></label>&nbsp;&nbsp;
-                                            <label id="lastUpdateTime" style="color:white;"></label>&nbsp;&nbsp;
-                                            <label id="location" style="color:white;"></label>
+                                            <label style="color:white;">{{weatherObj.remark}}</label>&nbsp;&nbsp;
+                                            <label style="color:white;">{{weatherObj.lastUpdateTime}}</label>&nbsp;&nbsp;
+                                            <label style="color:white;">{{weatherObj.location}}</label>
                                         </div>
                                     </div>
                                     <!--时间-->
@@ -435,8 +435,6 @@
     });
 
     getNaviMenuList();
-    getOnlineInfo();
-    grapWeatherInfo();
 
     // 获取左侧导航栏菜单列表
     function getNaviMenuList() {
@@ -448,47 +446,6 @@
             success: function (result) {
                 if (result.code == 1) {
                     _menus.menus = result.data;
-                }
-            }
-        });
-    }
-
-    //获取在线人数和积分数量
-    function getOnlineInfo() {
-        $.ajax({
-            type: 'GET',
-            url: 'ws/getOnlineInfo.json',
-            async: false,
-            data: {"roomName": roomName, "user": sessionUser},
-            success: function (result) {
-                if (result.code != 1) {
-                    return;
-                }
-                onlineData = result.data;
-                var coinNum = onlineData.currentOnlineUserInfo.coinNum;
-                var onlineNum = onlineData.onlineUserList.length;
-
-                // 左上角头像、积分、在线人数
-                $("#coinNum").text(coinNum);
-                $("#onlineNum").text(onlineNum);
-                if (sessionSelfimg == null || sessionSelfimg == "") {
-                    $("#headImage").attr("src", rootUrl + "../img/" + $.ws.errorImageName);
-                }
-            }
-        });
-    }
-
-    //获取天气
-    function grapWeatherInfo() {
-        $.ajax({
-            type: 'GET',
-            url: rootUrl + 'index/grapWetherInfo',
-            async: false,
-            success: function (result) {
-                if (result.code == 1) {
-                    $("#weatherInfo").text(result.data.remark);
-                    $("#lastUpdateTime").text(result.data.lastUpdateTime);
-                    $("#location").text(result.data.location);
                 }
             }
         });
@@ -721,8 +678,60 @@
         });
     });
 
-    // 首页--我的好友列表
-    var app = new Vue({
+    // 头部部分
+    var northRegionVue = new Vue({
+        el: '#northRegionDiv',
+        data: {
+            coinNum: 0,
+            onlineNum: 0,
+            headImage: sessionSelfimg,
+            weatherObj: {},
+        },
+        methods: {
+            getOnlineInfo: function () {
+                var that = this;
+                $.ajax({
+                    type: 'GET',
+                    url: 'ws/getOnlineInfo.json',
+                    async: false,
+                    data: {"roomName": roomName, "user": sessionUser},
+                    success: function (result) {
+                        if (result.code != 1) {
+                            return;
+                        }
+                        onlineData = result.data;
+                        // 左上角头像、积分、在线人数
+                        that.coinNum = onlineData.currentOnlineUserInfo.coinNum;
+                        that.onlineNum = onlineData.onlineUserList.length;
+                        if (that.headImage == null || that.headImage == "") {
+                            that.headImage = rootUrl + "../img/" + $.ws.errorImageName;
+                        }
+                    }
+                });
+            },
+            //获取天气
+            grapWeatherInfo: function () {
+                var that = this;
+                $.ajax({
+                    type: 'GET',
+                    url: rootUrl + 'index/grapWetherInfo',
+                    async: false,
+                    success: function (result) {
+                        if (result.code == 1) {
+                            that.weatherObj = result.data;
+                        }
+                    }
+                });
+            },
+        },
+        created: function (e) {
+            this.getOnlineInfo();
+            this.grapWeatherInfo();
+        }
+    });
+
+    // 中间部分--我的好友列表、最新新闻列表
+    var centerRegionVue = new Vue({
         el: '#centerRegionDiv',
         data: {
             recentNewsList: {},  //最新消息列表
