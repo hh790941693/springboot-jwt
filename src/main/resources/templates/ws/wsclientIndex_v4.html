@@ -442,17 +442,33 @@
     });
 
     getNaviMenuList();
+    getOnlineInfo();
 
     // 获取左侧导航栏菜单列表
     function getNaviMenuList() {
         $.ajax({
             type: 'GET',
             url: rootUrl + '/zhddkk/sysMenu/getRoleMenuList?userId=' + sessionUserId,
-            async: true,
+            async: false,
             dataType: 'json',
             success: function (result) {
                 if (result.code == 1) {
                     _menus.menus = result.data;
+                }
+            }
+        });
+    }
+
+    // 获取积分和在线用户信息
+    function getOnlineInfo() {
+        $.ajax({
+            type: 'GET',
+            url: 'ws/getOnlineInfo.json',
+            async: false,
+            data: {"roomName": roomName, "user": sessionUser},
+            success: function (result) {
+                if (result.code == 1) {
+                    onlineData = result.data;
                 }
             }
         });
@@ -489,7 +505,7 @@
             type: 'POST',
             url: '/zhddkk/wsSign/sign',
             data: {"user": sessionUser},
-            async: false,
+            async: true,
             success: function (result) {
                 layer.msg(result.msg);
             }
@@ -689,33 +705,12 @@
     var northRegionVue = new Vue({
         el: '#northRegionDiv',
         data: {
-            coinNum: 0,
-            onlineNum: 0,
+            coinNum: onlineData.currentOnlineUserInfo.coinNum,
+            onlineNum: onlineData.onlineUserList.length,
             headImage: sessionSelfimg,
             weatherObj: {},
         },
         methods: {
-            getOnlineInfo: function () {
-                var that = this;
-                $.ajax({
-                    type: 'GET',
-                    url: 'ws/getOnlineInfo.json',
-                    async: false,
-                    data: {"roomName": roomName, "user": sessionUser},
-                    success: function (result) {
-                        if (result.code != 1) {
-                            return;
-                        }
-                        onlineData = result.data;
-                        // 左上角头像、积分、在线人数
-                        that.coinNum = onlineData.currentOnlineUserInfo.coinNum;
-                        that.onlineNum = onlineData.onlineUserList.length;
-                        if (that.headImage == null || that.headImage == "") {
-                            that.headImage = rootUrl + "../img/" + $.ws.errorImageName;
-                        }
-                    }
-                });
-            },
             //获取天气
             grapWeatherInfo: function () {
                 var that = this;
@@ -732,7 +727,6 @@
             },
         },
         created: function (e) {
-            this.getOnlineInfo();
             this.grapWeatherInfo();
         }
     });
