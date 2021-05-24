@@ -137,7 +137,7 @@ public class LoginController {
         }
 
         if (StringUtils.isNotBlank(errorMsg)) {
-            model.addAttribute("errorMsg", errorMsg);
+            request.setAttribute("errorMsg", errorMsg);
         }
         return "ws/login";
     }
