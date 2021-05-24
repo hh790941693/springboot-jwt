@@ -326,7 +326,7 @@
                     }, function (value, index) {
                         layer.close(index);
                         if (value != "") {
-                            sendNoticeToServer(this.roomName, value);
+                            sendNoticeMsgToServer(this.roomName, value);
                         } else {
                             alert("通知内容不能为空!");
                         }
@@ -371,7 +371,7 @@
                 return;
             }
 
-            sendMsgToServer(app.$data.roomName, sessionUser, toUser, msg);
+            sendChatMsgToServer(app.$data.roomName, sessionUser, toUser, msg);
 
             // 清空输入框内容
             app.$data.msgSend = "";
@@ -387,22 +387,8 @@
          * @param userTo  接收人
          * @param msg    聊天内容
          */
-        function sendMsgToServer(roomName, userFrom, userTo, msg) {
-            if (webSocket == null) {
-                var msg = "连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
-                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, msg, "red", 10);
-                return;
-            }
-
-            var toServerMsgObj = {};
-            toServerMsgObj.msgTypeId = app.$data.msgTypeMap.onlinechat.value;
-            toServerMsgObj.msgTypeDesc = app.$data.msgTypeMap.onlinechat.desc;
-            toServerMsgObj.roomName = roomName;
-            toServerMsgObj.from = userFrom;
-            toServerMsgObj.to = userTo;
-            toServerMsgObj.msg = msg;
-            var jsonObj = JSON.stringify(toServerMsgObj);
-            webSocket.send(jsonObj);
+        function sendChatMsgToServer(roomName, userFrom, userTo, msg) {
+            sendMessage(roomName, userFrom, userTo, msg, app.$data.msgTypeMap.onlinechat.value, app.$data.msgTypeMap.onlinechat.desc);
         }
 
         /**
@@ -412,22 +398,8 @@
          * @param roomName 房间名称
          * @param msg 通知内容
          */
-        function sendNoticeToServer(roomName, msg) {
-            if (webSocket == null) {
-                var msg = "连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
-                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc ,msg, "red", 10);
-                return;
-            }
-
-            var toServerMsgObj = {};
-            toServerMsgObj.msgTypeId = app.$data.msgTypeMap.notice.value;
-            toServerMsgObj.msgTypeDesc = app.$data.msgTypeMap.notice.desc;
-            toServerMsgObj.roomName = roomName;
-            toServerMsgObj.from = "";
-            toServerMsgObj.to = "";
-            toServerMsgObj.msg = msg;
-            var jsonObj = JSON.stringify(toServerMsgObj);
-            webSocket.send(jsonObj);
+        function sendNoticeMsgToServer(roomName, msg) {
+            sendMessage(roomName, "", "", msg, app.$data.msgTypeMap.notice.value, app.$data.msgTypeMap.notice.desc);
         }
 
         /**
@@ -438,18 +410,37 @@
          * @param userFrom 发送人
          * @param msg      状态内容。格式:input:0 或者input:1
          */
-        function sendStatusToServer(roomName, userFrom, msg) {
-            if (webSocket != null) {
-                var toServerMsgObj = {};
-                toServerMsgObj.msgTypeId = app.$data.msgTypeMap.status.value;
-                toServerMsgObj.msgTypeDesc = app.$data.msgTypeMap.status.desc;
-                toServerMsgObj.roomName = roomName;
-                toServerMsgObj.from = userFrom;
-                toServerMsgObj.to = "";
-                toServerMsgObj.msg = msg;
-                var jsonObj = JSON.stringify(toServerMsgObj);
-                webSocket.send(jsonObj);
+        function sendStatusMsgToServer(roomName, userFrom, msg) {
+            sendMessage(roomName, userFrom, "", msg, app.$data.msgTypeMap.status.value, app.$data.msgTypeMap.status.desc);
+        }
+
+        /**
+         * 发送消息.
+         * 用户发送的聊天内容(支持表情)
+         *
+         * @param roomName    房间名称
+         * @param userFrom    发送人
+         * @param userTo      接收人
+         * @param msg         聊天内容
+         * @param msgTypeId   消息类型id
+         * @param msgTypeDesc 消息类型名称
+         */
+        function sendMessage(roomName, userFrom, userTo, msg, msgTypeId, msgTypeDesc) {
+            if (webSocket == null) {
+                var msg = "连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, msg, "red", 10);
+                return;
             }
+
+            var toServerMsgObj = {};
+            toServerMsgObj.msgTypeId = msgTypeId;
+            toServerMsgObj.msgTypeDesc = msgTypeDesc;
+            toServerMsgObj.roomName = roomName;
+            toServerMsgObj.from = userFrom;
+            toServerMsgObj.to = userTo;
+            toServerMsgObj.msg = msg;
+            var jsonObj = JSON.stringify(toServerMsgObj);
+            webSocket.send(jsonObj);
         }
 
         /**
@@ -727,12 +718,12 @@
 
         // 输入框聚焦事件(发送状态消息,告诉服务器某用户正在输入中)
         $("#sendMsgInput").focus(function() {
-            sendStatusToServer(app.$data.roomName, sessionUser, "input:1");
+            sendStatusMsgToServer(app.$data.roomName, sessionUser, "input:1");
         });
 
         // 输入框失去焦点事件(发送状态消息,告诉服务器某用户已停止输入)
         $("#sendMsgInput").blur(function() {
-            sendStatusToServer(app.$data.roomName, sessionUser, "input:0");
+            sendStatusMsgToServer(app.$data.roomName, sessionUser, "input:0");
         });
 
         // 加载表情
