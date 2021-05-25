@@ -87,14 +87,6 @@
             var sessionRoleName = $("#sessionRoleName").val();
             var sessionJsonStr = $("#sessionJsonStr").val();
             var sessionJsonObject = eval('(' + $("#sessionJsonObject").val() + ')');
-
-            try {
-                var language = [[${#locale.language}]];
-                var counrty = [[${#locale.country}]];
-                $.ws.i18nInit(language, counrty);
-            } catch (e) {
-                console.log("加载国际化信息异常:" + e);
-            }
         </script>
     </div>
     

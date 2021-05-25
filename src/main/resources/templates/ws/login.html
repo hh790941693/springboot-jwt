@@ -191,9 +191,6 @@
 </body>
 
 <script th:inline="javascript">
-    // 加载国际化
-    $.ws.i18nInit([[${#locale.language}]], [[${#locale.country}]]);
-
     // 切换语言
     layui.form.on('select(langSelect)', function(data){
         layui.form.render('select');
@@ -340,11 +337,11 @@
     function showBackgroundAnimation() {
         if (backgroundAnimation) {
             $("#iframePage").attr("src", "");
-            $("#showBg").text($.ws.i18n("a.showh5.label"));
+            $("#showBg").text([[#{a.showh5.label}]]);
             backgroundAnimation = false;
         } else {
             $("#iframePage").attr("src", rootUrl + "canvas/snow.page");
-            $("#showBg").text($.ws.i18n("a.hideh5.label"));
+            $("#showBg").text([[#{a.hideh5.label}]]);
             backgroundAnimation = true;
         }
     }

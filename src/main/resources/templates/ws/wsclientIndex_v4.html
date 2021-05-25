@@ -505,7 +505,9 @@
     // 设置语言对话框打开
     $("#modifyLanguageBtn").click(function (){
         $('#modifyLanguageDiv').window('open');
-        $("input[name='language'][value='"+language+"_"+counrty+"']").prop("checked", "checked");
+        var language = '[[${#locale.language}]]';
+        var country = '[[${#locale.country}]]';
+        $("input[name='language'][value='"+language+"_"+country+"']").prop("checked", "checked");
     });
 
     // 设置语言确定
