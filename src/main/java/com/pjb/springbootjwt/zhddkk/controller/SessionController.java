@@ -67,14 +67,13 @@ public class SessionController {
     
     /**
      * 跳转session信息页面.
-     * 
-     * @param request 请求
+     *
      * @param model 模型
      * @return 会话信息
      */
     @RequestMapping("/sessionInfo.page")
-    public String sessionInfoPage(HttpServletRequest request, Model model) {
-        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(request, CommonConstants.SESSION_INFO);
+    public String sessionInfoPage(Model model) {
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
         
         if (null != sessionInfoBean) {
             SessionInfoBean copyBean = new SessionInfoBean();

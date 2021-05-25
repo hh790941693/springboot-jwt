@@ -69,7 +69,7 @@ public class OperationLogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String requestUrl = request.getRequestURL().toString();
 
-        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(request, CommonConstants.SESSION_INFO);
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
         String userName = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
 
 

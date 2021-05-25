@@ -13,6 +13,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsSignDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.service.WsSignService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import com.pjb.springbootjwt.zhddkk.util.TimeUtil;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -80,17 +81,14 @@ public class WsSignController extends AdminBaseController {
 
     /**
      * 签到.
-     * @param user 用户id
      * @return 签到结果
      */
     @OperationLogAnnotation(type = OperationEnum.INSERT, module = ModuleEnum.SIGN, subModule = "", describe = "用户签到")
     @ResponseBody
     @PostMapping("/sign")
-    public Result<String> sign(String user) {
-        if (StringUtils.isBlank(user)) {
-            return Result.fail();
-        }
-        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+    public Result<String> sign() {
+        String userId = SessionUtil.getSessionUserId();
+        WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
         if (null == wsUsersDO) {
             return Result.fail("用户不存在");
         }

@@ -37,7 +37,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         // 检查session
-        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(httpServletRequest, CommonConstants.SESSION_INFO);
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
         String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
 
         // 如果session信息存在,放行

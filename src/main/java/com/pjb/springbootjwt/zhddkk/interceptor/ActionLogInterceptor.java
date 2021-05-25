@@ -82,7 +82,7 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         System.out.println("耗时    : " + (System.currentTimeMillis() - startTime) + "ms");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss S");
         System.out.println("操作时间: " + dateFormat.format(new Date()));
-        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(request, CommonConstants.SESSION_INFO);
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
         if (null != sessionInfoBean) {
             String user = sessionInfoBean.getUserName();
             System.out.println("操作用户: " + user);
