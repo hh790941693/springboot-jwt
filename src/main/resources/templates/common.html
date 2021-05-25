@@ -76,17 +76,17 @@
         <input type="hidden" id="sessionJsonStr" th:value="${session.sessionInfo.jsonStr}">
         <input type="hidden" id="sessionJsonObject" th:value="${session.sessionInfo.jsonObject}">
         <script th:inline="javascript">
-            var sessionUserId = $("#sessionUserId").val();
-            var sessionUser = $("#sessionUser").val();
-            var sessionPassword = $("#sessionPassword").val();
-            var sessionWebserverIp = $("#sessionWebserverIp").val();
-            var sessionWebserverport = $("#sessionWebserverport").val();
-            var sessionSelfimg = $("#sessionSelfimg").val();
-            var sessionUseragent = $("#sessionUseragent").val();
-            var sessionRoleId = $("#sessionRoleId").val();
-            var sessionRoleName = $("#sessionRoleName").val();
-            var sessionJsonStr = $("#sessionJsonStr").val();
-            var sessionJsonObject = eval('(' + $("#sessionJsonObject").val() + ')');
+            var sessionUserId = [[${session.sessionInfo.userId}]];
+            var sessionUser = [[${session.sessionInfo.userName}]];
+            var sessionPassword = [[${session.sessionInfo.password}]];
+            var sessionWebserverIp = [[${session.sessionInfo.webserverIp}]];
+            var sessionWebserverport = [[${session.sessionInfo.webserverPort}]];
+            var sessionSelfimg = [[${session.sessionInfo.selfImg}]];
+            var sessionUseragent = [[${session.sessionInfo.userAgent}]];
+            var sessionRoleId = [[${session.sessionInfo.roleId}]];
+            var sessionRoleName = [[${session.sessionInfo.roleName}]];
+            var sessionJsonStr = [[${session.sessionInfo.jsonStr}]];
+            var sessionJsonObject = JSON.parse(sessionJsonStr);
         </script>
     </div>
     
