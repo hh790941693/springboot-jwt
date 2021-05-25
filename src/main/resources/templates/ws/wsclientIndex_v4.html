@@ -440,7 +440,7 @@
             type: 'GET',
             url: 'ws/getOnlineInfo.json',
             async: false,
-            data: {"roomName": roomName, "user": sessionUser},
+            data: {"roomName": roomName},
             success: function (result) {
                 if (result.code == 1) {
                     onlineData = result.data;

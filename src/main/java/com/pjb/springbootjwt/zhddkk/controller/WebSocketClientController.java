@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.redis.RedisUtil;
+import com.pjb.springbootjwt.util.JwtUtils;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
@@ -193,10 +194,7 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "getOnlineInfo.json")
     @ResponseBody
-    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value = "roomName") String roomName, @RequestParam(value = "user") String user) {
-        if (StringUtils.isBlank(user)) {
-            return Result.fail(new WsOnlineInfo());
-        }
+    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value = "roomName") String roomName) {
         Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClientsSessionMap(roomName);
 
         //所有用户
@@ -218,9 +216,10 @@ public class WebSocketClientController extends AdminBaseController {
         }
 
         //当前用户信息
-        WsUsersDO currentOnlineUserInfo = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+        String userId = SessionUtil.getSessionUserId();
+        WsUsersDO currentOnlineUserInfo = wsUsersService.selectById(userId);
         WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>()
-                .eq("user_id", currentOnlineUserInfo.getId()));
+                .eq("user_id", userId));
         if (null != wsUserProfileDO) {
             currentOnlineUserInfo.setHeadImage(wsUserProfileDO.getImg());
         }
@@ -233,7 +232,7 @@ public class WebSocketClientController extends AdminBaseController {
         woi.setOnlineUserList(onlineUserList);
         woi.setOfflineUserList(offlineUserList);
         //我的好友列表
-        List<WsUsersDO> friendsUserList = wsUsersService.queryMyFriendList(currentOnlineUserInfo.getId());
+        List<WsUsersDO> friendsUserList = wsUsersService.queryMyFriendList(Integer.valueOf(userId));
         woi.setFriendsList(friendsUserList);
         List<WsUsersDO> onineFriendList = friendsUserList.stream().filter(wu -> wu != null
                 && wu.getState().equals("1")).collect(Collectors.toList());

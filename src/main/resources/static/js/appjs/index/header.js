@@ -55,7 +55,7 @@ function getOnlineInfo() {
     $.ajax({
         type: 'GET',
         url: 'ws/getOnlineInfo.json',
-        data: {"roomName":"001", "user": sessionUser},
+        data: {"roomName":"001"},
         //dataType: 'json',
         success: function (result) {
             if (result.code != 1) {
