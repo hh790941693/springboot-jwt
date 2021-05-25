@@ -45,6 +45,9 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         }
 
         String url = request.getRequestURI();
+        if (url.contains("undefined")) {
+            return;
+        }
 
         System.out.println("-----------------------------------action请求-------------------------------------");
         String functionName =  handler.toString().trim();

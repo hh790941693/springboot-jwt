@@ -27,12 +27,15 @@ public class LoginInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
 
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
+        String servletPath = httpServletRequest.getServletPath();
+        if (servletPath.contains("undefined")) {
+            return false;
+        }
         boolean filter = (boolean)httpServletRequest.getAttribute("filter");
         if (!filter) {
             return true;
         }
 
-        String servletPath = httpServletRequest.getServletPath();
         // 检查session
         SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(httpServletRequest, CommonConstants.SESSION_INFO);
         String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
