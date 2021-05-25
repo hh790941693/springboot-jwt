@@ -100,7 +100,7 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "登陆首页页面")
     @RequestMapping({"", "/", "/index"})
-    public String home(Model model, HttpServletRequest request, String errorMsg) {
+    public String home(Model model, HttpServletRequest request, HttpServletResponse response, String errorMsg) {
         String version = request.getParameter("v");
         if (StringUtils.isNotBlank(version)) {
             switch(version){
@@ -112,6 +112,7 @@ public class LoginController {
                 default:
                     HOME_PAGE_NAME = "wsclientIndex_v4";
             }
+            setCookieObj(response, "homePageName", HOME_PAGE_NAME, CommonConstants.LOCALE_COOKIE_EXPIRE);
         }
 
         // 如果用户已登陆过，则直接跳转登陆成功首页
@@ -121,20 +122,19 @@ public class LoginController {
         }
 
         // 检查cookie
-        Cookie[] cookies = request.getCookies();
-        model.addAttribute(CommonConstants.S_USER, "");
-        model.addAttribute(CommonConstants.S_PASS, "");
-        if (null != cookies) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(CommonConstants.S_USER) && cookie.getMaxAge() != 0) {
-                    model.addAttribute(CommonConstants.S_USER, cookie.getValue());
-                } else if (cookie.getName().equals(CommonConstants.S_PASS) && cookie.getMaxAge() != 0) {
-                    //对密码进行解密
-                    String passDecrypt = SecurityAESUtil.decryptAES(cookie.getValue(), CommonConstants.AES_PASSWORD);
-                    model.addAttribute(CommonConstants.S_PASS, passDecrypt);
-                }
-            }
+        String userInit = "";
+        String passwordInit = "";
+        Cookie userCookie = getCookieObj(request, CommonConstants.S_USER);
+        if (null != userCookie && userCookie.getMaxAge() != 0){
+            userInit = userCookie.getValue();
         }
+        Cookie passwordCookie = getCookieObj(request, CommonConstants.S_PASS);
+        if (null != passwordCookie && passwordCookie.getMaxAge() != 0){
+            //对密码进行解密
+            passwordInit = SecurityAESUtil.decryptAES(passwordCookie.getValue(), CommonConstants.AES_PASSWORD);
+        }
+        model.addAttribute(CommonConstants.S_USER, userInit);
+        model.addAttribute(CommonConstants.S_PASS, passwordInit);
 
         if (StringUtils.isNotBlank(errorMsg)) {
             request.setAttribute("errorMsg", errorMsg);
@@ -160,7 +160,7 @@ public class LoginController {
         if (null == curUserObj) {
             // 用户未注册
             request.setAttribute("user", userName);
-            request.setAttribute("errorMsg", getLocaleMessage("login.err.user.not.exist", request));
+            request.setAttribute("errorMsg", getLocaleMessage("login.err.user.not.exist"));
             request.getRequestDispatcher("index").forward(request, response);
             //request.getRequestDispatcher("loginfail.page").forward(request, response);
             return;
@@ -171,7 +171,7 @@ public class LoginController {
         if (isEnable.equals("0")) {
             // 此账号已被禁用
             request.setAttribute("user", userName);
-            request.setAttribute("errorMsg", getLocaleMessage("login.err.user.disable", request));
+            request.setAttribute("errorMsg", getLocaleMessage("login.err.user.disable"));
             request.getRequestDispatcher("index").forward(request, response);
             return;
         }
@@ -190,7 +190,7 @@ public class LoginController {
         // 如果密码不对
         if (!password.equals(dbPassDecrypted)) {
             request.setAttribute("user", userName);
-            request.setAttribute("errorMsg", getLocaleMessage("login.err.password.wrong", request));
+            request.setAttribute("errorMsg", getLocaleMessage("login.err.password.wrong"));
             request.getRequestDispatcher("index").forward(request, response);
             return;
         }
@@ -200,13 +200,13 @@ public class LoginController {
         String verifyCode = null != verifyCodeCookie ? verifyCodeCookie.getValue() : "";
         if (StringUtils.isBlank(verifyCode)) {
             request.setAttribute("user", userName);
-            request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.invalid", request));
+            request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.invalid"));
             request.getRequestDispatcher("index").forward(request, response);
             return;
         }
         if (!verifyCodeInput.equals(verifyCode)) {
             request.setAttribute("user", userName);
-            request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong", request));
+            request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong"));
             request.getRequestDispatcher("index").forward(request, response);
             return;
         }
@@ -227,7 +227,7 @@ public class LoginController {
         session.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
         //记录cookie
-        saveCookie(request, response, curUserObj);
+        saveCookie(response, curUserObj);
 
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(session.getId(),
@@ -268,8 +268,14 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "登录成功页面")
     @RequestMapping(value = "home.page")
-    public String wsclientIndex() {
+    public String wsclientIndex(HttpServletRequest request, HttpServletResponse response) {
         logger.debug("访问home.page");
+        Cookie cookie = getCookieObj(request, "homePageName");
+        if (null != cookie) {
+            HOME_PAGE_NAME = cookie.getValue();
+        } else {
+            setCookieObj(response, "homePageName", HOME_PAGE_NAME, CommonConstants.LOCALE_COOKIE_EXPIRE);
+        }
         return "ws/" + HOME_PAGE_NAME;
     }
 
@@ -688,10 +694,9 @@ public class LoginController {
     /**
      * 根据messageId获取对应的国际化.
      * @param messageId 信息ID
-     * @param request 请求
      * @return 国际化后的信息
      */
-    private  String getLocaleMessage(String messageId, HttpServletRequest request) {
+    private String getLocaleMessage(String messageId) {
         Locale locale = LocaleContextHolder.getLocale();
         if (null == locale) {
             locale = Locale.SIMPLIFIED_CHINESE;
@@ -701,37 +706,24 @@ public class LoginController {
 
     /**
      * 保存cookie.
-     * @param request 请求体
      * @param response 响应体
      * @param curUserObj 当前登陆用户
      */
-    private void saveCookie(HttpServletRequest request, HttpServletResponse response, WsUsersDO curUserObj) {
-        //记录cookie
-        Cookie userIdCookie = new Cookie(CommonConstants.S_USER_ID, String.valueOf(curUserObj.getId()));
-        userIdCookie.setPath("/");
-        userIdCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT); //用户Id30分钟
+    private void saveCookie(HttpServletResponse response, WsUsersDO curUserObj) {
+        // 用户id
+        setCookieObj(response, CommonConstants.S_USER_ID, String.valueOf(curUserObj.getId()), CommonConstants.COOKIE_TIMEOUT);
 
-        Cookie userCookie = new Cookie(CommonConstants.S_USER, curUserObj.getName());
-        userCookie.setPath("/");
-        userCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT); //用户名30分钟
+        // 用户名
+        setCookieObj(response, CommonConstants.S_USER, curUserObj.getName(), CommonConstants.COOKIE_TIMEOUT);
 
-        Cookie passCookie = new Cookie(CommonConstants.S_PASS, curUserObj.getPassword());
-        passCookie.setPath("/");
-        passCookie.setMaxAge(600); //密码10分钟
+        // 用户密码
+        setCookieObj(response, CommonConstants.S_PASS, curUserObj.getPassword(), 600);
 
-        Cookie webserveripCookie = new Cookie(CommonConstants.S_WEBSERVERIP, webSocketConfig.getAddress());
-        webserveripCookie.setPath("/");
-        webserveripCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
+        // 服务器ip
+        setCookieObj(response, CommonConstants.S_WEBSERVERIP, webSocketConfig.getAddress(), CommonConstants.COOKIE_TIMEOUT);
 
-        Cookie webserverportCookie = new Cookie(CommonConstants.S_WEBSERVERPORT, webSocketConfig.getPort());
-        webserverportCookie.setPath("/");
-        webserverportCookie.setMaxAge(CommonConstants.COOKIE_TIMEOUT);
-
-        response.addCookie(userIdCookie);
-        response.addCookie(userCookie);
-        response.addCookie(passCookie);
-        response.addCookie(webserveripCookie);
-        response.addCookie(webserverportCookie);
+        // 服务器port
+        setCookieObj(response, CommonConstants.S_WEBSERVERPORT, webSocketConfig.getPort(), CommonConstants.COOKIE_TIMEOUT);
     }
 
     /**
@@ -750,5 +742,19 @@ public class LoginController {
             }
         }
         return null;
+    }
+
+    /**
+     * 存储cookie对象.
+     * @param response 响应对象
+     * @param key cookie对应的key
+     * @param value cookie对应的value
+     * @param expire 过期时间
+     */
+    private static void setCookieObj(HttpServletResponse response, String key, String value, int expire) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setPath("/");
+        cookie.setMaxAge(expire);
+        response.addCookie(cookie);
     }
 }
