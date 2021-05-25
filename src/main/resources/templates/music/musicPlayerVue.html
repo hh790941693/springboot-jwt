@@ -284,7 +284,7 @@
                     $(checkedTr).addClass("selectRowClass");
                     $("#player").attr("src", url);
 
-                    $("#statusSpan").text($.ws.i18n("span.palystatus.playing"));
+                    $("#statusSpan").text('[[#{span.palystatus.playing}]]');
                     $("#songName").html(filename);
                     if (app.playStatus == -1 || app.playStatus == 1) {
                         app.playStatus = 0; //播放中
@@ -292,7 +292,7 @@
                         $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
                     } else {
                         app.playStatus = 1; //暂停中
-                        $("#statusSpan").text($.ws.i18n("span.palystatus.paused"));
+                        $("#statusSpan").text('[[#{span.palystatus.paused}]]');
                         $("#player")[0].pause();
                         $("#btnPlay span").removeClass("glyphicon-pause").addClass("glyphicon-play");
                     }
@@ -344,7 +344,7 @@
                     var url = selectedMusicInfo.url;
 
                     $("#player").attr("src", url);
-                    $("#statusSpan").text($.ws.i18n("span.palystatus.playing"));
+                    $("#statusSpan").text('[[#{span.palystatus.playing}]]');
                     $("#songName").html(filename);
 
                     $("#player")[0].play();
@@ -428,11 +428,11 @@
                      target = event.currentTarget;
                     if (app.showMode == 0) {
                         $("#musicList").slideDown(500);
-                        $(target).text($.ws.i18n("btn.hidelist.label"));
+                        $(target).text('[[#{btn.hidelist.label}]]');
                         app.showMode = 1;
                     } else {
                         $("#musicList").slideUp(500);
-                        $(target).text($.ws.i18n("btn.showlist.label"));
+                        $(target).text('[[#{btn.showlist.label}]]');
                         app.showMode = 0;
                     }
                 },

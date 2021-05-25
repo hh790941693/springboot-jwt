@@ -522,7 +522,7 @@
         //连接成功
         function onOpen(event) {
             connectStatus = "1";
-            var msg = $.ws.i18n("label.connected");
+            var msg = '[[#{label.connected}]]';
             updateChatMsg(msg, "green", 10);
         }
 
@@ -791,11 +791,11 @@
         function setPageTitle() {
             let title = "";
             if (sessionUser == "admin") {
-                title = "page.serverindex.title";
+                title = '[[#{page.serverindex.title}]]'
             } else {
-                title = "page.clientindex.title";
+                title = '[[#{page.clientindex.title}]]'
             }
-            $("title").text($.ws.i18n(title));
+            $("title").text(title);
         }
 
         /**

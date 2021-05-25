@@ -1,4 +1,4 @@
-var headerTitle = $.ws.i18n("web.title");
+var headerTitle = '[[#{web.title}]]';
 if (sessionUser == "admin") {
     if (sessionSelfimg == "") {
         $("#myImg").attr("src", rootUrl + "img/headimg/admin.jpg");

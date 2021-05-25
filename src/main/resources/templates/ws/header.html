@@ -108,7 +108,6 @@
 </body>
     <script type="text/javascript">
         //头部头像
-        var headerTitle = $.ws.i18n("web.title");
         if (sessionUser == "admin") {
             if (sessionSelfimg == "") {
                 $("#myImg").attr("src", rootUrl + "img/headimg/admin.jpg");
@@ -164,7 +163,7 @@
         function getOnlineInfo() {
             $.ajax({
                 type: 'GET',
-                url: 'ws/getOnlineInfo.json',
+                url: rootUrl+'/ws/getOnlineInfo.json',
                 data: {"user": sessionUser},
                 //dataType: 'json',
                 success: function (result) {
@@ -192,7 +191,7 @@
         setInterval(function () {
             var titleStatus = $("#headerTitleDiv").css("display");
             if (titleStatus == "none") {
-                $("#titleLabel").text(headerTitle);
+                $("#titleLabel").text('[[#{web.title}]]');
                 $("#headerTitleDiv").css("display", "block");
                 $("#weatherDiv").css("display", "none");
             } else {
