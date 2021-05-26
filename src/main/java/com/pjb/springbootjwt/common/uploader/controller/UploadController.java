@@ -2,6 +2,7 @@ package com.pjb.springbootjwt.common.uploader.controller;
 
 import com.pjb.springbootjwt.common.uploader.service.UploadService;
 import com.pjb.springbootjwt.zhddkk.bean.FileUploadResultBean;
+import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.helper.StringUtil;
@@ -26,6 +27,9 @@ public class UploadController {
 
     @Autowired
     private UploadService uploadService;
+
+    @Autowired
+    private CacheService cacheService;
 
     /**
      * 上传资源文件
@@ -108,6 +112,8 @@ public class UploadController {
                         }
                     }
                 }
+                // 更新缓存
+                cacheService.cacheUserFileData();
             }
         } catch (Exception e) {
             logger.info("上传出现异常:{}",e.getMessage());

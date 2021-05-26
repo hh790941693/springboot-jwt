@@ -142,7 +142,7 @@ public class WsCommonController extends AdminBaseController {
     public Result<String> save(WsCommonDO wsCommon) {
         wsCommonService.insert(wsCommon);
         // 刷新缓存
-        cacheService.cacheData();
+        cacheService.cacheCommonData();
         return Result.ok();
     }
 
@@ -155,7 +155,7 @@ public class WsCommonController extends AdminBaseController {
     public Result<String> update(WsCommonDO wsCommon) {
         wsCommonService.updateById(wsCommon);
         // 刷新缓存
-        cacheService.cacheData();
+        cacheService.cacheCommonData();
         return Result.ok();
     }
 
@@ -169,7 +169,7 @@ public class WsCommonController extends AdminBaseController {
     public Result<String> remove(Integer id) {
         wsCommonService.deleteById(id);
         // 刷新缓存
-        cacheService.cacheData();
+        cacheService.cacheCommonData();
         return Result.ok();
     }
 
@@ -182,7 +182,7 @@ public class WsCommonController extends AdminBaseController {
     public Result<String> remove(@RequestParam("ids[]") Integer[] ids) {
         wsCommonService.deleteBatchIds(Arrays.asList(ids));
         // 刷新缓存
-        cacheService.cacheData();
+        cacheService.cacheCommonData();
         return Result.ok();
     }
 

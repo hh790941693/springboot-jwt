@@ -14,6 +14,7 @@ import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
+import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.service.WsFileService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
@@ -47,6 +48,9 @@ public class FileOperationController {
     
     @Autowired
     private UploadConfig uploadConfig;
+
+    @Autowired
+    private CacheService cacheService;
 
     /**
      * 音乐播放首页.
@@ -96,6 +100,7 @@ public class FileOperationController {
                     logger.info("删除文件:{} " + file.getAbsolutePath());
                     file.delete();
                 }
+                cacheService.cacheUserFileData();
                 return Result.ok();
             }
         }

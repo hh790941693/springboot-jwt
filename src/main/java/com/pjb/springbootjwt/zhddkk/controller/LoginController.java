@@ -251,7 +251,7 @@ public class LoginController {
         }
 
         // 缓存常用表数据
-        cacheService.cacheData();
+        cacheService.cacheAllData();
 
         // 更新用户登录状态和时间
         curUserObj.setState("1");

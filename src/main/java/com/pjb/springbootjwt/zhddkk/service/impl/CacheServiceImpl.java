@@ -32,11 +32,31 @@ public class CacheServiceImpl implements CacheService {
     private WsFileService wsFileService;
 
     @Override
-    public void cacheData() {
-        logger.info("--------------------开始缓存数据-------------------");
+    public void cacheAllData() {
+        logger.info("--------------------开始缓存所有数据-------------------");
         initCommonData();
         initUserData();
         initUserProfileData();
+        initUserFileData();
+    }
+
+    @Override
+    public void cacheCommonData() {
+        initCommonData();
+    }
+
+    @Override
+    public void cacheUserData() {
+        initUserData();
+    }
+
+    @Override
+    public void cacheUserProfileData() {
+        initUserProfileData();
+    }
+
+    @Override
+    public void cacheUserFileData() {
         initUserFileData();
     }
 

@@ -22,6 +22,6 @@ public class CacheDataRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // 缓存数据
-        cacheService.cacheData();
+        cacheService.cacheAllData();
     }
 }
