@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -77,7 +79,7 @@ public class UploadController {
      * @return 上传文件的完整访问路径
      */
     @PostMapping("/uploadMusic")
-    public Map<String, FileUploadResultBean> uploadMusic(
+    public Result<List<FileUploadResultBean>> uploadMusic(
             @RequestParam(required = true)MultipartFile[] file,
             @RequestParam(required = false, defaultValue = "music")String folder
     ) {
@@ -85,6 +87,7 @@ public class UploadController {
         Map<String, FileUploadResultBean> map = new HashMap<>();
         String url = "";
         String userName = SessionUtil.getSessionUserName();
+        List<FileUploadResultBean> resultList = new ArrayList<>();
         try {
             if (null != file && file.length>0){
                 logger.info("开始上传文件");
@@ -97,11 +100,11 @@ public class UploadController {
                             url = uploadService.uploadFile(tempfile, folder, userName);
                             logger.info("返回的文件url:{}", url);
                             FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, true, url);
-                            map.put(originFilename, fileUploadResultBean);
+                            resultList.add(fileUploadResultBean);
                         }catch (Exception e){
                             logger.info("上传文件异常:{}",originFilename);
                             FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, false, "");
-                            map.put(originFilename, fileUploadResultBean);
+                            resultList.add(fileUploadResultBean);
                         }
                     }
                 }
@@ -112,7 +115,7 @@ public class UploadController {
             logger.info("上传出现异常:{}",e.getMessage());
             e.printStackTrace();
         }
-        return map;
+        return Result.ok(resultList);
     }
 
     /**

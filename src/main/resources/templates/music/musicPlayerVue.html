@@ -195,7 +195,7 @@
                 percent = Math.round(percent).toFixed(0)+"%";
                 layui.element.progress('uploadProgress', percent);
 
-                var resObj = res[Object.keys(res)[0]];
+                var resObj = res.data[0];
                 var filename = resObj.filename;
                 var uploadFlag = resObj.uploadFlag;
                 if (uploadFlag) {
