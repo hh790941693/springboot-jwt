@@ -353,8 +353,7 @@
             $.ajax({
                 type: "POST",
                 url: rootUrl + "file/delFile.do",
-                data: {id: id},
-                //dataType:'json',
+                data: {'id': id},
                 success: function (result) {
                     if (result.code == 1) {
                         layer.msg("操作成功");

@@ -170,7 +170,7 @@
         //选完文件后不自动上传
         layui.upload.render({
             elem: '#chooseFileBtn' //选择文件按钮
-            ,url: rootUrl+"/upload/app/uploadMusic" //接口url
+            ,url: $.ws.uploadMusicUrl //接口url
             ,field: 'file'    //文件对象名称
             ,data: {          //POST请求参数
                 'folder': 'music'

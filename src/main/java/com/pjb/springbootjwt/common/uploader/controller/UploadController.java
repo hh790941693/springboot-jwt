@@ -34,7 +34,7 @@ public class UploadController {
      * @param folder 要存放的路径，如果为空，则默认存放temp文件夹
      * @return 上传文件的完整访问路径
      */
-    @PostMapping
+    @PostMapping("/uploadFile")
     public Map<String, Object> upload(
             @RequestParam(required = true)MultipartFile[] file,
             @RequestParam(required = false)String folder,
@@ -82,7 +82,7 @@ public class UploadController {
     @PostMapping("/uploadMusic")
     public Map<String, FileUploadResultBean> uploadMusic(
             @RequestParam(required = true)MultipartFile[] file,
-            @RequestParam(required = false)String folder
+            @RequestParam(required = false, defaultValue = "music")String folder
     ) {
         logger.info("进入上传文件控制层, 目录名:{}", folder);
         Map<String, FileUploadResultBean> map = new HashMap<>();

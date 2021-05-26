@@ -143,7 +143,7 @@
         function renderImg(btnName, imgName, inputName) {
             layui.upload.render({
                 elem: '#' + btnName,
-                url: $.ws.uploadUrl,
+                url: $.ws.uploadFileUrl,
                 size: 10240,//单位为KB
                 accept: 'images',
                 data: {

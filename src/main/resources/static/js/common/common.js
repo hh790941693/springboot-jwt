@@ -4,10 +4,12 @@ host = window.location.host;
 //公共配置和接口
 $.ws = {
 
-    //上传文件接口地址
-    uploadUrl: protocol + "//" + host + "/upload/app",
-
+    //上传普通文件接口地址
+    uploadFileUrl: protocol + "//" + host + "/upload/app/uploadFile",
+    //h5编辑器上传接口地址
     uploadByFroalaUrl: protocol + "//" + host + "/upload/app/uploadByFroala",
+    // 上传音乐文件接口地址
+    uploadMusicUrl: protocol + "//" + host + "/upload/app/uploadMusic",
 
     //图片显示异常时,显示该图片
     errorImageName: "imgerror_default.jpg",

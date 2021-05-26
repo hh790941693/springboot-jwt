@@ -44,7 +44,7 @@ function initUpload() {
     //上传文件url
     layui.upload.render({
         elem: '#imageBtn',
-        url: $.ws.uploadUrl,
+        url: $.ws.uploadFileUrl,
         size: 10240,//单位为KB
         accept: 'images',
         data: {
