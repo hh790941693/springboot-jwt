@@ -215,7 +215,6 @@ public class WsUsersController extends AdminBaseController {
     public Result<String> addAsFriends(Integer friendUserId) {
         String fromUserId = SessionUtil.getSessionUserId();
         WsUsersDO fromUser = wsUsersService.selectById(fromUserId);
-
         WsUsersDO friendUser = wsUsersService.selectById(friendUserId);
         
         logger.info(fromUser.getName() + "申请添加" + friendUser.getName() + "为好友");

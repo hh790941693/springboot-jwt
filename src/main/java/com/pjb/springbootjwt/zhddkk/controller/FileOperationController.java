@@ -16,13 +16,16 @@ import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
+import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFileService;
+import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
 import com.pjb.springbootjwt.zhddkk.util.ServiceUtil;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -56,7 +59,7 @@ public class FileOperationController {
     
     @Autowired
     private UploadConfig uploadConfig;
-    
+
     /**
      * 音乐播放首页.
      * 
@@ -64,47 +67,28 @@ public class FileOperationController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.MUSIC, subModule = "", describe = "音乐播放器首页")
     @RequestMapping("musicPlayer.page")
-    public String musicPlayer(Model model, @RequestParam(value = "user", required = false) String user) {
-        model.addAttribute("user", user);
+    public String musicPlayer() {
         return "music/musicPlayerVue";
     }
     
     /**
      * 音乐播放器简版.
-     * 
-     * @param model
-     * @param user
+     *
      * @return
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.MUSIC, subModule = "", describe = "简易音乐播放器首页")
     @RequestMapping("musicPlayerSimple.page")
-    public String musicPlayerSimple(Model model, @RequestParam(value = "user", required = false) String user) {
-        model.addAttribute("user", user);
+    public String musicPlayerSimple() {
         return "music/musicPlayerSimple";
     }
-    
-    /**
-     * 上传文件首页.
-     *
-     * @param fileType
-     * @return
-     */
-    @RequestMapping("upload.page")
-    public String uploadFile(Model model, @RequestParam(value = "user", required = false) String user,
-        @RequestParam(value = "fileType", required = false) String fileType) {
-        model.addAttribute("user", user);
-        model.addAttribute("fileType", fileType);
-        return "music/upload";
-    }
-    
+
     /**
      * 上传文件结果.
-     * 
-     * @param model
+     *
      * @return
      */
     @RequestMapping("uploadResult.page")
-    public String uploadFile(Model model) {
+    public String uploadFile() {
         return "music/uploadResult";
     }
     
@@ -112,7 +96,7 @@ public class FileOperationController {
     @RequestMapping("delFile.do")
     @ResponseBody
     @Transactional
-    public Result<String> delFile(@RequestParam(value = "id", required = true) int id) {
+    public Result<String> delFile(@RequestParam(value = "id") int id) {
         WsFileDO wsFileDO = wsFileService.selectById(id);
         if (null != wsFileDO) {
             boolean delFlag = wsFileService.deleteById(id);
@@ -208,13 +192,13 @@ public class FileOperationController {
     @RequestMapping("showFiles.do")
     @ResponseBody
     // @Cacheable(value="musicList") 需要启动redis才可以
-    public Result<List<WsFileDO>> showFiles(HttpServletRequest request,
-        @RequestParam(value = "user", required = false) String user, @RequestParam("fileType") String fileType) {
+    public Result<List<WsFileDO>> showFiles(@RequestParam("fileType") String fileType) {
+        String userName = SessionUtil.getSessionUserName();
         List<WsFileDO> fileList = CoreCache.getInstance().getUserFileList();
         if (null != fileList && fileList.size() > 0) {
-            fileList = fileList.stream().filter(cache -> StringUtils.isNotBlank(cache.getUser()) && cache.getUser().equals(user)).filter(cache -> StringUtils.isNotBlank(cache.getFolder()) && cache.getFolder().equals(fileType)).sorted(Comparator.comparing(WsFileDO::getId)).collect(Collectors.toList());
+            fileList = fileList.stream().filter(cache -> StringUtils.isNotBlank(cache.getUser()) && cache.getUser().equals(userName)).filter(cache -> StringUtils.isNotBlank(cache.getFolder()) && cache.getFolder().equals(fileType)).sorted(Comparator.comparing(WsFileDO::getId)).collect(Collectors.toList());
         } else {
-            fileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", user).eq("folder", fileType));
+            fileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", userName).eq("folder", fileType));
         }
         
         List<WsFileDO> needBatchUpdateList = new ArrayList<>();

@@ -173,7 +173,6 @@
             ,url: rootUrl+"/upload/app/uploadMusic" //接口url
             ,field: 'file'    //文件对象名称
             ,data: {          //POST请求参数
-                'user': sessionUser,
                 'folder': 'music'
             }
             ,auto: false      //选择文件后是否自动上传
@@ -251,11 +250,10 @@
                 queryMusicList: function () {
                     // 查询歌曲列表
                     var fileType = "music";
-                    var user = sessionUser;
                     $.ajax({
                         type: "POST",
                         url: rootUrl + "file/showFiles.do",
-                        data: {user: user, fileType: fileType},
+                        data: {'fileType': fileType},
                         success: function (result) {
                             if (result.code == 1) {
                                 app.musicData = result.data;

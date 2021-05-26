@@ -48,8 +48,7 @@ function initUpload() {
         size: 10240,//单位为KB
         accept: 'images',
         data: {
-            "folder": "feedback",
-            "user": user
+            "folder": "feedback"
         },
         before: function () {
             layer.load();

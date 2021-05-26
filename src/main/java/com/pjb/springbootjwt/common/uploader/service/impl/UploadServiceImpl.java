@@ -4,7 +4,6 @@ import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.common.uploader.service.UploadService;
 import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.service.WsFileService;
-import com.pjb.springbootjwt.zhddkk.util.MusicParserUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,9 +29,9 @@ public class UploadServiceImpl implements UploadService {
     private WsFileService wsFileService;
     
     @Override
-    public String uploadFile(MultipartFile file, String folder, String userId)
+    public String uploadFile(MultipartFile file, String folder, String userName)
         throws Exception {
-        logger.info("进入上传文件业务层,目录名:{} 用户id:{}", folder, userId);
+        logger.info("进入上传文件业务层,目录名:{} 用户:{}", folder, userName);
         if (StringUtils.isBlank(folder)) {
             folder = TEMP_PATH;
         }
@@ -46,7 +45,7 @@ public class UploadServiceImpl implements UploadService {
         String viewUrl = uploadConfig.getViewUrl() + folder + "/" + newFileName;
         
         WsFileDO wsFileDO = new WsFileDO();
-        wsFileDO.setUser(userId);
+        wsFileDO.setUser(userName);
         wsFileDO.setFolder(folder);
         wsFileDO.setFilename(file.getOriginalFilename());
         if (uploadConfig.getStorePath().endsWith(File.separator)) {

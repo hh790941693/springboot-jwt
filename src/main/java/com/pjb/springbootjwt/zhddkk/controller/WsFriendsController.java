@@ -69,8 +69,8 @@ public class WsFriendsController extends AdminBaseController {
     @GetMapping("/list")
     public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDTO){
         Wrapper<WsFriendsDO> wrapper = new EntityWrapper<WsFriendsDO>();
-        String userId = SessionUtil.getSessionUserId();
-        wrapper.eq("t1.uid", userId);
+        String uname = SessionUtil.getSessionUserName();
+        wrapper.eq("t1.uname", uname);
         if (StringUtils.isNotBlank(wsFriendsDTO.getFname())){
             wrapper.like("t1.fname", wsFriendsDTO.getFname());
         }

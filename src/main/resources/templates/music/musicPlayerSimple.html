@@ -98,7 +98,7 @@
                     $.ajax({
                         type: "POST",
                         url: rootUrl + "file/showFiles.do",
-                        data: {'user': sessionUser, 'fileType': "music"},
+                        data: {'fileType': "music"},
                         success: function (result) {
                             if (result.code == 1) {
                                 app.musicData = result.data;

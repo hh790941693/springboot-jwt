@@ -36,6 +36,17 @@ public class SessionUtil {
         return null;
     }
 
+    public static String getSessionUserName() {
+        HttpSession httpSession = getRequest().getSession(false);
+        if (null != httpSession) {
+            SessionInfoBean sessionInfoBean = (SessionInfoBean)httpSession.getAttribute(CommonConstants.SESSION_INFO);
+            if (null != sessionInfoBean) {
+                return sessionInfoBean.getUserName();
+            }
+        }
+        return null;
+    }
+
     private static HttpServletRequest getRequest() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes();

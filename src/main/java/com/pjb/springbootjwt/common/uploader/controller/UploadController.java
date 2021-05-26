@@ -2,7 +2,9 @@ package com.pjb.springbootjwt.common.uploader.controller;
 
 import com.pjb.springbootjwt.common.uploader.service.UploadService;
 import com.pjb.springbootjwt.zhddkk.bean.FileUploadResultBean;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.helper.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,6 @@ public class UploadController {
      *
      * @param file   文件
      * @param folder 要存放的路径，如果为空，则默认存放temp文件夹
-     * @param user 用戶ID
      * @return 上传文件的完整访问路径
      */
     @PostMapping
@@ -39,9 +40,13 @@ public class UploadController {
             @RequestParam(required = false)String folder,
             @RequestParam(required = false)String user
     ) {
-        logger.info("进入上传文件控制层, 目录名:{} 用户ID:{}", folder, user);
+        logger.info("进入上传文件控制层, 目录名:{}", folder);
         Map<String, Object> map = new HashMap<>();
         String url = "";
+        String userName = SessionUtil.getSessionUserName();
+        if (StringUtil.isBlank(userName)) {
+            userName = user;
+        }
         try {
             if (null != file && file.length>0){
                 logger.info("开始上传文件");
@@ -49,7 +54,7 @@ public class UploadController {
                     MultipartFile tempfile = file[i];
                     if (!tempfile.isEmpty()){
                         logger.info("开始上传文件:{}", tempfile.getOriginalFilename());
-                        url = uploadService.uploadFile(tempfile, folder, user);
+                        url = uploadService.uploadFile(tempfile, folder, userName);
                         logger.info("返回的文件url:{}", url);
                         map.put("code", "1");
                         map.put("msg", "操作成功");
@@ -72,18 +77,17 @@ public class UploadController {
      *
      * @param file   文件
      * @param folder 要存放的路径，如果为空，则默认存放temp文件夹
-     * @param user 用戶ID
      * @return 上传文件的完整访问路径
      */
     @PostMapping("/uploadMusic")
     public Map<String, FileUploadResultBean> uploadMusic(
             @RequestParam(required = true)MultipartFile[] file,
-            @RequestParam(required = false)String folder,
-            @RequestParam(required = false)String user
+            @RequestParam(required = false)String folder
     ) {
-        logger.info("进入上传文件控制层, 目录名:{} 用户ID:{}", folder, user);
+        logger.info("进入上传文件控制层, 目录名:{}", folder);
         Map<String, FileUploadResultBean> map = new HashMap<>();
         String url = "";
+        String userName = SessionUtil.getSessionUserName();
         try {
             if (null != file && file.length>0){
                 logger.info("开始上传文件");
@@ -93,7 +97,7 @@ public class UploadController {
                         String originFilename = tempfile.getOriginalFilename();
                         try {
                             logger.info("开始上传文件:{}", originFilename);
-                            url = uploadService.uploadFile(tempfile, folder, user);
+                            url = uploadService.uploadFile(tempfile, folder, userName);
                             logger.info("返回的文件url:{}", url);
                             FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, true, url);
                             map.put(originFilename, fileUploadResultBean);

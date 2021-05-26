@@ -9,9 +9,9 @@ public interface UploadService {
      *
      * @param file       文件对象
      * @param folder     子目录名
-     * @param userId     用户id
+     * @param userName     用户名称
      * @return
      * @throws Exception
      */
-    String uploadFile(MultipartFile file, String folder, String userId) throws Exception;
+    String uploadFile(MultipartFile file, String folder, String userName) throws Exception;
 }

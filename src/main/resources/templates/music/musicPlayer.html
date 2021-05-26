@@ -50,7 +50,6 @@
         <div id="addMusic" align="center">
             <form action="/upload/app/uploadMusic" method="post" enctype="multipart/form-data"
                   onsubmit="return verify()" target="hidden_frame">
-                <input type="text" id="user" name="user" th:value="${user}" hidden="true">
                 <input type="hidden" name="folder" value="music">
                 文件:<input id="fileInput" type="file" name="file" multiple="multiple" accept="audio/mpeg"
                           style="display: inline-block;">
@@ -277,13 +276,10 @@
         showMusic();
         // 显示歌曲列表
         function showMusic() {
-            var fileType = "music";
-            var user = $('#user').val();
             $.ajax({
                 type: "POST",
                 url: rootUrl + "file/showFiles.do",
-                data: {user: user, fileType: fileType},
-                //dataType:'json',
+                data: {'fileType': 'music'},
                 success: function (result) {
                     var dataList = result.dataList;
                     for (var i = 0; i < dataList.length; i++) {
