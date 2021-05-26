@@ -18,7 +18,6 @@ import com.pjb.springbootjwt.zhddkk.util.TimeUtil;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +59,8 @@ public class WsSignController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.SIGN, subModule = "", describe = "用户签到页面")
     @GetMapping()
     //@RequiresPermissions("zhddkk:wsSign:wsSign")
-    public String wsSign(Model model, String user) {
+    public String wsSign() {
         logger.info("用户签到页面");
-        model.addAttribute("user", user);
         return "zhddkk/wsSign/wsSign";
     }
 
@@ -72,8 +70,9 @@ public class WsSignController extends AdminBaseController {
     @ResponseBody
     @GetMapping("/list")
     //@RequiresPermissions("zhddkk:wsSign:wsSign")
-    public Result<Page<WsSignDO>> list(String userName) {
+    public Result<Page<WsSignDO>> list() {
         Wrapper<WsSignDO> wrapper = new EntityWrapper<WsSignDO>();
+        String userName = SessionUtil.getSessionUserName();
         wrapper.eq("user_name", userName).orderBy("create_time", false);
         Page<WsSignDO> page = wsSignService.selectPage(getPage(WsSignDO.class), wrapper);
         return Result.ok(page);

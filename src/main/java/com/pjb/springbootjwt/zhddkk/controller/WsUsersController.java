@@ -80,8 +80,7 @@ public class WsUsersController extends AdminBaseController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "用户列表页面")
     @GetMapping("/wsUsers")
-    public String wsUsers(Model model, String user) {
-        model.addAttribute("user", user);
+    public String wsUsers() {
         return "zhddkk/wsUsers/wsUsers";
     }
     
@@ -91,7 +90,7 @@ public class WsUsersController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "用户列表")
     @ResponseBody
     @GetMapping("/wsUsersList")
-    public Result<Page<WsUsersDO>> list(WsUsersDO wsUsersDTO, String curUser) {
+    public Result<Page<WsUsersDO>> list(WsUsersDO wsUsersDTO) {
         Wrapper<WsUsersDO> wrapper = new EntityWrapper<WsUsersDO>();
         if (StringUtils.isNotBlank(wsUsersDTO.getName())) {
             wrapper.like("t1.name", wsUsersDTO.getName(), SqlLike.DEFAULT);
@@ -99,22 +98,23 @@ public class WsUsersController extends AdminBaseController {
         Page<WsUsersDO> page = getPage(WsUsersDO.class);
         List<WsUsersDO> userList = wsUsersService.queryUserPage(page, wrapper);
         page.setRecords(userList);
-        
+
+        String curUserName = SessionUtil.getSessionUserName();
         if (null != userList && userList.size() > 0) {
             for (WsUsersDO wu : userList) {
-                if (wu.getName().equals(curUser)) {
+                if (wu.getName().equals(curUserName)) {
                     wu.setIsFriend(3);
                     continue;
                 }
                 wu.setIsFriend(0);
                 int isMyFriend = wsFriendsService
-                    .selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", curUser).eq("fname", wu.getName()));
+                    .selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", curUserName).eq("fname", wu.getName()));
                 if (isMyFriend > 0) {
                     wu.setIsFriend(3); // 已是好友
                 } else {
                     // 0:不是 1:申请中 2:被拒绝 3:申请成功
                     List<WsFriendsApplyDO> applyList = wsFriendsApplyService.selectList(
-                        new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUser).eq("to_name", wu.getName()));
+                        new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUserName).eq("to_name", wu.getName()));
                     if (null == applyList || applyList.size() == 0) {
                         wu.setIsFriend(0); // 去申请
                     } else if (applyList.size() == 1) {
