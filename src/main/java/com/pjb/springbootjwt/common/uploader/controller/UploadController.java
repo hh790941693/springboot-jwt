@@ -127,24 +127,23 @@ public class UploadController {
      *
      * @param file   文件
      * @param folder 要存放的路径，如果为空，则默认存放temp文件夹
-     * @param user 用戶ID
      * @return 上传文件的完整访问路径
      */
     @PostMapping("/uploadByFroala")
     public Map<String, Object> uploadByFroala(
             @RequestParam(required = true)MultipartFile file,
-            @RequestParam(required = false)String folder,
-            @RequestParam(required = false)String user
+            @RequestParam(required = false)String folder
     ) {
-        logger.info("进入上传文件控制层, 目录名:{} 用户ID:{}", folder, user);
+        logger.info("进入上传文件控制层, 目录名:{}", folder);
         Map<String, Object> map = new HashMap<>();
         String url = "";
+        String userName = SessionUtil.getSessionUserName();
         try {
             if (null != file){
                 logger.info("开始上传文件");
                 if (!file.isEmpty()){
                     logger.info("开始上传文件:{}", file.getOriginalFilename());
-                    url = uploadService.uploadFile(file, folder, user);
+                    url = uploadService.uploadFile(file, folder, userName);
                     logger.info("返回的文件url:{}", url);
                     map.put("code", "1");
                     map.put("msg", "操作成功");
