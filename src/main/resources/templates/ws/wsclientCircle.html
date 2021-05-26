@@ -321,8 +321,7 @@
             $.ajax({
                 type: 'POST',
                 url: rootUrl + 'ws/toLike.do',
-                //dataType: 'json',
-                data: {user: sessionUser, circleId: circleId},
+                data: {'circleId': circleId},
                 async: false,
                 success: function (result) {
                     if (result.code == 1) {

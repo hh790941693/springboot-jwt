@@ -177,15 +177,11 @@ public class WebSocketClientController extends AdminBaseController {
     /**
      * 添加朋友圈.
      *
-     * @param model 模型
-     * @param user 用户id
      * @return 添加朋友圈页面
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.CIRCLE, subModule = "", describe = "添加朋友圈首页")
     @RequestMapping(value = "wsclientAddCircle.page")
-    public String wsclientAddCircle(Model model, @RequestParam("user")String user) {
-        logger.debug("访问wsclientAddCircle.page");
-        model.addAttribute("user", user);
+    public String wsclientAddCircle() {
         return "ws/wsclientAddCircle";
     }
 
@@ -613,13 +609,14 @@ public class WebSocketClientController extends AdminBaseController {
     @RequestMapping(value = "addCircle.do", method = RequestMethod.POST)
     @ResponseBody
     @Transactional
-    public Result<String> addCircle(@RequestParam("user")String user,
+    public Result<String> addCircle(
                             @RequestParam("content")String content,
                             @RequestParam(value = "circleImgFile1", required = false) String circleImgFile1,
                             @RequestParam(value = "circleImgFile2", required = false) String circleImgFile2,
                             @RequestParam(value = "circleImgFile3", required = false) String circleImgFile3,
                             @RequestParam(value = "circleImgFile4", required = false) String circleImgFile4) {
-        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+        String userId = SessionUtil.getSessionUserId();
+        WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
         if (null == wsUsersDO) {
             return Result.fail();
         }
@@ -657,12 +654,13 @@ public class WebSocketClientController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.CIRCLE, subModule = "", describe = "点赞朋友圈")
     @RequestMapping(value = "toLike.do", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> toLike(@RequestParam("user")String user, @RequestParam("circleId")Integer circleId) {
+    public Result<String> toLike(@RequestParam("circleId")Integer circleId) {
         WsCircleDO wsCircleDO = wsCircleService.selectById(circleId);
         if (null == wsCircleDO) {
             return Result.fail();
         }
-        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+        String userId = SessionUtil.getSessionUserId();
+        WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
         if (null == wsUsersDO) {
             return Result.fail();
         }
@@ -682,12 +680,13 @@ public class WebSocketClientController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.CIRCLE, subModule = "", describe = "点赞朋友圈")
     @RequestMapping(value = "toDislike.do", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> toDislike(@RequestParam("user")String user, @RequestParam("circleId")Integer circleId) {
+    public Result<String> toDislike(@RequestParam("circleId")Integer circleId) {
         WsCircleDO wsCircleDO = wsCircleService.selectById(circleId);
         if (null == wsCircleDO) {
             return Result.fail();
         }
-        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+        String userId = SessionUtil.getSessionUserId();
+        WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
         if (null == wsUsersDO) {
             return Result.fail();
         }
@@ -736,41 +735,6 @@ public class WebSocketClientController extends AdminBaseController {
             return Result.ok();
         }
         return Result.fail();
-    }
-
-    /**
-     * 获取我的好友列表.
-     * true:存在  false:不存在
-     */
-    @RequestMapping(value = "getMyFriendsList.json", method = RequestMethod.GET)
-    @ResponseBody
-    public Object getMyFriendsList(@RequestParam("curPage") int curPage,
-                                   @RequestParam("numPerPage") int numPerPage,
-                                   @RequestParam("curUser") String curUser) {
-        int totalCount = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", curUser));
-        int totalPage;
-        if (totalCount % numPerPage != 0) {
-            totalPage = totalCount / numPerPage + 1;
-        } else {
-            totalPage = totalCount / numPerPage;
-        }
-        if (totalPage == 0) {
-            totalPage = 1;
-        }
-
-        List<WsFriendsDO> userlist = new ArrayList<>();
-        Page<WsFriendsDO> friendsPage = wsFriendsService.selectPage(new Page<>(curPage, numPerPage),
-                    new EntityWrapper<WsFriendsDO>().eq("uname", curUser).orderBy("create_time", false));
-        if (null != friendsPage) {
-            userlist = friendsPage.getRecords();
-        }
-        PageResponseEntity rqe = new PageResponseEntity();
-        rqe.setTotalCount(totalCount);
-        rqe.setTotalPage(totalPage);
-        rqe.setList(userlist);
-        rqe.setParameter1(0);
-
-        return JsonUtil.javaobject2Jsonobject(rqe);
     }
 
     /**

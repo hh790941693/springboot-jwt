@@ -42,9 +42,6 @@
         <form id="form" method="post" action="/ws/addCircle.do" enctype="multipart/form-data"
               onsubmit="return beforeSumbit()" target="hidden_frame">
             <div>
-                <input id="userNameHidden" name="user" th:value="${user}" hidden="hidden">
-            </div>
-            <div>
                 <span>内&nbsp;&nbsp;&nbsp;&nbsp;容:</span>
                 <textarea id="contentTa" style="margin-left:10px;" name="content" rows="4" cols="30"
                           placeholder="请输入内容"></textarea>
@@ -106,7 +103,6 @@
 </body>
 
     <script type="text/javascript">
-        var curUser = $('#userNameHidden').val();
         initUpload();
         $(".inputImgClass").change(function () {
             //获取对应的img对象
@@ -115,7 +111,6 @@
         })
 
         function beforeSumbit() {
-            $("#userNameHidden").val(curUser);
             var content = $("#contentTa").val();
             if (content == "") {
                 return false;
