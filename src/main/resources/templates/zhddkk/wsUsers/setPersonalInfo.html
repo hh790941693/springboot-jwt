@@ -32,7 +32,6 @@
                     <div style="width:98%;height:100%;">
                         <form class="layui-form" lay-filter="personInfoForm" method="post" action="/zhddkk/wsUsers/setPersonInfo.do" enctype="multipart/form-data" target="hidden_frame1">
                             <div class="layui-form-item">
-                                <input name="userName" type="hidden" th:value="${session.sessionInfo.userName}" >
                                 <label class="layui-form-label">真实姓名</label>
                                 <div class="layui-input-block">
                                     <input type="text" name="realName" th:value="${userProfile.realName}" lay-verify="required" autocomplete="off" placeholder="请输入真实姓名" class="layui-input">
@@ -202,8 +201,6 @@
     // 区域位置数据
     var positionData = null;
     initPosition();
-    //查询个人信息
-    //queryPersonInfo(sessionUser);
 
     // 初始化區域位置信息
     var userProfileJsonObj = JSON.parse($("#userProfileJsonStr").val());
@@ -292,46 +289,6 @@
             layui.form.render();
         });
     });
-
-    // 查询个人信息
-    function queryPersonInfo(user) {
-        $.ajax({
-            type: 'POST',
-            url: '/zhddkk/wsUsers/queryPersonInfo.json',
-            data: {'user': user},
-            //dataType: 'json',
-            success: function (result) {
-                if (result.code == 1) {
-                    var data = result.data;
-                    $("input[name='realName']").val(data.realName);
-                    $("input[name='sign']").val(data.sign);
-                    $("input[name='age']").val(data.age);
-                    $("select[name='sex']").val(data.sex);
-                    $("input[name='sexText']").val(data.sexText);
-                    $("input[name='tel']").val(data.tel);
-                    var location = data.location;
-                    var province = "", city = "", district = "";
-                    if (location.indexOf("-") != -1) {
-                        province = location.split("-")[0];
-                        city = location.split("-")[1];
-                        district = location.split("-")[2];
-                        $("select[name='province']").val(province);
-                        $("select[name='city']").val(city);
-                        $("select[name='district']").val(district);
-                    }
-                    $("input[name='address']").val(data.address);
-                    $("select[name='profession']").val(data.profession);
-                    $("input[name='professionText']").val(data.professionText);
-                    $("select[name='hobby']").val(data.hobby);
-                    $("input[name='hobbyText']").val(data.hobbyText);
-                    $("#headImg").attr("src", data.img);
-                    $("#headImgInput").val(data.img);
-
-                    layui.form.render();
-                }
-            }
-        })
-    }
 
     function refresh() {
         window.location.href = window.location.href;

@@ -415,11 +415,11 @@ public class WsUsersController extends AdminBaseController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.SETTING, subModule = "", describe = "用户信息设置首页")
     @RequestMapping(value = "setPersonalInfo.page")
-    public String setPersonalInfo(Model model, @RequestParam("user") String user) {
+    public String setPersonalInfo(Model model) {
         logger.debug("访问setPersonalInfo.page");
-        model.addAttribute("user", user);
+        String userId = SessionUtil.getSessionUserId();
         WsUserProfileDO wsUserProfileDO =
-            wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_name", user));
+            wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_id", userId));
         if (null != wsUserProfileDO) {
             String location = wsUserProfileDO.getLocation();
             if (StringUtils.isNotBlank(location) && location.contains("-")) {
@@ -443,7 +443,7 @@ public class WsUsersController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.SETTING, subModule = "", describe = "设置个人信息")
     @RequestMapping(value = "setPersonInfo.do", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> setPersonInfo(@RequestParam(value = "userName", required = true) String userName,
+    public Result<String> setPersonInfo(
         @RequestParam(value = "realName", required = false) String realName,
         @RequestParam(value = "headImg", required = false) String headImg,
         @RequestParam(value = "sign", required = false) String sign,
@@ -459,7 +459,8 @@ public class WsUsersController extends AdminBaseController {
         @RequestParam(value = "professionText", required = false) String professionText,
         @RequestParam(value = "hobby", required = false) Integer hobby,
         @RequestParam(value = "hobbyText", required = false) String hobbyText) {
-        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
+        String userId = SessionUtil.getSessionUserId();
+        WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
         if (null == wsUsersDO) {
             return Result.fail();
         }
@@ -473,7 +474,7 @@ public class WsUsersController extends AdminBaseController {
             logger.info("插入个人信息");
             WsUserProfileDO wup = new WsUserProfileDO();
             wup.setUserId(wsUsersDO.getId());
-            wup.setUserName(userName);
+            wup.setUserName(wsUsersDO.getName());
             wup.setRealName(realName);
             wup.setImg(headImg);
             wup.setSign(sign);
@@ -493,7 +494,7 @@ public class WsUsersController extends AdminBaseController {
             }
         } else {
             logger.info("更新个人信息");
-            wsUserProfileDO.setUserName(userName);
+            wsUserProfileDO.setUserName(wsUsersDO.getName());
             wsUserProfileDO.setRealName(realName);
             wsUserProfileDO.setImg(headImg);
             wsUserProfileDO.setSign(sign);
