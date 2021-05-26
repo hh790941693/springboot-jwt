@@ -186,7 +186,6 @@
                 type: 'POST',
                 url: rootUrl + 'ws/queryCircleByPage.do',
                 data: {'curPage': curPagePara, 'numPerPage': numPerPagePara},
-                //contentType:"application/json",
                 async: false,
                 success: function (result) {
                     if (result.code != 1) {
@@ -301,8 +300,7 @@
                     $.ajax({
                         type: 'POST',
                         url: rootUrl + 'ws/toComment.do',
-                        //dataType: 'json',
-                        data: {user: sessionUser, circleId: circleId, comment: comment},
+                        data: {'circleId': circleId, 'comment': comment},
                         async: false,
                         success: function (result) {
                             if (result.code == 1) {
@@ -338,8 +336,7 @@
                     $.ajax({
                         type: 'POST',
                         url: rootUrl + 'ws/toDeleteCircle.do',
-                        //dataType: 'json',
-                        data: {id: circleId},
+                        data: {'id': circleId},
                         async: false,
                         success: function (result) {
                             if (result.code == 1) {
@@ -362,8 +359,7 @@
                     $.ajax({
                         type: 'POST',
                         url: rootUrl + 'ws/toDeleteComment.do',
-                        //dataType: 'json',
-                        data: {id: commentId},
+                        data: {'id': commentId},
                         async: false,
                         success: function (result) {
                             if (result.code == 1) {

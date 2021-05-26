@@ -159,7 +159,6 @@
                 type: 'POST',
                 url: rootUrl + '/checkUserRegisterStatus.json',
                 data: { 'user': user},
-                //dataType: 'json',
                 async: false,
                 success: function (result) {
                     if (result.code != 1) {

@@ -575,7 +575,7 @@ public class WebSocketClientController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.INSERT, module = ModuleEnum.CIRCLE, subModule = "", describe = "评论朋友圈")
     @RequestMapping(value = "toComment.do", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> toComment(@RequestParam("user")String user,
+    public Result<String> toComment(
                                     @RequestParam("circleId")Integer circleId,
                                     @RequestParam("comment")String comment) {
         WsCircleDO wsCircleDO = wsCircleService.selectById(circleId);
@@ -583,7 +583,8 @@ public class WebSocketClientController extends AdminBaseController {
             return Result.fail();
         }
 
-        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+        String userId = SessionUtil.getSessionUserId();
+        WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
         if (null == wsUsersDO) {
             return Result.fail();
         }
@@ -899,8 +900,7 @@ public class WebSocketClientController extends AdminBaseController {
      * 智能助手.
      */
     @GetMapping("intelAssistant.page")
-    String intelAssistantPage(Model model, String user) {
-        model.addAttribute("user", user);
+    String intelAssistantPage() {
         return "ws/intelAssistant";
     }
 

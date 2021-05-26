@@ -308,7 +308,7 @@
                                 type: 'POST',
                                 url: rootUrl + 'ws/toComment.do',
                                 //dataType: 'json',
-                                data: {'user': app.curUser, 'circleId': id, 'comment': value},
+                                data: {'circleId': id, 'comment': value},
                                 async: false,
                                 success: function (result) {
                                     if (result.code == 1) {
@@ -357,7 +357,6 @@
                             $.ajax({
                                 type: 'POST',
                                 url: rootUrl + 'ws/toDeleteCircle.do',
-                                //dataType: 'json',
                                 data: {'id': id},
                                 success: function (result) {
                                     if (result.code == 1) {

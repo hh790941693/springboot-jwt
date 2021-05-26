@@ -115,7 +115,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/zhddkk/wsUsers/queryPersonInfo.json',
-                data: {user: user},
+                data: {'user': user},
                 success: function (result) {
                     if (result.code != 1) {
                         layer.msg("查询个人详情页失败");
