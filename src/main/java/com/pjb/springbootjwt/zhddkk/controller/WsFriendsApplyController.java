@@ -8,7 +8,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsFriendsDO;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsService;
-import org.apache.commons.lang.StringUtils;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -53,8 +53,7 @@ public class WsFriendsApplyController extends AdminBaseController {
     */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.APPLY,subModule="",describe="我的申请记录页面")
     @GetMapping("/myApply")
-    public String myApply(Model model, String user){
-        model.addAttribute("user", user);
+    public String myApply(){
         return "zhddkk/wsFriendsApply/myApply";
     }
 
@@ -66,9 +65,8 @@ public class WsFriendsApplyController extends AdminBaseController {
     @GetMapping("/myApplyList")
     public Result<Page<WsFriendsApplyDO>> myApplyList(WsFriendsApplyDO wsFriendsApplyDTO){
         Wrapper<WsFriendsApplyDO> wrapper = new EntityWrapper<WsFriendsApplyDO>();
-        if (StringUtils.isNotBlank(wsFriendsApplyDTO.getFromName())){
-            wrapper.eq("from_name", wsFriendsApplyDTO.getFromName());
-        }
+        String curUserName = SessionUtil.getSessionUserName();
+        wrapper.eq("from_name", curUserName);
         if (null != wsFriendsApplyDTO.getProcessStatus()){
             wrapper.eq("process_status", wsFriendsApplyDTO.getProcessStatus());
         }
@@ -82,8 +80,7 @@ public class WsFriendsApplyController extends AdminBaseController {
      */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.APPLY,subModule="",describe="好友申请页面")
     @GetMapping("/friendApply")
-    public String friendApply(Model model, String user){
-        model.addAttribute("user", user);
+    public String friendApply(Model model){
         return "zhddkk/wsFriendsApply/friendApply";
     }
 
@@ -95,9 +92,9 @@ public class WsFriendsApplyController extends AdminBaseController {
     @GetMapping("/friendApplyList")
     public Result<Page<WsFriendsApplyDO>> friendApplyList(WsFriendsApplyDO wsFriendsApplyDTO){
         Wrapper<WsFriendsApplyDO> wrapper = new EntityWrapper<WsFriendsApplyDO>();
-        if (StringUtils.isNotBlank(wsFriendsApplyDTO.getToName())){
-            wrapper.eq("to_name", wsFriendsApplyDTO.getToName());
-        }
+        String curUserName = SessionUtil.getSessionUserName();
+        wrapper.eq("to_name", curUserName);
+
         if (null != wsFriendsApplyDTO.getProcessStatus()){
             wrapper.eq("process_status", wsFriendsApplyDTO.getProcessStatus());
         }
