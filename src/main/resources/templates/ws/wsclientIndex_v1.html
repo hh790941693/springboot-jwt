@@ -483,7 +483,7 @@
             $.ajax({
                 type: 'POST',
                 url: rootUrl + 'ws/logout.do',
-                data: {"user": sessionUser},
+                data: {},
                 async: false,
                 success: function (result) {
                     top.location.href = rootUrl;

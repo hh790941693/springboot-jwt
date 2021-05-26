@@ -87,20 +87,23 @@ public class WebSocketClientController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGOUT, subModule = "", describe = "退出")
     @RequestMapping(value = "logout.do", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> logout(@RequestParam("user")String user, HttpServletRequest request) {
-        HttpSession httpSession = request.getSession(false);
+    public Result<String> logout(HttpServletRequest request) {
+        //清除session之前,先获取session中的数据
+        String userId = SessionUtil.getSessionUserId();
+        WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
+
         // 销毁session
+        HttpSession httpSession = request.getSession(false);
         if (null != httpSession) {
             httpSession.invalidate();
         }
-        ZhddWebSocket.removeUserFromAllRoom(user);
 
-        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
-        if (null != wsUsersDO) {
-            wsUsersDO.setState("0");
-            wsUsersDO.setLastLogoutTime(SDF_STANDARD.format(new Date()));
-            wsUsersService.updateById(wsUsersDO);
-        }
+        //聊天室移除人
+        ZhddWebSocket.removeUserFromAllRoom(wsUsersDO.getName());
+
+        wsUsersDO.setState("0");
+        wsUsersDO.setLastLogoutTime(SDF_STANDARD.format(new Date()));
+        wsUsersService.updateById(wsUsersDO);
         return Result.ok();
     }
 
