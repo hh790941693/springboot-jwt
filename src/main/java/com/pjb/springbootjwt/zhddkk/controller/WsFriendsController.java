@@ -12,6 +12,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsFriendsApplyDO;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsApplyService;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -56,8 +57,7 @@ public class WsFriendsController extends AdminBaseController {
     */
     @OperationLogAnnotation(type=OperationEnum.PAGE,module=ModuleEnum.FRIENDS,subModule="",describe="好友列表页面")
     @GetMapping()
-    public String wsFriends(Model model, String user){
-        model.addAttribute("user", user);
+    public String wsFriends(Model model){
         return "zhddkk/wsFriends/wsFriends";
     }
 
@@ -69,9 +69,8 @@ public class WsFriendsController extends AdminBaseController {
     @GetMapping("/list")
     public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDTO){
         Wrapper<WsFriendsDO> wrapper = new EntityWrapper<WsFriendsDO>();
-        if (StringUtils.isNotBlank(wsFriendsDTO.getUname())){
-            wrapper.eq("t1.uname", wsFriendsDTO.getUname());
-        }
+        String userId = SessionUtil.getSessionUserId();
+        wrapper.eq("t1.uid", userId);
         if (StringUtils.isNotBlank(wsFriendsDTO.getFname())){
             wrapper.like("t1.fname", wsFriendsDTO.getFname());
         }

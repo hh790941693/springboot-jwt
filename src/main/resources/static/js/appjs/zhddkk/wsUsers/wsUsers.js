@@ -276,8 +276,7 @@ function addAsFriends(id) {
         url: prefix + "/addAsFriends",
         type: "post",
         data: {
-            'curUser': user,
-            'toUserId': id
+            'friendUserId': id
         },
         success: function (r) {
             if (r.code == 1) {

@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import com.baomidou.mybatisplus.enums.SqlLike;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
@@ -19,6 +18,7 @@ import com.pjb.springbootjwt.zhddkk.service.SysUserRoleService;
 import com.pjb.springbootjwt.zhddkk.util.ExcelUtil;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.SecurityAESUtil;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -203,32 +203,39 @@ public class WsUsersController extends AdminBaseController {
         wsUsersService.deleteBatchIds(Arrays.asList(ids));
         return Result.ok();
     }
-    
+
+    /**
+     * 添加好友.
+     * @param friendUserId
+     * @return
+     */
     @OperationLogAnnotation(type = OperationEnum.INSERT, module = ModuleEnum.USER_MANAGE, subModule = "", describe = "添加好友")
     @PostMapping("/addAsFriends")
     @ResponseBody
-    public Result<String> addAsFriends(String curUser, Integer toUserId) {
-        Integer fromUserId = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", curUser)).getId();
-        String toUserName = wsUsersService.selectById(toUserId).getName();
+    public Result<String> addAsFriends(Integer friendUserId) {
+        String fromUserId = SessionUtil.getSessionUserId();
+        WsUsersDO fromUser = wsUsersService.selectById(fromUserId);
+
+        WsUsersDO friendUser = wsUsersService.selectById(friendUserId);
         
-        logger.info(curUser + "申请添加" + toUserName + "为好友");
+        logger.info(fromUser.getName() + "申请添加" + friendUser.getName() + "为好友");
         WsFriendsDO wf = new WsFriendsDO();
-        wf.setUname(curUser);
-        wf.setFname(toUserName);
+        wf.setUname(fromUser.getName());
+        wf.setFname(friendUser.getName());
         int existCount =
-            wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", curUser).eq("fname", toUserName));
+            wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", fromUser.getName()).eq("fname", friendUser.getName()));
         if (existCount <= 0) {
             WsFriendsApplyDO wfa = new WsFriendsApplyDO();
-            wfa.setFromId(fromUserId);
-            wfa.setFromName(curUser);
-            wfa.setToId(toUserId);
-            wfa.setToName(toUserName);
+            wfa.setFromId(fromUser.getId());
+            wfa.setFromName(fromUser.getName());
+            wfa.setToId(friendUser.getId());
+            wfa.setToName(friendUser.getName());
             wfa.setProcessStatus(1);
             wsFriendsApplyService.insert(wfa);
             
             return Result.ok();
         } else {
-            logger.info(toUserName + "已是你的好友了,无需再次申请");
+            logger.info(friendUser.getName() + "已是你的好友了,无需再次申请");
         }
         
         return Result.fail();

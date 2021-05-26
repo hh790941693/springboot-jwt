@@ -1,5 +1,4 @@
 var prefix = "/zhddkk/wsFriends";
-var user = $("#user").val();
 
 $(function () {
     load();
@@ -31,7 +30,6 @@ function load() {
                 //传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
                 pageNumber: params.pageNumber,
                 pageSize: params.pageSize,
-                uname: user,
                 fname: $('#nameSearchInput').val()
                 //name:$('#searchName').val(),
                 //username:$('#searchName').val()
