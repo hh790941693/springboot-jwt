@@ -154,7 +154,7 @@
                 },
                 done: function (r) {
                     layer.closeAll('loading');
-                    if (r.code == "1") {
+                    if (r.code == 1) {
                         $("#" + imgName).attr("src", r.data);
                         $("#" + imgName).show();
                         $("#" + inputName).val(r.data);

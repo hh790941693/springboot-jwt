@@ -55,7 +55,7 @@ function initUpload() {
         },
         done: function (r) {
             layer.closeAll('loading');
-            if (r.code === "1") {
+            if (r.code == 1) {
                 $("#picUrl").val(r.data);
                 $("#imageImg").attr("src", r.data);
                 $("#imageDiv").show();

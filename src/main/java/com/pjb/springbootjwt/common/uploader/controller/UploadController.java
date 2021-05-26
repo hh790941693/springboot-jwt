@@ -1,6 +1,7 @@
 package com.pjb.springbootjwt.common.uploader.controller;
 
 import com.pjb.springbootjwt.common.uploader.service.UploadService;
+import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.FileUploadResultBean;
 import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
@@ -39,8 +40,8 @@ public class UploadController {
      * @return 上传文件的完整访问路径
      */
     @PostMapping("/uploadFile")
-    public Map<String, Object> upload(
-            @RequestParam(required = true)MultipartFile[] file,
+    public Result<String> upload(
+            @RequestParam(required = true)MultipartFile file,
             @RequestParam(required = false)String folder,
             @RequestParam(required = false)String user
     ) {
@@ -52,28 +53,20 @@ public class UploadController {
             userName = user;
         }
         try {
-            if (null != file && file.length>0){
+            if (null != file){
                 logger.info("开始上传文件");
-                for (int i=0;i<file.length;i++ ){
-                    MultipartFile tempfile = file[i];
-                    if (!tempfile.isEmpty()){
-                        logger.info("开始上传文件:{}", tempfile.getOriginalFilename());
-                        url = uploadService.uploadFile(tempfile, folder, userName);
-                        logger.info("返回的文件url:{}", url);
-                        map.put("code", "1");
-                        map.put("msg", "操作成功");
-                        map.put("data", url);
-                    }
+                if (!file.isEmpty()){
+                    logger.info("开始上传文件:{}", file.getOriginalFilename());
+                    url = uploadService.uploadFile(file, folder, userName);
+                    logger.info("返回的文件url:{}", url);
+                    return Result.ok(url);
                 }
             }
         } catch (Exception e) {
             logger.info("上传出现异常:{}",e.getMessage());
             e.printStackTrace();
-            map.put("code", "0");
-            map.put("msg", "操作失败");
-            map.put("data", "");
         }
-        return map;
+        return Result.fail();
     }
 
     /**

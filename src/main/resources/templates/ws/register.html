@@ -202,7 +202,7 @@
                 },
                 done: function (r) {
                     layer.closeAll('loading');
-                    if (r.code == "1") {
+                    if (r.code == 1) {
                         $("#headImg").attr("src", r.data);
                         $("#headImgInput").val(r.data);
                     }
