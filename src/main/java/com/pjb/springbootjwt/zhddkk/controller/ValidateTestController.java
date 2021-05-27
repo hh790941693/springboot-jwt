@@ -2,6 +2,7 @@ package com.pjb.springbootjwt.zhddkk.controller;
 
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.dto.WsUserDTO;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,10 @@ public class ValidateTestController {
      * 需要在类上添加@Validated
      */
     @PostMapping("/userDTO")
-    public Result<String> validEmail(@RequestBody WsUserDTO wsUserDTO) {
-        return Result.ok();
+    public Result<WsUserDTO> validUserDTO(@RequestBody WsUserDTO wsUserDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("xxxxxxxxxxxxxxxxxxxxx");
+        }
+        return Result.ok(wsUserDTO);
     }
 }
