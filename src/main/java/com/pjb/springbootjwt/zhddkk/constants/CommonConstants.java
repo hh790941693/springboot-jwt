@@ -34,7 +34,7 @@ public class CommonConstants {
     //加密秘钥
     public static final String AES_PASSWORD = "hch";
 
-    // admin管理员账号密码
+    // admin管理员账号
     public static final String ADMIN_USER = "admin";
 
     // cookie(locale)的过期时间(20年)

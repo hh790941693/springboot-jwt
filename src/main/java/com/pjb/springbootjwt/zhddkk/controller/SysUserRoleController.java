@@ -18,7 +18,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.domain.SysUserRoleDO;
 import com.pjb.springbootjwt.zhddkk.service.SysUserRoleService;
-import com.pjb.springbootjwt.common.vo.Result;
+import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

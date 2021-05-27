@@ -27,7 +27,7 @@ import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.domain.SysRoleDO;
 import com.pjb.springbootjwt.zhddkk.service.SysRoleService;
 import com.pjb.springbootjwt.zhddkk.service.SysRoleMenuService;
-import com.pjb.springbootjwt.common.vo.Result;
+import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

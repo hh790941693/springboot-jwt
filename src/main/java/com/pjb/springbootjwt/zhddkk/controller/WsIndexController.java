@@ -1,6 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
-import com.pjb.springbootjwt.common.vo.Result;
+import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.bean.WeatherBean;

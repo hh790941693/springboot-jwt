@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.pjb.springbootjwt.common.base.AdminBaseController;
-import com.pjb.springbootjwt.common.vo.Result;
+import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsApplyDO;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
