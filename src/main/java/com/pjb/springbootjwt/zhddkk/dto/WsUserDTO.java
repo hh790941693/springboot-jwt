@@ -8,8 +8,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class WsUserDTO {
 
-    private Integer id;
-
     @NotBlank
     @NotNull
     private String name;

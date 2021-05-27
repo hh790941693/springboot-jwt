@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,23 +28,26 @@ public class GlobalExceptionHandler {
      * body为空或Json格式错误
      */
     @ExceptionHandler({HttpMessageNotReadableException.class, MissingServletRequestParameterException.class})
+    @ResponseBody
     public Result<String> apiAuthorizationException(HttpMessageNotReadableException e) {
         return Result.build(-1, e.getMessage());
     }
 
     /**
-     * 参数校验失败 @Validated UserVo userVo
+     * 参数校验失败 @Validated
      */
     @ExceptionHandler(value = BindException.class)
+    @ResponseBody
     public Result<String> BindExceptionHandler(BindException e) {
         String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
         return Result.build(-2, message);
     }
 
     /**
-     * 参数校验失败 @NotBlank @Email String email
+     * 参数校验失败 @NotBlank @Email
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
+    @ResponseBody
     public Result<String> constraintViolationExceptionHandler(ConstraintViolationException e) {
         String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
         return Result.build(-3, message);
@@ -53,23 +57,16 @@ public class GlobalExceptionHandler {
      * 参数校验失败 RequestBody
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ResponseBody
     public Result<String> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
         return Result.build(-4, message);
     }
 
     /**
-     * 未知的运行时异常
-     */
-    @ExceptionHandler(value = RuntimeException.class)
-    public Result<String> runtimeException(Exception e) {
-        return Result.build(-5, e.getMessage());
-    }
-
-    /**
      * 捕捉系统异常
      */
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler({RuntimeException.class, Exception.class})
     public Object exceptionHandler(Exception e, HttpServletRequest request){
         ModelAndView mav = new ModelAndView();
         mav.addObject("exception", e);
