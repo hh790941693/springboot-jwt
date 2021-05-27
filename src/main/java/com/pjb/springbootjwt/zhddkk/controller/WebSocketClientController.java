@@ -1,19 +1,15 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
-import com.pjb.springbootjwt.common.redis.RedisUtil;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.base.Result;
-import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.bean.WangyiNewsBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
-import com.pjb.springbootjwt.zhddkk.entity.PageResponseEntity;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.bean.LoadConfigFileBean;
 import com.pjb.springbootjwt.zhddkk.service.*;
@@ -29,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +51,6 @@ public class WebSocketClientController extends AdminBaseController {
     private static final Map<String, String> chatMappingMap = LoadConfigFileBean.getChatMappingMap();
 
     @Autowired
-    private RedisUtil redisUtil;
-
-    @Autowired
     private WsCircleService wsCircleService;
 
     @Autowired
@@ -69,12 +61,6 @@ public class WebSocketClientController extends AdminBaseController {
 
     @Autowired
     private WsUserProfileService wsUserProfileService;
-
-    @Autowired
-    private WsFriendsService wsFriendsService;
-
-    @Autowired
-    private WsFriendsApplyService wsFriendsApplyService;
 
     @Autowired
     private WsCommonService wsCommonService;
@@ -248,285 +234,6 @@ public class WebSocketClientController extends AdminBaseController {
         woi.setRoomUserCount(roomUserNameList.size());
 
         return Result.ok(woi);
-    }
-
-    /**
-     * 分页显示所有用户信息.
-     * true:存在  false:不存在
-     */
-    @RequestMapping(value = "showAllUser.json", method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    @Deprecated
-    public Object getOnlineUsersByPage(@RequestBody WsUsersDO params) {
-        int totalCount = wsUsersService.selectCount(new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER));
-        int numPerPage = 15;
-        int curPage = 1;
-        String curUser = params.getName();
-        int totalPage;
-        if (totalCount % numPerPage != 0) {
-            totalPage = totalCount / numPerPage + 1;
-        } else {
-            totalPage = totalCount / numPerPage;
-        }
-        if (totalPage == 0) {
-            totalPage = 1;
-        }
-
-        Page<WsUsersDO> queryPage = new Page<WsUsersDO>(curPage, numPerPage);
-        List<WsUsersDO> userlist = new ArrayList<>();
-        Page<WsUsersDO> userPage = wsUsersService.selectPage(queryPage,
-                    new EntityWrapper<WsUsersDO>().ne("name", CommonConstants.ADMIN_USER).orderBy("last_login_time", false));
-
-        if (null != userPage) {
-            userlist = userPage.getRecords();
-        }
-        if (null != userlist && userlist.size() > 0) {
-            for (WsUsersDO wu : userlist) {
-                if (wu.getName().equals(curUser)) {
-                    continue;
-                }
-                wu.setIsFriend(0);
-
-                int isMyFriend = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>()
-                    .eq("uname", curUser).eq("fname", wu.getName()));
-                if (isMyFriend > 0) {
-                    wu.setIsFriend(3); //已是好友
-                } else {
-                    // 0:不是  1:申请中 2:被拒绝 3:申请成功
-                    WsFriendsApplyDO wfa = new WsFriendsApplyDO();
-                    wfa.setFromName(curUser);
-                    wfa.setToName(wu.getName());
-                    List<WsFriendsApplyDO> applyList = new ArrayList<>();
-                    Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(new Page<>(curPage,
-                                    numPerPage),
-                        new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUser)
-                        .eq("to_name", wu.getName()));
-                    if (null != wsFriendsApplyDoPage) {
-                        applyList = wsFriendsApplyDoPage.getRecords();
-                    }
-                    //List<WsFriendsApply> applyList = wsService.queryFriendsApplyList(wfa);
-                    if (null == applyList || applyList.size() == 0) {
-                        wu.setIsFriend(0); //去申请
-                    } else if (applyList.size() == 1) {
-                        Integer processStatus = applyList.get(0).getProcessStatus();
-                        wu.setIsFriend(processStatus); // 1:申请中 2:被拒绝 3:申请成功
-                    } else {
-                        // 过滤掉被驳回的记录
-                        for (WsFriendsApplyDO temp :  applyList) {
-                            if (temp.getProcessStatus() == 2) {
-                                continue;
-                            }
-                            wu.setIsFriend(temp.getProcessStatus());
-                        }
-                    }
-                }
-            }
-        }
-        PageResponseEntity rqe = new PageResponseEntity();
-        rqe.setTotalCount(totalCount);
-        rqe.setTotalPage(totalPage);
-        rqe.setList(userlist);
-        rqe.setParameter1(0);
-        return JsonUtil.javaobject2Jsonobject(rqe);
-    }
-
-    /**
-     *分页 获取好友申请列表.
-     * true:存在  false:不存在
-     */
-    @RequestMapping(value = "getFriendsApplyList.json", method = RequestMethod.GET)
-    @ResponseBody
-    public Object getFriendsApplyList(@RequestParam("curPage") int curPage,
-                                      @RequestParam("numPerPage") int numPerPage,
-                                      @RequestParam("curUser") String curUser) {
-        int totalCount = wsFriendsApplyService.selectCount(new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
-        int totalPage;
-        if (totalCount % numPerPage != 0) {
-            totalPage = totalCount / numPerPage + 1;
-        } else {
-            totalPage = totalCount / numPerPage;
-        }
-        if (totalPage == 0) {
-            totalPage = 1;
-        }
-
-        List<WsFriendsApplyDO> userlist = new ArrayList<>();
-        Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(
-                new Page<WsFriendsApplyDO>(curPage, numPerPage),
-                new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
-        if (null != wsFriendsApplyDoPage) {
-            userlist = wsFriendsApplyDoPage.getRecords();
-        }
-
-        PageResponseEntity rqe = new PageResponseEntity();
-        rqe.setTotalCount(totalCount);
-        rqe.setTotalPage(totalPage);
-        rqe.setList(userlist);
-        rqe.setParameter1(0);
-
-        return JsonUtil.javaobject2Jsonobject(rqe);
-    }
-
-    /**
-     *分页 我的申请记录.
-     * true:存在  false:不存在
-     */
-    @RequestMapping(value = "getMyApplyList.json", method = RequestMethod.GET)
-    @ResponseBody
-    public Object getMyApplyList(@RequestParam("curPage") int curPage,
-                                 @RequestParam("numPerPage") int numPerPage,
-                                 @RequestParam("curUser") String curUser) {
-        int totalCount = wsFriendsApplyService.selectCount(new EntityWrapper<WsFriendsApplyDO>().eq("to_name", curUser));
-        int totalPage;
-        if (totalCount % numPerPage != 0) {
-            totalPage = totalCount / numPerPage + 1;
-        } else {
-            totalPage = totalCount / numPerPage;
-        }
-        if (totalPage == 0) {
-            totalPage = 1;
-        }
-
-        List<WsFriendsApplyDO> userlist = new ArrayList<>();
-        Page<WsFriendsApplyDO> wsFriendsApplyDoPage = wsFriendsApplyService.selectPage(
-                new Page<WsFriendsApplyDO>(curPage, numPerPage),
-                 new EntityWrapper<WsFriendsApplyDO>().eq("from_name", curUser));
-        if (null != wsFriendsApplyDoPage) {
-            userlist = wsFriendsApplyDoPage.getRecords();
-        }
-
-        PageResponseEntity rqe = new PageResponseEntity();
-        rqe.setTotalCount(totalCount);
-        rqe.setTotalPage(totalPage);
-        rqe.setList(userlist);
-        rqe.setParameter1(0);
-
-        return JsonUtil.javaobject2Jsonobject(rqe);
-    }
-
-    /**
-     * 添加好友申请.
-     *
-     */
-    @RequestMapping(value = "addFriend.do", method = RequestMethod.POST)
-    @ResponseBody
-    public Result<String> addFriend(@RequestParam("fromUserName")String fromUserName,
-                                         @RequestParam("toUserId")Integer toUserId) {
-        Integer fromUserId = querySpecityUserName(fromUserName).getId();
-        String toUserName = querySpecityUserId(toUserId).getName();
-
-        logger.info(fromUserName + "申请添加" + toUserName + "为好友");
-        int existCount = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>().eq("uname", fromUserName)
-                .eq("fname", toUserName));
-        if (existCount <= 0) {
-            WsFriendsApplyDO wfa = new WsFriendsApplyDO();
-            wfa.setFromId(fromUserId);
-            wfa.setFromName(fromUserName);
-            wfa.setToId(toUserId);
-            wfa.setToName(toUserName);
-            wfa.setProcessStatus(1);
-            wsFriendsApplyService.insert(wfa);
-        } else {
-            logger.info(toUserName + "已是你的好友了,无需再次申请");
-        }
-        return Result.ok();
-    }
-
-    /**
-     * 同意好友申请.
-     *
-     */
-    @RequestMapping(value = "agreeFriend.do", method = RequestMethod.POST)
-    @ResponseBody
-    @Transactional
-    public Result<String> agreeFriend(@RequestParam("recordId")Integer recordId) {
-        WsFriendsApplyDO wfa = wsFriendsApplyService.selectById(recordId);
-        if (null == wfa) {
-            return Result.fail();
-        }
-        if (wfa.getProcessStatus().intValue() != 1) {
-            return Result.fail();
-        }
-
-        wfa.setProcessStatus(3);
-        boolean updateWfaFlag = wsFriendsApplyService.updateById(wfa);
-        if (updateWfaFlag) {
-            WsFriendsDO wf1 = new WsFriendsDO();
-            wf1.setUid(wfa.getFromId());
-            wf1.setUname(wfa.getFromName());
-            wf1.setFid(wfa.getToId());
-            wf1.setFname(wfa.getToName());
-            int isExist1 = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>()
-                .eq("uname", wfa.getFromName()).eq("fname", wfa.getToName()));
-            if (isExist1 <= 0) {
-                wsFriendsService.insert(wf1);
-            }
-
-            WsFriendsDO wf2 = new WsFriendsDO();
-            wf2.setUid(wfa.getToId());
-            wf2.setUname(wfa.getToName());
-            wf2.setFid(wfa.getFromId());
-            wf2.setFname(wfa.getFromName());
-            int isExist2 = wsFriendsService.selectCount(new EntityWrapper<WsFriendsDO>()
-                    .eq("uname", wfa.getToName()).eq("fname", wfa.getFromName()));
-            if (isExist2 <= 0) {
-                wsFriendsService.insert(wf2);
-            }
-        }
-        return Result.ok();
-    }
-
-    /**
-     * 拒绝好友申请.
-     *
-     */
-    @RequestMapping(value = "deagreeFriend.do", method = RequestMethod.POST)
-    @ResponseBody
-    public Result<String> deagreeFriend(@RequestParam("recordId")Integer recordId) {
-        WsFriendsApplyDO wfa = wsFriendsApplyService.selectById(recordId);
-        if (null == wfa) {
-            return Result.fail();
-        }
-        if (wfa.getProcessStatus().intValue() != 1) {
-            return Result.fail();
-        }
-
-        wfa.setProcessStatus(2);
-        boolean updateFlag = wsFriendsApplyService.updateById(wfa);
-        if (updateFlag) {
-            return Result.ok();
-        }
-
-        return Result.fail();
-    }
-
-    /**
-     * 删除好友.
-     *
-     */
-    @RequestMapping(value = "deleteFriend.do", method = RequestMethod.POST)
-    @ResponseBody
-    public Result<String> deleteFriend(@RequestParam("id")Integer id) {
-        WsFriendsDO wsFriendsDO = wsFriendsService.selectById(id);
-        if (null == wsFriendsDO) {
-            return Result.fail();
-        }
-
-        String uname = wsFriendsDO.getUname();
-        String fname = wsFriendsDO.getFname();
-
-        logger.info("uname:" + uname + "   fname:" + fname);
-        if (StringUtils.isNotEmpty(uname) && StringUtils.isNotEmpty(fname)) {
-            wsFriendsService.delete(new EntityWrapper<WsFriendsDO>().eq("uname", uname).eq("fname", fname));
-            wsFriendsService.delete(new EntityWrapper<WsFriendsDO>().eq("uname", fname).eq("fname", uname));
-
-            wsFriendsApplyService.delete(new EntityWrapper<WsFriendsApplyDO>().eq("from_name", fname)
-                    .eq("to_name", uname));
-            wsFriendsApplyService.delete(new EntityWrapper<WsFriendsApplyDO>().eq("from_name", uname)
-                    .eq("to_name", fname));
-        }
-
-        return Result.ok();
     }
 
     /**
@@ -739,23 +446,6 @@ public class WebSocketClientController extends AdminBaseController {
     }
 
     /**
-     * 查询个人信息.
-     *
-     * @return 用户信息
-     */
-    @RequestMapping(value = "queryPersonInfo.json", method = RequestMethod.POST)
-    @ResponseBody
-    public Result<WsUserProfileDO> queryPersonInfo(@RequestParam("user") String user) {
-        WsUserProfileDO wsUserProfileDO = wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>()
-                    .eq("user_name", user));
-        if (null != wsUserProfileDO) {
-            return Result.ok(wsUserProfileDO);
-        }
-
-        return Result.fail();
-    }
-
-    /**
      * 查询软件版本.
      *
      * @return 软件版本
@@ -822,25 +512,6 @@ public class WebSocketClientController extends AdminBaseController {
     }
 
     /**
-     * 根据用户名称查询用户信息.
-     *
-     * @param name 用户名称
-     * @return 用户信息
-     */
-    private WsUsersDO querySpecityUserName(String name) {
-        return wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", name));
-    }
-
-    /**
-     * 根据用户名称查询用户id.
-     *
-     * @return 用户信息
-     */
-    private WsUsersDO querySpecityUserId(Integer id) {
-        return wsUsersService.selectById(id);
-    }
-
-    /**
      * 移除kookie.
      * @param request 请求
      * @param response 响应
@@ -858,42 +529,6 @@ public class WebSocketClientController extends AdminBaseController {
                 }
             }
         }
-    }
-
-    /**
-     * 获取好友列表列表数据.
-     */
-    @ResponseBody
-    @GetMapping("/myFriendsList")
-    public Result<Page<WsFriendsDO>> list(WsFriendsDO wsFriendsDto) {
-        Wrapper<WsFriendsDO> wrapper = new EntityWrapper<>();
-        if (StringUtils.isNotBlank(wsFriendsDto.getUname())) {
-            wrapper.eq("uname", wsFriendsDto.getUname());
-        }
-        Page<WsFriendsDO> qryPage = getPage(WsFriendsDO.class);
-        Page<WsFriendsDO> page = wsFriendsService.selectPage(qryPage, wrapper);
-        return Result.ok(page);
-    }
-
-    /**
-     * 查询会话信息.
-     * @param user 用户id
-     * @param request 请求
-     * @return 会话信息
-     */
-    @ResponseBody
-    @GetMapping("/querySessionData")
-    public String querySessionData(String user, HttpServletRequest request) {
-        logger.info("查询session数据, user:{}", user);
-
-        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
-        Object sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
-        Object sessionPass = sessionInfoBean == null ? "" : sessionInfoBean.getPassword();
-
-        logger.info("sessionUser:" + sessionUser);
-        logger.info("sessionPass:" + sessionPass);
-
-        return sessionUser + ":" + sessionPass;
     }
 
     /**
