@@ -53,13 +53,7 @@ public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     // 登陆成功后的页面前缀
-    // 访问样例:http://127.0.0.1:8100?v=1
-    // 目前可用值:
-    //          v=1 -> wsclientIndex_v1.html 头、底、导航栏、iframe分离
-    //          v=2 -> wsclientIndex_v2.html 头、底、导航栏、iframe都在一个页面
-    //          v=3 -> wsclientIndex_v3.html 比v2更新一点的版本
-    //          v=4 -> wsclientIndex_v4.html 采用jquery easyUI重新设计(默认)
-    private static String HOME_PAGE_NAME = "wsclientIndex_v4";
+    private static String INDEX_PAGE_NAME = "wsclientIndex_v4";
 
     @Autowired
     private WebSocketConfig webSocketConfig;
@@ -99,7 +93,7 @@ public class LoginController {
      * @return 登陆首页
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "登陆首页页面")
-    @RequestMapping({"", "/", "/index"})
+    @RequestMapping({"", "/"})
     public String home(Model model, HttpServletRequest request, HttpServletResponse response, String errorMsg) {
         String version = request.getParameter("v");
         if (StringUtils.isNotBlank(version)) {
@@ -107,18 +101,18 @@ public class LoginController {
                 case "1":
                 case "2":
                 case "3":
-                    HOME_PAGE_NAME = "wsclientIndex_v" +version;
+                    INDEX_PAGE_NAME = "wsclientIndex_v" +version;
                     break;
                 default:
-                    HOME_PAGE_NAME = "wsclientIndex_v4";
+                    INDEX_PAGE_NAME = "wsclientIndex_v4";
             }
-            setCookieObj(response, "homePageName", HOME_PAGE_NAME, CommonConstants.LOCALE_COOKIE_EXPIRE);
+            setCookieObj(response, "indexPageName", INDEX_PAGE_NAME, CommonConstants.LOCALE_COOKIE_EXPIRE);
         }
 
         // 如果用户已登陆过，则直接跳转登陆成功首页
         SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
         if (null != sessionInfoBean) {
-            return "ws/" + HOME_PAGE_NAME;
+            return "index/" + INDEX_PAGE_NAME;
         }
 
         // 检查cookie
@@ -161,7 +155,7 @@ public class LoginController {
             // 用户未注册
             request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.user.not.exist"));
-            request.getRequestDispatcher("index").forward(request, response);
+            request.getRequestDispatcher("/").forward(request, response);
             //request.getRequestDispatcher("loginfail.page").forward(request, response);
             return;
         }
@@ -172,7 +166,7 @@ public class LoginController {
             // 此账号已被禁用
             request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.user.disable"));
-            request.getRequestDispatcher("index").forward(request, response);
+            request.getRequestDispatcher("/").forward(request, response);
             return;
         }
 
@@ -181,7 +175,7 @@ public class LoginController {
 //            // 如果已登录
 //            request.setAttribute("user", user);
 //            request.setAttribute("errorMsg", "当前用户已经登录了,请不要重复登录!");
-//            request.getRequestDispatcher("index").forward(request, response);
+//            request.getRequestDispatcher("/").forward(request, response);
 //            return;
 //        }
 
@@ -191,7 +185,7 @@ public class LoginController {
         if (!password.equals(dbPassDecrypted)) {
             request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.password.wrong"));
-            request.getRequestDispatcher("index").forward(request, response);
+            request.getRequestDispatcher("/").forward(request, response);
             return;
         }
 
@@ -201,13 +195,13 @@ public class LoginController {
         if (StringUtils.isBlank(verifyCode)) {
             request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.invalid"));
-            request.getRequestDispatcher("index").forward(request, response);
+            request.getRequestDispatcher("/").forward(request, response);
             return;
         }
         if (!verifyCodeInput.equals(verifyCode)) {
             request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong"));
-            request.getRequestDispatcher("index").forward(request, response);
+            request.getRequestDispatcher("/").forward(request, response);
             return;
         }
 
@@ -258,7 +252,7 @@ public class LoginController {
         curUserObj.setLastLoginTime(SDF_STANDARD.format(new Date()));
         wsUsersService.updateById(curUserObj);
 
-        response.sendRedirect("home.page");
+        response.sendRedirect("index.page");
     }
 
     /**
@@ -267,16 +261,16 @@ public class LoginController {
      * @return 首页
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "登录成功页面")
-    @RequestMapping(value = "home.page")
+    @RequestMapping(value = "index.page")
     public String wsclientIndex(HttpServletRequest request, HttpServletResponse response) {
-        logger.debug("访问home.page");
-        Cookie cookie = getCookieObj(request, "homePageName");
+        logger.debug("访问index.page");
+        Cookie cookie = getCookieObj(request, "indexPageName");
         if (null != cookie) {
-            HOME_PAGE_NAME = cookie.getValue();
+            INDEX_PAGE_NAME = cookie.getValue();
         } else {
-            setCookieObj(response, "homePageName", HOME_PAGE_NAME, CommonConstants.LOCALE_COOKIE_EXPIRE);
+            setCookieObj(response, "indexPageName", INDEX_PAGE_NAME, CommonConstants.LOCALE_COOKIE_EXPIRE);
         }
-        return "ws/" + HOME_PAGE_NAME;
+        return "index/" + INDEX_PAGE_NAME;
     }
 
     /**
