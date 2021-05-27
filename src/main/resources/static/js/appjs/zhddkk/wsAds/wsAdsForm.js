@@ -21,6 +21,17 @@ $(function () {
 function save() {
     var markupStr = $('#content')[0].childNodes[1].innerHTML;
     $('#contentInput').val(markupStr);
+    var backImg = $("#backImgInput").val();
+
+    if (!markupStr || typeof(markupStr) == "undefined") {
+        parent.layer.alert("请填写内容");
+        return;
+    }
+
+    if (!backImg || typeof(backImg) == "undefined") {
+        parent.layer.alert("请上传背景图片");
+        return;
+    }
 
     var action = "save";
     if ($("#id").val()) {
@@ -44,7 +55,6 @@ function save() {
             } else {
                 parent.layer.alert("保存失败，请稍后再试");
             }
-
         }
     });
 }
@@ -66,6 +76,9 @@ function validateRule() {
             },
             content: {
                 required: true
+            },
+            backImg: {
+                required: true
             }
         },
         messages: {
@@ -74,6 +87,9 @@ function validateRule() {
             },
             content: {
                 required: icon + "请输入内容"
+            },
+            backImg: {
+                required: icon + "请上传背景图片"
             }
         }
     });
@@ -103,11 +119,6 @@ function initUpload() {
             layer.closeAll('loading');
         }
     });
-}
-
-// 加载图片失败
-function imgerror(imgObj) {
-    $(imgObj).attr("src", rootUrl + "img/" + $.ws.errorImageName);
 }
 
 // 预览图片
