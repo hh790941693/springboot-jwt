@@ -46,7 +46,7 @@ public class WsIndexController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.OTHER, subModule = "", describe = "联系作者页面")
     @RequestMapping("/contactAuthor.page")
     public String contactAuthor() {
-        return "ws/contactAuthor";
+        return "index/contactAuthor";
     }
 
     /**
@@ -55,7 +55,7 @@ public class WsIndexController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.OTHER, subModule = "", describe = "捐赠作者页面")
     @RequestMapping("/donate.page")
     public String donate() {
-        return "ws/donate";
+        return "index/donate";
     }
 
     /**
@@ -64,7 +64,7 @@ public class WsIndexController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.OTHER, subModule = "", describe = "提出疑问页面")
     @RequestMapping("/feedbackUs.page")
     public String feedbackUs() {
-        return "ws/feedbackUs";
+        return "index/feedbackUs";
     }
 
     /**
@@ -73,7 +73,7 @@ public class WsIndexController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.OTHER, subModule = "", describe = "关于我们页面")
     @RequestMapping("/aboutUs.page")
     public String aboutUs() {
-        return "ws/aboutUs";
+        return "index/aboutUs";
     }
 
     /**
@@ -82,6 +82,6 @@ public class WsIndexController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.OTHER, subModule = "", describe = "easyUI Demo")
     @RequestMapping("/easyUIDemo.page")
     public String easyUI() {
-        return "ws/easyuiDemo";
+        return "index/easyuiDemo";
     }
 }
