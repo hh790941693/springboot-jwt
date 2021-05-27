@@ -112,7 +112,7 @@ public class LoginController {
         // 如果用户已登陆过，则直接跳转登陆成功首页
         SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
         if (null != sessionInfoBean) {
-            return "index/" + INDEX_PAGE_NAME;
+            return "redirect:/index.page";
         }
 
         // 检查cookie
