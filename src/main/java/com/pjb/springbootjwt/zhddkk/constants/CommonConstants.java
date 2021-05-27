@@ -47,5 +47,5 @@ public class CommonConstants {
     //session过期相关配置
     public static final String SESSION_TIMEOUT_MSG = "Session timeout";
     public static final String SESSION_TIMEOUT_CODE = "-255";
-    public static final String SESSION_TIMEOUT_REDIRECT_URL = "/index";
+    public static final String SESSION_TIMEOUT_REDIRECT_URL = "/";
 }
