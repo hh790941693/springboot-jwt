@@ -521,7 +521,7 @@ public class WebSocketClientController extends AdminBaseController {
         Cookie[] cookies = request.getCookies();
         if (null != cookies) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(CommonConstants.S_USER) || cookie.getName().equals(CommonConstants.S_PASS)) {
+                if (cookie.getName().equals(CommonConstants.C_USER) || cookie.getName().equals(CommonConstants.C_PASS)) {
                     if (cookie.getMaxAge() != 0) {
                         cookie.setMaxAge(0);
                         response.addCookie(cookie);

@@ -118,17 +118,17 @@ public class LoginController {
         // 检查cookie
         String userInit = "";
         String passwordInit = "";
-        Cookie userCookie = getCookieObj(request, CommonConstants.S_USER);
+        Cookie userCookie = getCookieObj(request, CommonConstants.C_USER);
         if (null != userCookie && userCookie.getMaxAge() != 0){
             userInit = userCookie.getValue();
         }
-        Cookie passwordCookie = getCookieObj(request, CommonConstants.S_PASS);
+        Cookie passwordCookie = getCookieObj(request, CommonConstants.C_PASS);
         if (null != passwordCookie && passwordCookie.getMaxAge() != 0){
             //对密码进行解密
             passwordInit = SecurityAESUtil.decryptAES(passwordCookie.getValue(), CommonConstants.AES_PASSWORD);
         }
-        model.addAttribute(CommonConstants.S_USER, userInit);
-        model.addAttribute(CommonConstants.S_PASS, passwordInit);
+        model.addAttribute(CommonConstants.C_USER, userInit);
+        model.addAttribute(CommonConstants.C_PASS, passwordInit);
 
         if (StringUtils.isNotBlank(errorMsg)) {
             request.setAttribute("errorMsg", errorMsg);
@@ -206,27 +206,20 @@ public class LoginController {
         }
 
         // 客户端浏览器类型
-        String userAgent = request.getHeader("User-Agent");
-        logger.info("userAgent:{}", userAgent);
-        String shortAgent = "unknown user agent";
-        try {
-            shortAgent = userAgent.split("\\(")[1].split("\\)")[0].replaceAll("\\(", "").replaceAll("\\)", "");
-        } catch (Exception e) {
-            logger.warn("获取客户端信息失败!" + e.getMessage());
-        }
+        String userAgent = parseUserAgent(request);
 
-        // 获取session
+        // 创建session
         HttpSession session = request.getSession(true);
         // 设置session非活动失效时间(30分钟)
         session.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
         //记录cookie
-        saveCookie(response, curUserObj);
+        saveCookie(response, curUserObj, userAgent);
 
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(session.getId(),
                 String.valueOf(curUserObj.getId()), userName, curUserObj.getPassword(), webSocketConfig.getAddress(),
-                webSocketConfig.getPort(), curUserObj.getHeadImage(), shortAgent, String.valueOf(curUserObj.getRoleId()), curUserObj.getRoleName(), session.getMaxInactiveInterval());
+                webSocketConfig.getPort(), curUserObj.getHeadImage(), userAgent, String.valueOf(curUserObj.getRoleId()), curUserObj.getRoleName(), session.getMaxInactiveInterval());
         String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
         JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
         sessionInfoBean.setJsonStr(jsonStr);
@@ -702,22 +695,29 @@ public class LoginController {
      * 保存cookie.
      * @param response 响应体
      * @param curUserObj 当前登陆用户
+     * @param userAgent 客户端类型
      */
-    private void saveCookie(HttpServletResponse response, WsUsersDO curUserObj) {
+    private void saveCookie(HttpServletResponse response, WsUsersDO curUserObj, String userAgent) {
         // 用户id
-        setCookieObj(response, CommonConstants.S_USER_ID, String.valueOf(curUserObj.getId()), CommonConstants.COOKIE_TIMEOUT);
+        setCookieObj(response, CommonConstants.C_USER_ID, String.valueOf(curUserObj.getId()), CommonConstants.COOKIE_TIMEOUT);
 
         // 用户名
-        setCookieObj(response, CommonConstants.S_USER, curUserObj.getName(), CommonConstants.COOKIE_TIMEOUT);
+        setCookieObj(response, CommonConstants.C_USER, curUserObj.getName(), CommonConstants.COOKIE_TIMEOUT);
 
         // 用户密码
-        setCookieObj(response, CommonConstants.S_PASS, curUserObj.getPassword(), 600);
+        setCookieObj(response, CommonConstants.C_PASS, curUserObj.getPassword(), 600);
 
         // 服务器ip
-        setCookieObj(response, CommonConstants.S_WEBSERVERIP, webSocketConfig.getAddress(), CommonConstants.COOKIE_TIMEOUT);
+        setCookieObj(response, CommonConstants.C_WEBSERVERIP, webSocketConfig.getAddress(), CommonConstants.COOKIE_TIMEOUT);
 
         // 服务器port
-        setCookieObj(response, CommonConstants.S_WEBSERVERPORT, webSocketConfig.getPort(), CommonConstants.COOKIE_TIMEOUT);
+        setCookieObj(response, CommonConstants.C_WEBSERVERPORT, webSocketConfig.getPort(), CommonConstants.COOKIE_TIMEOUT);
+
+        // 头像
+        setCookieObj(response, CommonConstants.C_IMG, curUserObj.getHeadImage(), CommonConstants.COOKIE_TIMEOUT);
+
+        // user-agent
+        setCookieObj(response, CommonConstants.C_USER_AGENT, userAgent, CommonConstants.COOKIE_TIMEOUT);
     }
 
     /**
@@ -750,5 +750,27 @@ public class LoginController {
         cookie.setPath("/");
         cookie.setMaxAge(expire);
         response.addCookie(cookie);
+    }
+
+    /**
+     * 获取客户端类型.
+     *
+     * @param request
+     * @return
+     */
+    private static String parseUserAgent(HttpServletRequest request) {
+        // 客户端浏览器类型
+        String userAgent = request.getHeader("User-Agent");
+        try {
+            userAgent = userAgent.split("\\(")[1].split("\\)")[0]
+                    .replaceAll("\\(", "")
+                    .replaceAll("\\)", "")
+                    .replaceAll(" +", "_")
+                    .replaceAll(";", "");
+        } catch (Exception e) {
+            userAgent = "unknown user agent";
+        }
+
+        return userAgent;
     }
 }

@@ -10,14 +10,14 @@ public class CommonConstants {
     //session信息
     public static final String SESSION_INFO = "sessionInfo";
 
-    //session中存储的KV键值对
-    public static final String S_USER_ID = "userid";
-    public static final String S_USER = "user";
-    public static final String S_PASS = "pass";
-    public static final String S_WEBSERVERIP = "webserverip";
-    public static final String S_WEBSERVERPORT = "webserverport";
-    public static final String S_IMG = "selfimg";           //个人头像
-    public static final String S_USER_AGENT = "useragent";  // 设备信息
+    //cookie中存储的KV键值对
+    public static final String C_USER_ID = "userId";
+    public static final String C_USER = "username";
+    public static final String C_PASS = "pass";
+    public static final String C_WEBSERVERIP = "webserverIp";
+    public static final String C_WEBSERVERPORT = "webserverPort";
+    public static final String C_IMG = "selfImg";           //个人头像
+    public static final String C_USER_AGENT = "userAgent";  // 设备信息
 
     // cookie中存储的KV键值对
     public static final String C_LANG = "lang";  // 语言
@@ -31,10 +31,6 @@ public class CommonConstants {
     //session不活动时的超时时间(单位:秒)  30分钟
     public static final int SESSION_INACTIVE_TIMEOUT = 1800;
 
-    // 请求结果常量
-    public static final String SUCCESS = "success";
-    public static final String FAIL = "failed";
-
     //加密秘钥
     public static final String AES_PASSWORD = "hch";
 
@@ -45,7 +41,6 @@ public class CommonConstants {
     public static final int LOCALE_COOKIE_EXPIRE = 20 * 365 * 24 * 60 * 60;
 
     //session过期相关配置
-    public static final String SESSION_TIMEOUT_MSG = "Session timeout";
     public static final String SESSION_TIMEOUT_CODE = "-255";
     public static final String SESSION_TIMEOUT_REDIRECT_URL = "/";
 }

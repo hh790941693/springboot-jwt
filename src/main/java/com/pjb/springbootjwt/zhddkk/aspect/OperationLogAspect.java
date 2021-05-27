@@ -134,7 +134,7 @@ public class OperationLogAspect {
                             continue;
                         }
                         String parameterValueStr = parameterValue.toString();
-                        if (paraterName.contains(CommonConstants.S_PASS)) {
+                        if (paraterName.contains(CommonConstants.C_PASS)) {
                             parameterValueStr = "******";
                         }
                         if (parameterValueStr.length() >= 300) {
