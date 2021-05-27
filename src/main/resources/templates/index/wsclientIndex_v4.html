@@ -89,6 +89,26 @@
             font-size: 17px;
             margin-bottom: 5px;
         }
+
+        .swiper-container{
+            width: 80%;
+            height: 100%;
+        }
+
+        .swiper-pagination-bullet {
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+            color:#000;
+            opacity: 1;
+            background: rgba(0,0,0,0.2);
+        }
+        .swiper-pagination-bullet-active {
+            color:#fff;
+            background: #007aff;
+        }
     </style>
 </head>
 
@@ -222,7 +242,7 @@
                                 <ul>
                                     <li v-for="news in recentNewsList">
                                         <span>
-                                            <a style='color:blue;font-weight: bold;' @click="showAdsDetail(news.id)">【查看详情】</a>
+                                            <a style='color:blue;font-weight: bold;' @click="showAdsDetail(news.title, news.id)">【查看详情】</a>
                                         </span>
                                         <span style='font-size:14px;font-weight: bold;'>{{news.title}} </span>
                                         <span style='font-size:9px;color: grey;margin-left:5px;'>{{news.createTime}}</span>
@@ -232,19 +252,14 @@
 
                             <!-- Swiper -->
                             <div id="swiperDiv" style="width:100%;height:400px;margin-top: 20px;">
-                                <div class="swiper-container" style="width: 80%;height: 100%;">
+                                <div class="swiper-container">
                                     <div class="swiper-wrapper">
-                                        <div class="swiper-slide" style="background-image:url(/img/pic1.jpg)" onclick="window.open('/zhddkk/wsAds/adsDetail.page?id=64', 'newwindow', 'height=800, width=1000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')"></div>
-                                        <div class="swiper-slide" style="background-image:url(/img/pic2.jpg)" onclick="window.open('/zhddkk/wsAds/adsDetail.page?id=63', 'newwindow', 'height=800, width=1000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')"></div>
-                                        <div class="swiper-slide" style="background-image:url(/img/pic3.jpg)" onclick="window.open('/zhddkk/wsAds/adsDetail.page?id=62', 'newwindow', 'height=800, width=1000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')"></div>
-                                        <div class="swiper-slide" style="background-image:url(/img/pic4.jpg)" onclick="window.open('/zhddkk/wsAds/adsDetail.page?id=61', 'newwindow', 'height=800, width=1000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')"></div>
-                                        <div class="swiper-slide" style="background-image:url(/img/pic5.jpg)" onclick="window.open('/zhddkk/wsAds/adsDetail.page?id=60', 'newwindow', 'height=800, width=1000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')"></div>
+                                        <div class="swiper-slide" v-for="news in recentNewsList">
+                                            <img :src="news.backImg" @click="showAdsDetail(news.title, news.id)" style="width: 100%;height: 100%;cursor: pointer;">
+                                        </div>
                                     </div>
                                     <!-- Add Pagination -->
                                     <div class="swiper-pagination swiper-pagination-white"></div>
-                                    <!-- Add Arrows -->
-                                    <div class="swiper-button-next swiper-button-white"></div>
-                                    <div class="swiper-button-prev swiper-button-white"></div>
                                 </div>
                             </div>
                         </div>
@@ -303,7 +318,7 @@
             <marquee direction="left" scrolldelay="10" scrollamount="7" onMouseOver="this.stop()" onMouseOut="this.start()">
                 <span v-for="news in recentNewsList">
                     <span>
-                        <a style='color:blue;font-weight: bold;' @click="showAdsDetail(news.id)">【查看详情】</a>
+                        <a style='color:blue;font-weight: bold;' @click="showAdsDetail(news.title, news.id)">【查看详情】</a>
                     </span>
                     <span style='font-size:14px;font-weight: bold;'>{{news.title}}</span>
                     <span style='font-size:9px;color: grey;margin-left:5px;margin-right: 200px;'>{{news.createTime}}</span>
@@ -742,8 +757,8 @@
                     }
                 });
             },
-            showAdsDetail: function(adId) {
-                window.open("./zhddkk/wsAds/adsDetail.page?id=" + adId);
+            showAdsDetail: function(title, adId) {
+                window.open('/zhddkk/wsAds/adsDetail.page?id='+adId, title, 'height=800, width=1000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
             },
             showPersonInfo: function (userName) {
                 layer.open({
@@ -773,6 +788,7 @@
         $("#gameIframe").attr("src", gUrl);
     }
 
+    // 图片滚动插件
     var swiper = new Swiper('.swiper-container', {
         spaceBetween: 30,
         effect: 'fade',
@@ -783,11 +799,15 @@
         pagination: {
             el: '.swiper-pagination',
             clickable: true,
+            renderBullet: function (index, className) {
+                return '<span class="' + className + '">' + (index + 1) + '</span>';
+            },
         },
         navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
         },
+        observer:true,
     });
 </script>
 </html>
