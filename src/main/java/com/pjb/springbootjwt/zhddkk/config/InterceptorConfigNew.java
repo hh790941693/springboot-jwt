@@ -34,8 +34,6 @@ public class InterceptorConfigNew implements WebMvcConfigurer {
             "/checkUserRegisterStatus.json",
             "/updatePassword.do",
             "/loginfail.page",
-            "/sessionInfo",
-            "/sessionInfo.page",
             "/generateVerifyCode.do",
             "/upload/app",
             "/wsregister.do",

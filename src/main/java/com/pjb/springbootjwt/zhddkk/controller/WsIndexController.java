@@ -2,13 +2,20 @@ package com.pjb.springbootjwt.zhddkk.controller;
 
 import com.pjb.springbootjwt.common.vo.Result;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.bean.WeatherBean;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
+import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import com.pjb.springbootjwt.zhddkk.util.WeatherUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -37,6 +44,27 @@ public class WsIndexController {
             e.printStackTrace();
         }
         return Result.fail();
+    }
+
+    /**
+     * session信息页面.
+     *
+     * @param model 模型
+     * @return 会话信息
+     */
+    @RequestMapping("/sessionInfo.page")
+    public String sessionInfoPage(Model model) {
+        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
+
+        if (null != sessionInfoBean) {
+            SessionInfoBean copyBean = new SessionInfoBean();
+            BeanUtils.copyProperties(sessionInfoBean, copyBean);
+            String encryPassword = hidePassword(sessionInfoBean.getPassword());
+            copyBean.setPassword(encryPassword);
+            model.addAttribute(CommonConstants.SESSION_INFO, JsonUtil.javaobject2Jsonobject(copyBean));
+            return "index/sessionInfo";
+        }
+        return "redirect:/";
     }
 
     /**
@@ -83,5 +111,25 @@ public class WsIndexController {
     @RequestMapping("/easyUIDemo.page")
     public String easyUI() {
         return "index/easyuiDemo";
+    }
+
+    /**
+     * 对密码做特殊处理.
+     *
+     * @param password 密文
+     * @return 密文
+     */
+    private String hidePassword(String password) {
+        StringBuilder sb = new StringBuilder();
+        if (StringUtils.isNotBlank(password)) {
+            for (int i = 0; i < password.length() - 1; i++) {
+                if (i % 3 == 0) {
+                    sb.append("*");
+                } else {
+                    sb.append(password.charAt(i));
+                }
+            }
+        }
+        return sb.toString();
     }
 }

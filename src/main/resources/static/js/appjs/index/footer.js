@@ -69,7 +69,7 @@ function showSessionInfo() {
         shadeClose: true,//点击遮罩关闭层
         area: ['630px', '410px'],
         anim: 1,
-        content: rootUrl + '/sessionInfo.page'
+        content: rootUrl + '/index/sessionInfo.page'
     });
 }
 
