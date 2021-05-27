@@ -54,6 +54,19 @@ function load() {
                 title: '主键'
             },
             {
+                field: 'backImg',
+                title: '背景图片',
+                formatter: function (value) {
+                    var result = "";
+                    if (value != "" && value != null) {
+                        result += "<div style='text-align: center;'>";
+                        result += "<img onerror=\"this.onerror='';this.src='" + $.ws.errorImgUrl + "'\" onclick=\"$.ws.gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
+                        result += "</div>";
+                    }
+                    return result;
+                }
+            },
+            {
                 field: 'title',
                 title: '标题',
                 formatter: function (value) {

@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/css/default.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/js/plugins/layui/css/layui.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/js/fontAwesome/css/font-awesome.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/js/swiper/swiper.min.css}">
     <script type="text/javascript" th:src="@{/js/easyui-1.9.11/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/easyui-1.9.11/jquery.easyui.min.js}"></script>
     <script type="text/javascript" th:src='@{/js/easyui-1.9.11/locale/easyui-lang-zh_CN.js}'> </script>
@@ -19,6 +20,7 @@
     <script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery/jquery.i18n.properties.js}"></script>
     <script type="text/javascript" th:src="@{/js/plugins/layui/layui.all.js}"></script>
+    <script type="text/javascript" th:src="@{/js/swiper/swiper.min.js}"></script>
     <th:block th:include="common :: sessionInfo"></th:block>
 
     <style type="text/css">
@@ -216,7 +218,7 @@
                 <div th:title="#{div.title.index}" data-options="iconCls:'icon icon-12-11',closable:false" style="padding:20px;overflow:hidden;" id="home">
                     <div class="easyui-layout" data-options="fit:true">
                         <div th:title="#{div.title.top.news}" data-options="region:'west',collapsed:false,split:false,border:true,iconCls:'icon icon-13-4'" style="width:30%;">
-                            <div id="recentNewsPanel" style="width:100%;height:200px;padding: 10px 0 0 10px;">
+                            <div id="recentNewsPanel" style="width:100%;height:200px;padding: 10px 0 0 10px;overflow: auto;">
                                 <ul>
                                     <li v-for="news in recentNewsList">
                                         <span>
@@ -226,6 +228,24 @@
                                         <span style='font-size:9px;color: grey;margin-left:5px;'>{{news.createTime}}</span>
                                     </li>
                                 </ul>
+                            </div>
+
+                            <!-- Swiper -->
+                            <div id="swiperDiv" style="width:100%;height:400px;margin-top: 20px;">
+                                <div class="swiper-container" style="width: 80%;height: 100%;">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide" style="background-image:url(/img/pic1.jpg)" onclick="window.open('/zhddkk/wsAds/adsDetail.page?id=64', 'newwindow', 'height=800, width=1000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')"></div>
+                                        <div class="swiper-slide" style="background-image:url(/img/pic2.jpg)" onclick="window.open('/zhddkk/wsAds/adsDetail.page?id=63', 'newwindow', 'height=800, width=1000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')"></div>
+                                        <div class="swiper-slide" style="background-image:url(/img/pic3.jpg)" onclick="window.open('/zhddkk/wsAds/adsDetail.page?id=62', 'newwindow', 'height=800, width=1000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')"></div>
+                                        <div class="swiper-slide" style="background-image:url(/img/pic4.jpg)" onclick="window.open('/zhddkk/wsAds/adsDetail.page?id=61', 'newwindow', 'height=800, width=1000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')"></div>
+                                        <div class="swiper-slide" style="background-image:url(/img/pic5.jpg)" onclick="window.open('/zhddkk/wsAds/adsDetail.page?id=60', 'newwindow', 'height=800, width=1000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')"></div>
+                                    </div>
+                                    <!-- Add Pagination -->
+                                    <div class="swiper-pagination swiper-pagination-white"></div>
+                                    <!-- Add Arrows -->
+                                    <div class="swiper-button-next swiper-button-white"></div>
+                                    <div class="swiper-button-prev swiper-button-white"></div>
+                                </div>
                             </div>
                         </div>
                         
@@ -752,5 +772,22 @@
         var gUrl = gameList[gIndex];
         $("#gameIframe").attr("src", gUrl);
     }
+
+    var swiper = new Swiper('.swiper-container', {
+        spaceBetween: 30,
+        effect: 'fade',
+        autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
 </script>
 </html>

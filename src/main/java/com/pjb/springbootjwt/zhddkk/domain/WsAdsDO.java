@@ -30,6 +30,8 @@ public class WsAdsDO implements Serializable {
     //内容
     @ApiModelProperty(value = "content",name = "内容")
     private String content;
+    //背景图片
+    private String backImg;
     //接收人列表
     @ApiModelProperty(value = "receiveList",name = "接收人列表")
     private String receiveList;
@@ -83,4 +85,11 @@ public class WsAdsDO implements Serializable {
         return createTime;
     }
 
+    public String getBackImg() {
+        return backImg;
+    }
+
+    public void setBackImg(String backImg) {
+        this.backImg = backImg;
+    }
 }

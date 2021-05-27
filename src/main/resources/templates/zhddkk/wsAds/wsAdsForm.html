@@ -21,6 +21,19 @@
                             </div>
 
                             <div class="form-group">
+                                <label class="col-sm-2 control-label"><span style="color:red">*</span>&nbsp;背景图片：</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" id="backImgInput" name="backImg" class="layui-input" th:value="${wsAds.backImg}">
+                                    <button type="button" id="imageBtn" class="layui-btn">
+                                        <i class="layui-icon">&#xe67c;</i>上传图片
+                                    </button>
+
+                                    <img id="backImg" style="margin-left: 30px;" onclick="showImg(this)" alt="" width="60px" height="60px"
+                                         onerror="imgerror(this)" th:src="${wsAds.backImg}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="col-sm-2 control-label"><span style="color:red">*</span>&nbsp;内容：</label>
                                 <input id="contentInput" name="content" th:value="${wsAds.content}"
                                        style="display: none">

@@ -1,5 +1,6 @@
 $(function () {
     validateRule();
+    initUpload();
 
     $('#content').editable({
         inlineMode: false,
@@ -76,4 +77,40 @@ function validateRule() {
             }
         }
     });
+}
+
+// 初始化上传模块
+function initUpload() {
+    layui.upload.render({
+        elem: '#imageBtn',
+        url: $.ws.uploadFileUrl,
+        size: 10240,//单位为KB
+        accept: 'images',
+        data: {
+            "folder": "adsBackImg"
+        },
+        before: function () {
+            layer.load();
+        },
+        done: function (r) {
+            layer.closeAll('loading');
+            if (r.code == 1) {
+                $("#backImg").attr("src", r.data);
+                $("#backImgInput").val(r.data);
+            }
+        },
+        error: function () {
+            layer.closeAll('loading');
+        }
+    });
+}
+
+// 加载图片失败
+function imgerror(imgObj) {
+    $(imgObj).attr("src", rootUrl + "img/" + $.ws.errorImageName);
+}
+
+// 预览图片
+function showImg(imgObj) {
+    $.ws.gShowImg($(imgObj).attr("src"));
 }

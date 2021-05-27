@@ -159,31 +159,25 @@ public class WsAdsController extends AdminBaseController {
         logger.info("进入保存广告信息");
         // 接收人列表
         List<String> receiveList = new ArrayList<>();
-        String title = wsAds.getTitle();
-        String content = wsAds.getContent();
-        if (StringUtils.isBlank(title) || StringUtils.isBlank(content)) {
+        if (StringUtils.isBlank(wsAds.getTitle()) || StringUtils.isBlank(wsAds.getContent()) || StringUtils.isBlank(wsAds.getBackImg())) {
             return Result.fail("参数不能为空");
         }
 
         // 插入广告记录
-        WsAdsDO wsAdsDO = new WsAdsDO();
-        wsAdsDO.setTitle(title);
-        wsAdsDO.setContent(content);
-        boolean insertFlag = wsAdsService.insert(wsAdsDO);
+        boolean insertFlag = wsAdsService.insert(wsAds);
         if (insertFlag) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String curTime = sdf.format(new Date());
 
             Map<String, Map<String, Session>> socketMap = ZhddWebSocket.getClientsMap();
             for (Map.Entry<String, Map<String, Session>> outerEntry : socketMap.entrySet()) {
-                Map<String, Session> roomClientMap = outerEntry.getValue();
                 for (Map.Entry<String, Session> innerEntry : outerEntry.getValue().entrySet()) {
                     if (innerEntry.getKey().equals(CommonConstants.ADMIN_USER)) {
                         continue;
                     }
                     try {
                         ChatMessageBean chatBean = new ChatMessageBean(curTime, "4", "广告消息",
-                                CommonConstants.ADMIN_USER, innerEntry.getKey(), "title:" + title + ";content:" + content);
+                                CommonConstants.ADMIN_USER, innerEntry.getKey(), "title:" + wsAds.getTitle() + ";content:" + wsAds.getContent());
                         innerEntry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
                         receiveList.add(innerEntry.getKey());
                     } catch (IOException e) {
@@ -192,8 +186,8 @@ public class WsAdsController extends AdminBaseController {
                 }
             }
 
-            wsAdsDO.setReceiveList(receiveList.toString());
-            wsAdsService.updateById(wsAdsDO);
+            wsAds.setReceiveList(receiveList.toString());
+            wsAdsService.updateById(wsAds);
             return Result.ok();
         }
         return Result.fail();
