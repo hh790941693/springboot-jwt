@@ -180,7 +180,7 @@
                     window.location.href = "login.page";
                 }, timeout * 1000);
             } else {
-                layer.msg('注册失败');
+                layer.msg('注册失败: '+jsonObj.msg);
             }
         });
 

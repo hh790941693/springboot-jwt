@@ -10,6 +10,7 @@ import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
+import com.pjb.springbootjwt.zhddkk.dto.ForgetPasswordDTO;
 import com.pjb.springbootjwt.zhddkk.dto.LoginDTO;
 import com.pjb.springbootjwt.zhddkk.dto.RegisterDTO;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
@@ -404,23 +405,19 @@ public class LoginController {
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.FORGET_PASSWORD, subModule = "", describe = "更新密码")
     @RequestMapping(value = "updatePassword.do", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> updatePassword(@RequestParam("user")String user,
-                                         @RequestParam("pass")String newPass,
-                                         @RequestParam("confirmPass")String confirmPass,
-                                         @RequestParam("select1")String question1, @RequestParam("answer1")String answer1,
-                                         @RequestParam("select2")String question2, @RequestParam("answer2")String answer2,
-                                         @RequestParam("select3")String question3, @RequestParam("answer3")String answer3) {
+    public Result<String> updatePassword(@Validated ForgetPasswordDTO forgetPasswordDTO) {
+        String user = forgetPasswordDTO.getUser();
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null == wsUsersDO) {
             return Result.fail();
         }
 
-        if (wsUsersDO.getQuestion1().equals(question1) && wsUsersDO.getAnswer1().equals(answer1)
-                && wsUsersDO.getQuestion2().equals(question2) && wsUsersDO.getAnswer2().equals(answer2)
-                && wsUsersDO.getQuestion3().equals(question3) && wsUsersDO.getAnswer3().equals(answer3)
-                && newPass.equals(confirmPass)) {
+        if (wsUsersDO.getQuestion1().equals(forgetPasswordDTO.getQuestion1()) && wsUsersDO.getAnswer1().equals(forgetPasswordDTO.getAnswer1())
+                && wsUsersDO.getQuestion2().equals(forgetPasswordDTO.getQuestion2()) && wsUsersDO.getAnswer2().equals(forgetPasswordDTO.getAnswer2())
+                && wsUsersDO.getQuestion3().equals(forgetPasswordDTO.getQuestion3()) && wsUsersDO.getAnswer3().equals(forgetPasswordDTO.getAnswer3())
+                && forgetPasswordDTO.getPass().equals(forgetPasswordDTO.getConfirmPass())) {
             //对新密码进行加密
-            String newPassEncrypt = SecurityAESUtil.encryptAES(newPass, CommonConstants.AES_PASSWORD);
+            String newPassEncrypt = SecurityAESUtil.encryptAES(forgetPasswordDTO.getPass(), CommonConstants.AES_PASSWORD);
             wsUsersDO.setPassword(newPassEncrypt);
             boolean updateFlag = wsUsersService.updateById(wsUsersDO);
             if (updateFlag) {
