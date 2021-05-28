@@ -37,14 +37,16 @@ function save() {
     if ($("#id").val()) {
         action = "update";
     }
+    var formObject = $('#form').serializeObject();
     $.ajax({
         cache: true,
         type: "POST",
         url: "/zhddkk/wsAds/" + action,
-        data: $('#form').serialize(),
+        data: JSON.stringify(formObject),
+        contentType: 'application/json',
         async: false,
-        error: function () {
-            parent.layer.alert("保存失败，请稍后再试");
+        error: function (result) {
+            parent.layer.alert("保存失败:"+result.msg);
         },
         success: function (data) {
             if (data.code === 1) {
@@ -53,7 +55,7 @@ function save() {
                 var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
                 parent.layer.close(index);
             } else {
-                parent.layer.alert("保存失败，请稍后再试");
+                parent.layer.alert("保存失败:"+data.msg);
             }
         }
     });

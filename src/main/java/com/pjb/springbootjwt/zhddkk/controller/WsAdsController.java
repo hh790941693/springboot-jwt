@@ -28,6 +28,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -155,7 +156,7 @@ public class WsAdsController extends AdminBaseController {
     @ResponseBody
     @PostMapping("/save")
     @Transactional
-    public Result<String> save(WsAdsDO wsAds) {
+    public Result<String> save(@Validated @RequestBody WsAdsDO wsAds) {
         logger.info("进入保存广告信息");
         // 接收人列表
         List<String> receiveList = new ArrayList<>();
@@ -198,7 +199,7 @@ public class WsAdsController extends AdminBaseController {
      */
     @ResponseBody
     @RequestMapping("/update")
-    public Result<String> update(WsAdsDO wsAds) {
+    public Result<String> update(@Validated @RequestBody WsAdsDO wsAds) {
         wsAdsService.updateById(wsAds);
         return Result.ok();
     }
