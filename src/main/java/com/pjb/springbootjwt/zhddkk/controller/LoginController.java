@@ -319,7 +319,7 @@ public class LoginController {
             // 如果密码不一致
             model.addAttribute("user", user);
             model.addAttribute("detail", "两次密码不一致!");
-            return Result.ok();
+            return Result.fail();
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
