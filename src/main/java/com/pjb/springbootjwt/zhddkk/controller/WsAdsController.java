@@ -160,9 +160,6 @@ public class WsAdsController extends AdminBaseController {
         logger.info("进入保存广告信息");
         // 接收人列表
         List<String> receiveList = new ArrayList<>();
-        if (StringUtils.isBlank(wsAds.getTitle()) || StringUtils.isBlank(wsAds.getContent()) || StringUtils.isBlank(wsAds.getBackImg())) {
-            return Result.fail("参数不能为空");
-        }
 
         // 插入广告记录
         boolean insertFlag = wsAdsService.insert(wsAds);

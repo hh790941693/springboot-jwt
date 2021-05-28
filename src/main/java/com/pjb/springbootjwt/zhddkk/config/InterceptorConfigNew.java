@@ -37,7 +37,7 @@ public class InterceptorConfigNew implements WebMvcConfigurer {
             "/loginfail.page",
             "/generateVerifyCode.do",
             "/upload/app",
-            "/wsregister.do",
+            "/register.do",
             "/getChatRoomInfo.json"));
 
     @Override

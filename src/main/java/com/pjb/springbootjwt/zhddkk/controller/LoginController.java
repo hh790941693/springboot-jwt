@@ -11,6 +11,7 @@ import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.dto.LoginDTO;
+import com.pjb.springbootjwt.zhddkk.dto.RegisterDTO;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.service.SysRoleService;
@@ -298,16 +299,11 @@ public class LoginController {
      * @return 注册
      */
     @OperationLogAnnotation(type = OperationEnum.INSERT, module = ModuleEnum.REGISTER, subModule = "", describe = "注册账号")
-    @RequestMapping(value = "wsregister.do", method = RequestMethod.POST)
+    @RequestMapping(value = "register.do", method = RequestMethod.POST)
     @ResponseBody
     @Transactional
-    public Result<String> wsregister(Model model, @RequestParam("user")String user,
-                             @RequestParam("pass")String pass,
-                             @RequestParam("headImg")String headImg,
-                             @RequestParam("confirmPass")String confirmPass,
-                             @RequestParam("select1")String question1, @RequestParam("answer1")String answer1,
-                             @RequestParam("select2")String question2, @RequestParam("answer2")String answer2,
-                             @RequestParam("select3")String question3, @RequestParam("answer3")String answer3) {
+    public Result<String> wsregister(Model model, @Validated RegisterDTO registerDTO) {
+        String user = registerDTO.getUser();
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {
             // 如果已经注册
@@ -316,6 +312,8 @@ public class LoginController {
             return Result.fail();
         }
 
+        String pass = registerDTO.getPass();
+        String confirmPass = registerDTO.getConfirmPass();
         if (!pass.equals(confirmPass)) {
             // 如果密码不一致
             model.addAttribute("user", user);
@@ -332,12 +330,12 @@ public class LoginController {
         insrtWu.setPassword(encryptPass);
         insrtWu.setRegisterTime(sdf.format(new Date()));
         insrtWu.setLastLoginTime(sdf.format(new Date()));
-        insrtWu.setQuestion1(question1);
-        insrtWu.setAnswer1(answer1);
-        insrtWu.setQuestion2(question2);
-        insrtWu.setAnswer2(answer2);
-        insrtWu.setQuestion3(question3);
-        insrtWu.setAnswer3(answer3);
+        insrtWu.setQuestion1(registerDTO.getQuestion1());
+        insrtWu.setAnswer1(registerDTO.getAnswer1());
+        insrtWu.setQuestion2(registerDTO.getQuestion2());
+        insrtWu.setAnswer2(registerDTO.getAnswer2());
+        insrtWu.setQuestion3(registerDTO.getQuestion3());
+        insrtWu.setAnswer3(registerDTO.getAnswer3());
         wsUsersService.insert(insrtWu);
 
         //插入注册日志
@@ -353,8 +351,8 @@ public class LoginController {
             wsUserProfileDO.setUserId(insrtWu.getId());
             wsUserProfileDO.setUserName(user);
             wsUserProfileDO.setCreateTime(new Date());
-            if (StringUtils.isNotBlank(headImg)) {
-                wsUserProfileDO.setImg(headImg);
+            if (StringUtils.isNotBlank(registerDTO.getHeadImg())) {
+                wsUserProfileDO.setImg(registerDTO.getHeadImg());
             }
             wsUserProfileService.insert(wsUserProfileDO);
         }
