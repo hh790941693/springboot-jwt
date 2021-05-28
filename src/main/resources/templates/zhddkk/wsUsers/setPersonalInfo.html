@@ -11,11 +11,11 @@
             margin-bottom: 2px;
         }
         .layui-form-label {
-            padding: 5px 15px;
+            padding: 5px 12px;
             width: 82px;
         }
         .layui-form-item .layui-input-inline {
-            width: 123px;
+            width: 125px;
         }
     </style>
 </head>
@@ -32,7 +32,7 @@
                     <div style="width:98%;height:100%;">
                         <form class="layui-form" lay-filter="personInfoForm" method="post" action="/zhddkk/wsUsers/setPersonInfo.do" enctype="multipart/form-data" target="hidden_frame1">
                             <div class="layui-form-item">
-                                <label class="layui-form-label">真实姓名</label>
+                                <label class="layui-form-label">真实姓名<span style="color:red">*</span></label>
                                 <div class="layui-input-block">
                                     <input type="text" name="realName" th:value="${userProfile.realName}" lay-verify="required" autocomplete="off" placeholder="请输入真实姓名" class="layui-input">
                                 </div>
@@ -52,7 +52,7 @@
                             </div>
 
                             <div class="layui-form-item">
-                                <label class="layui-form-label">个性签名</label>
+                                <label class="layui-form-label">个性签名<span style="color:red">*</span></label>
                                 <div class="layui-input-block">
                                     <input type="text" name="sign" th:value="${userProfile.sign}" lay-verify="required" autocomplete="off" placeholder="请输入个性签名" class="layui-input">
                                 </div>
@@ -85,7 +85,7 @@
                             </div>
 
                              <div class="layui-form-item">
-                                <label class="layui-form-label">住址</label>
+                                <label class="layui-form-label">住址<span style="color:red">*</span></label>
                                 <div class="layui-input-inline" style="margin-left: 28px;">
                                     <select name="province" th:value="${userProfile.province}" lay-filter="province" lay-verify="required">
                                         <option value="">请选择省份</option>
@@ -104,7 +104,7 @@
                              </div>
 
                             <div class="layui-form-item">
-                                <label class="layui-form-label">详细住址</label>
+                                <label class="layui-form-label">详细住址<span style="color:red">*</span></label>
                                 <div class="layui-input-block">
                                     <input type="text" name="address" th:value="${userProfile.address}" lay-verify="required" autocomplete="off" placeholder="请输入住址" class="layui-input">
                                 </div>
@@ -152,28 +152,28 @@
                     <div style="width:98%;height:100%;">
                         <form class="layui-form" action="/zhddkk/wsUsers/updatePassword.do" lay-filter="modifyPasswordForm" method="post" target="hidden_frame2">
                             <div class="layui-form-item">
-                                <label class="layui-form-label">用户名</label>
+                                <label class="layui-form-label">用户名<span style="color:red">*</span></label>
                                 <div class="layui-input-block">
                                     <input type="text" name="user" readonly th:value="${session.sessionInfo.userName}" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
 
                             <div class="layui-form-item">
-                                <label class="layui-form-label">旧密码</label>
+                                <label class="layui-form-label">旧密码<span style="color:red">*</span></label>
                                 <div class="layui-input-block">
                                     <input type="password" name="oldPass" lay-verify="required" placeholder="请输入旧密码" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
 
                             <div class="layui-form-item">
-                                <label class="layui-form-label">新密码</label>
+                                <label class="layui-form-label">新密码<span style="color:red">*</span></label>
                                 <div class="layui-input-block">
                                     <input type="password" name="newPass" lay-verify="required|newPass" placeholder="请输入新密码" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
 
                             <div class="layui-form-item">
-                                <label class="layui-form-label">确认密码</label>
+                                <label class="layui-form-label">确认密码<span style="color:red">*</span></label>
                                 <div class="layui-input-block">
                                     <input type="password" name="confirmPass" lay-verify="required|confirmPass" placeholder="请输入确认密码" autocomplete="off" class="layui-input">
                                 </div>
