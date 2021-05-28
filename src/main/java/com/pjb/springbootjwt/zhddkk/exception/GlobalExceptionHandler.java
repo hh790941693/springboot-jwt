@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = BindException.class)
     @ResponseBody
     public Result<String> BindExceptionHandler(BindException e) {
-        String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
+        String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(","));
         return Result.build(-2, message, message);
     }
 
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseBody
     public Result<String> constraintViolationExceptionHandler(ConstraintViolationException e) {
-        String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining());
+        String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(","));
         return Result.build(-3, message, message);
     }
 
@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
     public Result<String> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
-        String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
+        String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(","));
         return Result.build(-4, message, message);
     }
 

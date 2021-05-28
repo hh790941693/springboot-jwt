@@ -36,7 +36,7 @@ public class WsAdsDO implements Serializable {
     private String content;
 
     //背景图片
-    @NotBlank(message="背景图片不能为空")
+    @NotBlank(message="请上传背景图片")
     private String backImg;
 
     //接收人列表

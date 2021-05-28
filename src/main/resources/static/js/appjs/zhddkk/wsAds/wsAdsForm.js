@@ -37,13 +37,11 @@ function save() {
     if ($("#id").val()) {
         action = "update";
     }
-    var formObject = $('#form').serializeObject();
     $.ajax({
         cache: true,
         type: "POST",
         url: "/zhddkk/wsAds/" + action,
-        data: JSON.stringify(formObject),
-        contentType: 'application/json',
+        data: $('#form').serialize(),
         async: false,
         error: function (result) {
             parent.layer.alert("保存失败:"+result.msg);

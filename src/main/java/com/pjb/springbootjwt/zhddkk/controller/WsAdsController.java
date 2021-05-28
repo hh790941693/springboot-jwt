@@ -156,7 +156,7 @@ public class WsAdsController extends AdminBaseController {
     @ResponseBody
     @PostMapping("/save")
     @Transactional
-    public Result<String> save(@Validated @RequestBody WsAdsDO wsAds) {
+    public Result<String> save(@Validated WsAdsDO wsAds) {
         logger.info("进入保存广告信息");
         // 接收人列表
         List<String> receiveList = new ArrayList<>();
