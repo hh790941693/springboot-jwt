@@ -10,6 +10,7 @@ import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
+import com.pjb.springbootjwt.zhddkk.dto.LoginDTO;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.service.SysRoleService;
@@ -40,6 +41,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -138,16 +140,13 @@ public class LoginController {
 
     /**
      * 登录按钮事件.
-     * @param userName 用户名
-     * @param password 密码
-     * @param verifyCodeInput 验证码
+     * @param loginDTO 登录信息.
      */
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGIN, subModule = "", describe = "登录")
     @RequestMapping(value = "login.do", method = RequestMethod.POST)
-    public void login(@RequestParam("user")String userName, @RequestParam("pass")String password,
-                         @RequestParam("verifyCode")String verifyCodeInput,
-                         HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void login(@Validated LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 获取用户信息
+        String userName = loginDTO.getUser();
         WsUsersDO curUserObj = wsUsersService.queryUserByName(userName);
 
         // 如果用户信息不存在,提示用户去注册
@@ -182,7 +181,8 @@ public class LoginController {
         //数据库明文密码
         String dbPassDecrypted = SecurityAESUtil.decryptAES(curUserObj.getPassword(), CommonConstants.AES_PASSWORD);
         // 如果密码不对
-        if (!password.equals(dbPassDecrypted)) {
+        String passwordInput = loginDTO.getPass();
+        if (!passwordInput.equals(dbPassDecrypted)) {
             request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.password.wrong"));
             request.getRequestDispatcher("/").forward(request, response);
@@ -198,6 +198,7 @@ public class LoginController {
             request.getRequestDispatcher("/").forward(request, response);
             return;
         }
+        String verifyCodeInput = loginDTO.getVerifyCode();
         if (!verifyCodeInput.equals(verifyCode)) {
             request.setAttribute("user", userName);
             request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong"));
