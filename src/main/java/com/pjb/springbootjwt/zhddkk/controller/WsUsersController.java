@@ -11,6 +11,7 @@ import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
+import com.pjb.springbootjwt.zhddkk.dto.UpdatePasswordDTO;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsApplyService;
 import com.pjb.springbootjwt.zhddkk.service.WsFriendsService;
 import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -524,36 +526,21 @@ public class WsUsersController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.UPDATE_PASSWORD, subModule = "", describe = "修改密码")
     @RequestMapping(value = "updatePassword.do", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> updatePassword(@RequestParam(value = "user") String user,
-        @RequestParam(value = "oldPass") String oldPass, @RequestParam(value = "newPass") String newPass,
-        @RequestParam(value = "confirmPass") String confirmPass) {
-        if (StringUtils.isBlank(oldPass)) {
-            return Result.fail("旧密码不能为空");
-        }
+    public Result<String> updatePassword(@Validated UpdatePasswordDTO updatePasswordDTO) {
 
-        if (StringUtils.isBlank(newPass)) {
-            return Result.fail("新密码不能为空");
-        }
-
-        if (StringUtils.isBlank(confirmPass)) {
-            return Result.fail("确认密码不能为空");
-        }
-
-        if (!newPass.equals(confirmPass)) {
-            return Result.fail("两次密码不一致");
-        }
+        String user = updatePasswordDTO.getUser();
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {
             String passwordDecode = SecurityAESUtil.decryptAES(wsUsersDO.getPassword(), CommonConstants.AES_PASSWORD);
-            if (!passwordDecode.equals(oldPass)) {
+            if (!passwordDecode.equals(updatePasswordDTO.getOldPass())) {
                 return Result.fail("旧密码不正确");
             }
             
-            if (passwordDecode.equals(newPass)) {
+            if (passwordDecode.equals(updatePasswordDTO.getNewPass())) {
                 return Result.fail("新密码不能是旧密码");
             }
             
-            String passwordEncode = SecurityAESUtil.encryptAES(newPass, CommonConstants.AES_PASSWORD);
+            String passwordEncode = SecurityAESUtil.encryptAES(updatePasswordDTO.getNewPass(), CommonConstants.AES_PASSWORD);
             wsUsersDO.setPassword(passwordEncode);
             wsUsersService.updateById(wsUsersDO);
             return Result.ok();
