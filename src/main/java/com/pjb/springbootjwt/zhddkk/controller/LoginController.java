@@ -392,9 +392,8 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.FORGET_PASSWORD, subModule = "", describe = "忘记密码首页")
     @RequestMapping(value = "forgetPassword.page")
-    public String forgetPassword(Model model, @RequestParam("user")String user) {
+    public String forgetPassword() {
         logger.debug("访问forgetPassword.page");
-        model.addAttribute("user", user);
         return "ws/forgetPassword";
     }
 

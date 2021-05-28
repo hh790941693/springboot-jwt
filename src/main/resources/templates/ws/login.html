@@ -191,86 +191,63 @@
 </body>
 
 <script th:inline="javascript">
-    // 切换语言
-    layui.form.on('select(langSelect)', function(data){
-        layui.form.render('select');
-        window.location.replace("/i18n?lang=" + data.value);
-    });
 
-    // 设置进度条百分比
-    function setPercent(percent) {
-        layui.element.progress('checkProgress', percent.toFixed(0) + '%');
-    }
-
-    var user = "";
-    var checkBeforeLogin = false;
-    var backgroundAnimation = true;
-    $("#user").blur(function () {
-        user = $("#user").val();
-        if (user == "") {
-            layer.tips('用户名不能为空!', '#user', {
-                tips: [2, '#78BA32']
-            });
-        }
-    })
-
-    var pass = "";
-    $("#pass").blur(function () {
-        pass = $("#pass").val();
-        if (pass == "") {
-            layer.tips('密码不能为空!', '#pass', {
-                tips: [2, '#78BA32']
-            });
-        }
-    });
-
-    var verifyCode = "";
-    $("#verifyCode").blur(function () {
-        verifyCode = $("#verifyCode").val();
-        if (verifyCode == "") {
-            layer.tips('验证码不能为空!', '#verifyCodeImg', {
-                tips: [2, '#78BA32']
-            });
-        }
-    });
+    // $("#user").blur(function () {
+    //     var user = $("#user").val();
+    //     if (user == "") {
+    //         layer.tips('用户名不能为空!', '#user', {
+    //             tips: [2, '#78BA32']
+    //         });
+    //     }
+    // })
+    // $("#pass").blur(function () {
+    //     var pass = $("#pass").val();
+    //     if (pass == "") {
+    //         layer.tips('密码不能为空!', '#pass', {
+    //             tips: [2, '#78BA32']
+    //         });
+    //     }
+    // });
+    // $("#verifyCode").blur(function () {
+    //     var verifyCode = $("#verifyCode").val();
+    //     if (verifyCode == "") {
+    //         layer.tips('验证码不能为空!', '#verifyCodeImg', {
+    //             tips: [2, '#78BA32']
+    //         });
+    //     }
+    // });
 
     //提交校验
     $("#loginForm").validate({
         rules: {
-            user:
-                {
+            user:{
                     required: true,
                     minlength: 2,
                     maxlength: 10
                 },
-            pass:
-                {
+            pass: {
                     required: true,
                     minlength: 3,
                     maxlength: 20
                 },
-            verifyCode:
-                {
+            verifyCode: {
                     required: true,
                     minlength: 1,
                     maxlength: 12
                 }
         },
         messages: {
-            user:
-                {
+            user: {
                     required: "请输入用户名",
                     minlength: "至少包含2个字符",
                     maxlength: "最多包含10位字符"
                 },
-            pass:
-                {
+            pass: {
                     required: "请输入密码",
                     minlength: "至少包含3个字符",
                     maxlength: "最多包含12位字符"
                 },
-            verifyCode:
-                {
+            verifyCode: {
                     required: "请输入验证码",
                     minlength: "至少包含3个字符",
                     maxlength: "最多包含12位字符"
@@ -284,6 +261,12 @@
                 error.appendTo(element.parent().next());
             }
         }
+    });
+
+    // 切换语言
+    layui.form.on('select(langSelect)', function(data){
+        layui.form.render('select');
+        window.location.replace("/i18n?lang=" + data.value);
     });
 
     //注册账号
@@ -308,7 +291,7 @@
             shade: 0.2,
             area: ['486px', '465px'],
             anim: 1,
-            content: 'forgetPassword.page?user=' + user
+            content: 'forgetPassword.page'
         });
     }
 
@@ -319,7 +302,6 @@
             $.ajax({
                 type: 'POST',
                 url: rootUrl + 'showQRCode.do',
-                //dataType:'json',
                 async: false,
                 success: function (result) {
                     $("#qrImg").css("display", "block");
@@ -333,6 +315,7 @@
     })
 
     //关闭/开启动画
+    var backgroundAnimation = true;
     showBackgroundAnimation();
     function showBackgroundAnimation() {
         if (backgroundAnimation) {
@@ -351,12 +334,11 @@
         window.location.href = rootUrl + "canvas/canvasIndex.page";
     }
 
-    //定时滚动登陆页背景图片
-    //$.ws.backgroundImgAnimation("backgroundImg","mainDiv", 3, 10);
-
     //模拟登录前的检查操作
     var checkEnvTimer = null;
     var isCheckFinish = false;
+    // 安全检查按钮
+    var checkBeforeLogin = false;
     var textArr = new Array();
     function checkEnvironment() {
         console.log("触发登录前的点击事件");
@@ -403,7 +385,7 @@
                     if (percent > 100) {
                         percent = 100;
                     }
-                    setPercent(percent);
+                    layui.element.progress('checkProgress', percent.toFixed(0) + '%');
                 }
                 i++;
             }, 150+Math.random()*150);
@@ -413,6 +395,7 @@
 
     // 获取验证码
     generateVerifyCode();
+    // 绑定验证码事件
     $("#verifyCodeImg").click(generateVerifyCode);
     function generateVerifyCode() {
         $.ajax({
@@ -437,11 +420,5 @@
             $(this).children("span:first-child").removeClass().addClass("fa fa-toggle-on");
         }
     });
-
-    // 切换语言
-    // $('.selectpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-    //     var lang = e.currentTarget.value;
-    //     window.location.replace("/i18n?lang=" + lang);
-    // });
 </script>
 </html>
