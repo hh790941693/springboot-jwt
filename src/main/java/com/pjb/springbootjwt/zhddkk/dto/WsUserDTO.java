@@ -8,15 +8,17 @@ import javax.validation.constraints.NotNull;
 @Data
 public class WsUserDTO {
 
-    @NotBlank
-    @NotNull
+    private Integer id;
+
+    @NotBlank(message = "姓名不能为空")
+    @NotNull(message = "姓名不能为null")
     private String name;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "密码不能为空")
+    @NotNull(message = "密码不能为null")
     private String password;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "地址不能为空")
+    @NotNull(message = "地址不能为null")
     private String address;
 }

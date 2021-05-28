@@ -28,10 +28,7 @@ public class ValidateTestController {
      * 需要在类上添加@Validated
      */
     @PostMapping("/userDTO")
-    public Result<WsUserDTO> validUserDTO(@RequestBody WsUserDTO wsUserDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            System.out.println("xxxxxxxxxxxxxxxxxxxxx");
-        }
+    public Result<WsUserDTO> validUserDTO(@Validated @RequestBody WsUserDTO wsUserDTO) {
         return Result.ok(wsUserDTO);
     }
 }
