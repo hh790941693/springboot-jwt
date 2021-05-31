@@ -99,7 +99,7 @@
             <div id="playerDiv">
                 <div id="buttons" style="height:11%;min-height: 66px;border-bottom: 1px solid grey;">
                     <div id="songNameDiv" align="center"
-                         style="background-color:yellow;height:35%;border-bottom:2px solid green;">
+                         style="background-color:yellow;height:35%;padding-top:3px;border-bottom:2px solid green;">
                         <span id="statusSpan"
                               style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span><span> : </span><label
                             id="songName"></label>
@@ -263,11 +263,10 @@
             el: '#playerDiv',
             data: {
                 musicData: {},        // 歌曲列表数据
-                playMode: -1,         // 播放模式 0:单曲循环 1:顺序播放 2:随机播放
+                playMode: -1,         // 播放模式 -1:一次播放 0:单曲循环 1:顺序播放 2:随机播放
                 curSelectedIndex: 0,  // 当前播放歌曲的行号
-                hoverIndex: -1,       // 当前鼠标划过的行号
                 playStatus: -1,       // 播放状态   -1:初始化  0:播放中 1:暂停中
-                showMode: 1,           // 播放列表显示与隐藏  0:隐藏 1:显示
+                showMode: 1,          // 播放列表显示与隐藏  0:隐藏 1:显示
             },
             methods: {
                 queryMusicList: function () {
@@ -433,7 +432,7 @@
                 },
                 refreash: function () {
                     // 刷新音乐列表
-                    window.location.href = window.location.href;
+                    this.queryMusicList();
                 }
             },
             created: function () {
