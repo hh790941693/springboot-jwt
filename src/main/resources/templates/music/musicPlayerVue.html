@@ -252,11 +252,10 @@
             methods: {
                 queryMusicList: function () {
                     // 查询歌曲列表
-                    var fileType = "music";
                     $.ajax({
                         type: "POST",
                         url: rootUrl + "file/showFiles.do",
-                        data: {'fileType': fileType},
+                        data: {'fileType': 'music'},
                         success: function (result) {
                             if (result.code == 1) {
                                 app.musicData = result.data;
@@ -271,25 +270,10 @@
                     app.playByIndex();
                 },
                 play: function () {
-                    //播放
-                    var checkedInput = $("table tbody tr").find("input[checked='checked']");
-                    var checkedTr = $(checkedInput).parent().parent().parent();
-                    var selectedMusicInfo = app.musicData[app.curSelectedIndex];
-                    var filename = selectedMusicInfo.filename;
-                    var url = selectedMusicInfo.url;
-
-                    $("table tbody input").removeAttr("checked");
-                    $(checkedInput).prop("checked", true);
-                    $(checkedInput).attr("checked", "checked");
-                    $("table tbody tr").removeClass("selectRowClass");
-                    $(checkedTr).addClass("selectRowClass");
-                    $("#player").attr("src", url);
-
-                    $("#statusSpan").text('[[#{span.palystatus.playing}]]');
-                    $("#songName").html(filename);
+                    //播放按钮
                     if (app.playStatus == -1 || app.playStatus == 1) {
                         app.playStatus = 0; //播放中
-                        $("#player")[0].play();
+                        this.playByIndex();
                         $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
                     } else {
                         app.playStatus = 1; //暂停中
@@ -340,20 +324,17 @@
                     $(selectedInput).parents("tr").addClass("selectRowClass");
 
                     var selectedMusicInfo = app.musicData[app.curSelectedIndex];
-                    var filename = selectedMusicInfo.filename;
-                    var url = selectedMusicInfo.url;
-
-                    $("#player").attr("src", url);
+                    $("#player").attr("src", selectedMusicInfo.url);
                     $("#statusSpan").text('[[#{span.palystatus.playing}]]');
-                    $("#songName").html(filename);
+                    $("#songName").html(selectedMusicInfo.filename);
 
                     $("#player")[0].play();
                     $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
                 },
                 randomMusic: function () {
                     // 随机播放
-                    var randomNum = randomNumber(0, app.musicData.length - 1);
-                    app.curSelectedIndex = randomNum;
+                    var randomIndex = randomNumber(0, app.musicData.length - 1);
+                    app.curSelectedIndex = randomIndex;
                     app.playByIndex();
                 },
                 playMusic: function (index) {
@@ -405,7 +386,7 @@
                 },
                 mouseEnter: function (music, index) {
                     // 鼠标进入事件
-                    $.each($("#musicTable tr"), function (i, item) {
+                    $.each($("table tbody tr"), function (i, item) {
                         var itemId = $(item).children().eq(1).text();
                         if (itemId == music.id && !$(item).hasClass("thClass") && !$(item).hasClass("selectRowClass")) {
                             $(item).addClass("mouseonClass");
