@@ -154,7 +154,7 @@
                         <tbody>
                             <tr v-for="(music,index) in musicData" :key="index" @mouseenter="mouseEnter(music, index)"
                                 @mouseleave="mouseLeave(music, index)" @dblclick="doublePlay(index)">
-                                <td>
+                                <td style="width:10%;">
                                     <div v-if="index==0">
                                         <input type='radio' name='selectMusic' v-model="curSelectedIndex" :value="index" checked="checked"/>
                                     </div>
@@ -162,11 +162,11 @@
                                         <input type='radio' name='selectMusic' v-model="curSelectedIndex" :value="index"/>
                                     </div>
                                 </td>
-                                <td>{{music.id}}</td>
-                                <td>{{music.filename}}</td>
-                                <td>{{(parseInt(music.fileSize)/1024.0/1024.0).toFixed(0)}}M</td>
-                                <td>{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
-                                <td>
+                                <td style="width:10%;">{{music.id}}</td>
+                                <td style="width:43%;">{{music.filename}}</td>
+                                <td style="width:13%;">{{(parseInt(music.fileSize)/1024.0/1024.0).toFixed(0)}}M</td>
+                                <td style="width:9%;">{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
+                                <td style="width:14%;">
                                     <button class='delBtn btn btn-sm btn-success' @click="playMusic(index)">
                                         <span class="glyphicon glyphicon-play"></span> [[#{btn.play.label}]]
                                     </button>
