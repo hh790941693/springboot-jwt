@@ -16,7 +16,7 @@
     </fieldset>
 
     <div class="layui-upload">
-        <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+        <button type="button" class="layui-btn layui-btn-normal" id="chooseFilesBtn">选择多文件</button>
         <div class="layui-upload-list" style="max-width: 1000px;">
             <table class="layui-table">
                 <colgroup>
@@ -26,15 +26,17 @@
                     <col width="150">
                 </colgroup>
                 <thead>
-                <tr><th>文件名</th>
-                    <th>大小</th>
-                    <th>上传进度</th>
-                    <th>操作</th>
-                </tr></thead>
+                    <tr>
+                        <th>文件名</th>
+                        <th>大小</th>
+                        <th>上传进度</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
                 <tbody id="demoList"></tbody>
             </table>
         </div>
-        <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+        <button type="button" class="layui-btn" id="uploadFilesBtn">开始上传</button>
     </div>
 
 
@@ -42,10 +44,10 @@
         <legend>上传多张图片</legend>
     </fieldset>
     <div class="layui-upload">
-        <button type="button" class="layui-btn" id="test2">多图片上传</button>
+        <button type="button" class="layui-btn" id="uploadPicsBtn">多图片上传</button>
         <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
             预览图：
-            <div class="layui-upload-list" id="demo2"></div>
+            <div class="layui-upload-list" id="picsPreviewDiv"></div>
         </blockquote>
     </div>
 </div>
@@ -62,7 +64,7 @@
 
         //演示多文件列表
         var uploadListIns = upload.render({
-            elem: '#testList'
+            elem: '#chooseFilesBtn'
             ,elemList: $('#demoList') //列表元素对象
             ,url: $.ws.uploadFileUrl
             ,data:{'folder':'test'}
@@ -70,7 +72,7 @@
             ,multiple: true
             ,number: 20
             ,auto: false
-            ,bindAction: '#testListAction'
+            ,bindAction: '#uploadFilesBtn'
             ,choose: function(obj){
                 var that = this;
                 var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
@@ -129,14 +131,14 @@
 
         //多图片上传
         upload.render({
-            elem: '#test2'
+            elem: '#uploadPicsBtn'
             ,url: $.ws.uploadFileUrl //改成您自己的上传接口
             ,data:{'folder':'test'}
             ,multiple: true
             ,before: function(obj){
                 //预读本地文件示例，不支持ie8
                 obj.preview(function(index, file, result){
-                    $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img" style="width:100px;height:100px;margin-right:15px;">')
+                    $('#picsPreviewDiv').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img" style="width:100px;height:100px;margin-right:15px;">')
                 });
             }
             ,done: function(res){
