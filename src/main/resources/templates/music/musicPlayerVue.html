@@ -7,6 +7,26 @@
         <title>[[#{page.music.title}]]</title>
 
         <style type="text/css">
+            #musicTable {
+                width:100%;
+                height:100%;
+                border-collapse:separate;
+                border-spacing:1px 4px;
+            }
+
+            thead,tbody tr {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+            }
+            tbody {
+                height: 100%;
+                display: block;
+                max-height: calc(100% - 28px);
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
             .selectRowClass {
                 background-color: grey;
                 color: white;
@@ -119,8 +139,8 @@
                     </div>
                 </div>
     
-                <div id="musicList" style="overflow-y: scroll;width: 100%;height:89%;">
-                    <table id="musicTable" style="width:100%;border-collapse:separate; border-spacing:1px 4px;">
+                <div id="musicList" style="width: 100%;height:89%;">
+                    <table id="musicTable">
                         <thead class="thClass">
                             <tr>
                                 <th style="width:10%;">选择</th>
