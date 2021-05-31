@@ -114,6 +114,14 @@ public class WsIndexController {
     }
 
     /**
+     * layui upload Demo.
+     */
+    @RequestMapping("/uploadDemo.page")
+    public String uploadDemo() {
+        return "index/uploadDemo";
+    }
+
+    /**
      * 对密码做特殊处理.
      *
      * @param password 密文

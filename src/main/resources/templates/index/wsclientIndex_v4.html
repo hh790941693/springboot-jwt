@@ -216,6 +216,9 @@
                     <a href="#" id="easyUIDemo">
                         <span class="icon icon-1-5"></span>easyUI&nbsp;
                     </a>&nbsp;
+                    <a href="#" id="uploadDemo">
+                        <span class="icon icon-1-5"></span>layuiUpload&nbsp;
+                    </a>&nbsp;
                     <a href="#" id="aboutUsBtn">
                         <span class="icon icon-12-11"></span>[[#{a.aboutus.label}]]&nbsp;
                     </a>
@@ -617,6 +620,19 @@
             area: ['800px', '500px'],
             anim: 1,
             content: 'index/easyUIDemo.page'
+        });
+    });
+
+    // layui Upload Demo
+    $("#uploadDemo").click(function () {
+        parent.layer.open({
+            type: 2,
+            title: 'layui Upload Demo',
+            maxmin: false,
+            shadeClose: true,//点击遮罩关闭层
+            area: ['1000px', '700px'],
+            anim: 1,
+            content: 'index/uploadDemo.page'
         });
     });
 
