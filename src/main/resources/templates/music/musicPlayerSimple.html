@@ -3,7 +3,7 @@
 <head>
     <th:block th:include="common :: header"></th:block>
         <meta charset="utf-8">
-        <title>音乐播放器</title>
+        <title>微型音乐播放器</title>
 
         <style type="text/css">
             * {
@@ -68,8 +68,8 @@
                 </button>
             </div>
             <div id="songNameDiv">
-                <span id="statusSpan">{{playTips}}({{curSelectedIndex+1}}/{{musicData.length}}):</span><br/>
-                <span id="songNameSpan" style='color:green;'>{{songName}}</span>
+                <span>{{playTips}}({{curSelectedIndex+1}}/{{musicData.length}}):</span><br/>
+                <span style='color:green;'>{{songName}}</span>
             </div>
         </div>
 
@@ -111,17 +111,8 @@
                     if (app.musicData == null || app.musicData == undefined || app.musicData.length == 0) {
                         return;
                     }
-                    // console.log("开始播放音乐");
-                    // var selectedMusicInfo = app.musicData[app.curSelectedIndex];
-                    // var filename = selectedMusicInfo.filename;
-                    // var url = selectedMusicInfo.url;
-                    //
-                    // $("#player").attr("src", url);
-                    // app.playTips = "正在播放";
-                    // app.songName = filename;
                     if (app.playStatus == -1 || app.playStatus == 1) {
                         app.playStatus = 0; //播放中
-                        //$("#player")[0].play();
                         app.playByIndex();
                         $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
                     } else {
@@ -176,7 +167,6 @@
                     $("#player").attr("src", url);
                     app.playStatus = 0;
                     app.playTips = "正在播放";
-                    //$("#statusSpan").text("正在播放:");
 
                     $("#player")[0].play();
                     $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
