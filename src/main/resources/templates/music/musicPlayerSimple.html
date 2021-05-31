@@ -68,8 +68,8 @@
                 </button>
             </div>
             <div id="songNameDiv">
-                <span id="statusSpan">{{playTips}}:</span><br/><span id="songNameSpan"
-                                                                     style='color:green;'>{{songName}}</span>
+                <span id="statusSpan">{{playTips}}({{curSelectedIndex+1}}/{{musicData.length}}):</span><br/>
+                <span id="songNameSpan" style='color:green;'>{{songName}}</span>
             </div>
         </div>
 
@@ -82,11 +82,11 @@
             el: '#mainDiv',
             data: {
                 musicData: {},
-                songName: '',
+                songName: '暂无歌曲',
                 curSelectedIndex: 0,
                 playTips: '等待播放',
                 playStatus: -1,  //播放状态 -1:初始化  0:播放中 1:暂停中
-                playMode: 1,  //播放模式 0:单曲循环 1:顺序播放 2:随机播放
+                playMode: 1,     //播放模式 0:单曲循环 1:顺序播放 2:随机播放
                 playModeClass: {
                     0: 'glyphicon glyphicon-refresh',
                     1: 'glyphicon glyphicon-retweet',
@@ -102,9 +102,6 @@
                         success: function (result) {
                             if (result.code == 1) {
                                 app.musicData = result.data;
-                                if (app.musicData.length == 0) {
-                                    app.songName = "暂无歌曲";
-                                }
                             }
                         }
                     });
@@ -114,17 +111,18 @@
                     if (app.musicData == null || app.musicData == undefined || app.musicData.length == 0) {
                         return;
                     }
-                    console.log("开始播放音乐");
-                    var selectedMusicInfo = app.musicData[app.curSelectedIndex];
-                    var filename = selectedMusicInfo.filename;
-                    var url = selectedMusicInfo.url;
-
-                    $("#player").attr("src", url);
-                    app.playTips = "正在播放";
-                    app.songName = filename;
+                    // console.log("开始播放音乐");
+                    // var selectedMusicInfo = app.musicData[app.curSelectedIndex];
+                    // var filename = selectedMusicInfo.filename;
+                    // var url = selectedMusicInfo.url;
+                    //
+                    // $("#player").attr("src", url);
+                    // app.playTips = "正在播放";
+                    // app.songName = filename;
                     if (app.playStatus == -1 || app.playStatus == 1) {
                         app.playStatus = 0; //播放中
-                        $("#player")[0].play();
+                        //$("#player")[0].play();
+                        app.playByIndex();
                         $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
                     } else {
                         app.playStatus = 1; //暂停中
@@ -136,34 +134,37 @@
                 nextMusic: function () {
                     //下一首
                     if (app.playMode == 1) {
+                        //顺序播放
                         if (app.curSelectedIndex >= app.musicData.length - 1) {
                             app.curSelectedIndex = 0;
                         } else {
                             app.curSelectedIndex = app.curSelectedIndex + 1;
                         }
-                        app.play();
+                        app.playByIndex();
                     } else if (app.playMode == 0) {
-                        app.play();
+                        //单曲循环
+                        app.playByIndex();
                     } else if (app.playMode == 2) {
-                        app.randomMusic();
+                        //随机播放
+                        app.randomPlay();
                     }
                     app.playStatus = 0;
                 },
                 preMusic: function () {
                     //上一首
                     if (app.playMode == 1) {
+                        //顺序播放
                         if (app.curSelectedIndex == 0) {
                             app.curSelectedIndex = app.musicData.length - 1;
                         } else {
                             app.curSelectedIndex = app.curSelectedIndex - 1;
                         }
-                        var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
-                        app.playByIndex(selectedTr);
+                        app.playByIndex();
                     } else if (app.playMode == 0) {
                         app.playStatus = 1;
-                        app.play();
+                        app.playByIndex();
                     } else if (app.playMode == 2) {
-                        app.randomMusic();
+                        app.randomPlay();
                     }
                 },
                 playByIndex: function () {
@@ -174,15 +175,16 @@
 
                     $("#player").attr("src", url);
                     app.playStatus = 0;
-                    $("#statusSpan").text("正在播放:");
+                    app.playTips = "正在播放";
+                    //$("#statusSpan").text("正在播放:");
 
                     $("#player")[0].play();
                     $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
                 },
-                randomMusic: function () {
+                randomPlay: function () {
                     // 随机播放
-                    var randomNum = randomNumber(0, app.musicData.length - 1);
-                    app.curSelectedIndex = randomNum;
+                    var randomIndex = randomNumber(0, app.musicData.length - 1);
+                    app.curSelectedIndex = randomIndex;
                     app.playByIndex();
                 },
                 changePlayMode: function () {
@@ -214,7 +216,7 @@
                         app.nextMusic();
                     } else if (app.playMode == 2) {
                         //随机播放
-                        app.randomMusic();
+                        app.randomPlay();
                     }
                 } else if (e == "error") {
                     if (app.playMode == 1 || app.playMode == 2) {

@@ -27,8 +27,8 @@
         #musicIframeDiv {
             position: fixed;
             width: 168px;
-            height: 118px;
-            left: 0px;
+            height: 120px;
+            left: 2px;
             bottom: 150px;
             z-index: 99;
             border: 1px solid #8DB2E3;
@@ -407,7 +407,7 @@
             <span style='display:inline-block;width:67%;color: black;font-weight: bold;'>&nbsp;&nbsp;按住我拖动&nbsp;&nbsp;</span>
             <button id='resetMusicIframeDivPosBtn' style='display:inline-block;width:30%;color:black;'>复位</button>
         </div>
-        <iframe id="musicIframePage" scrolling="auto" frameborder="0" width="100%" style="height:calc(100% - 17px);" src="/file/musicPlayerSimple.page"></iframe>
+        <iframe id="musicIframePage" scrolling="auto" frameborder="0" width="100%" style="height:calc(100% - 20px);" src="/file/musicPlayerSimple.page"></iframe>
     </div>
 </body>
 
@@ -494,7 +494,7 @@
     $("#resetMusicIframeDivPosBtn").click(adjustMusicWindowPosition);
     function adjustMusicWindowPosition() {
         $("#musicIframeDiv").css("bottom", "150px");
-        $("#musicIframeDiv").css("left", "1px");
+        $("#musicIframeDiv").css("left", "2px");
     }
     //音乐播放器可拖动代码
     $.ws.dragPanelMove("#musicIframeHeader", "#musicIframeDiv");
