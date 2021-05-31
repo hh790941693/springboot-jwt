@@ -144,11 +144,11 @@
 
             <!--底部相关按钮-->
             <div id="helpDiv" style="height:25px;margin-top:10px;">
-                <a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:0;"
+                <a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:50px;"
                    th:text="#{a.register.label}"></a>
                 <a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;"
                    th:text="#{a.forgetpassword.label}"></a>
-                <a href="javascript:void(0)" onclick="playGame()" style="text-decoration:none;margin-left:20px;"
+                <a href="javascript:void(0)" onclick="window.location.href='canvas/canvasIndex.page'" style="text-decoration:none;margin-left:20px;"
                    th:text="#{a.playgame.label}"></a>
             </div>
 
@@ -158,26 +158,12 @@
                         style="width:130px;margin-right: 15px;">
                     <span class="glyphicon glyphicon-log-in"></span> [[#{page.login.title}]]
                 </button>
-                <a id="securityCheck"><span class="fa fa-toggle-off" style="font-size: 18px;"></span> [[#{checkbox.check.label}]]</a>
             </div>
         </form>
 
         <!--右上角二维码-->
         <div style="position:absolute;width:180px;height:180px;left:400px;top:1px;">
             <img id="qrImg" style="width:160px;height:160px;display:none;">
-        </div>
-
-        <!--底部进度条-->
-        <div class="layui-progress" lay-filter="checkProgress" style="top:15px;">
-            <div class="layui-progress-bar layui-bg-black" lay-percent="0%"></div>
-        </div>
-    </div>
-
-    <!--左上角安全检查滚屏-->
-    <div id="checkDiv"
-         style="width:200px;height:400px;position: fixed;left:5px;top:5px;z-index:2;overflow-y: hidden;display: none;">
-        <div id="checkContentDiv"
-             style="width:100%;height:auto;border:1px solid grey;background-color: #0C0C0C;padding: 5px 0 5px 10px;">
         </div>
     </div>
 
@@ -189,31 +175,6 @@
 </body>
 
 <script th:inline="javascript">
-
-    // $("#user").blur(function () {
-    //     var user = $("#user").val();
-    //     if (user == "") {
-    //         layer.tips('用户名不能为空!', '#user', {
-    //             tips: [2, '#78BA32']
-    //         });
-    //     }
-    // })
-    // $("#pass").blur(function () {
-    //     var pass = $("#pass").val();
-    //     if (pass == "") {
-    //         layer.tips('密码不能为空!', '#pass', {
-    //             tips: [2, '#78BA32']
-    //         });
-    //     }
-    // });
-    // $("#verifyCode").blur(function () {
-    //     var verifyCode = $("#verifyCode").val();
-    //     if (verifyCode == "") {
-    //         layer.tips('验证码不能为空!', '#verifyCodeImg', {
-    //             tips: [2, '#78BA32']
-    //         });
-    //     }
-    // });
 
     //提交校验
     $("#loginForm").validate({
@@ -312,70 +273,6 @@
         }
     })
 
-    //玩游戏
-    function playGame() {
-        window.location.href = rootUrl + "canvas/canvasIndex.page";
-    }
-
-    //模拟登录前的检查操作
-    var checkEnvTimer = null;
-    var isCheckFinish = false;
-    // 安全检查按钮
-    var checkBeforeLogin = false;
-    var textArr = new Array();
-    function checkEnvironment() {
-        console.log("触发登录前的点击事件");
-        if (!checkBeforeLogin) {
-            return true;
-        }
-        $.ajax({
-            type: 'GET',
-            url: rootUrl + 'querySystemInfo',
-            async: false,
-            success: function (result) {
-                if (result.code == 1) {
-                    var data = result.data;
-                    textArr = new Array("正在检查系统版本.....", data.osName,
-                        "正在检查java版本.....", data.javaVersion,
-                        "正在检查java家目录.....", data.javaHome,
-                        "正在检查数据库版本.....", data.dbVersion,
-                        "正在检查nginx进程状态.....", data.nginxFlag,
-                        "正在检查共享目录权限.....", data.shareDir,
-                        "正在检查其他事项....", "检查完毕",
-                        "登录中.........", "", "", "");
-                }
-            }
-        });
-        var text = "";
-        var i = 0;
-        var percent = 0;
-        if (null == checkEnvTimer && !isCheckFinish && textArr.length > 0) {
-            $("#checkDiv").css("display", "block");
-            checkEnvTimer = setInterval(function () {
-                if (i >= textArr.length) {
-                    isCheckFinish = true;
-                    if (null != checkEnvTimer) {
-                        checkEnvTimer = null;
-                        clearInterval(checkEnvTimer);
-                        $("#checkDiv").css("display", "none");
-                        $("#loginForm").submit();
-                    }
-                } else {
-                    text += "<span style='height:20px;color:white;display:inline-block;margin-bottom: 5px;'>" + textArr[i] + "</span><br/>";
-                    $("#checkContentDiv").html(text);
-
-                    percent += 100/(textArr.length-3);
-                    if (percent > 100) {
-                        percent = 100;
-                    }
-                    layui.element.progress('checkProgress', percent.toFixed(0) + '%');
-                }
-                i++;
-            }, 150+Math.random()*150);
-        }
-        return isCheckFinish;
-    }
-
     // 获取验证码
     generateVerifyCode();
     // 绑定验证码事件
@@ -392,16 +289,5 @@
             }
         });
     }
-
-    // 勾选登陆前检查事件
-    $("#securityCheck").click(function () {
-        if (checkBeforeLogin) {
-            checkBeforeLogin = false;
-            $(this).children("span:first-child").removeClass().addClass("fa fa-toggle-off");
-        } else {
-            checkBeforeLogin = true;
-            $(this).children("span:first-child").removeClass().addClass("fa fa-toggle-on");
-        }
-    });
 </script>
 </html>
