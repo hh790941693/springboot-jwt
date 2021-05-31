@@ -121,38 +121,41 @@
     
                 <div id="musicList" style="overflow-y: scroll;width: 100%;height:89%;">
                     <table id="musicTable" style="width:100%;border-collapse:separate; border-spacing:1px 4px;">
-                        <tr class="thClass">
-                            <th style="width:10%;">选择</th>
-                            <th style="width:10%;">主键</th>
-                            <th style="width:43%;">歌曲名称</th>
-                            <th style="width:13%;">大小</th>
-                            <th style="width:9%;">访问性</th>
-                            <th style="display:none;">url</th>
-                            <th style="width:14%;">操作</th>
-                        </tr>
-                        <tr v-for="(music,index) in musicData" :key="index" @mouseenter="mouseEnter(music, index)"
-                            @mouseleave="mouseLeave(music, index)">
-                            <td>
-                                <div v-if="index==0">
-                                    <input type='radio' name='selectMusic' checked="checked"/>
-                                </div>
-                                <div v-else>
-                                    <input type='radio' name='selectMusic'/>
-                                </div>
-                            </td>
-                            <td>{{music.id}}</td>
-                            <td @dblclick="doublePlay(index)">{{music.filename}}</td>
-                            <td>{{(parseInt(music.fileSize)/1024.0/1024.0).toFixed(0)}}M</td>
-                            <td>{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
-                            <td>
-                                <button class='delBtn btn btn-sm btn-success' @click="playMusic(music.id)">
-                                    <span class="glyphicon glyphicon-play"></span> [[#{btn.play.label}]]
-                                </button>
-                                <button class='delBtn btn btn-sm btn-danger' @click="deleteMusic(music.id)">
-                                    <span class="glyphicon glyphicon-trash"></span> [[#{btn.delete.label}]]
-                                </button>
-                            </td>
-                        </tr>
+                        <thead class="thClass">
+                            <tr>
+                                <th style="width:10%;">选择</th>
+                                <th style="width:10%;">主键</th>
+                                <th style="width:43%;">歌曲名称</th>
+                                <th style="width:13%;">大小</th>
+                                <th style="width:9%;">访问性</th>
+                                <th style="width:14%;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(music,index) in musicData" :key="index" @mouseenter="mouseEnter(music, index)"
+                                @mouseleave="mouseLeave(music, index)" @dblclick="doublePlay(index)">
+                                <td>
+                                    <div v-if="index==0">
+                                        <input type='radio' name='selectMusic' v-model="curSelectedIndex" :value="index" checked="checked"/>
+                                    </div>
+                                    <div v-else>
+                                        <input type='radio' name='selectMusic' v-model="curSelectedIndex" :value="index"/>
+                                    </div>
+                                </td>
+                                <td>{{music.id}}</td>
+                                <td>{{music.filename}}</td>
+                                <td>{{(parseInt(music.fileSize)/1024.0/1024.0).toFixed(0)}}M</td>
+                                <td>{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
+                                <td>
+                                    <button class='delBtn btn btn-sm btn-success' @click="playMusic(index)">
+                                        <span class="glyphicon glyphicon-play"></span> [[#{btn.play.label}]]
+                                    </button>
+                                    <button class='delBtn btn btn-sm btn-danger' @click="deleteMusic(music.id)">
+                                        <span class="glyphicon glyphicon-trash"></span> [[#{btn.delete.label}]]
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -244,7 +247,7 @@
                 curSelectedIndex: 0,  // 当前播放歌曲的行号
                 hoverIndex: -1,       // 当前鼠标划过的行号
                 playStatus: -1,       // 播放状态   -1:初始化  0:播放中 1:暂停中
-                showMode: 1           // 播放列表显示与隐藏  0:隐藏 1:显示
+                showMode: 1,           // 播放列表显示与隐藏  0:隐藏 1:显示
             },
             methods: {
                 queryMusicList: function () {
@@ -264,21 +267,21 @@
                 doublePlay: function (musicIndex) {
                     //双击播放
                     app.curSelectedIndex = musicIndex;
-                    var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
-                    app.playByIndex(selectedTr);
+                    console.log("double play:"+musicIndex);
+                    app.playByIndex();
                 },
                 play: function () {
                     //播放
-                    var checkedInput = $("table tr").find("input[checked='checked']");
+                    var checkedInput = $("table tbody tr").find("input[checked='checked']");
                     var checkedTr = $(checkedInput).parent().parent().parent();
                     var selectedMusicInfo = app.musicData[app.curSelectedIndex];
                     var filename = selectedMusicInfo.filename;
                     var url = selectedMusicInfo.url;
 
-                    $("table input").removeAttr("checked");
+                    $("table tbody input").removeAttr("checked");
                     $(checkedInput).prop("checked", true);
                     $(checkedInput).attr("checked", "checked");
-                    $("table tr").removeClass("selectRowClass");
+                    $("table tbody tr").removeClass("selectRowClass");
                     $(checkedTr).addClass("selectRowClass");
                     $("#player").attr("src", url);
 
@@ -303,8 +306,7 @@
                         } else {
                             app.curSelectedIndex = app.curSelectedIndex + 1;
                         }
-                        var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
-                        app.playByIndex(selectedTr);
+                        app.playByIndex();
                     } else if (app.playMode == 0) {
                         app.play();
                     } else if (app.playMode == 2) {
@@ -320,8 +322,7 @@
                         } else {
                             app.curSelectedIndex = app.curSelectedIndex - 1;
                         }
-                        var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
-                        app.playByIndex(selectedTr);
+                        app.playByIndex();
                     } else if (app.playMode == 0) {
                         app.playStatus = 1;
                         app.play();
@@ -329,13 +330,14 @@
                         app.randomMusic();
                     }
                 },
-                playByIndex: function (trObj) {
-                    var selectedInput = $(trObj).find("input");
-                    $("table input").removeAttr("checked");
+                playByIndex: function () {
+                    var selectedInput = $("table tbody input[value='"+app.curSelectedIndex+"']");
+                    $("table tbody input").removeAttr("checked");
                     $(selectedInput).prop("checked", true);
                     $(selectedInput).attr("checked", "checked");
-                    $("table tr").removeClass("selectRowClass");
-                    $(trObj).addClass("selectRowClass");
+
+                    $("table tbody tr").removeClass("selectRowClass");
+                    $(selectedInput).parents("tr").addClass("selectRowClass");
 
                     var selectedMusicInfo = app.musicData[app.curSelectedIndex];
                     var filename = selectedMusicInfo.filename;
@@ -352,17 +354,11 @@
                     // 随机播放
                     var randomNum = randomNumber(0, app.musicData.length - 1);
                     app.curSelectedIndex = randomNum;
-                    var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
-                    app.playByIndex(selectedTr);
+                    app.playByIndex();
                 },
-                playMusic: function (id) {
-                    $.each(app.musicData, function (i, row) {
-                        if (row.id == id) {
-                            app.curSelectedIndex = i;
-                            var selectedTr = $("table tr").get(app.curSelectedIndex + 1);
-                            app.playByIndex(selectedTr);
-                        }
-                    })
+                playMusic: function (index) {
+                    app.curSelectedIndex = index;
+                    app.playByIndex();
                 },
                 deleteMusic: function (id) {
                     //删除音乐
@@ -371,7 +367,7 @@
                             $.ajax({
                                 type: "POST",
                                 url: rootUrl + "file/delFile.do",
-                                data: {id: id},
+                                data: {'id': id},
                                 success: function (result) {
                                     if (result.code == 1) {
                                         layer.msg("删除成功");
