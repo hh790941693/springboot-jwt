@@ -101,8 +101,9 @@
                     <div id="songNameDiv" align="center"
                          style="background-color:yellow;height:35%;padding-top:3px;border-bottom:2px solid green;">
                         <span id="statusSpan"
-                              style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span><span> : </span><label
-                            id="songName"></label>
+                              style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span>
+                        <span>({{curSelectedIndex+1}}/{{musicData.length}}) : </span>
+                        <span>{{songName}}</span>
                     </div>
                     <div style="width:100%; height:64%;padding-top: 5px;">
                         <div style="float:left;width:30%;height:100%;margin-left: 5px;">
@@ -265,6 +266,7 @@
                 musicData: {},        // 歌曲列表数据
                 playMode: -1,         // 播放模式 -1:一次播放 0:单曲循环 1:顺序播放 2:随机播放
                 curSelectedIndex: 0,  // 当前播放歌曲的行号
+                songName: "",         // 当前播放的歌曲名
                 playStatus: -1,       // 播放状态   -1:初始化  0:播放中 1:暂停中
                 showMode: 1,          // 播放列表显示与隐藏  0:隐藏 1:显示
             },
@@ -345,7 +347,7 @@
                     var selectedMusicInfo = app.musicData[app.curSelectedIndex];
                     $("#player").attr("src", selectedMusicInfo.url);
                     $("#statusSpan").text('[[#{span.palystatus.playing}]]');
-                    $("#songName").html(selectedMusicInfo.filename);
+                    app.songName = selectedMusicInfo.filename;
 
                     $("#player")[0].play();
                     $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
