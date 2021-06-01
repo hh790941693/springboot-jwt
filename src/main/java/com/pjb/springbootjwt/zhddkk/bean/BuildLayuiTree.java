@@ -60,6 +60,9 @@ public class BuildLayuiTree {
             if (!children.getParentId().equals("0")) {
                 children.setHasParent(true);
             }
+            if (children.isChecked()) {
+                node.setSpread(true);
+            }
             node.getChildren().add(children);
             node.setHasChildren(true);
         });
