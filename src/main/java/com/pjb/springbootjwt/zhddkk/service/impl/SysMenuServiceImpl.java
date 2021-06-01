@@ -1,6 +1,8 @@
 package com.pjb.springbootjwt.zhddkk.service.impl;
 
+import com.pjb.springbootjwt.zhddkk.bean.BuildLayuiTree;
 import com.pjb.springbootjwt.zhddkk.bean.BuildTree;
+import com.pjb.springbootjwt.zhddkk.bean.LayuiTree;
 import com.pjb.springbootjwt.zhddkk.bean.Tree;
 import com.pjb.springbootjwt.zhddkk.service.SysRoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +77,54 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
         }
         // 默认顶级菜单为０，根据数据库实际情况调整
         Tree<SysMenuDO> t = BuildTree.build(trees);
+        return t;
+    }
+
+    @Override
+    public LayuiTree<SysMenuDO> getLayuiTree() {
+        List<LayuiTree<SysMenuDO>> trees = new ArrayList<LayuiTree<SysMenuDO>>();
+        List<SysMenuDO> menuDOs = baseMapper.selectList(null);
+        for (SysMenuDO sysMenuDO : menuDOs) {
+            LayuiTree<SysMenuDO> tree = new LayuiTree<SysMenuDO>();
+            tree.setId(sysMenuDO.getId().toString());
+            tree.setParentId(sysMenuDO.getParentId().toString());
+            tree.setTitle(sysMenuDO.getName());
+            trees.add(tree);
+        }
+        // 默认顶级菜单为０，根据数据库实际情况调整
+        LayuiTree<SysMenuDO> t = BuildLayuiTree.buildTree(trees);
+        return t;
+    }
+
+    @Override
+    public LayuiTree<SysMenuDO> getLayuiTree(int id) {
+        // 根据roleId查询权限
+        List<SysMenuDO> menus = baseMapper.selectList(null);
+        List<Integer> menuIds = sysRoleMenuService.listMenuIdByRoleId(id);
+        List<Integer> temp = menuIds;
+        for (SysMenuDO menu : menus) {
+            if (temp.contains(menu.getParentId())) {
+                menuIds.remove(menu.getParentId());
+            }
+        }
+        List<LayuiTree<SysMenuDO>> trees = new ArrayList<LayuiTree<SysMenuDO>>();
+        List<SysMenuDO> menuDOs = baseMapper.selectList(null);
+        for (SysMenuDO sysMenuDO : menuDOs) {
+            LayuiTree<SysMenuDO> tree = new LayuiTree<SysMenuDO>();
+            tree.setId(sysMenuDO.getId().toString());
+            tree.setParentId(sysMenuDO.getParentId().toString());
+            tree.setTitle(sysMenuDO.getName());
+            Map<String, Object> state = new HashMap<>(16);
+            int menuId = sysMenuDO.getId();
+            if (menuIds.contains(menuId)) {
+                tree.setChecked(true);
+            } else {
+                tree.setChecked(false);
+            }
+            trees.add(tree);
+        }
+        // 默认顶级菜单为０，根据数据库实际情况调整
+        LayuiTree<SysMenuDO> t = BuildLayuiTree.buildTree(trees);
         return t;
     }
 

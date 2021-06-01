@@ -1,5 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.service;
 
+import com.pjb.springbootjwt.zhddkk.bean.LayuiTree;
 import com.pjb.springbootjwt.zhddkk.bean.Tree;
 import com.pjb.springbootjwt.zhddkk.domain.SysMenuDO;
 import com.pjb.springbootjwt.zhddkk.base.CoreService;
@@ -15,6 +16,10 @@ public interface SysMenuService extends CoreService<SysMenuDO> {
     Tree<SysMenuDO> getTree();
 
     Tree<SysMenuDO> getTree(int id);
+
+    LayuiTree<SysMenuDO> getLayuiTree();
+
+    LayuiTree<SysMenuDO> getLayuiTree(int id);
 
     List<SysMenuDO> queryRoleMenuList(int roleId);
 }

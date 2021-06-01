@@ -93,7 +93,8 @@ public class SysRoleController extends AdminBaseController {
     public String add(Model model) {
         SysRoleDO sysRole = new SysRoleDO();
         model.addAttribute("sysRole", sysRole);
-        return "zhddkk/sysRole/sysRoleForm";
+        //return "zhddkk/sysRole/sysRoleForm";
+        return "zhddkk/sysRole/sysRoleFormForLayui";
     }
     
     /**
@@ -107,7 +108,8 @@ public class SysRoleController extends AdminBaseController {
     public String edit(@PathVariable("id") Integer id, Model model) {
         SysRoleDO sysRole = sysRoleService.selectById(id);
         model.addAttribute("sysRole", sysRole);
-        return "zhddkk/sysRole/sysRoleForm";
+        //return "zhddkk/sysRole/sysRoleForm";
+        return "zhddkk/sysRole/sysRoleFormForLayui";
     }
     
     /**

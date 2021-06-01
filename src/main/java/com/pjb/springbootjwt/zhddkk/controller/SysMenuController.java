@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.pjb.springbootjwt.zhddkk.bean.LayuiTree;
 import com.pjb.springbootjwt.zhddkk.bean.Tree;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.SysRoleMenuDO;
@@ -292,5 +293,21 @@ public class SysMenuController extends AdminBaseController {
         }
         
         return parentList;
+    }
+
+    @GetMapping("/layuiTree")
+    @ResponseBody
+    LayuiTree<SysMenuDO> layuiTree() {
+        LayuiTree<SysMenuDO> tree = new LayuiTree<SysMenuDO>();
+        tree = sysMenuService.getLayuiTree();
+        return tree;
+    }
+
+    @GetMapping("/layuiTree/{roleId}")
+    @ResponseBody
+    LayuiTree<SysMenuDO> layuiTree(@PathVariable("roleId") int roleId) {
+        LayuiTree<SysMenuDO> tree = new LayuiTree<SysMenuDO>();
+        tree = sysMenuService.getLayuiTree(roleId);
+        return tree;
     }
 }
