@@ -57,10 +57,10 @@ public class BuildLayuiTree {
 
     private static <T> void children(List<LayuiTree<T>> nodes, final LayuiTree<T> children, final String pId) {
         nodes.stream().filter(node -> node.getId() != null && node.getId().equals(pId)).forEach(node -> {
-            node.getChildren().add(children);
-            if (!node.getParentId().equals("0")) {
-                node.setHasParent(true);
+            if (!children.getParentId().equals("0")) {
+                children.setHasParent(true);
             }
+            node.getChildren().add(children);
             node.setHasChildren(true);
         });
     }
