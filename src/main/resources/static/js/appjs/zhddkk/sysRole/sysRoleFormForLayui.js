@@ -8,7 +8,7 @@ $(function(){
         , data: menuIdsData
         , showCheckbox: true  //是否显示复选框
         , id: 'layuiTreeId'
-        , isJump: true //是否允许点击节点时弹出新窗口跳转
+        , isJump: false //是否允许点击节点时弹出新窗口跳转
         , click: function (obj) {
             var data = obj.data;  //获取当前点击的节点数据
             layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));

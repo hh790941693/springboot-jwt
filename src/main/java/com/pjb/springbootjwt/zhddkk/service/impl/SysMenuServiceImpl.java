@@ -83,11 +83,15 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
     @Override
     public LayuiTree<SysMenuDO> getLayuiTree() {
         List<LayuiTree<SysMenuDO>> trees = new ArrayList<LayuiTree<SysMenuDO>>();
-        List<SysMenuDO> menuDOs = baseMapper.selectList(null);
-        for (SysMenuDO sysMenuDO : menuDOs) {
+        List<SysMenuDO> menuDOList = baseMapper.selectList(null);
+        for (SysMenuDO sysMenuDO : menuDOList) {
             LayuiTree<SysMenuDO> tree = new LayuiTree<SysMenuDO>();
             tree.setId(sysMenuDO.getId().toString());
             tree.setParentId(sysMenuDO.getParentId().toString());
+            if (sysMenuDO.getParentId().intValue() > 0) {
+                tree.setHasParent(true);
+            }
+            tree.setHasChildren(checkHasChildren(menuDOList, sysMenuDO.getId()));
             tree.setTitle(sysMenuDO.getName());
             trees.add(tree);
         }
@@ -131,5 +135,14 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
     @Override
     public List<SysMenuDO> queryRoleMenuList(int roleId) {
         return baseMapper.queryRoleMenuList(roleId);
+    }
+
+    private boolean checkHasChildren(List<SysMenuDO> menuDOList, int pid) {
+        for (SysMenuDO menuDO : menuDOList) {
+            if (menuDO.getParentId() == pid) {
+                return true;
+            }
+        }
+        return false;
     }
 }
