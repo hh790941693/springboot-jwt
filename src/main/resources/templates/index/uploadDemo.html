@@ -84,11 +84,17 @@
                         ,'<td><div class="layui-progress" lay-showpercent="true" lay-filter="progress-demo-'+ index +'"><div class="layui-progress-bar" lay-percent=""></div></div></td>'
                         ,'<td>等待上传</td>'
                         ,'<td>'
+                        ,'<button class="layui-btn layui-btn-xs demo-upload">上传</button>'
                         ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
                         ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
                         ,'</td>'
                         ,'<td style="display: none;"></td>'
                         ,'</tr>'].join(''));
+
+                    //单个上传
+                    tr.find('.demo-upload').on('click', function(){
+                        obj.upload(index, file);
+                    });
 
                     //单个重传
                     tr.find('.demo-reload').on('click', function(){
