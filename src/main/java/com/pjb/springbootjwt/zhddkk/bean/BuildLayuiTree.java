@@ -27,7 +27,7 @@ public class BuildLayuiTree {
         if (topNodes.size() == 1) {
             root = topNodes.get(0);
         } else {
-            root.setId("-1");
+            root.setId("0");
             root.setParentId("");
             root.setHasParent(false);
             root.setHasChildren(true);
@@ -58,7 +58,9 @@ public class BuildLayuiTree {
     private static <T> void children(List<LayuiTree<T>> nodes, final LayuiTree<T> children, final String pId) {
         nodes.stream().filter(node -> node.getId() != null && node.getId().equals(pId)).forEach(node -> {
             node.getChildren().add(children);
-            node.setHasParent(true);
+            if (!node.getParentId().equals("0")) {
+                node.setHasParent(true);
+            }
             node.setHasChildren(true);
         });
     }

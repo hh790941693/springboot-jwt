@@ -88,10 +88,10 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
             LayuiTree<SysMenuDO> tree = new LayuiTree<SysMenuDO>();
             tree.setId(sysMenuDO.getId().toString());
             tree.setParentId(sysMenuDO.getParentId().toString());
-            if (sysMenuDO.getParentId().intValue() > 0) {
-                tree.setHasParent(true);
-            }
-            tree.setHasChildren(checkHasChildren(menuDOList, sysMenuDO.getId()));
+//            if (sysMenuDO.getParentId().intValue() > 0) {
+//                tree.setHasParent(true);
+//            }
+//            tree.setHasChildren(checkHasChildren(menuDOList, sysMenuDO.getId()));
             tree.setTitle(sysMenuDO.getName());
             trees.add(tree);
         }
@@ -118,7 +118,6 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
             tree.setId(sysMenuDO.getId().toString());
             tree.setParentId(sysMenuDO.getParentId().toString());
             tree.setTitle(sysMenuDO.getName());
-            Map<String, Object> state = new HashMap<>(16);
             int menuId = sysMenuDO.getId();
             if (menuIds.contains(menuId)) {
                 tree.setChecked(true);
