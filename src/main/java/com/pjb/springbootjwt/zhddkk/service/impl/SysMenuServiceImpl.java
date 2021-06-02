@@ -46,10 +46,10 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
     }
 
     @Override
-    public Tree<SysMenuDO> getTree(int id) {
+    public Tree<SysMenuDO> getTree(int roleId) {
         // 根据roleId查询权限
         List<SysMenuDO> menus = baseMapper.selectList(null);
-        List<Integer> menuIds = sysRoleMenuService.listMenuIdByRoleId(id);
+        List<Integer> menuIds = sysRoleMenuService.listMenuIdByRoleId(roleId);
         List<Integer> temp = menuIds;
         for (SysMenuDO menu : menus) {
             if (temp.contains(menu.getParentId())) {

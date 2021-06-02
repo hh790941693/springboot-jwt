@@ -15,11 +15,11 @@ public interface SysMenuService extends CoreService<SysMenuDO> {
 
     Tree<SysMenuDO> getTree();
 
-    Tree<SysMenuDO> getTree(int id);
+    Tree<SysMenuDO> getTree(int roleId);
 
     LayuiTree<SysMenuDO> getLayuiTree();
 
-    LayuiTree<SysMenuDO> getLayuiTree(int id);
+    LayuiTree<SysMenuDO> getLayuiTree(int roleId);
 
     List<SysMenuDO> queryRoleMenuList(int roleId);
 }

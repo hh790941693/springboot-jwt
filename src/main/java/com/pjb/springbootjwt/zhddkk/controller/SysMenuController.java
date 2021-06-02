@@ -298,16 +298,12 @@ public class SysMenuController extends AdminBaseController {
     @GetMapping("/layuiTree")
     @ResponseBody
     LayuiTree<SysMenuDO> layuiTree() {
-        LayuiTree<SysMenuDO> tree = new LayuiTree<SysMenuDO>();
-        tree = sysMenuService.getLayuiTree();
-        return tree;
+        return sysMenuService.getLayuiTree();
     }
 
     @GetMapping("/layuiTree/{roleId}")
     @ResponseBody
     LayuiTree<SysMenuDO> layuiTree(@PathVariable("roleId") int roleId) {
-        LayuiTree<SysMenuDO> tree = new LayuiTree<SysMenuDO>();
-        tree = sysMenuService.getLayuiTree(roleId);
-        return tree;
+        return sysMenuService.getLayuiTree(roleId);
     }
 }
