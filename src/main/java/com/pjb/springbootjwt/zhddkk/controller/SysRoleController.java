@@ -130,21 +130,23 @@ public class SysRoleController extends AdminBaseController {
         }
         sysRoleService.insert(sysRole);
         List<Integer> menuIdList = sysRole.getMenuIds();
-        List<SysMenuDO> sysMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().in("id", menuIdList));
-        if (null != sysMenuList && sysMenuList.size() > 0) {
-            List<SysRoleMenuDO> insertRoleMenuList = new ArrayList<>();
-            for (SysMenuDO menu : sysMenuList) {
-                SysRoleMenuDO sysRoleMenuDO = new SysRoleMenuDO();
-                sysRoleMenuDO.setRoleId(sysRole.getId());
-                sysRoleMenuDO.setRoleName(sysRole.getName());
-                sysRoleMenuDO.setMenuId(menu.getId());
-                sysRoleMenuDO.setMenuName(menu.getName());
-                insertRoleMenuList.add(sysRoleMenuDO);
+        if (null != menuIdList && menuIdList.size() > 0) {
+            List<SysMenuDO> sysMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().in("id", menuIdList));
+            if (null != sysMenuList && sysMenuList.size() > 0) {
+                List<SysRoleMenuDO> insertRoleMenuList = new ArrayList<>();
+                for (SysMenuDO menu : sysMenuList) {
+                    SysRoleMenuDO sysRoleMenuDO = new SysRoleMenuDO();
+                    sysRoleMenuDO.setRoleId(sysRole.getId());
+                    sysRoleMenuDO.setRoleName(sysRole.getName());
+                    sysRoleMenuDO.setMenuId(menu.getId());
+                    sysRoleMenuDO.setMenuName(menu.getName());
+                    insertRoleMenuList.add(sysRoleMenuDO);
+                }
+                sysRoleMenuService.removeByRoleId(sysRole.getId());
+                sysRoleMenuService.batchSave(insertRoleMenuList);
+            } else {
+                sysRoleMenuService.removeByRoleId(sysRole.getId());
             }
-            sysRoleMenuService.removeByRoleId(sysRole.getId());
-            sysRoleMenuService.batchSave(insertRoleMenuList);
-        } else {
-            sysRoleMenuService.removeByRoleId(sysRole.getId());
         }
         return Result.ok();
     }
@@ -159,19 +161,23 @@ public class SysRoleController extends AdminBaseController {
     public Result<String> update(SysRoleDO sysRole) {
         sysRoleService.updateById(sysRole);
         List<Integer> menuIdList = sysRole.getMenuIds();
-        List<SysMenuDO> sysMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().in("id", menuIdList));
-        if (null != sysMenuList && sysMenuList.size() > 0) {
-            List<SysRoleMenuDO> insertRoleMenuList = new ArrayList<>();
-            for (SysMenuDO menu : sysMenuList) {
-                SysRoleMenuDO sysRoleMenuDO = new SysRoleMenuDO();
-                sysRoleMenuDO.setRoleId(sysRole.getId());
-                sysRoleMenuDO.setRoleName(sysRole.getName());
-                sysRoleMenuDO.setMenuId(menu.getId());
-                sysRoleMenuDO.setMenuName(menu.getName());
-                insertRoleMenuList.add(sysRoleMenuDO);
+        if (null != menuIdList && menuIdList.size() > 0) {
+            List<SysMenuDO> sysMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().in("id", menuIdList));
+            if (null != sysMenuList && sysMenuList.size() > 0) {
+                List<SysRoleMenuDO> insertRoleMenuList = new ArrayList<>();
+                for (SysMenuDO menu : sysMenuList) {
+                    SysRoleMenuDO sysRoleMenuDO = new SysRoleMenuDO();
+                    sysRoleMenuDO.setRoleId(sysRole.getId());
+                    sysRoleMenuDO.setRoleName(sysRole.getName());
+                    sysRoleMenuDO.setMenuId(menu.getId());
+                    sysRoleMenuDO.setMenuName(menu.getName());
+                    insertRoleMenuList.add(sysRoleMenuDO);
+                }
+                sysRoleMenuService.removeByRoleId(sysRole.getId());
+                sysRoleMenuService.batchSave(insertRoleMenuList);
+            } else {
+                sysRoleMenuService.removeByRoleId(sysRole.getId());
             }
-            sysRoleMenuService.removeByRoleId(sysRole.getId());
-            sysRoleMenuService.batchSave(insertRoleMenuList);
         } else {
             sysRoleMenuService.removeByRoleId(sysRole.getId());
         }
