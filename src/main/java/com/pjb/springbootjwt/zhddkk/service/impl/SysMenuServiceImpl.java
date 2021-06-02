@@ -33,18 +33,16 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
 
     @Override
     public Tree<SysMenuDO> getTree() {
-        List<Tree<SysMenuDO>> trees = new ArrayList<Tree<SysMenuDO>>();
-        List<SysMenuDO> menuDOs = baseMapper.selectList(null);
-        for (SysMenuDO sysMenuDO : menuDOs) {
+        List<Tree<SysMenuDO>> treeList = new ArrayList<Tree<SysMenuDO>>();
+        List<SysMenuDO> menuDOList = baseMapper.selectList(null);
+        for (SysMenuDO sysMenuDO : menuDOList) {
             Tree<SysMenuDO> tree = new Tree<SysMenuDO>();
             tree.setId(sysMenuDO.getId().toString());
             tree.setParentId(sysMenuDO.getParentId().toString());
             tree.setText(sysMenuDO.getName());
-            trees.add(tree);
+            treeList.add(tree);
         }
-        // 默认顶级菜单为０，根据数据库实际情况调整
-        Tree<SysMenuDO> t = BuildTree.build(trees);
-        return t;
+        return BuildTree.build(treeList);
     }
 
     @Override
@@ -58,9 +56,9 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
                 menuIds.remove(menu.getParentId());
             }
         }
-        List<Tree<SysMenuDO>> trees = new ArrayList<Tree<SysMenuDO>>();
-        List<SysMenuDO> menuDOs = baseMapper.selectList(null);
-        for (SysMenuDO sysMenuDO : menuDOs) {
+        List<Tree<SysMenuDO>> treeList = new ArrayList<Tree<SysMenuDO>>();
+        List<SysMenuDO> menuDOList = baseMapper.selectList(null);
+        for (SysMenuDO sysMenuDO : menuDOList) {
             Tree<SysMenuDO> tree = new Tree<SysMenuDO>();
             tree.setId(sysMenuDO.getId().toString());
             tree.setParentId(sysMenuDO.getParentId().toString());
@@ -73,47 +71,39 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
                 state.put("selected", false);
             }
             tree.setState(state);
-            trees.add(tree);
+            treeList.add(tree);
         }
-        // 默认顶级菜单为０，根据数据库实际情况调整
-        Tree<SysMenuDO> t = BuildTree.build(trees);
-        return t;
+        return BuildTree.build(treeList);
     }
 
     @Override
     public LayuiTree<SysMenuDO> getLayuiTree() {
-        List<LayuiTree<SysMenuDO>> trees = new ArrayList<LayuiTree<SysMenuDO>>();
+        List<LayuiTree<SysMenuDO>> treeList = new ArrayList<LayuiTree<SysMenuDO>>();
         List<SysMenuDO> menuDOList = baseMapper.selectList(null);
         for (SysMenuDO sysMenuDO : menuDOList) {
             LayuiTree<SysMenuDO> tree = new LayuiTree<SysMenuDO>();
             tree.setId(sysMenuDO.getId().toString());
             tree.setParentId(sysMenuDO.getParentId().toString());
-//            if (sysMenuDO.getParentId().intValue() > 0) {
-//                tree.setHasParent(true);
-//            }
-//            tree.setHasChildren(checkHasChildren(menuDOList, sysMenuDO.getId()));
             tree.setTitle(sysMenuDO.getName());
-            trees.add(tree);
+            treeList.add(tree);
         }
-        // 默认顶级菜单为０，根据数据库实际情况调整
-        LayuiTree<SysMenuDO> t = BuildLayuiTree.buildTree(trees);
-        return t;
+        return BuildLayuiTree.buildTree(treeList);
     }
 
     @Override
-    public LayuiTree<SysMenuDO> getLayuiTree(int id) {
+    public LayuiTree<SysMenuDO> getLayuiTree(int roleId) {
         // 根据roleId查询权限
         List<SysMenuDO> menus = baseMapper.selectList(null);
-        List<Integer> menuIds = sysRoleMenuService.listMenuIdByRoleId(id);
+        List<Integer> menuIds = sysRoleMenuService.listMenuIdByRoleId(roleId);
         List<Integer> temp = menuIds;
         for (SysMenuDO menu : menus) {
             if (temp.contains(menu.getParentId())) {
                 menuIds.remove(menu.getParentId());
             }
         }
-        List<LayuiTree<SysMenuDO>> trees = new ArrayList<LayuiTree<SysMenuDO>>();
-        List<SysMenuDO> menuDOs = baseMapper.selectList(null);
-        for (SysMenuDO sysMenuDO : menuDOs) {
+        List<LayuiTree<SysMenuDO>> treeList = new ArrayList<LayuiTree<SysMenuDO>>();
+        List<SysMenuDO> menuDOList = baseMapper.selectList(null);
+        for (SysMenuDO sysMenuDO : menuDOList) {
             LayuiTree<SysMenuDO> tree = new LayuiTree<SysMenuDO>();
             tree.setId(sysMenuDO.getId().toString());
             tree.setParentId(sysMenuDO.getParentId().toString());
@@ -124,24 +114,13 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
             } else {
                 tree.setChecked(false);
             }
-            trees.add(tree);
+            treeList.add(tree);
         }
-        // 默认顶级菜单为０，根据数据库实际情况调整
-        LayuiTree<SysMenuDO> t = BuildLayuiTree.buildTree(trees);
-        return t;
+        return BuildLayuiTree.buildTree(treeList);
     }
 
     @Override
     public List<SysMenuDO> queryRoleMenuList(int roleId) {
         return baseMapper.queryRoleMenuList(roleId);
-    }
-
-    private boolean checkHasChildren(List<SysMenuDO> menuDOList, int pid) {
-        for (SysMenuDO menuDO : menuDOList) {
-            if (menuDO.getParentId() == pid) {
-                return true;
-            }
-        }
-        return false;
     }
 }
