@@ -93,23 +93,22 @@ public class SysMenuServiceImpl extends CoreServiceImpl<SysMenuDao, SysMenuDO> i
     @Override
     public LayuiTree<SysMenuDO> getLayuiTree(int roleId) {
         // 根据roleId查询权限
-        List<SysMenuDO> menus = baseMapper.selectList(null);
-        List<Integer> menuIds = sysRoleMenuService.listMenuIdByRoleId(roleId);
-        List<Integer> temp = menuIds;
-        for (SysMenuDO menu : menus) {
-            if (temp.contains(menu.getParentId())) {
-                menuIds.remove(menu.getParentId());
+        List<SysMenuDO> allMenuList = baseMapper.selectList(null);
+        List<Integer> roleMenuIdList = sysRoleMenuService.listMenuIdByRoleId(roleId);
+        List<Integer> tempRoleMenuIdList = roleMenuIdList;
+        for (SysMenuDO menu : allMenuList) {
+            if (menu.getParentId().intValue() == 0 && tempRoleMenuIdList.contains(menu.getId())) {
+                roleMenuIdList.remove(menu.getId());
             }
         }
         List<LayuiTree<SysMenuDO>> treeList = new ArrayList<LayuiTree<SysMenuDO>>();
-        List<SysMenuDO> menuDOList = baseMapper.selectList(null);
-        for (SysMenuDO sysMenuDO : menuDOList) {
+        for (SysMenuDO sysMenuDO : allMenuList) {
             LayuiTree<SysMenuDO> tree = new LayuiTree<SysMenuDO>();
             tree.setId(sysMenuDO.getId().toString());
             tree.setParentId(sysMenuDO.getParentId().toString());
             tree.setTitle(sysMenuDO.getName());
             int menuId = sysMenuDO.getId();
-            if (menuIds.contains(menuId)) {
+            if (roleMenuIdList.contains(menuId)) {
                 tree.setChecked(true);
             } else {
                 tree.setChecked(false);
