@@ -10,8 +10,17 @@ $(function(){
         , id: 'layuiTreeId'
         , isJump: false //是否允许点击节点时弹出新窗口跳转
         , click: function (obj) {
-            //var data = obj.data;  //获取当前点击的节点数据
-            //layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+            // 节点被点击
+            console.log("******************节点被点击******************")
+            console.log(obj.data);
+            console.log("展开状态:"+obj.state);
+        }
+        ,oncheck: function(obj){
+            // 复选框被点击
+            console.log("******************复选框被点击******************")
+            console.log(obj.data); //得到当前点击的节点数据
+            console.log("状态:"+obj.checked); //得到当前节点的展开状态：open、close、normal
+            console.log(obj.elem); //得到当前节点元素
         }
     });
 });
