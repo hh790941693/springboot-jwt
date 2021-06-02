@@ -8,8 +8,10 @@ import java.util.List;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.baomidou.mybatisplus.enums.SqlLike;
+import com.pjb.springbootjwt.zhddkk.domain.SysMenuDO;
 import com.pjb.springbootjwt.zhddkk.domain.SysRoleMenuDO;
 import com.pjb.springbootjwt.zhddkk.domain.SysUserRoleDO;
+import com.pjb.springbootjwt.zhddkk.service.SysMenuService;
 import com.pjb.springbootjwt.zhddkk.service.SysUserRoleService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,9 @@ public class SysRoleController extends AdminBaseController {
     
     @Autowired
     private SysUserRoleService sysUserRoleService;
+
+    @Autowired
+    private SysMenuService sysMenuService;
     
     /**
      * binder.
@@ -125,13 +130,15 @@ public class SysRoleController extends AdminBaseController {
         }
         sysRoleService.insert(sysRole);
         List<Integer> menuIdList = sysRole.getMenuIds();
-        if (null != menuIdList && menuIdList.size() > 0) {
+        List<SysMenuDO> sysMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().in("id", menuIdList));
+        if (null != sysMenuList && sysMenuList.size() > 0) {
             List<SysRoleMenuDO> insertRoleMenuList = new ArrayList<>();
-            for (int menuId : menuIdList) {
+            for (SysMenuDO menu : sysMenuList) {
                 SysRoleMenuDO sysRoleMenuDO = new SysRoleMenuDO();
                 sysRoleMenuDO.setRoleId(sysRole.getId());
                 sysRoleMenuDO.setRoleName(sysRole.getName());
-                sysRoleMenuDO.setMenuId(menuId);
+                sysRoleMenuDO.setMenuId(menu.getId());
+                sysRoleMenuDO.setMenuName(menu.getName());
                 insertRoleMenuList.add(sysRoleMenuDO);
             }
             sysRoleMenuService.removeByRoleId(sysRole.getId());
@@ -152,16 +159,17 @@ public class SysRoleController extends AdminBaseController {
     public Result<String> update(SysRoleDO sysRole) {
         sysRoleService.updateById(sysRole);
         List<Integer> menuIdList = sysRole.getMenuIds();
-        if (null != menuIdList && menuIdList.size() > 0) {
+        List<SysMenuDO> sysMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().in("id", menuIdList));
+        if (null != sysMenuList && sysMenuList.size() > 0) {
             List<SysRoleMenuDO> insertRoleMenuList = new ArrayList<>();
-            for (int menuId : menuIdList) {
+            for (SysMenuDO menu : sysMenuList) {
                 SysRoleMenuDO sysRoleMenuDO = new SysRoleMenuDO();
                 sysRoleMenuDO.setRoleId(sysRole.getId());
                 sysRoleMenuDO.setRoleName(sysRole.getName());
-                sysRoleMenuDO.setMenuId(menuId);
+                sysRoleMenuDO.setMenuId(menu.getId());
+                sysRoleMenuDO.setMenuName(menu.getName());
                 insertRoleMenuList.add(sysRoleMenuDO);
             }
-            
             sysRoleMenuService.removeByRoleId(sysRole.getId());
             sysRoleMenuService.batchSave(insertRoleMenuList);
         } else {
