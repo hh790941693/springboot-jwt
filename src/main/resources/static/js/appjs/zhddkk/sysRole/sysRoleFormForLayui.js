@@ -10,12 +10,13 @@ $(function(){
         , id: 'layuiTreeId'
         , isJump: false //是否允许点击节点时弹出新窗口跳转
         , click: function (obj) {
-            var data = obj.data;  //获取当前点击的节点数据
-            layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+            //var data = obj.data;  //获取当前点击的节点数据
+            //layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
         }
     });
 });
 
+// 获取后台列表
 function getMenuTreeData() {
     var id = $('#id').val();
     var url = "/zhddkk/sysMenu/layuiTree";
@@ -28,11 +29,11 @@ function getMenuTreeData() {
         async: false,
         success : function(data) {
             menuIdsData = data.children;
-            console.log(data);
         }
     });
 }
 
+// 获取选择的列表
 function getAllSelectNodes() {
     var resultIdArr = new Array();
     var checkedData =  layui.tree.getChecked('layuiTreeId'); //获取选中节点的数据
@@ -42,7 +43,6 @@ function getAllSelectNodes() {
             resultIdArr.push(chilEle.id);
         });
     });
-    console.log(resultIdArr);
     return resultIdArr;
 }
 
@@ -84,31 +84,31 @@ $.validator.setDefaults({
     }
 });
 
-//表单验证
+//表单提交验证
 function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
     $("#form").validate({
         rules : {
-                                    name : {
+            name : {
                 required : true
             },
-                                createTime : {
+            createTime : {
                 required : true
             },
-                                updateTime : {
+            updateTime : {
                 required : true
             },
                     },
         messages : {
-                                    name : {
+            name : {
                 required : icon + "请输入角色名"
             },
-                                createTime : {
+            createTime : {
                 required : icon + "请输入创建时间"
             },
-                                updateTime : {
+            updateTime : {
                 required : icon + "请输入更新时间"
             },
-                    }
+        }
     })
 }
