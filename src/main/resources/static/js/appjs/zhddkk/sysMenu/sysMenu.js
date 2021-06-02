@@ -97,7 +97,15 @@ function load() {
 					var d = '<a class="btn btn-danger btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
 							+ row.id
 							+ '\')"><i class="fa fa-remove"></i></a> ';
-					return e+d;
+					var btns = e + d;
+
+					if (row.parentId == 0) {
+						var subAdd = '<a class="btn btn-info btn-sm" href="#" title="添加"  mce_href="#" onclick="add(\''
+							+ row.id
+							+ '\')"><i class="fa fa-plus"></i></a> ';
+						btns += subAdd;
+					}
+					return btns;
 				}
 			}
 		]
@@ -115,14 +123,14 @@ function cleanForm(){
 }
 
 //添加
-function add() {
+function add(pid) {
 	layer.open({
 		type : 2,
 		title : '增加',
 		maxmin : true,
 		shadeClose : false,//点击遮罩关闭层
 		area : [ '1000px', '520px' ],
-		content : prefix + '/add'
+		content : prefix + '/add?pid='+pid
 	});
 }
 

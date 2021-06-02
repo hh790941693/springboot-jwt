@@ -97,8 +97,9 @@ public class SysMenuController extends AdminBaseController {
      */
     @GetMapping("/add")
     // @RequiresPermissions("zhddkk:sysMenu:add")
-    public String add(Model model) {
+    public String add(Model model, int pid) {
         SysMenuDO sysMenu = new SysMenuDO();
+        sysMenu.setParentId(pid);
         model.addAttribute("sysMenu", sysMenu);
         
         List<SysMenuDO> parentMenuList = sysMenuService.selectList(new EntityWrapper<SysMenuDO>().eq("parent_id", 0));
