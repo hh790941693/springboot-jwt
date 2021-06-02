@@ -119,8 +119,7 @@ public class SysRoleController extends AdminBaseController {
     @PostMapping("/save")
     // @RequiresPermissions("zhddkk:sysRole:add")
     public Result<String> save(SysRoleDO sysRole) {
-        String roleName = sysRole.getName();
-        int roleCount = sysRoleService.selectCount(new EntityWrapper<SysRoleDO>().eq("name", roleName));
+        int roleCount = sysRoleService.selectCount(new EntityWrapper<SysRoleDO>().eq("name", sysRole.getName()));
         if (roleCount > 0) {
             return Result.fail("角色名已存在");
         }
