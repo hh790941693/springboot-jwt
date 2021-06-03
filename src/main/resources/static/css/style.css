@@ -118,20 +118,38 @@ body.body-small .navbar-top-links li:last-child {
     min-height: 50px;
 }
 
+/** 修复分页控件错位问题 start **/
+.page-list .show {
+    display: inline-block!important;
+}
+
+.dropup .dropdown-menu, .navbar-fixed-bottom .dropdown .dropdown-menu {
+    top: auto;
+    bottom: -350%;
+    margin-bottom: 2px;
+}
+
 .dropdown-menu {
-    border: medium none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
     display: none;
     float: left;
-    font-size: 12px;
-    left: 0;
-    list-style: none outside none;
-    padding: 0;
-    position: absolute;
-    text-shadow: none;
-    top: 100%;
-    z-index: 1000;
-    border-radius: 0;
-    box-shadow: 0 0 3px rgba(86, 96, 117, 0.3);
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+    box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
 }
 
 .dropdown-menu>li>a {
@@ -146,6 +164,8 @@ body.body-small .navbar-top-links li:last-child {
 .dropdown-menu>li>a.font-bold {
     font-weight: 600;
 }
+/** 修复分页控件错位问题 end **/
+
 
 .navbar-top-links .dropdown-menu li {
     display: block;
