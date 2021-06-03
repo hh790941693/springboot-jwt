@@ -1,5 +1,5 @@
 <!-- 页面通用元数据和CSS -->
-<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns:th="http://www.thymeleaf.org">
     <head th:fragment="header">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +7,10 @@
         <meta name="description" content="">
         <link rel="stylesheet" type="text/css" th:href="@{/js/timepicker/jquery.datetimepicker.css}"/>
         <link rel="stylesheet" type="text/css" th:href="@{/js/bootstrap/css/bootstrap.min.css?v=3.3.6}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/js/bootstraptable/bootstrap-table.min.css}"/>
         <link rel="stylesheet" type="text/css" th:href="@{/js/fontAwesome/css/font-awesome.css}">
         <link rel="stylesheet" type="text/css" th:href="@{/js/bootstrap-select/css/bootstrap-select.css}">
         <link rel="stylesheet" type="text/css" th:href="@{/js/layui/css/layui.css}">
-        <link rel="stylesheet" type="text/css" th:href="@{/js/bootstraptable/bootstrap-table.min.css}"/>
         <link rel="stylesheet" type="text/css" th:href="@{/css/style.css?v=4.1.0}">
         <link rel="stylesheet" type="text/css" th:href="@{/js/plugins/fancybox/jquery.fancybox.css}">
         <link rel="stylesheet" type="text/css" th:href="@{/js/swiper/swiper.min.css}">
@@ -22,8 +22,10 @@
     <!-- 页面通用JS -->
     <div th:fragment="footer">
         <script type="text/javascript" th:src="@{/js/jquery/jquery.min.js?v=2.1.4}"></script>
-        <script type="text/javascript" th:src="@{/js/bootstraptable/bootstrap-table.min.js?v=3.3.6}"></script>
         <script type="text/javascript" th:src="@{/js/bootstrap/js/popper.js}"></script>
+        <script type="text/javascript" th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/bootstraptable/bootstrap-table.min.js?v=3.3.6}"></script>
+        <script type="text/javascript" th:src="@{/js/bootstraptable/locale/bootstrap-table-zh-CN.min.js}"></script>
         <!--<script type="text/javascript" src="https://unpkg.com/popper.js@1.16.1/dist/umd/popper.min.js"></script>-->
         <script type="text/javascript" th:src="@{/js/plugins/select2/js/select2.min.js}"></script>
         <script type="text/javascript" th:src="@{/js/plugins/select2/js/i18n/zh-CN.js}"></script>
@@ -33,9 +35,7 @@
         <script type="text/javascript" th:src="@{/js/jquery/jquery.validate.js}"></script>
         <script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
         <script type="text/javascript" th:src="@{/js/timepicker/jquery.datetimepicker.js}"></script>
-        <script type="text/javascript" th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
         <script type="text/javascript" th:src="@{/js/layui/layui.js}"></script>
-        <script type="text/javascript" th:src="@{/js/bootstraptable/locale/bootstrap-table-zh-CN.min.js}"></script>
         <script type="text/javascript" th:src="@{/js/plugins/fancybox/jquery.fancybox.js}"></script>
         <script type="text/javascript" th:src="@{/js/vue/vue.min.js}"></script>
         <script type="text/javascript" th:src="@{/js/swiper/swiper.min.js}"></script>
