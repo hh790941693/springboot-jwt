@@ -59,7 +59,7 @@ public class ShiroAuthenticationFilter extends BasicHttpAuthenticationFilter {
             }
             logger.info("校验token");
             try {
-                JwtUtils.verifyToken(authorization, userId, userDO.getUsername() + userDO.getPassword());
+                JwtUtils.verifyToken(authorization, userId);
             }catch (ApplicationException e){
                 logger.info("验证token失败:{}", e.getMessage());
                 getSubject(request, response).logout();

@@ -5,7 +5,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.pjb.springbootjwt.common.exception.ApplicationException;
 import com.pjb.springbootjwt.ump.domain.UserDO;
@@ -15,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
-import java.util.Map;
-
 
 /**
  * @author jinbin
@@ -26,53 +23,32 @@ public class JwtUtils {
 
     private static Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    public static final String CLAIM_USER_ID = "id";
+    public static final String CLAIM_USER_ID = "userId";
     public static final long TOKEN_EXPIRE = 7200000;  //2小时
     public static final long REFREASH_TOKEN_EXPIRE = 86400000;//1天
 
-    public static String createToken(String userId, String secret, long expire) {
-        logger.info("创建token userId:{} expire:{}", userId, expire);
-        Date expireDate = new Date(System.currentTimeMillis() + expire);
-        Algorithm algorithm = Algorithm.HMAC256(secret);
+    public static final String CREATE_SECRET = "c123";
+    public static final String REFREASH_SECRET = "r123";
+
+    public static String createToken(String userId) {
+        logger.info("创建token userId:{}", userId);
+        Date expireDate = new Date(System.currentTimeMillis() + TOKEN_EXPIRE);
+        Algorithm algorithm = Algorithm.HMAC256(CREATE_SECRET);
         String token = JWT.create().withClaim(CLAIM_USER_ID, userId).withExpiresAt(expireDate).sign(algorithm);
         return token;
     }
 
-    public static String getUserId(String token){
-        if (StringUtils.isEmpty(token)){
-            return null;
-        }
-
-        String userId = null;
-        try {
-            DecodedJWT decodedJWT = JWT.decode(token);
-            userId = decodedJWT.getClaim(CLAIM_USER_ID).asString();
-        }catch (Exception e){
-            logger.info("解密token错误:{}", e.getMessage());
-        }
-
-        return userId;
+    public static String createRefreashToken(String userId) {
+        logger.info("创建refreash token userId:{}", userId);
+        Date expireDate = new Date(System.currentTimeMillis() + REFREASH_TOKEN_EXPIRE);
+        Algorithm algorithm = Algorithm.HMAC256(REFREASH_SECRET);
+        String token = JWT.create().withClaim(CLAIM_USER_ID, userId).withExpiresAt(expireDate).sign(algorithm);
+        return token;
     }
 
-    public static Map<String, Claim> getClaimsMap(String token){
-        if (StringUtils.isEmpty(token)){
-            return null;
-        }
-
-        Map<String, Claim> claimsMap = null;
-        try {
-            DecodedJWT decodedJWT = JWT.decode(token);
-            claimsMap = decodedJWT.getClaims();
-        }catch (Exception e){
-            logger.info("解密token错误:{}", e.getMessage());
-        }
-
-        return claimsMap;
-    }
-
-    public static boolean verifyToken(String token, String userId, String secret) throws ApplicationException {
+    public static boolean verifyToken(String token, String userId) throws ApplicationException {
         logger.info("验证token userId:{}", userId);
-        Algorithm algorithm = Algorithm.HMAC256(secret);
+        Algorithm algorithm = Algorithm.HMAC256(CREATE_SECRET);
         JWTVerifier jwtVerifier = JWT.require(algorithm).withClaim(CLAIM_USER_ID, userId).build();
         try {
             jwtVerifier.verify(token);
@@ -89,9 +65,9 @@ public class JwtUtils {
         }
     }
 
-    public static boolean verifyRefreashToken(String token, String userId, String secret) throws Exception{
+    public static boolean verifyRefreashToken(String token, String userId) throws ApplicationException{
         logger.info("验证refreashToken userId:{}", userId);
-        Algorithm algorithm = Algorithm.HMAC256(secret);
+        Algorithm algorithm = Algorithm.HMAC256(REFREASH_SECRET);
         JWTVerifier jwtVerifier = JWT.require(algorithm).withClaim(CLAIM_USER_ID, userId).build();
         try {
             jwtVerifier.verify(token);
@@ -120,5 +96,21 @@ public class JwtUtils {
             return userDO.getId();
         }
         return null;
+    }
+
+    public static String getUserId(String token){
+        if (StringUtils.isEmpty(token)){
+            return null;
+        }
+
+        String userId = null;
+        try {
+            DecodedJWT decodedJWT = JWT.decode(token);
+            userId = decodedJWT.getClaim(CLAIM_USER_ID).asString();
+        }catch (Exception e){
+            logger.info("解密token错误:{}", e.getMessage());
+        }
+
+        return userId;
     }
 }

@@ -59,7 +59,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
             // 正常请求token 执行认证
             try {
-                JwtUtils.verifyToken(token, user.getId(), user.getUsername() + user.getPassword());
+                JwtUtils.verifyToken(token, userId);
             }catch (ApplicationException e){
                 logger.info("token认证失败:{}", e.getMessage());
                 BuildResponseUtil.buildRes(e.getCode(), e.getDesc(), httpServletResponse);
@@ -83,7 +83,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             UserDO user = userService.findUserById(userId);
             // 刷新token
             try {
-                JwtUtils.verifyRefreashToken(token, user.getId(), user.getId() + user.getPassword());
+                JwtUtils.verifyRefreashToken(token, userId);
             }catch (ApplicationException e){
                 logger.info("refreashToken认证失败:{}", e.getMessage());
                 BuildResponseUtil.buildRes(e.getCode(), e.getDesc(), httpServletResponse);

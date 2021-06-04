@@ -9,6 +9,7 @@ import com.pjb.springbootjwt.ump.domain.UserDO;
 import com.pjb.springbootjwt.ump.service.UserService;
 import com.pjb.springbootjwt.util.EhcacheUtils;
 import com.pjb.springbootjwt.util.JwtUtils;
+import io.jsonwebtoken.Jwt;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -80,54 +81,18 @@ public class UserController {
         if (!userInfo.getPassword().equals(password)){
             return Result.build(902,"密码错误", new TokenBean());
         }
-
         String userId = userInfo.getId();
-        //检查缓存中是否有token
-        //Object cacheToken = EhcacheUtils.get(EhcacheUtils.default_cache_name, TOKEN_PREFIX+userInfo.getId());
-        Object cacheToken = redisUtil.get(Constant.TOKEN_PREFIX+userId);
 
         TokenBean tokenBean = new TokenBean();
-        if (null != cacheToken){
-            logger.info("直接从缓存中取出token返回");
-            tokenBean = (TokenBean)cacheToken;
-            //检查refreashToken是否已经过期
-            Long refreashTokenExpire = tokenBean.getRefreashTokenExpire();
-            if (refreashTokenExpire< System.currentTimeMillis()){
-                logger.info("缓存中的refreashToken已经过期,重新生成token");
-                String token = JwtUtils.createToken(userId, userInfo.getUsername() + userInfo.getPassword(), JwtUtils.TOKEN_EXPIRE);
-                String refreashToken = JwtUtils.createToken(userId, userId + userInfo.getPassword(), JwtUtils.REFREASH_TOKEN_EXPIRE);
+        String token = JwtUtils.createToken(userId);
+        String refreashToken = JwtUtils.createRefreashToken(userId);
 
-                tokenBean.setId(userId);
-                tokenBean.setToken(token);
-                tokenBean.setRefreashToken(refreashToken);
-                tokenBean.setTokenExpire(System.currentTimeMillis()+JwtUtils.TOKEN_EXPIRE);
-                tokenBean.setRefreashTokenExpire(System.currentTimeMillis()+JwtUtils.REFREASH_TOKEN_EXPIRE);
+        tokenBean.setUserId(userId);
+        tokenBean.setToken(token);
+        tokenBean.setRefreashToken(refreashToken);
+        tokenBean.setTokenExpire(System.currentTimeMillis()+JwtUtils.TOKEN_EXPIRE);
+        tokenBean.setRefreashTokenExpire(System.currentTimeMillis()+JwtUtils.REFREASH_TOKEN_EXPIRE);
 
-                //将token存入缓存
-                EhcacheUtils.put(EhcacheUtils.default_cache_name, Constant.TOKEN_PREFIX+userId, tokenBean);
-
-                //将token存入redis
-                redisUtil.set(Constant.TOKEN_PREFIX+userId, tokenBean);
-            }else{
-                logger.info("缓存中的refreashToken没有过期");
-            }
-        }else {
-            logger.info("第一次登录,生成token并存入缓存");
-            String token = JwtUtils.createToken(userId, userInfo.getUsername() + userInfo.getPassword(), JwtUtils.TOKEN_EXPIRE);
-            String refreashToken = JwtUtils.createToken(userId, userId + userInfo.getPassword(), JwtUtils.REFREASH_TOKEN_EXPIRE);
-
-            tokenBean.setId(userId);
-            tokenBean.setToken(token);
-            tokenBean.setRefreashToken(refreashToken);
-            tokenBean.setTokenExpire(System.currentTimeMillis()+JwtUtils.TOKEN_EXPIRE);
-            tokenBean.setRefreashTokenExpire(System.currentTimeMillis()+JwtUtils.REFREASH_TOKEN_EXPIRE);
-
-            //将token存入缓存
-            EhcacheUtils.put(EhcacheUtils.default_cache_name, Constant.TOKEN_PREFIX+userId, tokenBean);
-
-            //将token存入redis
-            redisUtil.set(Constant.TOKEN_PREFIX+userId, tokenBean);
-        }
         return Result.ok(tokenBean);
     }
 
@@ -148,28 +113,11 @@ public class UserController {
         try {
             String token = httpServletRequest.getHeader("Authorization");// 从 http 请求头中取出 token
             String userId = JwtUtils.getUserId(token);
-            UserDO userInfo = userService.findUserById(userId);
-            String newToken = JwtUtils.createToken(userId, userInfo.getUsername()+userInfo.getPassword(), JwtUtils.TOKEN_EXPIRE);
+            //校验token
+            JwtUtils.verifyToken(token, userId);
 
-            Object cacheToken = EhcacheUtils.get(EhcacheUtils.default_cache_name, Constant.TOKEN_PREFIX+userId);
-            if (null != cacheToken){
-                TokenBean tokenBean = (TokenBean) cacheToken;
-                tokenBean.setToken(newToken);
-            }
-            EhcacheUtils.remove(EhcacheUtils.default_cache_name, Constant.TOKEN_PREFIX+userId);
-
-            //从redis读取缓存
-            Object redisToken = redisUtil.get(Constant.TOKEN_PREFIX+userId);
-            if (null != redisToken){
-                TokenBean tokenBean = (TokenBean)redisToken;
-                tokenBean.setToken(newToken);
-                //更新缓存token
-                EhcacheUtils.put(EhcacheUtils.default_cache_name, Constant.TOKEN_PREFIX+userId, tokenBean);
-
-                //更新redis
-                redisUtil.set(Constant.TOKEN_PREFIX+userId, tokenBean);
-            }
-
+            //验证通过的话,创建新的token返回给前端
+            String newToken = JwtUtils.createToken(userId);
             return Result.ok(newToken);
         }catch (Exception e){
             e.printStackTrace();
