@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+	<th:block th:include="common :: header"></th:block>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+                        <form class="form-horizontal m-t" id="form">
+							<!-- 主键 -->
+                            <input type="hidden" id="id" name="id" th:value="${spMerchant.id}">
+																													<div class="form-group">
+								<label class="col-sm-3 control-label" for="userId"><span style="color:red">*</span>&nbsp;商家id：</label>
+								<div class="col-sm-8">
+									<input type="text" id="userId" name="userId" th:value="${spMerchant.userId}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="merchantId"><span style="color:red">*</span>&nbsp;店铺id：</label>
+								<div class="col-sm-8">
+									<input type="text" id="merchantId" name="merchantId" th:value="${spMerchant.merchantId}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="name"><span style="color:red">*</span>&nbsp;店铺名称：</label>
+								<div class="col-sm-8">
+									<input type="text" id="name" name="name" th:value="${spMerchant.name}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="address"><span style="color:red">*</span>&nbsp;店铺地址：</label>
+								<div class="col-sm-8">
+									<input type="text" id="address" name="address" th:value="${spMerchant.address}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="image"><span style="color:red">*</span>&nbsp;店铺图片：</label>
+								<div class="col-sm-8">
+									<input type="text" id="image" name="image" th:value="${spMerchant.image}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="desc"><span style="color:red">*</span>&nbsp;店铺描述：</label>
+								<div class="col-sm-8">
+									<input type="text" id="desc" name="desc" th:value="${spMerchant.desc}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="contact"><span style="color:red">*</span>&nbsp;联系电话：</label>
+								<div class="col-sm-8">
+									<input type="text" id="contact" name="contact" th:value="${spMerchant.contact}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="status"><span style="color:red">*</span>&nbsp;店铺状态 0:已关闭 1:营业中 2:暂停营业 3:已打烊：</label>
+								<div class="col-sm-8">
+									<input type="text" id="status" name="status" th:value="${spMerchant.status}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="createTime"><span style="color:red">*</span>&nbsp;创建时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="createTime" name="createTime" th:value="${spMerchant.createTime}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="updateTime"><span style="color:red">*</span>&nbsp;更新时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="updateTime" name="updateTime" th:value="${spMerchant.updateTime}" class="form-control" />
+								</div>
+							</div>
+											                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button type="submit" class="btn btn-primary">保存</button>
+                                </div>
+                            </div>
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="common :: footer"></th:block>
+</body>
+<script type="text/javascript" th:src="@{/js/appjs/shop/spMerchant/spMerchantForm.js}"></script>
+</html>
