@@ -3,6 +3,7 @@ package com.pjb.springbootjwt.shop.controller;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -106,7 +107,21 @@ public class SpMerchantApplyController extends AdminBaseController {
 	@PostMapping("/save")
 	//@RequiresPermissions("shop:spMerchantApply:add")
 	public Result<String> save(SpMerchantApplyDO spMerchantApply) {
-        String applyNo = "mer_apy_" + UUID.randomUUID().toString().replaceAll("-","");
+		String userId = SessionUtil.getSessionUserId();
+		List<SpMerchantApplyDO> spMerchantApplyDOList = spMerchantApplyService.selectList(new EntityWrapper<SpMerchantApplyDO>().eq("user_id", userId));
+        if (null != spMerchantApplyDOList && spMerchantApplyDOList.size() > 0) {
+        	for (SpMerchantApplyDO spMerchantApplyDO : spMerchantApplyDOList) {
+        		if (spMerchantApplyDO.getStatus().intValue() == 1) {
+        			// 待审批
+					return Result.fail("尚有待审批的订单,请不要重复申请。");
+				}
+        		if (spMerchantApplyDO.getStatus().intValue() == 2) {
+        			// 审批通过
+					return Result.fail("你已经是商家了,请不要重复申请。");
+				}
+			}
+		}
+		String applyNo = "mer_apy_" + UUID.randomUUID().toString().replaceAll("-","");
         spMerchantApply.setApplyNo(applyNo);
         spMerchantApply.setUserId(Long.valueOf(SessionUtil.getSessionUserId()));
 		spMerchantApplyService.insert(spMerchantApply);
