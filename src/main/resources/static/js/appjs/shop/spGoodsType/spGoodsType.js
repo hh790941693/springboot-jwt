@@ -50,10 +50,6 @@ function load() {
 				checkbox : true
 			},
 						{
-				field : 'id',
-				title : '主键id'
-			},
-						{
 				field : 'typeId',
 				title : '商品分类id'
 			},
@@ -63,7 +59,16 @@ function load() {
 			},
 						{
 				field : 'image',
-				title : '分类图片'
+				title : '分类图片',
+				formatter: function(value,row){
+					var result = "";
+					if (value != "" && value != null) {
+						result += "<div style='text-align: center;'>";
+						result += "<img onerror=\"this.onerror='';this.src='" + $.ws.errorImgUrl + "'\" onclick=\"$.ws.gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
+						result += "</div>";
+					}
+					return result;
+				}
 			},
 						{
 				field : 'desc',
@@ -71,11 +76,13 @@ function load() {
 			},
 						{
 				field : 'status',
-				title : '状态 0:禁用 1:启用'
-			},
-						{
-				field : 'createTime',
-				title : '创建时间'
+				title : '状态',
+				formatter : function (value, row) {
+					if (value == 0) {
+						return "禁用";
+					}
+					return "启用";
+				}
 			},
 						{
 				field : 'updateTime',

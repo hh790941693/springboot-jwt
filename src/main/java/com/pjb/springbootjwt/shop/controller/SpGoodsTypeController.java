@@ -3,6 +3,7 @@ package com.pjb.springbootjwt.shop.controller;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.UUID;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +98,10 @@ public class SpGoodsTypeController extends AdminBaseController {
 	@PostMapping("/save")
 	//@RequiresPermissions("shop:spGoodsType:add")
 	public Result<String> save(SpGoodsTypeDO spGoodsType) {
+		String goodsTypeId = "gt_" + UUID.randomUUID().toString().replaceAll("-", "");
+		spGoodsType.setTypeId(goodsTypeId);
+		spGoodsType.setCreateTime(new Date());
+		spGoodsType.setUpdateTime(new Date());
 		spGoodsTypeService.insert(spGoodsType);
         return Result.ok();
 	}

@@ -1,6 +1,7 @@
 $().ready(function() {
 	validateRule();
-    initUpload();
+    // 初始化上传模块
+    $.ws.initUpload("merchant", "imageBtn", "merchantImageInput", "image");
 });
 
 $.validator.setDefaults({
@@ -71,30 +72,4 @@ function validateRule() {
             },
 		}
 	})
-}
-
-// 初始化上传模块
-function initUpload() {
-    layui.upload.render({
-        elem: '#imageBtn',
-        url: $.ws.uploadFileUrl,
-        size: 10240,//单位为KB
-        accept: 'images',
-        data: {
-            "folder": "merchant"
-        },
-        before: function () {
-            layer.load();
-        },
-        done: function (r) {
-            layer.closeAll('loading');
-            if (r.code == 1) {
-                $("#image").attr("src", r.data);
-                $("#merchantImageInput").val(r.data);
-            }
-        },
-        error: function () {
-            layer.closeAll('loading');
-        }
-    });
 }

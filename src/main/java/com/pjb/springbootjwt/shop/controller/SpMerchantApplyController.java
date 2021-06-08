@@ -169,7 +169,7 @@ public class SpMerchantApplyController extends AdminBaseController {
      */
     @ResponseBody
     @PostMapping("/updateStatus")
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result<String> list(int id, int status) {
         SpMerchantApplyDO spMerchantApplyDO = spMerchantApplyService.selectById(id);
         if (null == spMerchantApplyDO) {

@@ -430,6 +430,39 @@ $.ws = {
             }
         }
         return result;
+    },
+
+    // 初始化上传模块
+    /**
+     *
+     * @param folderName    目录名
+     * @param clickBtnId    触发按钮id
+     * @param imgUrlInputId 存放url的输入框id
+     * @param imgShowId     显示图片的img id
+     */
+    initUpload: function(folderName, clickBtnId, imgUrlInputId, imgShowId) {
+        layui.upload.render({
+            elem: '#'+clickBtnId,
+            url: $.ws.uploadFileUrl,
+            size: 10240,//单位为KB
+            accept: 'images',
+            data: {
+                "folder": folderName
+            },
+            before: function () {
+                layer.load();
+            },
+            done: function (r) {
+                layer.closeAll('loading');
+                if (r.code == 1) {
+                    $("#"+imgShowId).attr("src", r.data);
+                    $("#"+imgUrlInputId).val(r.data);
+                }
+            },
+            error: function () {
+                layer.closeAll('loading');
+            }
+        });
     }
 }
 
