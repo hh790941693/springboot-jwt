@@ -105,6 +105,7 @@ public class SpMerchantApplyController extends AdminBaseController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
+	@Transactional(rollbackFor = Exception.class)
 	//@RequiresPermissions("shop:spMerchantApply:add")
 	public Result<String> save(SpMerchantApplyDO spMerchantApply) {
 		String userId = SessionUtil.getSessionUserId();
@@ -124,6 +125,7 @@ public class SpMerchantApplyController extends AdminBaseController {
 		String applyNo = "mer_apy_" + UUID.randomUUID().toString().replaceAll("-","");
         spMerchantApply.setApplyNo(applyNo);
         spMerchantApply.setUserId(Long.valueOf(SessionUtil.getSessionUserId()));
+		spMerchantApply.setCreateTime(new Date());
 		spMerchantApplyService.insert(spMerchantApply);
         return Result.ok();
 	}
@@ -176,6 +178,7 @@ public class SpMerchantApplyController extends AdminBaseController {
             return Result.fail("申请记录不存在");
         }
         spMerchantApplyDO.setStatus(status);
+		spMerchantApplyDO.setUpdateTime(new Date());
         spMerchantApplyService.updateById(spMerchantApplyDO);
         if (status == 2) {
             // 审批通过
@@ -183,8 +186,8 @@ public class SpMerchantApplyController extends AdminBaseController {
             BeanUtils.copyProperties(spMerchantApplyDO, spMerchantDO);
             spMerchantDO.setId(null);
             spMerchantDO.setStatus(1);
-            spMerchantDO.setCreateTime(null);
-            spMerchantDO.setUpdateTime(null);
+            spMerchantDO.setCreateTime(new Date());
+            spMerchantDO.setUpdateTime(new Date());
             String merchantId = "mer_" + UUID.randomUUID().toString().replaceAll("-", "");
             spMerchantDO.setMerchantId(merchantId);
             spMerchantService.insert(spMerchantDO);

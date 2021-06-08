@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -96,6 +97,7 @@ public class SpGoodsTypeController extends AdminBaseController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
+	@Transactional(rollbackFor = Exception.class)
 	//@RequiresPermissions("shop:spGoodsType:add")
 	public Result<String> save(SpGoodsTypeDO spGoodsType) {
 		String goodsTypeId = "gt_" + UUID.randomUUID().toString().replaceAll("-", "");
