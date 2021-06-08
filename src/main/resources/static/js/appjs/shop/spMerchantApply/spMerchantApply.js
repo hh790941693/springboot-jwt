@@ -30,7 +30,9 @@ function load() {
 			return {
 				//传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
 				pageNumber : params.pageNumber,
-				pageSize : params.pageSize
+				pageSize : params.pageSize,
+				name : $("#nameSearchInput").val(),
+				status : $("#statusSearchSelect").val(),
 			};
 		},
 		// //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -136,6 +138,8 @@ function reLoad() {
 
 //重置
 function cleanForm(){
+	$("#nameSearchInput").val("");
+	$("#statusSearchSelect").val("");
 	reLoad();
 }
 

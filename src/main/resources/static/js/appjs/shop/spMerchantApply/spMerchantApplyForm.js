@@ -1,5 +1,7 @@
 $(function(){
     validateRule();
+    // 初始化上传模块
+    $.ws.initUpload("merchant", "imageBtn", "merchantImageInput", "image");
 });
 
 //保存数据
@@ -43,12 +45,6 @@ function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
     $("#form").validate({
         rules : {
-                                    applyNo : {
-                required : true
-            },
-                                userId : {
-                required : true
-            },
                                 name : {
                 required : true
             },
@@ -64,23 +60,9 @@ function validateRule() {
                                 contact : {
                 required : true
             },
-                                status : {
-                required : true
-            },
-                                createTime : {
-                required : true
-            },
-                                updateTime : {
-                required : true
-            },
+
                     },
         messages : {
-                                    applyNo : {
-                required : icon + "请输入申请编号"
-            },
-                                userId : {
-                required : icon + "请输入申请人id"
-            },
                                 name : {
                 required : icon + "请输入店铺名称"
             },
@@ -95,15 +77,6 @@ function validateRule() {
             },
                                 contact : {
                 required : icon + "请输入联系电话"
-            },
-                                status : {
-                required : icon + "请输入审批状态 1:待审批 2:审批通过 3:审批不通过"
-            },
-                                createTime : {
-                required : icon + "请输入创建时间"
-            },
-                                updateTime : {
-                required : icon + "请输入更新时间"
             },
                     }
     })

@@ -21,8 +21,19 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="input-group">
-                                    <div class="input-group-addon">名称</div>
+                                    <div class="input-group-addon">店铺名称</div>
                                     <input type="text" class="form-control" id="nameSearchInput" placeholder="请输入">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">审批状态</div>
+                                    <select class="form-control" id="statusSearchSelect">
+                                        <option value="" th:selected="selected">--请选择--</option>
+                                        <option value="1">待审批</option>
+                                        <option value="2">审批通过</option>
+                                        <option value="3">审批不通过</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-4">

@@ -8,6 +8,8 @@ import java.util.UUID;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
+import com.pjb.springbootjwt.zhddkk.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -71,7 +73,14 @@ public class SpMerchantApplyController extends AdminBaseController {
 	@GetMapping("/list")
 	//@RequiresPermissions("shop:spMerchantApply:spMerchantApply")
 	public Result<Page<SpMerchantApplyDO>> list(SpMerchantApplyDO spMerchantApplyDto) {
-        Wrapper<SpMerchantApplyDO> wrapper = new EntityWrapper<SpMerchantApplyDO>(spMerchantApplyDto);
+        Wrapper<SpMerchantApplyDO> wrapper = new EntityWrapper<SpMerchantApplyDO>();
+        if (StringUtils.isNotBlank(spMerchantApplyDto.getName())) {
+        	wrapper.like("name", spMerchantApplyDto.getName());
+		}
+        System.out.println(spMerchantApplyDto.getStatus());
+        if (null != spMerchantApplyDto.getStatus()) {
+			wrapper.eq("status", spMerchantApplyDto.getStatus());
+		}
         Page<SpMerchantApplyDO> page = spMerchantApplyService.selectPage(getPage(SpMerchantApplyDO.class), wrapper);
         return Result.ok(page);
 	}
@@ -84,7 +93,7 @@ public class SpMerchantApplyController extends AdminBaseController {
     public String add(Model model) {
 		SpMerchantApplyDO spMerchantApply = new SpMerchantApplyDO();
         model.addAttribute("spMerchantApply", spMerchantApply);
-	    return "shop/spMerchantApply/spMerchantApplyAdd";
+	    return "shop/spMerchantApply/spMerchantApplyForm";
 	}
 
     /**
@@ -97,7 +106,7 @@ public class SpMerchantApplyController extends AdminBaseController {
     public String edit(@PathVariable("id") Long id, Model model) {
 		SpMerchantApplyDO spMerchantApply = spMerchantApplyService.selectById(id);
 		model.addAttribute("spMerchantApply", spMerchantApply);
-	    return "shop/spMerchantApply/spMerchantApplyEdit";
+	    return "shop/spMerchantApply/spMerchantApplyForm";
 	}
 	
 	/**

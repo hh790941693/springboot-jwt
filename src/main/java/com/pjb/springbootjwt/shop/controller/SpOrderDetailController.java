@@ -74,7 +74,7 @@ public class SpOrderDetailController extends AdminBaseController {
     public String add(Model model) {
 		SpOrderDetailDO spOrderDetail = new SpOrderDetailDO();
         model.addAttribute("spOrderDetail", spOrderDetail);
-	    return "shop/spOrderDetail/spOrderDetailAdd";
+	    return "shop/spOrderDetail/spOrderDetailForm";
 	}
 
     /**
@@ -87,7 +87,7 @@ public class SpOrderDetailController extends AdminBaseController {
     public String edit(@PathVariable("id") Long id, Model model) {
 		SpOrderDetailDO spOrderDetail = spOrderDetailService.selectById(id);
 		model.addAttribute("spOrderDetail", spOrderDetail);
-	    return "shop/spOrderDetail/spOrderDetailEdit";
+	    return "shop/spOrderDetail/spOrderDetailForm";
 	}
 	
 	/**

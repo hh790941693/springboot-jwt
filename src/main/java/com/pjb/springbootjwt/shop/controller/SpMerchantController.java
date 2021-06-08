@@ -74,7 +74,7 @@ public class SpMerchantController extends AdminBaseController {
     public String add(Model model) {
 		SpMerchantDO spMerchant = new SpMerchantDO();
         model.addAttribute("spMerchant", spMerchant);
-	    return "shop/spMerchant/spMerchantAdd";
+	    return "shop/spMerchant/spMerchantForm";
 	}
 
     /**
@@ -87,7 +87,7 @@ public class SpMerchantController extends AdminBaseController {
     public String edit(@PathVariable("id") Long id, Model model) {
 		SpMerchantDO spMerchant = spMerchantService.selectById(id);
 		model.addAttribute("spMerchant", spMerchant);
-	    return "shop/spMerchant/spMerchantEdit";
+	    return "shop/spMerchant/spMerchantForm";
 	}
 	
 	/**
