@@ -46,9 +46,6 @@ function load() {
 			 };
 		},
 		columns : [
-			{
-				checkbox : true
-			},
 						{
 				field : 'typeId',
 				title : '商品分类id'
