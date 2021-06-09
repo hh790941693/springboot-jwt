@@ -57,6 +57,16 @@
                 <input id="merchantName">
             </div>
 
+            <div style="width:150px;float:left;margin-left:50px;">
+                <span>价格排序 :</span>
+                <input type="checkbox" v-model="priceSort" value="true">
+            </div>
+
+            <div style="width:150px;float:left;margin-left:50px;">
+                <span>销量排序 :</span>
+                <input type="checkbox" v-model="saleNumberSort" value="false">
+            </div>
+
             <div style="width:150px;float:right;margin-left:15px;">
                 <button @click="queryGoodsList()" class="btn btn-sm btn-primary">搜索</button>
                 <button @click="resetSearch()" class="btn btn-sm btn-default">重置</button>
@@ -73,7 +83,7 @@
                 <p><span class="fa fa-home"></span>{{goodsDetail.merchantName}}</p>
                 <hr/>
                 <p style="text-align: right;">
-                    月销 55
+                    月销 {{goodsDetail.saleNumber}}
                 </p>
             </div>
         </div>
@@ -87,6 +97,8 @@
             el: '#mainDiv',
             data: {
                 goodsData: {},
+                priceSort: true,
+                saleNumberSort: false,
             },
             methods: {
                 queryGoodsList: function () {
@@ -97,6 +109,8 @@
                         data: {
                             'name':$("#goodsName").val(),
                             'merchantName':$("#merchantName").val(),
+                            'priceSort':this.priceSort,
+                            'saleNumberSort': this.saleNumberSort,
                         },
                         success: function (result) {
                             if (result.code == 1) {

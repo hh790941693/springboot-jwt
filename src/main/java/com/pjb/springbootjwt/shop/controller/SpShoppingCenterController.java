@@ -41,9 +41,9 @@ public class SpShoppingCenterController {
         if (StringUtils.isNotBlank(params.getMerchantName())) {
             wrapper.like("t2.name", params.getMerchantName());
         }
-
         wrapper.ne("t1.status", 0);
-        wrapper.orderBy("t1.create_time", false);
+        wrapper.orderBy("t1.sale_price", params.isPriceSort());
+        wrapper.orderBy("t1.sale_number", params.isSaleNumberSort());
         List<GoodsDetailDTO> goodsDetailDTOS = spGoodsService.queryCenterGoodsList(page, wrapper);
         return Result.ok(goodsDetailDTOS);
     }

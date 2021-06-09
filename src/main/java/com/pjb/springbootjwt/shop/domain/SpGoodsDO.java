@@ -59,6 +59,9 @@ public class SpGoodsDO implements Serializable {
     @ApiModelProperty(value = "merchantId" , name = "归属店铺id")
     private String merchantId;
 
+    // 销售量
+    private Integer saleNumber;
+
     //库存数
     @ApiModelProperty(value = "stockNum" , name = "库存数")
     private Integer stockNum;
