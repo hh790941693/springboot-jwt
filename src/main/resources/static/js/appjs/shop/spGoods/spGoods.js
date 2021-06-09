@@ -91,6 +91,19 @@ function load() {
 				field : 'unitName',
 				title : '商品单位'
 			},
+			{
+				field : 'backImage',
+				title : '封面图片',
+				formatter : function (value, row) {
+					var result = "";
+					if (value != "" && value != null) {
+						result += "<div style='text-align: center;'>";
+						result += "<img onerror=\"this.onerror='';this.src='" + $.ws.errorImgUrl + "'\" onclick=\"$.ws.gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
+						result += "</div>";
+					}
+					return result;
+				}
+			},
 						{
 				field : 'image1',
 				title : '商品图片1',

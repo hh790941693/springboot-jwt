@@ -1,5 +1,6 @@
 $(function(){
     validateRule();
+    $.ws.initUpload("goods", "imageClickBtn", "imageUrlInput", "imageShow");
     $.ws.initUpload("goods", "imageClickBtn1", "imageUrlInput1", "imageShow1");
     $.ws.initUpload("goods", "imageClickBtn2", "imageUrlInput2", "imageShow2");
     $.ws.initUpload("goods", "imageClickBtn3", "imageUrlInput3", "imageShow3");
@@ -71,7 +72,7 @@ function validateRule() {
                                 unitName : {
                 required : true
             },
-                                imageList : {
+                                backImage : {
                 required : true
             },
                     },
@@ -100,8 +101,8 @@ function validateRule() {
                                 unitName : {
                 required : icon + "请输入商品单位"
             },
-                                imageList : {
-                required : icon + "请输入商品图片集合"
+                                backImage : {
+                required : icon + "请上传封面图片"
             },
                     }
     })

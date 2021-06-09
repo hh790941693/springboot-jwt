@@ -9,7 +9,7 @@
 <body>
     <div id="mainDiv" style="width: 1000px;height:800px;border:1px solid red;">
         <div v-for="goodsDetail in goodsData" style="float:left;margin:30px;">
-            <img :src="goodsDetail.image1" style="width:120px;height:120px;">
+            <img :src="goodsDetail.backImage" style="width:120px;height:120px;">
             <p>{{goodsDetail.name}}</p>
             <p><span style="text-decoration:line-through;color:red;">￥{{goodsDetail.originalPrice}}</span>&nbsp;&nbsp;<span style="font-weight: bold;">￥{{goodsDetail.salePrice}}</span></p>
             <p><button>加入购物车</button></p>

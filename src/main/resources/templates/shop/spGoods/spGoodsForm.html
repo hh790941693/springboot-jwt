@@ -70,6 +70,19 @@
 									</select>
 								</div>
 							</div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label"><span style="color:red">*</span>&nbsp;封面图片：</label>
+								<div class="col-sm-8">
+									<div style="width:140px;height:140px;float: left;">
+										<input type="hidden" th:value="${spGoods.backImage}" id="imageUrlInput" name="backImage" class="layui-input">
+										<button type="button" id="imageClickBtn" class="layui-btn">
+											<i class="layui-icon">&#xe67c;</i>上传图片
+										</button>
+										<img id="imageShow" style="margin-top:15px;margin-left: 25px;" alt="" width="60px" height="60px" th:src="${spGoods.backImage}">
+									</div>
+								</div>
+							</div>
 																								<div class="form-group">
 								<label class="col-sm-3 control-label"><span style="color:red">*</span>&nbsp;商品图片集合：</label>
 								<div class="col-sm-8">

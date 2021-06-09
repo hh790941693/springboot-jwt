@@ -75,6 +75,9 @@ public class SpGoodsDO implements Serializable {
     @ApiModelProperty(value = "unitName" , name = "商品单位")
     private String unitName;
 
+    //商品封面图片
+    private String backImage;
+
     //商品图片1
     private String image1;
     //商品图片2
