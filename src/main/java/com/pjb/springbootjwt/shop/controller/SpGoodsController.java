@@ -102,6 +102,8 @@ public class SpGoodsController extends AdminBaseController {
 	//@RequiresPermissions("shop:spGoods:edit")
     public String edit(@PathVariable("id") Long id, Model model) {
 		SpGoodsDO spGoods = spGoodsService.selectById(id);
+		List<SpGoodsTypeDO> goodsTypeList = spGoodsTypeService.selectList(new EntityWrapper<SpGoodsTypeDO>().ne("status", 0));
+		spGoods.setSpGoodsTypeList(goodsTypeList);
 		model.addAttribute("spGoods", spGoods);
 	    return "shop/spGoods/spGoodsForm";
 	}
