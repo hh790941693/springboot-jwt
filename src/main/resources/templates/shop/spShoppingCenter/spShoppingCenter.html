@@ -57,14 +57,16 @@
                 <input id="merchantName">
             </div>
 
-            <div style="width:150px;float:left;margin-left:50px;">
+            <div style="width:160px;float:left;margin-left:50px;">
                 <span>价格排序 :</span>
-                <input type="checkbox" v-model="priceSort" value="true">
+                升序: <input type="radio" v-model="priceSort" value="true">&nbsp;&nbsp;
+                降序: <input type="radio" v-model="priceSort" value="false">
             </div>
 
-            <div style="width:150px;float:left;margin-left:50px;">
+            <div style="width:160px;float:left;margin-left:50px;">
                 <span>销量排序 :</span>
-                <input type="checkbox" v-model="saleNumberSort" value="false">
+                升序: <input type="radio" v-model="saleNumberSort" value="true">&nbsp;&nbsp;
+                降序: <input type="radio" v-model="saleNumberSort" value="false">
             </div>
 
             <div style="width:150px;float:right;margin-left:15px;">
