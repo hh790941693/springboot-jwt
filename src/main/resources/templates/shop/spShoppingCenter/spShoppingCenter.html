@@ -58,18 +58,26 @@
             </div>
 
             <div style="width:160px;float:left;margin-left:50px;">
-                <span>价格排序 :</span>
-                升序: <input type="radio" v-model="priceSort" value="true">&nbsp;&nbsp;
-                降序: <input type="radio" v-model="priceSort" value="false">
+                <div>
+                    <span>价格排序 :</span>
+                </div>
+                <div>
+                    <span>升序: </span><input type="radio" v-model="priceSort" value="true">&nbsp;&nbsp;
+                    <span>降序: </span><input type="radio" v-model="priceSort" value="false">
+                </div>
             </div>
 
-            <div style="width:160px;float:left;margin-left:50px;">
-                <span>销量排序 :</span>
-                升序: <input type="radio" v-model="saleNumberSort" value="true">&nbsp;&nbsp;
-                降序: <input type="radio" v-model="saleNumberSort" value="false">
+            <div style="width:130px;float:left;margin-left:50px;">
+                <div>
+                    <span>销量排序 :</span>
+                </div>
+                <div>
+                    <span>升序: </span><input type="radio" v-model="saleNumberSort" value="true">&nbsp;&nbsp;
+                    <span>降序: </span><input type="radio" v-model="saleNumberSort" value="false">
+                </div>
             </div>
 
-            <div style="width:150px;float:right;margin-left:15px;">
+            <div style="width:130px;float:right;margin-left:15px;">
                 <button @click="queryGoodsList()" class="btn btn-sm btn-primary">搜索</button>
                 <button @click="resetSearch()" class="btn btn-sm btn-default">重置</button>
             </div>
