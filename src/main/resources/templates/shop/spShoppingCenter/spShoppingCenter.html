@@ -7,7 +7,41 @@
     <title>超市购物</title>
 </head>
 <body>
+    <div id="mainDiv" style="width: 1000px;height:800px;border:1px solid red;">
+        <div v-for="goodsDetail in goodsData" style="float:left;margin:30px;">
+            <img :src="goodsDetail.image1" style="width:120px;height:120px;">
+            <p>{{goodsDetail.name}}</p>
+            <p><span style="text-decoration:line-through;color:red;">￥{{goodsDetail.originalPrice}}</span>&nbsp;&nbsp;<span style="font-weight: bold;">￥{{goodsDetail.salePrice}}</span></p>
+            <p><button>加入购物车</button></p>
+        </div>
 
+    </div>
     <th:block th:include="common :: footer"></th:block>
 </body>
+
+    <script>
+        var app = new Vue({
+            el: '#mainDiv',
+            data: {
+                goodsData: {},
+            },
+            methods: {
+                queryGoodsList: function () {
+                    // 查询歌曲列表
+                    $.ajax({
+                        type: "GET",
+                        url: "/shop/shoppingCenter/queryGoodsList",
+                        success: function (result) {
+                            if (result.code == 1) {
+                                app.goodsData = result.data;
+                            }
+                        }
+                    });
+                },
+            },
+            created: function () {
+                this.queryGoodsList();
+            }
+        });
+    </script>
 </html>
