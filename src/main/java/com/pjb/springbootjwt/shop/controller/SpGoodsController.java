@@ -8,11 +8,13 @@ import java.util.UUID;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.shop.domain.SpGoodsTypeDO;
+import com.pjb.springbootjwt.shop.domain.SpMerchantApplyDO;
 import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
 import com.pjb.springbootjwt.shop.service.SpGoodsTypeService;
 import com.pjb.springbootjwt.shop.service.SpMerchantService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -176,6 +178,26 @@ public class SpGoodsController extends AdminBaseController {
 	//@RequiresPermissions("shop:spGoods:batchRemove")
 	public Result<String> remove(@RequestParam("ids[]") Long[] ids) {
 		spGoodsService.deleteBatchIds(Arrays.asList(ids));
+		return Result.ok();
+	}
+
+	/**
+	 * 修改商品上架、下架状态
+	 * @param id      申请记录id
+	 * @param status  状态
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("/updateStatus")
+	@Transactional(rollbackFor = Exception.class)
+	public Result<String> list(int id, int status) {
+		SpGoodsDO spGoodsDO = spGoodsService.selectById(id);
+		if (null == spGoodsDO) {
+			return Result.fail("商品不存在");
+		}
+		spGoodsDO.setStatus(status);
+		spGoodsDO.setUpdateTime(new Date());
+		spGoodsService.updateById(spGoodsDO);
 		return Result.ok();
 	}
 }

@@ -165,13 +165,30 @@ function load() {
 				field : 'id',
 				align : 'center',
 				formatter : function(value, row, index) {
-					var e = '<a class="btn btn-warning btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
+					var btns = "";
+					var e = '<a class="btn btn-primary btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
 							+ row.id
 							+ '\')"><i class="fa fa-edit"></i></a> ';
-					var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
+					var d = '<a class="btn btn-danger btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
 							+ row.id
 							+ '\')"><i class="fa fa-remove"></i></a> ';
-					return e+d;
+					btns = e+d;
+					if (row.status == 0) {
+						var putonbtn = '<a class="btn btn-success btn-sm" href="#" title="上架"  mce_href="#" onclick="updateStatus(\''
+							+ row.id
+							+ '\',\''
+							+ '1'
+							+ '\')"><i class="fa fa-upload"></i>上架</a> ';
+						btns += putonbtn;
+					} else if (row.status == 1) {
+						var putoffbtn = '<a class="btn btn-warning btn-sm" href="#" title="下架"  mce_href="#" onclick="updateStatus(\''
+							+ row.id
+							+ '\',\''
+							+ '0'
+							+ '\')"><i class="fa fa-download"></i>下架</a> ';
+						btns += putoffbtn;
+					}
+					return btns;
 				}
 			}
 		]
@@ -268,4 +285,27 @@ function batchRemove() {
 	}, function() {
 
 	});
+}
+
+function updateStatus(id, status) {
+	layer.confirm('确定要继续操作吗？', {
+		btn : [ '确定', '取消' ]
+	}, function() {
+		$.ajax({
+			url : prefix+"/updateStatus",
+			type : "post",
+			data : {
+				'id' : id,
+				'status': status
+			},
+			success : function(r) {
+				if (r.code == 1) {
+					layer.msg(r.msg);
+					reLoad();
+				}else{
+					layer.msg(r.msg);
+				}
+			}
+		});
+	})
 }
