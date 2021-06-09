@@ -17,6 +17,12 @@
             padding:30px 15px 15px 15px;
         }
 
+        #searchDiv {
+            width:100%;
+            height:60px;
+            padding: 0 30px 0 30px;
+        }
+
         .goodsDiv {
             width:226px;
             height:367px;
@@ -41,6 +47,21 @@
 </head>
 <body>
     <div id="mainDiv">
+        <div id="searchDiv">
+            <div style="width:150px;float:left;">
+                <span>商品名称 :</span>
+                <input id="goodsName">
+            </div>
+            <div style="width:150px;float:left;margin-left:50px;">
+                <span>店铺名称 :</span>
+                <input id="merchantName">
+            </div>
+
+            <div style="width:150px;float:right;margin-left:15px;">
+                <button @click="queryGoodsList()" class="btn btn-sm btn-primary">搜索</button>
+                <button @click="resetSearch()" class="btn btn-sm btn-default">重置</button>
+            </div>
+        </div>
         <div id="innerDiv" style="width:100%;height:100%;">
             <div class="goodsDiv" v-for="(goodsDetail,index) in goodsData" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
                 <div style="width:184px;height:188px;">
@@ -73,6 +94,10 @@
                     $.ajax({
                         type: "GET",
                         url: "/shop/shoppingCenter/queryGoodsList",
+                        data: {
+                            'name':$("#goodsName").val(),
+                            'merchantName':$("#merchantName").val(),
+                        },
                         success: function (result) {
                             if (result.code == 1) {
                                 app.goodsData = result.data;
@@ -89,6 +114,11 @@
                     $("#innerDiv").children("div").eq(index).removeClass("selected");
                     $("#innerDiv").children("div").eq(index).css("border", '1px solid grey');
                     $("#innerDiv").children("div").eq(index).children("div").eq(0).children("img").eq(0).animate({width:"164px",height:"168px"});
+                },
+                resetSearch: function () {
+                    $("#goodsName").val("");
+                    $("#merchantName").val("");
+                    this.queryGoodsList();
                 }
             },
             created: function () {

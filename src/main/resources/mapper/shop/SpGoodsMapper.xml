@@ -11,9 +11,10 @@
             sp_merchant t2
         on
             t1.merchant_id = t2.merchant_id
-        where
-            t1.status != 0
-        order by
-            t1.create_time desc
+        <if test="ew.sqlSegment != null and ew.sqlSegment != ''">
+            <where>
+                ${ew.sqlSegment}
+            </where>
+        </if>
     </select>
 </mapper>

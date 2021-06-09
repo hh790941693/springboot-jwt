@@ -1,5 +1,7 @@
 package com.pjb.springbootjwt.shop.service.impl;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,7 @@ public class SpGoodsServiceImpl extends CoreServiceImpl<SpGoodsDao, SpGoodsDO> i
     private static final Logger logger = LoggerFactory.getLogger(SpGoodsServiceImpl.class);
 
     @Override
-    public List<GoodsDetailDTO> queryCenterGoodsList() {
-        return this.baseMapper.queryCenterGoodsList();
+    public List<GoodsDetailDTO> queryCenterGoodsList(Page<GoodsDetailDTO> page, Wrapper<GoodsDetailDTO> wrapper) {
+        return this.baseMapper.queryCenterGoodsList(page, wrapper);
     }
 }
