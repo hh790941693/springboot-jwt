@@ -51,7 +51,8 @@ function load() {
 			},
 						{
 				field : 'goodsId',
-				title : '商品id'
+				title : '商品id',
+				visible: false,
 			},
 						{
 				field : 'name',
@@ -67,11 +68,13 @@ function load() {
 			},
 						{
 				field : 'goodsTypeId',
-				title : '商品类型id'
+				title : '商品类型id',
+				visible: false,
 			},
 						{
 				field : 'merchantId',
-				title : '归属店铺id'
+				title : '归属店铺id',
+				visible: false,
 			},
 						{
 				field : 'stockNum',
