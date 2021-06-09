@@ -21,8 +21,17 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="input-group">
-                                    <div class="input-group-addon">名称</div>
+                                    <div class="input-group-addon">商品名称</div>
                                     <input type="text" class="form-control" id="nameSearchInput" placeholder="请输入">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">商品类型</div>
+                                    <select class="form-control" id="goodsTypeSelect">
+                                        <option value="">--请选择--</option>
+                                        <option th:each="goodsTypeObj:${goodsTypeList}" th:value="${goodsTypeObj.typeId}" th:text="${goodsTypeObj.name}"></option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-4">

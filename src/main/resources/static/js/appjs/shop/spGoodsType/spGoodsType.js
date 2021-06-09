@@ -75,10 +75,13 @@ function load() {
 				field : 'status',
 				title : '状态',
 				formatter : function (value, row) {
+					var res = "";
 					if (value == 0) {
-						return "禁用";
+						res = '<span class="label label-danger">禁用</span>';
+					} else {
+						res = '<span class="label label-success">启用</span>';
 					}
-					return "启用";
+					return res;
 				}
 			},
 						{

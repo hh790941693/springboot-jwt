@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -132,5 +133,16 @@ public class SpMerchantController extends AdminBaseController {
 	public Result<String> remove(@RequestParam("ids[]") Long[] ids) {
 		spMerchantService.deleteBatchIds(Arrays.asList(ids));
 		return Result.ok();
+	}
+
+	/**
+	 * 跳转到我的店铺页面.
+	 */
+	@GetMapping("/myMerchant")
+	//@RequiresPermissions("shop:spMerchant:spMerchant")
+	public String myMerchant(Model model){
+		SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("user_id", SessionUtil.getSessionUserId()));
+		model.addAttribute("spMerchant", spMerchantDO);
+		return "shop/spMerchant/myMerchant";
 	}
 }

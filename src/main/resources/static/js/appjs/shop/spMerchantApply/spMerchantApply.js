@@ -93,13 +93,15 @@ function load() {
 				field : 'status',
 				title : '审批状态',
 				formatter: function (value, row) {
+					var res = "";
 					if (value == 1) {
-						return "待审批";
+						res = '<span class="label label-primary">待审批</span>';
 					} else if (value == 2) {
-						return "审批通过";
+						res = '<span class="label label-success">审批通过</span>';
 					} else if (value == 3) {
-						return "审批不通过";
+						res = '<span class="label label-danger">审批不通过</span>';
 					}
+					return res;
                 }
 			},
 						{

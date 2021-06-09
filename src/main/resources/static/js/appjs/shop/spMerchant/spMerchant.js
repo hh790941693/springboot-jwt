@@ -83,7 +83,20 @@ function load() {
 			},
 						{
 				field : 'status',
-				title : '店铺状态 0:已关闭 1:营业中 2:暂停营业 3:已打烊'
+				title : '店铺状态 0:已关闭 1:营业中 2:暂停营业 3:已打烊',
+				formatter : function (value, row) {
+					var res = "";
+					if (value == 0) {
+						res = '<span class="label label-danger">已关闭</span>';
+					} else if (value == 1) {
+						res = '<span class="label label-success">营业中</span>';
+					} else if (value == 2) {
+						res = '<span class="label label-info">暂停中</span>';
+					} else if (value == 3) {
+						res = '<span class="label label-warning">已打烊</span>';
+					}
+					return res;
+				}
 			},
 						{
 				field : 'createTime',

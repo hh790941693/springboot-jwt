@@ -12,6 +12,7 @@ import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
 import com.pjb.springbootjwt.shop.service.SpGoodsTypeService;
 import com.pjb.springbootjwt.shop.service.SpMerchantService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -64,7 +65,9 @@ public class SpGoodsController extends AdminBaseController {
 	*/
 	@GetMapping()
 	//@RequiresPermissions("shop:spGoods:spGoods")
-    public String spGoods(){
+    public String spGoods(Model model){
+		List<SpGoodsTypeDO> goodsTypeList = spGoodsTypeService.selectList(new EntityWrapper<SpGoodsTypeDO>().ne("status", 0));
+		model.addAttribute("goodsTypeList", goodsTypeList);
 	    return "shop/spGoods/spGoods";
 	}
 
@@ -75,7 +78,20 @@ public class SpGoodsController extends AdminBaseController {
 	@GetMapping("/list")
 	//@RequiresPermissions("shop:spGoods:spGoods")
 	public Result<Page<SpGoodsDO>> list(SpGoodsDO spGoodsDto) {
-        Wrapper<SpGoodsDO> wrapper = new EntityWrapper<SpGoodsDO>(spGoodsDto);
+		// 检查当前用户是否有商铺
+		SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("user_id", SessionUtil.getSessionUserId()));
+		if (null == spMerchantDO) {
+			return Result.ok(new Page<SpGoodsDO>());
+		}
+
+        Wrapper<SpGoodsDO> wrapper = new EntityWrapper<SpGoodsDO>();
+        if (StringUtils.isNotBlank(spGoodsDto.getName())) {
+        	wrapper.like("name", spGoodsDto.getName());
+		}
+        if (StringUtils.isNotBlank(spGoodsDto.getGoodsTypeId())) {
+        	wrapper.eq("goods_type_id", spGoodsDto.getGoodsTypeId());
+		}
+		wrapper.eq("merchant_id", spMerchantDO.getMerchantId());
         Page<SpGoodsDO> page = spGoodsService.selectPage(getPage(SpGoodsDO.class), wrapper);
         return Result.ok(page);
 	}

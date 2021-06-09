@@ -30,7 +30,9 @@ function load() {
 			return {
 				//传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
 				pageNumber : params.pageNumber,
-				pageSize : params.pageSize
+				pageSize : params.pageSize,
+				name : $("#nameSearchInput").val(),
+				goodsTypeId : $("#goodsTypeSelect").val(),
 			};
 		},
 		// //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -46,9 +48,6 @@ function load() {
 			 };
 		},
 		columns : [
-			{
-				checkbox : true
-			},
 						{
 				field : 'goodsId',
 				title : '商品id',
@@ -148,10 +147,13 @@ function load() {
 				field : 'status',
 				title : '状态',
 				formatter: function (value, row) {
+					var res = "";
 					if (value == 0) {
-						return "未上架";
+						res = '<span class="label label-danger">未上架</span>';
+					} else {
+						res = '<span class="label label-success">已上架</span>';
 					}
-					return "已上架"
+					return res;
 				}
 			},
 						{
