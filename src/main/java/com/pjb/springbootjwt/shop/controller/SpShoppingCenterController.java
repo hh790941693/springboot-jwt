@@ -1,7 +1,6 @@
 package com.pjb.springbootjwt.shop.controller;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.pjb.springbootjwt.shop.domain.SpGoodsDO;
+import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
 import com.pjb.springbootjwt.shop.service.SpGoodsService;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,8 @@ public class SpShoppingCenterController {
 
     @RequestMapping("/queryGoodsList")
     @ResponseBody
-    public Result<List<SpGoodsDO>> queryGoodsList(){
-        List<SpGoodsDO> goodsDOList = spGoodsService.selectList(new EntityWrapper<SpGoodsDO>().ne("status", "0").orderBy("create_time", false));
-        return Result.ok(goodsDOList);
+    public Result<List<GoodsDetailDTO>> queryGoodsList(){
+        List<GoodsDetailDTO> goodsDetailDTOS = spGoodsService.queryCenterGoodsList();
+        return Result.ok(goodsDetailDTOS);
     }
 }

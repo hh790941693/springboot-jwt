@@ -2,5 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pjb.springbootjwt.shop.dao.SpGoodsDao">
-
+    <select id="queryCenterGoodsList" resultType="com.pjb.springbootjwt.shop.dto.GoodsDetailDTO">
+        select
+            t1.*,t2.name AS merchant_name
+        from
+            sp_goods t1
+        left join
+            sp_merchant t2
+        on
+            t1.merchant_id = t2.merchant_id
+        where
+            t1.status != 0
+        order by
+            t1.create_time desc
+    </select>
 </mapper>

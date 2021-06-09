@@ -9,9 +9,10 @@
     <style>
         #mainDiv {
             width: 1200px;
-            height:800px;
+            height:auto;
+            overflow-y: scroll;
             max-width: 1600px;
-            max-height: 820px;
+            min-height: 800px;
             border:1px solid red;
             padding:30px 15px 15px 15px;
         }
@@ -48,7 +49,7 @@
                 <p>{{goodsDetail.name}}</p>
                 <p><span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePrice}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPrice}}</span></p>
                 <p><button>加入购物车</button></p>
-                <p><span class="fa fa-home"></span>aa的店铺</p>
+                <p><span class="fa fa-home"></span>{{goodsDetail.merchantName}}</p>
                 <hr/>
                 <p style="text-align: right;">
                     月销 55
