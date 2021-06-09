@@ -1,6 +1,7 @@
 package com.pjb.springbootjwt.shop.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotations.TableField;
@@ -13,6 +14,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -72,9 +75,14 @@ public class SpGoodsDO implements Serializable {
     @ApiModelProperty(value = "unitName" , name = "商品单位")
     private String unitName;
 
-    //商品图片集合
-    @ApiModelProperty(value = "imageList" , name = "商品图片集合")
-    private String imageList;
+    //商品图片1
+    private String image1;
+    //商品图片2
+    private String image2;
+    //商品图片3
+    private String image3;
+    //商品图片4
+    private String image4;
 
     //状态 0:未上架 1:已上架
     @ApiModelProperty(value = "status" , name = "状态 0:未上架 1:已上架")
@@ -90,4 +98,8 @@ public class SpGoodsDO implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
 
+    // ------------非表字段---------------------------
+    // 商品类型列表
+    @TableField(exist = false)
+    private List<SpGoodsTypeDO> spGoodsTypeList = new ArrayList<>();
 }

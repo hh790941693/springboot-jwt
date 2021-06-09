@@ -1,5 +1,9 @@
 $(function(){
     validateRule();
+    $.ws.initUpload("goods", "imageClickBtn1", "imageUrlInput1", "imageShow1");
+    $.ws.initUpload("goods", "imageClickBtn2", "imageUrlInput2", "imageShow2");
+    $.ws.initUpload("goods", "imageClickBtn3", "imageUrlInput3", "imageShow3");
+    $.ws.initUpload("goods", "imageClickBtn4", "imageUrlInput4", "imageShow4");
 });
 
 //保存数据
@@ -43,9 +47,6 @@ function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
     $("#form").validate({
         rules : {
-                                    goodsId : {
-                required : true
-            },
                                 name : {
                 required : true
             },
@@ -56,9 +57,6 @@ function validateRule() {
                 required : true
             },
                                 goodsTypeId : {
-                required : true
-            },
-                                merchantId : {
                 required : true
             },
                                 stockNum : {
@@ -76,20 +74,8 @@ function validateRule() {
                                 imageList : {
                 required : true
             },
-                                status : {
-                required : true
-            },
-                                createTime : {
-                required : true
-            },
-                                updateTime : {
-                required : true
-            },
                     },
         messages : {
-                                    goodsId : {
-                required : icon + "请输入商品id"
-            },
                                 name : {
                 required : icon + "请输入商品名称"
             },
@@ -101,9 +87,6 @@ function validateRule() {
             },
                                 goodsTypeId : {
                 required : icon + "请输入商品类型id"
-            },
-                                merchantId : {
-                required : icon + "请输入归属店铺id"
             },
                                 stockNum : {
                 required : icon + "请输入库存数"
@@ -119,15 +102,6 @@ function validateRule() {
             },
                                 imageList : {
                 required : icon + "请输入商品图片集合"
-            },
-                                status : {
-                required : icon + "请输入状态 0:未上架 1:已上架"
-            },
-                                createTime : {
-                required : icon + "请输入创建时间"
-            },
-                                updateTime : {
-                required : icon + "请输入更新时间"
             },
                     }
     })

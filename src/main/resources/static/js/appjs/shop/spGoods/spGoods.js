@@ -50,10 +50,6 @@ function load() {
 				checkbox : true
 			},
 						{
-				field : 'id',
-				title : '主键id'
-			},
-						{
 				field : 'goodsId',
 				title : '商品id'
 			},
@@ -94,20 +90,70 @@ function load() {
 				title : '商品单位'
 			},
 						{
-				field : 'imageList',
-				title : '商品图片集合'
+				field : 'image1',
+				title : '商品图片1',
+				formatter : function (value, row) {
+					var result = "";
+					if (value != "" && value != null) {
+						result += "<div style='text-align: center;'>";
+						result += "<img onerror=\"this.onerror='';this.src='" + $.ws.errorImgUrl + "'\" onclick=\"$.ws.gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
+						result += "</div>";
+					}
+					return result;
+				}
+			},
+			{
+				field : 'image2',
+				title : '商品图片2',
+				formatter : function (value, row) {
+					var result = "";
+					if (value != "" && value != null) {
+						result += "<div style='text-align: center;'>";
+						result += "<img onerror=\"this.onerror='';this.src='" + $.ws.errorImgUrl + "'\" onclick=\"$.ws.gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
+						result += "</div>";
+					}
+					return result;
+				}
+			},
+			{
+				field : 'image3',
+				title : '商品图片3',
+				formatter : function (value, row) {
+					var result = "";
+					if (value != "" && value != null) {
+						result += "<div style='text-align: center;'>";
+						result += "<img onerror=\"this.onerror='';this.src='" + $.ws.errorImgUrl + "'\" onclick=\"$.ws.gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
+						result += "</div>";
+					}
+					return result;
+				}
+			},
+			{
+				field : 'image4',
+				title : '商品图片4',
+				formatter : function (value, row) {
+					var result = "";
+					if (value != "" && value != null) {
+						result += "<div style='text-align: center;'>";
+						result += "<img onerror=\"this.onerror='';this.src='" + $.ws.errorImgUrl + "'\" onclick=\"$.ws.gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
+						result += "</div>";
+					}
+					return result;
+				}
 			},
 						{
 				field : 'status',
-				title : '状态 0:未上架 1:已上架'
+				title : '状态',
+				formatter: function (value, row) {
+					if (value == 0) {
+						return "未上架";
+					}
+					return "已上架"
+				}
 			},
 						{
 				field : 'createTime',
 				title : '创建时间'
-			},
-						{
-				field : 'updateTime',
-				title : '更新时间'
 			},
 						{
 				title : '操作',

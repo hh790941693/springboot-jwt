@@ -12,12 +12,6 @@
                         <form class="form-horizontal m-t" id="form">
 							<!-- 主键 -->
                             <input type="hidden" id="id" name="id" th:value="${spGoods.id}">
-																													<div class="form-group">
-								<label class="col-sm-3 control-label" for="goodsId"><span style="color:red">*</span>&nbsp;商品id：</label>
-								<div class="col-sm-8">
-									<input type="text" id="goodsId" name="goodsId" th:value="${spGoods.goodsId}" class="form-control" />
-								</div>
-							</div>
 																								<div class="form-group">
 								<label class="col-sm-3 control-label" for="name"><span style="color:red">*</span>&nbsp;商品名称：</label>
 								<div class="col-sm-8">
@@ -39,61 +33,86 @@
 																								<div class="form-group">
 								<label class="col-sm-3 control-label" for="goodsTypeId"><span style="color:red">*</span>&nbsp;商品类型id：</label>
 								<div class="col-sm-8">
-									<input type="text" id="goodsTypeId" name="goodsTypeId" th:value="${spGoods.goodsTypeId}" class="form-control" />
+									<select id="goodsTypeId" name="goodsTypeId" th:value="${spGoods.goodsTypeId}" class="form-control">
+										<option th:each="goodsTypeObj:${spGoods.spGoodsTypeList}" value="${goodsTypeObj.typeId}" th:selected="${spGoods.goodsTypeId == goodsTypeObj.typeId}" th:text="${goodsTypeObj.name}"></option>
+									</select>
 								</div>
 							</div>
-																								<div class="form-group">
-								<label class="col-sm-3 control-label" for="merchantId"><span style="color:red">*</span>&nbsp;归属店铺id：</label>
-								<div class="col-sm-8">
-									<input type="text" id="merchantId" name="merchantId" th:value="${spGoods.merchantId}" class="form-control" />
-								</div>
-							</div>
-																								<div class="form-group">
+							<div class="form-group">
 								<label class="col-sm-3 control-label" for="stockNum"><span style="color:red">*</span>&nbsp;库存数：</label>
 								<div class="col-sm-8">
-									<input type="text" id="stockNum" name="stockNum" th:value="${spGoods.stockNum}" class="form-control" />
+									<input type="number" id="stockNum" name="stockNum" th:value="${spGoods.stockNum}" class="form-control" />
 								</div>
 							</div>
 																								<div class="form-group">
 								<label class="col-sm-3 control-label" for="originalPrice"><span style="color:red">*</span>&nbsp;原价：</label>
 								<div class="col-sm-8">
-									<input type="text" id="originalPrice" name="originalPrice" th:value="${spGoods.originalPrice}" class="form-control" />
+									<input type="number" id="originalPrice" name="originalPrice" th:value="${spGoods.originalPrice}" class="form-control" />
 								</div>
 							</div>
 																								<div class="form-group">
 								<label class="col-sm-3 control-label" for="salePrice"><span style="color:red">*</span>&nbsp;售价：</label>
 								<div class="col-sm-8">
-									<input type="text" id="salePrice" name="salePrice" th:value="${spGoods.salePrice}" class="form-control" />
+									<input type="number" id="salePrice" name="salePrice" th:value="${spGoods.salePrice}" class="form-control" />
 								</div>
 							</div>
 																								<div class="form-group">
 								<label class="col-sm-3 control-label" for="unitName"><span style="color:red">*</span>&nbsp;商品单位：</label>
 								<div class="col-sm-8">
-									<input type="text" id="unitName" name="unitName" th:value="${spGoods.unitName}" class="form-control" />
+									<select id="unitName" name="unitName" th:value="${spGoods.unitName}" class="form-control">
+										<option value="千克" th:selected="${spGoods.unitName == '千克'}">千克</option>
+										<option value="斤" th:selected="${spGoods.unitName == '斤'}">斤</option>
+										<option value="袋" th:selected="${spGoods.unitName == '袋'}">袋</option>
+										<option value="包" th:selected="${spGoods.unitName == '包'}">包</option>
+										<option value="条" th:selected="${spGoods.unitName == '条'}">条</option>
+										<option value="根" th:selected="${spGoods.unitName == '根'}">根</option>
+										<option value="只" th:selected="${spGoods.unitName == '只'}">只</option>
+									</select>
 								</div>
 							</div>
 																								<div class="form-group">
-								<label class="col-sm-3 control-label" for="imageList"><span style="color:red">*</span>&nbsp;商品图片集合：</label>
+								<label class="col-sm-3 control-label"><span style="color:red">*</span>&nbsp;商品图片集合：</label>
 								<div class="col-sm-8">
-									<input type="text" id="imageList" name="imageList" th:value="${spGoods.imageList}" class="form-control" />
+									<div style="width:140px;height:140px;float: left;">
+										<input type="hidden" th:value="${spGoods.image1}" id="imageUrlInput1" name="image1" class="layui-input">
+										<button type="button" id="imageClickBtn1" class="layui-btn">
+											<i class="layui-icon">&#xe67c;</i>上传图片
+										</button>
+										<img id="imageShow1" style="margin-top:15px;margin-left: 25px;" alt="" width="60px" height="60px" th:src="${spGoods.image1}">
+									</div>
+
+									<div style="width:140px;height:140px;float: left;">
+										<input type="hidden" th:value="${spGoods.image2}" id="imageUrlInput2" name="image2" class="layui-input">
+										<button type="button" id="imageClickBtn2" class="layui-btn">
+											<i class="layui-icon">&#xe67c;</i>上传图片
+										</button>
+										<img id="imageShow2" style="margin-top:15px;margin-left: 25px;" alt="" width="60px" height="60px" th:src="${spGoods.image2}">
+									</div>
+
+									<div style="width:140px;height:140px;float: left;">
+										<input type="hidden" th:value="${spGoods.image3}" id="imageUrlInput3" name="image3" class="layui-input">
+										<button type="button" id="imageClickBtn3" class="layui-btn">
+											<i class="layui-icon">&#xe67c;</i>上传图片
+										</button>
+										<img id="imageShow3" style="margin-top:15px;margin-left: 25px;" alt="" width="60px" height="60px" th:src="${spGoods.image3}">
+									</div>
+
+									<div style="width:140px;height:140px;float: left;">
+										<input type="hidden" th:value="${spGoods.image4}" id="imageUrlInput4" name="image4" class="layui-input">
+										<button type="button" id="imageClickBtn4" class="layui-btn">
+											<i class="layui-icon">&#xe67c;</i>上传图片
+										</button>
+										<img id="imageShow4" style="margin-top:15px;margin-left: 25px;" alt="" width="60px" height="60px" th:src="${spGoods.image4}">
+									</div>
 								</div>
 							</div>
 																								<div class="form-group">
-								<label class="col-sm-3 control-label" for="status"><span style="color:red">*</span>&nbsp;状态 0:未上架 1:已上架：</label>
+								<label class="col-sm-3 control-label" for="status"><span style="color:red">*</span>&nbsp;状态：</label>
 								<div class="col-sm-8">
-									<input type="text" id="status" name="status" th:value="${spGoods.status}" class="form-control" />
-								</div>
-							</div>
-																								<div class="form-group">
-								<label class="col-sm-3 control-label" for="createTime"><span style="color:red">*</span>&nbsp;创建时间：</label>
-								<div class="col-sm-8">
-									<input type="text" id="createTime" name="createTime" th:value="${spGoods.createTime}" class="form-control" />
-								</div>
-							</div>
-																								<div class="form-group">
-								<label class="col-sm-3 control-label" for="updateTime"><span style="color:red">*</span>&nbsp;更新时间：</label>
-								<div class="col-sm-8">
-									<input type="text" id="updateTime" name="updateTime" th:value="${spGoods.updateTime}" class="form-control" />
+									<select class="form-control" id="status" name="status" th:value="${spGoods.status}">
+										<option value="0" th:selected="${spGoods.status == 0}">未上架</option>
+										<option value="1" th:selected="${spGoods.status == 1}">已上架</option>
+									</select>
 								</div>
 							</div>
 											                            <div class="form-group">
