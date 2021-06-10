@@ -33,6 +33,7 @@ function load() {
 				pageSize : params.pageSize,
 				name : $("#nameSearchInput").val(),
 				goodsTypeId : $("#goodsTypeSelect").val(),
+				status : $("#statusSelect").val(),
 			};
 		},
 		// //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -217,6 +218,9 @@ function reLoad() {
 
 //重置
 function cleanForm(){
+	$("#nameSearchInput").val("");
+	$("#goodsTypeSelect").val("");
+	$("#statusSelect").val("");
 	reLoad();
 }
 

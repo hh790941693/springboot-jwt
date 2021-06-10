@@ -19,13 +19,13 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="input-group">
                                     <div class="input-group-addon">商品名称</div>
                                     <input type="text" class="form-control" id="nameSearchInput" placeholder="请输入">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="input-group">
                                     <div class="input-group-addon">商品类型</div>
                                     <select class="form-control" id="goodsTypeSelect">
@@ -34,7 +34,17 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">状态</div>
+                                    <select class="form-control" id="statusSelect">
+                                        <option value="" th:selected="selected">--请选择--</option>
+                                        <option value="1">上架</option>
+                                        <option value="2">下架</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <button class="btn btn-success" onclick="reLoad()">查询</button>
                                 <button type="button" class="btn btn-default" onclick="cleanForm()">重置</button>
                             </div>

@@ -93,6 +93,9 @@ public class SpGoodsController extends AdminBaseController {
         if (StringUtils.isNotBlank(spGoodsDto.getGoodsTypeId())) {
         	wrapper.eq("goods_type_id", spGoodsDto.getGoodsTypeId());
 		}
+        if (null != spGoodsDto.getStatus()) {
+        	wrapper.eq("status", spGoodsDto.getStatus());
+		}
 		wrapper.eq("merchant_id", spMerchantDO.getMerchantId());
         Page<SpGoodsDO> page = spGoodsService.selectPage(getPage(SpGoodsDO.class), wrapper);
         return Result.ok(page);
