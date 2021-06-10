@@ -36,7 +36,7 @@
         }
 
         .selected {
-            border:1px solid red;
+            box-shadow: 4px 4px 5px #888888;
             z-index:2;
         }
         p {
@@ -82,7 +82,7 @@
             </div>
         </div>
         <hr />
-        <div id="innerDiv" style="width:100%;height:calc(100% - 60px);overflow-y: auto;">
+        <div id="innerDiv" style="width:100%;height:calc(100% - 62px);overflow-y: auto;border-top:1px solid grey;padding-top:5px;">
             <div class="goodsDiv" v-for="(goodsDetail,index) in goodsData" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
                 <div style="width:184px;height:188px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
                     <img :src="goodsDetail.backImage" style="width:calc(100% - 20px);height:calc(100% - 20px);">
