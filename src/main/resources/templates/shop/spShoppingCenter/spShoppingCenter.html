@@ -99,12 +99,12 @@
                         <span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePrice}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPrice}}</span>
                     </div>
                     <div style="width:50%;float:right;">
-                        <button class="btn btn-sm btn-primary"><i class="fa fa-shopping-cart"></i>加入购物车</button>
+                        <button class="btn btn-sm btn-danger"><i class="fa fa-shopping-cart"></i>加入购物车</button>
                     </div>
                 </div>
 
                 <div style="height:25px;margin-top: 5px;font-size: 17px;">
-                    <p><i class="fa fa-home"></i>{{goodsDetail.merchantName}}</p>
+                    <p><i class="fa fa-home"></i><a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+goodsDetail.merchantId" target="_blank">{{goodsDetail.merchantName}}</a></p>
                 </div>
                 <hr/>
                 <div>

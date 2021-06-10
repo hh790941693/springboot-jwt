@@ -60,7 +60,7 @@
                 <p>产地： {{goodsDetail.place}}</p>
                 <p>售价： <span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePrice}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPrice}}</span></p>
                 <p>规格： {{goodsDetail.unitName}}</p>
-                <p>商家店铺： <a :href="'/shop/shoppingCenter/merchantDetail?merchantId='+goodsDetail.merchantId">{{goodsDetail.merchantName}}</a></p>
+                <p>商家店铺： <a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+goodsDetail.merchantId" target="_blank">{{goodsDetail.merchantName}}</a></p>
                 <div style="height:30px;text-align: center;margin-top: 25px;">
                     <button class="btn btn-success"><i class="fa fa-paypal"></i>立即购买</button>&nbsp;&nbsp;&nbsp;
                     <button class="btn btn-danger"><i class="fa fa-shopping-cart"></i>加入购物车</button>
