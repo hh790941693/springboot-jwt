@@ -8,7 +8,6 @@ import java.util.UUID;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
-import com.pjb.springbootjwt.zhddkk.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
