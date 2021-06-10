@@ -23,6 +23,9 @@ import com.pjb.springbootjwt.common.vo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 商家店铺表.
  */
@@ -140,9 +143,12 @@ public class SpMerchantController extends AdminBaseController {
 	 */
 	@GetMapping("/myMerchant")
 	//@RequiresPermissions("shop:spMerchant:spMerchant")
-	public String myMerchant(Model model){
+	public String myMerchant(Model model, HttpServletRequest request, HttpServletResponse response){
 		SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("user_id", SessionUtil.getSessionUserId()));
-		model.addAttribute("spMerchant", spMerchantDO);
-		return "shop/spMerchant/myMerchant";
+		if (null != spMerchantDO) {
+			model.addAttribute("spMerchant", spMerchantDO);
+			return "shop/spMerchant/myMerchant";
+		}
+		return "redirect:/error.page";
 	}
 }

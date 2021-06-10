@@ -294,6 +294,16 @@ public class LoginController {
     }
 
     /**
+     * 异常页面.
+     *
+     */
+    @RequestMapping(value = "/error.page")
+    public String error(Model model) {
+        logger.debug("访问error.page");
+        return "ws/error";
+    }
+
+    /**
      * 注册按钮事件.
      *
      * @param model 模型

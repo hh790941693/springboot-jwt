@@ -3,7 +3,7 @@
 <head>
     <th:block th:include="common :: header"></th:block>
     <meta charset="UTF-8">
-    <title>发生错误</title>
+    <title>页面出错啦</title>
 
     <style type="text/css">
         #emojiDiv {
@@ -17,77 +17,17 @@
             width: 60px;
             height: 60px;
         }
-
-        #mainDiv {
-            width: 500px;
-            height: auto;
-            margin: 100px auto;
-            border: 2px solid green;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 2px;
-        }
-
-        table th {
-            background-color: green;
-            font-weight: bold;
-            color: white;
-            text-align: center;
-        }
-
-        table td {
-            border: 2px solid green;
-            height: 30px;
-        }
     </style>
 </head>
 <body>
     <div id="emojiDiv">
+        <h1>页面访问出错啦</h1>
         <img th:each="count:${#numbers.sequence(1,3)}" th:src="@{../../img/emoji/qqs/11.png}">
     </div>
 
-    <div id="mainDiv">
-        <table>
-            <tr>
-                <th style="width:40%">url</th>
-                <th style="width:60%">错误信息</th>
-            </tr>
-            <tr>
-                <td th:text="${url}"></td>
-                <td th:text="${exception.message}"></td>
-            </tr>
-        </table>
-
-        <div style="height:20px;background:green;color:white;text-align: center">详情:</div>
-        <div style="border:1px solid green;max-height:200px;overflow: scroll;">
-            <p th:each="trace : ${exception.stackTrace}">[[${trace}]]</p>
-        </div>
-
-        <div align="center" style='font-size:20px;margin-top:10px;color:red;'>
-            <span id='timeSpan' style='color:blue;'>10</span><span>秒后返回登录页面</span>
-        </div>
-
-        <div align="center" style="margin:10px auto;">
-            <button onclick="toIndex()" class='btn btn-sm btn-primary'>返回登录</button>
-        </div>
-    </div>
     <th:block th:include="common :: footer"></th:block>
 </body>
     <script type="text/javascript">
-        var i = 10;
-        var timer = setInterval(function () {
-            $("#timeSpan").text(i);
-            if (i == 0) {
-                clearInterval(timer);
-                toIndex();
-            }
-            i = i - 1;
-        }, 1000);
 
-        function toIndex() {
-            top.location.href = rootUrl;
-        }
     </script>
 </html>
