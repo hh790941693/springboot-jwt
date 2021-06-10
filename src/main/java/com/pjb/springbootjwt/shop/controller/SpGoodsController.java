@@ -164,10 +164,16 @@ public class SpGoodsController extends AdminBaseController {
 	 */
 	@PostMapping("/remove")
 	@ResponseBody
+	@Transactional(rollbackFor = Exception.class)
 	//@RequiresPermissions("shop:spGoods:remove")
 	public Result<String> remove(Long id) {
-		spGoodsService.deleteById(id);
-        return Result.ok();
+		SpGoodsDO spGoodsDO = spGoodsService.selectById(id);
+		if (null != spGoodsDO) {
+			spGoodsDO.setStatus(0);
+			spGoodsService.updateById(spGoodsDO);
+			return Result.ok();
+		}
+        return Result.fail();
 	}
 	
 	/**

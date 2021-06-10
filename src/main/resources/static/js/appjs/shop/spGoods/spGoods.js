@@ -162,9 +162,11 @@ function load() {
 				formatter: function (value, row) {
 					var res = "";
 					if (value == 0) {
-						res = '<span class="label label-danger">未上架</span>';
-					} else {
+						res = '<span class="label label-default">已删除</span>';
+					} else if (value == 1) {
 						res = '<span class="label label-success">已上架</span>';
+					} else if (value == 2) {
+						res = '<span class="label label-danger">已下架</span>';
 					}
 					return res;
 				}
@@ -186,7 +188,7 @@ function load() {
 							+ row.id
 							+ '\')"><i class="fa fa-remove"></i></a> ';
 					btns = e+d;
-					if (row.status == 0) {
+					if (row.status == 2) {
 						var putonbtn = '<a class="btn btn-success btn-sm" href="#" title="上架"  mce_href="#" onclick="updateStatus(\''
 							+ row.id
 							+ '\',\''
@@ -197,7 +199,7 @@ function load() {
 						var putoffbtn = '<a class="btn btn-warning btn-sm" href="#" title="下架"  mce_href="#" onclick="updateStatus(\''
 							+ row.id
 							+ '\',\''
-							+ '0'
+							+ '2'
 							+ '\')"><i class="fa fa-download"></i>下架</a> ';
 						btns += putoffbtn;
 					}

@@ -48,7 +48,7 @@ public class SpGoodsTypeDO implements Serializable {
     private String desc;
 
     //状态 0:禁用 1:启用
-    @ApiModelProperty(value = "status" , name = "状态 0:禁用 1:启用")
+    @ApiModelProperty(value = "status" , name = "状态 0:已删除 1:启用 2:禁用")
     private Integer status;
 
     //创建时间

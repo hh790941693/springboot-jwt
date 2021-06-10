@@ -123,8 +123,8 @@
 								<label class="col-sm-3 control-label" for="status"><span style="color:red">*</span>&nbsp;状态：</label>
 								<div class="col-sm-8">
 									<select class="form-control" id="status" name="status" th:value="${spGoods.status}">
-										<option value="0" th:selected="${spGoods.status == 0}">未上架</option>
 										<option value="1" th:selected="${spGoods.status == 1}">已上架</option>
+										<option value="2" th:selected="${spGoods.status == 2}">未上架</option>
 									</select>
 								</div>
 							</div>

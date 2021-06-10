@@ -77,9 +77,11 @@ function load() {
 				formatter : function (value, row) {
 					var res = "";
 					if (value == 0) {
-						res = '<span class="label label-danger">禁用</span>';
-					} else {
+						res = '<span class="label label-default">删除</span>';
+					} else if (value == 1) {
 						res = '<span class="label label-success">启用</span>';
+					} else if (value == 2) {
+						res = '<span class="label label-danger">禁用</span>';
 					}
 					return res;
 				}

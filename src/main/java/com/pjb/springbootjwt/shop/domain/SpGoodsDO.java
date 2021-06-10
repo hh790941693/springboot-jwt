@@ -91,7 +91,7 @@ public class SpGoodsDO implements Serializable {
     private String image4;
 
     //状态 0:未上架 1:已上架
-    @ApiModelProperty(value = "status" , name = "状态 0:未上架 1:已上架")
+    @ApiModelProperty(value = "status" , name = "状态 0:已删除 1:已上架 2:未上架")
     private Integer status;
 
     //创建时间
