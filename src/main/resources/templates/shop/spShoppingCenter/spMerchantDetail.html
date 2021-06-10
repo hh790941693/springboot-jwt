@@ -3,67 +3,105 @@
 <meta charset="utf-8">
 <head>
 	<th:block th:include="common :: header"></th:block>
+
+	<style>
+		#mainDiv {
+			width: 100%;
+			height: 100%;
+		}
+
+		table {
+			margin:5px auto;
+		}
+
+		table body th,td{
+			padding: 10px;
+		}
+	</style>
 <body class="gray-bg">
-	<div class="wrapper wrapper-content ">
-		<div class="row">
-			<div class="col-sm-12">
-				<div class="ibox float-e-margins">
-					<div class="ibox-content">
-                        <form class="form-horizontal m-t" id="form">
-							<div class="form-group">
-								<label class="col-sm-3 control-label" for="merchantId"><span style="color:red">*</span>&nbsp;店铺id：</label>
-								<div class="col-sm-8">
-									<input th:readonly="readonly" type="text" id="merchantId" name="merchantId" th:value="${spMerchant.merchantId}" class="form-control" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label" for="name"><span style="color:red">*</span>&nbsp;店铺名称：</label>
-								<div class="col-sm-8">
-									<input th:readonly="readonly" type="text" id="name" name="name" th:value="${spMerchant.name}" class="form-control" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label" for="address"><span style="color:red">*</span>&nbsp;店铺地址：</label>
-								<div class="col-sm-8">
-									<input th:readonly="readonly" type="text" id="address" name="address" th:value="${spMerchant.address}" class="form-control" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label"><span style="color:red">*</span>&nbsp;店铺图片：</label>
-								<div class="col-sm-8">
-									<input type="hidden" th:value="${spMerchant.image}" id="imageUrlInput" name="image" class="layui-input">
-									<img id="imageShow" alt="" width="60px" height="60px" th:src="${spMerchant.image}" onclick="$.ws.gShowImg(this.src)">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label" for="desc"><span style="color:red">*</span>&nbsp;店铺描述：</label>
-								<div class="col-sm-8">
-									<input th:readonly="readonly" type="text" id="desc" name="desc" th:value="${spMerchant.desc}" class="form-control" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label" for="contact"><span style="color:red">*</span>&nbsp;联系电话：</label>
-								<div class="col-sm-8">
-									<input th:readonly="readonly" type="text" id="contact" name="contact" th:value="${spMerchant.contact}" class="form-control" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label" ><span style="color:red">*</span>&nbsp;店铺状态：</label>
-								<div class="col-sm-8">
-									<select name="status" th:value="${spMerchant.status}" class="form-control" th:disabled="disabled">
-										<option value="0" th:selected="${spMerchant.status == 0}">已关闭</option>
-										<option value="1" th:selected="${spMerchant.status == 1}">营业中</option>
-										<option value="2" th:selected="${spMerchant.status == 2}">暂停营业</option>
-										<option value="3" th:selected="${spMerchant.status == 3}">已打烊</option>
-									</select>
-								</div>
-							</div>
-                        </form>
-					</div>
-				</div>
-			</div>
+	<input type="hidden" id="merchantId" th:value="${merchantId}">
+	<div id="mainDiv">
+		<div id="topDiv" style="width:100%;height:330px;">
+			<table border="1">
+				<thead>
+					<th width="120px;"></th>
+					<th width="300px;"></th>
+				</thead>
+				<body>
+					<tr>
+						<td>店铺id</td>
+						<td>{{merchantDetail.merchantId}}</td>
+					</tr>
+					<tr>
+						<td>店铺名称</td>
+						<td>{{merchantDetail.name}}</td>
+					</tr>
+					<tr>
+						<td>店铺地址</td>
+						<td>{{merchantDetail.address}}</td>
+					</tr>
+					<tr>
+						<td>店铺图片</td>
+						<td><img width="60px" height="60px" :src="merchantDetail.image" onclick="$.ws.gShowImg(this.src)"></td>
+					</tr>
+					<tr>
+						<td>店铺描述</td>
+						<td>{{merchantDetail.desc}}</td>
+					</tr>
+					<tr>
+						<td>联系电话</td>
+						<td>{{merchantDetail.contact}}</td>
+					</tr>
+					<tr>
+						<td>店铺状态</td>
+						<td>
+							<select name="status" :value="merchantDetail.status" class="form-control" th:disabled="disabled">
+								<option :selected="merchantDetail.status == 0">已关闭</option>
+								<option :selected="merchantDetail.status == 1">营业中</option>
+								<option :selected="merchantDetail.status == 2">暂停营业</option>
+								<option :selected="merchantDetail.status == 3">已打烊</option>
+							</select>
+						</td>
+					</tr>
+				</body>
+			</table>
+		</div>
+
+		<div id="goodsListDiv" style="width:100%;height:400px;margin-top:5px;border:1px solid blue;overflow-y: auto;">
+			<p>商品列表</p>
+		</div>
+
+		<div id="guessLikeDiv" style="width:100%;height:400px;margin-top:5px;border:1px solid green;overflow-x: auto;">
+			<p>猜你喜欢</p>
 		</div>
 	</div>
 	<th:block th:include="common :: footer"></th:block>
 </body>
+	<script>
+		var app = new Vue({
+			el: '#mainDiv',
+			data: {
+				merchantDetail: {},
+			},
+			methods: {
+				queryMerchantDetail: function(merchantId){
+					$.ajax({
+						url : "/shop/shoppingCenter/merchantDetail",
+						type : "get",
+						data : {
+							'merchantId' : $("#merchantId").val(),
+						},
+						success : function(res) {
+							if (res.code == 1) {
+								app.merchantDetail = res.data;
+							}
+						}
+					});
+				}
+			},
+			created: function () {
+				this.queryMerchantDetail();
+			}
+		});
+	</script>
 </html>

@@ -84,9 +84,20 @@ public class SpShoppingCenterController {
      * @return
      */
     @RequestMapping("/merchantDetail.page")
-    public String merchantDetail(Model model, String merchantId){
-        SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("merchant_id", merchantId));
-        model.addAttribute("spMerchant", spMerchantDO);
+    public String merchantDetailPage(Model model, String merchantId){
+        model.addAttribute("merchantId", merchantId);
         return "shop/spShoppingCenter/spMerchantDetail";
+    }
+
+    /**
+     * 查询商家详情
+     * @param merchantId 商家id
+     * @return
+     */
+    @RequestMapping("/merchantDetail")
+    @ResponseBody
+    public Result<SpMerchantDO> merchantDetail(String merchantId){
+        SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("merchant_id", merchantId));
+        return Result.ok(spMerchantDO);
     }
 }
