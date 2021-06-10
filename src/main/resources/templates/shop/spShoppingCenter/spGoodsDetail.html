@@ -45,7 +45,7 @@
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide" v-for="image in imageList">
-                                <img :src="image" style="width: 100%;height: 100%;">
+                                <img :src="image" style="width: 100%;height: 100%;" onclick="$.ws.gShowImg(this.src)">
                             </div>
                         </div>
                         <!-- Add Pagination -->

@@ -32,7 +32,7 @@
 								<label class="col-sm-3 control-label"><span style="color:red">*</span>&nbsp;店铺图片：</label>
 								<div class="col-sm-8">
 									<input type="hidden" th:value="${spMerchant.image}" id="imageUrlInput" name="image" class="layui-input">
-									<img id="imageShow" style="margin-left: 30px;" alt="" width="60px" height="60px" th:src="${spMerchant.image}">
+									<img id="imageShow" alt="" width="60px" height="60px" th:src="${spMerchant.image}" onclick="$.ws.gShowImg(this.src)">
 								</div>
 							</div>
 							<div class="form-group">
