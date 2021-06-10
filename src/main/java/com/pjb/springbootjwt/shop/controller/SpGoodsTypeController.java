@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.UUID;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.pjb.springbootjwt.shop.domain.SpGoodsDO;
+import com.pjb.springbootjwt.shop.service.SpGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -46,6 +48,9 @@ public class SpGoodsTypeController extends AdminBaseController {
 
     @Autowired
 	private SpGoodsTypeService spGoodsTypeService;
+
+	@Autowired
+	private SpGoodsService spGoodsService;
 
     /**
     * 跳转到商品分类表页面.
@@ -128,12 +133,17 @@ public class SpGoodsTypeController extends AdminBaseController {
 	//@RequiresPermissions("shop:spGoodsType:remove")
 	public Result<String> remove(Long id) {
 		SpGoodsTypeDO spGoodsTypeDO = spGoodsTypeService.selectById(id);
-		if (null != spGoodsTypeDO) {
-			spGoodsTypeDO.setStatus(0);
-			spGoodsTypeService.updateById(spGoodsTypeDO);
-			return Result.ok();
+		if (null == spGoodsTypeDO) {
+			return Result.build(Result.CODE_FAIL, "记录不存在");
 		}
-        return Result.fail();
+		int goodsCnt = spGoodsService.selectCount(new EntityWrapper<SpGoodsDO>().eq("goods_type_id", spGoodsTypeDO.getTypeId()).eq("status", 1));
+		if (goodsCnt > 0) {
+			return Result.build(Result.CODE_FAIL, "尚有已上架的商品使用了该分类，请先下架对应商品后再进行操作！");
+		}
+
+		spGoodsTypeDO.setStatus(0);
+		spGoodsTypeService.updateById(spGoodsTypeDO);
+		return Result.ok();
 	}
 	
 	/**
