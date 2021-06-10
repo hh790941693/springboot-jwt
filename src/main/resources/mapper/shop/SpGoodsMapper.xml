@@ -17,4 +17,20 @@
             </where>
         </if>
     </select>
+
+    <select id="queryCenterGoodsDetail" resultType="com.pjb.springbootjwt.shop.dto.GoodsDetailDTO">
+        select
+            t1.*,t2.name AS merchant_name
+        from
+            sp_goods t1
+        left join
+            sp_merchant t2
+        on
+            t1.merchant_id = t2.merchant_id
+        where
+            t1.status != 0
+        and
+            t2.status != 0
+        and t1.id = #{goodsId}
+    </select>
 </mapper>

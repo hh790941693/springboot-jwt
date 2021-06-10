@@ -6,6 +6,7 @@ import com.pjb.springbootjwt.shop.domain.SpGoodsDO;
 import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
 import com.pjb.springbootjwt.zhddkk.base.CoreService;
 import com.pjb.springbootjwt.zhddkk.domain.WsFriendsDO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ import java.util.List;
  */
 public interface SpGoodsService extends CoreService<SpGoodsDO> {
     List<GoodsDetailDTO> queryCenterGoodsList(Page<GoodsDetailDTO> page, Wrapper<GoodsDetailDTO> wrapper);
+
+    GoodsDetailDTO queryCenterGoodsDetail(String goodsId);
 }

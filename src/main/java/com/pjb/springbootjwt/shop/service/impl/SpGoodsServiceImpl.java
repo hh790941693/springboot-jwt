@@ -26,4 +26,9 @@ public class SpGoodsServiceImpl extends CoreServiceImpl<SpGoodsDao, SpGoodsDO> i
     public List<GoodsDetailDTO> queryCenterGoodsList(Page<GoodsDetailDTO> page, Wrapper<GoodsDetailDTO> wrapper) {
         return this.baseMapper.queryCenterGoodsList(page, wrapper);
     }
+
+    @Override
+    public GoodsDetailDTO queryCenterGoodsDetail(String goodsId) {
+        return this.baseMapper.queryCenterGoodsDetail(goodsId);
+    }
 }

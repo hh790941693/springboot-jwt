@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+    <th:block th:include="common :: header"></th:block>
+    <meta charset="UTF-8">
+    <title>商品详情</title>
+
+    <style>
+        #mainDiv {
+            width: 100%;
+            height:100%;
+            border:1px solid red;
+            overflow: hidden;
+        }
+
+        .swiper-container{
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-pagination-bullet {
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+            color:#000;
+            opacity: 1;
+            background: rgba(0,0,0,0.2);
+        }
+        .swiper-pagination-bullet-active {
+            color:#fff;
+            background: #007aff;
+        }
+    </style>
+</head>
+<body>
+    <div id="mainDiv">
+        <input type="hidden" id="goodsId" th:value="${goodsId}">
+        <div id="topDiv" style="width:100%;height:50%;padding: 30px 15px 0 15px;">
+            <div style="width:50%;height:280px;float:left;padding:10px;border:1px solid yellow;">
+                <!-- Swiper -->
+                <div id="swiperDiv" style="width:100%;height:100%;max-height:280px;">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" v-for="image in imageList">
+                                <img :src="image" style="width: 100%;height: 100%;">
+                            </div>
+                        </div>
+                        <!-- Add Pagination -->
+                        <div class="swiper-pagination swiper-pagination-white"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="width:49%;height:280px;float:right;padding:10px;border:1px solid blue;">
+                <p style="font-weight: bold;font-size: 17px;">商品名称： {{goodsDetail.name}}</p>
+                <p>商品描述： {{goodsDetail.brief}}</p>
+                <p>产地： {{goodsDetail.place}}</p>
+                <p>售价： <span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePrice}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPrice}}</span></p>
+                <p>规格： {{goodsDetail.unitName}}</p>
+                <p>商家店铺： {{goodsDetail.merchantName}}</p>
+                <div style="height:30px;text-align: center;margin-top: 25px;">
+                    <button class="btn btn-success"><i class="fa fa-paypal"></i>立即购买</button>&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-danger"><i class="fa fa-shopping-cart"></i>加入购物车</button>
+                </div>
+            </div>
+        </div>
+        <div id="footerDiv" style="width:100%;height:calc(50% - 5px)">
+            <p>猜你喜欢</p>
+        </div>
+    </div>
+    <th:block th:include="common :: footer"></th:block>
+</body>
+
+    <script>
+        var app = new Vue({
+            el: '#mainDiv',
+            data: {
+                goodsDetail: {},
+                imageList:[],
+            },
+            methods: {
+                queryGoodsDetail: function () {
+                    // 查询商品列表
+                    var loadIndex = layer.load(1, {
+                        shade: [0.1,'#fff'] //0.1透明度的白色背景
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: "/shop/shoppingCenter/goodsDetail",
+                        data: {
+                            'goodsId':$("#goodsId").val(),
+                        },
+                        success: function (result) {
+                            layer.close(loadIndex);
+                            if (result.code == 1) {
+                                app.goodsDetail = result.data;
+                                if (!!app.goodsDetail.image1) {
+                                    app.imageList.push(app.goodsDetail.image1);
+                                }
+                                if (!!app.goodsDetail.image2) {
+                                    app.imageList.push(app.goodsDetail.image2);
+                                }
+                                if (!!app.goodsDetail.image3) {
+                                    app.imageList.push(app.goodsDetail.image3);
+                                }
+                                if (!!app.goodsDetail.image4) {
+                                    app.imageList.push(app.goodsDetail.image4);
+                                }
+                            }
+                        }
+                    });
+                },
+            },
+            created: function () {
+                this.queryGoodsDetail();
+            }
+        });
+
+        // 图片滚动插件
+        var swiper = new Swiper('.swiper-container', {
+            spaceBetween: 30,
+            effect: 'flip',
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                renderBullet: function (index, className) {
+                    return '<span class="' + className + '">' + (index + 1) + '</span>';
+                },
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            observer:true,
+        });
+    </script>
+</html>

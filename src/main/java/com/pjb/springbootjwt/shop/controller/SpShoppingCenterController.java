@@ -9,6 +9,7 @@ import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,5 +48,28 @@ public class SpShoppingCenterController {
         wrapper.orderBy("t1.sale_number", params.isSaleNumberSort());
         List<GoodsDetailDTO> goodsDetailDTOS = spGoodsService.queryCenterGoodsList(page, wrapper);
         return Result.ok(goodsDetailDTOS);
+    }
+
+    /**
+     * 跳转商品详情页
+     * @param goodsId 商品id
+     * @return
+     */
+    @RequestMapping("/goodsDetail.page")
+    public String goodsDetailPage(Model model, String goodsId){
+        model.addAttribute("goodsId", goodsId);
+        return "shop/spShoppingCenter/spGoodsDetail";
+    }
+
+    /**
+     * 查询商品详情
+     * @param goodsId 商品id
+     * @return
+     */
+    @RequestMapping("/goodsDetail")
+    @ResponseBody
+    public Result<GoodsDetailDTO> goodsDetail(String goodsId){
+        GoodsDetailDTO goodsDetailDTO = spGoodsService.queryCenterGoodsDetail(goodsId);
+        return Result.ok(goodsDetailDTO);
     }
 }

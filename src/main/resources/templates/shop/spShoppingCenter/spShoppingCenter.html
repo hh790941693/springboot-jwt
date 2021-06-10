@@ -82,7 +82,7 @@
         </div>
         <hr />
         <div id="innerDiv" style="width:100%;height:calc(100% - 60px);overflow-y: auto;">
-            <div class="goodsDiv" v-for="(goodsDetail,index) in goodsData" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
+            <div class="goodsDiv" v-for="(goodsDetail,index) in goodsData" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)" @click="showGoodsDetail(goodsDetail.id)">
                 <div style="width:184px;height:188px;">
                     <img :src="goodsDetail.backImage" style="width:calc(100% - 20px);height:calc(100% - 20px);">
                 </div>
@@ -130,8 +130,8 @@
                 saleNumberSort: false,
             },
             methods: {
+                // 商品列表
                 queryGoodsList: function () {
-                    // 查询商品列表
                     var loadIndex = layer.load(1, {
                         shade: [0.1,'#fff'] //0.1透明度的白色背景
                     });
@@ -162,12 +162,25 @@
                     $("#innerDiv").children("div").eq(index).css("border", '1px solid grey');
                     $("#innerDiv").children("div").eq(index).children("div").eq(0).children("img").eq(0).animate({width:"164px",height:"168px"});
                 },
+                // 重置按钮
                 resetSearch: function () {
                     $("#goodsName").val("");
                     $("#merchantName").val("");
                     app.priceSort = true;
                     app.saleNumberSort = false;
                     this.queryGoodsList();
+                },
+                // 单击进入商品详情页
+                showGoodsDetail : function (goodsId) {
+                    layer.open({
+                        type: 2,
+                        title: '商品详情页',
+                        shadeClose: true,
+                        shade: 0.2,
+                        area: ['860px', '680px'],
+                        anim: 1,
+                        content: '/shop/shoppingCenter/goodsDetail.page?goodsId='+goodsId
+                    });
                 }
             },
             created: function () {

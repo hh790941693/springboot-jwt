@@ -15,5 +15,9 @@ import java.util.List;
  */
 @Repository
 public interface SpGoodsDao extends BaseDao<SpGoodsDO> {
+    // 查询商品详情列表
     List<GoodsDetailDTO> queryCenterGoodsList(RowBounds rowBounds, @Param("ew") Wrapper<GoodsDetailDTO> wrapper);
+
+    // 查询商品详情
+    GoodsDetailDTO queryCenterGoodsDetail(@Param("goodsId")String goodsId);
 }
