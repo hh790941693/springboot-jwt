@@ -3,8 +3,10 @@ package com.pjb.springbootjwt.shop.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
 import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
 import com.pjb.springbootjwt.shop.service.SpGoodsService;
+import com.pjb.springbootjwt.shop.service.SpMerchantService;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class SpShoppingCenterController {
 
     @Autowired
     private SpGoodsService spGoodsService;
+
+    @Autowired
+    private SpMerchantService spMerchantService;
 
     @GetMapping()
     public String SpShoppingCenter(){
@@ -71,5 +76,17 @@ public class SpShoppingCenterController {
     public Result<GoodsDetailDTO> goodsDetail(String goodsId){
         GoodsDetailDTO goodsDetailDTO = spGoodsService.queryCenterGoodsDetail(goodsId);
         return Result.ok(goodsDetailDTO);
+    }
+
+    /**
+     * 跳转商家详情页
+     * @param merchantId 商家id
+     * @return
+     */
+    @RequestMapping("/merchantDetail.page")
+    public String merchantDetail(Model model, String merchantId){
+        SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("merchant_id", merchantId));
+        model.addAttribute("spMerchant", spMerchantDO);
+        return "shop/spShoppingCenter/spMerchantDetail";
     }
 }
