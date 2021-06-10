@@ -36,6 +36,11 @@ public class SpShoppingCenterController {
         return "shop/spShoppingCenter/spShoppingCenter";
     }
 
+    /**
+     * 查询所有商家的商品列表
+     * @param params
+     * @return
+     */
     @RequestMapping("/queryGoodsList")
     @ResponseBody
     public Result<List<GoodsDetailDTO>> queryGoodsList(GoodsDetailDTO params){
@@ -51,6 +56,26 @@ public class SpShoppingCenterController {
         wrapper.ne("t2.status", 0);
         wrapper.orderBy("t1.sale_price", params.isPriceSort());
         wrapper.orderBy("t1.sale_number", params.isSaleNumberSort());
+        List<GoodsDetailDTO> goodsDetailDTOS = spGoodsService.queryCenterGoodsList(page, wrapper);
+        return Result.ok(goodsDetailDTOS);
+    }
+
+    /**
+     * 查询指定商家的商品列表
+     * @param params
+     * @return
+     */
+    @RequestMapping("/queryGoodsListByMerchantId")
+    @ResponseBody
+    public Result<List<GoodsDetailDTO>> queryGoodsListByMerchantId(GoodsDetailDTO params){
+        Page<GoodsDetailDTO> page = new Page<>(1, 100);
+        Wrapper<GoodsDetailDTO> wrapper = new EntityWrapper<GoodsDetailDTO>();
+        if (StringUtils.isNotBlank(params.getMerchantId())) {
+            wrapper.like("t1.merchant_id", params.getMerchantId());
+        }
+        wrapper.ne("t1.status", 0);
+        wrapper.ne("t2.status", 0);
+        wrapper.orderBy("t1.sale_number", false);
         List<GoodsDetailDTO> goodsDetailDTOS = spGoodsService.queryCenterGoodsList(page, wrapper);
         return Result.ok(goodsDetailDTOS);
     }
