@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+	<th:block th:include="common :: header"></th:block>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+                        <form class="form-horizontal m-t" id="form">
+							<!-- 主键 -->
+                            <input type="hidden" id="id" name="id" th:value="${spFavorite.id}">
+																													<div class="form-group">
+								<label class="col-sm-3 control-label" for="userId"><span style="color:red">*</span>&nbsp;用户id：</label>
+								<div class="col-sm-8">
+									<input type="text" id="userId" name="userId" th:value="${spFavorite.userId}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="subjectId"><span style="color:red">*</span>&nbsp;收藏物id：</label>
+								<div class="col-sm-8">
+									<input type="text" id="subjectId" name="subjectId" th:value="${spFavorite.subjectId}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="subjectType"><span style="color:red">*</span>&nbsp;收藏物类型 1:商品 2:店铺：</label>
+								<div class="col-sm-8">
+									<input type="text" id="subjectType" name="subjectType" th:value="${spFavorite.subjectType}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="status"><span style="color:red">*</span>&nbsp;状态 1:收藏 2:取消收藏：</label>
+								<div class="col-sm-8">
+									<input type="text" id="status" name="status" th:value="${spFavorite.status}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="createTime"><span style="color:red">*</span>&nbsp;创建时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="createTime" name="createTime" th:value="${spFavorite.createTime}" class="form-control" />
+								</div>
+							</div>
+																								<div class="form-group">
+								<label class="col-sm-3 control-label" for="updateTime"><span style="color:red">*</span>&nbsp;更新时间：</label>
+								<div class="col-sm-8">
+									<input type="text" id="updateTime" name="updateTime" th:value="${spFavorite.updateTime}" class="form-control" />
+								</div>
+							</div>
+											                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button type="submit" class="btn btn-primary">保存</button>
+                                </div>
+                            </div>
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="common :: footer"></th:block>
+</body>
+<script type="text/javascript" th:src="@{/js/appjs/shop/spFavorite/spFavoriteForm.js}"></script>
+</html>

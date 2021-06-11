@@ -125,10 +125,10 @@
 
                 <div style="width: 100%;height:20px;margin-top:4px;">
                     <span style="width:49%;display:inline-block;text-align: left;">
-                            <a href="javascript:void(0);" @click="favoriteMerchant(goodsDetail.merchantId)"><i class="fa fa-plus"></i>收藏店铺</a>
+                            <a href="javascript:void(0);" @click="favoriteMerchant(goodsDetail.merchantId, 1)"><i class="fa fa-plus"></i>收藏店铺</a>
                     </span>
                     <span style="width:49%;display:inline-block;text-align: right;">
-                            <a href="javascript:void(0);" @click="favoriteGoods(goodsDetail.goodsId)"><i class="fa fa-plus"></i>收藏商品</a>
+                            <a href="javascript:void(0);" @click="favoriteGoods(goodsDetail.goodsId, 1)"><i class="fa fa-plus"></i>收藏商品</a>
                     </span>
                 </div>
                 <hr/>
@@ -207,11 +207,33 @@
                         content: '/shop/shoppingCenter/goodsDetail.page?goodsId='+goodsId
                     });
                 },
-                favoriteMerchant : function (merchantId) {
+                favoriteMerchant : function (merchantId, status) {
                     // 收藏店铺
+                    $.ajax({
+                        type: "POST",
+                        url: "/shop/spFavorite/favoriteMerchant",
+                        data: {
+                            'merchantId':merchantId,
+                            'status':status,
+                        },
+                        success: function (result) {
+                            layer.msg(result.msg);
+                        }
+                    });
                 },
                 favoriteGoods : function (goodsId) {
                     // 收藏商品
+                    $.ajax({
+                        type: "POST",
+                        url: "/shop/spFavorite//favoriteGoods",
+                        data: {
+                            'goodsId':goodsId,
+                            'status':status,
+                        },
+                        success: function (result) {
+                            layer.msg(result.msg);
+                        }
+                    });
                 },
             },
             created: function () {
