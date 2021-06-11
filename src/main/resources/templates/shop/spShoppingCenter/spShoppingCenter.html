@@ -131,6 +131,11 @@
                         月销 {{goodsDetail.saleNumber}}
                     </span>
                 </div>
+
+                <!--收藏标志图标-->
+                <div style="width:100%; height:16px;" v-if="goodsDetail.goodsFavoriteStatus == 1">
+                    <span style="color: red;" class="glyphicon glyphicon-bookmark"></span>
+                </div>
             </div>
         </div>
     </div>
