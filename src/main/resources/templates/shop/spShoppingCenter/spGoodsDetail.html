@@ -67,16 +67,10 @@
                     <button class="btn btn-danger"><i class="fa fa-shopping-cart"></i>加入购物车</button>
                 </div>
                 <div style="width: 100%;height:20px;margin-top:50px;">
-                    <span style="width:30%;display:inline-block;text-align: left;" v-if="goodsDetail.merchantFavoriteStatus == 2">
-                            <a href="javascript:void(0);" @click="favoriteMerchant(goodsDetail.merchantId, 1)"><i class="fa fa-plus"></i>收藏店铺</a>
-                    </span>
-                    <span style="width:30%;display:inline-block;text-align: left;" v-if="goodsDetail.merchantFavoriteStatus == 1">
-                            <a href="javascript:void(0);" style="color:#1ab394;" @click="favoriteMerchant(goodsDetail.merchantId, 2)"><i class="fa fa-check"></i>已收藏店铺</a>
-                    </span>
-                    <span style="width:30%;display:inline-block;text-align: right;" v-if="goodsDetail.goodsFavoriteStatus == 2">
+                    <span style="width:30%;display:inline-block;text-align: left;" v-if="goodsDetail.goodsFavoriteStatus == 2">
                             <a href="javascript:void(0);" @click="favoriteGoods(goodsDetail.goodsId, 1)"><i class="fa fa-plus"></i>收藏商品</a>
                     </span>
-                    <span style="width:30%;display:inline-block;text-align: right;" v-if="goodsDetail.goodsFavoriteStatus == 1">
+                    <span style="width:30%;display:inline-block;text-align: left;" v-if="goodsDetail.goodsFavoriteStatus == 1">
                             <a href="javascript:void(0);" style="color:#1ab394;" @click="favoriteGoods(goodsDetail.goodsId, 2)"><i class="fa fa-check"></i>已收藏商品</a>
                     </span>
                 </div>
@@ -125,22 +119,6 @@
                                     app.imageList.push(app.goodsDetail.image4);
                                 }
                             }
-                        }
-                    });
-                },
-                favoriteMerchant : function (merchantId, status) {
-                    // 收藏店铺
-                    var that = this;
-                    $.ajax({
-                        type: "POST",
-                        url: "/shop/spFavorite/favoriteMerchant",
-                        data: {
-                            'merchantId':merchantId,
-                            'status':status,
-                        },
-                        success: function (result) {
-                            layer.msg(result.msg);
-                            that.queryGoodsDetail();
                         }
                     });
                 },
