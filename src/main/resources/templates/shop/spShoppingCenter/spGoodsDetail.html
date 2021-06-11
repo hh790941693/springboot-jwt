@@ -37,7 +37,7 @@
 </head>
 <body>
     <div id="mainDiv">
-        <input type="hidden" id="goodsId" th:value="${goodsId}">
+        <input type="hidden" id="goodsPkId" th:value="${goodsPkId}">
         <div id="topDiv" style="width:100%;height:50%;padding: 30px 15px 0 15px;">
             <div style="width:50%;height:280px;float:left;padding:10px;border:1px solid yellow;">
                 <!-- Swiper -->
@@ -106,7 +106,7 @@
                         type: "GET",
                         url: "/shop/shoppingCenter/goodsDetail",
                         data: {
-                            'goodsId':$("#goodsId").val(),
+                            'goodsPkId':$("#goodsPkId").val(),
                         },
                         success: function (result) {
                             layer.close(loadIndex);

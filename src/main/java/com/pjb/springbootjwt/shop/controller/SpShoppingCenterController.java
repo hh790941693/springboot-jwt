@@ -82,24 +82,24 @@ public class SpShoppingCenterController {
 
     /**
      * 跳转商品详情页
-     * @param goodsId 商品id
+     * @param goodsPkId 商品主键id
      * @return
      */
     @RequestMapping("/goodsDetail.page")
-    public String goodsDetailPage(Model model, String goodsId){
-        model.addAttribute("goodsId", goodsId);
+    public String goodsDetailPage(Model model, String goodsPkId){
+        model.addAttribute("goodsPkId", goodsPkId);
         return "shop/spShoppingCenter/spGoodsDetail";
     }
 
     /**
      * 查询商品详情
-     * @param goodsId 商品id
+     * @param goodsPkId 商品主键id
      * @return
      */
     @RequestMapping("/goodsDetail")
     @ResponseBody
-    public Result<GoodsDetailDTO> goodsDetail(String goodsId){
-        GoodsDetailDTO goodsDetailDTO = spGoodsService.queryCenterGoodsDetail(goodsId);
+    public Result<GoodsDetailDTO> goodsDetail(String goodsPkId){
+        GoodsDetailDTO goodsDetailDTO = spGoodsService.queryCenterGoodsDetail(goodsPkId);
         return Result.ok(goodsDetailDTO);
     }
 

@@ -28,7 +28,7 @@ public class SpGoodsServiceImpl extends CoreServiceImpl<SpGoodsDao, SpGoodsDO> i
     }
 
     @Override
-    public GoodsDetailDTO queryCenterGoodsDetail(String goodsId) {
-        return this.baseMapper.queryCenterGoodsDetail(goodsId);
+    public GoodsDetailDTO queryCenterGoodsDetail(String goodsPkId) {
+        return this.baseMapper.queryCenterGoodsDetail(goodsPkId);
     }
 }

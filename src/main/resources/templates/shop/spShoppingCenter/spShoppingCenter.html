@@ -202,7 +202,7 @@
                     this.queryGoodsList();
                 },
                 // 单击进入商品详情页
-                showGoodsDetail : function (goodsId) {
+                showGoodsDetail : function (goodsPkId) {
                     layer.open({
                         type: 2,
                         title: '商品详情页',
@@ -210,7 +210,7 @@
                         shade: 0.2,
                         area: ['860px', '550px'],
                         anim: 1,
-                        content: '/shop/shoppingCenter/goodsDetail.page?goodsId='+goodsId
+                        content: '/shop/shoppingCenter/goodsDetail.page?goodsPkId='+goodsPkId
                     });
                 },
                 favoriteMerchant : function (merchantId, status) {

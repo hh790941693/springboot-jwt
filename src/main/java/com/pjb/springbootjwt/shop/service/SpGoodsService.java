@@ -16,5 +16,5 @@ import java.util.List;
 public interface SpGoodsService extends CoreService<SpGoodsDO> {
     List<GoodsDetailDTO> queryCenterGoodsList(Page<GoodsDetailDTO> page, Wrapper<GoodsDetailDTO> wrapper);
 
-    GoodsDetailDTO queryCenterGoodsDetail(String goodsId);
+    GoodsDetailDTO queryCenterGoodsDetail(String goodsPkId);
 }

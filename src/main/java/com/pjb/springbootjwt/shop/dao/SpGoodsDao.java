@@ -19,5 +19,5 @@ public interface SpGoodsDao extends BaseDao<SpGoodsDO> {
     List<GoodsDetailDTO> queryCenterGoodsList(RowBounds rowBounds, @Param("ew") Wrapper<GoodsDetailDTO> wrapper);
 
     // 查询商品详情
-    GoodsDetailDTO queryCenterGoodsDetail(@Param("goodsId")String goodsId);
+    GoodsDetailDTO queryCenterGoodsDetail(@Param("goodsPkId")String goodsPkId);
 }
