@@ -4,13 +4,26 @@
 <mapper namespace="com.pjb.springbootjwt.shop.dao.SpGoodsDao">
     <select id="queryCenterGoodsList" resultType="com.pjb.springbootjwt.shop.dto.GoodsDetailDTO">
         select
-            t1.*,t2.name AS merchant_name
+            t1.*,
+            t2.name AS merchant_name,
+            IFNULL(t3.status, 2) AS goods_favorite_status,
+            IFNULL(t4.status, 2) AS merchant_favorite_status
         from
             sp_goods t1
         left join
             sp_merchant t2
         on
             t1.merchant_id = t2.merchant_id
+        left join
+            sp_favorite t3
+        on
+            t1.goods_id = t3.subject_id
+        and t3.subject_type = 1
+        left join
+            sp_favorite t4
+        on
+            t1.merchant_id = t4.subject_id
+        and t4.subject_type = 2
         <if test="ew.sqlSegment != null and ew.sqlSegment != ''">
             <where>
                 ${ew.sqlSegment}
