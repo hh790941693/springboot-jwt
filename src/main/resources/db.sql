@@ -16,6 +16,177 @@
 CREATE DATABASE IF NOT EXISTS `zhdd` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `zhdd`;
 
+-- Dumping structure for table zhdd.sp_favorite
+CREATE TABLE IF NOT EXISTS `sp_favorite` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '用户id',
+  `subject_id` varchar(100) NOT NULL COMMENT '收藏物id',
+  `subject_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '收藏物类型 1:商品 2:店铺',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态 1:已收藏 2:未收藏',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='收藏表';
+
+-- Dumping data for table zhdd.sp_favorite: ~2 rows (approximately)
+/*!40000 ALTER TABLE `sp_favorite` DISABLE KEYS */;
+INSERT INTO `sp_favorite` (`id`, `user_id`, `subject_id`, `subject_type`, `status`, `create_time`, `update_time`) VALUES
+	(1, 23, 'gd_865278eda76e4973ba538a8e25dcaffe', 1, 1, '2021-06-11 20:36:23', '2021-06-11 20:36:23'),
+	(2, 23, 'mer_02c3e96c2dc546869b1744910239c0f4', 2, 1, '2021-06-11 20:36:34', '2021-06-11 20:36:34');
+/*!40000 ALTER TABLE `sp_favorite` ENABLE KEYS */;
+
+-- Dumping structure for table zhdd.sp_goods
+CREATE TABLE IF NOT EXISTS `sp_goods` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `goods_id` varchar(100) NOT NULL COMMENT '商品id',
+  `name` varchar(50) NOT NULL COMMENT '商品名称',
+  `brief` varchar(200) NOT NULL COMMENT '商品简介',
+  `place` varchar(20) NOT NULL COMMENT '商品生产地',
+  `goods_type_id` varchar(100) NOT NULL COMMENT '商品类型id',
+  `merchant_id` varchar(100) NOT NULL COMMENT '归属店铺id',
+  `stock_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '库存数',
+  `sale_number` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '销量',
+  `original_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '原价',
+  `sale_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '售价',
+  `unit_name` varchar(10) NOT NULL COMMENT '商品单位',
+  `back_image` varchar(200) NOT NULL COMMENT '封面图片',
+  `image1` varchar(200) NOT NULL COMMENT '商品图片1',
+  `image2` varchar(200) NOT NULL COMMENT '商品图片2',
+  `image3` varchar(200) NOT NULL COMMENT '商品图片3',
+  `image4` varchar(200) NOT NULL COMMENT '商品图片4',
+  `status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '状态 0:未上架 1:已上架',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sp_goods_unique_index` (`goods_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='商品表';
+
+-- Dumping data for table zhdd.sp_goods: ~10 rows (approximately)
+/*!40000 ALTER TABLE `sp_goods` DISABLE KEYS */;
+INSERT INTO `sp_goods` (`id`, `goods_id`, `name`, `brief`, `place`, `goods_type_id`, `merchant_id`, `stock_num`, `sale_number`, `original_price`, `sale_price`, `unit_name`, `back_image`, `image1`, `image2`, `image3`, `image4`, `status`, `create_time`, `update_time`) VALUES
+	(1, 'gd_b8046322522c41bf8bcbe296e2c7c1da', '红富士苹果', '非常好吃的苹果', '浙江', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 562, 0, 10.50, 6.00, '斤', 'http://127.0.0.1:8101/goods/7fe2cecb-0308-4d87-ba15-319c9fb72498.jpg', 'http://127.0.0.1:8101/goods/318e4fb6-3a2a-4ff1-a41c-a4397c416a32.jpg', 'http://127.0.0.1:8101/goods/4cc96beb-a768-4430-81d0-d8611a344422.jpg', 'http://127.0.0.1:8101/goods/4981c9fe-241a-4df2-ad24-6400435e03d1.jpg', 'http://127.0.0.1:8101/goods/84000fc2-1e47-4758-b491-d59ff3ef9273.jpg', 1, '2021-06-10 21:01:45', '2021-06-10 22:28:07'),
+	(2, 'gd_092e6fc1c6b942429da608a76b19006a', '香蕉', '很嫩很好吃', '云南', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 125, 0, 8.00, 5.00, '斤', 'http://127.0.0.1:8101/goods/31eb9533-7c14-4134-a86b-5aa0f76d1781.jpg', 'http://127.0.0.1:8101/goods/c3cc2b49-4d58-46c3-bcf0-f3aa84721d5b.jpg', 'http://127.0.0.1:8101/goods/34b0bfd0-39a9-491f-b250-bd7f3f42e598.jpg', 'http://127.0.0.1:8101/goods/cca18580-cc79-45c6-83f2-8ebdfb6b059c.jpg', 'http://127.0.0.1:8101/goods/528837ec-8329-4674-ae82-e32d006c36c0.jpg', 1, '2021-06-10 21:04:12', '2021-06-10 21:04:12'),
+	(3, 'gd_865278eda76e4973ba538a8e25dcaffe', '8424西瓜', '新疆产甜西瓜', '新疆', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 854, 0, 2.50, 2.00, '斤', 'http://127.0.0.1:8101/goods/23a32c2a-c2e9-4456-9c8d-f775d7c9ea51.jpg', 'http://127.0.0.1:8101/goods/b4811278-7557-4ae7-a222-a928423a6b89.jpg', 'http://127.0.0.1:8101/goods/39950454-0bc3-4eea-a0af-8e2d188805b9.jpg', 'http://127.0.0.1:8101/goods/acb3dac4-d7da-4390-a4a4-46962480ad8f.jpg', 'http://127.0.0.1:8101/goods/f4df93af-107f-498c-ae2f-29c037ef5748.jpg', 1, '2021-06-10 21:45:57', '2021-06-10 21:45:57'),
+	(4, 'gd_a9d6933261b9466c8964d5a463ec1175', '泰国空运榴莲', '泰国空运过来的榴莲', '泰国', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 120, 0, 89.00, 75.00, '斤', 'http://127.0.0.1:8101/goods/f795c425-110e-4d6b-abfd-f3dc4d492e2e.jpg', 'http://127.0.0.1:8101/goods/34c91aa0-17c1-4ac3-a0c4-2ed1c8121445.jpg', 'http://127.0.0.1:8101/goods/56c491a5-8c12-4f8c-a419-1a89b03b6d0d.jpg', 'http://127.0.0.1:8101/goods/66d0a737-ad1c-4422-9145-37c0135b63e7.jpg', 'http://127.0.0.1:8101/goods/8aca2ae4-7461-4eeb-b959-4f660b4b6a52.jpg', 1, '2021-06-10 21:49:04', '2021-06-10 21:49:04'),
+	(5, 'gd_e34aecce0a5946dabfa907f4a6a335c8', '火龙果', '非常甜的火龙果', '湖南', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 410, 0, 15.00, 8.00, '斤', 'http://127.0.0.1:8101/goods/fd7d0fc7-7aa4-4deb-8686-63774e8c65bd.jpg', 'http://127.0.0.1:8101/goods/db5d54be-0c59-405f-90ae-2a72f17de736.jpg', 'http://127.0.0.1:8101/goods/385eaba6-0107-4e32-8af7-4bb7cd07e5d7.jpg', 'http://127.0.0.1:8101/goods/9557ef2a-a70c-4aaa-94d4-63e585688904.jpg', 'http://127.0.0.1:8101/goods/aa5cc66e-fdae-41f8-8a33-53a07aabecb6.jpg', 1, '2021-06-10 21:52:28', '2021-06-10 21:52:28'),
+	(6, 'gd_2cbdfb93bfd940b5a4ac20f8761fd12b', '大鲍鱼', '大鲍鱼很好吃', '青岛', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 100, 0, 68.00, 57.00, '斤', 'http://127.0.0.1:8101/goods/b31ed3ce-835e-4c2e-b66f-d69f05d581db.jpg', 'http://127.0.0.1:8101/goods/a66b2a47-580b-4dd3-93dc-dc291d52e4fc.jpg', 'http://127.0.0.1:8101/goods/a465f4f6-39e4-41c1-8ca3-63711f308b1d.jpg', 'http://127.0.0.1:8101/goods/b35f4f32-ccf8-49de-a469-48cbc9437296.jpg', 'http://127.0.0.1:8101/goods/0c4d7987-9abf-48f6-9782-aebd24be1e12.jpg', 1, '2021-06-10 22:09:58', '2021-06-10 22:09:58'),
+	(7, 'gd_4eabab3c9a304d779aa1e570d8b44762', '深海大龙虾', '波士顿大龙虾', '波士顿', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 324, 0, 99.00, 87.00, '斤', 'http://127.0.0.1:8101/goods/1c354f5f-6410-4269-b326-a9e308acc0d5.jpg', 'http://127.0.0.1:8101/goods/46a018ad-f881-47c5-b0f4-45d43391daec.jpg', 'http://127.0.0.1:8101/goods/d5e378d3-ede8-4a88-a628-b30898660f3b.jpg', 'http://127.0.0.1:8101/goods/ec1b99b6-9066-4cda-b43c-36a14044dc0d.jpg', 'http://127.0.0.1:8101/goods/24f57881-eb53-4d0f-80bc-850b5915163b.jpg', 1, '2021-06-10 22:12:01', '2021-06-10 22:12:01'),
+	(8, 'gd_039a2b8074c34ad8912fe20683225a90', '帝王蟹', '很大的帝王蟹', '阿根廷', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 300, 0, 110.00, 102.00, '斤', 'http://127.0.0.1:8101/goods/aae1d812-9ca1-4c99-8320-5071def6ebc9.jpg', 'http://127.0.0.1:8101/goods/f9baa7dd-d46c-485c-a89b-66af353cb11e.jpg', 'http://127.0.0.1:8101/goods/556aeae2-cbaf-4179-a57d-f5f599228151.jpg', 'http://127.0.0.1:8101/goods/250d4172-0683-4e9a-9543-b8b6e4f5b9c8.jpg', 'http://127.0.0.1:8101/goods/3e92931e-f4e8-4728-8991-b7924eb60411.jpg', 1, '2021-06-10 22:12:55', '2021-06-10 22:12:55'),
+	(9, 'gd_233cc264f0534688ae48181fa1c67bd3', '海参', '软软的海参', '海南', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 140, 0, 65.00, 60.00, '斤', 'http://127.0.0.1:8101/goods/ecca221e-09d7-41e4-a373-5ce865ed5303.jpg', 'http://127.0.0.1:8101/goods/c33c75f9-9e46-4d8d-8633-153a71c9e3e5.jpg', 'http://127.0.0.1:8101/goods/3f7c186c-169b-453b-9b53-0bbf733df904.jpg', 'http://127.0.0.1:8101/goods/15a2473e-e460-41f8-854b-ed4099313998.jpg', 'http://127.0.0.1:8101/goods/96b29c28-eb2a-4195-9cdc-267b2dccfa66.jpg', 1, '2021-06-10 22:13:46', '2021-06-10 22:13:46'),
+	(10, 'gd_57b38380fcc94571b2f29931f03acb99', '扇贝', '蒜泥扇贝', '台湾', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 432, 0, 40.00, 27.00, '斤', 'http://127.0.0.1:8101/goods/b9bbc4f4-fa68-4ecd-984b-f86adf494611.jpg', 'http://127.0.0.1:8101/goods/121ec583-c3d2-406c-9c38-82440b158ec7.jpg', 'http://127.0.0.1:8101/goods/81e660eb-ef0f-496d-be75-d08c01addd8c.jpg', 'http://127.0.0.1:8101/goods/0ef573c9-6bb8-43a2-9b59-5f05e7ddb5cb.jpg', 'http://127.0.0.1:8101/goods/9073f2e6-4e7d-413c-8ab7-674e8182918c.jpg', 1, '2021-06-10 22:15:51', '2021-06-10 22:15:51');
+/*!40000 ALTER TABLE `sp_goods` ENABLE KEYS */;
+
+-- Dumping structure for table zhdd.sp_goods_type
+CREATE TABLE IF NOT EXISTS `sp_goods_type` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `type_id` varchar(100) NOT NULL COMMENT '商品分类id',
+  `name` varchar(20) NOT NULL COMMENT '分类名称',
+  `image` varchar(200) NOT NULL COMMENT '分类图片',
+  `desc` varchar(200) DEFAULT NULL COMMENT '分类描述',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态 0:禁用 1:启用',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sp_goods_type_unique_index` (`type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='商品分类表';
+
+-- Dumping data for table zhdd.sp_goods_type: ~7 rows (approximately)
+/*!40000 ALTER TABLE `sp_goods_type` DISABLE KEYS */;
+INSERT INTO `sp_goods_type` (`id`, `type_id`, `name`, `image`, `desc`, `status`, `create_time`, `update_time`) VALUES
+	(1, 'gt_c7364f84714749149e139cbe162e8d29', '海鲜水产', 'http://127.0.0.1:8101/goodsType/3e18804f-9c5c-4ff2-ba04-e77b14b84e9f.jpg', '海鲜水产', 1, '2021-06-10 20:44:50', '2021-06-10 20:44:50'),
+	(2, 'gt_60bd03d5c09743ab82174315d125883b', '新鲜水果', 'http://127.0.0.1:8101/goodsType/f8aa627b-3e58-469c-9782-6b2055ec0f0e.jpg', '新鲜水果', 1, '2021-06-10 20:45:26', '2021-06-10 22:01:46'),
+	(3, 'gt_6d519bcb156946d48dd35ce130d67ecb', '家用电器', 'http://127.0.0.1:8101/goodsType/bcabfa8b-acc9-41a9-a8ef-5095ac91554d.jpg', '家用电器', 1, '2021-06-10 20:45:36', '2021-06-10 20:45:36'),
+	(4, 'gt_2b1ba70953344e53ba4ac1e3cf3635d4', '手机数码', 'http://127.0.0.1:8101/goodsType/acf97a26-303f-46ae-9d3e-0e148d900362.jpg', '手机数码', 1, '2021-06-10 20:45:55', '2021-06-10 20:45:55'),
+	(5, 'gt_2fde9df708a548208a1f60f8326d8a75', '男装女装', 'http://127.0.0.1:8101/goodsType/a4a5a57c-eaa6-4980-b1ec-6a68f98e95d6.jpg', '男装女装', 1, '2021-06-10 20:46:06', '2021-06-10 20:46:06'),
+	(6, 'gt_a9beb3698a054845afe465e8c684b07b', '蔬菜蛋品', 'http://127.0.0.1:8101/goodsType/0fe8c1bf-e4d7-4116-b14a-31c476b1a46e.jpg', '蔬菜蛋品', 1, '2021-06-10 22:01:10', '2021-06-10 22:01:10'),
+	(7, 'gt_2d2391cde56b4ce7a349250ade608ada', '精选肉类', 'http://127.0.0.1:8101/goodsType/9a2266ad-0f68-474f-bd3d-40aa26159c9f.jpg', '精选肉类', 1, '2021-06-10 22:02:39', '2021-06-10 22:02:39');
+/*!40000 ALTER TABLE `sp_goods_type` ENABLE KEYS */;
+
+-- Dumping structure for table zhdd.sp_merchant
+CREATE TABLE IF NOT EXISTS `sp_merchant` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '商家id',
+  `merchant_id` varchar(100) NOT NULL COMMENT '店铺id',
+  `name` varchar(20) NOT NULL COMMENT '店铺名称',
+  `address` varchar(100) NOT NULL COMMENT '店铺地址',
+  `image` varchar(200) NOT NULL COMMENT '店铺图片',
+  `desc` varchar(1000) NOT NULL COMMENT '店铺描述',
+  `contact` varchar(20) NOT NULL COMMENT '联系电话',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '店铺状态 0:已关闭 1:营业中 2:暂停营业 3:已打烊',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sp_merchant_unique_index` (`merchant_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='商家店铺表';
+
+-- Dumping data for table zhdd.sp_merchant: ~1 rows (approximately)
+/*!40000 ALTER TABLE `sp_merchant` DISABLE KEYS */;
+INSERT INTO `sp_merchant` (`id`, `user_id`, `merchant_id`, `name`, `address`, `image`, `desc`, `contact`, `status`, `create_time`, `update_time`) VALUES
+	(3, 23, 'mer_02c3e96c2dc546869b1744910239c0f4', 'aa的店铺', '江苏省扬州市某街道', 'http://127.0.0.1:8101/merchant/ef9ba3a9-c2b7-4716-9784-d6adf6357787.jpg', '售卖各种水果。', '16605141987', 1, '2021-06-05 10:50:40', '2021-06-10 20:57:25'),
+	(4, 24, 'mer_ae7f37e85816499bbb1aa4951bddef58', 'bb的海鲜店铺', '江苏省扬州市广陵区万福西路99号', 'http://127.0.0.1:8101/merchant/cb1ab333-06f2-4cc7-90be-e1016a26335a.jpg', '海鲜水产', '15874119632', 1, '2021-06-10 21:08:10', '2021-06-10 21:08:10');
+/*!40000 ALTER TABLE `sp_merchant` ENABLE KEYS */;
+
+-- Dumping structure for table zhdd.sp_merchant_apply
+CREATE TABLE IF NOT EXISTS `sp_merchant_apply` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `apply_no` varchar(50) NOT NULL COMMENT '申请编号',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '申请人id',
+  `name` varchar(20) NOT NULL COMMENT '店铺名称',
+  `address` varchar(100) NOT NULL COMMENT '店铺地址',
+  `image` varchar(200) NOT NULL COMMENT '店铺图片',
+  `desc` varchar(1000) NOT NULL COMMENT '店铺描述',
+  `contact` varchar(20) NOT NULL COMMENT '联系电话',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '审批状态 1:待审批 2:审批通过 3:审批不通过',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Index 2` (`apply_no`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='申请成为商家表';
+
+-- Dumping data for table zhdd.sp_merchant_apply: ~1 rows (approximately)
+/*!40000 ALTER TABLE `sp_merchant_apply` DISABLE KEYS */;
+INSERT INTO `sp_merchant_apply` (`id`, `apply_no`, `user_id`, `name`, `address`, `image`, `desc`, `contact`, `status`, `create_time`, `update_time`) VALUES
+	(1, 'MER_APPLY_5e20362a-153f-4c59-adf9-b37a85dd01ff', 23, 'aa的店铺', '江苏省扬州市某街道', 'http://127.0.0.1:8101/merchant/1ea9fed4-1b92-49fc-b495-ab93d60becc9.jpg', '售卖生活用品、猪肉粮油、蔬菜于一体的综合超市。', '16605141987', 2, '2021-06-05 10:09:31', '2021-06-05 10:50:11'),
+	(2, 'mer_apy_dd4992a8b33741f09b262052c4bf746e', 24, 'bb的海鲜店铺', '江苏省扬州市广陵区万福西路99号', 'http://127.0.0.1:8101/merchant/cb1ab333-06f2-4cc7-90be-e1016a26335a.jpg', '海鲜水产', '15874119632', 2, '2021-06-10 20:52:49', '2021-06-10 21:08:10');
+/*!40000 ALTER TABLE `sp_merchant_apply` ENABLE KEYS */;
+
+-- Dumping structure for table zhdd.sp_order
+CREATE TABLE IF NOT EXISTS `sp_order` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `order_no` varchar(100) NOT NULL COMMENT '订单号',
+  `parent_order_no` varchar(100) DEFAULT '' COMMENT '父订单号',
+  `total_price` decimal(10,2) unsigned NOT NULL COMMENT '总价',
+  `pay_price` decimal(10,2) unsigned NOT NULL COMMENT '支付价格',
+  `order_user_id` bigint(20) unsigned NOT NULL COMMENT '下单用户id',
+  `pay_user_id` bigint(20) unsigned NOT NULL COMMENT '支付用户id',
+  `status` tinyint(3) unsigned NOT NULL COMMENT '状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sp_order_unique_index` (`order_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+
+-- Dumping data for table zhdd.sp_order: ~0 rows (approximately)
+/*!40000 ALTER TABLE `sp_order` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sp_order` ENABLE KEYS */;
+
+-- Dumping structure for table zhdd.sp_order_detail
+CREATE TABLE IF NOT EXISTS `sp_order_detail` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `order_no` varchar(100) NOT NULL COMMENT '订单号',
+  `goods_id` varchar(100) NOT NULL COMMENT '商品id',
+  `goods_count` int(11) NOT NULL DEFAULT '1' COMMENT '商品数量',
+  `goods_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品售价',
+  `merchant_id` varchar(100) NOT NULL COMMENT '商品所属的商家id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单详情表';
+
+-- Dumping data for table zhdd.sp_order_detail: ~0 rows (approximately)
+/*!40000 ALTER TABLE `sp_order_detail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sp_order_detail` ENABLE KEYS */;
+
 -- Dumping structure for table zhdd.sys_config
 CREATE TABLE IF NOT EXISTS `sys_config` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -33,8 +204,8 @@ INSERT INTO `sys_config` (`id`, `k`, `v`, `remark`, `create_time`, `kv_type`) VA
 	(2, 'oss_qiniu', '{"AccessKey" : "8-HMj9EgGNIP-xuOCpSzTn-OMyGOFtR3TxLdn4Uu","SecretKey" : "SjpGg3V6PsMdJgn42PeEd5Ik-6aNyuwdqV5CPM6A","bucket" : "ifast","AccessUrl" : "http://p6r7ke2jc.bkt.clouddn.com/"}', '七牛对象存储配置', '2018-04-06 14:31:26', 4300),
 	(3, 'author', 'admin', '代码生成器配置', '2018-05-27 19:57:04', 4401),
 	(4, 'email', 'anonymous@anonymous.com', '代码生成器配置', '2018-05-27 19:57:04', 4401),
-	(5, 'package', 'com.pjb.springbootjwt.zhddkk', '代码生成器配置', '2018-05-27 19:57:04', 4401),
-	(6, 'autoRemovePre', 'true', '代码生成器配置', '2018-05-27 19:57:04', 4401),
+	(5, 'package', 'com.pjb.springbootjwt.shop', '代码生成器配置', '2018-05-27 19:57:04', 4401),
+	(6, 'autoRemovePre', 'false', '代码生成器配置', '2018-05-27 19:57:04', 4401),
 	(7, 'tablePrefix', 't_', '代码生成器配置', '2018-05-27 19:57:04', 4401),
 	(8, 'tinyint', 'Integer', '代码生成器配置', '2018-05-27 19:57:04', 4400),
 	(9, 'smallint', 'Integer', '代码生成器配置', '2018-05-27 19:57:04', 4400),
@@ -71,9 +242,9 @@ CREATE TABLE IF NOT EXISTS `sys_menu` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COMMENT='菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
--- Dumping data for table zhdd.sys_menu: ~33 rows (approximately)
+-- Dumping data for table zhdd.sys_menu: ~37 rows (approximately)
 /*!40000 ALTER TABLE `sys_menu` DISABLE KEYS */;
 INSERT INTO `sys_menu` (`id`, `name`, `parent_id`, `i18n_key`, `url`, `icon`, `ext_column1`, `ext_column2`, `ext_column3`, `create_time`, `update_time`) VALUES
 	(1, '系统管理', 0, 'li.pmenu.sysmanage.label', '', 'icon-menu-folder-open', '', '', '', '2021-01-07 21:18:30', '2021-03-24 21:36:18'),
@@ -108,7 +279,14 @@ INSERT INTO `sys_menu` (`id`, `name`, `parent_id`, `i18n_key`, `url`, `icon`, `e
 	(33, '反馈建议', 25, 'li.feedback.label', '/zhddkk/wsFeedback/myFeedback', 'icon icon-12-9', 'true', '', '', '2021-01-10 13:05:12', '2021-03-24 21:39:44'),
 	(34, '智能助手', 25, 'li.aiassistant.label', '/ws/intelAssistant.page', 'icon icon-25-10', 'true', '', '', '2021-01-10 13:05:37', '2021-03-24 21:39:50'),
 	(35, '网易新闻', 25, 'li.wantyinews.label', '/ws/wangyiNews.page', 'icon icon-9-10', 'true', '', '', '2021-01-10 13:05:55', '2021-03-24 21:39:57'),
-	(38, 'H5游戏', 2, 'li.h5.label', '/canvas/canvasIndex.page', 'icon icon-12-19', 'true', '', '', '2021-01-10 14:44:17', '2021-03-24 21:39:58');
+	(38, 'H5游戏', 2, 'li.h5.label', '/canvas/canvasIndex.page', 'icon icon-12-19', 'true', '', '', '2021-01-10 14:44:17', '2021-03-24 21:39:58'),
+	(39, '超市管理', 0, 'shop.menu.title', '', 'icon icon-5-11', 'true', '', '', '2021-06-05 09:27:05', '2021-06-05 09:27:05'),
+	(40, '申请成为商家', 39, 'shop.menu.apply.title', '/shop/spMerchantApply', 'icon icon-11-13', 'true', '', '', '2021-06-05 09:29:06', '2021-06-05 09:29:06'),
+	(41, '审批商家申请', 39, 'shop.menu.approve.title', '/shop/spMerchantApply', 'icon icon-4-20', 'true', '', '', '2021-06-05 09:31:18', '2021-06-05 09:31:18'),
+	(42, '商品类型', 39, 'shop.goods.type.title', '/shop/spGoodsType', 'icon icon-8-7', 'true', '', '', '2021-06-10 07:33:38', '2021-06-10 07:33:38'),
+	(43, '我的商品', 39, 'shop.goods.title', '/shop/spGoods', 'icon icon-8-12', 'true', '', '', '2021-06-10 07:34:15', '2021-06-10 07:34:15'),
+	(44, '我的店铺', 39, 'shop.my.merchant.title', '/shop/spMerchant/myMerchant', 'icon icon-6-9', 'true', '', '', '2021-06-10 07:34:57', '2021-06-10 07:34:57'),
+	(45, '超市购物', 39, 'shop.shopping.title', '/shop/shoppingCenter', 'icon icon-12-15', 'true', '', '', '2021-06-10 07:35:33', '2021-06-10 07:35:33');
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.sys_role
@@ -120,7 +298,7 @@ CREATE TABLE IF NOT EXISTS `sys_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
--- Dumping data for table zhdd.sys_role: ~2 rows (approximately)
+-- Dumping data for table zhdd.sys_role: ~3 rows (approximately)
 /*!40000 ALTER TABLE `sys_role` DISABLE KEYS */;
 INSERT INTO `sys_role` (`id`, `name`, `create_time`, `update_time`) VALUES
 	(1, '管理员', '2021-01-07 20:50:39', '2021-01-07 20:50:39'),
@@ -138,60 +316,11 @@ CREATE TABLE IF NOT EXISTS `sys_role_menu` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8 COMMENT='角色与菜单关系表';
+) ENGINE=InnoDB AUTO_INCREMENT=296 DEFAULT CHARSET=utf8 COMMENT='角色与菜单关系表';
 
--- Dumping data for table zhdd.sys_role_menu: ~57 rows (approximately)
+-- Dumping data for table zhdd.sys_role_menu: ~63 rows (approximately)
 /*!40000 ALTER TABLE `sys_role_menu` DISABLE KEYS */;
 INSERT INTO `sys_role_menu` (`id`, `role_id`, `role_name`, `menu_id`, `menu_name`, `create_time`, `update_time`) VALUES
-	(105, 2, '', 3, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(106, 2, '', 26, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(107, 2, '', 27, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(108, 2, '', 28, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(109, 2, '', 29, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(110, 2, '', 30, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(111, 2, '', 31, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(112, 2, '', 32, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(113, 2, '', 33, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(114, 2, '', 34, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(115, 2, '', 35, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(116, 2, '', 25, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(117, 2, '', 38, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(118, 2, '', 2, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(119, 2, '', -1, '', '2021-01-10 14:44:37', '2021-01-10 14:44:37'),
-	(120, 1, '', 4, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(121, 1, '', 6, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(122, 1, '', 8, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(123, 1, '', 9, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(124, 1, '', 10, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(125, 1, '', 11, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(126, 1, '', 12, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(127, 1, '', 13, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(128, 1, '', 14, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(129, 1, '', 15, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(130, 1, '', 16, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(131, 1, '', 17, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(132, 1, '', 18, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(133, 1, '', 3, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(134, 1, '', 38, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(135, 1, '', 21, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(136, 1, '', 22, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(137, 1, '', 23, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(138, 1, '', 24, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(139, 1, '', 1, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(140, 1, '', 2, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(141, 1, '', 20, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(142, 1, '', 25, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(143, 1, '', 26, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(144, 1, '', 27, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(145, 1, '', 28, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(146, 1, '', 29, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(147, 1, '', 30, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(148, 1, '', 31, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(149, 1, '', 32, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(150, 1, '', 33, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(151, 1, '', 34, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(152, 1, '', 35, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
-	(153, 1, '', -1, '', '2021-01-15 22:35:08', '2021-01-15 22:35:08'),
 	(154, 3, '', 35, '', '2021-01-16 09:09:39', '2021-01-16 09:09:39'),
 	(155, 3, '', 34, '', '2021-01-16 09:09:39', '2021-01-16 09:09:39'),
 	(156, 3, '', 33, '', '2021-01-16 09:09:39', '2021-01-16 09:09:39'),
@@ -199,7 +328,62 @@ INSERT INTO `sys_role_menu` (`id`, `role_id`, `role_name`, `menu_id`, `menu_name
 	(158, 3, '', 3, '', '2021-01-16 09:09:39', '2021-01-16 09:09:39'),
 	(159, 3, '', 38, '', '2021-01-16 09:09:39', '2021-01-16 09:09:39'),
 	(160, 3, '', -1, '', '2021-01-16 09:09:39', '2021-01-16 09:09:39'),
-	(161, 3, '', 25, '', '2021-01-16 09:09:39', '2021-01-16 09:09:39');
+	(161, 3, '', 25, '', '2021-01-16 09:09:39', '2021-01-16 09:09:39'),
+	(241, 1, '管理员', 1, '系统管理', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(242, 1, '管理员', 2, '娱乐管理', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(243, 1, '管理员', 3, '游戏娱乐', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(244, 1, '管理员', 4, '用户管理', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(245, 1, '管理员', 6, '角色配置', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(246, 1, '管理员', 8, '菜单配置', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(247, 1, '管理员', 9, '音乐播放', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(248, 1, '管理员', 10, '聊天监控', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(249, 1, '管理员', 11, '朋友圈', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(250, 1, '管理员', 12, '聊天记录', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(251, 1, '管理员', 13, '操作记录', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(252, 1, '管理员', 14, '广告发布', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(253, 1, '管理员', 15, '反馈建议', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(254, 1, '管理员', 16, '领导驾驶舱', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(255, 1, '管理员', 17, '定时任务', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(256, 1, '管理员', 18, '生成代码', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(257, 1, '管理员', 20, '通用管理', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(258, 1, '管理员', 21, '敏感词配置', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(259, 1, '管理员', 22, '脏话配置', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(260, 1, '管理员', 23, '常用语配置', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(261, 1, '管理员', 24, '注册问题配置', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(262, 1, '管理员', 25, '客户端管理', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(263, 1, '管理员', 26, '实时聊天', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(264, 1, '管理员', 27, '音乐播放', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(265, 1, '管理员', 28, '添加朋友', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(266, 1, '管理员', 29, '我的朋友', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(267, 1, '管理员', 30, '我的申请', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(268, 1, '管理员', 31, '好友申请', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(269, 1, '管理员', 32, '朋友圈', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(270, 1, '管理员', 33, '反馈建议', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(271, 1, '管理员', 34, '智能助手', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(272, 1, '管理员', 35, '网易新闻', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(273, 1, '管理员', 38, 'H5游戏', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(274, 1, '管理员', 39, '超市管理', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(275, 1, '管理员', 41, '审批商家申请', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(276, 1, '管理员', 42, '商品类型', '2021-06-10 07:35:44', '2021-06-10 07:35:44'),
+	(277, 2, '普通用户', 2, '娱乐管理', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(278, 2, '普通用户', 3, '游戏娱乐', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(279, 2, '普通用户', 25, '客户端管理', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(280, 2, '普通用户', 26, '实时聊天', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(281, 2, '普通用户', 27, '音乐播放', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(282, 2, '普通用户', 28, '添加朋友', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(283, 2, '普通用户', 29, '我的朋友', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(284, 2, '普通用户', 30, '我的申请', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(285, 2, '普通用户', 31, '好友申请', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(286, 2, '普通用户', 32, '朋友圈', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(287, 2, '普通用户', 33, '反馈建议', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(288, 2, '普通用户', 34, '智能助手', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(289, 2, '普通用户', 35, '网易新闻', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(290, 2, '普通用户', 38, 'H5游戏', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(291, 2, '普通用户', 39, '超市管理', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(292, 2, '普通用户', 40, '申请成为商家', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(293, 2, '普通用户', 43, '我的商品', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(294, 2, '普通用户', 44, '我的店铺', '2021-06-10 07:35:56', '2021-06-10 07:35:56'),
+	(295, 2, '普通用户', 45, '超市购物', '2021-06-10 07:35:56', '2021-06-10 07:35:56');
 /*!40000 ALTER TABLE `sys_role_menu` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.sys_user_role
@@ -212,7 +396,7 @@ CREATE TABLE IF NOT EXISTS `sys_user_role` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='用户与角色关系表';
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='用户与角色关系表';
 
 -- Dumping data for table zhdd.sys_user_role: ~13 rows (approximately)
 /*!40000 ALTER TABLE `sys_user_role` DISABLE KEYS */;
@@ -223,13 +407,13 @@ INSERT INTO `sys_user_role` (`id`, `user_id`, `user_name`, `role_id`, `role_name
 	(17, 1, 'admin', 1, '管理员', '2021-01-10 15:08:25', '2021-01-10 15:08:25'),
 	(19, 18, 'hch', 2, '普通用户', '2021-01-10 15:11:51', '2021-01-16 19:43:22'),
 	(20, 29, 'gt', 2, '普通用户', '2021-01-11 21:52:26', '2021-01-11 21:52:26'),
-	(21, 23, 'aa', 3, '游客', '2021-01-16 09:09:50', '2021-01-16 09:09:50'),
 	(22, 35, 'aa01', 2, '普通用户', '2021-01-17 11:07:55', '2021-01-17 11:07:55'),
 	(23, 36, 'ee', 2, '普通用户', '2021-02-10 23:28:13', '2021-02-10 23:28:13'),
 	(24, 37, 'ff', 2, '普通用户', '2021-02-10 23:28:39', '2021-02-10 23:28:39'),
 	(25, 38, 'gg', 2, '普通用户', '2021-02-10 23:29:00', '2021-02-10 23:29:00'),
 	(26, 39, 'hh', 2, '普通用户', '2021-02-10 23:29:27', '2021-02-10 23:29:27'),
-	(27, 40, 'ii', 2, '普通用户', '2021-02-10 23:40:01', '2021-02-10 23:40:01');
+	(27, 40, 'ii', 2, '普通用户', '2021-02-10 23:40:01', '2021-02-10 23:40:01'),
+	(28, 23, 'aa', 2, '普通用户', '2021-06-05 09:34:58', '2021-06-05 09:34:58');
 /*!40000 ALTER TABLE `sys_user_role` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.t_permission
@@ -355,9 +539,9 @@ CREATE TABLE IF NOT EXISTS `ws_chatlog` (
   `msg` varchar(4000) DEFAULT '' COMMENT '内容',
   `remark` varchar(400) DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='聊天记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=191 DEFAULT CHARSET=utf8 COMMENT='聊天记录表';
 
--- Dumping data for table zhdd.ws_chatlog: ~1 rows (approximately)
+-- Dumping data for table zhdd.ws_chatlog: ~190 rows (approximately)
 /*!40000 ALTER TABLE `ws_chatlog` DISABLE KEYS */;
 INSERT INTO `ws_chatlog` (`id`, `time`, `room_name`, `user`, `to_user`, `msg`, `remark`) VALUES
 	(1, '2021-05-27 21:53:55', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
@@ -365,7 +549,191 @@ INSERT INTO `ws_chatlog` (`id`, `time`, `room_name`, `user`, `to_user`, `msg`, `
 	(3, '2021-05-27 21:54:36', '002', 'admin', '', '离开了聊天室', ''),
 	(4, '2021-05-27 21:54:45', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
 	(5, '2021-05-27 21:56:14', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
-	(6, '2021-05-27 21:56:14', '002', 'admin', '', '离开了聊天室', '');
+	(6, '2021-05-27 21:56:14', '002', 'admin', '', '离开了聊天室', ''),
+	(7, '2021-05-27 22:10:32', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(8, '2021-05-27 22:21:26', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(9, '2021-05-27 22:21:30', '001', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(10, '2021-05-29 07:26:13', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(11, '2021-05-29 07:30:56', '001', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(12, '2021-05-29 07:30:56', '001', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(13, '2021-05-29 07:30:57', '001', 'admin', '', '离开了聊天室', ''),
+	(14, '2021-05-29 07:30:57', '002', 'admin', '', '离开了聊天室', ''),
+	(15, '2021-05-29 07:30:57', '001', 'admin', '', '离开了聊天室', ''),
+	(16, '2021-05-29 09:25:16', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(17, '2021-05-29 09:37:18', '001', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(18, '2021-05-29 09:37:18', '001', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(19, '2021-05-29 09:37:20', '001', 'admin', '', '离开了聊天室', ''),
+	(20, '2021-05-29 10:40:47', '002', 'admin', '', '离开了聊天室', ''),
+	(21, '2021-05-29 10:40:47', '001', 'admin', '', '离开了聊天室', ''),
+	(22, '2021-05-29 13:08:08', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(23, '2021-05-29 17:13:48', '002', 'admin', '', '离开了聊天室', ''),
+	(24, '2021-05-29 17:14:01', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(25, '2021-06-01 20:40:25', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(26, '2021-06-01 20:47:09', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(27, '2021-06-01 20:47:15', '002', 'admin', '', '离开了聊天室', ''),
+	(28, '2021-06-01 20:47:43', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(29, '2021-06-01 21:00:37', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(30, '2021-06-01 21:12:56', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(31, '2021-06-01 21:18:33', '002', 'admin', '', '离开了聊天室', ''),
+	(32, '2021-06-01 21:18:41', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(33, '2021-06-01 21:46:24', '002', 'admin', '', '离开了聊天室', ''),
+	(34, '2021-06-01 21:46:27', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(35, '2021-06-01 21:47:48', '002', 'admin', '', '离开了聊天室', ''),
+	(36, '2021-06-01 21:47:50', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(37, '2021-06-01 22:17:10', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(38, '2021-06-01 22:17:12', '002', 'admin', '', '离开了聊天室', ''),
+	(39, '2021-06-01 22:17:22', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(40, '2021-06-01 22:25:07', '002', 'admin', '', '离开了聊天室', ''),
+	(41, '2021-06-01 22:25:09', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(42, '2021-06-01 22:25:21', '002', 'admin', '', '离开了聊天室', ''),
+	(43, '2021-06-01 22:25:27', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(44, '2021-06-02 22:04:20', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(45, '2021-06-02 22:05:21', '002', 'admin', '', '离开了聊天室', ''),
+	(46, '2021-06-02 22:07:21', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(47, '2021-06-03 21:13:38', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(48, '2021-06-03 21:24:00', '002', 'admin', '', '离开了聊天室', ''),
+	(49, '2021-06-04 20:42:31', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(50, '2021-06-05 09:21:49', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(51, '2021-06-05 09:31:56', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(52, '2021-06-05 09:32:25', '002', 'admin', '', '离开了聊天室', ''),
+	(53, '2021-06-05 09:32:32', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(54, '2021-06-05 09:33:56', '002', 'admin', '', '离开了聊天室', ''),
+	(55, '2021-06-05 09:33:58', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(56, '2021-06-05 09:34:03', '002', 'admin', '', '离开了聊天室', ''),
+	(57, '2021-06-05 09:34:05', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(58, '2021-06-05 09:34:21', '002', 'admin', '', '离开了聊天室', ''),
+	(59, '2021-06-05 09:34:23', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(60, '2021-06-05 09:34:28', '002', 'admin', '', '离开了聊天室', ''),
+	(61, '2021-06-05 09:34:44', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(62, '2021-06-05 09:34:48', '002', 'aa', '', '离开了聊天室', ''),
+	(63, '2021-06-05 09:34:54', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(64, '2021-06-05 09:35:06', '002', 'admin', '', '离开了聊天室', ''),
+	(65, '2021-06-05 09:35:13', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(66, '2021-06-05 09:36:28', '002', 'aa', '', '离开了聊天室', ''),
+	(67, '2021-06-05 09:36:30', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(68, '2021-06-05 09:39:49', '002', 'aa', '', '离开了聊天室', ''),
+	(69, '2021-06-05 09:39:51', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(70, '2021-06-05 09:40:41', '002', 'aa', '', '离开了聊天室', ''),
+	(71, '2021-06-05 09:40:44', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(72, '2021-06-05 09:42:03', '002', 'aa', '', '离开了聊天室', ''),
+	(73, '2021-06-05 09:42:05', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(74, '2021-06-05 09:42:44', '002', 'aa', '', '离开了聊天室', ''),
+	(75, '2021-06-05 09:42:46', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(76, '2021-06-05 09:43:09', '002', 'aa', '', '离开了聊天室', ''),
+	(77, '2021-06-05 09:43:11', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(78, '2021-06-05 09:47:42', '002', 'aa', '', '离开了聊天室', ''),
+	(79, '2021-06-05 09:47:45', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(80, '2021-06-05 09:48:25', '002', 'aa', '', '离开了聊天室', ''),
+	(81, '2021-06-05 09:51:35', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(82, '2021-06-05 09:54:23', '002', 'admin', '', '离开了聊天室', ''),
+	(83, '2021-06-05 09:54:26', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(84, '2021-06-05 09:54:48', '002', 'admin', '', '离开了聊天室', ''),
+	(85, '2021-06-05 09:54:54', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(86, '2021-06-05 09:55:43', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(87, '2021-06-05 10:01:03', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(88, '2021-06-05 10:01:09', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(89, '2021-06-05 10:01:12', '002', 'admin', '', '离开了聊天室', ''),
+	(90, '2021-06-05 10:01:19', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(91, '2021-06-05 10:01:19', '002', 'aa', '', '离开了聊天室', ''),
+	(92, '2021-06-05 10:01:26', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(93, '2021-06-05 10:03:19', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(94, '2021-06-05 10:03:19', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(95, '2021-06-05 10:04:20', '002', 'aa', '', '离开了聊天室', ''),
+	(96, '2021-06-05 10:04:28', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(97, '2021-06-05 10:08:50', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(98, '2021-06-05 10:08:50', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(99, '2021-06-05 10:08:52', '002', 'aa', '', '离开了聊天室', ''),
+	(100, '2021-06-05 10:09:01', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(101, '2021-06-05 10:14:23', '002', 'aa', '', '离开了聊天室', ''),
+	(102, '2021-06-05 10:14:25', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(103, '2021-06-05 10:14:51', '002', 'aa', '', '离开了聊天室', ''),
+	(104, '2021-06-05 10:14:54', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(105, '2021-06-05 10:15:37', '002', 'aa', '', '离开了聊天室', ''),
+	(106, '2021-06-05 10:15:39', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(107, '2021-06-05 10:19:02', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(108, '2021-06-05 10:23:02', '002', 'aa', '', '离开了聊天室', ''),
+	(109, '2021-06-05 10:23:09', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(110, '2021-06-05 10:24:46', '002', 'aa', '', '离开了聊天室', ''),
+	(111, '2021-06-05 10:24:48', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(112, '2021-06-05 10:29:15', '002', 'aa', '', '离开了聊天室', ''),
+	(113, '2021-06-05 10:29:18', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(114, '2021-06-05 10:31:10', '002', 'aa', '', '离开了聊天室', ''),
+	(115, '2021-06-05 10:31:12', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(116, '2021-06-05 10:42:53', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(117, '2021-06-05 10:42:54', '002', 'aa', '', '离开了聊天室', ''),
+	(118, '2021-06-05 10:43:01', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(119, '2021-06-05 10:43:55', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(120, '2021-06-05 10:43:58', '002', 'aa', '', '离开了聊天室', ''),
+	(121, '2021-06-05 10:44:05', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(122, '2021-06-05 10:46:46', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(123, '2021-06-05 10:46:48', '002', 'aa', '', '离开了聊天室', ''),
+	(124, '2021-06-05 10:46:55', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(125, '2021-06-05 10:50:24', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(126, '2021-06-05 10:50:28', '002', 'aa', '', '离开了聊天室', ''),
+	(127, '2021-06-05 10:50:36', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(128, '2021-06-05 11:34:09', '002', 'aa', '', '离开了聊天室', ''),
+	(129, '2021-06-05 12:48:25', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(130, '2021-06-05 13:14:40', '001', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(131, '2021-06-05 15:06:31', '001', 'admin', '', '离开了聊天室', ''),
+	(132, '2021-06-05 15:06:31', '002', 'admin', '', '离开了聊天室', ''),
+	(133, '2021-06-10 07:32:05', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(134, '2021-06-10 07:32:38', '002', 'admin', '', '离开了聊天室', ''),
+	(135, '2021-06-10 07:32:41', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(136, '2021-06-10 07:36:00', '002', 'admin', '', '离开了聊天室', ''),
+	(137, '2021-06-10 07:36:02', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(138, '2021-06-10 07:37:00', '002', 'admin', '', '离开了聊天室', ''),
+	(139, '2021-06-10 07:37:06', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(140, '2021-06-10 07:37:37', '002', 'admin', '', '离开了聊天室', ''),
+	(141, '2021-06-10 07:37:47', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(142, '2021-06-10 20:36:33', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(143, '2021-06-10 20:36:45', '002', 'admin', '', '离开了聊天室', ''),
+	(144, '2021-06-10 20:36:47', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(145, '2021-06-10 20:39:09', '002', 'admin', '', '离开了聊天室', ''),
+	(146, '2021-06-10 20:39:12', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(147, '2021-06-10 20:39:20', '002', 'admin', '', '离开了聊天室', ''),
+	(148, '2021-06-10 20:39:28', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(149, '2021-06-10 20:41:58', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(150, '2021-06-10 20:44:26', '002', 'admin', '', '离开了聊天室', ''),
+	(151, '2021-06-10 20:44:32', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(152, '2021-06-10 20:48:57', '002', 'admin', '', '离开了聊天室', ''),
+	(153, '2021-06-10 20:49:06', '002', 'bb', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(154, '2021-06-10 20:53:01', '002', 'bb', '', '离开了聊天室', ''),
+	(155, '2021-06-10 20:55:19', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(156, '2021-06-10 20:55:37', '002', 'admin', '', '离开了聊天室', ''),
+	(157, '2021-06-10 20:55:45', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(158, '2021-06-10 20:55:46', '002', 'aa', '', '离开了聊天室', ''),
+	(159, '2021-06-10 20:56:05', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(160, '2021-06-10 21:07:01', '002', 'aa', '', '离开了聊天室', ''),
+	(161, '2021-06-10 21:07:05', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(162, '2021-06-10 21:07:20', '002', 'aa', '', '离开了聊天室', ''),
+	(163, '2021-06-10 21:07:23', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(164, '2021-06-10 21:07:49', '002', 'aa', '', '离开了聊天室', ''),
+	(165, '2021-06-10 21:07:52', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(166, '2021-06-10 21:44:38', '002', 'aa', '', '离开了聊天室', ''),
+	(167, '2021-06-10 21:44:48', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(168, '2021-06-10 21:50:13', '002', 'aa', '', '离开了聊天室', ''),
+	(169, '2021-06-10 21:50:24', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(170, '2021-06-10 21:52:55', '002', 'aa', '', '离开了聊天室', ''),
+	(171, '2021-06-10 21:53:05', '002', 'bb', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(172, '2021-06-10 21:59:07', '002', 'bb', '', '离开了聊天室', ''),
+	(173, '2021-06-10 21:59:14', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(174, '2021-06-10 22:08:42', '002', 'admin', '', '离开了聊天室', ''),
+	(175, '2021-06-10 22:08:54', '002', 'bb', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(176, '2021-06-10 22:28:19', '002', 'bb', '', '离开了聊天室', ''),
+	(177, '2021-06-10 22:28:22', '002', 'bb', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(178, '2021-06-11 20:33:48', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(179, '2021-06-11 20:33:51', '002', 'admin', '', '离开了聊天室', ''),
+	(180, '2021-06-11 20:33:56', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(181, '2021-06-11 20:34:54', '002', 'aa', '', '离开了聊天室', ''),
+	(182, '2021-06-11 20:34:57', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(183, '2021-06-11 20:35:00', '002', 'aa', '', '离开了聊天室', ''),
+	(184, '2021-06-11 20:35:02', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(185, '2021-06-11 20:35:31', '002', 'aa', '', '离开了聊天室', ''),
+	(186, '2021-06-11 20:35:37', '002', 'admin', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(187, '2021-06-11 20:36:04', '002', 'admin', '', '离开了聊天室', ''),
+	(188, '2021-06-11 20:36:14', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(189, '2021-06-11 20:47:00', '002', 'aa', '', '离开了聊天室', ''),
+	(190, '2021-06-11 21:18:31', '002', 'aa', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64');
 /*!40000 ALTER TABLE `ws_chatlog` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_circle
@@ -535,9 +903,9 @@ CREATE TABLE IF NOT EXISTS `ws_file` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0:无效 1:有效',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2990 DEFAULT CHARSET=utf8 COMMENT='文件表';
+) ENGINE=InnoDB AUTO_INCREMENT=3088 DEFAULT CHARSET=utf8 COMMENT='文件表';
 
--- Dumping data for table zhdd.ws_file: ~222 rows (approximately)
+-- Dumping data for table zhdd.ws_file: ~320 rows (approximately)
 /*!40000 ALTER TABLE `ws_file` DISABLE KEYS */;
 INSERT INTO `ws_file` (`id`, `user`, `folder`, `filename`, `disk_path`, `url`, `file_size`, `author`, `track_length`, `access_status`, `create_time`, `update_time`, `status`) VALUES
 	(517, 'aa', 'headImg', '1.jpg', 'D:\\\\temp\\\\headImg', 'http://127.0.0.1:8101/headImg\\1.jpg', 451216, '', '', 1, '2020-05-11 18:29:55', '2020-05-11 18:29:55', 1),
@@ -761,7 +1129,105 @@ INSERT INTO `ws_file` (`id`, `user`, `folder`, `filename`, `disk_path`, `url`, `
 	(2986, 'admin', 'adsBackImg', '6.jpg', 'D:\\\\temp\\\\adsBackImg', 'http://127.0.0.1:8101/adsBackImg/b361299e-3763-4c7c-8621-4a1b6d75b7d6.jpg', 22627, '', '00:00', 1, '2021-05-27 21:37:12', '2021-05-27 21:37:12', 1),
 	(2987, 'admin', 'adsBackImg', '8.jpg', 'D:\\\\temp\\\\adsBackImg', 'http://127.0.0.1:8101/adsBackImg/b2a35ac5-e895-4c89-a645-131d23adac34.jpg', 18612, '', '00:00', 1, '2021-05-27 21:37:29', '2021-05-27 21:37:29', 1),
 	(2988, 'admin', 'adsBackImg', '2.jpg', 'D:\\\\temp\\\\adsBackImg', 'http://127.0.0.1:8101/adsBackImg/6a94b2d4-f72c-484f-a28a-fa8626f7d2cf.jpg', 21919, '', '00:00', 1, '2021-05-27 21:37:47', '2021-05-27 21:37:47', 1),
-	(2989, 'admin', 'adsBackImg', '5.jpg', 'D:\\\\temp\\\\adsBackImg', 'http://127.0.0.1:8101/adsBackImg/87665e46-3361-4c66-9111-9835d3e3e9be.jpg', 18667, '', '00:00', 1, '2021-05-27 21:38:01', '2021-05-27 21:38:01', 1);
+	(2989, 'admin', 'adsBackImg', '5.jpg', 'D:\\\\temp\\\\adsBackImg', 'http://127.0.0.1:8101/adsBackImg/87665e46-3361-4c66-9111-9835d3e3e9be.jpg', 18667, '', '00:00', 1, '2021-05-27 21:38:01', '2021-05-27 21:38:01', 1),
+	(2990, 'admin', 'test', 'Apink (에이핑크) - Secret.mp3', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/f4267c99-722d-4309-8d00-61e8d0c3a6b3.mp3', 3852726, '', '00:00', 0, '2021-06-02 22:09:10', '2021-06-02 22:09:10', 1),
+	(2991, 'admin', 'test', '2BiC (투빅) - 우리 다시 사랑한다면 (如果我们重新相爱).mp3', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/3ecc9007-3a29-48ad-9776-af5e7d1a8bee.mp3', 4241479, '', '00:00', 0, '2021-06-02 22:09:10', '2021-06-02 22:09:10', 1),
+	(2992, 'admin', 'test', 'Apink (에이핑크) - LUV (Korean ver_).mp3', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/71de3ed0-a530-4dbf-a297-791545c1e6a1.mp3', 3880344, '', '00:00', 0, '2021-06-02 22:09:10', '2021-06-02 22:09:10', 1),
+	(2993, 'admin', 'test', 'Ailee (에일리) - 보여줄게 (给你看).mp3', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/530d0bae-7443-49c2-bd70-0b8131e21fa7.mp3', 3801255, '', '00:00', 0, '2021-06-02 22:09:10', '2021-06-02 22:09:10', 1),
+	(2994, 'admin', 'test', 'Annyeong (안녕) - 너의 번호를 누르고 (Prod_ 영화처럼).mp3', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/465107df-0fc1-41b7-ac19-b063bb8fdf6e.mp3', 4010950, '', '00:00', 0, '2021-06-02 22:09:10', '2021-06-02 22:09:10', 1),
+	(2995, 'admin', 'test', '5urprise (서프라이즈) - Jump.mp3', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/46dda8b2-d271-4f95-969c-d5c544461a20.mp3', 2853462, '', '00:00', 0, '2021-06-02 22:09:10', '2021-06-02 22:09:10', 1),
+	(2996, 'admin', 'test', 'Apink (에이핑크) - Wanna Be.mp3', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/fd2a7e38-a022-4e58-923d-2d6dc22403ca.mp3', 3589836, '', '00:00', 0, '2021-06-02 22:09:10', '2021-06-02 22:09:10', 1),
+	(2997, 'admin', 'test', 'Apink (에이핑크) - 천사가 아냐 (不是天使).mp3', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/85ea2f38-2105-42f0-9445-927619f25589.mp3', 3359573, '', '00:00', 0, '2021-06-02 22:09:10', '2021-06-02 22:09:10', 1),
+	(2998, 'admin', 'merchant', '5.jpg', 'D:\\\\temp\\\\merchant', 'http://127.0.0.1:8101/merchant/645b9b90-c99e-4358-997d-1372a323bde2.jpg', 8768, '', '00:00', 1, '2021-06-05 09:54:37', '2021-06-05 09:54:37', 1),
+	(2999, 'aa', 'merchant', '6.jpg', 'D:\\\\temp\\\\merchant', 'http://127.0.0.1:8101/merchant/8a5f721e-9a39-4476-b725-7d5537a9d0db.jpg', 22627, '', '00:00', 1, '2021-06-05 09:55:55', '2021-06-05 09:55:55', 1),
+	(3000, 'aa', 'merchant', '6.jpg', 'D:\\\\temp\\\\merchant', 'http://127.0.0.1:8101/merchant/5411331b-bf99-47c3-ac62-a6f3f002a82d.jpg', 22627, '', '00:00', 1, '2021-06-05 10:01:40', '2021-06-05 10:01:40', 1),
+	(3001, 'aa', 'merchant', '6.jpg', 'D:\\\\temp\\\\merchant', 'http://127.0.0.1:8101/merchant/320d4fdb-5b61-4019-a477-183c9759481e.jpg', 22627, '', '00:00', 1, '2021-06-05 10:04:36', '2021-06-05 10:04:36', 1),
+	(3002, 'aa', 'merchant', '6.jpg', 'D:\\\\temp\\\\merchant', 'http://127.0.0.1:8101/merchant/1ea9fed4-1b92-49fc-b495-ab93d60becc9.jpg', 22627, '', '00:00', 1, '2021-06-05 10:09:09', '2021-06-05 10:09:09', 1),
+	(3003, 'aa', 'test', '4.jpg', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/fffdc95f-f049-4b87-a348-882a7f8f1ddd.jpg', 46312, '', '00:00', 0, '2021-06-05 11:01:29', '2021-06-05 11:01:29', 1),
+	(3004, 'aa', 'test', '6.jpg', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/7e76d642-e995-4f9c-8c27-32b2cca72a13.jpg', 22627, '', '00:00', 0, '2021-06-05 11:01:30', '2021-06-05 11:01:30', 1),
+	(3005, 'aa', 'test', '5.jpg', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/a375bff6-090a-45ee-bd09-c9f288761bd9.jpg', 8768, '', '00:00', 0, '2021-06-05 11:01:30', '2021-06-05 11:01:30', 1),
+	(3006, 'aa', 'test', 'vmware-0.log', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/7e419d53-c260-4cdb-bb85-51aba35dde6e.log', 262879, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3007, 'aa', 'test', 'CentOS 64 位.nvram', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/4c586e48-e6b0-453f-b921-426c9118f566.nvram', 8684, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3008, 'aa', 'test', 'vmware-2.log', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/607f93f1-7836-46d5-9134-cdbb5debb419.log', 280427, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3009, 'aa', 'test', 'vmware.log', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/11e6d4c0-4ebe-4732-834f-05b647f51a56.log', 232771, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3010, 'aa', 'test', 'CentOS 64 位-s006.vmdk', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/d210fa54-58ac-4771-9ece-b7007eeec9a5.vmdk', 65536, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3011, 'aa', 'test', 'vmware-1.log', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/c6b513b8-070a-4c3a-b359-6a869167719f.log', 260113, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3012, 'aa', 'test', 'vprintproxy-0.log', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/40d2bcc2-e936-4c91-8111-a2f635686a7e.log', 4294, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3013, 'aa', 'test', 'CentOS 64 位.vmdk', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/59318708-c882-4f34-b406-b3eff06544db.vmdk', 735, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3014, 'aa', 'test', 'vprintproxy.log', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/bf56076f-5d79-4e3d-b827-ccda9c3c1f79.log', 4033, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3015, 'aa', 'test', 'vprintproxy-2.log', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/a5d4b523-3f85-40be-8b0b-d1e92ed3bd53.log', 4293, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3016, 'aa', 'test', 'CentOS 64 位.vmx', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/4f3adf98-03dd-410e-b7b2-6c6c1544d73f.vmx', 2822, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3017, 'aa', 'test', 'vprintproxy-1.log', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/51d1665c-bdae-4443-bfa8-e15608f4a687.log', 4293, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3018, 'aa', 'test', 'CentOS 64 位.vmxf', 'D:\\\\temp\\\\test', 'http://127.0.0.1:8101/test/705f6120-d944-4ef6-87bf-d076a879ab88.vmxf', 295, '', '00:00', 0, '2021-06-05 11:23:45', '2021-06-05 11:23:45', 1),
+	(3019, 'admin', 'goodsType', '6.jpg', 'E:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/2ac1a267-bdb2-450a-976d-fa49dd649406.jpg', 49774, '', '00:00', 0, '2021-06-10 07:36:23', '2021-06-10 07:36:23', 1),
+	(3020, 'admin', 'goodsType', '9.jpg', 'E:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/6eb1e35e-e50b-4c9d-89a7-a454419016fa.jpg', 1019943, '', '00:00', 0, '2021-06-10 07:37:17', '2021-06-10 07:37:17', 1),
+	(3021, 'admin', 'goodsType', 'u=1455076401,2481686948&fm=26&gp=0.jpg', 'E:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/e47dc9e0-9970-4598-a3c6-603431a8ddf3.jpg', 37810, '', '00:00', 0, '2021-06-10 20:38:58', '2021-06-10 20:38:58', 1),
+	(3022, 'admin', 'goodsType', 'u=1455076401,2481686948&fm=26&gp=0.jpg', 'E:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/85bc8acb-2263-4548-a1d6-7fd3e850d3a1.jpg', 37810, '', '00:00', 0, '2021-06-10 20:39:38', '2021-06-10 20:39:38', 1),
+	(3023, 'admin', 'goodsType', 'u=1455076401,2481686948&fm=26&gp=0.jpg', 'D:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/3e18804f-9c5c-4ff2-ba04-e77b14b84e9f.jpg', 37810, '', '00:00', 1, '2021-06-10 20:44:42', '2021-06-10 20:44:42', 1),
+	(3024, 'admin', 'goodsType', 'u=279547965,105024409&fm=26&gp=0.jpg', 'D:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/49339e4b-1f9a-4bd5-83ba-c1cbcc8e2505.jpg', 33674, '', '00:00', 1, '2021-06-10 20:45:22', '2021-06-10 20:45:22', 1),
+	(3025, 'admin', 'goodsType', 'u=391568885,2761186398&fm=26&gp=0.jpg', 'D:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/bcabfa8b-acc9-41a9-a8ef-5095ac91554d.jpg', 31444, '', '00:00', 1, '2021-06-10 20:45:34', '2021-06-10 20:45:34', 1),
+	(3026, 'admin', 'goodsType', 'f9dcd100baa1cd11871b88a1b812c8fcc2ce2d86.jpg', 'D:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/acf97a26-303f-46ae-9d3e-0e148d900362.jpg', 164473, '', '00:00', 1, '2021-06-10 20:45:51', '2021-06-10 20:45:51', 1),
+	(3027, 'admin', 'goodsType', 'u=3986116355,280458356&fm=26&gp=0.jpg', 'D:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/a4a5a57c-eaa6-4980-b1ec-6a68f98e95d6.jpg', 33781, '', '00:00', 1, '2021-06-10 20:46:03', '2021-06-10 20:46:03', 1),
+	(3028, 'bb', 'merchant', 'hxsc.jpg', 'D:\\\\temp\\\\merchant', 'http://127.0.0.1:8101/merchant/cb1ab333-06f2-4cc7-90be-e1016a26335a.jpg', 58497, '', '00:00', 1, '2021-06-10 20:52:37', '2021-06-10 20:52:37', 1),
+	(3029, 'aa', 'merchant', 'sg.jpg', 'D:\\\\temp\\\\merchant', 'http://127.0.0.1:8101/merchant/ef9ba3a9-c2b7-4716-9784-d6adf6357787.jpg', 38978, '', '00:00', 1, '2021-06-10 20:57:10', '2021-06-10 20:57:10', 1),
+	(3030, 'aa', 'goods', 'pg1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/7fe2cecb-0308-4d87-ba15-319c9fb72498.jpg', 19475, '', '00:00', 1, '2021-06-10 21:01:32', '2021-06-10 21:01:32', 1),
+	(3031, 'aa', 'goods', 'pg0.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/318e4fb6-3a2a-4ff1-a41c-a4397c416a32.jpg', 42122, '', '00:00', 1, '2021-06-10 21:01:35', '2021-06-10 21:01:35', 1),
+	(3032, 'aa', 'goods', 'pg2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/4cc96beb-a768-4430-81d0-d8611a344422.jpg', 77122, '', '00:00', 1, '2021-06-10 21:01:38', '2021-06-10 21:01:38', 1),
+	(3033, 'aa', 'goods', 'pg3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/4981c9fe-241a-4df2-ad24-6400435e03d1.jpg', 31281, '', '00:00', 1, '2021-06-10 21:01:40', '2021-06-10 21:01:40', 1),
+	(3034, 'aa', 'goods', 'pg4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/84000fc2-1e47-4758-b491-d59ff3ef9273.jpg', 121870, '', '00:00', 1, '2021-06-10 21:01:43', '2021-06-10 21:01:43', 1),
+	(3035, 'aa', 'goods', 'xj0.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/31eb9533-7c14-4134-a86b-5aa0f76d1781.jpg', 10659, '', '00:00', 1, '2021-06-10 21:04:01', '2021-06-10 21:04:01', 1),
+	(3036, 'aa', 'goods', 'xj1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/c3cc2b49-4d58-46c3-bcf0-f3aa84721d5b.jpg', 7744, '', '00:00', 1, '2021-06-10 21:04:04', '2021-06-10 21:04:04', 1),
+	(3037, 'aa', 'goods', 'xj2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/34b0bfd0-39a9-491f-b250-bd7f3f42e598.jpg', 25342, '', '00:00', 1, '2021-06-10 21:04:06', '2021-06-10 21:04:06', 1),
+	(3038, 'aa', 'goods', 'xj3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/cca18580-cc79-45c6-83f2-8ebdfb6b059c.jpg', 12485, '', '00:00', 1, '2021-06-10 21:04:08', '2021-06-10 21:04:08', 1),
+	(3039, 'aa', 'goods', 'xj4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/528837ec-8329-4674-ae82-e32d006c36c0.jpg', 109843, '', '00:00', 1, '2021-06-10 21:04:10', '2021-06-10 21:04:10', 1),
+	(3040, 'aa', 'goods', 'xg0.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/23a32c2a-c2e9-4456-9c8d-f775d7c9ea51.jpg', 22216, '', '00:00', 1, '2021-06-10 21:45:42', '2021-06-10 21:45:42', 1),
+	(3041, 'aa', 'goods', 'xg1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/b4811278-7557-4ae7-a222-a928423a6b89.jpg', 36003, '', '00:00', 1, '2021-06-10 21:45:46', '2021-06-10 21:45:46', 1),
+	(3042, 'aa', 'goods', 'xg2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/39950454-0bc3-4eea-a0af-8e2d188805b9.jpg', 51449, '', '00:00', 1, '2021-06-10 21:45:49', '2021-06-10 21:45:49', 1),
+	(3043, 'aa', 'goods', 'xg3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/acb3dac4-d7da-4390-a4a4-46962480ad8f.jpg', 63472, '', '00:00', 1, '2021-06-10 21:45:52', '2021-06-10 21:45:52', 1),
+	(3044, 'aa', 'goods', 'xg4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/f4df93af-107f-498c-ae2f-29c037ef5748.jpg', 128703, '', '00:00', 1, '2021-06-10 21:45:55', '2021-06-10 21:45:55', 1),
+	(3045, 'aa', 'goods', 'll0.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/f795c425-110e-4d6b-abfd-f3dc4d492e2e.jpg', 32541, '', '00:00', 1, '2021-06-10 21:48:52', '2021-06-10 21:48:52', 1),
+	(3046, 'aa', 'goods', 'll1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/34c91aa0-17c1-4ac3-a0c4-2ed1c8121445.jpg', 60410, '', '00:00', 1, '2021-06-10 21:48:54', '2021-06-10 21:48:54', 1),
+	(3047, 'aa', 'goods', 'll2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/56c491a5-8c12-4f8c-a419-1a89b03b6d0d.jpg', 31678, '', '00:00', 1, '2021-06-10 21:48:57', '2021-06-10 21:48:57', 1),
+	(3048, 'aa', 'goods', 'll3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/66d0a737-ad1c-4422-9145-37c0135b63e7.jpg', 153325, '', '00:00', 1, '2021-06-10 21:49:00', '2021-06-10 21:49:00', 1),
+	(3049, 'aa', 'goods', 'll4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/8aca2ae4-7461-4eeb-b959-4f660b4b6a52.jpg', 27839, '', '00:00', 1, '2021-06-10 21:49:02', '2021-06-10 21:49:02', 1),
+	(3050, 'aa', 'goods', 'hlg0.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/fd7d0fc7-7aa4-4deb-8686-63774e8c65bd.jpg', 235093, '', '00:00', 1, '2021-06-10 21:52:20', '2021-06-10 21:52:20', 1),
+	(3051, 'aa', 'goods', 'hlg1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/db5d54be-0c59-405f-90ae-2a72f17de736.jpg', 77019, '', '00:00', 1, '2021-06-10 21:52:21', '2021-06-10 21:52:21', 1),
+	(3052, 'aa', 'goods', 'hlg2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/385eaba6-0107-4e32-8af7-4bb7cd07e5d7.jpg', 76443, '', '00:00', 1, '2021-06-10 21:52:23', '2021-06-10 21:52:23', 1),
+	(3053, 'aa', 'goods', 'hlg3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/9557ef2a-a70c-4aaa-94d4-63e585688904.jpg', 36106, '', '00:00', 1, '2021-06-10 21:52:25', '2021-06-10 21:52:25', 1),
+	(3054, 'aa', 'goods', 'hlg4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/aa5cc66e-fdae-41f8-8a33-53a07aabecb6.jpg', 78454, '', '00:00', 1, '2021-06-10 21:52:27', '2021-06-10 21:52:27', 1),
+	(3055, 'admin', 'goodsType', 'scdp.jpg', 'D:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/0fe8c1bf-e4d7-4116-b14a-31c476b1a46e.jpg', 52756, '', '00:00', 1, '2021-06-10 22:00:57', '2021-06-10 22:00:57', 1),
+	(3056, 'admin', 'goodsType', 'xxsg.jpg', 'D:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/f8aa627b-3e58-469c-9782-6b2055ec0f0e.jpg', 173646, '', '00:00', 1, '2021-06-10 22:01:45', '2021-06-10 22:01:45', 1),
+	(3057, 'admin', 'goodsType', 'jxrl.jpg', 'D:\\\\temp\\\\goodsType', 'http://127.0.0.1:8101/goodsType/9a2266ad-0f68-474f-bd3d-40aa26159c9f.jpg', 76204, '', '00:00', 1, '2021-06-10 22:02:36', '2021-06-10 22:02:36', 1),
+	(3058, 'bb', 'goods', 'by0.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/b31ed3ce-835e-4c2e-b66f-d69f05d581db.jpg', 59294, '', '00:00', 1, '2021-06-10 22:09:48', '2021-06-10 22:09:48', 1),
+	(3059, 'bb', 'goods', 'by1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/a66b2a47-580b-4dd3-93dc-dc291d52e4fc.jpg', 81605, '', '00:00', 1, '2021-06-10 22:09:50', '2021-06-10 22:09:50', 1),
+	(3060, 'bb', 'goods', 'by2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/a465f4f6-39e4-41c1-8ca3-63711f308b1d.jpg', 32643, '', '00:00', 1, '2021-06-10 22:09:52', '2021-06-10 22:09:52', 1),
+	(3061, 'bb', 'goods', 'by3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/b35f4f32-ccf8-49de-a469-48cbc9437296.jpg', 111733, '', '00:00', 1, '2021-06-10 22:09:54', '2021-06-10 22:09:54', 1),
+	(3062, 'bb', 'goods', 'by4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/0c4d7987-9abf-48f6-9782-aebd24be1e12.jpg', 70857, '', '00:00', 1, '2021-06-10 22:09:56', '2021-06-10 22:09:56', 1),
+	(3063, 'bb', 'goods', 'dlx0.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/1c354f5f-6410-4269-b326-a9e308acc0d5.jpg', 32224, '', '00:00', 1, '2021-06-10 22:10:43', '2021-06-10 22:10:43', 1),
+	(3064, 'bb', 'goods', 'dlx1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/46a018ad-f881-47c5-b0f4-45d43391daec.jpg', 128655, '', '00:00', 1, '2021-06-10 22:10:46', '2021-06-10 22:10:46', 1),
+	(3065, 'bb', 'goods', 'dlx2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/d5e378d3-ede8-4a88-a628-b30898660f3b.jpg', 55690, '', '00:00', 1, '2021-06-10 22:10:48', '2021-06-10 22:10:48', 1),
+	(3066, 'bb', 'goods', 'dlx3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/ec1b99b6-9066-4cda-b43c-36a14044dc0d.jpg', 254609, '', '00:00', 1, '2021-06-10 22:10:50', '2021-06-10 22:10:50', 1),
+	(3067, 'bb', 'goods', 'dlx4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/24f57881-eb53-4d0f-80bc-850b5915163b.jpg', 69026, '', '00:00', 1, '2021-06-10 22:11:59', '2021-06-10 22:11:59', 1),
+	(3068, 'bb', 'goods', 'dwx0.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/aae1d812-9ca1-4c99-8320-5071def6ebc9.jpg', 58145, '', '00:00', 1, '2021-06-10 22:12:46', '2021-06-10 22:12:46', 1),
+	(3069, 'bb', 'goods', 'dwx1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/f9baa7dd-d46c-485c-a89b-66af353cb11e.jpg', 81426, '', '00:00', 1, '2021-06-10 22:12:49', '2021-06-10 22:12:49', 1),
+	(3070, 'bb', 'goods', 'dwx2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/556aeae2-cbaf-4179-a57d-f5f599228151.jpg', 161531, '', '00:00', 1, '2021-06-10 22:12:50', '2021-06-10 22:12:50', 1),
+	(3071, 'bb', 'goods', 'dwx3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/250d4172-0683-4e9a-9543-b8b6e4f5b9c8.jpg', 74220, '', '00:00', 1, '2021-06-10 22:12:53', '2021-06-10 22:12:53', 1),
+	(3072, 'bb', 'goods', 'dwx4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/3e92931e-f4e8-4728-8991-b7924eb60411.jpg', 109374, '', '00:00', 1, '2021-06-10 22:12:54', '2021-06-10 22:12:54', 1),
+	(3073, 'bb', 'goods', 'hs0.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/ecca221e-09d7-41e4-a373-5ce865ed5303.jpg', 98565, '', '00:00', 1, '2021-06-10 22:13:31', '2021-06-10 22:13:31', 1),
+	(3074, 'bb', 'goods', 'hs1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/c33c75f9-9e46-4d8d-8633-153a71c9e3e5.jpg', 74535, '', '00:00', 1, '2021-06-10 22:13:34', '2021-06-10 22:13:34', 1),
+	(3075, 'bb', 'goods', 'hs2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/3f7c186c-169b-453b-9b53-0bbf733df904.jpg', 77662, '', '00:00', 1, '2021-06-10 22:13:36', '2021-06-10 22:13:36', 1),
+	(3076, 'bb', 'goods', 'hs3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/15a2473e-e460-41f8-854b-ed4099313998.jpg', 55612, '', '00:00', 1, '2021-06-10 22:13:39', '2021-06-10 22:13:39', 1),
+	(3077, 'bb', 'goods', 'hs4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/96b29c28-eb2a-4195-9cdc-267b2dccfa66.jpg', 110944, '', '00:00', 1, '2021-06-10 22:13:40', '2021-06-10 22:13:40', 1),
+	(3078, 'bb', 'goods', 'sh0.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/01bc250d-695c-4f42-b9a8-f9a36adf58c5.jpg', 33293, '', '00:00', 1, '2021-06-10 22:14:24', '2021-06-10 22:14:24', 1),
+	(3079, 'bb', 'goods', 'sh1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/58c42c8b-dbd1-47b8-b837-b1d0968856bf.jpg', 29585, '', '00:00', 1, '2021-06-10 22:14:27', '2021-06-10 22:14:27', 1),
+	(3080, 'bb', 'goods', 'sh2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/eedfe05b-fcd2-498c-b89a-c6e1b6716e9d.jpg', 84253, '', '00:00', 1, '2021-06-10 22:14:29', '2021-06-10 22:14:29', 1),
+	(3081, 'bb', 'goods', 'sh3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/4b84cffa-d20a-4efc-9773-031bb512feb1.jpg', 103572, '', '00:00', 1, '2021-06-10 22:14:31', '2021-06-10 22:14:31', 1),
+	(3082, 'bb', 'goods', 'sh4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/0dd01e03-ad32-4f24-82f4-3a2008059d22.jpg', 59883, '', '00:00', 1, '2021-06-10 22:14:33', '2021-06-10 22:14:33', 1),
+	(3083, 'bb', 'goods', 'sb0.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/b9bbc4f4-fa68-4ecd-984b-f86adf494611.jpg', 33293, '', '00:00', 1, '2021-06-10 22:15:40', '2021-06-10 22:15:40', 1),
+	(3084, 'bb', 'goods', 'sb1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/121ec583-c3d2-406c-9c38-82440b158ec7.jpg', 29585, '', '00:00', 1, '2021-06-10 22:15:43', '2021-06-10 22:15:43', 1),
+	(3085, 'bb', 'goods', 'sb2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/81e660eb-ef0f-496d-be75-d08c01addd8c.jpg', 84253, '', '00:00', 1, '2021-06-10 22:15:45', '2021-06-10 22:15:45', 1),
+	(3086, 'bb', 'goods', 'sb3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/0ef573c9-6bb8-43a2-9b59-5f05e7ddb5cb.jpg', 103572, '', '00:00', 1, '2021-06-10 22:15:47', '2021-06-10 22:15:47', 1),
+	(3087, 'bb', 'goods', 'sb4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/9073f2e6-4e7d-413c-8ab7-674e8182918c.jpg', 59883, '', '00:00', 1, '2021-06-10 22:15:50', '2021-06-10 22:15:50', 1);
 /*!40000 ALTER TABLE `ws_file` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_friends
@@ -896,63 +1362,10 @@ CREATE TABLE IF NOT EXISTS `ws_operation_log` (
   `access_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '访问时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5952 DEFAULT CHARSET=utf8 COMMENT='操作日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='操作日志表';
 
--- Dumping data for table zhdd.ws_operation_log: ~12 rows (approximately)
+-- Dumping data for table zhdd.ws_operation_log: ~0 rows (approximately)
 /*!40000 ALTER TABLE `ws_operation_log` DISABLE KEYS */;
-INSERT INTO `ws_operation_log` (`id`, `user_id`, `user_name`, `oper_type`, `oper_module`, `oper_submodule`, `oper_describe`, `oper_remark`, `request_url`, `cost_time`, `class_name`, `method_name`, `parameters`, `oper_result`, `error_msg`, `access_time`, `create_time`) VALUES
-	(5900, 1, 'admin', '页面', '聊天记录管理', '', '聊天记录页面', '', 'http://127.0.0.1:8100/zhddkk/wsChatlog', 59, 'com.pjb.springbootjwt.zhddkk.controller.WsChatlogController', 'wsChatlog', '', 'zhddkk/wsChatlog/wsChatlog', '', '2021-05-27 21:49:00', '2021-05-27 21:49:00'),
-	(5901, 1, 'admin', '查询', '聊天记录管理', '', '聊天记录列表', '', 'http://127.0.0.1:8100/zhddkk/wsChatlog/list', 7, 'com.pjb.springbootjwt.zhddkk.controller.WsChatlogController', 'list', 'arg0:WsChatlogDO(id=null, time=null, roomName=, user=, toUser=, msg=null, remark=null, beginTime=, endTime=) ', 'com.pjb.springbootjwt.zhddkk.base.Result@37302659', '', '2021-05-27 21:49:00', '2021-05-27 21:49:00'),
-	(5902, NULL, '', '页面', '登录', '', '登陆首页页面', '', 'http://127.0.0.1:8100/', 6, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'home', '', 'ws/login', '', '2021-05-27 21:53:43', '2021-05-27 21:53:43'),
-	(5903, NULL, '', '页面', '登录', '', '获取验证码', '', 'http://127.0.0.1:8100/generateVerifyCode.do', 439, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'getCode', '', 'com.pjb.springbootjwt.zhddkk.base.Result@631a4979', '', '2021-05-27 21:53:44', '2021-05-27 21:53:45'),
-	(5904, 1, 'admin', '更新', '登录', '', '登录', '', 'http://127.0.0.1:8100/login.do', 837, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'login', 'arg0:admin arg1:admin arg2:5 ', NULL, '', '2021-05-27 21:53:47', '2021-05-27 21:53:48'),
-	(5905, 1, 'admin', '页面', '注册', '', '登录成功页面', '', 'http://127.0.0.1:8100/index.page', 0, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'wsclientIndex', '', 'index/wsclientIndex_v4', '', '2021-05-27 21:53:48', '2021-05-27 21:53:48'),
-	(5906, 1, 'admin', '页面', '音乐播放器', '', '简易音乐播放器首页', '', 'http://127.0.0.1:8100/file/musicPlayerSimple.page', 2, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'musicPlayerSimple', '', 'music/musicPlayerSimple', '', '2021-05-27 21:53:48', '2021-05-27 21:53:49'),
-	(5907, 1, 'admin', '查询', '音乐播放器', '', '显示音乐列表', '', 'http://127.0.0.1:8100/file/showFiles.do', 2, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'showFiles', 'arg0:music ', 'com.pjb.springbootjwt.zhddkk.base.Result@4f6971e4', '', '2021-05-27 21:53:50', '2021-05-27 21:53:50'),
-	(5908, 1, 'admin', '查询', '聊天', '', '获取房间人员列表', '', 'http://127.0.0.1:8100/getChatRoomInfo.json', 5, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'getChatRoomInfo', 'arg0:002 ', 'com.pjb.springbootjwt.zhddkk.base.Result@73fb32fe', '', '2021-05-27 21:53:50', '2021-05-27 21:53:50'),
-	(5909, 1, 'admin', '页面', '音乐播放器', '', '音乐播放器首页', '', 'http://127.0.0.1:8100/file/musicPlayer.page', 0, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'musicPlayer', '', 'music/musicPlayerVue', '', '2021-05-27 21:53:52', '2021-05-27 21:53:52'),
-	(5910, 1, 'admin', '页面', '音乐播放器', '', '音乐播放器首页', '', 'http://127.0.0.1:8100/file/musicPlayer.page', 0, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'musicPlayer', '', 'music/musicPlayerVue', '', '2021-05-27 21:53:52', '2021-05-27 21:53:52'),
-	(5911, 1, 'admin', '查询', '音乐播放器', '', '显示音乐列表', '', 'http://127.0.0.1:8100/file/showFiles.do', 1, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'showFiles', 'arg0:music ', 'com.pjb.springbootjwt.zhddkk.base.Result@7052d406', '', '2021-05-27 21:53:52', '2021-05-27 21:53:52'),
-	(5912, NULL, '', '页面', '登录', '', '登陆首页页面', '', 'http://127.0.0.1:8100/', 834, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'home', '', 'ws/login', '', '2021-05-27 21:54:35', '2021-05-27 21:54:36'),
-	(5913, NULL, '', '页面', '登录', '', '获取验证码', '', 'http://127.0.0.1:8100/generateVerifyCode.do', 312, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'getCode', '', 'com.pjb.springbootjwt.zhddkk.base.Result@71448627', '', '2021-05-27 21:54:37', '2021-05-27 21:54:37'),
-	(5914, NULL, '', '页面', '登录', '', '登陆首页页面', '', 'http://127.0.0.1:8100/', 1, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'home', '', 'ws/login', '', '2021-05-27 21:54:40', '2021-05-27 21:54:40'),
-	(5915, NULL, '', '更新', '登录', '', '登录', '', 'http://127.0.0.1:8100/login.do', 208, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'login', 'arg0:admin arg1:admin arg2:3 ', NULL, '', '2021-05-27 21:54:40', '2021-05-27 21:54:40'),
-	(5916, NULL, '', '页面', '登录', '', '获取验证码', '', 'http://127.0.0.1:8100/generateVerifyCode.do', 36, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'getCode', '', 'com.pjb.springbootjwt.zhddkk.base.Result@32c8ce9a', '', '2021-05-27 21:54:40', '2021-05-27 21:54:40'),
-	(5917, 1, 'admin', '更新', '登录', '', '登录', '', 'http://127.0.0.1:8100/login.do', 172, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'login', 'arg0:admin arg1:admin arg2:14 ', NULL, '', '2021-05-27 21:54:43', '2021-05-27 21:54:43'),
-	(5918, 1, 'admin', '页面', '注册', '', '登录成功页面', '', 'http://127.0.0.1:8100/index.page', 0, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'wsclientIndex', '', 'index/wsclientIndex_v4', '', '2021-05-27 21:54:43', '2021-05-27 21:54:43'),
-	(5919, 1, 'admin', '页面', '音乐播放器', '', '简易音乐播放器首页', '', 'http://127.0.0.1:8100/file/musicPlayerSimple.page', 4, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'musicPlayerSimple', '', 'music/musicPlayerSimple', '', '2021-05-27 21:54:43', '2021-05-27 21:54:43'),
-	(5920, 1, 'admin', '查询', '音乐播放器', '', '显示音乐列表', '', 'http://127.0.0.1:8100/file/showFiles.do', 3, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'showFiles', 'arg0:music ', 'com.pjb.springbootjwt.zhddkk.base.Result@ffbb0c6', '', '2021-05-27 21:54:44', '2021-05-27 21:54:44'),
-	(5921, 1, 'admin', '查询', '聊天', '', '获取房间人员列表', '', 'http://127.0.0.1:8100/getChatRoomInfo.json', 5, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'getChatRoomInfo', 'arg0:002 ', 'com.pjb.springbootjwt.zhddkk.base.Result@5d0f5fff', '', '2021-05-27 21:54:44', '2021-05-27 21:54:44'),
-	(5922, 1, 'admin', '页面', '朋友圈', '', '朋友圈首页', '', 'http://127.0.0.1:8100/ws/wsclientCircle.page', 0, 'com.pjb.springbootjwt.zhddkk.controller.WebSocketClientController', 'clientCircle', '', 'ws/wsclientCircleVue', '', '2021-05-27 21:54:46', '2021-05-27 21:54:46'),
-	(5923, 1, 'admin', '页面', '朋友圈', '', '朋友圈首页', '', 'http://127.0.0.1:8100/ws/wsclientCircle.page', 0, 'com.pjb.springbootjwt.zhddkk.controller.WebSocketClientController', 'clientCircle', '', 'ws/wsclientCircleVue', '', '2021-05-27 21:54:46', '2021-05-27 21:54:46'),
-	(5924, 1, 'admin', '查询', '朋友圈', '', '查看朋友圈列表', '', 'http://127.0.0.1:8100/ws/queryCircleByPage.do', 28, 'com.pjb.springbootjwt.zhddkk.controller.WebSocketClientController', 'queryCircleList', 'arg0:1 arg1:5 ', 'com.pjb.springbootjwt.zhddkk.base.Result@6a4a346e', '', '2021-05-27 21:54:47', '2021-05-27 21:54:47'),
-	(5925, 1, 'admin', '页面', '广告发布', '', '广告列表页面', '', 'http://127.0.0.1:8100/zhddkk/wsAds', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsAdsController', 'wsAds', '', 'zhddkk/wsAds/wsAds', '', '2021-05-27 21:54:49', '2021-05-27 21:54:49'),
-	(5926, 1, 'admin', '页面', '广告发布', '', '广告列表页面', '', 'http://127.0.0.1:8100/zhddkk/wsAds', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsAdsController', 'wsAds', '', 'zhddkk/wsAds/wsAds', '', '2021-05-27 21:54:49', '2021-05-27 21:54:49'),
-	(5927, 1, 'admin', '查询', '广告发布', '', '广告列表', '', 'http://127.0.0.1:8100/zhddkk/wsAds/list', 5, 'com.pjb.springbootjwt.zhddkk.controller.WsAdsController', 'list', 'arg0:com.pjb.springbootjwt.zhddkk.domain.WsAdsDO@7d2941cd ', 'com.pjb.springbootjwt.zhddkk.base.Result@553dbd1c', '', '2021-05-27 21:54:49', '2021-05-27 21:54:49'),
-	(5928, 1, 'admin', '查询', '广告发布', '', '广告列表', '', 'http://127.0.0.1:8100/zhddkk/wsAds/list', 4, 'com.pjb.springbootjwt.zhddkk.controller.WsAdsController', 'list', 'arg0:com.pjb.springbootjwt.zhddkk.domain.WsAdsDO@236663c8 ', 'com.pjb.springbootjwt.zhddkk.base.Result@5d986ab5', '', '2021-05-27 21:54:49', '2021-05-27 21:54:49'),
-	(5929, 1, 'admin', '页面', '配置', '', '通用配置页面', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/mgc', 1, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'wsCommon', 'arg1:mgc ', 'zhddkk/wsCommon/wsCommon', '', '2021-05-27 21:54:53', '2021-05-27 21:54:53'),
-	(5930, 1, 'admin', '页面', '配置', '', '通用配置页面', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/mgc', 1, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'wsCommon', 'arg1:mgc ', 'zhddkk/wsCommon/wsCommon', '', '2021-05-27 21:54:53', '2021-05-27 21:54:53'),
-	(5931, 1, 'admin', '查询', '配置', '', '通用配置列表', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/list', 1, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'list', 'arg0:com.pjb.springbootjwt.zhddkk.domain.WsCommonDO@5f3980b6 ', 'com.pjb.springbootjwt.zhddkk.base.Result@1663130c', '', '2021-05-27 21:54:53', '2021-05-27 21:54:53'),
-	(5932, 1, 'admin', '查询', '配置', '', '通用配置列表', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/list', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'list', 'arg0:com.pjb.springbootjwt.zhddkk.domain.WsCommonDO@37743e2a ', 'com.pjb.springbootjwt.zhddkk.base.Result@7ca31afc', '', '2021-05-27 21:54:53', '2021-05-27 21:54:53'),
-	(5933, 1, 'admin', '页面', '配置', '', '通用配置页面', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/zh', 1, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'wsCommon', 'arg1:zh ', 'zhddkk/wsCommon/wsCommon', '', '2021-05-27 21:54:54', '2021-05-27 21:54:54'),
-	(5934, 1, 'admin', '页面', '配置', '', '通用配置页面', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/zh', 1, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'wsCommon', 'arg1:zh ', 'zhddkk/wsCommon/wsCommon', '', '2021-05-27 21:54:54', '2021-05-27 21:54:54'),
-	(5935, 1, 'admin', '查询', '配置', '', '通用配置列表', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/list', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'list', 'arg0:com.pjb.springbootjwt.zhddkk.domain.WsCommonDO@43835da8 ', 'com.pjb.springbootjwt.zhddkk.base.Result@227388ed', '', '2021-05-27 21:54:54', '2021-05-27 21:54:54'),
-	(5936, 1, 'admin', '查询', '配置', '', '通用配置列表', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/list', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'list', 'arg0:com.pjb.springbootjwt.zhddkk.domain.WsCommonDO@6839dd86 ', 'com.pjb.springbootjwt.zhddkk.base.Result@292145a0', '', '2021-05-27 21:54:54', '2021-05-27 21:54:54'),
-	(5937, 1, 'admin', '页面', '配置', '', '通用配置页面', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/cyy', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'wsCommon', 'arg1:cyy ', 'zhddkk/wsCommon/wsCommon', '', '2021-05-27 21:54:54', '2021-05-27 21:54:54'),
-	(5938, 1, 'admin', '页面', '配置', '', '通用配置页面', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/cyy', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'wsCommon', 'arg1:cyy ', 'zhddkk/wsCommon/wsCommon', '', '2021-05-27 21:54:54', '2021-05-27 21:54:54'),
-	(5939, 1, 'admin', '查询', '配置', '', '通用配置列表', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/list', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'list', 'arg0:com.pjb.springbootjwt.zhddkk.domain.WsCommonDO@2108c02 ', 'com.pjb.springbootjwt.zhddkk.base.Result@3ea0ecb6', '', '2021-05-27 21:54:54', '2021-05-27 21:54:54'),
-	(5940, 1, 'admin', '查询', '配置', '', '通用配置列表', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/list', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'list', 'arg0:com.pjb.springbootjwt.zhddkk.domain.WsCommonDO@538bd73e ', 'com.pjb.springbootjwt.zhddkk.base.Result@417e88c0', '', '2021-05-27 21:54:54', '2021-05-27 21:54:54'),
-	(5941, 1, 'admin', '页面', '配置', '', '通用配置页面', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/zcwt', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'wsCommon', 'arg1:zcwt ', 'zhddkk/wsCommon/wsCommon', '', '2021-05-27 21:54:55', '2021-05-27 21:54:55'),
-	(5942, 1, 'admin', '页面', '配置', '', '通用配置页面', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/zcwt', 1, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'wsCommon', 'arg1:zcwt ', 'zhddkk/wsCommon/wsCommon', '', '2021-05-27 21:54:55', '2021-05-27 21:54:55'),
-	(5943, 1, 'admin', '查询', '配置', '', '通用配置列表', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/list', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'list', 'arg0:com.pjb.springbootjwt.zhddkk.domain.WsCommonDO@4d49162d ', 'com.pjb.springbootjwt.zhddkk.base.Result@6e2e8a54', '', '2021-05-27 21:54:55', '2021-05-27 21:54:55'),
-	(5944, 1, 'admin', '查询', '配置', '', '通用配置列表', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/list', 1, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'list', 'arg0:com.pjb.springbootjwt.zhddkk.domain.WsCommonDO@36c0f617 ', 'com.pjb.springbootjwt.zhddkk.base.Result@2e1bf3a2', '', '2021-05-27 21:54:55', '2021-05-27 21:54:55'),
-	(5945, 1, 'admin', '页面', '配置', '', '添加配置页面', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/add', 1, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'add', 'arg1:zcwt ', 'zhddkk/wsCommon/wsCommonForm', '', '2021-05-27 21:54:56', '2021-05-27 21:54:56'),
-	(5946, 1, 'admin', '页面', '配置', '', '添加配置页面', '', 'http://127.0.0.1:8100/zhddkk/wsCommon/add', 0, 'com.pjb.springbootjwt.zhddkk.controller.WsCommonController', 'add', 'arg1:zcwt ', 'zhddkk/wsCommon/wsCommonForm', '', '2021-05-27 21:55:02', '2021-05-27 21:55:02'),
-	(5947, 1, 'admin', '页面', '登录', '', '登陆首页页面', '', 'http://127.0.0.1:8100/', 0, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'home', '', 'redirect:/index.page', '', '2021-05-27 21:56:12', '2021-05-27 21:56:12'),
-	(5948, 1, 'admin', '页面', '注册', '', '登录成功页面', '', 'http://127.0.0.1:8100/index.page', 0, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'wsclientIndex', '', 'index/wsclientIndex_v4', '', '2021-05-27 21:56:12', '2021-05-27 21:56:12'),
-	(5949, 1, 'admin', '页面', '音乐播放器', '', '简易音乐播放器首页', '', 'http://127.0.0.1:8100/file/musicPlayerSimple.page', 0, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'musicPlayerSimple', '', 'music/musicPlayerSimple', '', '2021-05-27 21:56:12', '2021-05-27 21:56:12'),
-	(5950, 1, 'admin', '查询', '音乐播放器', '', '显示音乐列表', '', 'http://127.0.0.1:8100/file/showFiles.do', 1, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'showFiles', 'arg0:music ', 'com.pjb.springbootjwt.zhddkk.base.Result@76473258', '', '2021-05-27 21:56:13', '2021-05-27 21:56:13'),
-	(5951, 1, 'admin', '查询', '聊天', '', '获取房间人员列表', '', 'http://127.0.0.1:8100/getChatRoomInfo.json', 3, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'getChatRoomInfo', 'arg0:002 ', 'com.pjb.springbootjwt.zhddkk.base.Result@4494c42e', '', '2021-05-27 21:56:13', '2021-05-27 21:56:13');
 /*!40000 ALTER TABLE `ws_operation_log` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_scheduled_cron
@@ -981,9 +1394,9 @@ CREATE TABLE IF NOT EXISTS `ws_sign` (
   `user_name` varchar(50) NOT NULL DEFAULT '' COMMENT '用户名称',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '签到时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8 COMMENT='用户签到表';
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8 COMMENT='用户签到表';
 
--- Dumping data for table zhdd.ws_sign: ~91 rows (approximately)
+-- Dumping data for table zhdd.ws_sign: ~85 rows (approximately)
 /*!40000 ALTER TABLE `ws_sign` DISABLE KEYS */;
 INSERT INTO `ws_sign` (`id`, `user_id`, `user_name`, `create_time`) VALUES
 	(2, 23, 'aa', '2020-05-31 12:10:52'),
@@ -1096,7 +1509,11 @@ INSERT INTO `ws_sign` (`id`, `user_id`, `user_name`, `create_time`) VALUES
 	(109, 1, 'admin', '2021-05-20 23:45:36'),
 	(110, 1, 'admin', '2021-05-22 11:49:05'),
 	(111, 1, 'admin', '2021-05-23 18:19:13'),
-	(112, 1, 'admin', '2021-05-26 20:20:27');
+	(112, 1, 'admin', '2021-05-26 20:20:27'),
+	(113, 1, 'admin', '2021-05-29 07:28:39'),
+	(114, 1, 'admin', '2021-06-04 20:43:22'),
+	(115, 1, 'admin', '2021-06-05 13:14:43'),
+	(116, 24, 'bb', '2021-06-10 22:22:51');
 /*!40000 ALTER TABLE `ws_sign` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_users
@@ -1124,7 +1541,7 @@ CREATE TABLE IF NOT EXISTS `ws_users` (
 -- Dumping data for table zhdd.ws_users: ~34 rows (approximately)
 /*!40000 ALTER TABLE `ws_users` DISABLE KEYS */;
 INSERT INTO `ws_users` (`id`, `name`, `password`, `register_time`, `state`, `last_login_time`, `last_logout_time`, `enable`, `speak`, `coin_num`, `question1`, `answer1`, `question2`, `answer2`, `question3`, `answer3`, `create_time`) VALUES
-	(1, 'admin', 'MjQzMTBCNkQxNkM1NkZCNzk2M0ZCNEY1REMxQkM0NDk=', '2018-03-22 22:37:07', '0', '2021-05-27 21:54:42', '2021-05-22 11:51:00', '1', '1', 850, '你最喜欢的明星是谁?', '11', '你最喜欢的一首歌是什么?', '22', '你父亲的生日是什么时候', '33', '2018-12-12 10:10:15'),
+	(1, 'admin', 'MjQzMTBCNkQxNkM1NkZCNzk2M0ZCNEY1REMxQkM0NDk=', '2018-03-22 22:37:07', '0', '2021-06-11 20:35:34', '2021-06-11 20:36:04', '1', '1', 880, '你最喜欢的明星是谁?', '11', '你最喜欢的一首歌是什么?', '22', '你父亲的生日是什么时候', '33', '2018-12-12 10:10:15'),
 	(4, 'mb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-31 21:55:17', '0', '2020-07-03 09:29:04', '2018-12-12 16:07:08', '1', '1', 0, '你最喜欢的水果是什么?', 'apple', '你的初中在哪里？', '湖北', '你的第一次是什么时候？', '16', '2018-12-12 10:10:15'),
 	(5, '小七', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-24 11:03:07', '0', '2018-03-31 23:35:22', '2018-03-31 23:38:03', '1', '1', 0, '你最喜欢的明星是谁?', '用户', '你最喜欢的一首歌是?', '计划', '你的初恋女友是谁?', '哦了', '2018-12-12 10:10:15'),
 	(6, '小三', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-24 10:45:15', '0', '2018-03-25 22:28:51', '2018-03-25 22:27:00', '1', '1', 0, '你最喜欢的明星是谁?', '喜鹊', '你最喜欢的一首歌是?', '我的心', '你的初恋女友是谁?', '曹君怡', '2018-12-12 10:10:15'),
@@ -1142,8 +1559,8 @@ INSERT INTO `ws_users` (`id`, `name`, `password`, `register_time`, `state`, `las
 	(18, 'hch', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-22 22:36:37', '0', '2021-02-09 20:49:37', '2021-01-31 19:29:30', '1', '1', 80, '你最喜欢的明星是谁?', '张娜拉', '你最喜欢的一首歌是什么?', '天天', '你父亲的生日是什么时候', '6.0', '2018-12-12 10:10:15'),
 	(21, '徐志摩', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 10:10:50', '0', '2018-12-12 10:16:02', '2018-12-12 10:16:02', '1', '1', 0, '你最喜欢的水果是什么?', '梨子', '你父亲生日是什么时候?', '元旦节', '你最想去哪旅行?', '非洲', '2018-12-12 10:10:50'),
 	(22, 'hhh', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 13:55:37', '0', '2020-07-03 09:25:55', '2018-12-12 14:51:08', '1', '1', 0, '你最喜欢的水果是什么?', '梨子', '你父亲生日是什么时候?', 'dd', '你最想去哪旅行?', '한국', '2018-12-12 13:55:37'),
-	(23, 'aa', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:38:58', '0', '2021-05-22 09:12:39', '2021-01-16 09:48:39', '1', '1', 181, '你最喜欢的水果是什么?', '带到', '你父亲生日是什么时候?', '带到', '你最想去哪旅行?', '的啊', '2018-12-12 16:38:58'),
-	(24, 'bb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:39:16', '0', '2021-05-21 22:05:10', '2021-01-31 17:55:50', '1', '1', 35, '你最喜欢的水果是什么?', '的的', '你父亲生日是什么时候?', '都是大神', '你最想去哪旅行?', '都是的', '2018-12-12 16:39:16'),
+	(23, 'aa', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:38:58', '1', '2021-06-11 21:18:27', '2021-06-11 20:35:30', '1', '1', 181, '你最喜欢的水果是什么?', '带到', '你父亲生日是什么时候?', '带到', '你最想去哪旅行?', '的啊', '2018-12-12 16:38:58'),
+	(24, 'bb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:39:16', '0', '2021-06-10 22:08:51', '2021-06-10 21:59:07', '1', '1', 45, '你最喜欢的水果是什么?', '的的', '你父亲生日是什么时候?', '都是大神', '你最想去哪旅行?', '都是的', '2018-12-12 16:39:16'),
 	(25, 'vb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-13 15:34:55', '0', '2020-07-03 09:26:09', '2020-06-01 21:23:16', '1', '1', 0, '你最喜欢的水果是什么?', '的的', '你父亲生日是什么时候?', '33', '你最想去哪旅行?', '55', '2018-12-13 15:34:55'),
 	(26, 'jkx', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-13 15:35:13', '0', '2018-12-13 15:41:00', '2018-12-13 15:41:00', '1', '1', 0, '你最想去哪旅行?', '中国', '你最想去哪旅行?', '中国', '你怎么看待中国的房价?', '太高了', '2018-12-13 15:35:13'),
 	(28, 'good', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-13 15:35:31', '0', '2020-07-03 09:25:13', '2018-12-13 15:37:53', '1', '1', 0, '你的初中在哪里？', '不告诉你', '你父亲生日是什么时候?', '不告诉你', '你最想去哪旅行?', '不告诉你', '2018-12-13 15:35:31'),
