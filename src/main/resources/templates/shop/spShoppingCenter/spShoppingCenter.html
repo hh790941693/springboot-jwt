@@ -128,13 +128,13 @@
                             <a href="javascript:void(0);" @click="favoriteMerchant(goodsDetail.merchantId, 1)"><i class="fa fa-plus"></i>收藏店铺</a>
                     </span>
                     <span style="width:49%;display:inline-block;text-align: left;" v-if="goodsDetail.merchantFavoriteStatus == 1">
-                            <a href="javascript:void(0);" @click="favoriteMerchant(goodsDetail.merchantId, 2)"><i class="fa fa-check"></i>已收藏店铺</a>
+                            <a href="javascript:void(0);" style="color:#1ab394;" @click="favoriteMerchant(goodsDetail.merchantId, 2)"><i class="fa fa-check"></i>已收藏店铺</a>
                     </span>
                     <span style="width:49%;display:inline-block;text-align: right;" v-if="goodsDetail.goodsFavoriteStatus == 2">
                             <a href="javascript:void(0);" @click="favoriteGoods(goodsDetail.goodsId, 1)"><i class="fa fa-plus"></i>收藏商品</a>
                     </span>
                     <span style="width:49%;display:inline-block;text-align: right;" v-if="goodsDetail.goodsFavoriteStatus == 1">
-                            <a href="javascript:void(0);" @click="favoriteGoods(goodsDetail.goodsId, 2)"><i class="fa fa-check"></i>已收藏商品</a>
+                            <a href="javascript:void(0);" style="color:#1ab394;" @click="favoriteGoods(goodsDetail.goodsId, 2)"><i class="fa fa-check"></i>已收藏商品</a>
                     </span>
                 </div>
                 <hr/>
