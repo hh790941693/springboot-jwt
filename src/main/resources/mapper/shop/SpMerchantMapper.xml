@@ -2,5 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pjb.springbootjwt.shop.dao.SpMerchantDao">
-
+    <select id="queryMerchantDetail" resultType="com.pjb.springbootjwt.shop.dto.SpMerchantDTO">
+        select
+            t1.*,
+            IFNULL(t2.status, 2) AS merchant_favorite_status
+        from
+            sp_merchant t1
+        left join
+            sp_favorite t2
+        on
+            t1.merchant_id = t2.subject_id
+        and t2.subject_type = 2
+        and t2.user_id=#{loginUserId}
+        where
+            t1.merchant_id=#{merchantId}
+    </select>
 </mapper>

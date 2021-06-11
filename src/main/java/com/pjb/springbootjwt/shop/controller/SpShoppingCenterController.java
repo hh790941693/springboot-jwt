@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
 import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
+import com.pjb.springbootjwt.shop.dto.SpMerchantDTO;
 import com.pjb.springbootjwt.shop.service.SpGoodsService;
 import com.pjb.springbootjwt.shop.service.SpMerchantService;
 import com.pjb.springbootjwt.zhddkk.base.Result;
@@ -121,8 +122,8 @@ public class SpShoppingCenterController {
      */
     @RequestMapping("/merchantDetail")
     @ResponseBody
-    public Result<SpMerchantDO> merchantDetail(String merchantId){
-        SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("merchant_id", merchantId));
-        return Result.ok(spMerchantDO);
+    public Result<SpMerchantDTO> merchantDetail(String merchantId){
+        SpMerchantDTO spMerchantDTO = spMerchantService.queryMerchantDetail(merchantId);
+        return Result.ok(spMerchantDTO);
     }
 }

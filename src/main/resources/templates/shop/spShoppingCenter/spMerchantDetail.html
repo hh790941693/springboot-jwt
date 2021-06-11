@@ -55,7 +55,12 @@
 					<tr>
 						<td>店铺名称</td>
 						<td>{{merchantDetail.name}}
-
+							<span style="width:38%;display:inline-block;text-align: right;" v-if="merchantDetail.merchantFavoriteStatus == 2">
+								<a href="javascript:void(0);" @click="favoriteMerchant(merchantDetail.merchantId, 1)"><i class="fa fa-plus"></i>收藏店铺</a>
+							</span>
+							<span style="width:38%;display:inline-block;text-align: right;" v-if="merchantDetail.merchantFavoriteStatus == 1">
+								<a href="javascript:void(0);" style="color:#1ab394;" @click="favoriteMerchant(merchantDetail.merchantId, 2)"><i class="fa fa-check"></i>已收藏店铺</a>
+							</span>
 						</td>
 					</tr>
 					<tr>
@@ -202,7 +207,7 @@
 						},
 						success: function (result) {
 							layer.msg(result.msg);
-							that.queryGoodsList();
+							that.queryMerchantDetail();
 						}
 					});
 				},

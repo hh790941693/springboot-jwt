@@ -4,7 +4,7 @@ import com.pjb.springbootjwt.shop.domain.SpGoodsDO;
 import lombok.Data;
 
 /**
- * 商品详情
+ * 商品详情DTO.
  */
 @Data
 public class GoodsDetailDTO extends SpGoodsDO {
