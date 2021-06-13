@@ -40,7 +40,8 @@
             </div>
             
             <div style="width:300px;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid green;">
-                <p><span style="font-weight: bold;color: red;font-size: 22px;">￥{{cartObj.salePrice}}</span>&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through;color:grey;font-size: 22px;">￥{{cartObj.originalPrice}}</span></p>
+                    <span style="text-decoration:line-through;color:grey;font-size: 18px;">￥{{cartObj.originalPrice}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span style="font-weight: bold;color: red;font-size: 22px;">￥{{cartObj.salePrice}}</span>
             </div>
             <div style="width:100px;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid green;">
                 <a href="javascript:void(0)" @click="cartObj.goodsCount--">-</a>
