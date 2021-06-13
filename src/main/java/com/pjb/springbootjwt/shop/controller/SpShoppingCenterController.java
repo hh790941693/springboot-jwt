@@ -60,7 +60,7 @@ public class SpShoppingCenterController {
         if (StringUtils.isNotBlank(params.getMerchantName())) {
             wrapper.like("t2.name", params.getMerchantName());
         }
-        wrapper.ne("t1.status", 0);
+        wrapper.eq("t1.status", 1);
         wrapper.ne("t2.status", 0);
         wrapper.orderBy("t1.sale_price", params.isPriceSort());
         wrapper.orderBy("t1.sale_number", params.isSaleNumberSort());
