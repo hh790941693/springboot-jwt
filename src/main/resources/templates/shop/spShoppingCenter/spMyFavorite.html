@@ -42,7 +42,7 @@
 </head>
 <body>
     <div id="mainDiv">
-        <div id="merchantFavoriteDiv" style="width: 100%;height:320px;border:1px solid yellow;">
+        <div id="merchantFavoriteDiv" style="width: 100%;height:320px;padding-left:10px;border:1px solid yellow;">
             <p>
                 我的店铺收藏
             </p>
@@ -52,21 +52,21 @@
 				</div>
 
                 <div style="width:100%;height:20px;text-align: left;overflow: hidden;">
-                    <p><i class="fa fa-home"></i><a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+merchantDetail.merchantId" target="_blank">店铺名：{{merchantDetail.name}}</a></p>
+                    <p><i class="fa fa-home"></i><a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+merchantDetail.merchantId" target="_blank">&nbsp;店铺名：{{merchantDetail.name}}</a></p>
                 </div>
                 <div style="width:100%;height:20px;text-align: left;overflow: hidden;">
-                    <p><i class="fa fa-location-arrow"></i>地址：{{merchantDetail.address}}</p>
+                    <p><i class="fa fa-location-arrow"></i>&nbsp;地址：{{merchantDetail.address}}</p>
                 </div>
                 
                 <div style="width:100%;height:20px;text-align: left;overflow: hidden;">
-                    <p><i class="fa fa-phone"></i>联系电话：{{merchantDetail.contact}}</p>
+                    <p><i class="fa fa-phone"></i>&nbsp;联系电话：{{merchantDetail.contact}}</p>
                 </div>
                 
                 <div style="width:100%;height:20px;text-align: left;">
-                    <p v-if="merchantDetail.status == 0">店铺状态： 已关闭</p>
-                    <p v-if="merchantDetail.status == 1">店铺状态： 营业中</p>
-                    <p v-if="merchantDetail.status == 2">店铺状态： 暂停营业</p>
-                    <p v-if="merchantDetail.status == 3">店铺状态： 已打烊</p>
+                    <p v-if="merchantDetail.status == 0"><i class="fa fa-star"></i>&nbsp;店铺状态： 已关闭</p>
+                    <p v-if="merchantDetail.status == 1"><i class="fa fa-star"></i>&nbsp;店铺状态： 营业中</p>
+                    <p v-if="merchantDetail.status == 2"><i class="fa fa-star"></i>&nbsp;店铺状态： 暂停营业</p>
+                    <p v-if="merchantDetail.status == 3"><i class="fa fa-star"></i>&nbsp;店铺状态： 已打烊</p>
                 </div>
 			</div>
         </div>
