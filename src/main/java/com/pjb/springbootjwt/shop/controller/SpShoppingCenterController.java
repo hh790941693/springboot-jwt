@@ -3,13 +3,17 @@ package com.pjb.springbootjwt.shop.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
 import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
 import com.pjb.springbootjwt.shop.dto.SpMerchantDTO;
+import com.pjb.springbootjwt.shop.dto.SpFavoriteDTO;
+import com.pjb.springbootjwt.shop.domain.SpGoodsDO;
+import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
 import com.pjb.springbootjwt.shop.service.SpGoodsService;
 import com.pjb.springbootjwt.shop.service.SpMerchantService;
+import com.pjb.springbootjwt.shop.service.SpFavoriteService;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.apache.commons.lang.StringUtils;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +35,9 @@ public class SpShoppingCenterController {
 
     @Autowired
     private SpMerchantService spMerchantService;
+
+    @Autowired
+    private SpFavoriteService spFavoriteService;
 
     @GetMapping()
     public String SpShoppingCenter(){
@@ -125,5 +132,30 @@ public class SpShoppingCenterController {
     public Result<SpMerchantDTO> merchantDetail(String merchantId){
         SpMerchantDTO spMerchantDTO = spMerchantService.queryMerchantDetail(merchantId);
         return Result.ok(spMerchantDTO);
+    }
+
+    /**
+     * 我的收藏页面
+     * @return
+     */
+    @RequestMapping("/spMyFavorite.page")
+    public String spMyFavorite(){
+        return "shop/spShoppingCenter/spMyFavorite";
+    }
+
+    /**
+     * 查询我的收藏列表
+     * @return
+     */
+    @RequestMapping("/queryFavoriteSubjectList")
+    @ResponseBody
+    public Result<SpFavoriteDTO> queryFavoriteGoodsList(){
+        List<SpGoodsDO> goodsDoList = spFavoriteService.queryFavoriteGoodsList(SessionUtil.getSessionUserId());
+        List<SpMerchantDO> merchantDoList = spFavoriteService.queryFavoriteMerchantList(SessionUtil.getSessionUserId());
+
+        SpFavoriteDTO spFavoriteDTO = new SpFavoriteDTO();
+        spFavoriteDTO.setGoodsList(goodsDoList);
+        spFavoriteDTO.setMerchantList(merchantDoList);
+        return Result.ok(spFavoriteDTO);
     }
 }

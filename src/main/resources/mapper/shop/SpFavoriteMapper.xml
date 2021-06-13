@@ -2,5 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pjb.springbootjwt.shop.dao.SpFavoriteDao">
-
+    <select id="queryFavoriteGoodsList" resultType="com.pjb.springbootjwt.shop.domain.SpGoodsDO">
+        select
+          t2.*
+        from
+          sp_favorite t1
+        right join
+          sp_goods t2
+        on t1.subject_id = t2.goods_id
+        and t1.subject_type = 1
+        and t1.status = 1
+        where
+          t1.user_id=#{loginUserId}
+        order by
+          t1.create_time desc
+    </select>
+    
+    <select id="queryFavoriteMerchantList" resultType="com.pjb.springbootjwt.shop.domain.SpMerchantDO">
+        select
+          t2.*
+        from
+          sp_favorite t1
+        right join
+          sp_merchant t2
+        on t1.subject_id = t2.merchant_id
+        and t1.subject_type = 2
+        and t1.status = 1
+        where
+          t1.user_id=#{loginUserId}
+        order by
+          t1.create_time desc
+    </select>
 </mapper>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+    <th:block th:include="common :: header"></th:block>
+  <meta charset="UTF-8">
+  <title>我的收藏</title>
+    
+    <style>
+        #mainDiv {
+            width: 100%;
+            height: 100%;
+            border:1px solid red;
+            padding: 25px 60px 10px 60px;
+        }
+
+        .merchantDiv {
+            width:226px;
+            height:300px;
+            float:left;
+            padding:20px;
+            margin-right:5px;
+            margin-bottom: 5px;
+            border: 1px solid grey;
+        }
+        
+        .goodsDiv {
+            width:226px;
+            height:310px;
+            float:left;
+            padding:20px;
+            margin-right:5px;
+            margin-bottom: 5px;
+            border: 1px solid grey;
+            text-align: center;
+        }
+
+        .goodsDiv p {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div id="mainDiv">
+        <div id="merchantFavoriteDiv" style="width: 100%;height:320px;border:1px solid yellow;">
+            <p>
+                我的店铺收藏
+            </p>
+			<div class="merchantDiv" v-for="(merchantDetail,index) in favoriteDataList.merchantList">
+				<div style="width:184px;height:188px;cursor: pointer;" >
+					<img :src="merchantDetail.image" style="width:100%;height:100%;">
+				</div>
+
+                <div style="width:100%;height:20px;text-align: left;overflow: hidden;">
+                    <p><i class="fa fa-home"></i><a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+merchantDetail.merchantId" target="_blank">店铺名：{{merchantDetail.name}}</a></p>
+                </div>
+                <div style="width:100%;height:20px;text-align: left;overflow: hidden;">
+                    <p><i class="fa fa-location-arrow"></i>地址：{{merchantDetail.address}}</p>
+                </div>
+                
+                <div style="width:100%;height:20px;text-align: left;overflow: hidden;">
+                    <p><i class="fa fa-phone"></i>联系电话：{{merchantDetail.contact}}</p>
+                </div>
+                
+                <div style="width:100%;height:20px;text-align: left;">
+                    <p v-if="merchantDetail.status == 0">店铺状态： 已关闭</p>
+                    <p v-if="merchantDetail.status == 1">店铺状态： 营业中</p>
+                    <p v-if="merchantDetail.status == 2">店铺状态： 暂停营业</p>
+                    <p v-if="merchantDetail.status == 3">店铺状态： 已打烊</p>
+                </div>
+			</div>
+        </div>
+        
+        <div id="goodsFavoriteDiv" style="width: 100%;height:360px;overflow-x: auto;padding-left:10px;border:1px solid blue;">
+            <p>
+                我的商品收藏
+            </p>
+			<div class="goodsDiv" v-for="(goodsDetail,index) in favoriteDataList.goodsList">
+				<div style="width:184px;height:188px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
+					<img :src="goodsDetail.backImage" style="width:100%;height:100%;">
+				</div>
+				<div style="width:100%;height:20px;">
+					<div style="width:70%;height:100%;float:left;text-align: left;overflow: hidden;">
+						<p>{{goodsDetail.name}}</p>
+					</div>
+					<div style="width:29%;height:100%;float:right;text-align: right;">
+						<p style="text-align: right"><i class="fa fa-location-arrow"></i>{{goodsDetail.place}}</p>
+					</div>
+				</div>
+				<div style="width:100%;height:30px;">
+					<div style="width:50%;float:left;text-align: left;">
+						<span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePrice}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPrice}}</span>
+					</div>
+					<div style="width:50%;float:right;">
+						<button class="btn btn-sm btn-danger"><i class="fa fa-shopping-cart"></i>加入购物车</button>
+					</div>
+				</div>
+    
+				<hr/>
+				<div>
+                    <span style="width:49%;display:inline-block;text-align: left;">
+                        库存 {{goodsDetail.stockNum}}
+                    </span>
+					<span style="width:49%;display:inline-block;text-align: right;">
+                        月销 {{goodsDetail.saleNumber}}
+                    </span>
+				</div>
+			</div>
+        </div>
+    </div>
+  <th:block th:include="common :: footer"></th:block>
+</body>
+    <script>
+       var app = new Vue({
+           el: '#mainDiv',
+           data: {
+               favoriteDataList:[],
+               goodsList:[],
+               merchantList:[],
+           },
+           methods: {
+               queryFavoriteList: function () {
+                   // 查询商品列表
+                   var loadIndex = layer.load(1, {
+                       shade: [0.1,'#fff'] //0.1透明度的白色背景
+                   });
+                   $.ajax({
+                       type: "GET",
+                       url: "/shop/shoppingCenter/queryFavoriteSubjectList",
+                       success: function (result) {
+                           layer.close(loadIndex);
+                           if (result.code == 1) {
+                               app.favoriteDataList = result.data;
+                           }
+                       }
+                   });
+               },
+               // 单击进入商品详情页
+               showGoodsDetail : function (goodsPkId) {
+                   layer.open({
+                       type: 2,
+                       title: '商品详情页',
+                       shadeClose: true,
+                       shade: 0.2,
+                       area: ['860px', '680px'],
+                       anim: 1,
+                       content: '/shop/shoppingCenter/goodsDetail.page?goodsPkId='+goodsPkId
+                   });
+               },
+           },
+           created: function () {
+               this.queryFavoriteList();
+           }
+       });
+    </script>
+</html>
