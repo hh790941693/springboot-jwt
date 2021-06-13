@@ -8,9 +8,11 @@ import com.pjb.springbootjwt.shop.dto.SpMerchantDTO;
 import com.pjb.springbootjwt.shop.dto.SpFavoriteDTO;
 import com.pjb.springbootjwt.shop.domain.SpGoodsDO;
 import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
+import com.pjb.springbootjwt.shop.dto.SpShoppingCartDTO;
 import com.pjb.springbootjwt.shop.service.SpGoodsService;
 import com.pjb.springbootjwt.shop.service.SpMerchantService;
 import com.pjb.springbootjwt.shop.service.SpFavoriteService;
+import com.pjb.springbootjwt.shop.service.SpShoppingCartService;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.apache.commons.lang.StringUtils;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
@@ -38,6 +40,9 @@ public class SpShoppingCenterController {
 
     @Autowired
     private SpFavoriteService spFavoriteService;
+
+    @Autowired
+    private SpShoppingCartService spShoppingCartService;
 
     @GetMapping()
     public String SpShoppingCenter(){
@@ -157,5 +162,25 @@ public class SpShoppingCenterController {
         spFavoriteDTO.setGoodsList(goodsDoList);
         spFavoriteDTO.setMerchantList(merchantDoList);
         return Result.ok(spFavoriteDTO);
+    }
+
+    /**
+     * 我的购物车页面
+     * @return
+     */
+    @RequestMapping("/spMyShoppingCart.page")
+    public String spMyShoppingCart(){
+        return "shop/spShoppingCenter/spMyShoppingCart";
+    }
+
+    /**
+     * 查询我的收藏列表
+     * @return
+     */
+    @RequestMapping("/queryShoppingCartList")
+    @ResponseBody
+    public Result<List<SpShoppingCartDTO>> queryShoppingCartList(){
+        List<SpShoppingCartDTO> spShoppingCartDTOList = spShoppingCartService.queryShoppingCartList(SessionUtil.getSessionUserId());
+        return Result.ok(spShoppingCartDTOList);
     }
 }

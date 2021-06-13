@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+    <th:block th:include="common :: header"></th:block>
+  <meta charset="UTF-8">
+  <title>我的购物车</title>
+</head>
+<body>
+  <div id="mainDiv" style="width:100%;height:100%;border:1px solid red;padding: 20px 300px 10px 300px;">
+      <div style="width:100%;height:20px;">
+          <div style="width:120px;float:left;text-align: center;">
+              封面
+          </div>
+          <div style="width:200px;float:left;text-align: center;">
+              商品信息
+          </div>
+          <div style="width:300px;float:left;text-align: center;">
+              单价
+          </div>
+          <div style="width:100px;float:left;text-align: center;">
+              数量
+          </div>
+          <div style="width:100px;float:left;text-align: center;">
+              总价
+          </div>
+          <div style="width:100px;float:left;text-align: center;">
+              操作
+          </div>
+      </div>
+        <div v-for="cartObj in shoppingCartList" :key="cartObj.id" style="width:100%;height:120px;border:1px solid blue;padding:10px;">
+            <div style="width:120px;height:100%;float:left;">
+                <img :src="cartObj.backImage" style="width:100%;height:100%;">
+            </div>
+            <div style="width:200px;height:100%;float:left;padding: 10px;">
+                <p>商品名称：{{cartObj.name}}</p>
+                <p>商品产地：{{cartObj.place}}</p>
+                <p>商品描述：{{cartObj.brief}}</p>
+                <p>商品描述：{{cartObj.brief}}</p>
+            </div>
+            
+            <div style="width:300px;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid green;">
+                <p><span style="font-weight: bold;color: red;font-size: 22px;">￥{{cartObj.salePrice}}</span>&nbsp;&nbsp;&nbsp;<span style="text-decoration:line-through;color:grey;font-size: 22px;">￥{{cartObj.originalPrice}}</span></p>
+            </div>
+            <div style="width:100px;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid green;">
+                <a href="javascript:void(0)" @click="cartObj.goodsCount--">-</a>
+                <input :value="cartObj.goodsCount" style="width:25px;text-align: center;">
+                <a href="javascript:void(0)" @click="cartObj.goodsCount++">+</a>
+            </div>
+            <div style="width:100px;height:100%;float:left;text-align:center;padding-top:40px;font-size:25px;border:1px solid green;">
+                <span>{{cartObj.salePrice * cartObj.goodsCount}}</span>
+            </div>
+            <div style="width:80px;height:100%;float:left;text-align:center;padding-top:40px;font-size:25px;border:1px solid green;">
+                <button class="btn btn-danger" @click="removeShoopingCartObj(cartObj.shoppingCartPkId)">删除</button>
+            </div>
+        </div>
+        <div style="width:100%;height:25px;text-align: right;font-size: 30px;font-weight: bold;">
+            <p>200.00元</p>
+        </div>
+  </div>
+    <th:block th:include="common :: footer"></th:block>
+</body>
+  <script>
+      var app = new Vue({
+          el: '#mainDiv',
+          data: {
+              shoppingCartList:[],
+          },
+          methods: {
+              queryShoppingCartList: function () {
+                  // 查询商品列表
+                  var loadIndex = layer.load(1, {
+                      shade: [0.1,'#fff'] //0.1透明度的白色背景
+                  });
+                  $.ajax({
+                      type: "GET",
+                      url: "/shop/shoppingCenter/queryShoppingCartList",
+                      success: function (result) {
+                          layer.close(loadIndex);
+                          if (result.code == 1) {
+                              app.shoppingCartList = result.data;
+                          }
+                      }
+                  });
+              },
+              removeShoopingCartObj: function(cartobjId) {
+                  console.log(cartobjId);
+                  var that = this;
+                  $.ajax({
+                      type: "POST",
+                      url: "/shop/spShoppingCart/remove",
+                      data: {
+                        'id':cartobjId,
+                      },
+                      success: function (result) {
+                          if (result.code == 1) {
+                              that.queryShoppingCartList();
+                          }
+                      }
+                  });
+              },
+              // 单击进入商品详情页
+              showGoodsDetail : function (goodsPkId) {
+                  layer.open({
+                      type: 2,
+                      title: '商品详情页',
+                      shadeClose: true,
+                      shade: 0.2,
+                      area: ['860px', '680px'],
+                      anim: 1,
+                      content: '/shop/shoppingCenter/goodsDetail.page?goodsPkId='+goodsPkId
+                  });
+              },
+          },
+          created: function () {
+              this.queryShoppingCartList();
+          }
+      });
+  </script>
+</html>

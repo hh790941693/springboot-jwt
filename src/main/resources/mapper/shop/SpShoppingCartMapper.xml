@@ -2,5 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pjb.springbootjwt.shop.dao.SpShoppingCartDao">
-
+    <select id="queryShoppingCartList" resultType="com.pjb.springbootjwt.shop.dto.SpShoppingCartDTO">
+        select
+          t2.*,t1.id as shopping_cart_pk_id,t1.goods_count
+        from
+          sp_shopping_cart t1
+        right join
+          sp_goods t2
+        on
+          t1.goods_id = t2.goods_id
+        where
+          t1.user_id=#{loginUserId}
+    </select>
 </mapper>
