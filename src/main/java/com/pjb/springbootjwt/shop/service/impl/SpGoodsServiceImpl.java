@@ -23,12 +23,12 @@ public class SpGoodsServiceImpl extends CoreServiceImpl<SpGoodsDao, SpGoodsDO> i
     private static final Logger logger = LoggerFactory.getLogger(SpGoodsServiceImpl.class);
 
     @Override
-    public List<GoodsDetailDTO> queryCenterGoodsList(Page<GoodsDetailDTO> page, Wrapper<GoodsDetailDTO> wrapper) {
-        return this.baseMapper.queryCenterGoodsList(page, wrapper);
+    public List<GoodsDetailDTO> queryCenterGoodsList(String loginUserId, Page<GoodsDetailDTO> page, Wrapper<GoodsDetailDTO> wrapper) {
+        return this.baseMapper.queryCenterGoodsList(loginUserId, page, wrapper);
     }
 
     @Override
-    public GoodsDetailDTO queryCenterGoodsDetail(String goodsPkId) {
-        return this.baseMapper.queryCenterGoodsDetail(goodsPkId);
+    public GoodsDetailDTO queryCenterGoodsDetail(String loginUserId, String goodsPkId) {
+        return this.baseMapper.queryCenterGoodsDetail(loginUserId, goodsPkId);
     }
 }

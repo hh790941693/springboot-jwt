@@ -19,11 +19,13 @@
         on
             t1.goods_id = t3.subject_id
         and t3.subject_type = 1
+        and t3.user_id=#{loginUserId}
         left join
             sp_favorite t4
         on
             t1.merchant_id = t4.subject_id
         and t4.subject_type = 2
+        and t4.user_id=#{loginUserId}
         <if test="ew.sqlSegment != null and ew.sqlSegment != ''">
             <where>
                 ${ew.sqlSegment}
@@ -48,11 +50,13 @@
         on
             t1.goods_id = t3.subject_id
         and t3.subject_type = 1
+        and t3.user_id = #{loginUserId}
         left join
             sp_favorite t4
         on
             t1.merchant_id = t4.subject_id
         and t4.subject_type = 2
+        and t4.user_id = #{loginUserId}
         where
             t1.status != 0
         and

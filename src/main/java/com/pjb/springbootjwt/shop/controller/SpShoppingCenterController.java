@@ -69,7 +69,7 @@ public class SpShoppingCenterController {
         wrapper.ne("t2.status", 0);
         wrapper.orderBy("t1.sale_price", params.isPriceSort());
         wrapper.orderBy("t1.sale_number", params.isSaleNumberSort());
-        List<GoodsDetailDTO> goodsDetailDTOS = spGoodsService.queryCenterGoodsList(page, wrapper);
+        List<GoodsDetailDTO> goodsDetailDTOS = spGoodsService.queryCenterGoodsList(SessionUtil.getSessionUserId(), page, wrapper);
         return Result.ok(goodsDetailDTOS);
     }
 
@@ -89,7 +89,7 @@ public class SpShoppingCenterController {
         wrapper.ne("t1.status", 0);
         wrapper.ne("t2.status", 0);
         wrapper.orderBy("t1.sale_number", false);
-        List<GoodsDetailDTO> goodsDetailDTOS = spGoodsService.queryCenterGoodsList(page, wrapper);
+        List<GoodsDetailDTO> goodsDetailDTOS = spGoodsService.queryCenterGoodsList(SessionUtil.getSessionUserId(), page, wrapper);
         return Result.ok(goodsDetailDTOS);
     }
 
@@ -112,7 +112,7 @@ public class SpShoppingCenterController {
     @RequestMapping("/goodsDetail")
     @ResponseBody
     public Result<GoodsDetailDTO> goodsDetail(String goodsPkId){
-        GoodsDetailDTO goodsDetailDTO = spGoodsService.queryCenterGoodsDetail(goodsPkId);
+        GoodsDetailDTO goodsDetailDTO = spGoodsService.queryCenterGoodsDetail(SessionUtil.getSessionUserId(), goodsPkId);
         return Result.ok(goodsDetailDTO);
     }
 
