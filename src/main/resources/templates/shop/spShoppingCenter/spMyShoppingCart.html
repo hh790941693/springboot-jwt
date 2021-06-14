@@ -101,17 +101,22 @@
               },
               removeShoopingCartObj: function(cartobjId) {
                   var that = this;
-                  $.ajax({
-                      type: "POST",
-                      url: "/shop/spShoppingCart/remove",
-                      data: {
-                        'id':cartobjId,
-                      },
-                      success: function (result) {
-                          if (result.code == 1) {
-                              that.queryShoppingCartList();
-                          }
-                      }
+                  var conIndex = layer.confirm("确认要删除吗?", {
+                          btn : [ '确定', '取消' ]
+                      }, function() {
+                          $.ajax({
+                              type: "POST",
+                              url: "/shop/spShoppingCart/remove",
+                              data: {
+                                  'id': cartobjId,
+                              },
+                              success: function (result) {
+                                  if (result.code == 1) {
+                                      that.queryShoppingCartList();
+                                  }
+                                  layer.close(conIndex);
+                              }
+                          });
                   });
               },
               selectGoods : function() {
