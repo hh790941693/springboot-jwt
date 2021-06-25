@@ -79,13 +79,14 @@
       var app = new Vue({
           el: '#mainDiv',
           data: {
-              shoppingCartList:[],
-              selectedGoodsIndexArr:[],
-              totalOriginalPrice: 0, //总原价
-              totalSalePrice: 0,     //总售价
-              selectAllFlag: false,
+              shoppingCartList:[],       //购物车商品列表
+              selectedGoodsIndexArr:[],  // 已选中的商品索引列表
+              totalOriginalPrice: 0,     //总原价
+              totalSalePrice: 0,         //总售价
+              selectAllFlag: false,      // 全选标志 ture:选中  false:未选中
           },
           methods: {
+              // 查询我的购物车列表
               queryShoppingCartList: function () {
                   // 查询商品列表
                   var loadIndex = layer.load(1, {
@@ -102,6 +103,7 @@
                       }
                   });
               },
+              // 删除购物车商品
               removeShoopingCartObj: function(cartobjId) {
                   var that = this;
                   var conIndex = layer.confirm("确认要删除吗?", {
@@ -122,6 +124,7 @@
                           });
                   });
               },
+              // 重新计算总价
               selectGoods : function() {
                   var that = this;
                   var totalSalePriceTmp = 0;
@@ -135,7 +138,7 @@
                       app.totalOriginalPrice = totalOriginalPriceTmp;
                   }, 10);
               },
-              // 单击进入商品详情页
+              // 商品详情页
               showGoodsDetail : function (goodsPkId) {
                   layer.open({
                       type: 2,
@@ -147,10 +150,10 @@
                       content: '/shop/shoppingCenter/goodsDetail.page?goodsPkId='+goodsPkId
                   });
               },
+              // 全选事件
               selectAll : function () {
                   var that = this;
                   setTimeout(function(){
-                      console.log(app.selectAllFlag);
                       if (app.selectAllFlag) {
                           for (var i=0;i<app.shoppingCartList.length;i++) {
                               app.selectedGoodsIndexArr.push(i);
