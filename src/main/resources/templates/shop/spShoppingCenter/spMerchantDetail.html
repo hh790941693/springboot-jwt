@@ -113,7 +113,7 @@
 						<span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePrice}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPrice}}</span>
 					</div>
 					<div style="width:50%;float:right;">
-						<button class="btn btn-sm btn-danger"><i class="fa fa-shopping-cart"></i>加入购物车</button>
+						<button class="btn btn-sm btn-danger" @click="addToShoppingCart(goodsDetail.goodsId, 1)"><i class="fa fa-shopping-cart"></i>加入购物车</button>
 					</div>
 				</div>
 
@@ -201,6 +201,7 @@
 						content: '/shop/shoppingCenter/goodsDetail.page?goodsPkId='+goodsPkId
 					});
 				},
+				// 收藏店铺
 				favoriteMerchant : function (merchantId, status) {
 					// 收藏店铺
 					var that = this;
@@ -217,6 +218,20 @@
 						}
 					});
 				},
+                // 加入购物车
+                addToShoppingCart : function (goodsId, goodsCount) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/shop/spShoppingCart/addToShoppingCart",
+                        data: {
+                            'goodsId':goodsId,
+                            'goodsCount':goodsCount,
+                        },
+                        success: function (result) {
+                            layer.msg(result.msg);
+                        }
+                    });
+                },
 			},
 			created: function () {
 				this.queryMerchantDetail();

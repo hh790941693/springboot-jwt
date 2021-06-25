@@ -51,9 +51,9 @@
                     <span style="font-weight: bold;color: red;font-size: 22px;">￥{{cartObj.salePrice}}</span>
             </div>
             <div style="width:100px;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid grey;">
-                <a href="javascript:void(0)" @click="cartObj.goodsCount--;selectGoods();">-</a>
+                <a href="javascript:void(0)" @click="cartObj.goodsCount--;selectGoods();" style="font-weight: bold;">-</a>
                 <input :value="cartObj.goodsCount" readonly style="width:25px;text-align: center;">
-                <a href="javascript:void(0)" @click="cartObj.goodsCount++;selectGoods();">+</a>
+                <a href="javascript:void(0)" @click="cartObj.goodsCount++;selectGoods();" style="font-weight: bold;">+</a>
             </div>
             <div style="width:100px;height:100%;float:left;text-align:center;padding-top:40px;font-size:25px;border:1px solid grey;">
                 <span>{{cartObj.salePrice * cartObj.goodsCount}}</span>

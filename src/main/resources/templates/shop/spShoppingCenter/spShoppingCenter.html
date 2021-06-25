@@ -203,6 +203,7 @@
                         content: '/shop/shoppingCenter/goodsDetail.page?goodsPkId='+goodsPkId
                     });
                 },
+                // 加入购物车
                 addToShoppingCart : function (goodsId, goodsCount) {
                     $.ajax({
                         type: "POST",
@@ -215,7 +216,7 @@
                             layer.msg(result.msg);
                         }
                     });
-                }
+                },
             },
             created: function () {
                 this.queryGoodsList();
