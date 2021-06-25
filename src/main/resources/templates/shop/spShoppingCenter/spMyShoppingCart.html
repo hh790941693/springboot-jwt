@@ -126,7 +126,7 @@
                   setTimeout(function(){
                       for (var i=0;i<that.selectedGoodsIndexArr.length;i++){
                           totalSalePriceTmp += app.shoppingCartList[that.selectedGoodsIndexArr[i]].salePrice * app.shoppingCartList[that.selectedGoodsIndexArr[i]].goodsCount;
-                          totalOriginalPriceTmp += app.shoppingCartList[i].originalPrice * app.shoppingCartList[i].goodsCount;
+                          totalOriginalPriceTmp += app.shoppingCartList[that.selectedGoodsIndexArr[i]].originalPrice * app.shoppingCartList[that.selectedGoodsIndexArr[i]].goodsCount;
                       }
                       app.totalSalePrice = totalSalePriceTmp;
                       app.totalOriginalPrice = totalOriginalPriceTmp;
