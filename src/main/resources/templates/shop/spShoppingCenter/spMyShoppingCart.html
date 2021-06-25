@@ -7,8 +7,8 @@
   <title>我的购物车</title>
 </head>
 <body>
-  <div id="mainDiv" style="width:100%;height:100%;border:1px solid red;padding: 20px 300px 10px 300px;">
-      <div style="width:100%;height:20px;">
+  <div id="mainDiv" style="width:100%;height:100%;overflow-y:auto;padding: 20px 300px 30px 300px;">
+      <div style="width:100%;height:20px;background-color: #0d8ddb;">
           <div style="width:40px;float:left;text-align: center;">
               选择
           </div>
@@ -19,7 +19,7 @@
               商品信息
           </div>
           <div style="width:250px;float:left;text-align: center;">
-              单价
+              原价 / 单价
           </div>
           <div style="width:100px;float:left;text-align: center;">
               数量
@@ -31,7 +31,7 @@
               操作
           </div>
       </div>
-        <div v-for="(cartObj,index) in shoppingCartList" :key="cartObj.id" style="width:100%;height:120px;border:1px solid blue;padding:10px;">
+        <div v-for="(cartObj,index) in shoppingCartList" :key="cartObj.id" style="width:100%;height:120px;border:1px solid grey;padding:10px;">
             <div style="width:40px;float:left;padding-top:40px;">
               <input type="checkbox" v-model="selectedGoodsIndexArr" :value="index" @click="selectGoods()">
             </div>
@@ -43,7 +43,7 @@
                 <p>商品名称：{{cartObj.name}}</p>
                 <p>商品产地：{{cartObj.place}}</p>
                 <p>商品描述：{{cartObj.brief}}</p>
-                <p>原价    ：￥ {{cartObj.originalPrice}}</p>
+                <p>商品原价    ：￥ {{cartObj.originalPrice}}</p>
             </div>
             
             <div style="width:250px;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid green;">
