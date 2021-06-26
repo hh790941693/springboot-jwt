@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
 import com.pjb.springbootjwt.shop.dto.SpMerchantDTO;
 import com.pjb.springbootjwt.shop.dto.SpFavoriteDTO;
-import com.pjb.springbootjwt.shop.domain.SpGoodsDO;
 import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
 import com.pjb.springbootjwt.shop.dto.SpShoppingCartDTO;
 import com.pjb.springbootjwt.shop.service.SpGoodsService;
@@ -155,7 +154,7 @@ public class SpShoppingCenterController {
     @RequestMapping("/queryFavoriteSubjectList")
     @ResponseBody
     public Result<SpFavoriteDTO> queryFavoriteGoodsList(){
-        List<SpGoodsDO> goodsDoList = spFavoriteService.queryFavoriteGoodsList(SessionUtil.getSessionUserId());
+        List<GoodsDetailDTO> goodsDoList = spFavoriteService.queryFavoriteGoodsList(SessionUtil.getSessionUserId());
         List<SpMerchantDO> merchantDoList = spFavoriteService.queryFavoriteMerchantList(SessionUtil.getSessionUserId());
 
         SpFavoriteDTO spFavoriteDTO = new SpFavoriteDTO();

@@ -28,7 +28,7 @@
             width:226px;
             height:310px;
             float:left;
-            padding:20px;
+            padding:0 10px 0 10px;
             margin-right:5px;
             margin-bottom: 5px;
             border: 1px solid grey;
@@ -44,7 +44,7 @@
     <div id="mainDiv">
         <div id="merchantFavoriteDiv" style="width: 100%;height:320px;padding-left:10px;border:1px solid yellow;">
             <p>
-                我的店铺收藏
+                我收藏的店铺
             </p>
 			<div class="merchantDiv" v-for="(merchantDetail,index) in favoriteDataList.merchantList">
 				<div style="width:184px;height:188px;cursor: pointer;" >
@@ -73,7 +73,7 @@
         
         <div id="goodsFavoriteDiv" style="width: 100%;height:360px;overflow-x: auto;padding-left:10px;border:1px solid blue;">
             <p>
-                我的商品收藏
+                我收藏的商品
             </p>
 			<div class="goodsDiv" v-for="(goodsDetail,index) in favoriteDataList.goodsList">
 				<div style="width:184px;height:188px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
@@ -87,7 +87,7 @@
 						<p style="text-align: right"><i class="fa fa-location-arrow"></i>{{goodsDetail.place}}</p>
 					</div>
 				</div>
-				<div style="width:100%;height:30px;">
+				<div style="width:100%;height:30px;margin-bottom:5px;">
 					<div style="width:50%;float:left;text-align: left;">
 						<span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePrice}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPrice}}</span>
 					</div>
@@ -96,8 +96,11 @@
 					</div>
 				</div>
     
-				<hr/>
-				<div>
+                <div style="height:25px;margin-top: 5px;font-size: 15px;border-bottom: 1px solid lightgrey;">
+                    <p><i class="fa fa-home"></i><a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+goodsDetail.merchantId" target="_blank">{{goodsDetail.merchantName}}</a></p>
+                </div>
+                
+				<div style="height:25px;margin-top:15px;">
                     <span style="width:49%;display:inline-block;text-align: left;">
                         库存 {{goodsDetail.stockNum}}
                     </span>
