@@ -94,7 +94,7 @@
 			</table>
 		</div>
 
-		<div id="innerDiv" style="width:100%;height:350px;margin-top:5px;padding-left:60px;border:1px solid blue;overflow-y: auto;">
+		<div id="innerDiv" style="width:100%;height:350px;margin-top:5px;padding-left:60px;overflow-y: auto;">
 			<p>商品列表</p>
 			<div class="goodsDiv" v-for="(goodsDetail,index) in goodsList" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
 				<div style="width:184px;height:188px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
@@ -135,7 +135,7 @@
 			</div>
 		</div>
 
-		<div id="guessLikeDiv" style="width:100%;height:400px;margin-top:5px;padding-left:60px;border:1px solid green;overflow-x: auto;">
+		<div id="guessLikeDiv" style="width:100%;height:400px;margin-top:5px;padding-left:60px;overflow-x: auto;">
 			<p>猜你喜欢</p>
 		</div>
 	</div>
