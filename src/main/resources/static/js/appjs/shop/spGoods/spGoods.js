@@ -90,7 +90,8 @@ function load() {
 			},
 						{
 				field : 'unitName',
-				title : '商品单位'
+				title : '商品单位',
+				visible : false,
 			},
 			{
 				field : 'backImage',
@@ -107,7 +108,7 @@ function load() {
 			},
 						{
 				field : 'image1',
-				title : '商品图片1',
+				title : '图片1',
 				formatter : function (value, row) {
 					var result = "";
 					if (value != "" && value != null) {
@@ -120,7 +121,7 @@ function load() {
 			},
 			{
 				field : 'image2',
-				title : '商品图片2',
+				title : '图片2',
 				formatter : function (value, row) {
 					var result = "";
 					if (value != "" && value != null) {
@@ -133,7 +134,7 @@ function load() {
 			},
 			{
 				field : 'image3',
-				title : '商品图片3',
+				title : '图片3',
 				formatter : function (value, row) {
 					var result = "";
 					if (value != "" && value != null) {
@@ -146,7 +147,7 @@ function load() {
 			},
 			{
 				field : 'image4',
-				title : '商品图片4',
+				title : '图片4',
 				formatter : function (value, row) {
 					var result = "";
 					if (value != "" && value != null) {
@@ -197,7 +198,7 @@ function load() {
 							+ '\')"><i class="fa fa-upload"></i>上架</a> ';
 						btns += putonbtn;
 					} else if (row.status == 1) {
-						var putoffbtn = '<a class="btn btn-warning btn-sm" href="#" title="下架"  mce_href="#" onclick="updateStatus(\''
+						var putoffbtn = '<a class="btn btn-danger btn-sm" href="#" title="下架"  mce_href="#" onclick="updateStatus(\''
 							+ row.id
 							+ '\',\''
 							+ '2'
