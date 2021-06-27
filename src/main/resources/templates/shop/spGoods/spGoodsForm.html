@@ -60,13 +60,15 @@
 								<label class="col-sm-3 control-label" for="unitName"><span style="color:red">*</span>&nbsp;商品单位：</label>
 								<div class="col-sm-8">
 									<select id="unitName" name="unitName" th:value="${spGoods.unitName}" class="form-control">
-										<option value="千克" th:selected="${spGoods.unitName == '千克'}">千克</option>
+										<option value="个" th:selected="${spGoods.unitName == '个'}">个</option>
 										<option value="斤" th:selected="${spGoods.unitName == '斤'}">斤</option>
+										<option value="台" th:selected="${spGoods.unitName == '台'}">台</option>
 										<option value="袋" th:selected="${spGoods.unitName == '袋'}">袋</option>
 										<option value="包" th:selected="${spGoods.unitName == '包'}">包</option>
 										<option value="条" th:selected="${spGoods.unitName == '条'}">条</option>
 										<option value="根" th:selected="${spGoods.unitName == '根'}">根</option>
 										<option value="只" th:selected="${spGoods.unitName == '只'}">只</option>
+										<option value="千克" th:selected="${spGoods.unitName == '千克'}">千克</option>
 									</select>
 								</div>
 							</div>
