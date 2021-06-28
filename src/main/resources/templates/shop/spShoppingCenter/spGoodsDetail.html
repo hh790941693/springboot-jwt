@@ -58,7 +58,7 @@
                 <p style="font-weight: bold;font-size: 17px;">商品名称： {{goodsDetail.name}}</p>
                 <p>商品描述： {{goodsDetail.brief}}</p>
                 <p>产地： {{goodsDetail.place}}</p>
-                <p>售价： <span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePrice}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPrice}}</span></p>
+                <p>售价： <span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePriceStr}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPriceStr}}</span></p>
                 <p>规格： {{goodsDetail.unitName}}</p>
                 <p>商家店铺： <a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+goodsDetail.merchantId" target="_blank">{{goodsDetail.merchantName}}</a>
                 </p>

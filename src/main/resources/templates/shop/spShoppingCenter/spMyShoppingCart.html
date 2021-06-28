@@ -43,12 +43,12 @@
                 <p>商品名称：{{cartObj.name}}</p>
                 <p>商品产地：{{cartObj.place}}</p>
                 <p>商品描述：{{cartObj.brief}}</p>
-                <p>商品原价：￥ {{cartObj.originalPrice}}</p>
+                <p>商品原价：￥ {{cartObj.originalPriceStr}}</p>
             </div>
             
             <div style="width:23%;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid grey;">
-                <span style="text-decoration:line-through;color:grey;font-size: 18px;">￥{{cartObj.originalPrice}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span style="font-weight: bold;color: red;font-size: 22px;">￥{{cartObj.salePrice}}</span>
+                <span style="text-decoration:line-through;color:grey;font-size: 18px;">￥{{cartObj.originalPriceStr}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span style="font-weight: bold;color: red;font-size: 22px;">￥{{cartObj.salePriceStr}}</span>
             </div>
             <div style="width:10%;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid grey;">
                 <a href="javascript:void(0)" @click="cartObj.goodsCount--;selectGoods();" style="font-weight: bold;">-</a>

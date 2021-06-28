@@ -70,9 +70,15 @@ public class SpGoodsDO implements Serializable {
     @ApiModelProperty(value = "originalPrice" , name = "原价")
     private BigDecimal originalPrice;
 
+    @TableField(exist = false)
+    private String originalPriceStr;
+
     //售价
     @ApiModelProperty(value = "salePrice" , name = "售价")
     private BigDecimal salePrice;
+
+    @TableField(exist = false)
+    private String salePriceStr;
 
     //商品单位
     @ApiModelProperty(value = "unitName" , name = "商品单位")

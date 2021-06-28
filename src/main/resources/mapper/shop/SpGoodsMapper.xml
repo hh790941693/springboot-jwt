@@ -7,7 +7,9 @@
             t1.*,
             t2.name AS merchant_name,
             IFNULL(t3.status, 2) AS goods_favorite_status,
-            IFNULL(t4.status, 2) AS merchant_favorite_status
+            IFNULL(t4.status, 2) AS merchant_favorite_status,
+            cast(t1.original_price as char) AS original_price_str,
+            cast(t1.sale_price as char) AS sale_price_str
         from
             sp_goods t1
         left join
@@ -38,7 +40,9 @@
             t1.*,
             t2.name AS merchant_name,
             IFNULL(t3.status, 2) AS goods_favorite_status,
-            IFNULL(t4.status, 2) AS merchant_favorite_status
+            IFNULL(t4.status, 2) AS merchant_favorite_status,
+            cast(t1.original_price as char) AS original_price_str,
+            cast(t1.sale_price as char) AS sale_price_str
         from
             sp_goods t1
         left join
