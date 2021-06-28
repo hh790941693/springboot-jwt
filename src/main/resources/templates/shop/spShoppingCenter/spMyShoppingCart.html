@@ -7,7 +7,7 @@
   <title>我的购物车</title>
 </head>
 <body>
-  <div id="mainDiv" style="width:100%;height:100%;overflow-y:auto;padding: 20px 300px 30px 300px;">
+  <div id="mainDiv" style="width:100%;height:100%;overflow-y:auto;padding: 20px 100px 30px 100px;">
       <div style="width:100%;height:30px;background-color: #0d8ddb;font-size:18px;">
           <div style="width:5%;height:100%;float:left;border-right:1px solid lightblue;text-align: center;">
               选择
@@ -15,7 +15,7 @@
           <div style="width:12%;height:100%;float:left;border-right:1px solid lightblue;text-align: center;">
               封面
           </div>
-          <div style="width:15%;height:100%;float:left;border-right:1px solid lightblue;text-align: center;">
+          <div style="width:19%;height:100%;float:left;border-right:1px solid lightblue;text-align: center;">
               商品信息
           </div>
           <div style="width:23%;height:100%;float:left;border-right:1px solid lightblue;text-align: center;">
@@ -24,14 +24,14 @@
           <div style="width:10%;height:100%;float:left;border-right:1px solid lightblue;text-align: center;">
               数量
           </div>
-          <div style="width:10%;height:100%;float:left;border-right:1px solid lightblue;text-align: center;">
+          <div style="width:15%;height:100%;float:left;border-right:1px solid lightblue;text-align: center;">
               总价
           </div>
-          <div style="width:24%;height:100%;float:left;text-align: center;">
+          <div style="width:15%;height:100%;float:left;text-align: center;">
               操作
           </div>
       </div>
-        <div v-for="(cartObj,index) in shoppingCartList" :key="cartObj.id" style="width:100%;height:120px;border:1px solid grey;padding:10px;">
+        <div v-for="(cartObj,index) in shoppingCartList" :key="cartObj.id" style="width:100%;height:120px;border:1px solid grey;padding:10px 5px 10px 5px;">
             <div style="width:5%;float:left;padding-top:40px;">
               <input type="checkbox" v-model="selectedGoodsIndexArr" :value="index" @click="selectGoods()">
             </div>
@@ -39,7 +39,7 @@
             <div style="width:12%;height:100%;float:left;">
                 <img :src="cartObj.backImage" style="width:100%;height:100%;">
             </div>
-            <div style="width:15%;height:100%;float:left;padding: 6px 0 0 10px;">
+            <div style="width:19%;height:100%;float:left;padding: 6px 0 0 10px;">
                 <p>商品名称：<a style="color: blue;" @click="showGoodsDetail(cartObj.id)">{{cartObj.name}}</a></p>
                 <p>商品产地：{{cartObj.place}}</p>
                 <p>商品描述：{{cartObj.brief}}</p>
@@ -56,18 +56,18 @@
                 <input :value="cartObj.goodsCount" readonly style="width:25px;text-align: center;">
                 <button style="width:20px;" @click="addGoodsCount(index)">+</button>
             </div>
-            <div style="width:10%;height:100%;float:left;text-align:center;padding-top:30px;font-size:25px;margin-right:2px;border:1px solid grey;">
+            <div style="width:15%;height:100%;float:left;text-align:center;padding-top:30px;font-size:25px;margin-right:2px;border:1px solid grey;">
                 <span>￥{{toFixedNumber(cartObj.salePrice * cartObj.goodsCount)}}</span>
             </div>
-            <div style="width:24%;height:100%;float:left;text-align:center;padding-top:30px;font-size:25px;border:1px solid grey;">
+            <div style="width:15%;height:100%;float:left;text-align:center;padding-top:30px;font-size:25px;border:1px solid grey;">
                 <button class="btn btn-danger" @click="removeShoopingCartObj(cartObj.shoppingCartPkId)"><i class="fa fa-trash"></i>删除</button>
             </div>
         </div>
         <div style="width:100%;height:60px;font-weight: bold;">
-            <div style="width:150px;height:25px;float:left;padding-left: 10px;">
+            <div style="width:10%;height:25px;float:left;padding-left: 10px;">
                 <input type="checkbox" v-model="selectAllFlag" @click="selectAll()">&nbsp;全选
             </div>
-            <div style="width:550px;height:60px;float:right;text-align: right;font-size: 30px;">
+            <div style="width:87%;height:60px;float:right;text-align: right;font-size: 30px;">
                 <span style="text-decoration:line-through;color:grey;font-size:22px;">{{toFixedNumber(totalOriginalPrice)}}元</span>
                 <span style="font-size: 10px;color:blue;">(已为您节省{{toFixedNumber(totalOriginalPrice-totalSalePrice)}}元)</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span>{{toFixedNumber(totalSalePrice)}}元</span>
