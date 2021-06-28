@@ -37,10 +37,10 @@
             </div>
             
             <div style="width:12%;height:100%;float:left;">
-                <img :src="cartObj.backImage" style="width:100%;height:100%;cursor:pointer;" @click="showGoodsDetail(cartObj.id)">
+                <img :src="cartObj.backImage" style="width:100%;height:100%;">
             </div>
             <div style="width:15%;height:100%;float:left;padding: 10px;">
-                <p>商品名称：{{cartObj.name}}</p>
+                <p>商品名称：<a style="color: blue;" @click="showGoodsDetail(cartObj.id)">{{cartObj.name}}</a></p>
                 <p>商品产地：{{cartObj.place}}</p>
                 <p>商品描述：{{cartObj.brief}}</p>
                 <p>商品原价：￥ {{cartObj.originalPriceStr}}</p>
