@@ -4,7 +4,10 @@
 <mapper namespace="com.pjb.springbootjwt.shop.dao.SpFavoriteDao">
     <select id="queryFavoriteGoodsList" resultType="com.pjb.springbootjwt.shop.dto.GoodsDetailDTO">
         select
-          t2.*,t3.name as merchant_name
+          t2.*,
+          t3.name as merchant_name,
+          cast(t2.original_price as char) AS original_price_str,
+          cast(t2.sale_price as char) AS sale_price_str
         from
           sp_favorite t1
         right join
