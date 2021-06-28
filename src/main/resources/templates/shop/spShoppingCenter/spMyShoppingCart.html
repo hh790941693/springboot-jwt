@@ -39,12 +39,12 @@
             <div style="width:12%;height:100%;float:left;">
                 <img :src="cartObj.backImage" style="width:100%;height:100%;">
             </div>
-            <div style="width:15%;height:100%;float:left;padding: 10px;">
+            <div style="width:15%;height:100%;float:left;padding: 6px 0 0 10px;">
                 <p>商品名称：<a style="color: blue;" @click="showGoodsDetail(cartObj.id)">{{cartObj.name}}</a></p>
                 <p>商品产地：{{cartObj.place}}</p>
                 <p>商品描述：{{cartObj.brief}}</p>
                 <p>商品原价：￥ {{cartObj.originalPriceStr}}</p>
-                <p>商家信息：<a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+cartObj.merchantId" target="_blank"><i class="fa fa-home"></i></a></p>
+                <p>商家信息：<a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+cartObj.merchantId" target="_blank"><i class="fa fa-home"></i>{{cartObj.merchantName}}</a></p>
             </div>
             
             <div style="width:23%;height:100%;float:left;text-align:center;padding-top:30px;margin-right:2px;border:1px solid grey;">
@@ -64,8 +64,8 @@
             </div>
         </div>
         <div style="width:100%;height:60px;font-weight: bold;">
-            <div style="width:150px;height:25px;float:left;">
-                <input type="checkbox" v-model="selectAllFlag" @click="selectAll()">全选
+            <div style="width:150px;height:25px;float:left;padding-left: 10px;">
+                <input type="checkbox" v-model="selectAllFlag" @click="selectAll()">&nbsp;全选
             </div>
             <div style="width:400px;height:60px;float:right;text-align: right;font-size: 30px;">
                 <span style="text-decoration:line-through;color:grey;font-size:22px;">{{toFixedNumber(totalOriginalPrice)}}元</span>&nbsp;&nbsp;&nbsp;&nbsp;

@@ -8,13 +8,18 @@
           t1.id as shopping_cart_pk_id,
           t1.goods_count,
           cast(t2.original_price as char) AS original_price_str,
-          cast(t2.sale_price as char) AS sale_price_str
+          cast(t2.sale_price as char) AS sale_price_str,
+          t3.name AS merchant_name
         from
           sp_shopping_cart t1
         right join
           sp_goods t2
         on
           t1.goods_id = t2.goods_id
+        right join
+          sp_merchant t3
+        on
+          t2.merchant_id = t3.merchant_id
         where
           t1.user_id=#{loginUserId}
     </select>

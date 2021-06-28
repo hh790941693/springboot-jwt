@@ -13,4 +13,7 @@ public class SpShoppingCartDTO extends SpGoodsDO {
 
     // 商品数量
     private int goodsCount;
+
+    // 商家名称
+    private String merchantName;
 }
