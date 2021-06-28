@@ -159,11 +159,13 @@
         });
 
         // 图片滚动插件
-        var swiper = new Swiper('.swiper-container', {
-            spaceBetween: 30,
-            effect: 'flip',
+        var mySwipper = new Swiper('.swiper-container', {
+            observer: true,
+            observeParents: true,
+            loop: false, // 循环模式选项
             autoplay: {
-                delay: 2500,
+                delay: 1600,
+                stopOnLastSlide: false,
                 disableOnInteraction: false,
             },
             pagination: {
@@ -177,7 +179,6 @@
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
             },
-            observer:true,
         });
     </script>
 </html>
