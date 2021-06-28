@@ -44,6 +44,7 @@
                 <p>商品产地：{{cartObj.place}}</p>
                 <p>商品描述：{{cartObj.brief}}</p>
                 <p>商品原价：￥ {{cartObj.originalPriceStr}}</p>
+                <p>商家信息：<a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+cartObj.merchantId" target="_blank"><i class="fa fa-home"></i></a></p>
             </div>
             
             <div style="width:23%;height:100%;float:left;text-align:center;padding-top:30px;margin-right:2px;border:1px solid grey;">
