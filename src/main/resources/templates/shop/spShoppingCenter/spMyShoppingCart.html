@@ -52,9 +52,9 @@
                 <span style="font-weight: bold;color: red;font-size: 22px;">￥{{cartObj.salePriceStr}}</span>
             </div>
             <div style="width:10%;height:100%;float:left;text-align:center;padding-top:40px;margin-right:2px;border:1px solid grey;">
-                <a href="javascript:void(0)" @click="cartObj.goodsCount--;selectGoods();" style="font-weight: bold;">-</a>
+                <button style="width:20px;" @click="minusGoodsCount(index)">-</button>
                 <input :value="cartObj.goodsCount" readonly style="width:25px;text-align: center;">
-                <a href="javascript:void(0)" @click="cartObj.goodsCount++;selectGoods();" style="font-weight: bold;">+</a>
+                <button style="width:20px;" @click="addGoodsCount(index)">+</button>
             </div>
             <div style="width:10%;height:100%;float:left;text-align:center;padding-top:30px;font-size:25px;margin-right:2px;border:1px solid grey;">
                 <span>￥{{toFixedNumber(cartObj.salePrice * cartObj.goodsCount)}}</span>
@@ -165,6 +165,24 @@
                       }
                       that.selectGoods();
                   }, 50);
+              },
+              minusGoodsCount : function(index) {
+                  var goodsDetail = app.shoppingCartList[index];
+                  if (goodsDetail.goodsCount <= 1) {
+                      layer.alert("数量不能小于0");
+                      return;
+                  }
+                  app.shoppingCartList[index].goodsCount = app.shoppingCartList[index].goodsCount-1;
+                  this.selectGoods();
+              },
+              addGoodsCount : function(index) {
+                  var goodsDetail = app.shoppingCartList[index];
+                  if (goodsDetail.goodsCount >= goodsDetail.stockNum) {
+                      layer.alert("数量已超过库存数");
+                      return;
+                  }
+                  app.shoppingCartList[index].goodsCount = app.shoppingCartList[index].goodsCount+1;
+                  this.selectGoods();
               },
               toFixedNumber : function (num) {
                   return num.toFixed(2);
