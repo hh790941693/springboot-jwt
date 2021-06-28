@@ -9,56 +9,56 @@
 <body>
   <div id="mainDiv" style="width:100%;height:100%;overflow-y:auto;padding: 20px 300px 30px 300px;">
       <div style="width:100%;height:30px;background-color: #0d8ddb;font-size:18px;">
-          <div style="width:40px;float:left;text-align: center;">
+          <div style="width:5%;float:left;text-align: center;">
               选择
           </div>
-          <div style="width:120px;float:left;text-align: center;">
+          <div style="width:12%;float:left;text-align: center;">
               封面
           </div>
-          <div style="width:200px;float:left;text-align: center;">
+          <div style="width:15%;float:left;text-align: center;">
               商品信息
           </div>
-          <div style="width:250px;float:left;text-align: center;">
+          <div style="width:23%;float:left;text-align: center;">
               原价 / 单价
           </div>
-          <div style="width:100px;float:left;text-align: center;">
+          <div style="width:10%;float:left;text-align: center;">
               数量
           </div>
-          <div style="width:100px;float:left;text-align: center;">
+          <div style="width:10%;float:left;text-align: center;">
               总价
           </div>
-          <div style="width:100px;float:left;text-align: center;">
+          <div style="width:25%;float:left;text-align: center;">
               操作
           </div>
       </div>
         <div v-for="(cartObj,index) in shoppingCartList" :key="cartObj.id" style="width:100%;height:120px;border:1px solid grey;padding:10px;">
-            <div style="width:40px;float:left;padding-top:40px;">
+            <div style="width:5%;float:left;padding-top:40px;">
               <input type="checkbox" v-model="selectedGoodsIndexArr" :value="index" @click="selectGoods()">
             </div>
             
-            <div style="width:120px;height:100%;float:left;">
+            <div style="width:12%;height:100%;float:left;">
                 <img :src="cartObj.backImage" style="width:100%;height:100%;cursor:pointer;" @click="showGoodsDetail(cartObj.id)">
             </div>
-            <div style="width:200px;height:100%;float:left;padding: 10px;">
+            <div style="width:15%;height:100%;float:left;padding: 10px;">
                 <p>商品名称：{{cartObj.name}}</p>
                 <p>商品产地：{{cartObj.place}}</p>
                 <p>商品描述：{{cartObj.brief}}</p>
-                <p>商品原价    ：￥ {{cartObj.originalPrice}}</p>
+                <p>商品原价：￥ {{cartObj.originalPrice}}</p>
             </div>
             
-            <div style="width:250px;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid grey;">
-                    <span style="text-decoration:line-through;color:grey;font-size: 18px;">￥{{cartObj.originalPrice}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span style="font-weight: bold;color: red;font-size: 22px;">￥{{cartObj.salePrice}}</span>
+            <div style="width:23%;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid grey;">
+                <span style="text-decoration:line-through;color:grey;font-size: 18px;">￥{{cartObj.originalPrice}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span style="font-weight: bold;color: red;font-size: 22px;">￥{{cartObj.salePrice}}</span>
             </div>
-            <div style="width:100px;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid grey;">
+            <div style="width:10%;height:100%;float:left;text-align:center;padding-top:40px;border:1px solid grey;">
                 <a href="javascript:void(0)" @click="cartObj.goodsCount--;selectGoods();" style="font-weight: bold;">-</a>
                 <input :value="cartObj.goodsCount" readonly style="width:25px;text-align: center;">
                 <a href="javascript:void(0)" @click="cartObj.goodsCount++;selectGoods();" style="font-weight: bold;">+</a>
             </div>
-            <div style="width:100px;height:100%;float:left;text-align:center;padding-top:40px;font-size:25px;border:1px solid grey;">
+            <div style="width:10%;height:100%;float:left;text-align:center;padding-top:40px;font-size:25px;border:1px solid grey;">
                 <span>{{cartObj.salePrice * cartObj.goodsCount}}</span>
             </div>
-            <div style="width:80px;height:100%;float:left;text-align:center;padding-top:40px;font-size:25px;border:1px solid grey;">
+            <div style="width:25%;height:100%;float:left;text-align:center;padding-top:40px;font-size:25px;border:1px solid grey;">
                 <button class="btn btn-danger" @click="removeShoopingCartObj(cartObj.shoppingCartPkId)">删除</button>
             </div>
         </div>
@@ -67,7 +67,7 @@
                 <input type="checkbox" v-model="selectAllFlag" @click="selectAll()">全选
             </div>
             <div style="width:400px;height:60px;float:right;text-align: right;font-size: 30px;">
-                <span style="text-decoration:line-through;color:grey;">{{totalOriginalPrice}}元</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                <span style="text-decoration:line-through;color:grey;font-size:22px;">{{totalOriginalPrice}}元</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span>{{totalSalePrice}}元</span>
                 <button class="btn btn-primary"><i class="fa fa-paypal"></i>立即支付</button>
             </div>
