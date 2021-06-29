@@ -41,13 +41,18 @@
             <div style="width:100%;height:50px;text-align: center;">
                 <span style="font-weight: bold;font-size: 25px;">￥{{orderInfo.totalSalePrice}}元</span>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-primary" @click="pay()">立即支付</button>
             </div>
-            <div style="width:100%;height:200px;">
+            <div style="width:100%;height:auto;overflow-y: auto;">
                 <p>订单详情</p>
-                <div v-for="goods in orderInfo.goodsList" style="width: 100%;border:1px solid grey;margin-bottom: 3px;padding: 3px;">
-                    <p>子订单号：{{goods.orderNo}}</p>
-                    <p>数量：{{goods.goodsCount}}</p>
-                    <p>原价：￥{{toFixedNumber(goods.goodsOriginalPrice)}}</p>
-                    <p>售价：￥{{toFixedNumber(goods.goodsSalePrice)}}</p>
+                <div v-for="goods in orderInfo.goodsList" style="width: 100%;height:102px;border:1px solid grey;margin-bottom: 3px;padding: 3px;">
+                    <div style="width:100px;height:100px;float:left;padding:10px;">
+                        <img :src="goods.backImage" style="width: 100%;height: 100%;">
+                    </div>
+                    <div style="width: 500px;height:100px;float:left;margin-left:25px;">
+                        <p>子订单号：{{goods.orderNo}}</p>
+                        <p>名称：{{goods.name}}</p>
+                        <p>数量：{{goods.goodsCount}}</p>
+                        <p><span style="color: grey;font-size: 15px;">￥{{toFixedNumber(goods.goodsOriginalPrice)}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;font-size: 20px;">￥{{toFixedNumber(goods.goodsSalePrice)}}</span></p>
+                    </div>
                 </div>
             </div>
         </div>
