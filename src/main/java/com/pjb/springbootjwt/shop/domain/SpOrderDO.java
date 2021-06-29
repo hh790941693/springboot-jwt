@@ -40,6 +40,12 @@ public class SpOrderDO implements Serializable {
     @ApiModelProperty(value = "parentOrderNo" , name = "父订单号")
     private String parentOrderNo;
 
+    //店铺id
+    private String merchantId;
+
+    //商品id
+    private String goodsId;
+
     //总价
     @ApiModelProperty(value = "totalPrice" , name = "总价")
     private BigDecimal totalPrice;

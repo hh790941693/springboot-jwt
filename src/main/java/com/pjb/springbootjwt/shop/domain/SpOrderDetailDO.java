@@ -44,9 +44,12 @@ public class SpOrderDetailDO implements Serializable {
     @ApiModelProperty(value = "goodsCount" , name = "商品数量")
     private Integer goodsCount;
 
+    //商品原价
+    @ApiModelProperty(value = "goodsOriginalPrice" , name = "商品原价")
+    private BigDecimal goodsOriginalPrice;
+
     //商品售价
-    @ApiModelProperty(value = "goodsPrice" , name = "商品售价")
-    private BigDecimal goodsPrice;
+    private BigDecimal goodsSalePrice;
 
     //商品所属的商家id
     @ApiModelProperty(value = "merchantId" , name = "商品所属的商家id")

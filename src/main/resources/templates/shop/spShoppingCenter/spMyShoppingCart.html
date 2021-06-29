@@ -221,9 +221,24 @@
                       layer.alert("请选择你要下单的物品!");
                       return;
                   }
+                  var goodsIdArr = [];
                   for (var i=0;i<app.selectedGoodsIndexArr.length;i++) {
                       console.log(app.shoppingCartList[app.selectedGoodsIndexArr[i]]);
+                      goodsIdArr.push(app.shoppingCartList[app.selectedGoodsIndexArr[i]].goodsId);
                   }
+
+                  $.ajax({
+                      type: "POST",
+                      url: "/shop/shoppingCenter/createOrder",
+                      data : {
+                          'goodsIdArr':goodsIdArr
+                      },
+                      success: function (result) {
+                          if (result.code == 1) {
+                            layer.msg("下单成功:"+result.data)
+                          }
+                      }
+                  });
               },
               toFixedNumber : function (num) {
                   return num.toFixed(2);
