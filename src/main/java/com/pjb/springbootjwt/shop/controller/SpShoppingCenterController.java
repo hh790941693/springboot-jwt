@@ -3,15 +3,13 @@ package com.pjb.springbootjwt.shop.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.pjb.springbootjwt.shop.domain.SpGoodsTypeDO;
 import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
 import com.pjb.springbootjwt.shop.dto.SpMerchantDTO;
 import com.pjb.springbootjwt.shop.dto.SpFavoriteDTO;
 import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
 import com.pjb.springbootjwt.shop.dto.SpShoppingCartDTO;
-import com.pjb.springbootjwt.shop.service.SpGoodsService;
-import com.pjb.springbootjwt.shop.service.SpMerchantService;
-import com.pjb.springbootjwt.shop.service.SpFavoriteService;
-import com.pjb.springbootjwt.shop.service.SpShoppingCartService;
+import com.pjb.springbootjwt.shop.service.*;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.apache.commons.lang.StringUtils;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
@@ -43,6 +41,9 @@ public class SpShoppingCenterController {
     @Autowired
     private SpShoppingCartService spShoppingCartService;
 
+    @Autowired
+    private SpGoodsTypeService spGoodsTypeService;
+
     @GetMapping()
     public String SpShoppingCenter(){
         return "shop/spShoppingCenter/spShoppingCenter";
@@ -63,6 +64,9 @@ public class SpShoppingCenterController {
         }
         if (StringUtils.isNotBlank(params.getMerchantName())) {
             wrapper.like("t2.name", params.getMerchantName());
+        }
+        if (StringUtils.isNotBlank(params.getGoodsTypeId())) {
+            wrapper.like("t1.goods_type_id", params.getGoodsTypeId());
         }
         wrapper.eq("t1.status", 1);
         wrapper.ne("t2.status", 0);
@@ -181,5 +185,12 @@ public class SpShoppingCenterController {
     public Result<List<SpShoppingCartDTO>> queryShoppingCartList(){
         List<SpShoppingCartDTO> spShoppingCartDTOList = spShoppingCartService.queryShoppingCartList(SessionUtil.getSessionUserId());
         return Result.ok(spShoppingCartDTOList);
+    }
+
+    @RequestMapping("/queryGoodsTypeList")
+    @ResponseBody
+    public Result<List<SpGoodsTypeDO>> queryGoodsTypeList() {
+        List<SpGoodsTypeDO> list = spGoodsTypeService.selectList(new EntityWrapper<SpGoodsTypeDO>().ne("status", 0));
+        return Result.ok(list);
     }
 }

@@ -63,11 +63,19 @@
             <div style="width:100%;height:60px;">
                 <div style="width:140px;float:left;">
                     <span>商品名称 :</span>
-                    <input id="goodsName">
+                    <input id="goodsName" style="width: 100%;">
                 </div>
                 <div style="width:140px;float:left;margin-left:50px;">
                     <span>店铺名称 :</span>
-                    <input id="merchantName">
+                    <input id="merchantName" style="width: 100%;">
+                </div>
+
+                <div style="width:140px;float:left;margin-left:50px;">
+                    <span>商品分类 :</span>
+                    <select id="goodsTypeSelect" style="width: 100%;">
+                        <option value="">--请选择--</option>
+                        <option v-for="goodsType in goodsTypeListData" :value="goodsType.typeId">{{goodsType.name}}</option>
+                    </select>
                 </div>
 
                 <div style="width:160px;float:left;margin-left:50px;">
@@ -98,7 +106,7 @@
         </div>
         <hr />
         <div id="innerDiv">
-            <div class="goodsDiv" v-for="(goodsDetail,index) in goodsData" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
+            <div class="goodsDiv" v-for="(goodsDetail,index) in goodsListData" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
                 <div style="width:100%;height:188px;padding-top:10px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
                     <img :src="goodsDetail.backImage" style="width:calc(100% - 40px);height:calc(100% - 20px);">
                 </div>
@@ -145,7 +153,8 @@
         var app = new Vue({
             el: '#mainDiv',
             data: {
-                goodsData: {},
+                goodsListData: {},
+                goodsTypeListData: {},
                 priceSort: true,
                 saleNumberSort: false,
             },
@@ -161,13 +170,14 @@
                         data: {
                             'name':$("#goodsName").val(),
                             'merchantName':$("#merchantName").val(),
+                            'goodsTypeId':$("#goodsTypeSelect").val(),
                             'priceSort':this.priceSort,
                             'saleNumberSort': this.saleNumberSort,
                         },
                         success: function (result) {
                             layer.close(loadIndex);
                             if (result.code == 1) {
-                                app.goodsData = result.data;
+                                app.goodsListData = result.data;
                             }
                         }
                     });
@@ -186,6 +196,7 @@
                 resetSearch: function () {
                     $("#goodsName").val("");
                     $("#merchantName").val("");
+                    $("#goodsTypeSelect").val("");
                     app.priceSort = true;
                     app.saleNumberSort = false;
                     this.queryGoodsList();
@@ -216,9 +227,20 @@
                         }
                     });
                 },
+                // 查询商品类型列表
+                queryGoodsTypeList : function () {
+                    $.ajax({
+                        type: "GET",
+                        url: "/shop/shoppingCenter/queryGoodsTypeList",
+                        success: function (result) {
+                            app.goodsTypeListData = result.data;
+                        }
+                    });
+                }
             },
             created: function () {
                 this.queryGoodsList();
+                this.queryGoodsTypeList();
             }
         });
     </script>
