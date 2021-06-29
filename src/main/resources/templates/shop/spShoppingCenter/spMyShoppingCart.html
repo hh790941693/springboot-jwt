@@ -119,12 +119,10 @@
                               },
                               success: function (result) {
                                   if (result.code == 1) {
-                                      console.log(that.selectedGoodsIndexArr);
                                       var iindex = that.selectedGoodsIndexArr.indexOf(index);
                                       if (iindex != -1) {
                                           that.selectedGoodsIndexArr.splice(iindex, 1);
                                       }
-                                      console.log(that.selectedGoodsIndexArr);
                                       that.queryShoppingCartList();
                                       that.computeGoodsPrice();
                                   }
