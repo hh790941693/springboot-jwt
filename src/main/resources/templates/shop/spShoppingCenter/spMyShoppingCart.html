@@ -71,7 +71,7 @@
                 <span style="text-decoration:line-through;color:grey;font-size:22px;">{{toFixedNumber(totalOriginalPrice)}}元</span>
                 <span style="font-size: 10px;color:blue;">(已为您节省{{toFixedNumber(totalOriginalPrice-totalSalePrice)}}元)</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span>{{toFixedNumber(totalSalePrice)}}元</span>
-                <button class="btn btn-success" @click="payNow()">立即下单</button>
+                <button class="btn btn-success" @click="orderNow()">立即下单</button>
             </div>
         </div>
   </div>
@@ -101,6 +101,7 @@
                           layer.close(loadIndex);
                           if (result.code == 1) {
                               app.shoppingCartList = result.data;
+                              that.computeGoodsPrice();
                           }
                       }
                   });
@@ -124,7 +125,6 @@
                                           that.selectedGoodsIndexArr.splice(iindex, 1);
                                       }
                                       that.queryShoppingCartList();
-                                      that.computeGoodsPrice();
                                   }
                                   layer.close(conIndex);
                               }
@@ -215,15 +215,15 @@
                       }
                   });
               },
-              // 立即支付
-              payNow : function(){
+              // 立即下单
+              orderNow : function(){
+                  var that = this;
                   if (app.selectedGoodsIndexArr.length == 0) {
                       layer.alert("请选择你要下单的物品!");
                       return;
                   }
                   var goodsIdArr = [];
                   for (var i=0;i<app.selectedGoodsIndexArr.length;i++) {
-                      console.log(app.shoppingCartList[app.selectedGoodsIndexArr[i]]);
                       goodsIdArr.push(app.shoppingCartList[app.selectedGoodsIndexArr[i]].goodsId);
                   }
 
@@ -236,15 +236,21 @@
                       success: function (result) {
                           if (result.code == 1) {
                              layer.msg("下单成功:"+result.data);
-                             //跳转到支付页面
-                              layer.open({
-                                  type : 2,
-                                  title : '支付页面',
-                                  maxmin : true,
-                                  shadeClose : false,//点击遮罩关闭层
-                                  area : [ '800px', '620px' ],
-                                  content : '/shop/shoppingCenter/spShoppingPay.page?orderNo='+result.data
-                              });
+                              app.selectedGoodsIndexArr = [];
+                              app.totalOriginalPrice = 0;
+                              app.totalSalePrice = 0;
+                              that.queryShoppingCartList();
+                              setTimeout(function () {
+                                  //跳转到支付页面
+                                  layer.open({
+                                      type : 2,
+                                      title : '支付页面',
+                                      maxmin : true,
+                                      shadeClose : false,//点击遮罩关闭层
+                                      area : [ '800px', '620px' ],
+                                      content : '/shop/shoppingCenter/spShoppingPay.page?orderNo='+result.data
+                                  });
+                              },200);
                           }
                       }
                   });
