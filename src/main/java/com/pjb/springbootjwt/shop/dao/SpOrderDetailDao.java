@@ -1,8 +1,12 @@
 package com.pjb.springbootjwt.shop.dao;
 
 import com.pjb.springbootjwt.shop.domain.SpOrderDetailDO;
+import com.pjb.springbootjwt.shop.dto.SpOrderDetailDTO;
 import com.pjb.springbootjwt.zhddkk.base.BaseDao;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * 订单详情表
@@ -10,4 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SpOrderDetailDao extends BaseDao<SpOrderDetailDO> {
 
+    List<SpOrderDetailDTO> queryOrderDetailList(@Param("parentOrderNo")String parentOrderNo);
 }

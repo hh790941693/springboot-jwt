@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.shop.domain.*;
-import com.pjb.springbootjwt.shop.dto.SpGoodsDTO;
-import com.pjb.springbootjwt.shop.dto.SpMerchantDTO;
-import com.pjb.springbootjwt.shop.dto.SpFavoriteDTO;
-import com.pjb.springbootjwt.shop.dto.SpShoppingCartDTO;
+import com.pjb.springbootjwt.shop.dto.*;
 import com.pjb.springbootjwt.shop.service.*;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.apache.commons.lang.StringUtils;
@@ -309,10 +306,20 @@ public class SpShoppingCenterController {
 
     @GetMapping("/queryOrderDetailList")
     @ResponseBody
-    public Result<List<SpOrderDetailDO>> queryOrderDetailList(String parentOrderNo) {
-        List<SpOrderDO> spOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>().eq("parent_order_no", parentOrderNo));
-        List<String> orderNoList = spOrderList.stream().map(order->order.getOrderNo()).collect(Collectors.toList());
-        List<SpOrderDetailDO> spOrderDetailList = spOrderDetailService.selectList(new EntityWrapper<SpOrderDetailDO>().in("order_no", orderNoList));
-        return Result.ok(spOrderDetailList);
+    @Transactional(rollbackFor = Exception.class)
+    public Result<SpOrderDTO> queryOrderDetailList(String parentOrderNo) {
+        SpOrderDO mainOrder = spOrderService.selectOne(new EntityWrapper<SpOrderDO>().eq("order_no", parentOrderNo));
+        if (null == mainOrder) {
+            return Result.fail();
+        }
+        SpOrderDTO spOrderDTO = new SpOrderDTO();
+        List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(parentOrderNo);
+
+        spOrderDTO.setParentOrderNo(parentOrderNo);
+        spOrderDTO.setGoodsList(spOrderDetailList);
+        spOrderDTO.setTotalOriginalPrice(mainOrder.getTotalPrice());
+        spOrderDTO.setTotalSalePrice(mainOrder.getPayPrice());
+
+        return Result.ok(spOrderDTO);
     }
 }

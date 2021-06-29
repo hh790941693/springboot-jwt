@@ -2,5 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pjb.springbootjwt.shop.dao.SpOrderDetailDao">
-
+    <select id="queryOrderDetailList" resultType="com.pjb.springbootjwt.shop.dto.SpOrderDetailDTO">
+        SELECT
+            t1.*,
+            cast(t1.original_price as char) AS original_price_str,
+            cast(t1.sale_price as char) AS sale_price_str,
+            t3.name AS merchant_name
+        FROM
+            sp_goods t1
+        LEFT JOIN
+            sp_merchant t3
+        ON
+            t1.merchant_id = t3.merchant_id
+        WHERE
+            t1.goods_id IN (
+                SELECT
+                    t4.goods_id
+                FROM
+                    sp_order_detail t4
+                WHERE
+                    t4.order_no IN (
+                        SELECT
+                            t5.order_no
+                        FROM
+                            sp_order t5
+                        WHERE t5.parent_order_no = #{parentOrderNo}
+                    )
+            )
+    </select>
 </mapper>

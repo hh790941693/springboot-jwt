@@ -29,7 +29,7 @@
                 订单号：{{orderNo}}
             </div>
             <div style="width: 100%;height:30px;font-size:16px;">
-                <span>原价：￥250元</span>
+                <span>原价：￥{{orderInfo.totalOriginalPrice}}元</span>
             </div>
             <div id="payWayDiv" style="width: 100%;height:30px;font-size:16px;">
                 <span>支付方式：</span>
@@ -39,13 +39,13 @@
                 <input type="radio" v-model="payWay" :value="9">其他
             </div>
             <div style="width:100%;height:50px;text-align: center;">
-                <span style="font-weight: bold;font-size: 25px;">￥200元</span>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-primary" @click="pay()">立即支付</button>
+                <span style="font-weight: bold;font-size: 25px;">￥{{orderInfo.totalSalePrice}}元</span>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-primary" @click="pay()">立即支付</button>
             </div>
             <div style="width:100%;height:200px;">
                 <p>订单详情</p>
-                <div v-for="goods in orderDetailList" style="width: 100%;border:1px solid grey;margin-bottom: 3px;padding: 3px;">
+                <div v-for="goods in orderInfo.goodsList" style="width: 100%;border:1px solid grey;margin-bottom: 3px;padding: 3px;">
                     <p>子订单号：{{goods.orderNo}}</p>
-                    <p>数量：{{goods.goodsCount}}</p>
+                    <p>数量：0</p>
                     <p>原价：￥{{toFixedNumber(goods.goodsOriginalPrice)}}</p>
                     <p>售价：￥{{toFixedNumber(goods.goodsSalePrice)}}</p>
                 </div>
@@ -60,7 +60,7 @@
             data: {
                 orderNo : $("#orderNo").val(), //订单号
                 payWay : 1, //支付方式 1:微信 2:支付宝 3:银行卡 9:其他
-                orderDetailList : [],  //详细订单列表
+                orderInfo : [],  //订单数据
             },
             methods: {
                 pay : function(){
@@ -75,7 +75,7 @@
                         },
                         success: function (result) {
                             if (result.code == 1) {
-                                app.orderDetailList = result.data;
+                                app.orderInfo = result.data;
                             }
                         }
                     });
