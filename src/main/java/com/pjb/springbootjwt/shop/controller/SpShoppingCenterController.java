@@ -306,4 +306,13 @@ public class SpShoppingCenterController {
         model.addAttribute("orderNo", orderNo);
         return "shop/spShoppingCenter/spShoppingPay";
     }
+
+    @GetMapping("/queryOrderDetailList")
+    @ResponseBody
+    public Result<List<SpOrderDetailDO>> queryOrderDetailList(String parentOrderNo) {
+        List<SpOrderDO> spOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>().eq("parent_order_no", parentOrderNo));
+        List<String> orderNoList = spOrderList.stream().map(order->order.getOrderNo()).collect(Collectors.toList());
+        List<SpOrderDetailDO> spOrderDetailList = spOrderDetailService.selectList(new EntityWrapper<SpOrderDetailDO>().in("order_no", orderNoList));
+        return Result.ok(spOrderDetailList);
+    }
 }
