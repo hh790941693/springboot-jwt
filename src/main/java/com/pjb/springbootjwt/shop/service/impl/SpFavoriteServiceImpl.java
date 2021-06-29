@@ -1,6 +1,6 @@
 package com.pjb.springbootjwt.shop.service.impl;
 
-import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
+import com.pjb.springbootjwt.shop.dto.SpGoodsDTO;
 import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class SpFavoriteServiceImpl extends CoreServiceImpl<SpFavoriteDao, SpFavo
     private static final Logger logger = LoggerFactory.getLogger(SpFavoriteServiceImpl.class);
 
     @Override
-    public List<GoodsDetailDTO> queryFavoriteGoodsList(String loginUserId) {
+    public List<SpGoodsDTO> queryFavoriteGoodsList(String loginUserId) {
         return this.baseMapper.queryFavoriteGoodsList(loginUserId);
     }
 

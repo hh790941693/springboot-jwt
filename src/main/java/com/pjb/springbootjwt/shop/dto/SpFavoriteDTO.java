@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class SpFavoriteDTO {
 
-    private List<GoodsDetailDTO> goodsList;
+    private List<SpGoodsDTO> goodsList;
 
     private List<SpMerchantDO> merchantList;
 }

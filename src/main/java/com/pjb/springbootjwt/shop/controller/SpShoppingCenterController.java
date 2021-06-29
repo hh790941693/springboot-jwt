@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.shop.domain.SpGoodsTypeDO;
-import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
+import com.pjb.springbootjwt.shop.dto.SpGoodsDTO;
 import com.pjb.springbootjwt.shop.dto.SpMerchantDTO;
 import com.pjb.springbootjwt.shop.dto.SpFavoriteDTO;
 import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
@@ -56,9 +56,9 @@ public class SpShoppingCenterController {
      */
     @RequestMapping("/queryGoodsList")
     @ResponseBody
-    public Result<List<GoodsDetailDTO>> queryGoodsList(GoodsDetailDTO params){
-        Page<GoodsDetailDTO> page = new Page<>(1, 100);
-        Wrapper<GoodsDetailDTO> wrapper = new EntityWrapper<GoodsDetailDTO>();
+    public Result<List<SpGoodsDTO>> queryGoodsList(SpGoodsDTO params){
+        Page<SpGoodsDTO> page = new Page<>(1, 100);
+        Wrapper<SpGoodsDTO> wrapper = new EntityWrapper<SpGoodsDTO>();
         if (StringUtils.isNotBlank(params.getName())) {
             wrapper.like("t1.name", params.getName());
         }
@@ -72,8 +72,8 @@ public class SpShoppingCenterController {
         wrapper.ne("t2.status", 0);
         wrapper.orderBy("t1.sale_price", params.isPriceSort());
         wrapper.orderBy("t1.sale_number", params.isSaleNumberSort());
-        List<GoodsDetailDTO> goodsDetailDTOS = spGoodsService.queryCenterGoodsList(SessionUtil.getSessionUserId(), page, wrapper);
-        return Result.ok(goodsDetailDTOS);
+        List<SpGoodsDTO> spGoodsDTOS = spGoodsService.queryCenterGoodsList(SessionUtil.getSessionUserId(), page, wrapper);
+        return Result.ok(spGoodsDTOS);
     }
 
     /**
@@ -83,17 +83,17 @@ public class SpShoppingCenterController {
      */
     @RequestMapping("/queryGoodsListByMerchantId")
     @ResponseBody
-    public Result<List<GoodsDetailDTO>> queryGoodsListByMerchantId(GoodsDetailDTO params){
-        Page<GoodsDetailDTO> page = new Page<>(1, 100);
-        Wrapper<GoodsDetailDTO> wrapper = new EntityWrapper<GoodsDetailDTO>();
+    public Result<List<SpGoodsDTO>> queryGoodsListByMerchantId(SpGoodsDTO params){
+        Page<SpGoodsDTO> page = new Page<>(1, 100);
+        Wrapper<SpGoodsDTO> wrapper = new EntityWrapper<SpGoodsDTO>();
         if (StringUtils.isNotBlank(params.getMerchantId())) {
             wrapper.like("t1.merchant_id", params.getMerchantId());
         }
         wrapper.ne("t1.status", 0);
         wrapper.ne("t2.status", 0);
         wrapper.orderBy("t1.sale_number", false);
-        List<GoodsDetailDTO> goodsDetailDTOS = spGoodsService.queryCenterGoodsList(SessionUtil.getSessionUserId(), page, wrapper);
-        return Result.ok(goodsDetailDTOS);
+        List<SpGoodsDTO> spGoodsDTOS = spGoodsService.queryCenterGoodsList(SessionUtil.getSessionUserId(), page, wrapper);
+        return Result.ok(spGoodsDTOS);
     }
 
     /**
@@ -114,9 +114,9 @@ public class SpShoppingCenterController {
      */
     @RequestMapping("/goodsDetail")
     @ResponseBody
-    public Result<GoodsDetailDTO> goodsDetail(String goodsPkId){
-        GoodsDetailDTO goodsDetailDTO = spGoodsService.queryCenterGoodsDetail(SessionUtil.getSessionUserId(), goodsPkId);
-        return Result.ok(goodsDetailDTO);
+    public Result<SpGoodsDTO> goodsDetail(String goodsPkId){
+        SpGoodsDTO spGoodsDTO = spGoodsService.queryCenterGoodsDetail(SessionUtil.getSessionUserId(), goodsPkId);
+        return Result.ok(spGoodsDTO);
     }
 
     /**
@@ -158,7 +158,7 @@ public class SpShoppingCenterController {
     @RequestMapping("/queryFavoriteSubjectList")
     @ResponseBody
     public Result<SpFavoriteDTO> queryFavoriteGoodsList(){
-        List<GoodsDetailDTO> goodsDoList = spFavoriteService.queryFavoriteGoodsList(SessionUtil.getSessionUserId());
+        List<SpGoodsDTO> goodsDoList = spFavoriteService.queryFavoriteGoodsList(SessionUtil.getSessionUserId());
         List<SpMerchantDO> merchantDoList = spFavoriteService.queryFavoriteMerchantList(SessionUtil.getSessionUserId());
 
         SpFavoriteDTO spFavoriteDTO = new SpFavoriteDTO();

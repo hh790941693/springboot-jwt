@@ -2,7 +2,7 @@ package com.pjb.springbootjwt.shop.dao;
 
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.pjb.springbootjwt.shop.domain.SpGoodsDO;
-import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
+import com.pjb.springbootjwt.shop.dto.SpGoodsDTO;
 import com.pjb.springbootjwt.zhddkk.base.BaseDao;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -16,11 +16,11 @@ import java.util.List;
 @Repository
 public interface SpGoodsDao extends BaseDao<SpGoodsDO> {
     // 查询商品详情列表
-    List<GoodsDetailDTO> queryCenterGoodsList(@Param("loginUserId")String loginUserId, RowBounds rowBounds, @Param("ew") Wrapper<GoodsDetailDTO> wrapper);
+    List<SpGoodsDTO> queryCenterGoodsList(@Param("loginUserId")String loginUserId, RowBounds rowBounds, @Param("ew") Wrapper<SpGoodsDTO> wrapper);
 
     // 查询商品详情
-    GoodsDetailDTO queryCenterGoodsDetail(@Param("loginUserId")String loginUserId, @Param("goodsPkId")String goodsPkId);
+    SpGoodsDTO queryCenterGoodsDetail(@Param("loginUserId")String loginUserId, @Param("goodsPkId")String goodsPkId);
 
     // 查询猜你喜欢商品列表
-    List<GoodsDetailDTO> queryMaybeLikeGoodsList(@Param("goodsPkId")String goodsPkId);
+    List<SpGoodsDTO> queryMaybeLikeGoodsList(@Param("goodsPkId")String goodsPkId);
 }

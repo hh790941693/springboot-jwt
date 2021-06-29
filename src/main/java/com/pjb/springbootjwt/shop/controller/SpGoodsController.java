@@ -9,7 +9,7 @@ import java.util.UUID;
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.shop.domain.SpGoodsTypeDO;
 import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
-import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
+import com.pjb.springbootjwt.shop.dto.SpGoodsDTO;
 import com.pjb.springbootjwt.shop.service.SpGoodsTypeService;
 import com.pjb.springbootjwt.shop.service.SpMerchantService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
@@ -215,13 +215,13 @@ public class SpGoodsController extends AdminBaseController {
 	@GetMapping("/queryMaybeLikeGoodsList")
 	@ResponseBody
 	//@RequiresPermissions("shop:spGoods:batchRemove")
-	public Result<List<GoodsDetailDTO>> queryMaybeLikeGoodsList(String goodsPkId) {
+	public Result<List<SpGoodsDTO>> queryMaybeLikeGoodsList(String goodsPkId) {
 		SpGoodsDO spGoodsDO = spGoodsService.selectOne(new EntityWrapper<SpGoodsDO>().eq("id", goodsPkId));
 		if (null == spGoodsDO) {
 			return Result.fail();
 		}
 
-		List<GoodsDetailDTO> list = spGoodsService.queryMaybeLikeGoodsList(goodsPkId);
+		List<SpGoodsDTO> list = spGoodsService.queryMaybeLikeGoodsList(goodsPkId);
 		return Result.ok(list);
 	}
 }

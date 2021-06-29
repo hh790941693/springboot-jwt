@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pjb.springbootjwt.shop.dao.SpFavoriteDao">
-    <select id="queryFavoriteGoodsList" resultType="com.pjb.springbootjwt.shop.dto.GoodsDetailDTO">
+    <select id="queryFavoriteGoodsList" resultType="com.pjb.springbootjwt.shop.dto.SpGoodsDTO">
         select
           t2.*,
           t3.name as merchant_name,

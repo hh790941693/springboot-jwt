@@ -7,7 +7,7 @@ import lombok.Data;
  * 商品详情DTO.
  */
 @Data
-public class GoodsDetailDTO extends SpGoodsDO {
+public class SpGoodsDTO extends SpGoodsDO {
 
     // 店铺名称
     private String merchantName;

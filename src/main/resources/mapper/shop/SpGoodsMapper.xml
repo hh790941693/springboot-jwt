@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pjb.springbootjwt.shop.dao.SpGoodsDao">
-    <select id="queryCenterGoodsList" resultType="com.pjb.springbootjwt.shop.dto.GoodsDetailDTO">
+    <select id="queryCenterGoodsList" resultType="com.pjb.springbootjwt.shop.dto.SpGoodsDTO">
         select
             t1.*,
             t2.name AS merchant_name,
@@ -35,7 +35,7 @@
         </if>
     </select>
 
-    <select id="queryCenterGoodsDetail" resultType="com.pjb.springbootjwt.shop.dto.GoodsDetailDTO">
+    <select id="queryCenterGoodsDetail" resultType="com.pjb.springbootjwt.shop.dto.SpGoodsDTO">
         select
             t1.*,
             t2.name AS merchant_name,
@@ -68,7 +68,7 @@
         and t1.id = #{goodsPkId}
     </select>
 
-    <select id="queryMaybeLikeGoodsList" resultType="com.pjb.springbootjwt.shop.dto.GoodsDetailDTO">
+    <select id="queryMaybeLikeGoodsList" resultType="com.pjb.springbootjwt.shop.dto.SpGoodsDTO">
         SELECT
             t1.*,
             cast(t1.original_price as char) AS original_price_str,

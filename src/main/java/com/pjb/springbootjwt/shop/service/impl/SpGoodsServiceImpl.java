@@ -2,7 +2,7 @@ package com.pjb.springbootjwt.shop.service.impl;
 
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
+import com.pjb.springbootjwt.shop.dto.SpGoodsDTO;
 import org.springframework.stereotype.Service;
 
 import com.pjb.springbootjwt.shop.dao.SpGoodsDao;
@@ -23,18 +23,18 @@ public class SpGoodsServiceImpl extends CoreServiceImpl<SpGoodsDao, SpGoodsDO> i
     private static final Logger logger = LoggerFactory.getLogger(SpGoodsServiceImpl.class);
 
     @Override
-    public List<GoodsDetailDTO> queryCenterGoodsList(String loginUserId, Page<GoodsDetailDTO> page, Wrapper<GoodsDetailDTO> wrapper) {
+    public List<SpGoodsDTO> queryCenterGoodsList(String loginUserId, Page<SpGoodsDTO> page, Wrapper<SpGoodsDTO> wrapper) {
         return this.baseMapper.queryCenterGoodsList(loginUserId, page, wrapper);
     }
 
     @Override
-    public GoodsDetailDTO queryCenterGoodsDetail(String loginUserId, String goodsPkId) {
+    public SpGoodsDTO queryCenterGoodsDetail(String loginUserId, String goodsPkId) {
         return this.baseMapper.queryCenterGoodsDetail(loginUserId, goodsPkId);
     }
 
     // 查询猜你喜欢商品列表
     @Override
-    public List<GoodsDetailDTO> queryMaybeLikeGoodsList(String goodsPkId) {
+    public List<SpGoodsDTO> queryMaybeLikeGoodsList(String goodsPkId) {
         return this.baseMapper.queryMaybeLikeGoodsList(goodsPkId);
     }
 }
