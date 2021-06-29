@@ -31,4 +31,10 @@ public class SpGoodsServiceImpl extends CoreServiceImpl<SpGoodsDao, SpGoodsDO> i
     public GoodsDetailDTO queryCenterGoodsDetail(String loginUserId, String goodsPkId) {
         return this.baseMapper.queryCenterGoodsDetail(loginUserId, goodsPkId);
     }
+
+    // 查询猜你喜欢商品列表
+    @Override
+    public List<GoodsDetailDTO> queryMaybeLikeGoodsList(String goodsPkId) {
+        return this.baseMapper.queryMaybeLikeGoodsList(goodsPkId);
+    }
 }

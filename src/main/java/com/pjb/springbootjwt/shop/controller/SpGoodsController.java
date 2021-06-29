@@ -8,13 +8,12 @@ import java.util.UUID;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.shop.domain.SpGoodsTypeDO;
-import com.pjb.springbootjwt.shop.domain.SpMerchantApplyDO;
 import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
+import com.pjb.springbootjwt.shop.dto.GoodsDetailDTO;
 import com.pjb.springbootjwt.shop.service.SpGoodsTypeService;
 import com.pjb.springbootjwt.shop.service.SpMerchantService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -208,5 +207,21 @@ public class SpGoodsController extends AdminBaseController {
 		spGoodsDO.setUpdateTime(new Date());
 		spGoodsService.updateById(spGoodsDO);
 		return Result.ok();
+	}
+
+	/**
+	 * 获取猜你喜欢商品列表.
+	 */
+	@GetMapping("/queryMaybeLikeGoodsList")
+	@ResponseBody
+	//@RequiresPermissions("shop:spGoods:batchRemove")
+	public Result<List<GoodsDetailDTO>> queryMaybeLikeGoodsList(String goodsPkId) {
+		SpGoodsDO spGoodsDO = spGoodsService.selectOne(new EntityWrapper<SpGoodsDO>().eq("id", goodsPkId));
+		if (null == spGoodsDO) {
+			return Result.fail();
+		}
+
+		List<GoodsDetailDTO> list = spGoodsService.queryMaybeLikeGoodsList(goodsPkId);
+		return Result.ok(list);
 	}
 }

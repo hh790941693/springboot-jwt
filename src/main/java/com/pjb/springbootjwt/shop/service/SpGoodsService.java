@@ -17,4 +17,7 @@ public interface SpGoodsService extends CoreService<SpGoodsDO> {
     List<GoodsDetailDTO> queryCenterGoodsList(String loginUserId, Page<GoodsDetailDTO> page, Wrapper<GoodsDetailDTO> wrapper);
 
     GoodsDetailDTO queryCenterGoodsDetail(String loginUserId, String goodsPkId);
+
+    // 查询猜你喜欢商品列表
+    List<GoodsDetailDTO> queryMaybeLikeGoodsList(String goodsPkId);
 }

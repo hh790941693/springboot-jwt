@@ -20,4 +20,7 @@ public interface SpGoodsDao extends BaseDao<SpGoodsDO> {
 
     // 查询商品详情
     GoodsDetailDTO queryCenterGoodsDetail(@Param("loginUserId")String loginUserId, @Param("goodsPkId")String goodsPkId);
+
+    // 查询猜你喜欢商品列表
+    List<GoodsDetailDTO> queryMaybeLikeGoodsList(@Param("goodsPkId")String goodsPkId);
 }

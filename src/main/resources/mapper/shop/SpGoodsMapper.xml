@@ -67,4 +67,30 @@
             t2.status != 0
         and t1.id = #{goodsPkId}
     </select>
+
+    <select id="queryMaybeLikeGoodsList" resultType="com.pjb.springbootjwt.shop.dto.GoodsDetailDTO">
+        SELECT
+            t1.*,
+            cast(t1.original_price as char) AS original_price_str,
+            cast(t1.sale_price as char) AS sale_price_str,
+            t2.name AS merchant_name
+        FROM
+            sp_goods t1
+        LEFT join
+            sp_goods t11
+        ON
+            t11.id = #{goodsPkId}
+        LEFT JOIN
+            sp_merchant t2
+        ON
+            t1.merchant_id = t2.merchant_id
+        where
+            t1.goods_type_id = t11.goods_type_id
+        AND
+            t1.id != #{goodsPkId}
+        AND
+<![CDATA[
+            ABS(t1.sale_price-t11.sale_price)/t11.sale_price <= 0.3
+]]>
+    </select>
 </mapper>

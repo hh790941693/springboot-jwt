@@ -32,6 +32,21 @@
             color:#fff;
             background: #007aff;
         }
+
+        .goodsDiv {
+            width:226px;
+            height:310px;
+            padding:0 10px 0 10px;
+            margin-right:5px;
+            margin-bottom: 5px;
+            border: 1px solid grey;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .goodsDiv p {
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -76,9 +91,43 @@
             </div>
         </div>
         <p style="padding-left: 15px;">猜你喜欢</p>
-        <div id="footerDiv" style="width:100%;height:300px;padding: 10px 15px 10px 15px;">
-            <div style="width: 100%;height:100%;border: 1px solid grey;">
+        <div id="footerDiv" style="width:100%;height:340px;padding: 10px 15px 10px 15px;">
+            <div class="goodsDiv" v-for="(goodsDetail,index) in maybelikeGoodsList">
+                <div style="width:100%;height:188px;padding-top:10px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
+                    <img :src="goodsDetail.backImage" style="width:100%;height:100%;">
+                </div>
+                <div style="width:100%;height:20px;">
+                    <div style="width:70%;height:100%;float:left;text-align: left;overflow: hidden;">
+                        <p>{{goodsDetail.name}}</p>
+                    </div>
+                    <div style="width:29%;height:100%;float:right;text-align: right;">
+                        <p style="text-align: right"><i class="fa fa-location-arrow"></i>{{goodsDetail.place}}</p>
+                    </div>
+                </div>
+                <div style="width:100%;height:30px;">
+                    <div style="width:50%;float:left;text-align: left;">
+                        <span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePriceStr}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPriceStr}}</span>
+                    </div>
+                    <div style="width:18%;float:right;">
+                        <button style="width: 40px;" class="btn btn-sm btn-danger" @click="addToShoppingCart(goodsDetail.goodsId, 1)"><i class="fa fa-shopping-cart"></i></button>
+                    </div>
+                </div>
 
+                <div style="height:25px;margin-top: 5px;font-size: 15px;border-bottom: 1px solid lightgrey;">
+                    <p><i class="fa fa-home"></i><a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+goodsDetail.merchantId" target="_blank">{{goodsDetail.merchantName}}</a></p>
+                </div>
+                <div style="height:20px;margin-top:15px;">
+                    <span style="width:49%;display:inline-block;text-align: left;">
+                        库存 {{goodsDetail.stockNum}}
+                    </span>
+                    <span style="width:49%;display:inline-block;text-align: right;">
+                        月销 {{goodsDetail.saleNumber}}
+                    </span>
+                </div>
+                <!--收藏标志图标-->
+                <div style="width:100%; height:16px;" v-if="goodsDetail.goodsFavoriteStatus == 1">
+                    <span style="color: red;" class="glyphicon glyphicon-bookmark"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -89,8 +138,9 @@
         var app = new Vue({
             el: '#mainDiv',
             data: {
-                goodsDetail: {},
-                imageList:[],
+                goodsDetail: {},  //商品详情
+                imageList:[],     //商品图片列表
+                maybelikeGoodsList:[], //猜你喜欢列表
             },
             methods: {
                 queryGoodsDetail: function () {
@@ -154,9 +204,36 @@
                         }
                     });
                 },
+                // 查询猜你喜欢商品列表
+                queryMaybeLikeGoodsList : function(goodsPkId){
+                    $.ajax({
+                        type: "GET",
+                        url: "/shop/spGoods/queryMaybeLikeGoodsList",
+                        data: {
+                            'goodsPkId':goodsPkId,
+                        },
+                        success: function (result) {
+                            app.maybelikeGoodsList = result.data;
+                        }
+                    });
+                },
+                // 单击进入商品详情页
+                showGoodsDetail : function (goodsPkId) {
+                    layer.open({
+                        type: 2,
+                        title: '商品详情页',
+                        shadeClose: true,
+                        shade: 0.2,
+                        area: ['860px', '680px'],
+                        anim: 1,
+                        content: '/shop/shoppingCenter/goodsDetail.page?goodsPkId='+goodsPkId
+                    });
+                },
             },
             created: function () {
                 this.queryGoodsDetail();
+                var goodsPkId = $("#goodsPkId").val();
+                this.queryMaybeLikeGoodsList(goodsPkId);
             }
         });
 
