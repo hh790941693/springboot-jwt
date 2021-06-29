@@ -71,7 +71,7 @@
                 <span style="text-decoration:line-through;color:grey;font-size:22px;">{{toFixedNumber(totalOriginalPrice)}}元</span>
                 <span style="font-size: 10px;color:blue;">(已为您节省{{toFixedNumber(totalOriginalPrice-totalSalePrice)}}元)</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span>{{toFixedNumber(totalSalePrice)}}元</span>
-                <button class="btn btn-primary"><i class="fa fa-paypal"></i>立即支付</button>
+                <button class="btn btn-primary" @click="payNow()"><i class="fa fa-paypal"></i>立即支付</button>
             </div>
         </div>
   </div>
@@ -190,6 +190,13 @@
                   }
                   app.shoppingCartList[index].goodsCount = app.shoppingCartList[index].goodsCount+1;
                   this.computeGoodsPrice();
+              },
+              // 立即支付
+              payNow : function(){
+                  if (app.selectedGoodsIndexArr.length == 0) {
+                      layer.alert("请选择你要下单的物品!");
+                      return;
+                  }
               },
               toFixedNumber : function (num) {
                   return num.toFixed(2);
