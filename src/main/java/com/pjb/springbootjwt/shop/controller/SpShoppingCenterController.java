@@ -240,7 +240,9 @@ public class SpShoppingCenterController {
         List<SpShoppingCartDTO> spShoppingCartDTOList = spShoppingCartService.queryShoppingCartList(SessionUtil.getSessionUserId());
         List<String> goodsIdList = new ArrayList<>(Arrays.asList(goodsIdArr));
         List<SpShoppingCartDTO> orderGoodsList = spShoppingCartDTOList.stream().filter(cart->goodsIdList.contains(cart.getGoodsId())).collect(Collectors.toList());
-
+        if (null == orderGoodsList || orderGoodsList.size() == 0) {
+            return Result.fail("请先选择要购买的商品");
+        }
         BigDecimal totalOriginalPrice = new BigDecimal(0);
         BigDecimal totalPayPrice = new BigDecimal(0);
         for (SpShoppingCartDTO spShoppingCartDTO : orderGoodsList) {
@@ -277,7 +279,7 @@ public class SpShoppingCenterController {
             subOrder.setUpdateTime(new Date());
             spOrderService.insert(subOrder);
 
-            // 订单商品详情
+            // 各店铺订单商品详情
             SpOrderDetailDO spOrderDetailDO = new SpOrderDetailDO();
             spOrderDetailDO.setOrderNo(subOrder.getOrderNo());
             spOrderDetailDO.setGoodsId(spShoppingCartDTO.getGoodsId());
@@ -289,8 +291,19 @@ public class SpShoppingCenterController {
             spOrderDetailDO.setUpdateTime(new Date());
             spOrderDetailService.insert(spOrderDetailDO);
 
+            // 删除购物车商品
             spShoppingCartService.delete(new EntityWrapper<SpShoppingCartDO>().eq("goods_id", spShoppingCartDTO.getGoodsId()).eq("user_id", SessionUtil.getSessionUserId()));
         }
         return Result.ok(mainOrder.getOrderNo());
+    }
+
+    /**
+     * 支付页面.
+     * @return
+     */
+    @RequestMapping("/spShoppingPay.page")
+    public String spShoppingPay(Model model, String orderNo){
+        model.addAttribute("orderNo", orderNo);
+        return "shop/spShoppingCenter/spShoppingPay";
     }
 }

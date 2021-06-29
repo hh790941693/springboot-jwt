@@ -235,7 +235,16 @@
                       },
                       success: function (result) {
                           if (result.code == 1) {
-                            layer.msg("下单成功:"+result.data)
+                             layer.msg("下单成功:"+result.data);
+                             //跳转到支付页面
+                              layer.open({
+                                  type : 2,
+                                  title : '支付页面',
+                                  maxmin : true,
+                                  shadeClose : false,//点击遮罩关闭层
+                                  area : [ '800px', '520px' ],
+                                  content : '/shop/shoppingCenter/spShoppingPay.page?orderNo='+result.data
+                              });
                           }
                       }
                   });
