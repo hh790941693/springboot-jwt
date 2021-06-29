@@ -62,6 +62,15 @@ public class SpOrderDO implements Serializable {
     @ApiModelProperty(value = "payUserId" , name = "支付用户id")
     private Long payUserId;
 
+    // 支付状态 1：待支付 2:已支付
+    private Integer payStatus;
+
+    // 物流状态 3:待发货 4:已发货
+    private Integer logisticsStatus;
+
+    // 支付方式 1:微信 2:支付宝 3:银行卡 4:现金 9:其他
+    private Integer payWay;
+
     //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
     @ApiModelProperty(value = "status" , name = "状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货")
     private Integer status;

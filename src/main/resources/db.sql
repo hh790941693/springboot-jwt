@@ -28,9 +28,9 @@ CREATE TABLE IF NOT EXISTS `sp_favorite` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='收藏表';
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COMMENT='收藏表';
 
--- Dumping data for table zhdd.sp_favorite: ~20 rows (approximately)
+-- Dumping data for table zhdd.sp_favorite: ~38 rows (approximately)
 /*!40000 ALTER TABLE `sp_favorite` DISABLE KEYS */;
 INSERT INTO `sp_favorite` (`id`, `user_id`, `subject_id`, `subject_type`, `status`, `create_time`, `update_time`) VALUES
 	(1, 23, 'gd_865278eda76e4973ba538a8e25dcaffe', 1, 2, '2021-06-11 20:36:23', '2021-06-26 16:51:50'),
@@ -52,7 +52,25 @@ INSERT INTO `sp_favorite` (`id`, `user_id`, `subject_id`, `subject_type`, `statu
 	(17, 30, 'gd_b8046322522c41bf8bcbe296e2c7c1da', 1, 1, '2021-06-17 11:19:15', '2021-06-17 11:19:15'),
 	(18, 23, 'mer_b231ea39d10149b38663d0dc43d5f0c7', 2, 1, '2021-06-27 18:59:35', '2021-06-27 18:59:35'),
 	(19, 31, 'mer_b231ea39d10149b38663d0dc43d5f0c7', 2, 1, '2021-06-27 19:29:07', '2021-06-27 19:29:07'),
-	(20, 31, 'gd_865278eda76e4973ba538a8e25dcaffe', 1, 1, '2021-06-27 19:29:21', '2021-06-27 19:29:21');
+	(20, 31, 'gd_865278eda76e4973ba538a8e25dcaffe', 1, 1, '2021-06-27 19:29:21', '2021-06-27 19:29:21'),
+	(21, 31, 'gd_59342bceeb224bfeb5907cfb97309124', 1, 1, '2021-06-28 22:10:59', '2021-06-28 22:10:59'),
+	(22, 31, 'gd_092e6fc1c6b942429da608a76b19006a', 1, 1, '2021-06-28 22:11:02', '2021-06-28 22:11:02'),
+	(23, 31, 'gd_b8046322522c41bf8bcbe296e2c7c1da', 1, 1, '2021-06-28 22:11:07', '2021-06-28 22:11:07'),
+	(24, 31, 'gd_2cbdfb93bfd940b5a4ac20f8761fd12b', 1, 1, '2021-06-28 22:11:10', '2021-06-28 22:11:10'),
+	(25, 31, 'gd_57b38380fcc94571b2f29931f03acb99', 1, 1, '2021-06-28 22:11:12', '2021-06-28 22:11:12'),
+	(26, 31, 'gd_ebbc6d586912492b8ad11fef0194d8c6', 1, 1, '2021-06-28 22:11:14', '2021-06-28 22:11:14'),
+	(27, 31, 'gd_e34aecce0a5946dabfa907f4a6a335c8', 1, 1, '2021-06-28 22:11:17', '2021-06-28 22:11:17'),
+	(28, 31, 'gd_233cc264f0534688ae48181fa1c67bd3', 1, 1, '2021-06-28 22:11:21', '2021-06-28 22:11:21'),
+	(29, 31, 'gd_a9d6933261b9466c8964d5a463ec1175', 1, 1, '2021-06-28 22:11:24', '2021-06-28 22:11:24'),
+	(30, 31, 'gd_4eabab3c9a304d779aa1e570d8b44762', 1, 1, '2021-06-28 22:11:30', '2021-06-28 22:11:30'),
+	(31, 31, 'gd_f24701f40b704157879d499610de5c38', 1, 1, '2021-06-28 22:11:32', '2021-06-28 22:11:32'),
+	(32, 31, 'gd_670710e48c23486ab4f16d87538466b0', 1, 1, '2021-06-28 22:11:34', '2021-06-28 22:11:34'),
+	(33, 31, 'gd_387601498d174738a2c2f2332e0ccdd8', 1, 1, '2021-06-28 22:11:36', '2021-06-28 22:11:36'),
+	(34, 31, 'gd_5fda6d842779448abc18d6993d316564', 1, 1, '2021-06-28 22:11:38', '2021-06-28 22:11:38'),
+	(35, 31, 'gd_039a2b8074c34ad8912fe20683225a90', 1, 1, '2021-06-28 22:11:40', '2021-06-28 22:11:40'),
+	(36, 31, 'gd_eb6b692874d644e2a717494203036fa8', 1, 1, '2021-06-28 22:11:43', '2021-06-28 22:11:43'),
+	(37, 31, 'gd_fb208d124d3f4c369ff85340d3732508', 1, 1, '2021-06-28 22:11:46', '2021-06-28 22:11:46'),
+	(38, 31, 'gd_8eee4411aeb342e0bea449ee33395bb2', 1, 1, '2021-06-28 22:11:48', '2021-06-28 22:11:48');
 /*!40000 ALTER TABLE `sp_favorite` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.sp_goods
@@ -193,19 +211,54 @@ CREATE TABLE IF NOT EXISTS `sp_order` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `order_no` varchar(100) NOT NULL COMMENT '订单号',
   `parent_order_no` varchar(100) DEFAULT '' COMMENT '父订单号',
+  `merchant_id` varchar(100) DEFAULT '' COMMENT '商家id',
+  `goods_id` varchar(100) DEFAULT '' COMMENT '商品id',
   `total_price` decimal(10,2) unsigned NOT NULL COMMENT '总价',
   `pay_price` decimal(10,2) unsigned NOT NULL COMMENT '支付价格',
   `order_user_id` bigint(20) unsigned NOT NULL COMMENT '下单用户id',
-  `pay_user_id` bigint(20) unsigned NOT NULL COMMENT '支付用户id',
-  `status` tinyint(3) unsigned NOT NULL COMMENT '状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货',
+  `pay_user_id` bigint(20) DEFAULT NULL COMMENT '支付用户id',
+  `pay_status` tinyint(3) unsigned DEFAULT '1' COMMENT '支付状态 1:待支付 2:已支付',
+  `logistics_status` tinyint(3) unsigned DEFAULT '3' COMMENT '物流状态 3:未发货 4:已发货',
+  `pay_way` tinyint(3) unsigned DEFAULT '1' COMMENT '支付方式 1:微信 2:支付宝 3:银行卡 4:现金 9:其他',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sp_order_unique_index` (`order_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='订单表';
 
--- Dumping data for table zhdd.sp_order: ~0 rows (approximately)
+-- Dumping data for table zhdd.sp_order: ~27 rows (approximately)
 /*!40000 ALTER TABLE `sp_order` DISABLE KEYS */;
+INSERT INTO `sp_order` (`id`, `order_no`, `parent_order_no`, `merchant_id`, `goods_id`, `total_price`, `pay_price`, `order_user_id`, `pay_user_id`, `pay_status`, `logistics_status`, `pay_way`, `status`, `create_time`, `update_time`) VALUES
+	(3, 'porder_34343c51d4c14a6cb1f88a617c222eb7', '', '', '', 10998.00, 7997.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:34:33', '2021-06-29 20:34:33'),
+	(4, 'sorder_83ecf1c13b864c109a7cc8b3287f9114', 'porder_34343c51d4c14a6cb1f88a617c222eb7', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_5fda6d842779448abc18d6993d316564', 1999.00, 998.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:34:33', '2021-06-29 20:34:33'),
+	(5, 'sorder_8122d65f06eb48d986bfffb87d674e89', 'porder_34343c51d4c14a6cb1f88a617c222eb7', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_fb208d124d3f4c369ff85340d3732508', 8999.00, 6999.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:34:33', '2021-06-29 20:34:33'),
+	(6, 'porder_7c06231412924a4e8ef337e27acc12c3', '', '', '', 4417.00, 3377.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:40:49', '2021-06-29 20:40:49'),
+	(7, 'sorder_71b32a2a8c2a4c79be01c4ffd04ef117', 'porder_7c06231412924a4e8ef337e27acc12c3', 'mer_ae7f37e85816499bbb1aa4951bddef58', 'gd_039a2b8074c34ad8912fe20683225a90', 220.00, 204.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:40:49', '2021-06-29 20:40:49'),
+	(8, 'sorder_853da55d555848aeb430e9515a165736', 'porder_7c06231412924a4e8ef337e27acc12c3', 'mer_ae7f37e85816499bbb1aa4951bddef58', 'gd_4eabab3c9a304d779aa1e570d8b44762', 198.00, 174.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:40:49', '2021-06-29 20:40:49'),
+	(9, 'sorder_9ae0d32ce02d4217a9540a00e288e8df', 'porder_7c06231412924a4e8ef337e27acc12c3', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_8eee4411aeb342e0bea449ee33395bb2', 3999.00, 2999.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:40:49', '2021-06-29 20:40:49'),
+	(10, 'porder_bdcc4d875b5f4e3781e1295958cc5219', '', '', '', 12516.00, 54299.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:44:32', '2021-06-29 20:44:32'),
+	(11, 'sorder_b9cef57a0dd2419e8b80f8000b3d2589', 'porder_bdcc4d875b5f4e3781e1295958cc5219', 'mer_ae7f37e85816499bbb1aa4951bddef58', 'gd_039a2b8074c34ad8912fe20683225a90', 220.00, 204.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:44:32', '2021-06-29 20:44:32'),
+	(12, 'sorder_af1acec7d9844d3081822a50987a7e34', 'porder_bdcc4d875b5f4e3781e1295958cc5219', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_f24701f40b704157879d499610de5c38', 299.00, 99.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:44:32', '2021-06-29 20:44:32'),
+	(13, 'sorder_7cc3bce28f9447c8a2dfcfc20f3eae07', 'porder_bdcc4d875b5f4e3781e1295958cc5219', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_8eee4411aeb342e0bea449ee33395bb2', 3999.00, 2999.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:44:32', '2021-06-29 20:44:32'),
+	(14, 'sorder_d8c21b5d6d86468980057f94c73c6df4', 'porder_bdcc4d875b5f4e3781e1295958cc5219', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_5fda6d842779448abc18d6993d316564', 1999.00, 998.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:44:32', '2021-06-29 20:44:32'),
+	(15, 'sorder_4417bf34bcad480c87fffbef9dbfbe68', 'porder_bdcc4d875b5f4e3781e1295958cc5219', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_eb6b692874d644e2a717494203036fa8', 5999.00, 49999.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:44:32', '2021-06-29 20:44:32'),
+	(16, 'porder_7350db6c137c4b7f99c30722d58202d6', '', '', '', 33994.00, 70992.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:47:06', '2021-06-29 20:47:06'),
+	(17, 'sorder_d0554f0df80544949192368f542521a5', 'porder_7350db6c137c4b7f99c30722d58202d6', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_8eee4411aeb342e0bea449ee33395bb2', 3999.00, 2999.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:47:06', '2021-06-29 20:47:06'),
+	(18, 'sorder_33a79983fe714074bde145e612cf4058', 'porder_7350db6c137c4b7f99c30722d58202d6', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_eb6b692874d644e2a717494203036fa8', 5999.00, 49999.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:47:06', '2021-06-29 20:47:06'),
+	(19, 'sorder_4beb23b204dc442aa68ad19d7d4acda4', 'porder_7350db6c137c4b7f99c30722d58202d6', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_fb208d124d3f4c369ff85340d3732508', 17998.00, 13998.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:47:06', '2021-06-29 20:47:06'),
+	(20, 'sorder_f723b4aca4a544ca993fa1941ea1b11d', 'porder_7350db6c137c4b7f99c30722d58202d6', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_5fda6d842779448abc18d6993d316564', 1999.00, 998.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:47:06', '2021-06-29 20:47:06'),
+	(21, 'sorder_5f489c7ccc964ff3870b6cb425d06b81', 'porder_7350db6c137c4b7f99c30722d58202d6', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_670710e48c23486ab4f16d87538466b0', 3999.00, 2998.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:47:06', '2021-06-29 20:47:06'),
+	(22, 'porder_6f69314531a141208368b2295f9b7dc7', '', '', '', 518.00, 293.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:51:06', '2021-06-29 20:51:06'),
+	(23, 'sorder_0b7680c528e14cd493f086e550d2cf89', 'porder_6f69314531a141208368b2295f9b7dc7', 'mer_02c3e96c2dc546869b1744910239c0f4', 'gd_59342bceeb224bfeb5907cfb97309124', 10.00, 5.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:51:06', '2021-06-29 20:51:06'),
+	(24, 'sorder_792eb4c16b824a13b4b74325187d4de9', 'porder_6f69314531a141208368b2295f9b7dc7', 'mer_ae7f37e85816499bbb1aa4951bddef58', 'gd_039a2b8074c34ad8912fe20683225a90', 110.00, 102.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:51:06', '2021-06-29 20:51:06'),
+	(25, 'sorder_6c156cc85a474958b4c0826cfbdd37bb', 'porder_6f69314531a141208368b2295f9b7dc7', 'mer_ae7f37e85816499bbb1aa4951bddef58', 'gd_4eabab3c9a304d779aa1e570d8b44762', 99.00, 87.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:51:06', '2021-06-29 20:51:06'),
+	(26, 'sorder_bb5ebd45231644769bc7e4f281755446', 'porder_6f69314531a141208368b2295f9b7dc7', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 'gd_f24701f40b704157879d499610de5c38', 299.00, 99.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:51:06', '2021-06-29 20:51:06'),
+	(27, 'porder_adff11819914473c840995d70a11dfae', '', '', '', 18.50, 11.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:52:26', '2021-06-29 20:52:26'),
+	(28, 'sorder_ee05f2c52f9f4a0a9d13cb21a1d0e850', 'porder_adff11819914473c840995d70a11dfae', 'mer_02c3e96c2dc546869b1744910239c0f4', 'gd_092e6fc1c6b942429da608a76b19006a', 8.00, 5.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:52:26', '2021-06-29 20:52:26'),
+	(29, 'sorder_80ef769c297e473c9c858e62e8360dd0', 'porder_adff11819914473c840995d70a11dfae', 'mer_02c3e96c2dc546869b1744910239c0f4', 'gd_b8046322522c41bf8bcbe296e2c7c1da', 10.50, 6.00, 31, NULL, 1, 1, 1, 1, '2021-06-29 20:52:26', '2021-06-29 20:52:26'),
+	(30, 'porder_22ff699366aa402fae811a3ca3fe5764', '', '', '', 15.00, 8.00, 31, NULL, 1, 3, 1, 1, '2021-06-29 21:12:03', '2021-06-29 21:12:03'),
+	(31, 'sorder_dff7a1572d3548dfb5e23ec1967012be', 'porder_22ff699366aa402fae811a3ca3fe5764', 'mer_02c3e96c2dc546869b1744910239c0f4', 'gd_ebbc6d586912492b8ad11fef0194d8c6', 15.00, 8.00, 31, NULL, 1, 3, 1, 1, '2021-06-29 21:12:03', '2021-06-29 21:12:03');
 /*!40000 ALTER TABLE `sp_order` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.sp_order_detail
@@ -215,15 +268,39 @@ CREATE TABLE IF NOT EXISTS `sp_order_detail` (
   `order_no` varchar(100) NOT NULL COMMENT '订单号',
   `goods_id` varchar(100) NOT NULL COMMENT '商品id',
   `goods_count` int(11) NOT NULL DEFAULT '1' COMMENT '商品数量',
-  `goods_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品售价',
+  `goods_original_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品原价',
+  `goods_sale_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品售价',
   `merchant_id` varchar(100) NOT NULL COMMENT '商品所属的商家id',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单详情表';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='订单详情表';
 
--- Dumping data for table zhdd.sp_order_detail: ~0 rows (approximately)
+-- Dumping data for table zhdd.sp_order_detail: ~22 rows (approximately)
 /*!40000 ALTER TABLE `sp_order_detail` DISABLE KEYS */;
+INSERT INTO `sp_order_detail` (`id`, `order_no`, `goods_id`, `goods_count`, `goods_original_price`, `goods_sale_price`, `merchant_id`, `create_time`, `update_time`) VALUES
+	(1, 'sorder_83ecf1c13b864c109a7cc8b3287f9114', 'gd_5fda6d842779448abc18d6993d316564', 1, 1999.00, 998.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:34:33', '2021-06-29 20:34:33'),
+	(2, 'sorder_8122d65f06eb48d986bfffb87d674e89', 'gd_fb208d124d3f4c369ff85340d3732508', 1, 8999.00, 6999.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:34:33', '2021-06-29 20:34:33'),
+	(3, 'sorder_71b32a2a8c2a4c79be01c4ffd04ef117', 'gd_039a2b8074c34ad8912fe20683225a90', 2, 110.00, 102.00, 'mer_ae7f37e85816499bbb1aa4951bddef58', '2021-06-29 20:40:49', '2021-06-29 20:40:49'),
+	(4, 'sorder_853da55d555848aeb430e9515a165736', 'gd_4eabab3c9a304d779aa1e570d8b44762', 2, 99.00, 87.00, 'mer_ae7f37e85816499bbb1aa4951bddef58', '2021-06-29 20:40:49', '2021-06-29 20:40:49'),
+	(5, 'sorder_9ae0d32ce02d4217a9540a00e288e8df', 'gd_8eee4411aeb342e0bea449ee33395bb2', 1, 3999.00, 2999.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:40:49', '2021-06-29 20:40:49'),
+	(6, 'sorder_b9cef57a0dd2419e8b80f8000b3d2589', 'gd_039a2b8074c34ad8912fe20683225a90', 2, 110.00, 102.00, 'mer_ae7f37e85816499bbb1aa4951bddef58', '2021-06-29 20:44:32', '2021-06-29 20:44:32'),
+	(7, 'sorder_af1acec7d9844d3081822a50987a7e34', 'gd_f24701f40b704157879d499610de5c38', 1, 299.00, 99.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:44:32', '2021-06-29 20:44:32'),
+	(8, 'sorder_7cc3bce28f9447c8a2dfcfc20f3eae07', 'gd_8eee4411aeb342e0bea449ee33395bb2', 1, 3999.00, 2999.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:44:32', '2021-06-29 20:44:32'),
+	(9, 'sorder_d8c21b5d6d86468980057f94c73c6df4', 'gd_5fda6d842779448abc18d6993d316564', 1, 1999.00, 998.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:44:32', '2021-06-29 20:44:32'),
+	(10, 'sorder_4417bf34bcad480c87fffbef9dbfbe68', 'gd_eb6b692874d644e2a717494203036fa8', 1, 5999.00, 49999.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:44:32', '2021-06-29 20:44:32'),
+	(11, 'sorder_d0554f0df80544949192368f542521a5', 'gd_8eee4411aeb342e0bea449ee33395bb2', 1, 3999.00, 2999.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:47:06', '2021-06-29 20:47:06'),
+	(12, 'sorder_33a79983fe714074bde145e612cf4058', 'gd_eb6b692874d644e2a717494203036fa8', 1, 5999.00, 49999.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:47:06', '2021-06-29 20:47:06'),
+	(13, 'sorder_4beb23b204dc442aa68ad19d7d4acda4', 'gd_fb208d124d3f4c369ff85340d3732508', 2, 8999.00, 6999.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:47:06', '2021-06-29 20:47:06'),
+	(14, 'sorder_f723b4aca4a544ca993fa1941ea1b11d', 'gd_5fda6d842779448abc18d6993d316564', 1, 1999.00, 998.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:47:06', '2021-06-29 20:47:06'),
+	(15, 'sorder_5f489c7ccc964ff3870b6cb425d06b81', 'gd_670710e48c23486ab4f16d87538466b0', 1, 3999.00, 2998.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:47:06', '2021-06-29 20:47:06'),
+	(16, 'sorder_0b7680c528e14cd493f086e550d2cf89', 'gd_59342bceeb224bfeb5907cfb97309124', 1, 10.00, 5.00, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-06-29 20:51:06', '2021-06-29 20:51:06'),
+	(17, 'sorder_792eb4c16b824a13b4b74325187d4de9', 'gd_039a2b8074c34ad8912fe20683225a90', 1, 110.00, 102.00, 'mer_ae7f37e85816499bbb1aa4951bddef58', '2021-06-29 20:51:06', '2021-06-29 20:51:06'),
+	(18, 'sorder_6c156cc85a474958b4c0826cfbdd37bb', 'gd_4eabab3c9a304d779aa1e570d8b44762', 1, 99.00, 87.00, 'mer_ae7f37e85816499bbb1aa4951bddef58', '2021-06-29 20:51:06', '2021-06-29 20:51:06'),
+	(19, 'sorder_bb5ebd45231644769bc7e4f281755446', 'gd_f24701f40b704157879d499610de5c38', 1, 299.00, 99.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-06-29 20:51:06', '2021-06-29 20:51:06'),
+	(20, 'sorder_ee05f2c52f9f4a0a9d13cb21a1d0e850', 'gd_092e6fc1c6b942429da608a76b19006a', 1, 8.00, 5.00, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-06-29 20:52:26', '2021-06-29 20:52:26'),
+	(21, 'sorder_80ef769c297e473c9c858e62e8360dd0', 'gd_b8046322522c41bf8bcbe296e2c7c1da', 1, 10.50, 6.00, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-06-29 20:52:26', '2021-06-29 20:52:26'),
+	(22, 'sorder_dff7a1572d3548dfb5e23ec1967012be', 'gd_ebbc6d586912492b8ad11fef0194d8c6', 1, 15.00, 8.00, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-06-29 21:12:03', '2021-06-29 21:12:03');
 /*!40000 ALTER TABLE `sp_order_detail` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.sp_shopping_cart
@@ -236,9 +313,9 @@ CREATE TABLE IF NOT EXISTS `sp_shopping_cart` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 
--- Dumping data for table zhdd.sp_shopping_cart: ~9 rows (approximately)
+-- Dumping data for table zhdd.sp_shopping_cart: ~8 rows (approximately)
 /*!40000 ALTER TABLE `sp_shopping_cart` DISABLE KEYS */;
 INSERT INTO `sp_shopping_cart` (`id`, `user_id`, `goods_id`, `goods_count`, `create_time`, `update_time`) VALUES
 	(7, 24, 'gd_2cbdfb93bfd940b5a4ac20f8761fd12b', 1, '2021-06-14 15:59:48', '2021-06-14 15:59:48'),
@@ -248,8 +325,7 @@ INSERT INTO `sp_shopping_cart` (`id`, `user_id`, `goods_id`, `goods_count`, `cre
 	(20, 23, 'gd_59342bceeb224bfeb5907cfb97309124', 1, '2021-06-27 13:49:01', '2021-06-27 13:49:01'),
 	(21, 23, 'gd_e34aecce0a5946dabfa907f4a6a335c8', 1, '2021-06-27 13:49:02', '2021-06-27 13:49:02'),
 	(22, 23, 'gd_865278eda76e4973ba538a8e25dcaffe', 1, '2021-06-27 18:11:56', '2021-06-27 18:11:56'),
-	(23, 31, 'gd_fb208d124d3f4c369ff85340d3732508', 1, '2021-06-27 18:53:00', '2021-06-27 18:53:00'),
-	(24, 31, 'gd_8eee4411aeb342e0bea449ee33395bb2', 1, '2021-06-27 18:57:55', '2021-06-27 18:57:55');
+	(42, 31, 'gd_865278eda76e4973ba538a8e25dcaffe', 1, '2021-06-29 20:50:54', '2021-06-29 20:50:54');
 /*!40000 ALTER TABLE `sp_shopping_cart` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.sys_config
@@ -617,15 +693,33 @@ CREATE TABLE IF NOT EXISTS `ws_chatlog` (
   `msg` varchar(4000) DEFAULT '' COMMENT '内容',
   `remark` varchar(400) DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='聊天记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='聊天记录表';
 
--- Dumping data for table zhdd.ws_chatlog: ~4 rows (approximately)
+-- Dumping data for table zhdd.ws_chatlog: ~22 rows (approximately)
 /*!40000 ALTER TABLE `ws_chatlog` DISABLE KEYS */;
 INSERT INTO `ws_chatlog` (`id`, `time`, `room_name`, `user`, `to_user`, `msg`, `remark`) VALUES
 	(1, '2021-06-27 19:28:30', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
 	(2, '2021-06-27 20:14:58', '002', 'dd', '', '离开了聊天室', ''),
 	(3, '2021-06-27 20:15:04', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
-	(4, '2021-06-27 20:42:24', '002', 'dd', '', '离开了聊天室', '');
+	(4, '2021-06-27 20:42:24', '002', 'dd', '', '离开了聊天室', ''),
+	(5, '2021-06-28 20:55:07', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(6, '2021-06-28 21:26:08', '002', 'dd', '', '离开了聊天室', ''),
+	(7, '2021-06-28 21:39:52', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(8, '2021-06-28 21:55:24', '002', 'dd', '', '离开了聊天室', ''),
+	(9, '2021-06-28 22:01:48', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(10, '2021-06-28 22:13:15', '002', 'dd', '', '离开了聊天室', ''),
+	(11, '2021-06-29 20:32:06', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(12, '2021-06-29 20:32:28', '002', 'dd', '', '离开了聊天室', ''),
+	(13, '2021-06-29 20:32:30', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(14, '2021-06-29 20:38:37', '002', 'dd', '', '离开了聊天室', ''),
+	(15, '2021-06-29 20:38:39', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(16, '2021-06-29 20:40:20', '002', 'dd', '', '离开了聊天室', ''),
+	(17, '2021-06-29 20:40:22', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(18, '2021-06-29 20:50:49', '002', 'dd', '', '离开了聊天室', ''),
+	(19, '2021-06-29 20:50:51', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(20, '2021-06-29 21:11:46', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64'),
+	(21, '2021-06-29 21:11:50', '002', 'dd', '', '离开了聊天室', ''),
+	(22, '2021-06-29 21:11:56', '002', 'dd', '', '进入了聊天室', 'Windows_NT_10.0_Win64_x64');
 /*!40000 ALTER TABLE `ws_chatlog` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_circle
@@ -1133,27 +1227,10 @@ CREATE TABLE IF NOT EXISTS `ws_operation_log` (
   `access_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '访问时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='操作日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='操作日志表';
 
--- Dumping data for table zhdd.ws_operation_log: ~16 rows (approximately)
+-- Dumping data for table zhdd.ws_operation_log: ~0 rows (approximately)
 /*!40000 ALTER TABLE `ws_operation_log` DISABLE KEYS */;
-INSERT INTO `ws_operation_log` (`id`, `user_id`, `user_name`, `oper_type`, `oper_module`, `oper_submodule`, `oper_describe`, `oper_remark`, `request_url`, `cost_time`, `class_name`, `method_name`, `parameters`, `oper_result`, `error_msg`, `access_time`, `create_time`) VALUES
-	(1, NULL, '', '页面', '登录', '', '登陆首页页面', '', 'http://127.0.0.1:8100/', 13, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'home', '', 'ws/login', '', '2021-06-27 19:26:52', '2021-06-27 19:26:52'),
-	(2, NULL, '', '页面', '登录', '', '获取验证码', '', 'http://127.0.0.1:8100/generateVerifyCode.do', 544, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'getCode', '', 'com.pjb.springbootjwt.zhddkk.base.Result@439cc160', '', '2021-06-27 19:26:53', '2021-06-27 19:26:54'),
-	(3, 31, 'dd', '更新', '登录', '', '登录', '', 'http://127.0.0.1:8100/login.do', 920, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'login', 'loginDTO:LoginDTO(user=dd, pass=111, verifyCode=0) ', NULL, '', '2021-06-27 19:28:27', '2021-06-27 19:28:28'),
-	(4, 31, 'dd', '页面', '注册', '', '登录成功页面', '', 'http://127.0.0.1:8100/index.page', 0, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'wsclientIndex', '', 'index/wsclientIndex_v4', '', '2021-06-27 19:28:28', '2021-06-27 19:28:28'),
-	(5, 31, 'dd', '页面', '音乐播放器', '', '简易音乐播放器首页', '', 'http://127.0.0.1:8100/file/musicPlayerSimple.page', 5, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'musicPlayerSimple', '', 'music/musicPlayerSimple', '', '2021-06-27 19:28:28', '2021-06-27 19:28:28'),
-	(6, 31, 'dd', '查询', '音乐播放器', '', '显示音乐列表', '', 'http://127.0.0.1:8100/file/showFiles.do', 2, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'showFiles', 'fileType:music ', 'com.pjb.springbootjwt.zhddkk.base.Result@c3af92c', '', '2021-06-27 19:28:29', '2021-06-27 19:28:29'),
-	(7, 31, 'dd', '查询', '聊天', '', '获取房间人员列表', '', 'http://127.0.0.1:8100/getChatRoomInfo.json', 7, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'getChatRoomInfo', 'roomName:002 ', 'com.pjb.springbootjwt.zhddkk.base.Result@19343dee', '', '2021-06-27 19:28:29', '2021-06-27 19:28:29'),
-	(8, NULL, '', '页面', '登录', '', '登陆首页页面', '', 'http://127.0.0.1:8100/', 1, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'home', '', 'ws/login', '', '2021-06-27 20:14:56', '2021-06-27 20:14:56'),
-	(9, NULL, '', '页面', '登录', '', '获取验证码', '', 'http://127.0.0.1:8100/generateVerifyCode.do', 42, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'getCode', '', 'com.pjb.springbootjwt.zhddkk.base.Result@2d673eab', '', '2021-06-27 20:14:56', '2021-06-27 20:14:56'),
-	(10, NULL, '', '页面', '登录', '', '登陆首页页面', '', 'http://127.0.0.1:8100/', 0, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'home', 'errorMsg:会话已超时！ ', 'ws/login', '', '2021-06-27 20:14:59', '2021-06-27 20:14:59'),
-	(11, NULL, '', '页面', '登录', '', '获取验证码', '', 'http://127.0.0.1:8100/generateVerifyCode.do', 32, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'getCode', '', 'com.pjb.springbootjwt.zhddkk.base.Result@5359edd1', '', '2021-06-27 20:14:59', '2021-06-27 20:14:59'),
-	(12, 31, 'dd', '更新', '登录', '', '登录', '', 'http://127.0.0.1:8100/login.do', 65, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'login', 'loginDTO:LoginDTO(user=dd, pass=111, verifyCode=1) ', NULL, '', '2021-06-27 20:15:02', '2021-06-27 20:15:02'),
-	(13, 31, 'dd', '页面', '注册', '', '登录成功页面', '', 'http://127.0.0.1:8100/index.page', 0, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'wsclientIndex', '', 'index/wsclientIndex_v4', '', '2021-06-27 20:15:02', '2021-06-27 20:15:02'),
-	(14, 31, 'dd', '页面', '音乐播放器', '', '简易音乐播放器首页', '', 'http://127.0.0.1:8100/file/musicPlayerSimple.page', 0, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'musicPlayerSimple', '', 'music/musicPlayerSimple', '', '2021-06-27 20:15:02', '2021-06-27 20:15:02'),
-	(15, 31, 'dd', '查询', '音乐播放器', '', '显示音乐列表', '', 'http://127.0.0.1:8100/file/showFiles.do', 1, 'com.pjb.springbootjwt.zhddkk.controller.FileOperationController', 'showFiles', 'fileType:music ', 'com.pjb.springbootjwt.zhddkk.base.Result@2683ab0e', '', '2021-06-27 20:15:03', '2021-06-27 20:15:03'),
-	(16, 31, 'dd', '查询', '聊天', '', '获取房间人员列表', '', 'http://127.0.0.1:8100/getChatRoomInfo.json', 3, 'com.pjb.springbootjwt.zhddkk.controller.LoginController', 'getChatRoomInfo', 'roomName:002 ', 'com.pjb.springbootjwt.zhddkk.base.Result@49bcb7f5', '', '2021-06-27 20:15:03', '2021-06-27 20:15:03');
 /*!40000 ALTER TABLE `ws_operation_log` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_scheduled_cron
@@ -1359,7 +1436,7 @@ INSERT INTO `ws_users` (`id`, `name`, `password`, `register_time`, `state`, `las
 	(28, 'good', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-13 15:35:31', '0', '2020-07-03 09:25:13', '2018-12-13 15:37:53', '1', '1', 0, '你的初中在哪里？', '不告诉你', '你父亲生日是什么时候?', '不告诉你', '你最想去哪旅行?', '不告诉你', '2018-12-13 15:35:31'),
 	(29, 'gt', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-21 11:42:00', '0', '2020-07-03 09:25:33', NULL, '1', '1', 0, '你最喜欢的水果是什么?', '11', '你父亲生日是什么时候?', '11', '你最想去哪旅行?', '11', '2018-12-21 11:42:01'),
 	(30, 'cc', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2020-05-13 13:34:23', '0', '2021-06-17 11:18:56', '2021-06-17 11:19:31', '1', '1', 0, '你最喜欢的水果是什么?', '111', '你父亲生日是什么时候?', '111', '你最想去哪旅行?', '111', '2020-05-13 13:34:23'),
-	(31, 'dd', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2020-05-13 13:35:41', '0', '2021-06-27 20:15:01', '2021-06-27 18:59:10', '1', '1', 10, '你最喜欢的水果是什么?', '111', '你父亲生日是什么时候?', '111', '你最想去哪旅行?', '111', '2020-05-13 13:35:41'),
+	(31, 'dd', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2020-05-13 13:35:41', '1', '2021-06-29 21:11:54', '2021-06-27 18:59:10', '1', '1', 10, '你最喜欢的水果是什么?', '111', '你父亲生日是什么时候?', '111', '你最想去哪旅行?', '111', '2020-05-13 13:35:41'),
 	(33, 'cccc', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2020-12-26 11:07:28', '0', '2020-12-26 11:07:28', NULL, '1', '1', 0, '你父亲生日是什么时候?', '111', '你的第一次是什么时候？', '111', '你的初中在哪里？', '111', '2020-12-26 11:07:28'),
 	(34, 'hhhh', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2020-12-26 11:30:09', '0', '2021-01-16 10:25:58', '2021-01-16 10:26:14', '1', '1', 0, '你的月薪多少？', '111', '你感觉人生操蛋吗?', '111', '你最想去哪旅行?', '111', '2020-12-26 11:30:09'),
 	(35, 'aa01', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2021-01-17 11:07:09', '0', '2021-01-17 11:08:20', NULL, '1', '1', 0, '你最喜欢的水果是什么?', '111', '你父亲生日是什么时候?', '111', '你的第一次是什么时候？', '111', '2021-01-17 11:07:11'),
