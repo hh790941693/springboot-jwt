@@ -18,5 +18,9 @@ public class SpOrderDTO {
 
     private BigDecimal totalSalePrice = new BigDecimal(0);
 
+    private String totalOriginalPriceStr;
+
+    private String totalSalePriceStr;
+
     private List<SpOrderDetailDTO> goodsList = new ArrayList<>();
 }

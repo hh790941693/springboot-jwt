@@ -45,7 +45,7 @@
                 <p>订单详情</p>
                 <div v-for="goods in orderInfo.goodsList" style="width: 100%;border:1px solid grey;margin-bottom: 3px;padding: 3px;">
                     <p>子订单号：{{goods.orderNo}}</p>
-                    <p>数量：0</p>
+                    <p>数量：{{goods.goodsCount}}</p>
                     <p>原价：￥{{toFixedNumber(goods.goodsOriginalPrice)}}</p>
                     <p>售价：￥{{toFixedNumber(goods.goodsSalePrice)}}</p>
                 </div>

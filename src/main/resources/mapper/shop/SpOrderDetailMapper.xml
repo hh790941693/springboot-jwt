@@ -7,27 +7,30 @@
             t1.*,
             cast(t1.original_price as char) AS original_price_str,
             cast(t1.sale_price as char) AS sale_price_str,
-            t3.name AS merchant_name
+            t3.name AS merchant_name,
+            t5.order_no,
+            t5.goods_count,
+            t5.goods_original_price,
+            t5.goods_sale_price,
+            cast(t5.goods_original_price as char) AS goods_original_price_str,
+            cast(t5.goods_sale_price as char) AS goods_sale_price_str
         FROM
             sp_goods t1
-        LEFT JOIN
+        RIGHT JOIN
             sp_merchant t3
         ON
             t1.merchant_id = t3.merchant_id
+        RIGHT JOIN
+        		sp_order t4
+        ON
+		  		t4.parent_order_no = #{parentOrderNo}
+        RIGHT JOIN
+        		sp_order_detail t5
+        ON
+		  		t5.order_no = t4.order_no
+        AND
+		  		t1.goods_id = t5.goods_id
         WHERE
-            t1.goods_id IN (
-                SELECT
-                    t4.goods_id
-                FROM
-                    sp_order_detail t4
-                WHERE
-                    t4.order_no IN (
-                        SELECT
-                            t5.order_no
-                        FROM
-                            sp_order t5
-                        WHERE t5.parent_order_no = #{parentOrderNo}
-                    )
-            )
+		  		t1.goods_id IS NOT null
     </select>
 </mapper>
