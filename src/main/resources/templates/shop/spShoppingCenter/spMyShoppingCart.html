@@ -173,29 +173,56 @@
               },
               // 商品数量减少
               minusGoodsCount : function(index) {
+                  var that = this;
                   var goodsDetail = app.shoppingCartList[index];
                   if (goodsDetail.goodsCount <= 1) {
                       layer.alert("数量不能小于0");
                       return;
                   }
-                  app.shoppingCartList[index].goodsCount = app.shoppingCartList[index].goodsCount-1;
-                  this.computeGoodsPrice();
+                  $.ajax({
+                      type: "POST",
+                      url: "/shop/shoppingCenter/minusShoppingCartGoodsCount",
+                      data : {
+                          'cartPkgId':goodsDetail.shoppingCartPkId
+                      },
+                      success: function (result) {
+                          if (result.code == 1) {
+                              app.shoppingCartList[index].goodsCount = app.shoppingCartList[index].goodsCount-1;
+                              that.computeGoodsPrice();
+                          }
+                      }
+                  });
               },
               // 商品数量增加
               addGoodsCount : function(index) {
+                  var that = this;
                   var goodsDetail = app.shoppingCartList[index];
                   if (goodsDetail.goodsCount >= goodsDetail.stockNum) {
                       layer.alert("数量已超过库存数");
                       return;
                   }
-                  app.shoppingCartList[index].goodsCount = app.shoppingCartList[index].goodsCount+1;
-                  this.computeGoodsPrice();
+                  $.ajax({
+                      type: "POST",
+                      url: "/shop/shoppingCenter/addShoppingCartGoodsCount",
+                      data : {
+                          'cartPkgId':goodsDetail.shoppingCartPkId
+                      },
+                      success: function (result) {
+                          if (result.code == 1) {
+                              app.shoppingCartList[index].goodsCount = app.shoppingCartList[index].goodsCount+1;
+                              that.computeGoodsPrice();
+                          }
+                      }
+                  });
               },
               // 立即支付
               payNow : function(){
                   if (app.selectedGoodsIndexArr.length == 0) {
                       layer.alert("请选择你要下单的物品!");
                       return;
+                  }
+                  for (var i=0;i<app.selectedGoodsIndexArr.length;i++) {
+                      console.log(app.shoppingCartList[app.selectedGoodsIndexArr[i]]);
                   }
               },
               toFixedNumber : function (num) {

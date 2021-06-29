@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.shop.domain.SpGoodsTypeDO;
+import com.pjb.springbootjwt.shop.domain.SpShoppingCartDO;
 import com.pjb.springbootjwt.shop.dto.SpGoodsDTO;
 import com.pjb.springbootjwt.shop.dto.SpMerchantDTO;
 import com.pjb.springbootjwt.shop.dto.SpFavoriteDTO;
@@ -15,8 +16,10 @@ import org.apache.commons.lang.StringUtils;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -192,5 +195,28 @@ public class SpShoppingCenterController {
     public Result<List<SpGoodsTypeDO>> queryGoodsTypeList() {
         List<SpGoodsTypeDO> list = spGoodsTypeService.selectList(new EntityWrapper<SpGoodsTypeDO>().ne("status", 0));
         return Result.ok(list);
+    }
+
+    @PostMapping("/addShoppingCartGoodsCount")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public Result<String> addShoppingCartGoodsCount(String cartPkgId){
+        SpShoppingCartDO spShoppingCartDO = spShoppingCartService.selectById(cartPkgId);
+        spShoppingCartDO.setGoodsCount(spShoppingCartDO.getGoodsCount()+1);
+        spShoppingCartService.updateById(spShoppingCartDO);
+        return Result.ok();
+    }
+
+    @PostMapping("/minusShoppingCartGoodsCount")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public Result<String> minusShoppingCartGoodsCount(String cartPkgId){
+        SpShoppingCartDO spShoppingCartDO = spShoppingCartService.selectById(cartPkgId);
+        if (spShoppingCartDO.getGoodsCount() <= 0 ) {
+            return Result.fail("商品数量不能小于0");
+        }
+        spShoppingCartDO.setGoodsCount(spShoppingCartDO.getGoodsCount()-1);
+        spShoppingCartService.updateById(spShoppingCartDO);
+        return Result.ok();
     }
 }
