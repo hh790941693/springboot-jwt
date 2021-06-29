@@ -33,7 +33,7 @@
       </div>
         <div v-for="(cartObj,index) in shoppingCartList" :key="cartObj.id" style="width:100%;height:120px;border:1px solid grey;padding:10px 5px 10px 5px;">
             <div style="width:5%;float:left;padding-top:40px;">
-              <input type="checkbox" v-model="selectedGoodsIndexArr" :value="index" @click="selectGoods()">
+              <input type="checkbox" v-model="selectedGoodsIndexArr" :value="index" @click="computeGoodsPrice()">
             </div>
             
             <div style="width:12%;height:100%;float:left;">
@@ -60,7 +60,7 @@
                 <span>￥{{toFixedNumber(cartObj.salePrice * cartObj.goodsCount)}}</span>
             </div>
             <div style="width:15%;height:100%;float:left;text-align:center;padding-top:30px;font-size:25px;border:1px solid grey;">
-                <button class="btn btn-danger" @click="removeShoopingCartObj(cartObj.shoppingCartPkId)"><i class="fa fa-trash"></i>删除</button>
+                <button class="btn btn-danger" @click="removeShoopingCartObj(index, cartObj.shoppingCartPkId)"><i class="fa fa-trash"></i>删除</button>
             </div>
         </div>
         <div style="width:100%;height:60px;font-weight: bold;">
@@ -106,7 +106,7 @@
                   });
               },
               // 删除购物车商品
-              removeShoopingCartObj: function(cartobjId) {
+              removeShoopingCartObj: function(index, cartobjId) {
                   var that = this;
                   var conIndex = layer.confirm("确认要删除吗?", {
                           btn : [ '确定', '取消' ]
@@ -119,7 +119,14 @@
                               },
                               success: function (result) {
                                   if (result.code == 1) {
+                                      console.log(that.selectedGoodsIndexArr);
+                                      var iindex = that.selectedGoodsIndexArr.indexOf(index);
+                                      if (iindex != -1) {
+                                          that.selectedGoodsIndexArr.splice(iindex, 1);
+                                      }
+                                      console.log(that.selectedGoodsIndexArr);
                                       that.queryShoppingCartList();
+                                      that.computeGoodsPrice();
                                   }
                                   layer.close(conIndex);
                               }
@@ -127,7 +134,7 @@
                   });
               },
               // 重新计算总价
-              selectGoods : function() {
+              computeGoodsPrice : function() {
                   var that = this;
                   var totalSalePriceTmp = 0;
                   var totalOriginalPriceTmp = 0;
@@ -163,9 +170,10 @@
                       } else {
                           app.selectedGoodsIndexArr = [];
                       }
-                      that.selectGoods();
+                      that.computeGoodsPrice();
                   }, 50);
               },
+              // 商品数量减少
               minusGoodsCount : function(index) {
                   var goodsDetail = app.shoppingCartList[index];
                   if (goodsDetail.goodsCount <= 1) {
@@ -173,8 +181,9 @@
                       return;
                   }
                   app.shoppingCartList[index].goodsCount = app.shoppingCartList[index].goodsCount-1;
-                  this.selectGoods();
+                  this.computeGoodsPrice();
               },
+              // 商品数量增加
               addGoodsCount : function(index) {
                   var goodsDetail = app.shoppingCartList[index];
                   if (goodsDetail.goodsCount >= goodsDetail.stockNum) {
@@ -182,7 +191,7 @@
                       return;
                   }
                   app.shoppingCartList[index].goodsCount = app.shoppingCartList[index].goodsCount+1;
-                  this.selectGoods();
+                  this.computeGoodsPrice();
               },
               toFixedNumber : function (num) {
                   return num.toFixed(2);
