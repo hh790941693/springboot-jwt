@@ -304,6 +304,7 @@ public class SpShoppingCenterController {
 
         // 更新商品库存
         spGoodsDO.setStockNum(spGoodsDO.getStockNum() - goodsCount);
+        spGoodsDO.setSaleNumber(spGoodsDO.getSaleNumber() + goodsCount);
         spGoodsService.updateById(spGoodsDO);
 
         return Result.ok(mainOrder.getOrderNo());
@@ -388,6 +389,7 @@ public class SpShoppingCenterController {
             // 更新商品库存
             SpGoodsDO spGoodsDO = spGoodsService.selectOne(new EntityWrapper<SpGoodsDO>().eq("goods_id", spShoppingCartDTO.getGoodsId()));
             spGoodsDO.setStockNum(spGoodsDO.getStockNum() - spShoppingCartDTO.getGoodsCount());
+            spGoodsDO.setSaleNumber(spGoodsDO.getSaleNumber() + spShoppingCartDTO.getGoodsCount());
             spGoodsService.updateById(spGoodsDO);
         }
         return Result.ok(mainOrder.getOrderNo());
