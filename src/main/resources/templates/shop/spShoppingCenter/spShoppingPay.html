@@ -75,8 +75,25 @@
                 orderInfo : [],  //订单数据
             },
             methods: {
+                // 支付
                 pay : function(){
-                    layer.alert("支付成功:"+app.payWay);
+                    var payPrice = app.toFixedNumber(app.orderInfo.totalSalePrice);
+                    $.ajax({
+                        type: "POST",
+                        url: "/shop/shoppingCenter/pay",
+                        data : {
+                            'parentOrderNo':$("#orderNo").val(),
+                            'payWay':app.payWay,
+                            'payPrice':payPrice,
+                        },
+                        success: function (result) {
+                            if (result.code == 1) {
+                                layer.alert("支付成功");
+                            } else {
+                                layer.alert(result.data);
+                            }
+                        }
+                    });
                 },
                 queryOrderDetailList : function(){
                     $.ajax({

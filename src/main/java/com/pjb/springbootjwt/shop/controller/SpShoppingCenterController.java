@@ -402,4 +402,55 @@ public class SpShoppingCenterController {
 
         return Result.ok(spOrderDTO);
     }
+
+    @PostMapping("/pay")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public Result<String> pay(String parentOrderNo, int payWay, String payPrice){
+        SpOrderDO mainOrder = spOrderService.selectOne(new EntityWrapper<SpOrderDO>().eq("order_no", parentOrderNo));
+        if (null == mainOrder) {
+            return Result.fail("订单不存在");
+        }
+
+        // 检查是否已经支付
+        if (mainOrder.getPayStatus().intValue() != 1 || mainOrder.getStatus().intValue() != 1) {
+            return Result.fail("无需重复支付");
+        }
+
+        // 主订单
+        //已支付
+        mainOrder.setPayStatus(2);
+        //支付方式
+        mainOrder.setPayWay(payWay);
+        //待发货
+        mainOrder.setLogisticsStatus(1);
+        //待发货
+        mainOrder.setStatus(3);
+        mainOrder.setUpdateTime(new Date());
+        //支付人
+        mainOrder.setPayUserId(Long.valueOf(SessionUtil.getSessionUserId()));
+        //支付价格
+        mainOrder.setPayPrice(new BigDecimal(payPrice));
+        spOrderService.updateById(mainOrder);
+
+        // 子订单
+        List<SpOrderDO> subOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>()
+                .eq("parent_order_no", parentOrderNo).eq("status", 1));
+        for (SpOrderDO subOrderDO : subOrderList) {
+            //已支付
+            subOrderDO.setPayStatus(2);
+            //支付方式
+            subOrderDO.setPayWay(payWay);
+            //待发货
+            subOrderDO.setLogisticsStatus(1);
+            //待发货
+            subOrderDO.setStatus(3);
+            subOrderDO.setUpdateTime(new Date());
+            //支付人
+            subOrderDO.setPayUserId(Long.valueOf(SessionUtil.getSessionUserId()));
+            spOrderService.updateById(subOrderDO);
+        }
+
+        return Result.ok();
+    }
 }
