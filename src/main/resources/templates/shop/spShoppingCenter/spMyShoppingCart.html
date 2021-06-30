@@ -229,9 +229,9 @@
 
                   $.ajax({
                       type: "POST",
-                      url: "/shop/shoppingCenter/createOrder",
+                      url: "/shop/shoppingCenter/createCartOrder",
                       data : {
-                          'goodsIdArr':goodsIdArr
+                          'goodsIdArr':goodsIdArr,
                       },
                       success: function (result) {
                           if (result.code == 1) {

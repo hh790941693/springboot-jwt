@@ -230,10 +230,80 @@ public class SpShoppingCenterController {
         return Result.ok();
     }
 
+    /**
+     * 直接下单
+     * @param goodsId 商品id
+     * @param goodsCount 商品数量
+     * @return
+     */
     @PostMapping("/createOrder")
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
-    public Result<String> createOrder(@RequestParam("goodsIdArr[]") String[] goodsIdArr){
+    public Result<String> createOrder(String goodsId, int goodsCount) {
+        SpGoodsDO spGoodsDO = spGoodsService.selectOne(new EntityWrapper<SpGoodsDO>().eq("goods_id", goodsId));
+        if (null == spGoodsDO) {
+            return Result.fail("商品不存在");
+        }
+
+        // 主订单
+        SpOrderDO mainOrder = new SpOrderDO();
+        mainOrder.setOrderNo("porder_"+ UUID.randomUUID().toString().replaceAll("-", ""));
+        mainOrder.setTotalPrice(spGoodsDO.getOriginalPrice().multiply(new BigDecimal(goodsCount)));
+        mainOrder.setPayPrice(spGoodsDO.getSalePrice().multiply(new BigDecimal(goodsCount)));
+        mainOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
+        //支付状态 1:待支付 2:已支付
+        mainOrder.setPayStatus(1);
+        //物流状态 3:未发货 4:已发货
+        mainOrder.setLogisticsStatus(3);
+        //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
+        mainOrder.setStatus(1);
+        mainOrder.setCreateTime(new Date());
+        mainOrder.setUpdateTime(new Date());
+        spOrderService.insert(mainOrder);
+
+        // 各店铺订单
+        SpOrderDO subOrder = new SpOrderDO();
+        subOrder.setOrderNo("sorder_"+ UUID.randomUUID().toString().replaceAll("-", ""));
+        subOrder.setParentOrderNo(mainOrder.getOrderNo());
+        subOrder.setMerchantId(spGoodsDO.getMerchantId());
+        subOrder.setGoodsId(goodsId);
+        subOrder.setTotalPrice(spGoodsDO.getOriginalPrice().multiply(new BigDecimal(goodsCount)));
+        subOrder.setPayPrice(spGoodsDO.getSalePrice().multiply(new BigDecimal(goodsCount)));
+        subOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
+        //支付状态 1:待支付 2:已支付
+        subOrder.setPayStatus(1);
+        //物流状态 3:未发货 4:已发货
+        subOrder.setLogisticsStatus(3);
+        //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
+        subOrder.setStatus(1);
+        subOrder.setCreateTime(new Date());
+        subOrder.setUpdateTime(new Date());
+        spOrderService.insert(subOrder);
+
+        // 各店铺订单商品详情
+        SpOrderDetailDO spOrderDetailDO = new SpOrderDetailDO();
+        spOrderDetailDO.setOrderNo(subOrder.getOrderNo());
+        spOrderDetailDO.setGoodsId(goodsId);
+        spOrderDetailDO.setGoodsCount(goodsCount);
+        spOrderDetailDO.setGoodsOriginalPrice(spGoodsDO.getOriginalPrice());
+        spOrderDetailDO.setGoodsSalePrice(spGoodsDO.getSalePrice());
+        spOrderDetailDO.setMerchantId(spGoodsDO.getMerchantId());
+        spOrderDetailDO.setCreateTime(new Date());
+        spOrderDetailDO.setUpdateTime(new Date());
+        spOrderDetailService.insert(spOrderDetailDO);
+
+        return Result.ok(mainOrder.getOrderNo());
+    }
+
+    /**
+     * 购物车下单
+     * @param goodsIdArr 商品id数组
+     * @return
+     */
+    @PostMapping("/createCartOrder")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public Result<String> createCartOrder(@RequestParam("goodsIdArr[]") String[] goodsIdArr){
         List<SpShoppingCartDTO> spShoppingCartDTOList = spShoppingCartService.queryShoppingCartList(SessionUtil.getSessionUserId());
         List<String> goodsIdList = new ArrayList<>(Arrays.asList(goodsIdArr));
         List<SpShoppingCartDTO> orderGoodsList = spShoppingCartDTOList.stream().filter(cart->goodsIdList.contains(cart.getGoodsId())).collect(Collectors.toList());
@@ -256,6 +326,11 @@ public class SpShoppingCenterController {
         mainOrder.setTotalPrice(totalOriginalPrice);
         mainOrder.setPayPrice(totalPayPrice);
         mainOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
+        //支付状态 1:待支付 2:已支付
+        mainOrder.setPayStatus(1);
+        //物流状态 3:未发货 4:已发货
+        mainOrder.setLogisticsStatus(3);
+        //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
         mainOrder.setStatus(1);
         mainOrder.setCreateTime(new Date());
         mainOrder.setUpdateTime(new Date());
@@ -271,6 +346,11 @@ public class SpShoppingCenterController {
             subOrder.setTotalPrice(spShoppingCartDTO.getOriginalPrice().multiply(new BigDecimal(spShoppingCartDTO.getGoodsCount())));
             subOrder.setPayPrice(spShoppingCartDTO.getSalePrice().multiply(new BigDecimal(spShoppingCartDTO.getGoodsCount())));
             subOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
+            //支付状态 1:待支付 2:已支付
+            subOrder.setPayStatus(1);
+            //物流状态 3:未发货 4:已发货
+            subOrder.setLogisticsStatus(3);
+            //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
             subOrder.setStatus(1);
             subOrder.setCreateTime(new Date());
             subOrder.setUpdateTime(new Date());

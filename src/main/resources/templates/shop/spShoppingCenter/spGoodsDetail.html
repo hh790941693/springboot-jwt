@@ -77,7 +77,7 @@
                 <p>商家店铺： <a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+goodsDetail.merchantId" target="_blank">{{goodsDetail.merchantName}}</a>
                 </p>
                 <div style="height:30px;text-align: center;margin-top: 25px;">
-                    <button class="btn btn-success"><i class="fa fa-paypal"></i>立即购买</button>&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-success" @click="orderNow()">立即下单</button>&nbsp;&nbsp;&nbsp;
                     <button style="width: 18px;" @click="minusGoodsCount()">-</button>
                     <input readonly style="width: 25px;text-align: center;" v-model="goodsCount">
                     <button style="width: 18px;" @click="addGoodsCount()">+</button>
@@ -233,6 +233,7 @@
                         content: '/shop/shoppingCenter/goodsDetail.page?goodsPkId='+goodsPkId
                     });
                 },
+                // 减少商品
                 minusGoodsCount : function () {
                     if (app.goodsCount <=1) {
                         layer.alert("商品数量不能低于1");
@@ -240,13 +241,40 @@
                     }
                     app.goodsCount--;
                 },
+                //增加商品
                 addGoodsCount : function () {
                     if (app.goodsCount >= app.goodsDetail.stockNum) {
                         layer.alert("商品数量超过库存啦");
                         return;
                     }
                     app.goodsCount++;
-                }
+                },
+                //立即下单
+                orderNow : function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "/shop/shoppingCenter/createOrder",
+                        data : {
+                            'goodsId':app.goodsDetail.goodsId,
+                            'goodsCount':app.goodsCount,
+                        },
+                        success: function (result) {
+                            if (result.code == 1) {
+                                setTimeout(function () {
+                                    //跳转到支付页面
+                                    layer.open({
+                                        type : 2,
+                                        title : '支付页面',
+                                        maxmin : true,
+                                        shadeClose : false,//点击遮罩关闭层
+                                        area : [ '800px', '620px' ],
+                                        content : '/shop/shoppingCenter/spShoppingPay.page?orderNo='+result.data
+                                    });
+                                },50);
+                            }
+                        }
+                    });
+                },
             },
             created: function () {
                 this.queryGoodsDetail();
