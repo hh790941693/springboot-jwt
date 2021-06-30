@@ -223,15 +223,7 @@
                 },
                 // 单击进入商品详情页
                 showGoodsDetail : function (goodsPkId) {
-                    layer.open({
-                        type: 2,
-                        title: '商品详情页',
-                        shadeClose: true,
-                        shade: 0.2,
-                        area: ['860px', '680px'],
-                        anim: 1,
-                        content: '/shop/shoppingCenter/goodsDetail.page?goodsPkId='+goodsPkId
-                    });
+                    window.location.href='/shop/shoppingCenter/goodsDetail.page?goodsPkId='+goodsPkId;
                 },
                 // 减少商品
                 minusGoodsCount : function () {
@@ -260,17 +252,18 @@
                         },
                         success: function (result) {
                             if (result.code == 1) {
-                                setTimeout(function () {
-                                    //跳转到支付页面
-                                    layer.open({
-                                        type : 2,
-                                        title : '支付页面',
-                                        maxmin : true,
-                                        shadeClose : false,//点击遮罩关闭层
-                                        area : [ '800px', '620px' ],
-                                        content : '/shop/shoppingCenter/spShoppingPay.page?orderNo='+result.data
-                                    });
-                                },50);
+                                window.location.href='/shop/shoppingCenter/spShoppingPay.page?orderNo='+result.data
+                                // setTimeout(function () {
+                                //     //跳转到支付页面
+                                //     layer.open({
+                                //         type : 2,
+                                //         title : '支付页面',
+                                //         maxmin : true,
+                                //         shadeClose : false,//点击遮罩关闭层
+                                //         area : [ '800px', '620px' ],
+                                //         content : '/shop/shoppingCenter/spShoppingPay.page?orderNo='+result.data
+                                //     });
+                                // },50);
                             }
                         }
                     });
