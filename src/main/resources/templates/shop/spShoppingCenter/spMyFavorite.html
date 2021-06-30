@@ -73,6 +73,7 @@
 			<div class="goodsDiv" v-for="(goodsDetail,index) in favoriteDataList.goodsList">
 				<div style="width:100%;height:188px;padding-top:10px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
 					<img :src="goodsDetail.backImage" style="width:100%;height:100%;">
+                    <img v-if="goodsDetail.stockNum<=0" src="/img/shop/shouqing.jpg" style="width:100px;height:100px;position: relative;left:-150px;border-radius:50px;">
 				</div>
 				<div style="width:100%;height:20px;">
 					<div style="width:70%;height:100%;float:left;text-align: left;overflow: hidden;">

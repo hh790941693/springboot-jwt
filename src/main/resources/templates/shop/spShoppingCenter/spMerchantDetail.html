@@ -99,9 +99,10 @@
 		
 		<p style="text-align: left;">商品列表({{Object.keys(goodsList).length}})</p>
 		<div id="innerDiv" style="width:100%;height:350px;margin-top:5px;overflow-x: auto;overflow-y: hidden;white-space:nowrap;">
-			<div class="goodsDiv" v-for="(goodsDetail,index) in goodsList" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
+			<div class="goodsDiv" v-for="(goodsDetail,index) in goodsList">
 				<div style="width:100%;height:188px;padding-top:10px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
-					<img :src="goodsDetail.backImage" style="width:calc(100% - 40px);height:calc(100% - 20px);">
+					<img :src="goodsDetail.backImage" style="width:100%;height:100%;">
+					<img v-if="goodsDetail.stockNum<=0" src="/img/shop/shouqing.jpg" style="width:100px;height:100px;position: relative;left:-150px;border-radius:50px;">
 				</div>
 				<div style="width:100%;height:20px;">
 					<div style="width:70%;height:100%;float:left;text-align: left;overflow: hidden;">
@@ -181,16 +182,6 @@
 							}
 						}
 					});
-				},
-				mouseEnter: function (index) {
-					$("#innerDiv").children("div").eq(index).css("border", '');
-					$("#innerDiv").children("div").eq(index).addClass("selected");
-					$("#innerDiv").children("div").eq(index).children("div").eq(0).children("img").eq(0).animate({width:"100%",height:"100%"});
-				},
-				mouseLeave: function (index) {
-					$("#innerDiv").children("div").eq(index).removeClass("selected");
-					$("#innerDiv").children("div").eq(index).css("border", '1px solid grey');
-					$("#innerDiv").children("div").eq(index).children("div").eq(0).children("img").eq(0).animate({width:"164px",height:"168px"});
 				},
 				// 单击进入商品详情页
 				showGoodsDetail : function (goodsPkId) {
