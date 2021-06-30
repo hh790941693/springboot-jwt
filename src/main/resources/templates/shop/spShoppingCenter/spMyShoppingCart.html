@@ -235,7 +235,6 @@
                       },
                       success: function (result) {
                           if (result.code == 1) {
-                             layer.msg("下单成功:"+result.data);
                               app.selectedGoodsIndexArr = [];
                               app.totalOriginalPrice = 0;
                               app.totalSalePrice = 0;
@@ -250,7 +249,7 @@
                                       area : [ '800px', '620px' ],
                                       content : '/shop/shoppingCenter/spShoppingPay.page?orderNo='+result.data
                                   });
-                              },200);
+                              },50);
                           }
                       }
                   });
