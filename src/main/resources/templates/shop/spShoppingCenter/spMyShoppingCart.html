@@ -188,7 +188,9 @@
                   setTimeout(function(){
                       if (app.selectAllFlag) {
                           for (var i=0;i<app.shoppingCartList.length;i++) {
-                              app.selectedGoodsIndexArr.push(i);
+                              if (app.shoppingCartList[i].stockNum>0) {
+                                  app.selectedGoodsIndexArr.push(i);
+                              }
                           }
                       } else {
                           app.selectedGoodsIndexArr = [];
