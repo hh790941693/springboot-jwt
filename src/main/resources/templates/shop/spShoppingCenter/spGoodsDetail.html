@@ -79,7 +79,7 @@
                 <div style="height:30px;text-align: center;margin-top: 25px;">
                     <button class="btn btn-success"><i class="fa fa-paypal"></i>立即购买</button>&nbsp;&nbsp;&nbsp;
                     <button style="width: 18px;" @click="minusGoodsCount()">-</button>
-                    <input style="width: 25px;text-align: center;" v-model="goodsCount">
+                    <input readonly style="width: 25px;text-align: center;" v-model="goodsCount">
                     <button style="width: 18px;" @click="addGoodsCount()">+</button>
                     <button class="btn btn-danger" @click="addToShoppingCart(goodsDetail.goodsId, 1)"><i class="fa fa-shopping-cart"></i>加入购物车</button>
                 </div>
@@ -235,14 +235,14 @@
                 },
                 minusGoodsCount : function () {
                     if (app.goodsCount <=1) {
-                        layer.alert("商品数量不能低于1!");
+                        layer.alert("商品数量不能低于1");
                         return;
                     }
                     app.goodsCount--;
                 },
                 addGoodsCount : function () {
                     if (app.goodsCount >= app.goodsDetail.stockNum) {
-                        layer.alert("商品数量超过库存啦!");
+                        layer.alert("商品数量超过库存啦");
                         return;
                     }
                     app.goodsCount++;
