@@ -87,7 +87,7 @@
 						<span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePriceStr}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPriceStr}}</span>
 					</div>
 					<div style="width:18%;float:right;">
-						<button style="width: 40px;" class="btn btn-sm btn-danger"><i class="fa fa-shopping-cart"></i></button>
+						<button style="width: 40px;" class="btn btn-sm btn-danger" @click="addToShoppingCart(goodsDetail.goodsId, 1)"><i class="fa fa-shopping-cart"></i></button>
 					</div>
 				</div>
     
@@ -143,6 +143,20 @@
                        area: ['860px', '680px'],
                        anim: 1,
                        content: '/shop/shoppingCenter/goodsDetail.page?goodsPkId='+goodsPkId
+                   });
+               },
+               // 加入购物车
+               addToShoppingCart : function (goodsId, goodsCount) {
+                   $.ajax({
+                       type: "POST",
+                       url: "/shop/spShoppingCart/addToShoppingCart",
+                       data: {
+                           'goodsId':goodsId,
+                           'goodsCount':goodsCount,
+                       },
+                       success: function (result) {
+                           layer.msg(result.msg);
+                       }
                    });
                },
            },
