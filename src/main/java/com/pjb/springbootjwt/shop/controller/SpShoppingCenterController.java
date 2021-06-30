@@ -59,7 +59,9 @@ public class SpShoppingCenterController {
      */
     @RequestMapping("/queryGoodsList")
     @ResponseBody
-    public Result<List<SpGoodsDTO>> queryGoodsList(SpGoodsDTO params){
+    public Result<SpShoppingCenterDTO> queryGoodsList(SpGoodsDTO params){
+        SpShoppingCenterDTO spShoppingCenterDTO = new SpShoppingCenterDTO();
+
         Page<SpGoodsDTO> page = new Page<>(1, 100);
         Wrapper<SpGoodsDTO> wrapper = new EntityWrapper<SpGoodsDTO>();
         if (StringUtils.isNotBlank(params.getName())) {
@@ -75,8 +77,16 @@ public class SpShoppingCenterController {
         wrapper.ne("t2.status", 0);
         wrapper.orderBy("t1.sale_price", params.isPriceSort());
         wrapper.orderBy("t1.sale_number", params.isSaleNumberSort());
-        List<SpGoodsDTO> spGoodsDTOS = spGoodsService.queryCenterGoodsList(SessionUtil.getSessionUserId(), page, wrapper);
-        return Result.ok(spGoodsDTOS);
+        List<SpGoodsDTO> spGoodsList = spGoodsService.queryCenterGoodsList(SessionUtil.getSessionUserId(), page, wrapper);
+        spShoppingCenterDTO.setGoodsList(spGoodsList);
+
+        int shoppingCartNum = spShoppingCartService.selectCount(new EntityWrapper<SpShoppingCartDO>().eq("user_id", SessionUtil.getSessionUserId()));
+        spShoppingCenterDTO.setShoppingCartNum(shoppingCartNum);
+
+        int favoriteNum = spFavoriteService.selectCount(new EntityWrapper<SpFavoriteDO>().eq("user_id", SessionUtil.getSessionUserId()).eq("status", 1));
+        spShoppingCenterDTO.setFavoriteNum(favoriteNum);
+
+        return Result.ok(spShoppingCenterDTO);
     }
 
     /**

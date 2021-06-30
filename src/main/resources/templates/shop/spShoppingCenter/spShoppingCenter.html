@@ -57,7 +57,7 @@
     <div id="mainDiv">
         <div id="searchDiv">
             <div style="width: 100%;height:30px;text-align: right;">
-                <p><a href="/shop/shoppingCenter/spMyFavorite.page" target="_blank"><i class="fa fa-star"></i>我的收藏</a>&nbsp;&nbsp;&nbsp;<a href="/shop/shoppingCenter/spMyShoppingCart.page" target="_blank"><i class="fa fa-shopping-cart"></i>我的购物车</a></p>
+                <p><a href="/shop/shoppingCenter/spMyFavorite.page" target="_blank"><i class="fa fa-star"></i>我的收藏<span class="layui-badge">{{shoppingCenterData.favoriteNum}}</span></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/shop/shoppingCenter/spMyShoppingCart.page" target="_blank"><i class="fa fa-shopping-cart"></i>我的购物车</a><span class="layui-badge">{{shoppingCenterData.shoppingCartNum}}</span></a></p>
             </div>
 
             <div style="width:100%;height:60px;">
@@ -106,7 +106,7 @@
         </div>
         <hr />
         <div id="innerDiv">
-            <div class="goodsDiv" v-for="(goodsDetail,index) in goodsListData" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
+            <div class="goodsDiv" v-for="(goodsDetail,index) in shoppingCenterData.goodsList" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
                 <div style="width:100%;height:188px;padding-top:10px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
                     <img :src="goodsDetail.backImage" style="width:calc(100% - 40px);height:calc(100% - 20px);">
                 </div>
@@ -153,7 +153,7 @@
         var app = new Vue({
             el: '#mainDiv',
             data: {
-                goodsListData: {},
+                shoppingCenterData : {},
                 goodsTypeListData: {},
                 priceSort: true,
                 saleNumberSort: false,
@@ -177,7 +177,7 @@
                         success: function (result) {
                             layer.close(loadIndex);
                             if (result.code == 1) {
-                                app.goodsListData = result.data;
+                                app.shoppingCenterData = result.data;
                             }
                         }
                     });
