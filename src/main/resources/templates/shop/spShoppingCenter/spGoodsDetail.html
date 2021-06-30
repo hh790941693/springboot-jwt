@@ -72,7 +72,7 @@
                 <p style="font-weight: bold;font-size: 17px;">商品名称： {{goodsDetail.name}}</p>
                 <p>商品描述： {{goodsDetail.brief}}</p>
                 <p>产地： {{goodsDetail.place}}</p>
-                <p>售价： <span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePriceStr}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPriceStr}}</span></p>
+                <p>售价： <span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPriceStr}}</span>&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePriceStr}}</span></p>
                 <p>规格： {{goodsDetail.unitName}}</p>
                 <p>商家店铺： <a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+goodsDetail.merchantId" target="_blank">{{goodsDetail.merchantName}}</a>
                 </p>
@@ -109,7 +109,7 @@
                 </div>
                 <div style="width:100%;height:30px;">
                     <div style="width:50%;float:left;text-align: left;">
-                        <span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePriceStr}}</span>&nbsp;<span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPriceStr}}</span>
+                        <span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPriceStr}}</span>&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePriceStr}}</span>
                     </div>
                     <div style="width:18%;float:right;">
                         <button style="width: 40px;" class="btn btn-sm btn-danger" @click="addToShoppingCart(goodsDetail.goodsId)"><i class="fa fa-shopping-cart"></i></button>
