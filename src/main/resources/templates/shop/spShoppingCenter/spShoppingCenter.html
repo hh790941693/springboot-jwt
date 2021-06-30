@@ -109,6 +109,7 @@
             <div class="goodsDiv" v-for="(goodsDetail,index) in shoppingCenterData.goodsList" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
                 <div style="width:100%;height:188px;padding-top:10px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
                     <img :src="goodsDetail.backImage" style="width:calc(100% - 40px);height:calc(100% - 20px);">
+                    <img v-if="goodsDetail.stockNum<=0" src="../img/shop/shouqing.jpg" style="width:100px;height:100px;position: relative;top:-140px;border-radius:50px;">
                 </div>
                 <div style="width:100%;height:25px;">
                     <div style="width:70%;height:100%;float:left;text-align: left;overflow: hidden;">
