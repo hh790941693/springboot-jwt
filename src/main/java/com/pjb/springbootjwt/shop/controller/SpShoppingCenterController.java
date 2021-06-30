@@ -302,6 +302,10 @@ public class SpShoppingCenterController {
         spOrderDetailDO.setUpdateTime(new Date());
         spOrderDetailService.insert(spOrderDetailDO);
 
+        // 更新商品库存
+        spGoodsDO.setStockNum(spGoodsDO.getStockNum() - goodsCount);
+        spGoodsService.updateById(spGoodsDO);
+
         return Result.ok(mainOrder.getOrderNo());
     }
 
@@ -380,6 +384,11 @@ public class SpShoppingCenterController {
 
             // 删除购物车商品
             spShoppingCartService.delete(new EntityWrapper<SpShoppingCartDO>().eq("goods_id", spShoppingCartDTO.getGoodsId()).eq("user_id", SessionUtil.getSessionUserId()));
+
+            // 更新商品库存
+            SpGoodsDO spGoodsDO = spGoodsService.selectOne(new EntityWrapper<SpGoodsDO>().eq("goods_id", spShoppingCartDTO.getGoodsId()));
+            spGoodsDO.setStockNum(spGoodsDO.getStockNum() - spShoppingCartDTO.getGoodsCount());
+            spGoodsService.updateById(spGoodsDO);
         }
         return Result.ok(mainOrder.getOrderNo());
     }
