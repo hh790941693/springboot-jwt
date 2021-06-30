@@ -124,6 +124,17 @@ public class SpShoppingCartController extends AdminBaseController {
 		spShoppingCartService.deleteById(id);
         return Result.ok();
 	}
+
+	/**
+	 * 删除所有.
+	 */
+	@PostMapping("/removeAll")
+	@ResponseBody
+	//@RequiresPermissions("shop:spShoppingCart:removeAll")
+	public Result<String> removeAll() {
+		spShoppingCartService.delete(new EntityWrapper<SpShoppingCartDO>().eq("user_id", SessionUtil.getSessionUserId()));
+		return Result.ok();
+	}
 	
 	/**
 	 * 批量删除.
