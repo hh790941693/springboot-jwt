@@ -5,6 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import com.pjb.springbootjwt.shop.domain.SpOrderDO;
 
 /**
  * 订单详情
@@ -22,5 +23,9 @@ public class SpOrderDTO {
 
     private String totalSalePriceStr;
 
-    private List<SpOrderDetailDTO> goodsList = new ArrayList<>();
+    // 主订单
+    private SpOrderDO mainOrder;
+
+    // 次订单列表
+    private List<SpOrderDetailDTO> subOrderList = new ArrayList<>();
 }

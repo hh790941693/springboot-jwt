@@ -8,6 +8,8 @@
             cast(t1.original_price as char) AS original_price_str,
             cast(t1.sale_price as char) AS sale_price_str,
             t3.name AS merchant_name,
+            t4.total_price AS total_original_price,
+            t4.pay_price AS total_pay_price,
             t5.order_no,
             t5.goods_count,
             t5.goods_original_price,

@@ -416,8 +416,9 @@ public class SpShoppingCenterController {
         SpOrderDTO spOrderDTO = new SpOrderDTO();
         List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(parentOrderNo);
 
+        spOrderDTO.setMainOrder(mainOrder);
         spOrderDTO.setParentOrderNo(parentOrderNo);
-        spOrderDTO.setGoodsList(spOrderDetailList);
+        spOrderDTO.setSubOrderList(spOrderDetailList);
         spOrderDTO.setTotalOriginalPrice(mainOrder.getTotalPrice());
         spOrderDTO.setTotalSalePrice(mainOrder.getPayPrice());
 
@@ -473,5 +474,37 @@ public class SpShoppingCenterController {
         }
 
         return Result.ok();
+    }
+
+    /**
+     * 我的订单页面.
+     * @return
+     */
+    @RequestMapping("/spMyOrder.page")
+    public String myOrder(){
+        return "shop/spShoppingCenter/spMyOrder";
+    }
+
+    @GetMapping("/queryMyOrderList")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public Result<List<SpOrderDTO>> queryMyOrderList(){
+
+        List<SpOrderDTO> resultList = new ArrayList<>();
+
+        List<SpOrderDO> mainOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>().eq("order_user_id", SessionUtil.getSessionUserId()).isNull("parent_order_no").orderBy("status"));
+        for (SpOrderDO mainOrder : mainOrderList) {
+            List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(mainOrder.getOrderNo());
+
+            SpOrderDTO spOrderDTO = new SpOrderDTO();
+            spOrderDTO.setMainOrder(mainOrder);
+            spOrderDTO.setParentOrderNo(mainOrder.getOrderNo());
+            spOrderDTO.setTotalOriginalPrice(mainOrder.getTotalPrice());
+            spOrderDTO.setTotalSalePrice(mainOrder.getPayPrice());
+            spOrderDTO.setSubOrderList(spOrderDetailList);
+            resultList.add(spOrderDTO);
+        }
+
+        return Result.ok(resultList);
     }
 }

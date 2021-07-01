@@ -16,6 +16,12 @@ public class SpOrderDetailDTO extends SpGoodsDO {
     // 售价
     private BigDecimal goodsSalePrice;
 
+    // 总原价
+    private BigDecimal totalOriginalPrice;
+
+    // 总售价
+    private BigDecimal totalPayPrice;
+
     // 商品数量
     private int goodsCount;
 
