@@ -508,10 +508,15 @@ public class SpShoppingCenterController {
     @GetMapping("/queryMyOrderList")
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
-    public Result<List<SpOrderDTO>> queryMyOrderList(){
+    public Result<List<SpOrderDTO>> queryMyOrderList(String status){
 
         List<SpOrderDTO> resultList = new ArrayList<>();
-        List<SpOrderDO> mainOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>().eq("order_user_id", SessionUtil.getSessionUserId()).isNull("parent_order_no").orderBy("status"));
+        Wrapper<SpOrderDO> wrapper = new EntityWrapper<SpOrderDO>().eq("order_user_id", SessionUtil.getSessionUserId()).isNull("parent_order_no");
+        if (StringUtils.isNotBlank(status)) {
+            wrapper.eq("status", status);
+        }
+        wrapper.orderBy("status");
+        List<SpOrderDO> mainOrderList = spOrderService.selectList(wrapper);
         for (SpOrderDO mainOrder : mainOrderList) {
             List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(mainOrder.getOrderNo());
 

@@ -17,6 +17,18 @@
 <body>
     <div id="mainDiv">
         <div style="width:100%;height:750px;overflow-y: auto;border: 1px solid grey;">
+            <div style="width: 100%;height:30px;">
+                支付状态：
+                <select id="statusSelect" v-model="statusSearchValue" @change="onChangeStatus()">
+                    <option value="" selected>-- 请选择 --</option>
+                    <option value="1" selected>待支付</option>
+                    <option value="3">已支付</option>
+                    <option value="3">待发货</option>
+                    <option value="4">已发货</option>
+                    <option value="6">已取消</option>
+                    <option value="9">已确认收货</option>
+                </select>
+            </div>
             <div v-for="(orderInfo,index) in orderList" style="width: 100%;height:auto;border:1px solid grey;margin-bottom: 10px;">
                 <div style="width: 100%;height:30px;font-weight: bold;font-size: 15px;background-color: lightblue;">
                     <div style="width: 450px;height:30px;float:left;">
@@ -72,19 +84,27 @@
             el: '#mainDiv',
             data: {
                 orderList : [],  //订单数据
+                statusSearchValue : 1,
             },
             methods: {
                 // 我的订单列表
                 queryMyOrderList : function(){
+                    var that = this;
                     $.ajax({
                         type: "GET",
                         url: "/shop/shoppingCenter/queryMyOrderList",
+                        data : {
+                            'status': this.statusSearchValue,
+                        },
                         success: function (result) {
                             if (result.code == 1) {
                                 app.orderList = result.data;
                             }
                         }
                     });
+                },
+                onChangeStatus : function(){
+                    this.queryMyOrderList();
                 },
                 // 立即支付
                 payNow : function(orderNo) {
