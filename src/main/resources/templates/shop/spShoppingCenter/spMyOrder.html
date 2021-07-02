@@ -22,7 +22,7 @@
                     <span>支付状态：</span>
                     <select id="statusSelect" v-model="statusSearchValue" @change="onChangeStatus()">
                         <option value="" selected>-- 请选择 --</option>
-                        <option value="1" selected>待支付</option>
+                        <option value="1">待支付</option>
                         <option value="3">已支付,待发货</option>
                         <option value="4">已发货</option>
                         <option value="6">已取消</option>
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div v-for="(orderInfo,index) in orderList" style="width: 100%;height:auto;border:1px solid grey;margin-bottom: 10px;">
-                <div style="width: 100%;height:30px;font-weight: bold;font-size: 15px;background-color: lightblue;">
+                <div style="width: 100%;height:36px;font-weight: bold;font-size: 15px;background-color: lightblue;padding: 3px 5px;">
                     <div style="width: 450px;height:30px;float:left;">
                         订单{{index+1}}：{{orderInfo.mainOrder.orderNo}}
                     </div>
@@ -55,8 +55,8 @@
                         取消状态：<span v-text="orderInfo.mainOrder.cancelStatus == 5 ? '未取消' : '已取消'"></span>
                     </div>
                     <div style="width: 200px;height:30px;float:left;">
-                        <button v-if="orderInfo.mainOrder.status == 1" @click="payNow(orderInfo.mainOrder.orderNo)">去支付</button>&nbsp;&nbsp;&nbsp;
-                        <button v-if="orderInfo.mainOrder.status == 1" @click="cancelOrder(orderInfo.mainOrder.orderNo)">取消订单</button>
+                        <button v-if="orderInfo.mainOrder.status == 1" @click="payNow(orderInfo.mainOrder.orderNo)" class="btn btn-sm btn-primary">去支付</button>&nbsp;&nbsp;&nbsp;
+                        <button v-if="orderInfo.mainOrder.status == 1" @click="cancelOrder(orderInfo.mainOrder.orderNo)" class="btn btn-sm btn-danger">取消订单</button>
                     </div>
                 </div>
                 <div v-for="subOrder in orderInfo.subOrderList" style="width:100%;height:50px;margin-bottom:5px;padding-left:30px;border-top:1px solid grey;">
