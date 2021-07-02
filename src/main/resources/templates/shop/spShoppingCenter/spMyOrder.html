@@ -16,32 +16,44 @@
 </head>
 <body>
     <div id="mainDiv">
-        <div style="width:100%;height:350px;overflow-y: auto;border:1px solid grey;">
-            <div v-for="orderInfo in orderList" style="width: 100%;height:86px;border-bottom:1px solid grey;margin-bottom: 3px;padding: 3px;">
-                <div>
-                    <p>父订单号：{{orderInfo.mainOrder.orderNo}}</p>
-                    <p>原价：{{orderInfo.mainOrder.totalPrice}}</p>
-                    <p>支付价格：{{orderInfo.mainOrder.payPrice}}</p>
-                </div>
-                <div v-for="subOrder in orderInfo.subOrderList">
-                    <div style="width: 100px;height:100px;float:left;">
-                        <img :src="subOrder.backImage" width="100%" height="100%">
+        <div style="width:100%;height:550px;overflow-y: auto;border: 1px solid grey;">
+            <div v-for="orderInfo in orderList" style="width: 100%;height:auto;border:1px solid grey;margin-bottom: 10px;padding: 5px;">
+                <div style="width: 100%;height:30px;">
+                    <div style="width: 400px;height:30px;float:left;">
+                        父订单号：{{orderInfo.mainOrder.orderNo}}
                     </div>
-                    <div style="width: 100px;height:25px;float:left;">
+                    <div style="width: 200px;height:30px;float:left;">
+                        总原价：￥{{toFixedNumber(orderInfo.mainOrder.totalPrice)}}
+                    </div>
+                    <div style="width: 200px;height:30px;float:left;">
+                        总支付价格：￥{{toFixedNumber(orderInfo.mainOrder.payPrice)}}
+                    </div>
+                    <div style="width: 150px;height:30px;float:left;">
+                        支付状态：<span v-text="orderInfo.mainOrder.payStatus == 1 ? '待支付' : '已支付'"></span>
+                    </div>
+                    <div style="width: 150px;height:30px;float:left;">
+                        <button v-if="orderInfo.mainOrder.payStatus == 1" @click="payNow(orderInfo.mainOrder.orderNo)">去支付</button>
+                    </div>
+                </div>
+                <div v-for="subOrder in orderInfo.subOrderList" style="width:100%;height:50px;margin-bottom:5px;padding-left:30px;border-top:1px solid grey;">
+                    <div style="width: 60px;height:50px;float:left;margin-right: 10px;">
+                        <img :src="subOrder.backImage" width="100%" height="80%">
+                    </div>
+                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;">
                         {{subOrder.name}}
                     </div>
-                    <div style="width: 100px;height:25px;float:left;">
-                        {{subOrder.goodsCount}}
+                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;">
+                        X{{subOrder.goodsCount}}
                     </div>
-                    <div style="width: 100px;height:25px;float:left;">
-                        ￥{{toFixedNumber(subOrder.originalPriceStr)}} ￥{{toFixedNumber(subOrder.salePriceStr)}}
+                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;">
+                        ￥{{toFixedNumber(subOrder.originalPrice)}} ￥{{toFixedNumber(subOrder.salePrice)}}
                     </div>
-                    <div style="width: 100px;height:25px;float:left;">
-                        ￥{{toFixedNumber(subOrder.totalOriginalPrice)}} ￥{{toFixedNumber(subOrder.totalSalePrice)}}
+                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;">
+                        ￥{{toFixedNumber(subOrder.totalOriginalPrice)}} ￥{{toFixedNumber(subOrder.totalPayPrice)}}
                     </div>
-                </div>
-                <div style="width:15%;height:84px;float:left;padding:10px;">
-                    <img :src="goods.backImage" style="width: 100%;height: 100%;">
+                    <div style="width: 200px;height:40px;float:left;margin-right: 10px;">
+                        {{subOrder.orderNo}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,6 +76,17 @@
                                 app.orderList = result.data;
                             }
                         }
+                    });
+                },
+                payNow : function(orderNo) {
+                    //跳转到支付页面
+                    layer.open({
+                        type : 2,
+                        title : '支付页面',
+                        maxmin : true,
+                        shadeClose : false,//点击遮罩关闭层
+                        area : [ '800px', '620px' ],
+                        content : '/shop/shoppingCenter/spShoppingPay.page?orderNo='+orderNo
                     });
                 },
                 toFixedNumber : function (num) {

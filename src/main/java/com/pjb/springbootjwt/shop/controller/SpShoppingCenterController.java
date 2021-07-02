@@ -481,13 +481,16 @@ public class SpShoppingCenterController {
         return "shop/spShoppingCenter/spMyOrder";
     }
 
+    /**
+     * 我的订单列表.
+     * @return
+     */
     @GetMapping("/queryMyOrderList")
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
     public Result<List<SpOrderDTO>> queryMyOrderList(){
 
         List<SpOrderDTO> resultList = new ArrayList<>();
-
         List<SpOrderDO> mainOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>().eq("order_user_id", SessionUtil.getSessionUserId()).isNull("parent_order_no").orderBy("status"));
         for (SpOrderDO mainOrder : mainOrderList) {
             List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(mainOrder.getOrderNo());
