@@ -518,7 +518,7 @@ public class SpShoppingCenterController {
         if (StringUtils.isNotBlank(orderNo)) {
             wrapper.eq("order_no", orderNo);
         }
-        wrapper.orderBy("status");
+        wrapper.orderBy("create_time", false);
         List<SpOrderDO> mainOrderList = spOrderService.selectList(wrapper);
         for (SpOrderDO mainOrder : mainOrderList) {
             List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(mainOrder.getOrderNo());
