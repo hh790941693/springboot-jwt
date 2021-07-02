@@ -405,7 +405,7 @@ public class SpShoppingCenterController {
         return "shop/spShoppingCenter/spShoppingPay";
     }
 
-    @GetMapping("/queryOrderDetailList")
+    @GetMapping("/queryOrderInfo")
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
     public Result<SpOrderDTO> queryOrderDetailList(String parentOrderNo) {
@@ -414,13 +414,9 @@ public class SpShoppingCenterController {
             return Result.fail();
         }
         SpOrderDTO spOrderDTO = new SpOrderDTO();
-        List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(parentOrderNo);
-
         spOrderDTO.setMainOrder(mainOrder);
-        spOrderDTO.setParentOrderNo(parentOrderNo);
+        List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(parentOrderNo);
         spOrderDTO.setSubOrderList(spOrderDetailList);
-        spOrderDTO.setTotalOriginalPrice(mainOrder.getTotalPrice());
-        spOrderDTO.setTotalSalePrice(mainOrder.getPayPrice());
 
         return Result.ok(spOrderDTO);
     }
@@ -498,9 +494,6 @@ public class SpShoppingCenterController {
 
             SpOrderDTO spOrderDTO = new SpOrderDTO();
             spOrderDTO.setMainOrder(mainOrder);
-            spOrderDTO.setParentOrderNo(mainOrder.getOrderNo());
-            spOrderDTO.setTotalOriginalPrice(mainOrder.getTotalPrice());
-            spOrderDTO.setTotalSalePrice(mainOrder.getPayPrice());
             spOrderDTO.setSubOrderList(spOrderDetailList);
             resultList.add(spOrderDTO);
         }

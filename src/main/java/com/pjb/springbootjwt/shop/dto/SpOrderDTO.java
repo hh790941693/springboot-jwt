@@ -2,7 +2,6 @@ package com.pjb.springbootjwt.shop.dto;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import com.pjb.springbootjwt.shop.domain.SpOrderDO;
@@ -12,16 +11,6 @@ import com.pjb.springbootjwt.shop.domain.SpOrderDO;
  */
 @Data
 public class SpOrderDTO {
-
-    private String parentOrderNo;
-
-    private BigDecimal totalOriginalPrice = new BigDecimal(0);
-
-    private BigDecimal totalSalePrice = new BigDecimal(0);
-
-    private String totalOriginalPriceStr;
-
-    private String totalSalePriceStr;
 
     // 主订单
     private SpOrderDO mainOrder;

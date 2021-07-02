@@ -26,10 +26,10 @@
     <div id="mainDiv">
         <div id="innerDiv">
             <div style="width: 100%;height:30px;font-size: 16px;">
-                订单号：{{orderNo}}
+                订单号：{{orderInfo.mainOrder.orderNo}}
             </div>
             <div style="width: 100%;height:30px;font-size:16px;">
-                原价：<span style="text-decoration: line-through;">￥{{toFixedNumber(orderInfo.totalOriginalPrice)}}元</span>
+                原价：<span style="text-decoration: line-through;">￥{{toFixedNumber(orderInfo.mainOrder.totalPrice)}}元</span>
             </div>
             <div id="payWayDiv" style="width: 100%;height:30px;font-size:16px;">
                 <span>支付方式：</span>
@@ -40,7 +40,7 @@
                 <input type="radio" v-model="payWay" :value="9">其他
             </div>
             <div style="width:100%;height:50px;text-align: right;">
-                <span style="font-weight: bold;font-size: 25px;">￥{{toFixedNumber(orderInfo.totalSalePrice)}}元</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-primary" @click="pay()">立即支付</button>
+                <span style="font-weight: bold;font-size: 25px;">￥{{toFixedNumber(orderInfo.mainOrder.payPrice)}}元</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-primary" @click="pay()">立即支付</button>
             </div>
             <p>订单详情</p>
             <div style="width:100%;height:370px;overflow-y: auto;border:1px solid grey;">
@@ -72,12 +72,12 @@
             data: {
                 orderNo : $("#orderNo").val(), //订单号
                 payWay : 1, //支付方式 1:微信 2:支付宝 3:银行卡 4:现金 9:其他
-                orderInfo : [],  //订单数据
+                orderInfo : {},  //订单数据
             },
             methods: {
                 // 支付
                 pay : function(){
-                    var payPrice = app.toFixedNumber(app.orderInfo.totalSalePrice);
+                    var payPrice = app.toFixedNumber(app.orderInfo.mainOrder.payPrice);
                     $.ajax({
                         type: "POST",
                         url: "/shop/shoppingCenter/pay",
@@ -95,10 +95,10 @@
                         }
                     });
                 },
-                queryOrderDetailList : function(){
+                queryOrderInfo : function(){
                     $.ajax({
                         type: "GET",
-                        url: "/shop/shoppingCenter/queryOrderDetailList",
+                        url: "/shop/shoppingCenter/queryOrderInfo",
                         data : {
                             'parentOrderNo':$("#orderNo").val()
                         },
@@ -114,7 +114,7 @@
                 }
             },
             created : function() {
-                this.queryOrderDetailList();
+                this.queryOrderInfo();
             }
         });
     </script>
