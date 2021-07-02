@@ -44,21 +44,21 @@
                 </div>
                 <div v-for="subOrder in orderInfo.subOrderList" style="width:100%;height:50px;margin-bottom:5px;padding-left:30px;border-top:1px solid grey;">
                     <div style="width: 60px;height:50px;float:left;margin-right: 10px;">
-                        <img :src="subOrder.backImage" width="100%" height="80%">
+                        <img :src="subOrder.backImage" width="100%" height="80%" style="margin-top: 10px;">
                     </div>
-                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;">
+                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;padding-top: 15px;text-align: center;">
                         {{subOrder.name}}
                     </div>
-                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;">
+                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;padding-top: 15px;">
                         X{{subOrder.goodsCount}}
                     </div>
-                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;">
-                        ￥{{toFixedNumber(subOrder.originalPrice)}} ￥{{toFixedNumber(subOrder.salePrice)}}
+                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;padding-top: 15px;">
+                        <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrder.originalPrice)}}</span> <span>￥{{toFixedNumber(subOrder.salePrice)}}</span>
                     </div>
-                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;">
-                        ￥{{toFixedNumber(subOrder.totalOriginalPrice)}} ￥{{toFixedNumber(subOrder.totalPayPrice)}}
+                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;padding-top: 15px;">
+                        <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrder.totalOriginalPrice)}}</span> <span>￥{{toFixedNumber(subOrder.totalPayPrice)}}</span>
                     </div>
-                    <div style="width: 200px;height:40px;float:left;margin-right: 10px;">
+                    <div style="width: 200px;height:40px;float:left;margin-right: 10px;padding-top: 15px;">
                         {{subOrder.orderNo}}
                     </div>
                 </div>
