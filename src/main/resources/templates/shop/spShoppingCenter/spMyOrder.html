@@ -10,15 +10,15 @@
         #mainDiv {
             width: 100%;
             height: 100%;
-            padding: 10px 30px 10px 30px;
+            padding: 10px 100px 10px 100px;
         }
     </style>
 </head>
 <body>
     <div id="mainDiv">
-        <div style="width:100%;height:550px;overflow-y: auto;border: 1px solid grey;">
-            <div v-for="(orderInfo,index) in orderList" style="width: 100%;height:auto;border:1px solid grey;margin-bottom: 10px;padding: 5px;">
-                <div style="width: 100%;height:30px;font-weight: bold;font-size: 15px;">
+        <div style="width:100%;height:750px;overflow-y: auto;border: 1px solid grey;">
+            <div v-for="(orderInfo,index) in orderList" style="width: 100%;height:auto;border:1px solid grey;margin-bottom: 10px;">
+                <div style="width: 100%;height:30px;font-weight: bold;font-size: 15px;background-color: lightblue;">
                     <div style="width: 450px;height:30px;float:left;">
                         订单{{index+1}}：{{orderInfo.mainOrder.orderNo}}
                     </div>
@@ -30,9 +30,6 @@
                     </div>
                     <div v-if="orderInfo.mainOrder.cancelStatus != 6" style="width: 180px;height:30px;float:left;">
                         支付状态：<span v-text="orderInfo.mainOrder.payStatus == 1 ? '待支付' : '已支付'"></span>
-                    </div>
-                    <div v-if="orderInfo.mainOrder.payStatus != 1" style="width: 180px;height: 30px;float: left;">
-                        物流状态：<span v-text="orderInfo.mainOrder.logisticsStatus == 3 ? '未发货' : '已发货'"></span>
                     </div>
                     <div v-if="orderInfo.mainOrder.payStatus == 1" style="width: 180px;height: 30px;float: left;">
                         取消状态：<span v-text="orderInfo.mainOrder.cancelStatus == 5 ? '未取消' : '已取消'"></span>
@@ -46,20 +43,23 @@
                     <div style="width: 60px;height:50px;float:left;margin-right: 10px;">
                         <img :src="subOrder.backImage" width="100%" height="80%" style="margin-top: 10px;">
                     </div>
-                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;padding-top: 15px;text-align: center;">
+                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;padding-top: 20px;text-align: center;">
                         {{subOrder.name}}
                     </div>
-                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;padding-top: 15px;">
+                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;padding-top: 20px;">
                         X{{subOrder.goodsCount}}
                     </div>
-                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;padding-top: 15px;">
+                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;padding-top: 20px;">
                         <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrder.originalPrice)}}</span> <span>￥{{toFixedNumber(subOrder.salePrice)}}</span>
                     </div>
-                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;padding-top: 15px;">
+                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;padding-top: 20px;">
                         <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrder.totalOriginalPrice)}}</span> <span>￥{{toFixedNumber(subOrder.totalPayPrice)}}</span>
                     </div>
-                    <div style="width: 200px;height:40px;float:left;margin-right: 10px;padding-top: 15px;">
+                    <div style="width: 280px;height:40px;float:left;margin-right: 10px;padding-top: 20px;">
                         {{subOrder.orderNo}}
+                    </div>
+                    <div v-if="orderInfo.mainOrder.payStatus != 1" style="width: 180px;height: 40px;float: left;margin-right: 10px;padding-top: 20px;">
+                        <span v-text="orderInfo.mainOrder.logisticsStatus == 3 ? '待发货' : '已发货'"></span>
                     </div>
                 </div>
             </div>
