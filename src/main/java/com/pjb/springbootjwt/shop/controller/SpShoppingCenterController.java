@@ -569,6 +569,20 @@ public class SpShoppingCenterController {
             spOrderService.updateById(subOrderDO);
         }
 
+        //商品对应的库存要增加
+        List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(mainOrder.getOrderNo());
+        List<SpGoodsDO> batchUpdateList = new ArrayList<>();
+        for (SpOrderDetailDTO spOrderDetailDTO : spOrderDetailList) {
+            SpGoodsDO spGoodsDO = spGoodsService.selectOne(new EntityWrapper<SpGoodsDO>().eq("goods_id", spOrderDetailDTO.getGoodsId()));
+            if (null != spGoodsDO) {
+                spGoodsDO.setStockNum(spGoodsDO.getStockNum() + spOrderDetailDTO.getGoodsCount());
+                batchUpdateList.add(spGoodsDO);
+            }
+        }
+        if (batchUpdateList.size() > 0) {
+            spGoodsService.updateBatchById(batchUpdateList);
+        }
+
         return Result.ok();
     }
 }
