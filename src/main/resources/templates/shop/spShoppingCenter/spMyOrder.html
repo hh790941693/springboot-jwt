@@ -12,6 +12,18 @@
             height: 100%;
             padding: 10px 100px 10px 100px;
         }
+
+        .payClass,.notCancelClass {
+            background-color:lightgreen;
+        }
+
+        .notPayClass {
+            background-color: lightsalmon;
+        }
+
+        .cancelClass {
+            background-color: lightgrey;
+        }
     </style>
 </head>
 <body>
@@ -43,16 +55,25 @@
                         订单{{index+1}}：{{orderInfo.mainOrder.orderNo}}
                     </div>
                     <div style="width: 220px;height:30px;float:left;">
-                        总原价：￥{{toFixedNumber(orderInfo.mainOrder.totalPrice)}}
+                        原价：￥{{toFixedNumber(orderInfo.mainOrder.totalPrice)}}
                     </div>
                     <div style="width: 230px;height:30px;float:left;">
-                        总支付价格：￥{{toFixedNumber(orderInfo.mainOrder.payPrice)}}
+                        售价：￥{{toFixedNumber(orderInfo.mainOrder.payPrice)}}
                     </div>
-                    <div v-if="orderInfo.mainOrder.cancelStatus != 6" style="width: 180px;height:30px;float:left;">
-                        支付状态：<span v-text="orderInfo.mainOrder.payStatus == 1 ? '待支付' : '已支付'"></span>
+                    <div v-if="orderInfo.mainOrder.cancelStatus != 6" style="width: 200px;height:30px;float:left;">
+                        支付状态：<span v-text="orderInfo.mainOrder.payStatus == 1 ? '待支付' : '已支付'" :class="orderInfo.mainOrder.payStatus == 1 ? 'notPayClass' : 'payClass'"></span>
+                        <span v-if="orderInfo.mainOrder.status != 1">
+                            (
+                            <span v-if="orderInfo.mainOrder.payWay == 1">微信</span>
+                            <span v-if="orderInfo.mainOrder.payWay == 2">支付宝</span>
+                            <span v-if="orderInfo.mainOrder.payWay == 3">银行卡</span>
+                            <span v-if="orderInfo.mainOrder.payWay == 4">现金</span>
+                            <span v-if="orderInfo.mainOrder.payWay == 9">其他</span>
+                            )
+                        </span>
                     </div>
-                    <div v-if="orderInfo.mainOrder.payStatus == 1" style="width: 180px;height: 30px;float: left;">
-                        取消状态：<span v-text="orderInfo.mainOrder.cancelStatus == 5 ? '未取消' : '已取消'"></span>
+                    <div v-if="orderInfo.mainOrder.payStatus == 1 && orderInfo.mainOrder.cancelStatus == 6" style="width: 180px;height: 30px;float: left;">
+                        取消状态：<span v-text="orderInfo.mainOrder.cancelStatus == 5 ? '未取消' : '已取消'" :class="orderInfo.mainOrder.cancelStatus == 5 ? 'notCancelClass' : 'cancelClass'"></span>
                     </div>
                     <div style="width: 200px;height:30px;float:left;">
                         <button v-if="orderInfo.mainOrder.status == 1" @click="payNow(orderInfo.mainOrder.orderNo)" class="btn btn-sm btn-primary">去支付</button>&nbsp;&nbsp;&nbsp;
