@@ -17,10 +17,10 @@
 <body>
     <div id="mainDiv">
         <div style="width:100%;height:550px;overflow-y: auto;border: 1px solid grey;">
-            <div v-for="orderInfo in orderList" style="width: 100%;height:auto;border:1px solid grey;margin-bottom: 10px;padding: 5px;">
-                <div style="width: 100%;height:30px;font-weight: bold;font-size: 18px;">
-                    <div style="width: 400px;height:30px;float:left;">
-                        {{orderInfo.mainOrder.orderNo}}
+            <div v-for="(orderInfo,index) in orderList" style="width: 100%;height:auto;border:1px solid grey;margin-bottom: 10px;padding: 5px;">
+                <div style="width: 100%;height:30px;font-weight: bold;font-size: 15px;">
+                    <div style="width: 450px;height:30px;float:left;">
+                        订单{{index+1}}：{{orderInfo.mainOrder.orderNo}}
                     </div>
                     <div style="width: 220px;height:30px;float:left;">
                         总原价：￥{{toFixedNumber(orderInfo.mainOrder.totalPrice)}}
@@ -28,7 +28,7 @@
                     <div style="width: 230px;height:30px;float:left;">
                         总支付价格：￥{{toFixedNumber(orderInfo.mainOrder.payPrice)}}
                     </div>
-                    <div style="width: 180px;height:30px;float:left;">
+                    <div v-if="orderInfo.mainOrder.cancelStatus != 6" style="width: 180px;height:30px;float:left;">
                         支付状态：<span v-text="orderInfo.mainOrder.payStatus == 1 ? '待支付' : '已支付'"></span>
                     </div>
                     <div v-if="orderInfo.mainOrder.payStatus != 1" style="width: 180px;height: 30px;float: left;">
@@ -74,6 +74,7 @@
                 orderList : [],  //订单数据
             },
             methods: {
+                // 我的订单列表
                 queryMyOrderList : function(){
                     $.ajax({
                         type: "GET",
@@ -85,6 +86,7 @@
                         }
                     });
                 },
+                // 立即支付
                 payNow : function(orderNo) {
                     //跳转到支付页面
                     layer.open({
@@ -96,8 +98,28 @@
                         content : '/shop/shoppingCenter/spShoppingPay.page?orderNo='+orderNo
                     });
                 },
+                // 取消订单
                 cancelOrder : function(orderNo) {
-                    layer.alert("取消订单");
+                    var that = this;
+                    layer.confirm('确定要删除选中的记录？', {
+                            btn: ['确定', '取消']
+                        }, function () {
+                            $.ajax({
+                                type: "POST",
+                                url: "/shop/shoppingCenter/cancelOrder",
+                                data: {
+                                    'parentOrderNo': orderNo,
+                                },
+                                success: function (result) {
+                                    if (result.code == 1) {
+                                        layer.msg(result.msg);
+                                    } else {
+                                        layer.alert(result.data);
+                                    }
+                                    that.queryMyOrderList();
+                                }
+                            });
+                    })
                 },
                 toFixedNumber : function (num) {
                     return num.toFixed(2);

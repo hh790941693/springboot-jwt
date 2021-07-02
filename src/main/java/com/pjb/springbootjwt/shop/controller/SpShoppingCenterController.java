@@ -86,6 +86,9 @@ public class SpShoppingCenterController {
         int favoriteNum = spFavoriteService.selectCount(new EntityWrapper<SpFavoriteDO>().eq("user_id", SessionUtil.getSessionUserId()).eq("status", 1));
         spShoppingCenterDTO.setFavoriteNum(favoriteNum);
 
+        int orderNum = spOrderService.selectCount(new EntityWrapper<SpOrderDO>().eq("order_user_id", SessionUtil.getSessionUserId()).isNull("parent_order_no"));
+        spShoppingCenterDTO.setOrderNum(orderNum);
+
         return Result.ok(spShoppingCenterDTO);
     }
 
@@ -405,6 +408,11 @@ public class SpShoppingCenterController {
         return "shop/spShoppingCenter/spShoppingPay";
     }
 
+    /**
+     * 支付页面订单详情.
+     * @param parentOrderNo
+     * @return
+     */
     @GetMapping("/queryOrderInfo")
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
@@ -421,6 +429,13 @@ public class SpShoppingCenterController {
         return Result.ok(spOrderDTO);
     }
 
+    /**
+     * 订单支付.
+     * @param parentOrderNo
+     * @param payWay
+     * @param payPrice
+     * @return
+     */
     @PostMapping("/pay")
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
@@ -430,9 +445,14 @@ public class SpShoppingCenterController {
             return Result.fail("订单不存在");
         }
 
-        // 检查是否已经支付
+        // 检查订单是否已经取消  取消状态 5:未取消 6:已取消
+        if (mainOrder.getCancelStatus().intValue() == 6 || mainOrder.getStatus().intValue() == 6) {
+            return Result.fail("订单已取消,无法进行支付。");
+        }
+
+        // 检查是否已经支付  状态 1：待支付 2:已支付 3:待发货 4:已发货 6:已取消 9:已确认收货
         if (mainOrder.getPayStatus().intValue() != 1 || mainOrder.getStatus().intValue() != 1) {
-            return Result.fail("无需重复支付");
+            return Result.fail("无需重复支付。");
         }
 
         // 主订单
@@ -502,5 +522,45 @@ public class SpShoppingCenterController {
         }
 
         return Result.ok(resultList);
+    }
+
+    /**
+     * 取消订单.
+     * @return
+     */
+    @PostMapping("/cancelOrder")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public Result<String> cancelOrder(String parentOrderNo){
+        SpOrderDO mainOrder = spOrderService.selectOne(new EntityWrapper<SpOrderDO>().eq("order_no", parentOrderNo));
+        if (null == mainOrder) {
+            return Result.fail("订单不存在");
+        }
+
+        if (mainOrder.getStatus().intValue() == 6) {
+            return Result.ok();
+        }
+
+        if (mainOrder.getPayStatus().intValue() != 1 || mainOrder.getStatus().intValue() != 1) {
+            return Result.fail("当前订单已支付,无法取消。");
+        }
+
+        // 主订单
+        mainOrder.setCancelStatus(6);
+        mainOrder.setStatus(6);
+        mainOrder.setUpdateTime(new Date());
+        spOrderService.updateById(mainOrder);
+
+        // 子订单
+        List<SpOrderDO> subOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>()
+                .eq("parent_order_no", parentOrderNo));
+        for (SpOrderDO subOrderDO : subOrderList) {
+            subOrderDO.setCancelStatus(6);
+            subOrderDO.setStatus(6);
+            subOrderDO.setUpdateTime(new Date());
+            spOrderService.updateById(subOrderDO);
+        }
+
+        return Result.ok();
     }
 }
