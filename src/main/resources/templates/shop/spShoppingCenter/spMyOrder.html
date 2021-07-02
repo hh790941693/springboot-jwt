@@ -55,10 +55,10 @@
                     <div style="width: 450px;height:30px;float:left;">
                         订单{{index+1}}：{{orderInfo.mainOrder.orderNo}}
                     </div>
-                    <div style="width: 220px;height:30px;float:left;">
+                    <div style="width: 150px;height:30px;float:left;">
                         原价：￥{{toFixedNumber(orderInfo.mainOrder.totalPrice)}}
                     </div>
-                    <div style="width: 230px;height:30px;float:left;">
+                    <div style="width: 150px;height:30px;float:left;">
                         售价：￥{{toFixedNumber(orderInfo.mainOrder.payPrice)}}
                     </div>
                     <div v-if="orderInfo.mainOrder.cancelStatus != 6" style="width: 200px;height:30px;float:left;">
@@ -76,7 +76,7 @@
                     <div v-if="orderInfo.mainOrder.payStatus == 1 && orderInfo.mainOrder.cancelStatus == 6" style="width: 180px;height: 30px;float: left;">
                         取消状态：<span v-text="orderInfo.mainOrder.cancelStatus == 5 ? '未取消' : '已取消'" :class="orderInfo.mainOrder.cancelStatus == 5 ? 'notCancelClass' : 'cancelClass'"></span>
                     </div>
-                    <div style="width: 200px;height:30px;float:left;">
+                    <div style="width: 200px;height:30px;float:right;text-align: right;">
                         <button v-if="orderInfo.mainOrder.status == 1" @click="payNow(orderInfo.mainOrder.orderNo)" class="btn btn-sm btn-primary">去支付</button>&nbsp;&nbsp;&nbsp;
                         <button v-if="orderInfo.mainOrder.status == 1" @click="cancelOrder(orderInfo.mainOrder.orderNo)" class="btn btn-sm btn-danger">取消订单</button>
                     </div>
