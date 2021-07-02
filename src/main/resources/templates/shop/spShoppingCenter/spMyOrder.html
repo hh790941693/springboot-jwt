@@ -18,20 +18,20 @@
     <div id="mainDiv">
         <div style="width:100%;height:550px;overflow-y: auto;border: 1px solid grey;">
             <div v-for="orderInfo in orderList" style="width: 100%;height:auto;border:1px solid grey;margin-bottom: 10px;padding: 5px;">
-                <div style="width: 100%;height:30px;">
+                <div style="width: 100%;height:30px;font-weight: bold;font-size: 18px;">
                     <div style="width: 400px;height:30px;float:left;">
-                        父订单号：{{orderInfo.mainOrder.orderNo}}
+                        {{orderInfo.mainOrder.orderNo}}
                     </div>
-                    <div style="width: 200px;height:30px;float:left;">
+                    <div style="width: 220px;height:30px;float:left;">
                         总原价：￥{{toFixedNumber(orderInfo.mainOrder.totalPrice)}}
                     </div>
-                    <div style="width: 200px;height:30px;float:left;">
+                    <div style="width: 230px;height:30px;float:left;">
                         总支付价格：￥{{toFixedNumber(orderInfo.mainOrder.payPrice)}}
                     </div>
-                    <div style="width: 150px;height:30px;float:left;">
+                    <div style="width: 180px;height:30px;float:left;">
                         支付状态：<span v-text="orderInfo.mainOrder.payStatus == 1 ? '待支付' : '已支付'"></span>
                     </div>
-                    <div v-if="orderInfo.mainOrder.payStatus != 1" style="width: 150px;height: 30px;float: left;">
+                    <div v-if="orderInfo.mainOrder.payStatus != 1" style="width: 180px;height: 30px;float: left;">
                         物流状态：<span v-text="orderInfo.mainOrder.logisticsStatus == 3 ? '未发货' : '已发货'"></span>
                     </div>
                     <div style="width: 150px;height:30px;float:left;">

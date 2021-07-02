@@ -441,7 +441,7 @@ public class SpShoppingCenterController {
         //支付方式
         mainOrder.setPayWay(payWay);
         //待发货
-        mainOrder.setLogisticsStatus(1);
+        mainOrder.setLogisticsStatus(3);
         //待发货
         mainOrder.setStatus(3);
         mainOrder.setUpdateTime(new Date());
@@ -460,7 +460,7 @@ public class SpShoppingCenterController {
             //支付方式
             subOrderDO.setPayWay(payWay);
             //待发货
-            subOrderDO.setLogisticsStatus(1);
+            subOrderDO.setLogisticsStatus(3);
             //待发货
             subOrderDO.setStatus(3);
             subOrderDO.setUpdateTime(new Date());
