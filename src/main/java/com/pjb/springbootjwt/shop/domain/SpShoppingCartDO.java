@@ -38,6 +38,9 @@ public class SpShoppingCartDO implements Serializable {
     @ApiModelProperty(value = "goodsId" , name = "商品id")
     private String goodsId;
 
+    //店铺id
+    private String merchantId;
+
     //商品数量
     @ApiModelProperty(value = "goodsCount" , name = "商品数量")
     private Integer goodsCount;

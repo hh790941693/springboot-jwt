@@ -151,13 +151,14 @@ public class SpShoppingCartController extends AdminBaseController {
 	@PostMapping("/addToShoppingCart")
     @Transactional(rollbackFor = Exception.class)
 	//@RequiresPermissions("shop:spShoppingCart:spShoppingCart")
-	public Result<String> addToShoppingCart(String goodsId, int goodsCount) {
+	public Result<String> addToShoppingCart(String goodsId, int goodsCount, String merchantId) {
         SpShoppingCartDO spShoppingCartDO = spShoppingCartService.selectOne(new EntityWrapper<SpShoppingCartDO>().eq("user_id", SessionUtil.getSessionUserId())
                 .eq("goods_id", goodsId));
         if (null == spShoppingCartDO) {
             spShoppingCartDO = new SpShoppingCartDO();
             spShoppingCartDO.setUserId(Long.valueOf(SessionUtil.getSessionUserId()));
             spShoppingCartDO.setGoodsId(goodsId);
+			spShoppingCartDO.setMerchantId(merchantId);
             spShoppingCartDO.setGoodsCount(goodsCount);
             spShoppingCartDO.setCreateTime(new Date());
             spShoppingCartDO.setUpdateTime(new Date());

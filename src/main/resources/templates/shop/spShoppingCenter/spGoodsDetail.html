@@ -88,7 +88,7 @@
                     <button style="width: 18px;" @click="minusGoodsCount()">-</button>
                     <input readonly style="width: 25px;text-align: center;" v-model="goodsCount">
                     <button style="width: 18px;" @click="addGoodsCount()">+</button>
-                    <button class="btn btn-danger" @click="addToShoppingCart(goodsDetail.goodsId, 1)" :disabled="goodsDetail.stockNum <=0 || goodsCount>goodsDetail.stockNum"><i class="fa fa-shopping-cart"></i>加入购物车</button>
+                    <button class="btn btn-danger" @click="batchAddToShoppingCart(goodsDetail.goodsId, goodsDetail.merchantId)" :disabled="goodsDetail.stockNum <=0 || goodsCount>goodsDetail.stockNum"><i class="fa fa-shopping-cart"></i>加入购物车</button>
                 </div>
                 <div style="width: 100%;height:20px;margin-top:40px;">
                     <span style="width:30%;display:inline-block;text-align: left;" v-if="goodsDetail.goodsFavoriteStatus == 2">
@@ -119,7 +119,7 @@
                         <span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPriceStr}}</span>&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePriceStr}}</span>
                     </div>
                     <div style="width:18%;float:right;">
-                        <button style="width: 40px;" class="btn btn-sm btn-danger" @click="addToShoppingCart(goodsDetail.goodsId)"><i class="fa fa-shopping-cart"></i></button>
+                        <button style="width: 40px;" class="btn btn-sm btn-danger" @click="addToShoppingCart(goodsDetail.goodsId, 1, goodsDetail.merchantId)"><i class="fa fa-shopping-cart"></i></button>
                     </div>
                 </div>
 
@@ -202,18 +202,23 @@
                     });
                 },
                 // 加入购物车
-                addToShoppingCart : function (goodsId) {
+                addToShoppingCart : function (goodsId, goodsCount, merchantId) {
                     $.ajax({
                         type: "POST",
                         url: "/shop/spShoppingCart/addToShoppingCart",
                         data: {
                             'goodsId':goodsId,
-                            'goodsCount':app.goodsCount,
+                            'goodsCount':goodsCount,
+                            'merchantId':merchantId,
                         },
                         success: function (result) {
                             layer.msg(result.msg);
                         }
                     });
+                },
+                // 批量添加到购物车
+                batchAddToShoppingCart : function (goodsId, merchantId) {
+                    this.addToShoppingCart(goodsId, app.goodsCount, merchantId);
                 },
                 // 查询猜你喜欢商品列表
                 queryMaybeLikeGoodsList : function(goodsPkId){
