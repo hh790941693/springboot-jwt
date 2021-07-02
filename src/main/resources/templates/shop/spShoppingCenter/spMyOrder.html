@@ -34,8 +34,9 @@
                     <div v-if="orderInfo.mainOrder.payStatus != 1" style="width: 180px;height: 30px;float: left;">
                         物流状态：<span v-text="orderInfo.mainOrder.logisticsStatus == 3 ? '未发货' : '已发货'"></span>
                     </div>
-                    <div style="width: 150px;height:30px;float:left;">
-                        <button v-if="orderInfo.mainOrder.payStatus == 1" @click="payNow(orderInfo.mainOrder.orderNo)">去支付</button>
+                    <div style="width: 200px;height:30px;float:left;">
+                        <button v-if="orderInfo.mainOrder.payStatus == 1" @click="payNow(orderInfo.mainOrder.orderNo)">去支付</button>&nbsp;&nbsp;&nbsp;
+                        <button v-if="orderInfo.mainOrder.payStatus == 1" @click="cancelOrder(orderInfo.mainOrder.orderNo)">取消订单</button>
                     </div>
                 </div>
                 <div v-for="subOrder in orderInfo.subOrderList" style="width:100%;height:50px;margin-bottom:5px;padding-left:30px;border-top:1px solid grey;">
@@ -91,6 +92,9 @@
                         area : [ '800px', '620px' ],
                         content : '/shop/shoppingCenter/spShoppingPay.page?orderNo='+orderNo
                     });
+                },
+                cancelOrder : function(orderNo) {
+                    layer.alert("取消订单");
                 },
                 toFixedNumber : function (num) {
                     return num.toFixed(2);
