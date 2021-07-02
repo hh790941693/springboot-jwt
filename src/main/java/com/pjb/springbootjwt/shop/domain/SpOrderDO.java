@@ -69,7 +69,7 @@ public class SpOrderDO implements Serializable {
     private Integer logisticsStatus;
 
     // 取消状态 5:未取消 6:已取消
-    private Integer cancleStatus;
+    private Integer cancelStatus;
 
     // 支付方式 1:微信 2:支付宝 3:银行卡 4:现金 9:其他
     private Integer payWay;
