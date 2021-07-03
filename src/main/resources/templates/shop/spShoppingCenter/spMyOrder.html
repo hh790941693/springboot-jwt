@@ -81,9 +81,9 @@
                         <button v-if="orderInfo.mainOrder.status == 1" @click="cancelOrder(orderInfo.mainOrder.orderNo)" class="btn btn-sm btn-danger">取消订单</button>
                     </div>
                 </div>
-                <div v-for="subOrder in orderInfo.subOrderList" style="width:100%;height:50px;margin-bottom:5px;padding-left:30px;border-top:1px solid grey;">
-                    <div style="width: 60px;height:50px;float:left;margin-right: 10px;">
-                        <img :src="subOrder.backImage" width="100%" height="80%" style="margin-top: 10px;">
+                <div v-for="subOrder in orderInfo.subOrderList" style="width:100%;height:60px;margin-bottom:10px;padding-left:30px;border-top:1px solid grey;">
+                    <div style="width: 60px;height:60px;float:left;margin-right: 10px;">
+                        <img :src="subOrder.backImage" width="100%" height="90%" style="margin-top: 7px;">
                     </div>
                     <div style="width: 100px;height:40px;float:left;margin-right: 10px;padding-top: 20px;text-align: center;">
                         {{subOrder.name}}
