@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class SpMerchantOrderDTO {
+public class SpSubOrderDTO {
 
     // 次订单
     private SpOrderDO subOrder;
 
     // 次订单商品列表
-    private List<SpOrderDetailDTO> subOrderList = new ArrayList<>();
+    private List<SpOrderDetailDTO> subOrderGoodsList = new ArrayList<>();
 }

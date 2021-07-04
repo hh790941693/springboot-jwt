@@ -2,7 +2,6 @@ package com.pjb.springbootjwt.shop.dto;
 
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.pjb.springbootjwt.shop.domain.SpOrderDO;
 
@@ -15,6 +14,6 @@ public class SpOrderDTO {
     // 主订单
     private SpOrderDO mainOrder;
 
-    // 次订单
-    private List<SpMerchantOrderDTO> subOrderList;
+    // 次订单列表
+    private List<SpSubOrderDTO> subOrderList;
 }

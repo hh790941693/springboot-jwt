@@ -451,13 +451,13 @@ public class SpShoppingCenterController {
         spOrderDTO.setMainOrder(mainOrder);
 
         List<SpOrderDO> subOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>().eq("parent_order_no", mainOrder.getOrderNo()));
-        List<SpMerchantOrderDTO> subOrderListReturnList = new ArrayList<>();
+        List<SpSubOrderDTO> subOrderListReturnList = new ArrayList<>();
         for (SpOrderDO subOrder : subOrderList) {
-            SpMerchantOrderDTO spMerchantOrderDTO = new SpMerchantOrderDTO();
+            SpSubOrderDTO spSubOrderDTO = new SpSubOrderDTO();
             List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailListByOrderNo(subOrder.getOrderNo());
-            spMerchantOrderDTO.setSubOrder(subOrder);
-            spMerchantOrderDTO.setSubOrderList(spOrderDetailList);
-            subOrderListReturnList.add(spMerchantOrderDTO);
+            spSubOrderDTO.setSubOrder(subOrder);
+            spSubOrderDTO.setSubOrderGoodsList(spOrderDetailList);
+            subOrderListReturnList.add(spSubOrderDTO);
         }
         spOrderDTO.setSubOrderList(subOrderListReturnList);
 
@@ -560,13 +560,13 @@ public class SpShoppingCenterController {
             spOrderDTO.setMainOrder(mainOrder);
 
             List<SpOrderDO> subOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>().eq("parent_order_no", mainOrder.getOrderNo()));
-            List<SpMerchantOrderDTO> subOrderListReturnList = new ArrayList<>();
+            List<SpSubOrderDTO> subOrderListReturnList = new ArrayList<>();
             for (SpOrderDO subOrder : subOrderList) {
-                SpMerchantOrderDTO spMerchantOrderDTO = new SpMerchantOrderDTO();
+                SpSubOrderDTO spSubOrderDTO = new SpSubOrderDTO();
                 List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailListByOrderNo(subOrder.getOrderNo());
-                spMerchantOrderDTO.setSubOrder(subOrder);
-                spMerchantOrderDTO.setSubOrderList(spOrderDetailList);
-                subOrderListReturnList.add(spMerchantOrderDTO);
+                spSubOrderDTO.setSubOrder(subOrder);
+                spSubOrderDTO.setSubOrderGoodsList(spOrderDetailList);
+                subOrderListReturnList.add(spSubOrderDTO);
             }
             spOrderDTO.setSubOrderList(subOrderListReturnList);
 
