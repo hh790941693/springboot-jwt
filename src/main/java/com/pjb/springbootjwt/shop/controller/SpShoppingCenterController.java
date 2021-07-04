@@ -257,6 +257,12 @@ public class SpShoppingCenterController {
         if (null == spGoodsDO) {
             return Result.fail("商品不存在");
         }
+        if (goodsCount <= 0) {
+            return Result.fail("入参有误");
+        }
+        if (goodsCount > spGoodsDO.getStockNum()) {
+            return Result.fail("商品数量超过了库存数"+spGoodsDO.getStockNum());
+        }
 
         // 主订单
         SpOrderDO mainOrder = new SpOrderDO();
