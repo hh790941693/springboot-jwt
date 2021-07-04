@@ -455,6 +455,7 @@ public class SpShoppingCenterController {
         for (SpOrderDO subOrder : subOrderList) {
             SpSubOrderDTO spSubOrderDTO = new SpSubOrderDTO();
             List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailListByOrderNo(subOrder.getOrderNo());
+            subOrder.setMerchantName(spOrderDetailList.get(0).getMerchantName());
             spSubOrderDTO.setSubOrder(subOrder);
             spSubOrderDTO.setSubOrderGoodsList(spOrderDetailList);
             subOrderListReturnList.add(spSubOrderDTO);
@@ -564,6 +565,7 @@ public class SpShoppingCenterController {
             for (SpOrderDO subOrder : subOrderList) {
                 SpSubOrderDTO spSubOrderDTO = new SpSubOrderDTO();
                 List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailListByOrderNo(subOrder.getOrderNo());
+                subOrder.setMerchantName(spOrderDetailList.get(0).getMerchantName());
                 spSubOrderDTO.setSubOrder(subOrder);
                 spSubOrderDTO.setSubOrderGoodsList(spOrderDetailList);
                 subOrderListReturnList.add(spSubOrderDTO);
