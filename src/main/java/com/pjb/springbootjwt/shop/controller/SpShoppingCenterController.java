@@ -3,6 +3,7 @@ package com.pjb.springbootjwt.shop.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.pjb.springbootjwt.shop.constants.SpConstants;
 import com.pjb.springbootjwt.shop.domain.*;
 import com.pjb.springbootjwt.shop.dto.*;
 import com.pjb.springbootjwt.shop.service.*;
@@ -272,11 +273,11 @@ public class SpShoppingCenterController {
         mainOrder.setPayPrice(spGoodsDO.getSalePrice().multiply(new BigDecimal(goodsCount)));
         mainOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
         //支付状态 1:待支付 2:已支付
-        mainOrder.setPayStatus(1);
+        mainOrder.setPayStatus(SpConstants.PayEnum.WAIT_PAY.getCode());
         //物流状态 3:未发货 4:已发货
-        mainOrder.setLogisticsStatus(3);
+        mainOrder.setLogisticsStatus(SpConstants.PayEnum.WAIT_DELIVERY.getCode());
         //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
-        mainOrder.setStatus(1);
+        mainOrder.setStatus(SpConstants.PayEnum.WAIT_PAY.getCode());
         mainOrder.setCreateTime(new Date());
         mainOrder.setUpdateTime(new Date());
         spOrderService.insert(mainOrder);
@@ -291,11 +292,11 @@ public class SpShoppingCenterController {
         subOrder.setPayPrice(spGoodsDO.getSalePrice().multiply(new BigDecimal(goodsCount)));
         subOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
         //支付状态 1:待支付 2:已支付
-        subOrder.setPayStatus(1);
+        subOrder.setPayStatus(SpConstants.PayEnum.WAIT_PAY.getCode());
         //物流状态 3:未发货 4:已发货
-        subOrder.setLogisticsStatus(3);
+        subOrder.setLogisticsStatus(SpConstants.PayEnum.WAIT_DELIVERY.getCode());
         //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
-        subOrder.setStatus(1);
+        subOrder.setStatus(SpConstants.PayEnum.WAIT_PAY.getCode());
         subOrder.setCreateTime(new Date());
         subOrder.setUpdateTime(new Date());
         spOrderService.insert(subOrder);
