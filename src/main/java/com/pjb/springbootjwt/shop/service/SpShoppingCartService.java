@@ -15,5 +15,5 @@ public interface SpShoppingCartService extends CoreService<SpShoppingCartDO> {
     List<SpShoppingCartDTO> queryShoppingCartList(String loginUserId);
 
     // 我的购物车部分商品列表
-    List<SpShoppingCartDTO> queryShoppingCartList(String loginUserId, List<String> goodsIdList);
+    List<SpShoppingCartDTO> queryShoppingCartListByGoodsIds(String loginUserId, List<String> goodsIdList);
 }

@@ -9,6 +9,7 @@ import com.pjb.springbootjwt.shop.service.*;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import org.apache.commons.lang.StringUtils;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -311,7 +312,7 @@ public class SpShoppingCenterController {
         spOrderDetailDO.setUpdateTime(new Date());
         spOrderDetailService.insert(spOrderDetailDO);
 
-        // 更新商品库存
+        // 更新商品库存和销量
         spGoodsDO.setStockNum(spGoodsDO.getStockNum() - goodsCount);
         spGoodsDO.setSaleNumber(spGoodsDO.getSaleNumber() + goodsCount);
         spGoodsService.updateById(spGoodsDO);
@@ -329,13 +330,8 @@ public class SpShoppingCenterController {
     @Transactional(rollbackFor = Exception.class)
     public Result<String> createCartOrder(@RequestParam("goodsIdArr[]") String[] goodsIdArr){
         List<String> goodsIdList = new ArrayList<>(Arrays.asList(goodsIdArr));
-        List<SpShoppingCartDO> spShoppingCartDOList = spShoppingCartService.selectList(new EntityWrapper<SpShoppingCartDO>().eq("user_id", SessionUtil.getSessionUserId())
-                        .in("goods_id", goodsIdList));
-        if (null == spShoppingCartDOList || spShoppingCartDOList.size() ==0) {
-            return Result.fail("请先选择要购买的商品");
-        }
 
-        List<SpShoppingCartDTO> spShoppingCartDTOList = spShoppingCartService.queryShoppingCartList(SessionUtil.getSessionUserId(), goodsIdList);
+        List<SpShoppingCartDTO> spShoppingCartDTOList = spShoppingCartService.queryShoppingCartListByGoodsIds(SessionUtil.getSessionUserId(), goodsIdList);
         if (null == spShoppingCartDTOList || spShoppingCartDTOList.size() == 0) {
             return Result.fail("请先选择要购买的商品");
         }
@@ -420,7 +416,18 @@ public class SpShoppingCenterController {
         // 删除购物车商品
         spShoppingCartService.delete(new EntityWrapper<SpShoppingCartDO>().in("goods_id", goodsIdList));
 
-        // TODO 商品库存减少(待补充)
+        // 更新商品库存和销量
+        List<SpGoodsDO> updateGoodsList = new ArrayList<>();
+        for (SpShoppingCartDTO spShoppingCartDO : spShoppingCartDTOList) {
+            SpGoodsDO updateGoods = new SpGoodsDO();
+            BeanUtils.copyProperties(spShoppingCartDO, updateGoods);
+            updateGoods.setStockNum(updateGoods.getStockNum() - spShoppingCartDO.getGoodsCount());
+            updateGoods.setSaleNumber(updateGoods.getSaleNumber() + spShoppingCartDO.getGoodsCount());
+            updateGoods.setUpdateTime(new Date());
+            updateGoodsList.add(updateGoods);
+        }
+        spGoodsService.updateBatchById(updateGoodsList);
+
         return Result.ok(mainOrder.getOrderNo());
     }
 
@@ -615,13 +622,14 @@ public class SpShoppingCenterController {
             spOrderService.updateById(subOrderDO);
         }
 
-        //商品对应的库存要增加
+        //商品对应的库存要增加,销量减少
         List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailListByParentOrderNo(mainOrder.getOrderNo());
         List<SpGoodsDO> batchUpdateList = new ArrayList<>();
         for (SpOrderDetailDTO spOrderDetailDTO : spOrderDetailList) {
             SpGoodsDO spGoodsDO = spGoodsService.selectOne(new EntityWrapper<SpGoodsDO>().eq("goods_id", spOrderDetailDTO.getGoodsId()));
             if (null != spGoodsDO) {
                 spGoodsDO.setStockNum(spGoodsDO.getStockNum() + spOrderDetailDTO.getGoodsCount());
+                spGoodsDO.setSaleNumber(spGoodsDO.getSaleNumber() - spOrderDetailDTO.getGoodsCount());
                 batchUpdateList.add(spGoodsDO);
             }
         }
