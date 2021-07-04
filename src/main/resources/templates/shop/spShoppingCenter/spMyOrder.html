@@ -62,9 +62,12 @@
                         <div style="width: 150px;height:30px;float:left;">
                             售价：￥{{toFixedNumber(orderInfo.mainOrder.payPrice)}}
                         </div>
-                        <div v-if="orderInfo.mainOrder.cancelStatus != 6" style="width: 200px;height:30px;float:left;">
-                            支付状态：<span v-text="orderInfo.mainOrder.payStatus == 1 ? '待支付' : '已支付'" :class="orderInfo.mainOrder.payStatus == 1 ? 'label label-warning' : 'label label-primary'"></span>
-                            <span v-if="orderInfo.mainOrder.status != 1">
+                        <div style="width: 200px;height:30px;float:left;">
+                            状态：
+                            <span v-if="orderInfo.mainOrder.status == 6" class="label label-default">已取消</span>
+                            <span v-if="orderInfo.mainOrder.status == 1" class="label label-warning">待支付</span>
+                            <span v-if="orderInfo.mainOrder.status != 1 && orderInfo.mainOrder.status != 6" class="label label-primary">
+                                已支付
                                 (
                                 <span v-if="orderInfo.mainOrder.payWay == 1">微信</span>
                                 <span v-if="orderInfo.mainOrder.payWay == 2">支付宝</span>
@@ -73,9 +76,6 @@
                                 <span v-if="orderInfo.mainOrder.payWay == 9">其他</span>
                                 )
                             </span>
-                        </div>
-                        <div v-if="orderInfo.mainOrder.payStatus == 1 && orderInfo.mainOrder.cancelStatus == 6" style="width: 180px;height: 30px;float: left;">
-                            取消状态：<span v-text="orderInfo.mainOrder.cancelStatus == 5 ? '未取消' : '已取消'" :class="orderInfo.mainOrder.cancelStatus == 5 ? 'label label-primary' : 'label label-default'"></span>
                         </div>
                     </div>
                     <div v-for="subOrder in orderInfo.subOrderList" style="width:100%;height:auto;padding-left:15px;margin-bottom:5px;border-top:1px solid grey;">
