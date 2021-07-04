@@ -43,8 +43,9 @@ public class SpOrderDO implements Serializable {
     //店铺id
     private String merchantId;
 
-    //商品id
-    private String goodsId;
+    //店铺名称
+    @TableField(exist = false)
+    private String merchantName;
 
     //总价
     @ApiModelProperty(value = "totalPrice" , name = "总价")

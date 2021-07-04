@@ -420,47 +420,7 @@ public class SpShoppingCenterController {
         // 删除购物车商品
         spShoppingCartService.delete(new EntityWrapper<SpShoppingCartDO>().in("goods_id", goodsIdList));
 
-//        for (SpShoppingCartDTO spShoppingCartDTO : orderGoodsList) {
-//            // 各店铺订单
-//            SpOrderDO subOrder = new SpOrderDO();
-//            subOrder.setOrderNo("sorder_"+ UUID.randomUUID().toString().replaceAll("-", ""));
-//            subOrder.setParentOrderNo(mainOrder.getOrderNo());
-//            subOrder.setMerchantId(spShoppingCartDTO.getMerchantId());
-//            subOrder.setGoodsId(spShoppingCartDTO.getGoodsId());
-//            subOrder.setTotalPrice(spShoppingCartDTO.getOriginalPrice().multiply(new BigDecimal(spShoppingCartDTO.getGoodsCount())));
-//            subOrder.setPayPrice(spShoppingCartDTO.getSalePrice().multiply(new BigDecimal(spShoppingCartDTO.getGoodsCount())));
-//            subOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
-//            //支付状态 1:待支付 2:已支付
-//            subOrder.setPayStatus(1);
-//            //物流状态 3:未发货 4:已发货
-//            subOrder.setLogisticsStatus(3);
-//            //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
-//            subOrder.setStatus(1);
-//            subOrder.setCreateTime(new Date());
-//            subOrder.setUpdateTime(new Date());
-//            spOrderService.insert(subOrder);
-//
-//            // 各店铺订单商品详情
-//            SpOrderDetailDO spOrderDetailDO = new SpOrderDetailDO();
-//            spOrderDetailDO.setOrderNo(subOrder.getOrderNo());
-//            spOrderDetailDO.setGoodsId(spShoppingCartDTO.getGoodsId());
-//            spOrderDetailDO.setGoodsCount(spShoppingCartDTO.getGoodsCount());
-//            spOrderDetailDO.setGoodsOriginalPrice(spShoppingCartDTO.getOriginalPrice());
-//            spOrderDetailDO.setGoodsSalePrice(spShoppingCartDTO.getSalePrice());
-//            spOrderDetailDO.setMerchantId(spShoppingCartDTO.getMerchantId());
-//            spOrderDetailDO.setCreateTime(new Date());
-//            spOrderDetailDO.setUpdateTime(new Date());
-//            spOrderDetailService.insert(spOrderDetailDO);
-//
-//            // 删除购物车商品
-//            spShoppingCartService.delete(new EntityWrapper<SpShoppingCartDO>().eq("goods_id", spShoppingCartDTO.getGoodsId()).eq("user_id", SessionUtil.getSessionUserId()));
-//
-//            // 更新商品库存
-//            SpGoodsDO spGoodsDO = spGoodsService.selectOne(new EntityWrapper<SpGoodsDO>().eq("goods_id", spShoppingCartDTO.getGoodsId()));
-//            spGoodsDO.setStockNum(spGoodsDO.getStockNum() - spShoppingCartDTO.getGoodsCount());
-//            spGoodsDO.setSaleNumber(spGoodsDO.getSaleNumber() + spShoppingCartDTO.getGoodsCount());
-//            spGoodsService.updateById(spGoodsDO);
-//        }
+        // TODO 商品库存减少(待补充)
         return Result.ok(mainOrder.getOrderNo());
     }
 
