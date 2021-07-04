@@ -36,7 +36,7 @@
 		  		t1.goods_id IS NOT null
     </select>
 
-    <select id="queryOrderDetailListByParentNo" resultType="com.pjb.springbootjwt.shop.dto.SpOrderDetailDTO">
+    <select id="queryOrderDetailListByParentOrderNo" resultType="com.pjb.springbootjwt.shop.dto.SpOrderDetailDTO">
         SELECT
             t1.*,
             cast(t1.original_price as char) AS original_price_str,
