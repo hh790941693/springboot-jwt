@@ -107,7 +107,7 @@
                             <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrderGoods.originalPrice)}}</span> <span>￥{{toFixedNumber(subOrderGoods.salePrice)}}</span>
                         </div>
                         <div style="width: 150px;height:40px;float:left;margin-right: 10px;padding-top: 20px;">
-                            <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrderGoods.totalOriginalPrice)}}</span> <span>￥{{toFixedNumber(subOrderGoods.totalPayPrice)}}</span>
+                            <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrderGoods.originalPrice * subOrderGoods.goodsCount)}}</span> <span>￥{{toFixedNumber(subOrderGoods.salePrice* subOrderGoods.goodsCount)}}</span>
                         </div>
                     </div>
                 </div>
