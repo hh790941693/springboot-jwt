@@ -14,4 +14,6 @@ import java.util.List;
 @Repository
 public interface SpShoppingCartDao extends BaseDao<SpShoppingCartDO> {
     List<SpShoppingCartDTO> queryShoppingCartList(@Param("loginUserId") String loginUserId);
+
+    List<SpShoppingCartDTO> queryShoppingCartListByGoodsIds(@Param("loginUserId") String loginUserId, @Param("goodsIdList")List<String> goodsIdList);
 }

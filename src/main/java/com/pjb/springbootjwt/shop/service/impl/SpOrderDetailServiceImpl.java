@@ -21,7 +21,12 @@ public class SpOrderDetailServiceImpl extends CoreServiceImpl<SpOrderDetailDao, 
     private static final Logger logger = LoggerFactory.getLogger(SpOrderDetailServiceImpl.class);
 
     @Override
-    public List<SpOrderDetailDTO> queryOrderDetailList(String parentOrderNo) {
-        return this.baseMapper.queryOrderDetailList(parentOrderNo);
+    public List<SpOrderDetailDTO> queryOrderDetailListByOrderNo(String orderNo) {
+        return this.baseMapper.queryOrderDetailListByOrderNo(orderNo);
+    }
+
+    @Override
+    public List<SpOrderDetailDTO> queryOrderDetailListByParentOrderNo(String parentOrderNo) {
+        return this.baseMapper.queryOrderDetailListByParentOrderNo(parentOrderNo);
     }
 }

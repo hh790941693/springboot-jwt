@@ -24,4 +24,9 @@ public class SpShoppingCartServiceImpl extends CoreServiceImpl<SpShoppingCartDao
     public List<SpShoppingCartDTO> queryShoppingCartList(String loginUserId) {
         return this.baseMapper.queryShoppingCartList(loginUserId);
     }
+
+    @Override
+    public List<SpShoppingCartDTO> queryShoppingCartList(String loginUserId, List<String> goodsIdList) {
+        return this.baseMapper.queryShoppingCartListByGoodsIds(loginUserId, goodsIdList);
+    }
 }

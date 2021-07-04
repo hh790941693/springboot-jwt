@@ -11,6 +11,9 @@ import java.util.List;
  */
 public interface SpShoppingCartService extends CoreService<SpShoppingCartDO> {
 
-    // 我的购物车商品列表
+    // 我的购物车所有商品列表
     List<SpShoppingCartDTO> queryShoppingCartList(String loginUserId);
+
+    // 我的购物车部分商品列表
+    List<SpShoppingCartDTO> queryShoppingCartList(String loginUserId, List<String> goodsIdList);
 }

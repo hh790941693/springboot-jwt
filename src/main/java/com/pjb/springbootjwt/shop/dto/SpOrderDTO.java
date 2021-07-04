@@ -15,6 +15,6 @@ public class SpOrderDTO {
     // 主订单
     private SpOrderDO mainOrder;
 
-    // 次订单列表
-    private List<SpOrderDetailDTO> subOrderList = new ArrayList<>();
+    // 次订单
+    private List<SpMerchantOrderDTO> subOrderList;
 }

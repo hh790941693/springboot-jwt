@@ -285,7 +285,7 @@ public class SpShoppingCenterController {
         subOrder.setOrderNo("sorder_"+ UUID.randomUUID().toString().replaceAll("-", ""));
         subOrder.setParentOrderNo(mainOrder.getOrderNo());
         subOrder.setMerchantId(spGoodsDO.getMerchantId());
-        subOrder.setGoodsId(goodsId);
+        //subOrder.setGoodsId(goodsId);
         subOrder.setTotalPrice(spGoodsDO.getOriginalPrice().multiply(new BigDecimal(goodsCount)));
         subOrder.setPayPrice(spGoodsDO.getSalePrice().multiply(new BigDecimal(goodsCount)));
         subOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
@@ -328,15 +328,22 @@ public class SpShoppingCenterController {
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
     public Result<String> createCartOrder(@RequestParam("goodsIdArr[]") String[] goodsIdArr){
-        List<SpShoppingCartDTO> spShoppingCartDTOList = spShoppingCartService.queryShoppingCartList(SessionUtil.getSessionUserId());
         List<String> goodsIdList = new ArrayList<>(Arrays.asList(goodsIdArr));
-        List<SpShoppingCartDTO> orderGoodsList = spShoppingCartDTOList.stream().filter(cart->goodsIdList.contains(cart.getGoodsId())).collect(Collectors.toList());
-        if (null == orderGoodsList || orderGoodsList.size() == 0) {
+        List<SpShoppingCartDO> spShoppingCartDOList = spShoppingCartService.selectList(new EntityWrapper<SpShoppingCartDO>().eq("user_id", SessionUtil.getSessionUserId())
+                        .in("goods_id", goodsIdList));
+        if (null == spShoppingCartDOList || spShoppingCartDOList.size() ==0) {
             return Result.fail("请先选择要购买的商品");
         }
+
+        List<SpShoppingCartDTO> spShoppingCartDTOList = spShoppingCartService.queryShoppingCartList(SessionUtil.getSessionUserId(), goodsIdList);
+        if (null == spShoppingCartDTOList || spShoppingCartDTOList.size() == 0) {
+            return Result.fail("请先选择要购买的商品");
+        }
+
+        // 计算订单总价格
         BigDecimal totalOriginalPrice = new BigDecimal(0);
         BigDecimal totalPayPrice = new BigDecimal(0);
-        for (SpShoppingCartDTO spShoppingCartDTO : orderGoodsList) {
+        for (SpShoppingCartDTO spShoppingCartDTO : spShoppingCartDTOList) {
             BigDecimal tmpOriginalPrice = spShoppingCartDTO.getOriginalPrice().multiply(new BigDecimal(spShoppingCartDTO.getGoodsCount()));
             BigDecimal tmpSalePrice = spShoppingCartDTO.getSalePrice().multiply(new BigDecimal(spShoppingCartDTO.getGoodsCount()));
 
@@ -360,15 +367,28 @@ public class SpShoppingCenterController {
         mainOrder.setUpdateTime(new Date());
         spOrderService.insert(mainOrder);
 
-        for (SpShoppingCartDTO spShoppingCartDTO : orderGoodsList) {
-            // 各店铺订单
+        //找出涉及到的店铺id
+        List<String> merchantIdList = spShoppingCartDTOList.stream().map(SpShoppingCartDTO::getMerchantId).distinct().collect(Collectors.toList());
+
+        // 为各店铺生成子订单
+        for (String merchantId : merchantIdList) {
+            // 店铺涉及到的商品列表
+            List<SpShoppingCartDTO> subSpShoppingCartDTOList = spShoppingCartDTOList.stream().filter(cart->cart.getMerchantId().equals(merchantId)).collect(Collectors.toList());
+
+            //计算各店铺的商品总价格
+            BigDecimal tmpOriginalPrice = new BigDecimal(0);
+            BigDecimal tmpSalePrice = new BigDecimal(0);
+            for (SpShoppingCartDTO subCart : subSpShoppingCartDTOList) {
+                tmpOriginalPrice = tmpOriginalPrice.add(subCart.getOriginalPrice().multiply(new BigDecimal(subCart.getGoodsCount())));
+                tmpSalePrice =tmpSalePrice.add(subCart.getSalePrice().multiply(new BigDecimal(subCart.getGoodsCount())));
+            }
+
             SpOrderDO subOrder = new SpOrderDO();
             subOrder.setOrderNo("sorder_"+ UUID.randomUUID().toString().replaceAll("-", ""));
             subOrder.setParentOrderNo(mainOrder.getOrderNo());
-            subOrder.setMerchantId(spShoppingCartDTO.getMerchantId());
-            subOrder.setGoodsId(spShoppingCartDTO.getGoodsId());
-            subOrder.setTotalPrice(spShoppingCartDTO.getOriginalPrice().multiply(new BigDecimal(spShoppingCartDTO.getGoodsCount())));
-            subOrder.setPayPrice(spShoppingCartDTO.getSalePrice().multiply(new BigDecimal(spShoppingCartDTO.getGoodsCount())));
+            subOrder.setMerchantId(merchantId);
+            subOrder.setTotalPrice(tmpOriginalPrice);
+            subOrder.setPayPrice(tmpSalePrice);
             subOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
             //支付状态 1:待支付 2:已支付
             subOrder.setPayStatus(1);
@@ -381,26 +401,66 @@ public class SpShoppingCenterController {
             spOrderService.insert(subOrder);
 
             // 各店铺订单商品详情
-            SpOrderDetailDO spOrderDetailDO = new SpOrderDetailDO();
-            spOrderDetailDO.setOrderNo(subOrder.getOrderNo());
-            spOrderDetailDO.setGoodsId(spShoppingCartDTO.getGoodsId());
-            spOrderDetailDO.setGoodsCount(spShoppingCartDTO.getGoodsCount());
-            spOrderDetailDO.setGoodsOriginalPrice(spShoppingCartDTO.getOriginalPrice());
-            spOrderDetailDO.setGoodsSalePrice(spShoppingCartDTO.getSalePrice());
-            spOrderDetailDO.setMerchantId(spShoppingCartDTO.getMerchantId());
-            spOrderDetailDO.setCreateTime(new Date());
-            spOrderDetailDO.setUpdateTime(new Date());
-            spOrderDetailService.insert(spOrderDetailDO);
-
-            // 删除购物车商品
-            spShoppingCartService.delete(new EntityWrapper<SpShoppingCartDO>().eq("goods_id", spShoppingCartDTO.getGoodsId()).eq("user_id", SessionUtil.getSessionUserId()));
-
-            // 更新商品库存
-            SpGoodsDO spGoodsDO = spGoodsService.selectOne(new EntityWrapper<SpGoodsDO>().eq("goods_id", spShoppingCartDTO.getGoodsId()));
-            spGoodsDO.setStockNum(spGoodsDO.getStockNum() - spShoppingCartDTO.getGoodsCount());
-            spGoodsDO.setSaleNumber(spGoodsDO.getSaleNumber() + spShoppingCartDTO.getGoodsCount());
-            spGoodsService.updateById(spGoodsDO);
+            List<SpOrderDetailDO> insertOrderDetailList = new ArrayList<>();
+            for (SpShoppingCartDTO subCart : subSpShoppingCartDTOList) {
+                SpOrderDetailDO spOrderDetailDO = new SpOrderDetailDO();
+                spOrderDetailDO.setOrderNo(subOrder.getOrderNo());
+                spOrderDetailDO.setGoodsId(subCart.getGoodsId());
+                spOrderDetailDO.setGoodsCount(subCart.getGoodsCount());
+                spOrderDetailDO.setGoodsOriginalPrice(subCart.getOriginalPrice());
+                spOrderDetailDO.setGoodsSalePrice(subCart.getSalePrice());
+                spOrderDetailDO.setMerchantId(merchantId);
+                spOrderDetailDO.setCreateTime(new Date());
+                spOrderDetailDO.setUpdateTime(new Date());
+                insertOrderDetailList.add(spOrderDetailDO);
+            }
+            spOrderDetailService.insertBatch(insertOrderDetailList);
         }
+
+        // 删除购物车商品
+        spShoppingCartService.delete(new EntityWrapper<SpShoppingCartDO>().in("goods_id", goodsIdList));
+
+//        for (SpShoppingCartDTO spShoppingCartDTO : orderGoodsList) {
+//            // 各店铺订单
+//            SpOrderDO subOrder = new SpOrderDO();
+//            subOrder.setOrderNo("sorder_"+ UUID.randomUUID().toString().replaceAll("-", ""));
+//            subOrder.setParentOrderNo(mainOrder.getOrderNo());
+//            subOrder.setMerchantId(spShoppingCartDTO.getMerchantId());
+//            subOrder.setGoodsId(spShoppingCartDTO.getGoodsId());
+//            subOrder.setTotalPrice(spShoppingCartDTO.getOriginalPrice().multiply(new BigDecimal(spShoppingCartDTO.getGoodsCount())));
+//            subOrder.setPayPrice(spShoppingCartDTO.getSalePrice().multiply(new BigDecimal(spShoppingCartDTO.getGoodsCount())));
+//            subOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
+//            //支付状态 1:待支付 2:已支付
+//            subOrder.setPayStatus(1);
+//            //物流状态 3:未发货 4:已发货
+//            subOrder.setLogisticsStatus(3);
+//            //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
+//            subOrder.setStatus(1);
+//            subOrder.setCreateTime(new Date());
+//            subOrder.setUpdateTime(new Date());
+//            spOrderService.insert(subOrder);
+//
+//            // 各店铺订单商品详情
+//            SpOrderDetailDO spOrderDetailDO = new SpOrderDetailDO();
+//            spOrderDetailDO.setOrderNo(subOrder.getOrderNo());
+//            spOrderDetailDO.setGoodsId(spShoppingCartDTO.getGoodsId());
+//            spOrderDetailDO.setGoodsCount(spShoppingCartDTO.getGoodsCount());
+//            spOrderDetailDO.setGoodsOriginalPrice(spShoppingCartDTO.getOriginalPrice());
+//            spOrderDetailDO.setGoodsSalePrice(spShoppingCartDTO.getSalePrice());
+//            spOrderDetailDO.setMerchantId(spShoppingCartDTO.getMerchantId());
+//            spOrderDetailDO.setCreateTime(new Date());
+//            spOrderDetailDO.setUpdateTime(new Date());
+//            spOrderDetailService.insert(spOrderDetailDO);
+//
+//            // 删除购物车商品
+//            spShoppingCartService.delete(new EntityWrapper<SpShoppingCartDO>().eq("goods_id", spShoppingCartDTO.getGoodsId()).eq("user_id", SessionUtil.getSessionUserId()));
+//
+//            // 更新商品库存
+//            SpGoodsDO spGoodsDO = spGoodsService.selectOne(new EntityWrapper<SpGoodsDO>().eq("goods_id", spShoppingCartDTO.getGoodsId()));
+//            spGoodsDO.setStockNum(spGoodsDO.getStockNum() - spShoppingCartDTO.getGoodsCount());
+//            spGoodsDO.setSaleNumber(spGoodsDO.getSaleNumber() + spShoppingCartDTO.getGoodsCount());
+//            spGoodsService.updateById(spGoodsDO);
+//        }
         return Result.ok(mainOrder.getOrderNo());
     }
 
@@ -429,8 +489,17 @@ public class SpShoppingCenterController {
         }
         SpOrderDTO spOrderDTO = new SpOrderDTO();
         spOrderDTO.setMainOrder(mainOrder);
-        List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(parentOrderNo);
-        spOrderDTO.setSubOrderList(spOrderDetailList);
+
+        List<SpOrderDO> subOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>().eq("parent_order_no", mainOrder.getOrderNo()));
+        List<SpMerchantOrderDTO> subOrderListReturnList = new ArrayList<>();
+        for (SpOrderDO subOrder : subOrderList) {
+            SpMerchantOrderDTO spMerchantOrderDTO = new SpMerchantOrderDTO();
+            List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailListByOrderNo(subOrder.getOrderNo());
+            spMerchantOrderDTO.setSubOrder(subOrder);
+            spMerchantOrderDTO.setSubOrderList(spOrderDetailList);
+            subOrderListReturnList.add(spMerchantOrderDTO);
+        }
+        spOrderDTO.setSubOrderList(subOrderListReturnList);
 
         return Result.ok(spOrderDTO);
     }
@@ -527,11 +596,20 @@ public class SpShoppingCenterController {
         wrapper.orderBy("create_time", false);
         List<SpOrderDO> mainOrderList = spOrderService.selectList(wrapper);
         for (SpOrderDO mainOrder : mainOrderList) {
-            List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(mainOrder.getOrderNo());
-
             SpOrderDTO spOrderDTO = new SpOrderDTO();
             spOrderDTO.setMainOrder(mainOrder);
-            spOrderDTO.setSubOrderList(spOrderDetailList);
+
+            List<SpOrderDO> subOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>().eq("parent_order_no", mainOrder.getOrderNo()));
+            List<SpMerchantOrderDTO> subOrderListReturnList = new ArrayList<>();
+            for (SpOrderDO subOrder : subOrderList) {
+                SpMerchantOrderDTO spMerchantOrderDTO = new SpMerchantOrderDTO();
+                List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailListByOrderNo(subOrder.getOrderNo());
+                spMerchantOrderDTO.setSubOrder(subOrder);
+                spMerchantOrderDTO.setSubOrderList(spOrderDetailList);
+                subOrderListReturnList.add(spMerchantOrderDTO);
+            }
+            spOrderDTO.setSubOrderList(subOrderListReturnList);
+
             resultList.add(spOrderDTO);
         }
 
@@ -576,7 +654,7 @@ public class SpShoppingCenterController {
         }
 
         //商品对应的库存要增加
-        List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailList(mainOrder.getOrderNo());
+        List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailListByParentOrderNo(mainOrder.getOrderNo());
         List<SpGoodsDO> batchUpdateList = new ArrayList<>();
         for (SpOrderDetailDTO spOrderDetailDTO : spOrderDetailList) {
             SpGoodsDO spGoodsDO = spGoodsService.selectOne(new EntityWrapper<SpGoodsDO>().eq("goods_id", spOrderDetailDTO.getGoodsId()));

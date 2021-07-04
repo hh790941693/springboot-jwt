@@ -14,5 +14,6 @@ import java.util.List;
 @Repository
 public interface SpOrderDetailDao extends BaseDao<SpOrderDetailDO> {
 
-    List<SpOrderDetailDTO> queryOrderDetailList(@Param("parentOrderNo")String parentOrderNo);
+    List<SpOrderDetailDTO> queryOrderDetailListByOrderNo(@Param("orderNo")String orderNo);
+    List<SpOrderDetailDTO> queryOrderDetailListByParentOrderNo(@Param("parentOrderNo")String parentOrderNo);
 }
