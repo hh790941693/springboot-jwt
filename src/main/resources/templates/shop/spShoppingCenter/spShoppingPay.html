@@ -93,8 +93,8 @@
                         type: "POST",
                         url: "/shop/shoppingCenter/pay",
                         data : {
-                            'parentOrderNo':$("#orderNo").val(),
-                            'payWay':app.payWay,
+                            'parentOrderNo':this.orderNo,
+                            'payWay':this.payWay,
                             'payPrice':payPrice,
                         },
                         success: function (result) {
@@ -111,7 +111,7 @@
                         type: "GET",
                         url: "/shop/shoppingCenter/queryOrderInfo",
                         data : {
-                            'parentOrderNo':$("#orderNo").val()
+                            'parentOrderNo':this.orderNo,
                         },
                         success: function (result) {
                             if (result.code == 1) {
