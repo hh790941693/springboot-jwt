@@ -63,21 +63,41 @@ public class SpOrderDO implements Serializable {
     @ApiModelProperty(value = "payUserId" , name = "支付用户id")
     private Long payUserId;
 
-    // 支付状态 1：待支付 2:已支付
+    //支付状态 1：待支付 2:已支付
     private Integer payStatus;
 
-    // 物流状态 3:待发货 4:已发货
+    //物流状态 3:待发货 4:已发货
     private Integer logisticsStatus;
 
-    // 取消状态 5:未取消 6:已取消
+    //取消状态 5:未取消 6:已取消
     private Integer cancelStatus;
 
-    // 支付方式 1:微信 2:支付宝 3:银行卡 4:现金 9:其他
+    //支付方式 1:微信 2:支付宝 3:银行卡 4:现金 9:其他
     private Integer payWay;
 
     //状态 1：待支付 2:已支付 3:待发货 4:已发货 6:已取消 9:已确认收货
     @ApiModelProperty(value = "status" , name = "状态 1：待支付 2:已支付 3:待发货 4:已发货 6:已取消 9:已确认收货")
     private Integer status;
+
+    //下单时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date orderTime;
+
+    //支付时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date payTime;
+
+    //取消订单时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date cancelTime;
+
+    //发货时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date deliverTime;
+
+    //确认收货时间
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date confirmTime;
 
     //创建时间
     @ApiModelProperty(value = "createTime" , name = "创建时间")

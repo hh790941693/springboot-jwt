@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 超市购物
+ * 超市购物中心.
  */
 @Controller
 @RequestMapping("/shop/shoppingCenter")
@@ -55,8 +55,8 @@ public class SpShoppingCenterController {
     }
 
     /**
-     * 查询所有商家的商品列表
-     * @param params
+     * 购物首页商品列表
+     * @param params 查询条件
      * @return
      */
     @RequestMapping("/queryGoodsList")
@@ -64,7 +64,7 @@ public class SpShoppingCenterController {
     public Result<SpShoppingCenterDTO> queryGoodsList(SpGoodsDTO params){
         SpShoppingCenterDTO spShoppingCenterDTO = new SpShoppingCenterDTO();
 
-        Page<SpGoodsDTO> page = new Page<>(1, 100);
+        Page<SpGoodsDTO> page = new Page<>(1, 800);
         Wrapper<SpGoodsDTO> wrapper = new EntityWrapper<SpGoodsDTO>();
         if (StringUtils.isNotBlank(params.getName())) {
             wrapper.like("t1.name", params.getName());
@@ -102,7 +102,7 @@ public class SpShoppingCenterController {
     @RequestMapping("/queryGoodsListByMerchantId")
     @ResponseBody
     public Result<List<SpGoodsDTO>> queryGoodsListByMerchantId(SpGoodsDTO params){
-        Page<SpGoodsDTO> page = new Page<>(1, 100);
+        Page<SpGoodsDTO> page = new Page<>(1, 800);
         Wrapper<SpGoodsDTO> wrapper = new EntityWrapper<SpGoodsDTO>();
         if (StringUtils.isNotBlank(params.getMerchantId())) {
             wrapper.like("t1.merchant_id", params.getMerchantId());
@@ -170,13 +170,15 @@ public class SpShoppingCenterController {
     }
 
     /**
-     * 查询我的收藏列表
+     * 我的收藏列表
      * @return
      */
     @RequestMapping("/queryFavoriteSubjectList")
     @ResponseBody
-    public Result<SpFavoriteDTO> queryFavoriteGoodsList(){
+    public Result<SpFavoriteDTO> queryFavoriteSubjectList(){
+        // 收藏的商品列表
         List<SpGoodsDTO> goodsDoList = spFavoriteService.queryFavoriteGoodsList(SessionUtil.getSessionUserId());
+        // 收藏的店铺列表
         List<SpMerchantDO> merchantDoList = spFavoriteService.queryFavoriteMerchantList(SessionUtil.getSessionUserId());
 
         SpFavoriteDTO spFavoriteDTO = new SpFavoriteDTO();
@@ -195,7 +197,7 @@ public class SpShoppingCenterController {
     }
 
     /**
-     * 查询我的收藏列表
+     * 购物车列表
      * @return
      */
     @RequestMapping("/queryShoppingCartList")
@@ -205,6 +207,10 @@ public class SpShoppingCenterController {
         return Result.ok(spShoppingCartDTOList);
     }
 
+    /**
+     * 查询商品类型列表
+     * @return
+     */
     @RequestMapping("/queryGoodsTypeList")
     @ResponseBody
     public Result<List<SpGoodsTypeDO>> queryGoodsTypeList() {
@@ -213,8 +219,8 @@ public class SpShoppingCenterController {
     }
 
     /**
-     * 购物车商品增加
-     * @param cartPkgId
+     * 购物车添加商品
+     * @param cartPkgId 购物车表主键id
      * @return
      */
     @PostMapping("/addShoppingCartGoodsCount")
@@ -228,8 +234,8 @@ public class SpShoppingCenterController {
     }
 
     /**
-     * 购物车商品减少
-     * @param cartPkgId
+     * 购物车减少商品
+     * @param cartPkgId 购物车表主键id
      * @return
      */
     @PostMapping("/minusShoppingCartGoodsCount")
@@ -273,11 +279,12 @@ public class SpShoppingCenterController {
         mainOrder.setPayPrice(spGoodsDO.getSalePrice().multiply(new BigDecimal(goodsCount)));
         mainOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
         //支付状态 1:待支付 2:已支付
-        mainOrder.setPayStatus(SpConstants.PayEnum.WAIT_PAY.getCode());
-        //物流状态 3:未发货 4:已发货
-        mainOrder.setLogisticsStatus(SpConstants.PayEnum.WAIT_DELIVERY.getCode());
+        mainOrder.setPayStatus(SpConstants.OrderStatusEnum.WAIT_PAY.getCode());
+        //物流状态 3:待发货 4:已发货
+        mainOrder.setLogisticsStatus(SpConstants.OrderStatusEnum.WAIT_DELIVERY.getCode());
         //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
-        mainOrder.setStatus(SpConstants.PayEnum.WAIT_PAY.getCode());
+        mainOrder.setStatus(SpConstants.OrderStatusEnum.WAIT_PAY.getCode());
+        mainOrder.setOrderTime(new Date());
         mainOrder.setCreateTime(new Date());
         mainOrder.setUpdateTime(new Date());
         spOrderService.insert(mainOrder);
@@ -292,11 +299,12 @@ public class SpShoppingCenterController {
         subOrder.setPayPrice(spGoodsDO.getSalePrice().multiply(new BigDecimal(goodsCount)));
         subOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
         //支付状态 1:待支付 2:已支付
-        subOrder.setPayStatus(SpConstants.PayEnum.WAIT_PAY.getCode());
-        //物流状态 3:未发货 4:已发货
-        subOrder.setLogisticsStatus(SpConstants.PayEnum.WAIT_DELIVERY.getCode());
+        subOrder.setPayStatus(SpConstants.OrderStatusEnum.WAIT_PAY.getCode());
+        //物流状态 3:待发货 4:已发货
+        subOrder.setLogisticsStatus(SpConstants.OrderStatusEnum.WAIT_DELIVERY.getCode());
         //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
-        subOrder.setStatus(SpConstants.PayEnum.WAIT_PAY.getCode());
+        subOrder.setStatus(SpConstants.OrderStatusEnum.WAIT_PAY.getCode());
+        subOrder.setOrderTime(new Date());
         subOrder.setCreateTime(new Date());
         subOrder.setUpdateTime(new Date());
         spOrderService.insert(subOrder);
@@ -355,11 +363,12 @@ public class SpShoppingCenterController {
         mainOrder.setPayPrice(totalPayPrice);
         mainOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
         //支付状态 1:待支付 2:已支付
-        mainOrder.setPayStatus(1);
-        //物流状态 3:未发货 4:已发货
-        mainOrder.setLogisticsStatus(3);
+        mainOrder.setPayStatus(SpConstants.OrderStatusEnum.WAIT_PAY.getCode());
+        //物流状态 3:待发货 4:已发货
+        mainOrder.setLogisticsStatus(SpConstants.OrderStatusEnum.WAIT_DELIVERY.getCode());
         //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
-        mainOrder.setStatus(1);
+        mainOrder.setStatus(SpConstants.OrderStatusEnum.WAIT_PAY.getCode());
+        mainOrder.setOrderTime(new Date());
         mainOrder.setCreateTime(new Date());
         mainOrder.setUpdateTime(new Date());
         spOrderService.insert(mainOrder);
@@ -388,11 +397,12 @@ public class SpShoppingCenterController {
             subOrder.setPayPrice(tmpSalePrice);
             subOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
             //支付状态 1:待支付 2:已支付
-            subOrder.setPayStatus(1);
-            //物流状态 3:未发货 4:已发货
-            subOrder.setLogisticsStatus(3);
+            subOrder.setPayStatus(SpConstants.OrderStatusEnum.WAIT_PAY.getCode());
+            //物流状态 3:待发货 4:已发货
+            subOrder.setLogisticsStatus(SpConstants.OrderStatusEnum.WAIT_DELIVERY.getCode());
             //状态 1：待支付 2:已支付 3:待发货 4:已发货 5:已确认收货
-            subOrder.setStatus(1);
+            subOrder.setStatus(SpConstants.OrderStatusEnum.WAIT_PAY.getCode());
+            subOrder.setOrderTime(new Date());
             subOrder.setCreateTime(new Date());
             subOrder.setUpdateTime(new Date());
             spOrderService.insert(subOrder);
@@ -434,6 +444,7 @@ public class SpShoppingCenterController {
 
     /**
      * 支付页面.
+     * @param orderNo 主订单号
      * @return
      */
     @RequestMapping("/spShoppingPay.page")
@@ -444,7 +455,7 @@ public class SpShoppingCenterController {
 
     /**
      * 支付页面订单详情.
-     * @param parentOrderNo
+     * @param parentOrderNo 主订单号
      * @return
      */
     @GetMapping("/queryOrderInfo")
@@ -469,15 +480,14 @@ public class SpShoppingCenterController {
             subOrderListReturnList.add(spSubOrderDTO);
         }
         spOrderDTO.setSubOrderList(subOrderListReturnList);
-
         return Result.ok(spOrderDTO);
     }
 
     /**
      * 订单支付.
-     * @param parentOrderNo
-     * @param payWay
-     * @param payPrice
+     * @param parentOrderNo 主订单号
+     * @param payWay        支付方式
+     * @param payPrice      支付价格
      * @return
      */
     @PostMapping("/pay")
@@ -490,24 +500,25 @@ public class SpShoppingCenterController {
         }
 
         // 检查订单是否已经取消  取消状态 5:未取消 6:已取消
-        if (mainOrder.getCancelStatus().intValue() == 6 || mainOrder.getStatus().intValue() == 6) {
+        if (mainOrder.getCancelStatus().intValue() == SpConstants.OrderStatusEnum.CANCEL_OK.getCode() || mainOrder.getStatus().intValue() == SpConstants.OrderStatusEnum.CANCEL_OK.getCode()) {
             return Result.fail("订单已取消,无法进行支付。");
         }
 
         // 检查是否已经支付  状态 1：待支付 2:已支付 3:待发货 4:已发货 6:已取消 9:已确认收货
-        if (mainOrder.getPayStatus().intValue() != 1 || mainOrder.getStatus().intValue() != 1) {
+        if (mainOrder.getPayStatus().intValue() != SpConstants.OrderStatusEnum.WAIT_PAY.getCode() || mainOrder.getStatus().intValue() != SpConstants.OrderStatusEnum.WAIT_PAY.getCode()) {
             return Result.fail("无需重复支付。");
         }
 
         // 主订单
         //已支付
-        mainOrder.setPayStatus(2);
+        mainOrder.setPayStatus(SpConstants.OrderStatusEnum.PAY_OK.getCode());
         //支付方式
         mainOrder.setPayWay(payWay);
         //待发货
-        mainOrder.setLogisticsStatus(3);
+        mainOrder.setLogisticsStatus(SpConstants.OrderStatusEnum.WAIT_DELIVERY.getCode());
         //待发货
-        mainOrder.setStatus(3);
+        mainOrder.setStatus(SpConstants.OrderStatusEnum.WAIT_DELIVERY.getCode());
+        mainOrder.setPayTime(new Date());
         mainOrder.setUpdateTime(new Date());
         //支付人
         mainOrder.setPayUserId(Long.valueOf(SessionUtil.getSessionUserId()));
@@ -517,22 +528,22 @@ public class SpShoppingCenterController {
 
         // 子订单
         List<SpOrderDO> subOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>()
-                .eq("parent_order_no", parentOrderNo).eq("status", 1));
+                .eq("parent_order_no", parentOrderNo).eq("status", SpConstants.OrderStatusEnum.WAIT_PAY.getCode()));
         for (SpOrderDO subOrderDO : subOrderList) {
             //已支付
-            subOrderDO.setPayStatus(2);
+            subOrderDO.setPayStatus(SpConstants.OrderStatusEnum.PAY_OK.getCode());
             //支付方式
             subOrderDO.setPayWay(payWay);
             //待发货
-            subOrderDO.setLogisticsStatus(3);
+            subOrderDO.setLogisticsStatus(SpConstants.OrderStatusEnum.WAIT_DELIVERY.getCode());
             //待发货
-            subOrderDO.setStatus(3);
+            subOrderDO.setStatus(SpConstants.OrderStatusEnum.WAIT_DELIVERY.getCode());
+            subOrderDO.setPayTime(new Date());
             subOrderDO.setUpdateTime(new Date());
             //支付人
             subOrderDO.setPayUserId(Long.valueOf(SessionUtil.getSessionUserId()));
             spOrderService.updateById(subOrderDO);
         }
-
         return Result.ok();
     }
 
@@ -547,6 +558,8 @@ public class SpShoppingCenterController {
 
     /**
      * 我的订单列表.
+     * @param status   订单状态
+     * @param orderNo  主订单号
      * @return
      */
     @GetMapping("/queryMyOrderList")
@@ -582,12 +595,12 @@ public class SpShoppingCenterController {
 
             resultList.add(spOrderDTO);
         }
-
         return Result.ok(resultList);
     }
 
     /**
      * 取消订单.
+     * @param parentOrderNo 主订单号
      * @return
      */
     @PostMapping("/cancelOrder")
@@ -599,17 +612,20 @@ public class SpShoppingCenterController {
             return Result.fail("订单不存在");
         }
 
-        if (mainOrder.getStatus().intValue() == 6) {
+        // 订单已是取消状态
+        if (mainOrder.getStatus().intValue() == SpConstants.OrderStatusEnum.CANCEL_OK.getCode()) {
             return Result.ok();
         }
 
-        if (mainOrder.getPayStatus().intValue() != 1 || mainOrder.getStatus().intValue() != 1) {
+        // 订单是已支付状态
+        if (mainOrder.getPayStatus().intValue() != SpConstants.OrderStatusEnum.WAIT_PAY.getCode() || mainOrder.getStatus().intValue() != SpConstants.OrderStatusEnum.WAIT_PAY.getCode()) {
             return Result.fail("当前订单已支付,无法取消。");
         }
 
         // 主订单
-        mainOrder.setCancelStatus(6);
-        mainOrder.setStatus(6);
+        mainOrder.setCancelStatus(SpConstants.OrderStatusEnum.CANCEL_OK.getCode());
+        mainOrder.setStatus(SpConstants.OrderStatusEnum.CANCEL_OK.getCode());
+        mainOrder.setCancelTime(new Date());
         mainOrder.setUpdateTime(new Date());
         spOrderService.updateById(mainOrder);
 
@@ -617,8 +633,9 @@ public class SpShoppingCenterController {
         List<SpOrderDO> subOrderList = spOrderService.selectList(new EntityWrapper<SpOrderDO>()
                 .eq("parent_order_no", parentOrderNo));
         for (SpOrderDO subOrderDO : subOrderList) {
-            subOrderDO.setCancelStatus(6);
-            subOrderDO.setStatus(6);
+            subOrderDO.setCancelStatus(SpConstants.OrderStatusEnum.CANCEL_OK.getCode());
+            subOrderDO.setStatus(SpConstants.OrderStatusEnum.CANCEL_OK.getCode());
+            subOrderDO.setCancelTime(new Date());
             subOrderDO.setUpdateTime(new Date());
             spOrderService.updateById(subOrderDO);
         }
@@ -637,7 +654,6 @@ public class SpShoppingCenterController {
         if (batchUpdateList.size() > 0) {
             spGoodsService.updateBatchById(batchUpdateList);
         }
-
         return Result.ok();
     }
 }
