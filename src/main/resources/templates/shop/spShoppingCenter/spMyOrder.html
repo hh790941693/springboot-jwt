@@ -53,8 +53,8 @@
             <div style="width: 100%;height:auto;">
                 <div v-for="(orderInfo,index) in orderList" style="width: 100%;height:auto;border:1px solid grey;margin-bottom: 20px;">
                     <div style="width: 100%;height:36px;font-weight: bold;font-size: 15px;background-color: lightblue;padding: 3px 5px;">
-                        <div style="width: 25px;height:30px;float:left;">
-                            <button style="width: 100%;" @click="expandOrder">-</button>
+                        <div style="width: 30px;height:30px;float:left;margin-right:5px;font-size: 20px;color:blue;">
+                            <span style="width: 100%;" @click="expandOrder"><i class="fa fa-minus-square"></i></span>
                         </div>
                         <div style="width: 450px;height:30px;float:left;">
                             订单{{index+1}}：{{orderInfo.mainOrder.orderNo}}
@@ -94,7 +94,10 @@
                     </div>
                     <div style="width:100%;height:auto;" :id="'test'+index">
                         <div v-for="subOrder in orderInfo.subOrderList" style="width:100%;height:auto;padding-left:15px;margin-bottom:5px;border-top:1px solid grey;">
-                            <div style="width: 100%;height:25px;">
+                            <div style="width: 100%;height:30px;padding-top: 10px;">
+                                <div style="width: 20px;height:100%;float:left;margin-right:5px;font-size:15px;color:darkorange;">
+                                    <span style="width: 100%;" @click="expandMerchant"><i class="fa fa-minus-square"></i></span>
+                                </div>
                                 <div style="width:320px;height: 100%;float: left;">
                                     <p><i class="fa fa-home"></i><a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+subOrder.subOrder.merchantId" target="_blank">{{subOrder.subOrder.merchantName}}</a></p>
                                 </div>
@@ -107,26 +110,28 @@
                                 </div>
                             </div>
 
-                            <div v-for="subOrderGoods in subOrder.subOrderGoodsList" style="width: 100%;height: 65px;padding-left: 30px;border-bottom: 1px solid grey;">
-                                <div style="width: 60px;height:60px;float:left;margin-right: 10px;">
-                                    <img :src="subOrderGoods.backImage" width="100%" height="90%" style="margin-top: 7px;">
-                                </div>
-                                <div style="width: 100px;height:40px;float:left;margin-right: 10px;padding-top: 20px;text-align: center;">
-                                    {{subOrderGoods.name}}
-                                </div>
-                                <div style="width: 100px;height:40px;float:left;margin-right: 10px;padding-top: 20px;">
-                                    X{{subOrderGoods.goodsCount}}
-                                </div>
-                                <div style="width: 150px;height:40px;float:left;margin-right: 10px;padding-top: 20px;">
-                                    <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrderGoods.originalPrice)}}</span> <span>￥{{toFixedNumber(subOrderGoods.salePrice)}}</span>
-                                </div>
-                                <div style="width: 150px;height:40px;float:left;margin-right: 10px;padding-top: 20px;">
-                                    <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrderGoods.originalPrice * subOrderGoods.goodsCount)}}</span> <span>￥{{toFixedNumber(subOrderGoods.salePrice* subOrderGoods.goodsCount)}}</span>
+                            <div style="width: 100%;height: auto;">
+                                <div v-for="subOrderGoods in subOrder.subOrderGoodsList" style="width: 100%;height: 65px;padding-left: 30px;border-bottom: 1px solid grey;">
+                                    <div style="width: 60px;height:60px;float:left;margin-right: 10px;">
+                                        <img :src="subOrderGoods.backImage" width="100%" height="90%" style="margin-top: 7px;">
+                                    </div>
+                                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;padding-top: 20px;text-align: center;">
+                                        {{subOrderGoods.name}}
+                                    </div>
+                                    <div style="width: 100px;height:40px;float:left;margin-right: 10px;padding-top: 20px;">
+                                        X{{subOrderGoods.goodsCount}}
+                                    </div>
+                                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;padding-top: 20px;">
+                                        <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrderGoods.originalPrice)}}</span> <span>￥{{toFixedNumber(subOrderGoods.salePrice)}}</span>
+                                    </div>
+                                    <div style="width: 150px;height:40px;float:left;margin-right: 10px;padding-top: 20px;">
+                                        <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrderGoods.originalPrice * subOrderGoods.goodsCount)}}</span> <span>￥{{toFixedNumber(subOrderGoods.salePrice* subOrderGoods.goodsCount)}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div style="width: 100%;height:30px;margin-bottom:10px;padding: 0 15px 0 15px;">
+                    <div style="width: 100%;height:30px;margin-bottom:10px;padding: 5px 15px;">
                         <div style="width: 200px;height:100%;float:left;">
                             <span>下单时间：{{orderInfo.mainOrder.createTime}}</span>
                         </div>
@@ -211,14 +216,25 @@
                     this.queryMyOrderList();
                 },
                 expandOrder : function(e){
-                    let target = e.target;
-                    var text = $(target).text();
-                    if (text === "-") {
-                        $(target).parent().parent().next("div").slideUp();
-                        $(target).text("+");
+                    var target = e.target;
+                    var iclass = $(target).attr("class");
+                    if (iclass === "fa fa-minus-square") {
+                        $(target).parent().parent().parent().next("div").slideUp();
+                        $(target).attr("class", "fa fa-plus-square");
                     } else {
-                        $(target).parent().parent().next("div").slideDown();
-                        $(target).text("-");
+                        $(target).parent().parent().parent().next("div").slideDown();
+                        $(target).attr("class", "fa fa-minus-square");
+                    }
+                },
+                expandMerchant : function(e) {
+                    var target = e.target;
+                    var iclass = $(target).attr("class");
+                    if (iclass === "fa fa-minus-square") {
+                        $(target).parent().parent().parent().next("div").slideUp();
+                        $(target).attr("class", "fa fa-plus-square");
+                    } else {
+                        $(target).parent().parent().parent().next("div").slideDown();
+                        $(target).attr("class", "fa fa-minus-square");
                     }
                 },
                 toFixedNumber : function (num) {
