@@ -77,6 +77,17 @@
                                 )
                             </span>
                         </div>
+                        <div style="width: 260px;height:30px;float:left;">
+                            <div style="height:100%;" v-if="orderInfo.mainOrder.status == 6">
+                                取消时间：{{orderInfo.mainOrder.cancelTime}}
+                            </div>
+                            <div style="height:100%;" v-if="orderInfo.mainOrder.status == 1">
+                                下单时间：{{orderInfo.mainOrder.orderTime}}
+                            </div>
+                            <div style="height:100%;" v-if="orderInfo.mainOrder.status != 1 && orderInfo.mainOrder.status != 6">
+                                支付时间：{{orderInfo.mainOrder.payTime}}
+                            </div>
+                        </div>
                     </div>
                     <div v-for="subOrder in orderInfo.subOrderList" style="width:100%;height:auto;padding-left:15px;margin-bottom:5px;border-top:1px solid grey;">
                         <div style="width: 100%;height:25px;">
