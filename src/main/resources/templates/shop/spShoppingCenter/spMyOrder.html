@@ -113,26 +113,26 @@
 
                             <div style="width: 100%;height: auto;">
                                 <div v-for="subOrderGoods in subOrder.subOrderGoodsList" style="width: 100%;height: 65px;padding-left: 30px;border-bottom: 1px solid grey;">
-                                    <div style="width: 60px;height:60px;float:left;margin-right: 10px;">
+                                    <div style="width: 70px;height:100%;float:left;padding-bottom: 5px;">
                                         <img :src="subOrderGoods.backImage" width="100%" height="90%" style="margin-top: 7px;">
                                     </div>
-                                    <div style="width: 100px;height:60px;float:left;margin-right: 10px;padding-top: 20px;text-align: center;">
+                                    <div style="width: 100px;height:100%;float:left;margin-right: 10px;padding-top: 20px;text-align: center;">
                                         {{subOrderGoods.name}}
                                     </div>
-                                    <div style="width: 100px;height:60px;float:left;margin-right: 10px;padding-top: 20px;">
+                                    <div style="width: 100px;height:100%;float:left;margin-right: 10px;padding-top: 20px;text-align: center;">
                                         X{{subOrderGoods.goodsCount}}
                                     </div>
-                                    <div style="width: 150px;height:60px;float:left;margin-right: 10px;padding-top: 20px;">
+                                    <div style="width: 150px;height:100%;float:left;margin-right: 10px;padding-top: 20px;text-align: center;">
                                         <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrderGoods.originalPrice)}}</span> <span>￥{{toFixedNumber(subOrderGoods.salePrice)}}</span>
                                     </div>
-                                    <div style="width: 150px;height:60px;float:left;margin-right: 10px;padding-top: 20px;">
+                                    <div style="width: 150px;height:100%;float:left;margin-right: 10px;padding-top: 20px;text-align: center;">
                                         <span style="text-decoration: line-through;color:grey;">￥{{toFixedNumber(subOrderGoods.originalPrice * subOrderGoods.goodsCount)}}</span> <span>￥{{toFixedNumber(subOrderGoods.salePrice* subOrderGoods.goodsCount)}}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div style="width: 100%;height:30px;margin-bottom:10px;padding: 5px 15px;">
+                    <div style="width: 100%;height:40px;margin-bottom:10px;padding: 5px 15px;">
                         <div style="width: 200px;height:100%;float:left;">
                             <span>下单时间：{{orderInfo.mainOrder.createTime}}</span>
                         </div>
