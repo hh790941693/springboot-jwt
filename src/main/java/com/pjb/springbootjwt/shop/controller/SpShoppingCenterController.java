@@ -717,12 +717,14 @@ public class SpShoppingCenterController {
     @Transactional(rollbackFor = Exception.class)
     public Result<String> deliverOrder(String orderNo) {
 
-        SpOrderDO spOrderDO = spOrderService.selectOne(new EntityWrapper<SpOrderDO>().eq("order_no", orderNo));
-        if (null == spOrderDO) {
-            return Result.fail("订单不存在");
+        SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("user_id", SessionUtil.getSessionUserId()));
+        // 该用户没有店铺
+        if (spMerchantDO == null) {
+            return Result.fail("该用户尚无店铺");
         }
 
-        if (StringUtils.isBlank(spOrderDO.getParentOrderNo())) {
+        SpOrderDO spOrderDO = spOrderService.selectOne(new EntityWrapper<SpOrderDO>().eq("order_no", orderNo).eq("merchant_id", spMerchantDO.getMerchantId()));
+        if (null == spOrderDO) {
             return Result.fail("订单不存在");
         }
 
@@ -748,8 +750,7 @@ public class SpShoppingCenterController {
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
     public Result<String> confirmOrder(String orderNo) {
-
-        SpOrderDO spOrderDO = spOrderService.selectOne(new EntityWrapper<SpOrderDO>().eq("order_no", orderNo));
+        SpOrderDO spOrderDO = spOrderService.selectOne(new EntityWrapper<SpOrderDO>().eq("order_no", orderNo).eq("order_user_id", SessionUtil.getSessionUserId()));
         if (null == spOrderDO) {
             return Result.fail("订单不存在");
         }
