@@ -67,6 +67,12 @@ public class SpGoodsController extends AdminBaseController {
 	@GetMapping()
 	//@RequiresPermissions("shop:spGoods:spGoods")
     public String spGoods(Model model){
+		// 检查当前用户是否有商铺
+		SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("user_id", SessionUtil.getSessionUserId()));
+		if (null == spMerchantDO) {
+			return "redirect:/error.page";
+		}
+
 		List<SpGoodsTypeDO> goodsTypeList = spGoodsTypeService.selectList(new EntityWrapper<SpGoodsTypeDO>().ne("status", 0));
 		model.addAttribute("goodsTypeList", goodsTypeList);
 	    return "shop/spGoods/spGoods";
