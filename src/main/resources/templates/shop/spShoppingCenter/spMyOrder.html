@@ -12,18 +12,6 @@
             height: 100%;
             padding: 10px 100px 10px 100px;
         }
-
-        .payClass,.notCancelClass {
-            background-color:lightgreen;
-        }
-
-        .notPayClass {
-            background-color: lightsalmon;
-        }
-
-        .cancelClass {
-            background-color: lightgrey;
-        }
     </style>
 </head>
 <body>
@@ -92,7 +80,7 @@
                             </div>
                         </div>
                     </div>
-                    <div style="width:100%;height:auto;" :id="'test'+index">
+                    <div style="width:100%;height:auto;">
                         <div v-for="subOrder in orderInfo.subOrderList" style="width:100%;height:auto;padding-left:15px;margin-bottom:5px;border-top:1px solid grey;">
                             <div style="width: 100%;height:30px;padding-top: 10px;">
                                 <div style="width: 20px;height:100%;float:left;margin-right:5px;font-size:15px;color:darkorange;">

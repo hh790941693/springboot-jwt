@@ -656,4 +656,53 @@ public class SpShoppingCenterController {
         }
         return Result.ok();
     }
+
+    /**
+     * 商家订单页面.
+     * @return
+     */
+    @RequestMapping("/spMerchantOrder.page")
+    @Transactional(rollbackFor = Exception.class)
+    public String spMerchantOrder() {
+        return "shop/spShoppingCenter/spMerchantOrder";
+    }
+
+    /**
+     * 商家订单列表.
+     * @param status   订单状态
+     * @param orderNo  次订单号
+     * @return
+     */
+    @GetMapping("/queryMerchantOrderList")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public Result<List<SpSubOrderDTO>> queryMerchantOrderList(String status, String orderNo){
+        List<SpSubOrderDTO> resultList = new ArrayList<>();
+        SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("user_id", SessionUtil.getSessionUserId()));
+        // 该用户没有店铺
+        if (spMerchantDO == null) {
+            return Result.fail();
+        }
+        // 店铺已关闭
+        if (spMerchantDO.getStatus().intValue() == 0) {
+            return Result.fail();
+        }
+        Wrapper<SpOrderDO> wrapper = new EntityWrapper<SpOrderDO>().eq("merchant_id", spMerchantDO.getMerchantId());
+        if (StringUtils.isNotBlank(status)) {
+            wrapper.eq("status", status);
+        }
+        if (StringUtils.isNotBlank(orderNo)) {
+            wrapper.eq("order_no", orderNo);
+        }
+        List<SpOrderDO> subOrderList = spOrderService.selectList(wrapper);
+        for (SpOrderDO subOrder : subOrderList) {
+            SpSubOrderDTO spSubOrderDTO = new SpSubOrderDTO();
+            List<SpOrderDetailDTO> spOrderDetailList = spOrderDetailService.queryOrderDetailListByOrderNo(subOrder.getOrderNo());
+            subOrder.setMerchantName(spOrderDetailList.get(0).getMerchantName());
+            spSubOrderDTO.setSubOrder(subOrder);
+            spSubOrderDTO.setSubOrderGoodsList(spOrderDetailList);
+            resultList.add(spSubOrderDTO);
+        }
+        return Result.ok(resultList);
+    }
 }
