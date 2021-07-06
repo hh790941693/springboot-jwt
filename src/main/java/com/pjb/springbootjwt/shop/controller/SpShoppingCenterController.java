@@ -75,8 +75,8 @@ public class SpShoppingCenterController {
         if (StringUtils.isNotBlank(params.getGoodsTypeId())) {
             wrapper.like("t1.goods_type_id", params.getGoodsTypeId());
         }
-        wrapper.eq("t1.status", 1);
-        wrapper.ne("t2.status", 0);
+        wrapper.eq("t1.status", 1);  //商品状态 0:已删除 1:已上架 2:已下架
+        wrapper.ne("t2.status", 0);  //店铺状态 0:已关闭 1:营业中 2:暂停营业 3:已打烊
         wrapper.orderBy("t1.sale_price", params.isPriceSort());
         wrapper.orderBy("t1.sale_number", params.isSaleNumberSort());
         List<SpGoodsDTO> spGoodsList = spGoodsService.queryCenterGoodsList(SessionUtil.getSessionUserId(), page, wrapper);
@@ -107,8 +107,8 @@ public class SpShoppingCenterController {
         if (StringUtils.isNotBlank(params.getMerchantId())) {
             wrapper.like("t1.merchant_id", params.getMerchantId());
         }
-        wrapper.ne("t1.status", 0);
-        wrapper.ne("t2.status", 0);
+        wrapper.eq("t1.status", 1); //商品状态 0:已删除 1:已上架 2:已下架
+        wrapper.ne("t2.status", 0); //店铺状态 0:已关闭 1:营业中 2:暂停营业 3:已打烊
         wrapper.orderBy("t1.sale_number", false);
         List<SpGoodsDTO> spGoodsDTOS = spGoodsService.queryCenterGoodsList(SessionUtil.getSessionUserId(), page, wrapper);
         return Result.ok(spGoodsDTOS);
