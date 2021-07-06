@@ -169,20 +169,24 @@
                 // 商家发货
                 deliverOrder : function(orderNo) {
                     var that =this;
-                    $.ajax({
-                        type: "POST",
-                        url: "/shop/shoppingCenter/deliverOrder",
-                        data : {
-                            'orderNo' : orderNo,
-                        },
-                        success: function (result) {
-                            if (result.code == 1) {
-                                layer.msg(result.msg);
-                            } else {
-                                layer.alert(result.data);
-                            }
-                            that.queryMerchantOrderList();
-                        }
+                    layer.confirm('确定要继续操作吗？', {
+                            btn: ['确定', '取消']
+                        }, function () {
+                            $.ajax({
+                                type: "POST",
+                                url: "/shop/shoppingCenter/deliverOrder",
+                                data: {
+                                    'orderNo': orderNo,
+                                },
+                                success: function (result) {
+                                    if (result.code == 1) {
+                                        layer.msg(result.msg);
+                                    } else {
+                                        layer.alert(result.data);
+                                    }
+                                    that.queryMerchantOrderList();
+                                }
+                            });
                     });
                 },
                 toFixedNumber : function (num) {
