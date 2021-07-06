@@ -89,8 +89,8 @@
                                 <div style="width:250px;height: 100%;float: left;">
                                     <p><i class="fa fa-home"></i><a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+subOrder.subOrder.merchantId" target="_blank">{{subOrder.subOrder.merchantName}}</a></p>
                                 </div>
-                                <div style="width:380px;height: 100%;float: left;">订单号：{{subOrder.subOrder.orderNo}}</div>
-                                <div style="width:190px;height: 100%;float: left;">
+                                <div style="width:300px;height: 100%;float: left;">{{subOrder.subOrder.orderNo}}</div>
+                                <div style="width:160px;height: 100%;float: left;">
                                     <span style="text-decoration: line-through;">￥{{toFixedNumber(subOrder.subOrder.totalPrice)}}</span>&nbsp;&nbsp;&nbsp;<span>￥{{toFixedNumber(subOrder.subOrder.payPrice)}}</span>
                                 </div>
                                 <div v-if="subOrder.subOrder.status >= 3" style="width: 180px;height: 100%;float: left;padding-top: 5px;">
@@ -106,7 +106,7 @@
                                         确认收货时间：{{subOrder.subOrder.confirmTime}}
                                     </div>
                                 </div>
-                                <div v-if="subOrder.subOrder.status == 4" style="width: 200px;height:100%;float:right;text-align: right;">
+                                <div v-if="subOrder.subOrder.status == 4" style="width: 100px;height:100%;float:right;text-align: right;">
                                     <button @click="confirmOrder(subOrder.subOrder.orderNo)" class="btn btn-sm btn-primary">确认收货</button>
                                 </div>
                             </div>
