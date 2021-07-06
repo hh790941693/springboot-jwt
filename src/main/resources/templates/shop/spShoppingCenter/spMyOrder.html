@@ -65,7 +65,7 @@
                                 <span v-if="orderInfo.mainOrder.payWay == 3">银行卡</span>
                                 <span v-if="orderInfo.mainOrder.payWay == 4">现金</span>
                                 <span v-if="orderInfo.mainOrder.payWay == 9">其他</span>
-                                )待发货
+                                )
                             </span>
                         </div>
                         <div style="width: 260px;height:30px;float:left;">
@@ -98,7 +98,7 @@
                                     <span v-if="subOrder.subOrder.status == 4" class="label label-warning">已发货,待确认收货</span>
                                     <span v-if="subOrder.subOrder.status == 9" class="label label-warning">已确认收货</span>
                                 </div>
-                                <div style="width: 260px;height:100px;float:left;">
+                                <div style="width: 260px;height:100%;float:left;">
                                     <div style="height:100%;" v-if="subOrder.subOrder.status == 4">
                                         发货时间：{{subOrder.subOrder.deliverTime}}
                                     </div>
@@ -240,6 +240,7 @@
                 },
                 // 买家确认收货
                 confirmOrder : function(orderNo) {
+                    var that = this;
                     $.ajax({
                         type: "POST",
                         url: "/shop/shoppingCenter/confirmOrder",
@@ -252,7 +253,7 @@
                             } else {
                                 layer.alert(result.data);
                             }
-                            this.queryMyOrderList();
+                            that.queryMyOrderList();
                         }
                     });
                 },

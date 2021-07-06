@@ -65,7 +65,7 @@
                                 <span v-if="orderInfo.subOrder.payWay == 3">银行卡</span>
                                 <span v-if="orderInfo.subOrder.payWay == 4">现金</span>
                                 <span v-if="orderInfo.subOrder.payWay == 9">其他</span>
-                                )待发货
+                                )
                             </span>
                             <span v-if="orderInfo.subOrder.status == 4" class="label label-warning">已发货,待确认收货</span>
                             <span v-if="orderInfo.subOrder.status == 9" class="label label-warning">已确认收货</span>
@@ -168,6 +168,7 @@
                 },
                 // 商家发货
                 deliverOrder : function(orderNo) {
+                    var that =this;
                     $.ajax({
                         type: "POST",
                         url: "/shop/shoppingCenter/deliverOrder",
@@ -180,7 +181,7 @@
                             } else {
                                 layer.alert(result.data);
                             }
-                            this.queryMerchantOrderList();
+                            that.queryMerchantOrderList();
                         }
                     });
                 },
