@@ -9,6 +9,14 @@
 			<div class="col-sm-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-content">
+						<div style="width:100%;height:40px;padding:10px;text-align: right;">
+							<p>
+								<a href="/shop/spGoods" target="_blank"><i class="fa fa-cube"></i>我的商品管理<span class="layui-badge">1</span></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a th:href="@{'/shop/shoppingCenter/merchantDetail.page?merchantId='+${spMerchant.merchantId}}" target="_blank"><i class="fa fa-home"></i>我的店铺详情</a></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="/shop/shoppingCenter/spMyOrder.page" target="_blank"><i class="fa fa-envelope"></i>我的店铺订单<span class="layui-badge">3</span></a>
+							</p>
+						</div>
+
                         <form class="form-horizontal m-t" id="form">
 							<!-- 主键 -->
                             <input type="hidden" id="id" name="id" th:value="${spMerchant.id}">
