@@ -93,12 +93,12 @@
                                 <div style="width:190px;height: 100%;float: left;">
                                     <span style="text-decoration: line-through;">￥{{toFixedNumber(subOrder.subOrder.totalPrice)}}</span>&nbsp;&nbsp;&nbsp;<span>￥{{toFixedNumber(subOrder.subOrder.payPrice)}}</span>
                                 </div>
-                                <div v-if="subOrder.subOrder.payStatus != 1" style="width: 180px;height: 100%;float: left;padding-top: 5px;">
+                                <div v-if="subOrder.subOrder.status >= 3" style="width: 180px;height: 100%;float: left;padding-top: 5px;">
                                     <span v-if="subOrder.subOrder.status == 3" class="label label-warning">待发货</span>
                                     <span v-if="subOrder.subOrder.status == 4" class="label label-warning">已发货,待确认收货</span>
                                     <span v-if="subOrder.subOrder.status == 9" class="label label-warning">已确认收货</span>
                                 </div>
-                                <div style="width: 260px;height:100%;float:left;">
+                                <div v-if="subOrder.subOrder.status >= 4" style="width: 260px;height:100%;float:left;">
                                     <div style="height:100%;" v-if="subOrder.subOrder.status == 4">
                                         发货时间：{{subOrder.subOrder.deliverTime}}
                                     </div>
@@ -106,8 +106,8 @@
                                         确认收货时间：{{subOrder.subOrder.confirmTime}}
                                     </div>
                                 </div>
-                                <div style="width: 200px;height:100%;float:right;text-align: right;">
-                                    <button v-if="subOrder.subOrder.status == 4" @click="confirmOrder(subOrder.subOrder.orderNo)" class="btn btn-sm btn-primary">确认收货</button>
+                                <div v-if="subOrder.subOrder.status == 4" style="width: 200px;height:100%;float:right;text-align: right;">
+                                    <button @click="confirmOrder(subOrder.subOrder.orderNo)" class="btn btn-sm btn-primary">确认收货</button>
                                 </div>
                             </div>
 
