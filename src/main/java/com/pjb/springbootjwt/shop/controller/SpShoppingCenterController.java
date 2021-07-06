@@ -705,4 +705,67 @@ public class SpShoppingCenterController {
         }
         return Result.ok(resultList);
     }
+
+    /**
+     * 商家发货
+     * @param orderNo 次订单号
+     * @return
+     */
+    @PostMapping("/deliverOrder")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public Result<String> deliverOrder(String orderNo) {
+
+        SpOrderDO spOrderDO = spOrderService.selectOne(new EntityWrapper<SpOrderDO>().eq("order_no", orderNo));
+        if (null == spOrderDO) {
+            return Result.fail("订单不存在");
+        }
+
+        if (StringUtils.isBlank(spOrderDO.getParentOrderNo())) {
+            return Result.fail("订单不存在");
+        }
+
+        //当前订单不是待发货状态
+        if (spOrderDO.getStatus().intValue() != SpConstants.OrderStatusEnum.WAIT_DELIVERY.getCode()) {
+            return Result.fail("订单状态不正确");
+        }
+
+        // 订单状态改为已发货
+        spOrderDO.setStatus(SpConstants.OrderStatusEnum.DELIVERY_OK.getCode());
+        spOrderDO.setDeliverTime(new Date());
+        spOrderService.updateById(spOrderDO);
+
+        return Result.ok();
+    }
+
+    /**
+     * 买家确认收货
+     * @param orderNo 次订单号
+     * @return
+     */
+    @PostMapping("/confirmOrder")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public Result<String> confirmOrder(String orderNo) {
+
+        SpOrderDO spOrderDO = spOrderService.selectOne(new EntityWrapper<SpOrderDO>().eq("order_no", orderNo));
+        if (null == spOrderDO) {
+            return Result.fail("订单不存在");
+        }
+
+        if (StringUtils.isBlank(spOrderDO.getParentOrderNo())) {
+            return Result.fail("订单不存在");
+        }
+        //当前订单不是已发货状态
+        if (spOrderDO.getStatus().intValue() != SpConstants.OrderStatusEnum.DELIVERY_OK.getCode()) {
+            return Result.fail("订单状态不正确");
+        }
+
+        // 订单状态改为已确认收货
+        spOrderDO.setStatus(SpConstants.OrderStatusEnum.CONFIRM_OK.getCode());
+        spOrderDO.setConfirmTime(new Date());
+        spOrderService.updateById(spOrderDO);
+
+        return Result.ok();
+    }
 }

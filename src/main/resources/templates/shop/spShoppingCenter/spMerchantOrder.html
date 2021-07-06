@@ -57,7 +57,7 @@
                             状态：
                             <span v-if="orderInfo.subOrder.status == 6" class="label label-default">已取消</span>
                             <span v-if="orderInfo.subOrder.status == 1" class="label label-warning">待支付</span>
-                            <span v-if="orderInfo.subOrder.status != 1 && orderInfo.subOrder.status != 6" class="label label-primary">
+                            <span v-if="orderInfo.subOrder.status == 3" class="label label-primary">
                                 已支付
                                 (
                                 <span v-if="orderInfo.subOrder.payWay == 1">微信</span>
@@ -65,8 +65,10 @@
                                 <span v-if="orderInfo.subOrder.payWay == 3">银行卡</span>
                                 <span v-if="orderInfo.subOrder.payWay == 4">现金</span>
                                 <span v-if="orderInfo.subOrder.payWay == 9">其他</span>
-                                )
+                                )待发货
                             </span>
+                            <span v-if="orderInfo.subOrder.status == 4" class="label label-warning">已发货,待确认收货</span>
+                            <span v-if="orderInfo.subOrder.status == 9" class="label label-warning">已确认收货</span>
                         </div>
                         <div style="width: 260px;height:30px;float:left;">
                             <div style="height:100%;" v-if="orderInfo.subOrder.status == 6">
@@ -75,8 +77,14 @@
                             <div style="height:100%;" v-if="orderInfo.subOrder.status == 1">
                                 下单时间：{{orderInfo.subOrder.orderTime}}
                             </div>
-                            <div style="height:100%;" v-if="orderInfo.subOrder.status != 1 && orderInfo.subOrder.status != 6">
+                            <div style="height:100%;" v-if="orderInfo.subOrder.status == 3">
                                 支付时间：{{orderInfo.subOrder.payTime}}
+                            </div>
+                            <div style="height:100%;" v-if="orderInfo.subOrder.status == 4">
+                                发货时间：{{orderInfo.subOrder.deliverTime}}
+                            </div>
+                            <div style="height:100%;" v-if="orderInfo.subOrder.status == 9">
+                                确认收货时间：{{orderInfo.subOrder.confirmTime}}
                             </div>
                         </div>
                     </div>
@@ -104,7 +112,7 @@
                             <span>下单时间：{{orderInfo.subOrder.createTime}}</span>
                         </div>
                          <div style="width: 200px;height:100%;float:right;text-align: right;">
-                                <button v-if="orderInfo.subOrder.status == 3" class="btn btn-sm btn-success">去发货</button>&nbsp;&nbsp;&nbsp;
+                                <button v-if="orderInfo.subOrder.status == 3" @click="deliverOrder(orderInfo.subOrder.orderNo)" class="btn btn-sm btn-success">去发货</button>&nbsp;&nbsp;&nbsp;
                          </div>
                     </div>
                 </div>
@@ -157,6 +165,24 @@
                         $(target).parent().parent().parent().next("div").slideDown();
                         $(target).attr("class", "fa fa-minus-square");
                     }
+                },
+                // 商家发货
+                deliverOrder : function(orderNo) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/shop/shoppingCenter/deliverOrder",
+                        data : {
+                            'orderNo' : orderNo,
+                        },
+                        success: function (result) {
+                            if (result.code == 1) {
+                                layer.msg(result.msg);
+                            } else {
+                                layer.alert(result.data);
+                            }
+                            this.queryMerchantOrderList();
+                        }
+                    });
                 },
                 toFixedNumber : function (num) {
                     return num.toFixed(2);
