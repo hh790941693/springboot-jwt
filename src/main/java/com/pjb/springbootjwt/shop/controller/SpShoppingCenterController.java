@@ -3,6 +3,7 @@ package com.pjb.springbootjwt.shop.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.pjb.springbootjwt.shop.ShopUtil;
 import com.pjb.springbootjwt.shop.constants.SpConstants;
 import com.pjb.springbootjwt.shop.domain.*;
 import com.pjb.springbootjwt.shop.dto.*;
@@ -274,7 +275,8 @@ public class SpShoppingCenterController {
 
         // 主订单
         SpOrderDO mainOrder = new SpOrderDO();
-        mainOrder.setOrderNo("porder_"+ UUID.randomUUID().toString().replaceAll("-", ""));
+        String mainOrderNo = ShopUtil.buildOrderNo("p", SessionUtil.getSessionUserId());
+        mainOrder.setOrderNo(mainOrderNo);
         mainOrder.setTotalPrice(spGoodsDO.getOriginalPrice().multiply(new BigDecimal(goodsCount)));
         mainOrder.setPayPrice(spGoodsDO.getSalePrice().multiply(new BigDecimal(goodsCount)));
         mainOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
@@ -291,7 +293,8 @@ public class SpShoppingCenterController {
 
         // 各店铺订单
         SpOrderDO subOrder = new SpOrderDO();
-        subOrder.setOrderNo("sorder_"+ UUID.randomUUID().toString().replaceAll("-", ""));
+        String subOrderNo = ShopUtil.buildOrderNo("s", SessionUtil.getSessionUserId());
+        subOrder.setOrderNo(subOrderNo);
         subOrder.setParentOrderNo(mainOrder.getOrderNo());
         subOrder.setMerchantId(spGoodsDO.getMerchantId());
         //subOrder.setGoodsId(goodsId);
@@ -358,7 +361,8 @@ public class SpShoppingCenterController {
 
         // 主订单
         SpOrderDO mainOrder = new SpOrderDO();
-        mainOrder.setOrderNo("porder_"+ UUID.randomUUID().toString().replaceAll("-", ""));
+        String mainOrderNo = ShopUtil.buildOrderNo("p", SessionUtil.getSessionUserId());
+        mainOrder.setOrderNo(mainOrderNo);
         mainOrder.setTotalPrice(totalOriginalPrice);
         mainOrder.setPayPrice(totalPayPrice);
         mainOrder.setOrderUserId(Long.valueOf(SessionUtil.getSessionUserId()));
@@ -390,7 +394,8 @@ public class SpShoppingCenterController {
             }
 
             SpOrderDO subOrder = new SpOrderDO();
-            subOrder.setOrderNo("sorder_"+ UUID.randomUUID().toString().replaceAll("-", ""));
+            String subOrderNo = ShopUtil.buildOrderNo("s", SessionUtil.getSessionUserId());
+            subOrder.setOrderNo(subOrderNo);
             subOrder.setParentOrderNo(mainOrder.getOrderNo());
             subOrder.setMerchantId(merchantId);
             subOrder.setTotalPrice(tmpOriginalPrice);

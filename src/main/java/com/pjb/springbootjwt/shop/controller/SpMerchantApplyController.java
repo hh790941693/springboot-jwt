@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.pjb.springbootjwt.shop.ShopUtil;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -130,7 +130,7 @@ public class SpMerchantApplyController extends AdminBaseController {
 				}
 			}
 		}
-		String applyNo = "mer_apy_" + UUID.randomUUID().toString().replaceAll("-","");
+		String applyNo = ShopUtil.buildObjectId("mer_apy_");
         spMerchantApply.setApplyNo(applyNo);
         spMerchantApply.setUserId(Long.valueOf(SessionUtil.getSessionUserId()));
 		spMerchantApply.setCreateTime(new Date());
@@ -196,7 +196,7 @@ public class SpMerchantApplyController extends AdminBaseController {
             spMerchantDO.setStatus(1);
             spMerchantDO.setCreateTime(new Date());
             spMerchantDO.setUpdateTime(new Date());
-            String merchantId = "mer_" + UUID.randomUUID().toString().replaceAll("-", "");
+			String merchantId = ShopUtil.buildObjectId("mer_");
             spMerchantDO.setMerchantId(merchantId);
             spMerchantService.insert(spMerchantDO);
         }

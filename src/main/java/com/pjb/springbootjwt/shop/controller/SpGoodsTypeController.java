@@ -3,9 +3,9 @@ package com.pjb.springbootjwt.shop.controller;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.UUID;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.pjb.springbootjwt.shop.ShopUtil;
 import com.pjb.springbootjwt.shop.domain.SpGoodsDO;
 import com.pjb.springbootjwt.shop.service.SpGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +105,7 @@ public class SpGoodsTypeController extends AdminBaseController {
 	@Transactional(rollbackFor = Exception.class)
 	//@RequiresPermissions("shop:spGoodsType:add")
 	public Result<String> save(SpGoodsTypeDO spGoodsType) {
-		String goodsTypeId = "gt_" + UUID.randomUUID().toString().replaceAll("-", "");
+		String goodsTypeId = ShopUtil.buildObjectId("gt_");
 		spGoodsType.setTypeId(goodsTypeId);
 		spGoodsType.setCreateTime(new Date());
 		spGoodsType.setUpdateTime(new Date());

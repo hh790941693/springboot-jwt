@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.pjb.springbootjwt.shop.ShopUtil;
 import com.pjb.springbootjwt.shop.domain.SpGoodsTypeDO;
 import com.pjb.springbootjwt.shop.domain.SpMerchantDO;
 import com.pjb.springbootjwt.shop.dto.SpGoodsDTO;
@@ -142,7 +142,7 @@ public class SpGoodsController extends AdminBaseController {
 			return Result.fail("你尚无店铺,无法添加商品");
 		}
 		spGoods.setMerchantId(spMerchantDO.getMerchantId());
-		String goodsId = "gd_" + UUID.randomUUID().toString().replaceAll("-", "");
+		String goodsId = ShopUtil.buildObjectId("gd_");
 		spGoods.setGoodsId(goodsId);
 		spGoods.setCreateTime(new Date());
 		spGoods.setUpdateTime(new Date());
