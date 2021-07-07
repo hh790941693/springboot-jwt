@@ -15,7 +15,7 @@
     <div style="margin:5px auto;">
         <div class="easyui-panel"  style="width:440px;">
             <div style="padding:10px 60px 20px 60px">
-                <form id="ff" method="post">
+                <form id="myForm" method="post">
                     <table cellpadding="5">
                         <tr>
                             <td>联系人:</td>
@@ -40,7 +40,7 @@
     </div>
     <script>
         function submitForm(){
-            var validate = $('#ff').form('validate');
+            var validate = $('#myForm').form('validate');
             if (validate) {
                 $.messager.show({
                     title: '提交成功',
@@ -54,7 +54,7 @@
             }
         }
         function clearForm(){
-            $('#ff').form('clear');
+            $('#myForm').form('clear');
         }
     </script>
 </body>
