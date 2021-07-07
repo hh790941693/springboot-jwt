@@ -1,51 +1,61 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
 <head>
-    <th:block th:include="common :: header"></th:block>
     <meta charset="UTF-8">
     <title>提出疑问</title>
-    <style>
-        p {
-            height: 28px;
-        }
-
-        span {
-            display: inline-block;
-            width: 70px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/themes/default/easyui.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/themes/icon.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/css/default.css}" />
+    <script type="text/javascript" th:src="@{/js/easyui-1.9.11/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/easyui-1.9.11/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src='@{/js/easyui-1.9.11/locale/easyui-lang-zh_CN.js}'> </script>
 </head>
 <body>
-    <div style="width:60%;height:70%;margin:0 auto;padding-top:20px;" align="center">
-        <p>
-            <span>联系人：</span><input id="name" type="text" placeholder="请填写姓名" autocomplete="off">
-        </p>
-        <p>
-            <span>联系方式：</span><input id="telephone" type="text" placeholder="请填写手机号" autocomplete="off">
-        </p>
-        <div>
-            <span>描述：</span>
-            <textarea id="feedback" rows="6" cols="23" style="margin-left:-3px;"></textarea>
+    <div style="margin:20px auto;">
+        <div class="easyui-panel" title="提出疑问" style="width:400px;margin:5px auto;">
+            <div style="padding:10px 60px 20px 60px">
+                <form id="ff" method="post">
+                    <table cellpadding="5">
+                        <tr>
+                            <td>联系人:</td>
+                            <td><input class="easyui-textbox" type="text" name="name" data-options="required:true"></input></td>
+                        </tr>
+                        <tr>
+                            <td>联系电话:</td>
+                            <td><input class="easyui-textbox" type="text" name="phone" data-options="required:true,validType:'phone'"></input></td>
+                        </tr>
+                        <tr>
+                            <td>详细内容:</td>
+                            <td><input class="easyui-textbox" name="message" data-options="multiline:true" style="height:60px"></input></td>
+                        </tr>
+                    </table>
+                </form>
+                <div style="text-align:center;padding:5px">
+                    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
+                    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">清空</a>
+                </div>
+            </div>
         </div>
-        <p style="margin-top: 18px;">
-            <button class="btn btn-sm btn-primary" onclick="send()">提&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交</button>
-        </p>
     </div>
-
-    <th:block th:include="common :: footer"></th:block>
-    <th:block th:include="common :: sessionInfo"></th:block>
-</body>
     <script>
-        function send() {
-            var name = $("#name").val();
-            var telephone = $("#telephone").val();
-            var feedback = $("#money").val();
-            if (name != '' && telephone != '' && feedback != 0) {
-                layer.msg("提交成功!");
-                setTimeout(function () {
-                    parent.layer.closeAll();
-                }, 2000);
+        function submitForm(){
+            var validate = $('#ff').form('validate');
+            if (validate) {
+                $.messager.show({
+                    title: '提交成功',
+                    msg: '感谢您的支持',
+                    showType: 'fade',
+                    style:{
+                        right:'',
+                        bottom:''
+                    }
+                });
             }
         }
+        function clearForm(){
+            $('#ff').form('clear');
+        }
     </script>
+</body>
 </html>
