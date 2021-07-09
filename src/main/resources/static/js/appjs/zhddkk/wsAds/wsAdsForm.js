@@ -2,25 +2,46 @@ $(function () {
     validateRule();
     initUpload();
 
-    $('#content').editable({
+    // froala编辑器初始化
+    initH5Editor("content", "contentInput", "ads");
+});
+
+/**
+ * froala编辑器初始化
+ * @param divId     用于页面展示用的div
+ * @param inputId   用于传递h5数据到后台的input
+ * @param folder    图片上传目录
+ */
+function initH5Editor(divId, inputId, folder){
+    $('#'+divId).editable({
         inlineMode: false,
         alwaysBlank: true,
         height: '300px',
         language: "zh_cn",
         imageUploadURL: $.ws.uploadByFroalaUrl,
-        imageUploadParams: {folder: "ads"}
+        imageUploadParams: {folder: folder}
     }).on('editable.afterRemoveImage', function (e, editor, $img) {
         // Set the image source to the image delete params.
         editor.options.imageDeleteParams = {src: $img.attr('src')}
     });
-    var markupStr = $('#contentInput').val();
-    $('#content')[0].childNodes[1].innerHTML = markupStr;
-});
+    var markupStr = $('#'+inputId).val();
+    $('#'+divId)[0].childNodes[1].innerHTML = markupStr;
+}
+
+/**
+ * 从编辑器区域获取h5数据,并赋值到input中,方便传递到后台
+ * @param divId    用于页面展示用的div
+ * @param inputId  用于传递h5数据到后台的input
+ */
+function setH5EditorData(divId, inputId){
+    var markupStr = $('#'+divId)[0].childNodes[1].innerHTML;
+    $('#'+inputId).val(markupStr);
+    return markupStr;
+}
 
 //保存数据
 function save() {
-    var markupStr = $('#content')[0].childNodes[1].innerHTML;
-    $('#contentInput').val(markupStr);
+    var markupStr = setH5EditorData();
     var backImg = $("#backImgInput").val();
 
     if (!markupStr || typeof(markupStr) == "undefined") {

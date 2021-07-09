@@ -47,6 +47,9 @@ public class SpGoodsDO implements Serializable {
     @ApiModelProperty(value = "brief" , name = "商品简介")
     private String brief;
 
+    //商品H5描述
+    private String description;
+
     //商品生产地
     @ApiModelProperty(value = "place" , name = "商品生产地")
     private String place;
