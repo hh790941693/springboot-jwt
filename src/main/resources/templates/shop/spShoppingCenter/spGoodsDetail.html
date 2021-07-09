@@ -54,7 +54,15 @@
 <body>
     <div id="mainDiv">
         <input type="hidden" id="goodsPkId" th:value="${goodsPkId}">
-        <a href="#topDiv"></a>
+        <!--导航栏 点击跳至对应的描点-->
+        <div id="navDiv" style="width:100%;height:50px;padding: 10px 15px 0 15px;">
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#topDiv">商品购买</a></li>
+                <li><a href="#guessLikeDiv">猜你喜欢</a></li>
+                <li><a href="#goodsH5Div">商品详情</a></li>
+            </ul>
+        </div>
+
         <div id="topDiv" style="width:100%;height:300px;padding: 10px 15px 0 15px;">
             <div style="width:50%;height:280px;float:left;padding:10px;border:1px solid grey;">
                 <!-- Swiper -->
@@ -104,7 +112,6 @@
             </div>
         </div>
         <p style="padding-left: 15px;">猜你喜欢</p>
-        <a href="#guessLikeDiv"></a>
         <div id="guessLikeDiv" style="width:100%;height:auto;padding: 10px 15px 10px 15px;">
             <div class="goodsDiv" v-for="(goodsDetail,index) in maybelikeGoodsList">
                 <div style="width:100%;height:188px;padding-top:10px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
@@ -146,7 +153,6 @@
         </div>
 
         <p style="padding-left: 15px;">商品详情</p>
-        <a href="#goodsH5Div"></a>
         <div id="goodsH5Div" style="width:100%;height:auto;padding:10px;">
             <div style="width: 100%;height:100%;padding:5px;border:1px solid grey;" v-html="goodsDetail.description">
             </div>
@@ -320,6 +326,11 @@
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
             },
+        });
+
+        $("#navDiv li").click(function (){
+            $("#navDiv li").removeClass();
+            $(this).addClass("active");
         });
     </script>
 </html>
