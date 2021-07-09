@@ -95,9 +95,6 @@ function validateRule() {
             title: {
                 required: true
             },
-            content: {
-                required: true
-            },
             backImg: {
                 required: true
             }
@@ -105,9 +102,6 @@ function validateRule() {
         messages: {
             title: {
                 required: icon + "请输入标题"
-            },
-            content: {
-                required: icon + "请输入内容"
             },
             backImg: {
                 required: icon + "请上传背景图片"

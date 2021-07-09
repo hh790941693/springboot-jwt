@@ -50,7 +50,11 @@ function save() {
         action = "update";
     }
     // 从编辑器区域获取h5数据,并赋值到input中,方便传递到后台
-    setH5EditorData("description", "descriptionInput");
+    var markupStr = setH5EditorData("description", "descriptionInput");
+    if (!markupStr || typeof(markupStr) == "undefined") {
+        parent.layer.alert("请填写商品详细内容");
+        return;
+    }
 
     $.ajax({
         cache : true,
