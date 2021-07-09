@@ -41,7 +41,7 @@ function setH5EditorData(divId, inputId){
 
 //保存数据
 function save() {
-    var markupStr = setH5EditorData();
+    var markupStr = setH5EditorData("content", "contentInput");
     var backImg = $("#backImgInput").val();
 
     if (!markupStr || typeof(markupStr) == "undefined") {

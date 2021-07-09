@@ -196,7 +196,7 @@ public class WsAdsController extends AdminBaseController {
      */
     @ResponseBody
     @RequestMapping("/update")
-    public Result<String> update(@Validated @RequestBody WsAdsDO wsAds) {
+    public Result<String> update(WsAdsDO wsAds) {
         wsAdsService.updateById(wsAds);
         return Result.ok();
     }
