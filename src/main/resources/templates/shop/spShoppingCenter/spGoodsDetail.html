@@ -74,7 +74,7 @@
                         <p style="font-weight: bold;font-size: 17px;">商品名称： {{goodsDetail.name}}</p>
                         <p>商品描述： {{goodsDetail.brief}}</p>
                         <p>产地： {{goodsDetail.place}}</p>
-                        <p>售价： <span style="text-decoration:line-through;color:grey;">￥{{goodsDetail.originalPriceStr}}</span>&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;color: red;font-size: 18px;">￥{{goodsDetail.salePriceStr}}</span></p>
+                        <p>售价： <span style="text-decoration:line-through;color:grey;">￥{{toFixedNumber(originalPrice)}}</span>&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;color: red;font-size: 18px;">￥{{toFixedNumber(salePrice)}}</span></p>
                         <p>规格： {{goodsDetail.unitName}}</p>
                         <p>库存： {{goodsDetail.stockNum}}</p>
                         <p>商家店铺： <a :href="'/shop/shoppingCenter/merchantDetail.page?merchantId='+goodsDetail.merchantId" target="_blank">{{goodsDetail.merchantName}}</a></p>
@@ -148,10 +148,12 @@
         var app = new Vue({
             el: '#mainDiv',
             data: {
-                goodsDetail: {},  //商品详情
-                imageList:[],     //商品图片列表
-                maybelikeGoodsList:[], //猜你喜欢列表
-                goodsCount:1,
+                goodsDetail: {},         //商品详情
+                imageList:[],            //商品图片列表
+                maybelikeGoodsList:[],   //猜你喜欢列表
+                originalPrice:0.00,      //商品原价
+                salePrice:0.00,          //商品售价
+                goodsCount:1,            //商品数量
             },
             methods: {
                 queryGoodsDetail: function () {
@@ -169,6 +171,8 @@
                             layer.close(loadIndex);
                             if (result.code == 1) {
                                 app.goodsDetail = result.data;
+                                app.originalPrice = result.data.originalPrice;
+                                app.salePrice = result.data.salePrice;
                                 if (!!app.goodsDetail.image1) {
                                     app.imageList.push(app.goodsDetail.image1);
                                 }
@@ -244,6 +248,8 @@
                         return;
                     }
                     app.goodsCount--;
+                    app.originalPrice = app.goodsDetail.originalPrice * app.goodsCount;
+                    app.salePrice = app.goodsDetail.salePrice * app.goodsCount;
                 },
                 //增加商品
                 addGoodsCount : function () {
@@ -252,6 +258,8 @@
                         return;
                     }
                     app.goodsCount++;
+                    app.originalPrice = app.goodsDetail.originalPrice * app.goodsCount;
+                    app.salePrice = app.goodsDetail.salePrice * app.goodsCount;
                 },
                 //立即下单
                 orderNow : function () {
@@ -265,21 +273,13 @@
                         success: function (result) {
                             if (result.code == 1) {
                                 window.location.href='/shop/shoppingCenter/spShoppingPay.page?orderNo='+result.data
-                                // setTimeout(function () {
-                                //     //跳转到支付页面
-                                //     layer.open({
-                                //         type : 2,
-                                //         title : '支付页面',
-                                //         maxmin : true,
-                                //         shadeClose : false,//点击遮罩关闭层
-                                //         area : [ '800px', '620px' ],
-                                //         content : '/shop/shoppingCenter/spShoppingPay.page?orderNo='+result.data
-                                //     });
-                                // },50);
                             }
                         }
                     });
                 },
+                toFixedNumber : function (num) {
+                    return num.toFixed(2);
+                }
             },
             created: function () {
                 this.queryGoodsDetail();
