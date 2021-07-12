@@ -20,7 +20,7 @@ public class PkgFileUtils {
     public static void run(){
         File file = new File(STORE_BASE_PATH + "wholeFile.txt");
         BufferedReader reader = null;
-        String timeDir = new SimpleDateFormat("yyyyMMddHH").format(new Date());
+        String timeDir = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
         try {
             reader = new BufferedReader(new FileReader(file));
             String tempString = null;
