@@ -137,7 +137,7 @@
                             <span>下单时间：{{orderInfo.mainOrder.createTime}}</span>
                         </div>
                          <div style="width: 200px;height:100%;float:right;text-align: right;">
-                                <button v-if="orderInfo.mainOrder.status == 1" @click="payNow(orderInfo.mainOrder.orderNo)" class="btn btn-sm btn-primary">去支付</button>&nbsp;&nbsp;&nbsp;
+                                <button v-if="orderInfo.mainOrder.status == 1" @click="payNow(orderInfo.mainOrder.orderNo)" class="btn btn-sm btn-success">去支付</button>&nbsp;&nbsp;&nbsp;
                                 <button v-if="orderInfo.mainOrder.status == 1" @click="cancelOrder(orderInfo.mainOrder.orderNo)" class="btn btn-sm btn-danger">取消订单</button>
                          </div>
                     </div>

@@ -39,7 +39,8 @@
                 <input type="radio" v-model="payWay" :value="9">其他
             </div>
             <div style="width:100%;height:50px;text-align: right;">
-                <span style="font-weight: bold;font-size: 25px;">￥{{toFixedNumber(orderInfo.mainOrder.payPrice)}}元</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-primary" @click="pay()">立即支付</button>
+                <span style="font-weight: bold;font-size: 25px;">￥{{toFixedNumber(orderInfo.mainOrder.payPrice)}}元</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button v-if="orderInfo.mainOrder.status == 1" class="btn btn-success" @click="pay()">立即支付</button>
+                <span style="font-size: 20px;" v-if="orderInfo.mainOrder.status != 1 && orderInfo.mainOrder.status != 6" class="label label-primary">已支付</span>
             </div>
             <p>订单详情</p>
             <div style="width:100%;height:370px;overflow-y: auto;border:1px solid grey;padding-left: 10px;">
@@ -87,6 +88,11 @@
             methods: {
                 // 支付
                 pay : function(){
+                    var that = this;
+                    layer.load(1, {
+                        shade: [0.1,'#fff']
+                    });
+
                     var payPrice = app.toFixedNumber(app.orderInfo.mainOrder.payPrice);
                     $.ajax({
                         type: "POST",
@@ -97,11 +103,16 @@
                             'payPrice':payPrice,
                         },
                         success: function (result) {
-                            if (result.code == 1) {
-                                layer.alert("支付成功");
-                            } else {
-                                layer.alert(result.data);
-                            }
+                            var costTime = (Math.random()*1000).toFixed(0);
+                            setTimeout(function(){
+                                if (result.code == 1) {
+                                    layer.alert("支付成功");
+                                } else {
+                                    layer.alert(result.data);
+                                }
+                                layer.closeAll('loading');
+                                that.queryOrderInfo();
+                            }, costTime);
                         }
                     });
                 },

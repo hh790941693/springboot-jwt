@@ -280,6 +280,9 @@
                 },
                 //立即下单
                 orderNow : function () {
+                    layer.load(1, {
+                        shade: [0.1,'#fff']
+                    });
                     $.ajax({
                         type: "POST",
                         url: "/shop/shoppingCenter/createOrder",
@@ -288,6 +291,7 @@
                             'goodsCount':app.goodsCount,
                         },
                         success: function (result) {
+                            layer.closeAll('loading');
                             if (result.code == 1) {
                                 window.location.href='/shop/shoppingCenter/spShoppingPay.page?orderNo='+result.data
                             }
