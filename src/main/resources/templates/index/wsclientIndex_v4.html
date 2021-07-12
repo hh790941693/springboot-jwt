@@ -415,6 +415,10 @@
 </body>
 
 <script type="text/javascript">
+    layer.load(1, {
+        shade: [0.1,'#fff'] //0.1透明度的白色背景
+    });
+
     // 左侧导航菜单
     var _menus = {
         "menus":[]
@@ -480,6 +484,7 @@
             async: false,
             data: {"roomName": roomName},
             success: function (result) {
+                layer.closeAll('loading');
                 if (result.code == 1) {
                     onlineData = result.data;
                 }
