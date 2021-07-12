@@ -31,7 +31,8 @@
                url="/zhddkk/wsCommon/jsonlist"
                method="get"
                toolbar="#toolbar"
-               rownumbers="true" fitColumns="true" singleSelect="true">
+               rownumbers="true" fitColumns="true" singleSelect="true"
+               data-options="pagination:true,pageSize:10">
             <thead>
                 <tr>
                     <th field="type" width="50">type</th>
@@ -41,10 +42,10 @@
             </thead>
         </table>
         <div id="toolbar">
-            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addCommon()">新增</a>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editCommon()">编辑</a>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteCommon()">删除</a>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reloadCommon()">刷新</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">新增</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="edit()">编辑</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteData()">删除</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reload()">刷新</a>
         </div>
         
         <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
@@ -69,20 +70,21 @@
             </form>
         </div>
         <div id="dlg-buttons">
-            <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveCommon()">保存</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="save()">保存</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
         </div>
     </body>
     
     <script>
+         $('#dg').datagrid({loadFilter:pagerFilter});
           var url = "";
-          function addCommon() {
+          function add() {
               $('#dlg').dialog('open').dialog('setTitle', '新增');
               $('#fm').form('clear');
               url = rootUrl + '/zhddkk/wsCommon/save';
           }
           
-          function editCommon() {
+          function edit() {
               var row = $('#dg').datagrid('getSelected');
               if (row){
                   console.log(row);
@@ -92,7 +94,7 @@
               }
           }
     
-          function saveCommon(){
+          function save(){
               $('#fm').form('submit',{
                   url: url,
                   onSubmit: function(){
@@ -113,7 +115,7 @@
               });
           }
     
-          function deleteCommon(){
+          function deleteData() {
               var row = $('#dg').datagrid('getSelected');
               if (row){
                   $.messager.confirm('删除确认','确认要删除这条记录吗?',function(r){
@@ -132,8 +134,38 @@
                   });
               }
           }
-          
-          function reloadCommon() {
+
+          function pagerFilter(data){
+              if (typeof data.length == 'number' && typeof data.splice == 'function'){	// is array
+                  data = {
+                      total: data.length,
+                      rows: data
+                  }
+              }
+              var dg = $(this);
+              var opts = dg.datagrid('options');
+              var pager = dg.datagrid('getPager');
+              pager.pagination({
+                  onSelectPage:function(pageNum, pageSize){
+                      opts.pageNumber = pageNum;
+                      opts.pageSize = pageSize;
+                      pager.pagination('refresh',{
+                          pageNumber:pageNum,
+                          pageSize:pageSize
+                      });
+                      dg.datagrid('loadData',data);
+                  }
+              });
+              if (!data.originalRows){
+                  data.originalRows = (data.rows);
+              }
+              var start = (opts.pageNumber-1)*parseInt(opts.pageSize);
+              var end = start + parseInt(opts.pageSize);
+              data.rows = (data.originalRows.slice(start, end));
+              return data;
+          }
+
+          function reload() {
               $('#dg').datagrid('reload');
           }
     </script>
