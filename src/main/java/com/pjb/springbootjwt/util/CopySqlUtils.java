@@ -43,6 +43,7 @@ public class CopySqlUtils {
                 String filename=cc.split(":")[0];
                 copy(XXBF_BASE_PATH+CC_SQL_PATH+filename, STORE_BASE_PATH+timeDir+"\\"+CC_SQL_PATH+filename);
             } else {
+                copy(XXBF_BASE_PATH+CC_SQL_PATH+cc, STORE_BASE_PATH+timeDir+"\\"+CC_SQL_PATH+cc);
                 copy(XXBF_BASE_PATH+CC_SQL_PATH+cc, STORE_BASE_PATH+timeDir+"\\modify\\"+CC_SQL_PATH+cc);
             }
         }
@@ -52,6 +53,7 @@ public class CopySqlUtils {
                 String filename=common.split(":")[0];
                 copy(XXBF_BASE_PATH+COMMON_SQL_PATH+filename, STORE_BASE_PATH+timeDir+"\\"+COMMON_SQL_PATH+filename);
             } else {
+                copy(XXBF_BASE_PATH+COMMON_SQL_PATH+common, STORE_BASE_PATH+timeDir+"\\"+COMMON_SQL_PATH+common);
                 copy(XXBF_BASE_PATH+COMMON_SQL_PATH+common, STORE_BASE_PATH+timeDir+"\\modify\\"+COMMON_SQL_PATH+common);
             }
         }
@@ -61,6 +63,7 @@ public class CopySqlUtils {
                 String filename=mc.split(":")[0];
                 copy(XXBF_BASE_PATH+MC_SQL_PATH+filename, STORE_BASE_PATH+timeDir+"\\"+MC_SQL_PATH+filename);
             } else {
+                copy(XXBF_BASE_PATH+MC_SQL_PATH+mc, STORE_BASE_PATH+timeDir+"\\"+MC_SQL_PATH+mc);
                 copy(XXBF_BASE_PATH+MC_SQL_PATH+mc, STORE_BASE_PATH+timeDir+"\\modify\\"+MC_SQL_PATH+mc);
             }
         }
