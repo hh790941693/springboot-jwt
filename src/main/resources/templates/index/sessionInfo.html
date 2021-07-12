@@ -1,61 +1,50 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
 <head>
-    <th:block th:include="common :: header"></th:block>
-<title>会话信息</title>
+    <meta charset="UTF-8">
+    <title>会话信息</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/themes/default/easyui.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/themes/icon.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/js/easyui-1.9.11/css/default.css}" />
+    <script type="text/javascript" th:src="@{/js/easyui-1.9.11/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/easyui-1.9.11/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src='@{/js/easyui-1.9.11/locale/easyui-lang-zh_CN.js}'> </script>
 
-<style type="text/css">
-    .layui-table td, .layui-table th {
-        line-height: 14px;
-    }
-
-    .layui-table {
-        margin: 5px;
-    }
-</style>
+    <style>
+        input {
+            width:300px;
+        }
+    </style>
 </head>
-    <body>
-        <div id="mainDiv" style="overflow-y: hidden;">
-            <div class="layui-form" style="width: 98%;height: calc(100% - 12px)">
-                  <table class="layui-table">
-                    <colgroup>
-                      <col width="150">
-                      <col width="150">
-                      <col>
-                    </colgroup>
-                    <thead>
-                      <tr>
-                        <th>键</th>
-                        <th>值</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr th:each="info : ${session.sessionInfo.jsonObject}" th:if="${not #strings.startsWith(info.key,'json')}">
-                        <td th:text="${info.key}"></td>
-                        <td th:text="${info.value}"></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-            <div align="center" style="margin-top:6px;">
-                <button onclick="toIndex()" class='btn btn-large btn-primary'>返回首页</button>
-            </div>
-
-            <th:block th:include="common :: footer"></th:block>
-            <th:block th:include="common :: sessionInfo"></th:block>
+<body>
+<div style="width:100%;height:100%;">
+    <div class="easyui-panel"
+         style="width:100%;height:100%;padding:10px;background:#fafafa;"
+         data-options="iconCls:'icon-save',closable:true,collapsible:true,minimizable:true,maximizable:true">
+        <div style="padding:10px 30px;">
+            <table cellpadding="1">
+                <thead style="background-color: #0c7cd5;">
+                    <tr>
+                        <th width="30%;">键</th>
+                        <th width="60%;">值</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="info : ${session.sessionInfo.jsonObject}" th:if="${not #strings.startsWith(info.key,'json')}">
+                        <td th:text="${info.key}" style="font-size: 15px;"></td>
+                        <td>
+                            <input class="easyui-textbox" type="text" name="name" data-options="required:true" th:value="${info.value}" readonly>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <script th:inline="javascript">
-            if (sessionJsonObject == "{}") {
-                var trElement = $('<tr><td>NA</td><td>尚未登陆,请先登录!</td></tr>');
-                $("table").append(trElement);
-            }
+    </div>
+</div>
+</body>
+    <script th:inline="javascript">
 
-            // 返回首页
-            function toIndex() {
-                top.location.href = rootUrl;
-            }
-        </script>
-    </body>
+    </script>
 </html>
+
