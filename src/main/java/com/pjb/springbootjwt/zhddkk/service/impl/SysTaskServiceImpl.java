@@ -28,7 +28,7 @@ public class SysTaskServiceImpl extends CoreServiceImpl<SysTaskDao, SysTaskDO> i
     public static String STATUS_RUNNING_START = "start";
 
     @Autowired
-    QuartzManager quartzManager;
+    private QuartzManager quartzManager;
 
     @Override
     public boolean deleteById(Serializable id) {
@@ -40,7 +40,6 @@ public class SysTaskServiceImpl extends CoreServiceImpl<SysTaskDao, SysTaskDO> i
             e.printStackTrace();
             return false;
         }
-
     }
 
     @Override
@@ -66,7 +65,6 @@ public class SysTaskServiceImpl extends CoreServiceImpl<SysTaskDao, SysTaskDO> i
                 ScheduleJob job = ScheduleJobUtils.entityToData(scheduleJob);
                 quartzManager.addJob(job);
             }
-
         }
     }
 
@@ -80,11 +78,8 @@ public class SysTaskServiceImpl extends CoreServiceImpl<SysTaskDao, SysTaskDO> i
             quartzManager.deleteJob(ScheduleJobUtils.entityToData(scheduleJob));
             scheduleJob.setJobStatus(ScheduleJob.STATUS_NOT_RUNNING);
         } else {
-            if (!STATUS_RUNNING_START.equals(cmd)) {
-            } else {
-                scheduleJob.setJobStatus(ScheduleJob.STATUS_RUNNING);
-                quartzManager.addJob(ScheduleJobUtils.entityToData(scheduleJob));
-            }
+            scheduleJob.setJobStatus(ScheduleJob.STATUS_RUNNING);
+            quartzManager.addJob(ScheduleJobUtils.entityToData(scheduleJob));
         }
         updateById(scheduleJob);
     }
@@ -100,5 +95,4 @@ public class SysTaskServiceImpl extends CoreServiceImpl<SysTaskDao, SysTaskDO> i
         }
         updateById(scheduleJob);
     }
-
 }

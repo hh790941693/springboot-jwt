@@ -133,7 +133,5 @@ public class ScheduleJob implements Serializable, Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         // TODO Auto-generated method stub
-
     }
-
 }
