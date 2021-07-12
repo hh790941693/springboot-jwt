@@ -338,23 +338,23 @@
                 <table cellpadding=3 style="border-collapse:separate; border-spacing:10px;">
                     <tr>
                         <td th:text="#{td.username.text}"></td>
-                        <td><input name="user" type="text" class="txt01 easyui-validatebox tb" readonly th:value="${session.sessionInfo.userName}"/></td>
+                        <td><input name="user" type="text" class="easyui-textbox" readonly th:value="${session.sessionInfo.userName}"/></td>
                     </tr>
                     <tr>
                         <td th:text="#{td.oldpassword.text}"></td>
-                        <td><input name="oldPass" type="password" class="txt01 easyui-validatebox tb" data-options="required:true"/></td>
+                        <td><input name="oldPass" type="password" class="easyui-textbox" data-options="required:true"/></td>
                     </tr>
                     <tr>
                         <td th:text="#{td.newpassword.text}"></td>
-                        <td><input id="newPass" name="newPass" type="password" class="txt01 easyui-validatebox tb" data-options="required:true"/></td>
+                        <td><input id="newPass" name="newPass" type="password" class="easyui-textbox" data-options="required:true"/></td>
                     </tr>
                     <tr>
                         <td th:text="#{td.confirmpassword.text}"></td>
-                        <td><input id="confirmPass" name="confirmPass" type="password" class="txt01 easyui-validatebox tb" required="required" validType="equals['#newPass']"/></td>
+                        <td><input id="confirmPass" name="confirmPass" type="password" class="easyui-textbox" required="required" validType="equals['#newPass']"/></td>
                     </tr>
                 </table>
             </div>
-            <div region="south" border="false" style="text-align: right; height: 36px; line-height: 30px;">
+            <div region="south" border="false" style="text-align: right; height: 36px; line-height: 30px;padding-right:5px;">
                 <a class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" onclick="confirmPassword()">[[#{btn.confirm.text}]]</a>
                 <a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" onclick="cancelPassword()">[[#{btn.cancel.text}]]</a>
             </div>
@@ -438,11 +438,11 @@
         // 修改密码对话框
         $('#modifyPasswordDiv').window({
             title: '[[#{easy.modify.password.title}]]',
-            width: 300,
+            width: 350,
             modal: true,
             shadow: true,
             closed: true,
-            height: 260,
+            height: 270,
             resizable: false
         });
 
