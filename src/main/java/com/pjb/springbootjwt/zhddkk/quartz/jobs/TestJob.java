@@ -1,6 +1,5 @@
 package com.pjb.springbootjwt.zhddkk.quartz.jobs;
 
-import com.sun.xml.internal.ws.spi.db.DatabindingException;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;

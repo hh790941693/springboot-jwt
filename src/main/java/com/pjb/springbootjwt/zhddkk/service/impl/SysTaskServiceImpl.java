@@ -3,6 +3,7 @@ package com.pjb.springbootjwt.zhddkk.service.impl;
 import com.pjb.springbootjwt.zhddkk.base.CoreServiceImpl;
 import com.pjb.springbootjwt.zhddkk.dao.SysTaskDao;
 import com.pjb.springbootjwt.zhddkk.domain.SysTaskDO;
+import com.pjb.springbootjwt.zhddkk.quartz.JobConstant;
 import com.pjb.springbootjwt.zhddkk.quartz.QuartzManager;
 import com.pjb.springbootjwt.zhddkk.quartz.ScheduleJob;
 import com.pjb.springbootjwt.zhddkk.service.SysTaskService;
@@ -22,10 +23,7 @@ import java.util.List;
 @Service
 public class SysTaskServiceImpl extends CoreServiceImpl<SysTaskDao, SysTaskDO> implements SysTaskService {
 
-    // 停止计划任务
-    public static String STATUS_RUNNING_STOP = "stop";
-    // 开启计划任务
-    public static String STATUS_RUNNING_START = "start";
+
 
     @Autowired
     private QuartzManager quartzManager;
@@ -74,11 +72,11 @@ public class SysTaskServiceImpl extends CoreServiceImpl<SysTaskDao, SysTaskDO> i
         if (scheduleJob == null) {
             return;
         }
-        if (STATUS_RUNNING_STOP.equals(cmd)) {
+        if (JobConstant.STATUS_RUNNING_STOP.equals(cmd)) {
             quartzManager.deleteJob(ScheduleJobUtils.entityToData(scheduleJob));
-            scheduleJob.setJobStatus(ScheduleJob.STATUS_NOT_RUNNING);
+            scheduleJob.setJobStatus(JobConstant.STATUS_NOT_RUNNING);
         } else {
-            scheduleJob.setJobStatus(ScheduleJob.STATUS_RUNNING);
+            scheduleJob.setJobStatus(JobConstant.STATUS_RUNNING);
             quartzManager.addJob(ScheduleJobUtils.entityToData(scheduleJob));
         }
         updateById(scheduleJob);
@@ -90,7 +88,7 @@ public class SysTaskServiceImpl extends CoreServiceImpl<SysTaskDao, SysTaskDO> i
         if (scheduleJob == null) {
             return;
         }
-        if (ScheduleJob.STATUS_RUNNING.equals(scheduleJob.getJobStatus())) {
+        if (JobConstant.STATUS_RUNNING.equals(scheduleJob.getJobStatus())) {
             quartzManager.updateJobCron(ScheduleJobUtils.entityToData(scheduleJob));
         }
         updateById(scheduleJob);

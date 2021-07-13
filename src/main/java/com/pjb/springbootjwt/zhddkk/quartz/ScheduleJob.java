@@ -14,11 +14,6 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ScheduleJob implements Serializable, Job {
 
-    public static final String STATUS_RUNNING = "1";
-    public static final String STATUS_NOT_RUNNING = "0";
-    public static final String CONCURRENT_IS = "1";
-    public static final String CONCURRENT_NOT = "0";
-
     /**
      * 任务名称
      */
@@ -28,21 +23,31 @@ public class ScheduleJob implements Serializable, Job {
      */
     private String jobGroup;
     /**
-     * 任务状态 是否启动任务
+     * 任务执行时调用哪个类的方法 包名+类名
      */
-    private String jobStatus;
+    private String beanClass;
     /**
      * cron表达式
      */
     private String cronExpression;
     /**
+     * 方法名
+     */
+    private String methodName;
+
+    // 方法参数
+    private String parameters;
+
+    /**
+     * 任务状态 是否启动任务
+     */
+    private String jobStatus;
+
+    /**
      * 描述
      */
     private String description;
-    /**
-     * 任务执行时调用哪个类的方法 包名+类名
-     */
-    private String beanClass;
+
     /**
      * 任务是否有状态
      */
@@ -52,11 +57,6 @@ public class ScheduleJob implements Serializable, Job {
      * Spring bean
      */
     private String springBean;
-
-    /**
-     * 任务调用的方法名
-     */
-    private String methodName;
 
     public String getJobName() {
         return jobName;
@@ -128,6 +128,14 @@ public class ScheduleJob implements Serializable, Job {
 
     public void setSpringBean(String springBean) {
         this.springBean = springBean;
+    }
+
+    public String getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(String parameters) {
+        this.parameters = parameters;
     }
 
     @Override

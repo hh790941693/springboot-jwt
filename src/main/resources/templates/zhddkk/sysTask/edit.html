@@ -9,33 +9,48 @@
 				<div class="ibox float-e-margins">
 					<div class="ibox-content">
 						<form class="form-horizontal m-t" id="signupForm">
-                            <input id="id" name="id" class="hidden" th:value="${job.id}">
+                            <input id="id" name="id" class="hidden" th:value="${sysTaskDO.id}">
 							<div class="form-group">
 								<label class="col-sm-2 control-label">任务名称：</label>
 								<div class="col-sm-4">
 									<input id="jobName" name="jobName" class="form-control"
-										type="text" th:value="${job.jobName}">
+										type="text" th:value="${sysTaskDO.jobName}">
 								</div>
 								<label class="col-sm-2 control-label">任务分组：</label>
 								<div class="col-sm-4">
 									<input id="jobGroup" name="jobGroup" class="form-control"
-										type="text" th:value="${job.jobGroup}">
+										type="text" th:value="${sysTaskDO.jobGroup}">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label">任务类：</label>
 								<div class="col-sm-4">
 									<input id="beanClass" name="beanClass" class="form-control"
-										type="text" th:value="${job.beanClass}">
+										type="text" th:value="${sysTaskDO.beanClass}">
 								</div>
 								<label class="col-sm-2 control-label">cron表达式：</label>
 								<div class="col-sm-4">
 									<input id="cronExpression" name="cronExpression"
-										   class="form-control" type="text" th:value="${job.cronExpression}">
+										   class="form-control" type="text" th:value="${sysTaskDO.cronExpression}">
 								</div>
 							</div>
-							<div class="form-group hidden">
 
+							<div class="form-group">
+								<label class="col-sm-2 control-label">方法名：</label>
+								<div class="col-sm-4">
+									<input id="methodName" th:name="methodName" th:value="${sysTaskDO.methodName}"
+										   class="form-control" type="text">
+								</div>
+
+
+								<label class="col-sm-2 control-label">方法参数：</label>
+								<div class="col-sm-4">
+									<input id="parameters" name="parameters" class="form-control"
+										   type="text" th:value="${sysTaskDO.parameters}">
+								</div>
+							</div>
+
+							<div class="form-group hidden">
 								<label class="col-sm-2 control-label">是否同步：</label>
 								<div class="col-sm-4">
 									<input id="isConcurrent" name="isConcurrent"
@@ -52,7 +67,7 @@
 								</div>
 							</div>
 							<input id="jobStatus" name="jobStatus" class="form-control hidden"
-								   type="text" value="0" th:value="${job.jobStatus}">
+								   type="text" value="0" th:value="${sysTaskDO.jobStatus}">
 							<div class="form-group">
 								<div class="col-sm-2 col-sm-offset-3">
 									<button type="submit" class="btn btn-primary">提交</button>

@@ -27,10 +27,26 @@
 									<input id="beanClass" name="beanClass" class="form-control"
 										type="text">
 								</div>
+
 								<label class="col-sm-2 control-label">cron表达式：</label>
 								<div class="col-sm-4">
 									<input id="cronExpression" name="cronExpression"
 										   class="form-control" type="text">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label">方法名：</label>
+								<div class="col-sm-4">
+									<input id="methodName" th:name="methodName" th:value="${sysTaskDO.methodName}"
+										   class="form-control" type="text">
+								</div>
+
+
+								<label class="col-sm-2 control-label">方法参数：</label>
+								<div class="col-sm-4">
+									<input id="parameters" name="parameters" class="form-control"
+										   type="text">
 								</div>
 							</div>
 

@@ -23,12 +23,9 @@ import java.util.Set;
  */
 @Service
 public class QuartzManager {
+
     private static final Logger logger = LoggerFactory.getLogger(QuartzManager.class);
-    // private SchedulerFactoryBean schedulerFactoryBean
-    // =SpringContextHolder.getBean(SchedulerFactoryBean.class);
-    // @Autowired
-    // @Qualifier("schedulerFactoryBean")
-    // private SchedulerFactoryBean schedulerFactoryBean;
+
     @Autowired
     private Scheduler scheduler;
 
@@ -45,6 +42,7 @@ public class QuartzManager {
             Class<? extends Job> jobClass = (Class<? extends Job>) (Class.forName(job.getBeanClass()).newInstance()
                     .getClass());
             JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(job.getJobName(), job.getJobGroup())// 任务名称和组构成任务key
+                    .usingJobData("name", "hch").usingJobData("age", 25)
                     .build();
             // 定义调度触发规则
             // 使用cornTrigger规则

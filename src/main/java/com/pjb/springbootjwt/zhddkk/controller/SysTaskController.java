@@ -6,13 +6,16 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.domain.SysTaskDO;
+import com.pjb.springbootjwt.zhddkk.quartz.JobConstant;
 import com.pjb.springbootjwt.zhddkk.service.SysTaskService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * <pre>
@@ -42,15 +45,18 @@ public class SysTaskController extends AdminBaseController {
     }
 
     @GetMapping("/add")
-    String add() {
+    String add(Model model) {
+        SysTaskDO sysTaskDO = new SysTaskDO();
+        sysTaskDO.setMethodName(JobConstant.DEFAULT_JOB_METHOD_NAME);
+        model.addAttribute("sysTaskDO", sysTaskDO);
         return "zhddkk/sysTask/add";
     }
     
 
     @GetMapping("/edit/{id}")
     String edit(@PathVariable("id") Long id, Model model) {
-        SysTaskDO job = sysTaskService.selectById(id);
-        model.addAttribute("job", job);
+        SysTaskDO sysTaskDO = sysTaskService.selectById(id);
+        model.addAttribute("sysTaskDO", sysTaskDO);
         return "zhddkk/sysTask/edit";
     }
 
@@ -69,6 +75,11 @@ public class SysTaskController extends AdminBaseController {
     @ResponseBody
     @PostMapping("/save")
     public Result<String> save(SysTaskDO taskScheduleJob) {
+        if (StringUtils.isBlank(taskScheduleJob.getMethodName())) {
+            taskScheduleJob.setMethodName(JobConstant.DEFAULT_JOB_METHOD_NAME);
+        }
+        taskScheduleJob.setCreateDate(new Date());
+        taskScheduleJob.setUpdateDate(new Date());
         sysTaskService.insert(taskScheduleJob);
         return Result.ok();
     }
@@ -79,6 +90,10 @@ public class SysTaskController extends AdminBaseController {
     @ResponseBody
     @PostMapping("/update")
     public Result<String> update(SysTaskDO taskScheduleJob) {
+        if (StringUtils.isBlank(taskScheduleJob.getMethodName())) {
+            taskScheduleJob.setMethodName(JobConstant.DEFAULT_JOB_METHOD_NAME);
+        }
+        taskScheduleJob.setUpdateDate(new Date());
         sysTaskService.updateById(taskScheduleJob);
         return Result.ok();
     }
