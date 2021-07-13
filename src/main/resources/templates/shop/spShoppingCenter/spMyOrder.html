@@ -184,6 +184,7 @@
                                     elem: 'paginationDiv',
                                     limit : 5,
                                     limits : [5,10,15,20,100],
+                                    layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
                                     count: app.allOrderList.length, //数据总数
                                     jump: function(obj){
                                         app.pageNumber = obj.curr;
