@@ -31,9 +31,9 @@ public class SysTaskDO implements Serializable {
     private String cronExpression;
     // 任务调用的方法名
     private String methodName;
-    // 方法参数
+    // 方法参数(json串) 比如{"name":"xxx","age":22}
     private String parameters;
-    // 任务状态
+    // 任务状态 0:停止 1:运行中
     private String jobStatus;
     // 任务描述
     private String description;
@@ -41,13 +41,6 @@ public class SysTaskDO implements Serializable {
     private String isConcurrent;
     // 创建时间
     private Date createDate;
-
     // 更新时间
     private Date updateDate;
-    // 创建者
-    private String createBy;
-    // 更新者
-    private String updateBy;
-    // Spring bean
-    private String springBean;
 }

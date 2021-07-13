@@ -32,9 +32,8 @@ function load() {
 							return {
 								// 说明：传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
 								pageNumber : params.pageNumber,
-								pageSize : params.pageSize
-							// name:$('#searchName').val(),
-							// username:$('#searchName').val()
+								pageSize : params.pageSize,
+								jobName:$('#searchName').val(),
 							};
 						},
 						// //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -76,9 +75,12 @@ function load() {
 									title : 'cron表达式'
 								},
 								{
-									visible : false,
 									field : 'methodName',
 									title : '方法名称'
+								},
+								{
+									field : 'parameters',
+									title : '方法参数'
 								},
 								{
 									visible : false,
@@ -92,12 +94,6 @@ function load() {
 								},
 								{
 									visible : false,
-									field : 'updateBy',
-									title : '更新者'
-								},
-
-								{
-									visible : false,
 									field : 'createDate',
 									title : '创建时间'
 								},
@@ -107,17 +103,6 @@ function load() {
 									field : 'updateDate',
 									title : '更新时间'
 								},
-								{
-									visible : false,
-									field : 'createBy',
-									title : '创建者'
-								},
-								{
-									visible : false,
-									field : 'springBean',
-									title : 'Spring bean'
-								},
-
 								{
 									field : 'jobStatus',
 									title : '停起操作',

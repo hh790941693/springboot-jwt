@@ -1,5 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.controller;
 
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -39,7 +40,10 @@ public class SysTaskController extends AdminBaseController {
     @GetMapping("/list")
     public Result<Page<SysTaskDO>> list(SysTaskDO taskDTO) {
         // 查询列表数据
-        Wrapper<SysTaskDO> wrapper = new EntityWrapper<SysTaskDO>(taskDTO);
+        Wrapper<SysTaskDO> wrapper = new EntityWrapper<SysTaskDO>();
+        if (StringUtils.isNotBlank(taskDTO.getJobName())) {
+            wrapper.like("job_name", taskDTO.getJobName(), SqlLike.DEFAULT);
+        }
         Page<SysTaskDO> page = sysTaskService.selectPage(getPage(SysTaskDO.class), wrapper);
         return Result.ok(page);
     }
@@ -51,7 +55,6 @@ public class SysTaskController extends AdminBaseController {
         model.addAttribute("sysTaskDO", sysTaskDO);
         return "zhddkk/sysTask/add";
     }
-    
 
     @GetMapping("/edit/{id}")
     String edit(@PathVariable("id") Long id, Model model) {

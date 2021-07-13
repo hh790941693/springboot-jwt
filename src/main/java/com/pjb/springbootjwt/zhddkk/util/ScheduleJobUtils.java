@@ -15,7 +15,6 @@ public class ScheduleJobUtils {
 		scheduleJob.setDescription(scheduleJobEntity.getDescription());
 		scheduleJob.setJobStatus(scheduleJobEntity.getJobStatus());
 		scheduleJob.setIsConcurrent(scheduleJobEntity.getIsConcurrent());
-		scheduleJob.setSpringBean(scheduleJobEntity.getSpringBean());
 		return scheduleJob;
 	}
 }
