@@ -1,5 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.quartz;
 
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang.StringUtils;
 import org.quartz.*;
 import org.quartz.DateBuilder.IntervalUnit;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -8,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 ;
 
@@ -41,8 +41,18 @@ public class QuartzManager {
             // 指明job的名称，所在组的名称，以及绑定job类
             Class<? extends Job> jobClass = (Class<? extends Job>) (Class.forName(job.getBeanClass()).newInstance()
                     .getClass());
+
+            // 构造方法参数
+            JobDataMap jobDataMap = new JobDataMap();
+            if (StringUtils.isNotBlank(job.getParameters())) {
+                Map<String, Object> maps = (Map) JSON.parse(job.getParameters());
+                for (Map.Entry<String, Object> entry : maps.entrySet()) {
+                    jobDataMap.put(entry.getKey(), entry.getValue());
+                }
+            }
             JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(job.getJobName(), job.getJobGroup())// 任务名称和组构成任务key
-                    .usingJobData("name", "hch").usingJobData("age", 25)
+                    .usingJobData("parameterTest", "hello world")
+                    .usingJobData(jobDataMap)
                     .build();
             // 定义调度触发规则
             // 使用cornTrigger规则
