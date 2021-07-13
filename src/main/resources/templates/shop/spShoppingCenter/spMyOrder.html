@@ -12,33 +12,48 @@
             height: 100%;
             padding: 10px 100px 10px 100px;
         }
+
+        .layui-form-label {
+            padding: 9px 0;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
     <div id="mainDiv">
         <div style="width:100%;height:750px;padding:10px;">
             <!--检索-->
-            <div style="width: 100%;height:20px;">
-                <div style="width:200px;height:100%;float: left;">
-                    <span>支付状态：</span>
-                    <select id="statusSelect" v-model="statusSearchValue" @change="onChangeStatus()">
-                        <option value="" selected>-- 请选择 --</option>
-                        <option value="1">待支付</option>
-                        <option value="3">已支付,待发货</option>
-                        <option value="4">已发货</option>
-                        <option value="6">已取消</option>
-                        <option value="9">已确认收货</option>
-                    </select>
-                </div>
-                <div style="width: 280px;height:100%;float: left;">
-                    <span>订单号：</span><input id="orderNoInput" v-model="orderNo" style="width: 220px;">
-                </div>
-                <div style="width: 300px;height:100%;float: right;text-align: right;">
-                    <button @click="queryAllMyOrderList()" style="width: 60px;" class="label label-success"><i class="fa fa-search"></i>查询</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button @click="resetSearch()" style="width: 60px;" class="label label-default"><i class="fa fa-undo"></i>重置</button>
+            <div style="width: 100%;height:43px;">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:100px;">支付状态：</label>
+                            <div class="layui-input-inline">
+                                <select name="interest" lay-filter="payStatusSelect">
+                                    <option value="" selected>-- 请选择 --</option>
+                                    <option value="1">待支付</option>
+                                    <option value="3">已支付,待发货</option>
+                                    <option value="4">已发货</option>
+                                    <option value="6">已取消</option>
+                                    <option value="9">已确认收货</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">订单号：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="orderNo" v-model="orderNo" autocomplete="off" placeholder="订单号" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <div class="layui-input-inline">
+                                <button class="layui-btn" @click="queryAllMyOrderList()"><i class="fa fa-search"></i>查询</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button class="layui-btn" @click="resetSearch()"><i class="fa fa-undo"></i>重置</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <hr/>
             <!--分页-->
             <div id="paginationDiv"></div>
             <!--订单列表-->
@@ -205,9 +220,6 @@
                     }
                     app.orderList = app.allOrderList.slice(start, end);
                 },
-                onChangeStatus : function(){
-                    this.queryAllMyOrderList();
-                },
                 // 立即支付
                 payNow : function(orderNo) {
                     //跳转到支付页面
@@ -300,6 +312,11 @@
             created : function() {
                 this.queryAllMyOrderList();
             }
+        });
+
+        layui.form.on('select(payStatusSelect)', function(data){
+            app.statusSearchValue = data.value;
+            app.queryAllMyOrderList();
         });
     </script>
 </html>
