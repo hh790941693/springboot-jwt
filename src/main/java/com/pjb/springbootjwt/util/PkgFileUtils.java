@@ -24,14 +24,20 @@ public class PkgFileUtils {
         try {
             reader = new BufferedReader(new FileReader(file));
             String tempString = null;
+            int fileNum = 0;
             // 一次读入一行，直到读入null为文件结束
             while ((tempString = reader.readLine()) != null) {
                 // 显示行号
                 if (StringUtils.isBlank(tempString)) {
                     continue;
                 }
+                if (tempString.startsWith("#") || tempString.startsWith("//")) {
+                    continue;
+                }
                 copy(PRJ_BASE_PATH + tempString, STORE_BASE_PATH + timeDir + "\\" + tempString);
+                fileNum++;
             }
+            System.out.println("文件拷贝总数:"+fileNum);
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();
