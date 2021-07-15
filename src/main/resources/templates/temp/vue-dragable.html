@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>vue.draggable例子</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+    <script type="text/javascript" th:src="@{/js/vue/vue.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/sortable/Sortable.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/vuedraggable/vuedraggable.umd.min.js}"></script>
+    <style scoped>
+       /*被拖拽对象的样式*/
+        .item {
+            padding: 6px;
+            background-color: #fdfdfd;
+            border: solid 1px #eee;
+            margin-bottom: 10px;
+            cursor: move;
+        } 
+        .item:hover {
+                background-color: #f1f1f1;
+                cursor: move;
+            }
+       /*选中元素的样式*/
+        .chosen {
+            background-color: #000 !important;
+            color: #fff;
+        }
+        /*目标位置占位符的样式*/
+        .ghost {
+            background-color: red !important;
+        }
+        .itxst {
+            margin: 10px;
+            text-align :left;
+        }
+        /*当鼠标落在handle指定的元素上面时才允许拖动*/
+        .mover {
+            background-color: #fdfdfd;
+            cursor: move;
+            padding:3px 6px;
+        }        
+    </style>
+</head>
+<body style="padding:10px;">
+    <div id="mainDiv">
+        <div>{{dragStatus?'拖拽中':'拖拽停止'}}</div>
+        <input type="button" class="title" @click="disableDraggle" v-if="disabled == false" value="禁用拖拽">
+        <input type="button"  class="title" @click="enableDraggle" v-if="disabled == true" value="开启拖拽"> 
+        <draggable v-model="myArray" delay="10" :disabled="disabled" filter=".forbid" handle=".mover" chosen-class="chosen" group="itxst" ghost-class="ghost" force-fallback="true" group="people" animation="1000" @start="onStart" @end="onEnd" :move="onMove" @update="onUpdate">
+            <transition-group>
+                <div :class="element.id==1?'item forbid':'item'" v-for="element in myArray" :key="element.id"><span class="mover">+</span>{{element.name}}</div>
+            </transition-group>
+        </draggable>
+    </div>
+    <script>
+        // 全局注册组件
+        Vue.component('vuedraggable', window.vuedraggable);
+        var app = new Vue({
+            el: '#mainDiv',
+            components: {
+                vuedraggable: window.vuedraggable,//当前页面注册组件
+            },
+            data : {
+                dragStatus: false, // 拖拽状态
+                disabled:false,     // 所有元素是否禁用拖拽
+                myArray: [],
+            },
+            methods: {
+                // 开始拖拽
+                onStart() {
+                    this.dragStatus = true;
+                },
+                // 拖拽结束
+                onEnd() {
+                    this.dragStatus = false;
+                },
+                // 选中的元素发生移动时
+                onMove : function(evt) {
+                    //console.log("元素名称：" + evt.draggedContext.element.name);
+                    console.log("call :move");
+                },
+                // 拖拽交换了位置(onUpdate早于OnEnd结束)
+                onUpdate : function(evt) {
+                    //console.log("旧下标：" + evt.oldIndex);
+                    //console.log("新下标：" + evt.newIndex);
+                },
+                //设置禁止拖拽
+                disableDraggle : function() {
+                   this.disabled = true;
+                },
+                //设置启用拖拽
+                enableDraggle : function() {
+                   this.disabled = false;
+                },
+            },
+            created : function () {
+                this.myArray = [
+                    { people: 'cn', id: 1, name: 'www.itxst.com',sort:1 },
+                    { people: 'cn', id: 2, name: 'www.baidu.com',sort:2 },
+                    { people: 'cn', id: 3, name: 'www.taobao.com',sort:3 },
+                    { people: 'us', id: 4, name: 'www.google.com',sort:4 }
+                ]
+            }
+        });
+    </script>
+</body>
+</html>
