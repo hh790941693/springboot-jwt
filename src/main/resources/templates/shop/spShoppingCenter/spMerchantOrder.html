@@ -12,32 +12,53 @@
             height: 100%;
             padding: 10px 100px 10px 100px;
         }
+
+        .layui-form-label {
+            padding: 9px 0;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
     <div id="mainDiv">
         <div style="width:100%;height:750px;padding:10px;">
-            <div style="width: 100%;height:20px;">
-                <div style="width:200px;height:100%;float: left;">
-                    <span>支付状态：</span>
-                    <select id="statusSelect" v-model="statusSearchValue" @change="onChangeStatus()">
-                        <option value="" selected>-- 请选择 --</option>
-                        <option value="1">待支付</option>
-                        <option value="3">已支付,待发货</option>
-                        <option value="4">已发货</option>
-                        <option value="6">已取消</option>
-                        <option value="9">已确认收货</option>
-                    </select>
+            <div style="width: 100%; height:100px;padding:10px;margin-bottom:10px;border:1px solid lightgrey;">
+                <!--检索-->
+                <div style="width: 100%;height:43px;text-align: center;">
+                    <div class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:100px;">支付状态：</label>
+                                <div class="layui-input-inline">
+                                    <select lay-filter="payStatusSelect" id="payStatusSelect">
+                                        <option value="" selected>-- 请选择 --</option>
+                                        <option value="1">待支付</option>
+                                        <option value="3">已支付,待发货</option>
+                                        <option value="4">已发货</option>
+                                        <option value="6">已取消</option>
+                                        <option value="9">已确认收货</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">订单号：</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" lay-verify="orderNo" v-model="orderNo" autocomplete="off" placeholder="请输入订单号" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <div class="layui-input-inline">
+                                    <button class="layui-btn" @click="queryMerchantOrderList()"><i class="fa fa-search"></i>查询</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button class="layui-btn layui-bg-cyan" @click="resetSearch()"><i class="fa fa-undo"></i>重置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style="width: 280px;height:100%;float: left;">
-                    <span>订单号：</span><input id="orderNoInput" v-model="orderNo" style="width: 220px;">
-                </div>
-                <div style="width: 300px;height:100%;float: right;text-align: right;">
-                    <button @click="queryMerchantOrderList()" style="width: 60px;" class="label label-success"><i class="fa fa-search"></i>查询</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button @click="resetSearch()" style="width: 60px;" class="label label-default"><i class="fa fa-undo"></i>重置</button>
-                </div>
+                <!--分页-->
+                <div id="paginationDiv" style="height:57px;text-align: right;"></div>
             </div>
-            <hr/>
+
             <div style="width: 100%;height:auto;">
                 <div v-for="(orderInfo,index) in orderList" style="width: 100%;height:auto;border:1px solid grey;margin-bottom: 20px;">
                     <div style="width: 100%;height:36px;font-weight: bold;font-size: 15px;background-color: lightblue;padding: 3px 5px;">
@@ -125,9 +146,12 @@
         var app = new Vue({
             el: '#mainDiv',
             data: {
-                orderList : [],  //订单数据
+                allOrderList : [],      // 所有订单数据
+                orderList : [],         // 分页订单数据
                 statusSearchValue : "", //搜索条件:状态
                 orderNo : "",           //搜索条件:订单号
+                pageNumber: 1,          // 当前页码(客户端分页)
+                pageSize: 5,            // 每页条数(客户端分页)
             },
             methods: {
                 // 商家订单列表
@@ -142,10 +166,36 @@
                         },
                         success: function (result) {
                             if (result.code == 1) {
-                                app.orderList = result.data;
+                                app.allOrderList = result.data;
+                                // 查询分页数据
+                                that.queryPageOrderList();
+
+                                // 绑定分页控件
+                                layui.laypage.render({
+                                    elem: 'paginationDiv',
+                                    limit : 5,
+                                    limits : [5,10,15,20,100],
+                                    layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
+                                    count: app.allOrderList.length, //数据总数
+                                    jump: function(obj){
+                                        app.pageNumber = obj.curr;
+                                        app.pageSize = obj.limit;
+                                        app.queryPageOrderList();
+                                    }
+                                });
+                                layer.close(loadIndex);
                             }
                         }
                     });
+                },
+                // 查询分页数据
+                queryPageOrderList : function () {
+                    var start = (app.pageNumber-1) * app.pageSize;
+                    var end = start+app.pageSize;
+                    if (end > app.allOrderList.length) {
+                        end = app.allOrderList.length;
+                    }
+                    app.orderList = app.allOrderList.slice(start, end);
                 },
                 onChangeStatus : function(){
                     this.queryMerchantOrderList();
@@ -153,6 +203,8 @@
                 resetSearch : function(){
                     app.statusSearchValue = "";
                     app.orderNo = "";
+                    $('#payStatusSelect').val("");
+                    layui.form.render();
                     this.queryMerchantOrderList();
                 },
                 expandOrder : function(e){
@@ -196,6 +248,11 @@
             created : function() {
                 this.queryMerchantOrderList();
             }
+        });
+
+        layui.form.on('select(payStatusSelect)', function(data){
+            app.statusSearchValue = data.value;
+            app.queryMerchantOrderList();
         });
     </script>
 </html>
