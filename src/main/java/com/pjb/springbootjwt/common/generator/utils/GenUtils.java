@@ -91,10 +91,11 @@ public class GenUtils {
         map.put("pk", tableDO.getPk());
         map.put("className", tableDO.getClassName());
         map.put("classname", tableDO.getClassname());
-        String pack = config.get("package");
-        map.put("pathName", pack.substring(pack.lastIndexOf(".") + 1));
+        String wholePackagePath = config.get("package");
+        String basePackagePath = wholePackagePath.substring(wholePackagePath.lastIndexOf(".") + 1);
+        map.put("package", wholePackagePath); // com.aaa.bbb.ccc
+        map.put("pathName", basePackagePath); // ccc
         map.put("columnList", tableDO.getColumnList());
-        map.put("package", pack);
         map.put("author", config.get("author"));
         map.put("email", config.get("email"));
         map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN_19));
@@ -121,8 +122,7 @@ public class GenUtils {
 
             try {
                 // 添加到zip
-                String outputFilePath = getFileName(template, tableDO.getClassname(), tableDO.getClassName(),
-                        pack.substring(pack.lastIndexOf(".") + 1));
+                String outputFilePath = getFileName(template, tableDO.getClassname(), tableDO.getClassName(), wholePackagePath, basePackagePath);
                 if (StringUtils.isNotBlank(outputFilePath)) {
                     zip.putNextEntry(new ZipEntry(outputFilePath));
                     IOUtils.write(sw.toString(), zip, "UTF-8");
@@ -206,57 +206,51 @@ public class GenUtils {
     /**
      * 获取文件名.
      */
-    public static String getFileName(String template, String classname, String className, String packageName) {
-        String packagePath = "main" + File.separator + "java" + File.separator;
-        if (StringUtils.isNotBlank(packageName)) {
-            packagePath += packageName.replace(".", File.separator) + File.separator;
+    public static String getFileName(String template, String classname, String className, String wholePackageName, String basePackageName) {
+        String javaPackagePath = "main" + File.separator + "java" + File.separator;
+        if (StringUtils.isNotBlank(wholePackageName)) {
+            javaPackagePath += wholePackageName.replace(".", File.separator) + File.separator;
+        }
+        String resourcePackagePath = "main" + File.separator + "resources" + File.separator;
+        String mapperPackagePath = resourcePackagePath + "mapper" + File.separator + basePackageName + File.separator;
+        String htmlPackagePath = resourcePackagePath + "templates" + File.separator + basePackageName + File.separator + classname + File.separator;
+        String jsPackagePath = resourcePackagePath + "static" + File.separator + "js" + File.separator + "appjs" + File.separator + basePackageName + File.separator + classname + File.separator;
+
+        // 后台java文件
+        if (template.contains("domain.java.vm")) {
+            return javaPackagePath + "domain" + File.separator + className + "DO.java";
+        } else if (template.contains("Dao.java.vm")) {
+            return javaPackagePath + "dao" + File.separator + className + "Dao.java";
+        } else if (template.contains("Service.java.vm")) {
+            return javaPackagePath + "service" + File.separator + className + "Service.java";
+        } else if (template.contains("ServiceImpl.java.vm")) {
+            return javaPackagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
+        } else if (template.contains("Controller.java.vm")) {
+            return javaPackagePath + "controller" + File.separator + className + "Controller.java";
         }
 
-        if (template.contains("domain.java.vm")) {
-            return packagePath + "domain" + File.separator + className + "DO.java";
-        } else if (template.contains("Dao.java.vm")) {
-            return packagePath + "dao" + File.separator + className + "Dao.java";
-        } else if (template.contains("Service.java.vm")) {
-            return packagePath + "service" + File.separator + className + "Service.java";
-        } else if (template.contains("ServiceImpl.java.vm")) {
-            return packagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
-        } else if (template.contains("Controller.java.vm")) {
-            return packagePath + "controller" + File.separator + className + "Controller.java";
-        } else if (template.contains("Mapper.xml.vm")) {
-            return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + packageName
-                    + File.separator + className + "Mapper.xml";
+        // 前端html、js、文件
+        if (template.contains("Mapper.xml.vm")) {
+            return mapperPackagePath + className + "Mapper.xml";
         } else if (template.contains("list.html.vm")) {
-            return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
-                    + File.separator + classname + File.separator + classname + ".html";
+            return htmlPackagePath + classname + ".html";
         } else if (template.contains("add.html.vm")) {
-            return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
-                    + File.separator + classname + File.separator + classname + "Add.html";
+            return htmlPackagePath + classname + "Add.html";
         } else if (template.contains("edit.html.vm")) {
-            return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
-                    + File.separator + classname + File.separator + classname + "Edit.html";
+            return htmlPackagePath + classname + "Edit.html";
         } else if (template.contains("form.html.vm")) {
-            return "main" + File.separator + "resources" + File.separator + "templates" + File.separator + packageName
-                    + File.separator + classname + File.separator + classname + "Form.html";
+            return htmlPackagePath + classname + "Form.html";
         } else if (template.contains("list.js.vm")) {
-            return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
-                    + File.separator + "appjs" + File.separator + packageName + File.separator + classname
-                    + File.separator + classname + ".js";
+            return jsPackagePath + classname + ".js";
         } else if (template.contains("add.js.vm")) {
-            return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
-                    + File.separator + "appjs" + File.separator + packageName + File.separator + classname
-                    + File.separator + classname + "Add.js";
+            return jsPackagePath + classname + "Add.js";
         } else if (template.contains("edit.js.vm")) {
-            return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
-                    + File.separator + "appjs" + File.separator + packageName + File.separator + classname
-                    + File.separator + classname + "Edit.js";
+            return jsPackagePath + classname + "Edit.js";
         } else if (template.contains("form.js.vm")) {
-            return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "js"
-                    + File.separator + "appjs" + File.separator + packageName + File.separator + classname
-                    + File.separator + classname + "Form.js";
+            return jsPackagePath + classname + "Form.js";
         } else if (template.contains("menu.sql.vm")) {
             return className.toLowerCase() + "_menu.sql";
         }
-
         return null;
     }
 }
