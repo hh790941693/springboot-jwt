@@ -5,6 +5,11 @@ import java.util.Arrays;
 import java.util.Date;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.pjb.springbootjwt.shop.constants.SpConstants;
+import com.pjb.springbootjwt.shop.domain.SpGoodsDO;
+import com.pjb.springbootjwt.shop.domain.SpOrderDO;
+import com.pjb.springbootjwt.shop.service.SpGoodsService;
+import com.pjb.springbootjwt.shop.service.SpOrderService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import com.pjb.springbootjwt.zhddkk.util.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +54,12 @@ public class SpMerchantController extends AdminBaseController {
 
     @Autowired
 	private SpMerchantService spMerchantService;
+
+	@Autowired
+	private SpOrderService spOrderService;
+
+	@Autowired
+	private SpGoodsService spGoodsService;
 
     /**
     * 跳转到商家店铺表页面.
@@ -152,6 +163,12 @@ public class SpMerchantController extends AdminBaseController {
 		SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("user_id", SessionUtil.getSessionUserId()));
 		if (null != spMerchantDO) {
 			model.addAttribute("spMerchant", spMerchantDO);
+			// 订单个数
+			int orderNum = spOrderService.selectCount(new EntityWrapper<SpOrderDO>().eq("merchant_id", spMerchantDO.getMerchantId()));
+			// 商品数量
+			int goodsNum = spGoodsService.selectCount(new EntityWrapper<SpGoodsDO>().eq("merchant_id", spMerchantDO.getMerchantId()).eq("status", 1));
+			model.addAttribute("orderNum", orderNum);
+			model.addAttribute("goodsNum", goodsNum);
 			String requestToken = WebUtil.generateAccessToken();
 			request.getSession(false).setAttribute(WebUtil.REQUEST_TOKEN, requestToken);
 			return "shop/spMerchant/myMerchant";
