@@ -17,7 +17,7 @@ public class ColumnDO {
     private String columnKey;
 
     // 属性名称(第一个字母大写)，如：user_name => UserName
-    private String attrName;
+    //private String attrName;
     // 属性名称(第一个字母小写)，如：user_name => userName
     private String attrname;
     // 属性类型
@@ -57,14 +57,6 @@ public class ColumnDO {
         this.attrname = attrname;
     }
 
-    public String getAttrName() {
-        return attrName;
-    }
-
-    public void setAttrName(String attrName) {
-        this.attrName = attrName;
-    }
-
     public String getAttrType() {
         return attrType;
     }
@@ -87,12 +79,5 @@ public class ColumnDO {
 
     public void setColumnKey(String columnKey) {
         this.columnKey = columnKey;
-    }
-
-    @Override
-    public String toString() {
-        return "ColumnDO{" + "columnName='" + columnName + '\'' + ", dataType='" + dataType + '\'' + ", comments='"
-                + comments + '\'' + ", attrName='" + attrName + '\'' + ", attrname='" + attrname + '\'' + ", attrType='"
-                + attrType + '\'' + ", extra='" + extra + '\'' + '}';
     }
 }

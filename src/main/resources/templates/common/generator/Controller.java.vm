@@ -24,6 +24,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ${comments}.
+ * 作者:${author}
+ * 邮箱:${email}
+ * 创建时间:${datetime}
  */
 @Controller
 @RequestMapping("/${pathName}/${classname}")

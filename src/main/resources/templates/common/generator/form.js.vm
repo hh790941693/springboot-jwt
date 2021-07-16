@@ -26,7 +26,6 @@ function save() {
             } else {
                 parent.layer.alert("保存失败，请稍后再试");
             }
-
         }
     });
 }
@@ -43,7 +42,7 @@ function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
     $("#form").validate({
         rules : {
-    #foreach($column in $columns)
+    #foreach($column in $columnList)
         #if($column.columnName != $pk.columnName)
             ${column.attrname} : {
                 required : true
@@ -52,7 +51,7 @@ function validateRule() {
     #end
         },
         messages : {
-    #foreach($column in $columns)
+    #foreach($column in $columnList)
         #if($column.columnName != $pk.columnName)
             ${column.attrname} : {
                 required : icon + "请输入${column.comments}"

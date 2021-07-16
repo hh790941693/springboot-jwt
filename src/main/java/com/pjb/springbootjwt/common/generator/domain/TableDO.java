@@ -25,7 +25,7 @@ public class TableDO {
     // 表的主键
     private ColumnDO pk;
     // 表的列名(不包含主键)
-    private List<ColumnDO> columns;
+    private List<ColumnDO> columnList;
 
     // 类名(第一个字母大写)，如：sys_user => SysUser
     private String className;
@@ -56,12 +56,12 @@ public class TableDO {
         this.pk = pk;
     }
 
-    public List<ColumnDO> getColumns() {
-        return columns;
+    public List<ColumnDO> getColumnList() {
+        return columnList;
     }
 
-    public void setColumns(List<ColumnDO> columns) {
-        this.columns = columns;
+    public void setColumnList(List<ColumnDO> columnList) {
+        this.columnList = columnList;
     }
 
     public String getClassName() {
@@ -94,12 +94,5 @@ public class TableDO {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    @Override
-    public String toString() {
-        return "TableDO{" + "tableName='" + tableName + '\'' + ", comments='" + comments + '\'' + ", pk=" + pk
-                + ", columns=" + columns + ", className='" + className + '\'' + ", classname='" + classname + '\''
-                + '}';
     }
 }

@@ -5,6 +5,9 @@ import com.pjb.springbootjwt.zhddkk.base.CoreService;
 
 /**
  * ${comments}.
+ * 作者:${author}
+ * 邮箱:${email}
+ * 创建时间:${datetime}
  */
 public interface ${className}Service extends CoreService<${className}DO> {
     

@@ -26,10 +26,8 @@ function update() {
 			} else {
 				parent.layer.alert(r.data);
 			}
-
 		}
 	});
-
 }
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";

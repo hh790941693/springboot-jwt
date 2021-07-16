@@ -5,7 +5,10 @@ import com.pjb.springbootjwt.zhddkk.base.BaseDao;
 import org.springframework.stereotype.Repository;
 
 /**
- * ${comments}
+ * ${comments}.
+ * 作者:${author}
+ * 邮箱:${email}
+ * 创建时间:${datetime}
  */
 @Repository
 public interface ${className}Dao extends BaseDao<${className}DO> {

@@ -39,7 +39,7 @@ public class GenUtils {
     public static void generatorCode(TableDO tableDO, List<ColumnDO> columnList, ZipOutputStream zip) {
         // 配置信息 读取表sys_config
         Map<String, String> config = getConfig();
-        // 表名转换成Java类名
+        // 表名转换成Java类名 ws_users  --> WsUsers
         String className = tableToJava(tableDO.getTableName(), config.get("tablePrefix"), config.get("autoRemovePre"));
         //首字母大写类名
         tableDO.setClassName(className);
@@ -61,11 +61,10 @@ public class GenUtils {
 
             // 列名转换成Java属性名
             String attrName = columnToJava(columnName);
-            columnDO.setAttrName(attrName);
-            columnDO.setAttrname(StringUtils.uncapitalize(attrName));
+            columnDO.setAttrname(StringUtils.uncapitalize(attrName));   //字段名 首字母小写
 
             // 列的数据类型，转换成Java类型
-            String attrType = config.get(columnDO.getDataType());
+            String attrType = config.get(columnDO.getDataType());     //字段类型 int、varchar
             columnDO.setAttrType(attrType);
 
             // 是否主键
@@ -73,11 +72,11 @@ public class GenUtils {
                 tableDO.setPk(columnDO);
             }
         }
-        tableDO.setColumns(columnList);
+        tableDO.setColumnList(columnList);
 
         // 没主键，则第一个字段为主键
         if (tableDO.getPk() == null) {
-            tableDO.setPk(tableDO.getColumns().get(0));
+            tableDO.setPk(tableDO.getColumnList().get(0));
         }
 
         // 设置velocity资源加载器
@@ -94,21 +93,13 @@ public class GenUtils {
         map.put("classname", tableDO.getClassname());
         String pack = config.get("package");
         map.put("pathName", pack.substring(pack.lastIndexOf(".") + 1));
-        map.put("columns", tableDO.getColumns());
+        map.put("columnList", tableDO.getColumnList());
         map.put("package", pack);
         map.put("author", config.get("author"));
         map.put("email", config.get("email"));
         map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN_19));
         // 字段特性
         map.put("hasBigDecimal", dataTypeList.contains("decimal"));
-        //时间类型的包含3种，date、datetime、timestamp
-        if (dataTypeList.contains("date")) {
-            map.put("hasDate", 1);
-        } else if (dataTypeList.contains("datetime")) {
-            map.put("hasDatetime", 1);
-        } else if (dataTypeList.contains("timestamp")) {
-            map.put("hasTimestamp", 1);
-        }
         map.put("hasDeleted", columnNameList.contains("deleted"));
         map.put("hasVersion", columnNameList.contains("version"));
         map.put("hasCreateAt", columnNameList.contains("createAt"));
@@ -147,21 +138,17 @@ public class GenUtils {
     }
 
     /**
-     * 表名转换成Java类名.
+     * 去掉表名中的前缀(比如t_).
      */
     public static String tableToJava(String tableName, String tablePrefix, String autoRemovePre) {
-
-        if ("true".equals(autoRemovePre)) {
-            //tableName = tableName.substring(tableName.indexOf(STR_DELIMITER) + 1);
-            if (StringUtils.isNotBlank(tablePrefix)) {
-                //去除表名前缀
-                String pattern = "(^" + tablePrefix + ")(.*)";
-                Pattern r = Pattern.compile(pattern);
-                Matcher m = r.matcher(tableName);
-                boolean isFind = m.find();
-                if (isFind) {
-                    tableName = m.group(2);
-                }
+        if ("true".equals(autoRemovePre) && (StringUtils.isNotBlank(tablePrefix))) {
+            //去除表名前缀
+            String pattern = "(^" + tablePrefix + ")(.*)";
+            Pattern r = Pattern.compile(pattern);
+            Matcher m = r.matcher(tableName);
+            boolean isFind = m.find();
+            if (isFind) {
+                tableName = m.group(2);
             }
         }
         return columnToJava(tableName);
@@ -169,6 +156,8 @@ public class GenUtils {
 
     /**
      * 列名转换成Java属性名.
+     * 1.删除下划线_
+     * 2.除第一个单词外,后面每个单词首字母大写
      */
     public static String columnToJava(String columnName) {
         if (columnName.contains(STR_DELIMITER)) {

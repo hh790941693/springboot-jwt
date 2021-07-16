@@ -7,11 +7,10 @@ import ${package}.entity.${className};
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
- * 
- * <pre>
  * ${comments}.
- * </pre>
- * <small> ${datetime} | ${author}</small>
+ * 作者:${author}
+ * 邮箱:${email}
+ * 创建时间:${datetime}
  */
 public interface ${className}Mapper extends BaseMapper<${className}> {
 

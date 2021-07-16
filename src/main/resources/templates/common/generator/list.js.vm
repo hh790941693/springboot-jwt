@@ -49,7 +49,7 @@ function load() {
 			{
 				checkbox : true
 			},
-			#foreach($column in $columns)
+			#foreach($column in $columnList)
 			{
 				field : '${column.attrname}',
 				title : '${column.comments}'

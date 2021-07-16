@@ -10,7 +10,7 @@
 				<div class="ibox float-e-margins">
 					<div class="ibox-content">
 						<form class="form-horizontal m-t" id="signupForm">
-							#foreach($column in $columns)
+							#foreach($column in $columnList)
 							#if($column.columnName != $pk.columnName)
                             <div class="form-group">
 								<label class="col-sm-3 control-label">${column.comments}：</label>

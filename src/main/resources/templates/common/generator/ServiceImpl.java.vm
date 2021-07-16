@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ${comments}.
+ * 作者:${author}
+ * 邮箱:${email}
+ * 创建时间:${datetime}
  */
 @Service
 public class ${className}ServiceImpl extends CoreServiceImpl<${className}Dao, ${className}DO> implements ${className}Service {
