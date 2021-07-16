@@ -6,6 +6,7 @@ import java.util.Date;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
+import com.pjb.springbootjwt.zhddkk.util.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -111,8 +112,12 @@ public class SpMerchantController extends AdminBaseController {
 	@ResponseBody
 	@RequestMapping("/update")
 	//@RequiresPermissions("shop:spMerchant:edit")
-	public Result<String> update(SpMerchantDO spMerchant) {
+	public Result<String> update(SpMerchantDO spMerchant, HttpServletRequest request) {
+		if (WebUtil.isRepeatSubmit(request)){
+			return Result.fail("请不要重复提交请求");
+		}
 		spMerchantService.updateById(spMerchant);
+		request.getSession(false).removeAttribute(WebUtil.REQUEST_TOKEN);
 		return Result.ok();
 	}
 	
@@ -147,6 +152,8 @@ public class SpMerchantController extends AdminBaseController {
 		SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("user_id", SessionUtil.getSessionUserId()));
 		if (null != spMerchantDO) {
 			model.addAttribute("spMerchant", spMerchantDO);
+			String requestToken = WebUtil.generateAccessToken();
+			request.getSession(false).setAttribute(WebUtil.REQUEST_TOKEN, requestToken);
 			return "shop/spMerchant/myMerchant";
 		}
 		return "redirect:/error.page";

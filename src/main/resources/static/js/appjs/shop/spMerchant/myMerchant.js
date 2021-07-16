@@ -17,11 +17,11 @@ function save() {
         success : function(r) {
             if (r.code == 1) {
                 parent.layer.msg("保存成功");
-                parent.reLoad();
+                //parent.reLoad();
                 var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
                 parent.layer.close(index);
             } else {
-                parent.layer.alert("保存失败，请稍后再试");
+                parent.layer.alert(r.data);
             }
 
         }
