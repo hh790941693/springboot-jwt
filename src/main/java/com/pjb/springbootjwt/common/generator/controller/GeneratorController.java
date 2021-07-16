@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <pre>
@@ -54,24 +52,25 @@ public class GeneratorController {
     }
 
     @RequestMapping("/code/{tableName}")
-    public void code(HttpServletRequest request, HttpServletResponse response,
-                     @PathVariable("tableName") String tableName) throws IOException {
-        String[] tableNames = new String[] { tableName };
-        byte[] data = generatorService.generatorCode(tableNames);
-        response.reset();
-        response.setHeader("Content-Disposition", "attachment; filename=\""+tableName+"_code.zip\"");
-        response.addHeader("Content-Length", "" + data.length);
-        response.setContentType("application/octet-stream; charset=UTF-8");
-
-        IOUtils.write(data, response.getOutputStream());
+    public void code(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException {
+        List<String> tableNameList = new ArrayList<>(Arrays.asList(tableName));
+        generatorCode(tableNameList, response);
     }
 
     @RequestMapping("/batchCode")
-    public void batchCode(HttpServletRequest request, HttpServletResponse response, String tables) throws IOException {
-        String[] tableNames = tables.split(",");
-        byte[] data = generatorService.generatorCode(tableNames);
+    public void batchCode(HttpServletResponse response, String tables) throws IOException {
+        List<String> tableNameList = new ArrayList<>(Arrays.asList(tables.split(",")));
+        generatorCode(tableNameList, response);
+    }
+
+    private void generatorCode(List<String> tableNameList, HttpServletResponse response) throws IOException {
+        byte[] data = generatorService.generatorCode(tableNameList);
         response.reset();
-        response.setHeader("Content-Disposition", "attachment; filename=\"code.zip\"");
+        String zipName = "code.zip";
+        if (tableNameList.size() == 1) {
+            zipName = tableNameList.get(0) + ".zip";
+        }
+        response.setHeader("Content-Disposition", "attachment; filename=\""+zipName+"\"");
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
 

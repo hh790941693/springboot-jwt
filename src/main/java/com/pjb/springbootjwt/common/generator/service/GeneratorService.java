@@ -16,5 +16,5 @@ public interface GeneratorService {
 
     List<TableDO> list();
 
-    byte[] generatorCode(String[] tableNameArr);
+    byte[] generatorCode(List<String> tableNameList);
 }

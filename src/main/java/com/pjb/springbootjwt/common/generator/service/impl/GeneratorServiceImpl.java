@@ -31,10 +31,10 @@ public class GeneratorServiceImpl implements GeneratorService {
     }
 
     @Override
-    public byte[] generatorCode(String[] tableNameArr) {
+    public byte[] generatorCode(List<String> tableNameList) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
-        for (String tableName : tableNameArr) {
+        for (String tableName : tableNameList) {
             // 查询表信息
             TableDO tableDO = generatorMapper.get(tableName);
             // 查询列信息
