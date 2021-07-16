@@ -12,16 +12,16 @@
                         <form class="form-horizontal m-t" id="form">
 							<!-- 主键 -->
                             <input type="hidden" id="${pk.columnName}" name="${pk.columnName}" th:value="${${classname}.${pk.columnName}}">
-					#foreach($column in $columnList)
-						#if($column.columnName != $pk.columnName)
+#foreach($column in $columnList)
+#if($column.columnName != $pk.columnName)
 							<div class="form-group">
 								<label class="col-sm-3 control-label" for="${column.attrname}"><span style="color:red">*</span>&nbsp;${column.comments}：</label>
 								<div class="col-sm-8">
 									<input type="text" id="${column.attrname}" name="${column.attrname}" th:value="${${classname}.${column.attrname}}" class="form-control" />
 								</div>
 							</div>
-						#end
-					#end
+#end
+#end
                             <div class="form-group">
                                 <div class="col-sm-8 col-sm-offset-3">
                                     <button type="submit" class="btn btn-primary">保存</button>

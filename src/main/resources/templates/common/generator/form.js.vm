@@ -42,22 +42,22 @@ function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
     $("#form").validate({
         rules : {
-    #foreach($column in $columnList)
-        #if($column.columnName != $pk.columnName)
+#foreach($column in $columnList)
+#if($column.columnName != $pk.columnName)
             ${column.attrname} : {
                 required : true
             },
-        #end
-    #end
+#end
+#end
         },
         messages : {
-    #foreach($column in $columnList)
-        #if($column.columnName != $pk.columnName)
+#foreach($column in $columnList)
+#if($column.columnName != $pk.columnName)
             ${column.attrname} : {
                 required : icon + "请输入${column.comments}"
             },
-        #end
-    #end
+#end
+#end
         }
     })
 }
