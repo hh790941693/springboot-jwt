@@ -27,6 +27,7 @@ public class SesstionTimeoutFilter implements Filter {
             "/canvas/",
             "/zhddWebSocket/",
             "/game/",
+            "/upload/app",
             "/i18n"));
 
     // 忽略的URL后缀列表
