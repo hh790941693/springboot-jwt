@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.pjb.springbootjwt.zhddkk.domain.WsScheduledCronDO;
-import com.pjb.springbootjwt.zhddkk.service.WsScheduledCronService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

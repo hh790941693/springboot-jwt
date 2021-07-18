@@ -16,8 +16,6 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
-import com.pjb.springbootjwt.zhddkk.domain.WsScheduledCronDO;
-import com.pjb.springbootjwt.zhddkk.service.WsScheduledCronService;
 import com.pjb.springbootjwt.zhddkk.schedule.ScheduledOfTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
