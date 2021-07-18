@@ -37,7 +37,7 @@ INSERT INTO `sp_favorite` (`id`, `user_id`, `subject_id`, `subject_type`, `statu
 	(2, 23, 'mer_02c3e96c2dc546869b1744910239c0f4', 2, 2, '2021-06-11 20:36:34', '2021-06-27 13:55:18'),
 	(3, 23, 'mer_ae7f37e85816499bbb1aa4951bddef58', 2, 1, '2021-06-11 21:28:54', '2021-06-13 16:54:46'),
 	(4, 23, 'gd_a9d6933261b9466c8964d5a463ec1175', 1, 1, '2021-06-11 21:29:29', '2021-06-13 15:31:05'),
-	(5, 23, 'gd_b8046322522c41bf8bcbe296e2c7c1da', 1, 1, '2021-06-11 21:36:14', '2021-06-11 21:36:19'),
+	(5, 23, 'gd_b8046322522c41bf8bcbe296e2c7c1da', 1, 2, '2021-06-11 21:36:14', '2021-07-17 08:47:58'),
 	(6, 23, 'gd_092e6fc1c6b942429da608a76b19006a', 1, 2, '2021-06-13 15:31:12', '2021-06-17 21:58:03'),
 	(7, 23, 'gd_e34aecce0a5946dabfa907f4a6a335c8', 1, 1, '2021-06-13 15:31:15', '2021-06-13 15:31:15'),
 	(8, 23, 'gd_2cbdfb93bfd940b5a4ac20f8761fd12b', 1, 1, '2021-06-13 15:31:25', '2021-06-13 15:31:25'),
@@ -82,20 +82,21 @@ CREATE TABLE IF NOT EXISTS `sp_goods` (
   `goods_id` varchar(100) NOT NULL COMMENT '商品id',
   `name` varchar(50) NOT NULL COMMENT '商品名称',
   `brief` varchar(200) NOT NULL COMMENT '商品简介',
+  `description` text COMMENT '商品H5描述',
   `place` varchar(20) NOT NULL COMMENT '商品生产地',
   `goods_type_id` varchar(100) NOT NULL COMMENT '商品类型id',
   `merchant_id` varchar(100) NOT NULL COMMENT '归属店铺id',
   `stock_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '库存数',
   `sale_number` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '销量',
   `original_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '原价',
-  `sale_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '售价',
+  `sale_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '售价',
   `unit_name` varchar(10) NOT NULL COMMENT '商品单位',
   `back_image` varchar(200) NOT NULL COMMENT '封面图片',
   `image1` varchar(200) NOT NULL COMMENT '商品图片1',
   `image2` varchar(200) NOT NULL COMMENT '商品图片2',
   `image3` varchar(200) NOT NULL COMMENT '商品图片3',
   `image4` varchar(200) NOT NULL COMMENT '商品图片4',
-  `status` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '状态 1:已上架 2:已下架',
+  `status` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '状态 0:已删除 1:已上架 2:已下架',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
@@ -104,26 +105,26 @@ CREATE TABLE IF NOT EXISTS `sp_goods` (
 
 -- Dumping data for table zhdd.sp_goods: ~19 rows (approximately)
 /*!40000 ALTER TABLE `sp_goods` DISABLE KEYS */;
-INSERT INTO `sp_goods` (`id`, `goods_id`, `name`, `brief`, `place`, `goods_type_id`, `merchant_id`, `stock_num`, `sale_number`, `original_price`, `sale_price`, `unit_name`, `back_image`, `image1`, `image2`, `image3`, `image4`, `status`, `create_time`, `update_time`) VALUES
-	(1, 'gd_b8046322522c41bf8bcbe296e2c7c1da', '红富士苹果', '非常好吃的苹果', '浙江', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 194, 6, 10.50, 6.00, '斤', 'http://127.0.0.1:8101/goods/7fe2cecb-0308-4d87-ba15-319c9fb72498.jpg', 'http://127.0.0.1:8101/goods/318e4fb6-3a2a-4ff1-a41c-a4397c416a32.jpg', 'http://127.0.0.1:8101/goods/4cc96beb-a768-4430-81d0-d8611a344422.jpg', 'http://127.0.0.1:8101/goods/4981c9fe-241a-4df2-ad24-6400435e03d1.jpg', 'http://127.0.0.1:8101/goods/84000fc2-1e47-4758-b491-d59ff3ef9273.jpg', 1, '2021-06-10 21:01:45', '2021-07-04 15:37:01'),
-	(2, 'gd_092e6fc1c6b942429da608a76b19006a', '香蕉', '很嫩很好吃', '云南', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 95, 5, 8.01, 5.25, '斤', 'http://127.0.0.1:8101/goods/31eb9533-7c14-4134-a86b-5aa0f76d1781.jpg', 'http://127.0.0.1:8101/goods/c3cc2b49-4d58-46c3-bcf0-f3aa84721d5b.jpg', 'http://127.0.0.1:8101/goods/34b0bfd0-39a9-491f-b250-bd7f3f42e598.jpg', 'http://127.0.0.1:8101/goods/cca18580-cc79-45c6-83f2-8ebdfb6b059c.jpg', 'http://127.0.0.1:8101/goods/528837ec-8329-4674-ae82-e32d006c36c0.jpg', 1, '2021-06-10 21:04:12', '2021-07-04 15:44:35'),
-	(3, 'gd_865278eda76e4973ba538a8e25dcaffe', '8424西瓜', '新疆产甜西瓜', '新疆', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 852, 4, 2.50, 2.00, '斤', 'http://127.0.0.1:8101/goods/23a32c2a-c2e9-4456-9c8d-f775d7c9ea51.jpg', 'http://127.0.0.1:8101/goods/b4811278-7557-4ae7-a222-a928423a6b89.jpg', 'http://127.0.0.1:8101/goods/39950454-0bc3-4eea-a0af-8e2d188805b9.jpg', 'http://127.0.0.1:8101/goods/acb3dac4-d7da-4390-a4a4-46962480ad8f.jpg', 'http://127.0.0.1:8101/goods/f4df93af-107f-498c-ae2f-29c037ef5748.jpg', 1, '2021-06-10 21:45:57', '2021-07-04 19:02:42'),
-	(4, 'gd_a9d6933261b9466c8964d5a463ec1175', '泰国空运榴莲', '泰国空运过来的榴莲', '泰国', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 119, 1, 89.00, 75.00, '斤', 'http://127.0.0.1:8101/goods/f795c425-110e-4d6b-abfd-f3dc4d492e2e.jpg', 'http://127.0.0.1:8101/goods/34c91aa0-17c1-4ac3-a0c4-2ed1c8121445.jpg', 'http://127.0.0.1:8101/goods/56c491a5-8c12-4f8c-a419-1a89b03b6d0d.jpg', 'http://127.0.0.1:8101/goods/66d0a737-ad1c-4422-9145-37c0135b63e7.jpg', 'http://127.0.0.1:8101/goods/8aca2ae4-7461-4eeb-b959-4f660b4b6a52.jpg', 1, '2021-06-10 21:49:04', '2021-06-10 21:49:04'),
-	(5, 'gd_e34aecce0a5946dabfa907f4a6a335c8', '火龙果', '非常甜的火龙果', '湖南', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 397, 13, 15.00, 8.00, '斤', 'http://127.0.0.1:8101/goods/fd7d0fc7-7aa4-4deb-8686-63774e8c65bd.jpg', 'http://127.0.0.1:8101/goods/db5d54be-0c59-405f-90ae-2a72f17de736.jpg', 'http://127.0.0.1:8101/goods/385eaba6-0107-4e32-8af7-4bb7cd07e5d7.jpg', 'http://127.0.0.1:8101/goods/9557ef2a-a70c-4aaa-94d4-63e585688904.jpg', 'http://127.0.0.1:8101/goods/aa5cc66e-fdae-41f8-8a33-53a07aabecb6.jpg', 1, '2021-06-10 21:52:28', '2021-07-04 17:33:06'),
-	(6, 'gd_2cbdfb93bfd940b5a4ac20f8761fd12b', '大鲍鱼', '大鲍鱼很好吃', '青岛', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 94, 6, 68.00, 57.00, '斤', 'http://127.0.0.1:8101/goods/b31ed3ce-835e-4c2e-b66f-d69f05d581db.jpg', 'http://127.0.0.1:8101/goods/a66b2a47-580b-4dd3-93dc-dc291d52e4fc.jpg', 'http://127.0.0.1:8101/goods/a465f4f6-39e4-41c1-8ca3-63711f308b1d.jpg', 'http://127.0.0.1:8101/goods/b35f4f32-ccf8-49de-a469-48cbc9437296.jpg', 'http://127.0.0.1:8101/goods/0c4d7987-9abf-48f6-9782-aebd24be1e12.jpg', 1, '2021-06-10 22:09:58', '2021-07-04 19:02:42'),
-	(7, 'gd_4eabab3c9a304d779aa1e570d8b44762', '深海大龙虾', '波士顿大龙虾', '波士顿', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 324, 0, 99.00, 87.00, '斤', 'http://127.0.0.1:8101/goods/1c354f5f-6410-4269-b326-a9e308acc0d5.jpg', 'http://127.0.0.1:8101/goods/46a018ad-f881-47c5-b0f4-45d43391daec.jpg', 'http://127.0.0.1:8101/goods/d5e378d3-ede8-4a88-a628-b30898660f3b.jpg', 'http://127.0.0.1:8101/goods/ec1b99b6-9066-4cda-b43c-36a14044dc0d.jpg', 'http://127.0.0.1:8101/goods/24f57881-eb53-4d0f-80bc-850b5915163b.jpg', 1, '2021-06-10 22:12:01', '2021-06-10 22:12:01'),
-	(8, 'gd_039a2b8074c34ad8912fe20683225a90', '帝王蟹', '很大的帝王蟹', '阿根廷', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 302, 1, 110.00, 102.00, '斤', 'http://127.0.0.1:8101/goods/aae1d812-9ca1-4c99-8320-5071def6ebc9.jpg', 'http://127.0.0.1:8101/goods/f9baa7dd-d46c-485c-a89b-66af353cb11e.jpg', 'http://127.0.0.1:8101/goods/556aeae2-cbaf-4179-a57d-f5f599228151.jpg', 'http://127.0.0.1:8101/goods/250d4172-0683-4e9a-9543-b8b6e4f5b9c8.jpg', 'http://127.0.0.1:8101/goods/3e92931e-f4e8-4728-8991-b7924eb60411.jpg', 1, '2021-06-10 22:12:55', '2021-06-10 22:12:55'),
-	(9, 'gd_233cc264f0534688ae48181fa1c67bd3', '海参', '软软的海参', '海南', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 131, 9, 65.00, 60.00, '斤', 'http://127.0.0.1:8101/goods/ecca221e-09d7-41e4-a373-5ce865ed5303.jpg', 'http://127.0.0.1:8101/goods/c33c75f9-9e46-4d8d-8633-153a71c9e3e5.jpg', 'http://127.0.0.1:8101/goods/3f7c186c-169b-453b-9b53-0bbf733df904.jpg', 'http://127.0.0.1:8101/goods/15a2473e-e460-41f8-854b-ed4099313998.jpg', 'http://127.0.0.1:8101/goods/96b29c28-eb2a-4195-9cdc-267b2dccfa66.jpg', 1, '2021-06-10 22:13:46', '2021-07-04 19:02:42'),
-	(10, 'gd_57b38380fcc94571b2f29931f03acb99', '扇贝', '蒜泥扇贝', '台湾', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 431, 1, 40.00, 27.00, '斤', 'http://127.0.0.1:8101/goods/b9bbc4f4-fa68-4ecd-984b-f86adf494611.jpg', 'http://127.0.0.1:8101/goods/121ec583-c3d2-406c-9c38-82440b158ec7.jpg', 'http://127.0.0.1:8101/goods/81e660eb-ef0f-496d-be75-d08c01addd8c.jpg', 'http://127.0.0.1:8101/goods/0ef573c9-6bb8-43a2-9b59-5f05e7ddb5cb.jpg', 'http://127.0.0.1:8101/goods/9073f2e6-4e7d-413c-8ab7-674e8182918c.jpg', 1, '2021-06-10 22:15:51', '2021-07-04 19:02:42'),
-	(11, 'gd_59342bceeb224bfeb5907cfb97309124', '桃子', '海南的桃子', '海口', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 491, 9, 10.00, 5.00, '斤', 'http://127.0.0.1:8101/goods/f395e3b0-06e3-482f-8211-4cf6e9d569b3.jpg', 'http://127.0.0.1:8101/goods/b8af7860-f515-4ca3-b480-b70a0fbc5b1a.jpg', 'http://127.0.0.1:8101/goods/3b24b752-02bc-4438-8774-038edfa5b71b.jpg', 'http://127.0.0.1:8101/goods/0fff663c-d3b2-4932-8875-edd4a17f9d63.jpg', 'http://127.0.0.1:8101/goods/01685fb8-5f1c-4fab-8075-47d2d295757a.jpg', 1, '2021-06-27 12:04:17', '2021-07-04 19:02:42'),
-	(12, 'gd_ebbc6d586912492b8ad11fef0194d8c6', '橘子', '四川的橘子', '四川', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 96, 4, 15.00, 8.00, '斤', 'http://127.0.0.1:8101/goods/751cb36a-0fb8-4796-be97-e94d72b06db4.jpg', 'http://127.0.0.1:8101/goods/a7ce1517-90e2-4dea-bf39-94cfcec5ff81.jpg', 'http://127.0.0.1:8101/goods/51cede01-e673-4289-956a-96ab3248fd5d.jpg', 'http://127.0.0.1:8101/goods/0913d04b-3f44-4261-aad7-86f689ff3aed.jpg', 'http://127.0.0.1:8101/goods/852c19a4-62e3-4b4b-b153-49702584df68.jpg', 1, '2021-06-27 12:05:01', '2021-06-27 12:05:01'),
-	(13, 'gd_eb6b692874d644e2a717494203036fa8', '华硕笔记本', '250G固态硬盘+2T机械硬盘', '台湾', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 0, 5, 5999.00, 4999.00, '台', 'http://127.0.0.1:8101/goods/8fb8a1be-b9f6-4248-9212-a3e211282e7e.jpg', 'http://127.0.0.1:8101/goods/1b8b0d68-6974-43b9-afa4-37f8f331af37.jpg', 'http://127.0.0.1:8101/goods/47db3042-a5cf-4c8f-a8b9-4c9c3a15f77f.jpg', 'http://127.0.0.1:8101/goods/5a6d4561-b2b7-4e56-b316-08168e463d01.jpg', 'http://127.0.0.1:8101/goods/4abd3b36-863b-45a3-8a2c-a7c6aa3b55e8.jpg', 1, '2021-06-27 18:38:10', '2021-07-03 14:39:39'),
-	(14, 'gd_670710e48c23486ab4f16d87538466b0', '美的冰箱', '美的冰箱，你值得拥有', '杭州', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 321, 4, 3999.00, 2998.00, '台', 'http://127.0.0.1:8101/goods/830943a3-0cbd-4ac7-9882-93edba89c636.jpg', 'http://127.0.0.1:8101/goods/9c029850-c04d-4c1e-a081-b783fff3bb3a.jpg', 'http://127.0.0.1:8101/goods/c9c3b445-e8a9-4683-8119-7fdffa036fb1.jpg', 'http://127.0.0.1:8101/goods/37787fcc-f007-4ace-bf77-2dc7ec20e970.jpg', 'http://127.0.0.1:8101/goods/44d4ad5f-0914-4b04-ba1d-b9285efc9be4.jpg', 1, '2021-06-27 18:40:28', '2021-07-04 19:02:42'),
-	(15, 'gd_fb208d124d3f4c369ff85340d3732508', '夏普电视', '75寸、2480*2100高清分辨率电视机', '日本', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 652, 0, 8999.00, 6999.00, '台', 'http://127.0.0.1:8101/goods/fc80acb0-834f-4e07-a093-5b6bdd87c30c.jpg', 'http://127.0.0.1:8101/goods/bc8e8982-6760-47c3-9962-dbe8add842c1.jpg', 'http://127.0.0.1:8101/goods/d73c63ee-d49e-4a76-b41f-1b516a6d7c40.jpg', 'http://127.0.0.1:8101/goods/f6579962-cd30-4133-8caf-b1ad8ce3fc75.jpg', 'http://127.0.0.1:8101/goods/2b7f2d4b-3157-407e-85cb-b39b769088f5.jpg', 1, '2021-06-27 18:41:54', '2021-06-27 18:56:24'),
-	(16, 'gd_f24701f40b704157879d499610de5c38', '坐地电风扇', '夏天的必备品', '湖南', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 999, 1, 299.00, 99.00, '台', 'http://127.0.0.1:8101/goods/5ca83872-2ebe-4f91-acd3-045b699ed8c7.jpg', 'http://127.0.0.1:8101/goods/916d02a1-2178-45b4-90b4-0cbd8eaf40b9.jpg', 'http://127.0.0.1:8101/goods/7acffccb-aff3-403c-8360-ac67384ddd57.jpg', 'http://127.0.0.1:8101/goods/133807ac-899b-46b3-a934-d351ce24b9ff.jpg', 'http://127.0.0.1:8101/goods/7f724254-ea16-4fb4-8c5b-3289a72d37c3.jpg', 1, '2021-06-27 18:42:53', '2021-07-04 19:02:42'),
-	(17, 'gd_8eee4411aeb342e0bea449ee33395bb2', '格力空调', '格力造', '浙江', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 448, 5, 3999.00, 2999.00, '台', 'http://127.0.0.1:8101/goods/92459271-c069-4a40-a8c7-e49bb2fa1d72.jpg', 'http://127.0.0.1:8101/goods/62672e82-3637-4ddb-8f33-c772a6a2faf9.jpg', 'http://127.0.0.1:8101/goods/b6d0b9ee-4268-453e-9b0a-5385183d2bbb.jpg', 'http://127.0.0.1:8101/goods/e07ba59f-f60a-4e24-b4cb-52de56a2b57a.jpg', 'http://127.0.0.1:8101/goods/37840a76-6fef-46e4-a1a3-7429a3602df4.jpg', 1, '2021-06-27 18:43:50', '2021-07-04 19:02:42'),
-	(18, 'gd_387601498d174738a2c2f2332e0ccdd8', '美的热水器', '用美的，幸福一生。', '宁波', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 359, 3, 2999.00, 1999.00, '台', 'http://127.0.0.1:8101/goods/cd284407-2867-4ca1-9fe5-28651aba69f7.jpg', 'http://127.0.0.1:8101/goods/daac65ff-df2a-4734-b8b9-38c895f31ac4.jpg', 'http://127.0.0.1:8101/goods/d7a1d83f-30c8-40cb-91c2-5fcda335aeac.jpg', 'http://127.0.0.1:8101/goods/42a1524f-66b3-4478-83cd-34349040d7ce.jpg', 'http://127.0.0.1:8101/goods/06ec420e-6070-44f6-be8b-64b236fd84f7.jpg', 1, '2021-06-27 18:44:57', '2021-07-04 19:02:42'),
-	(19, 'gd_5fda6d842779448abc18d6993d316564', '海尔洗衣机', '解放双手，悠闲人生。', '江苏', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 540, 2, 1999.00, 998.00, '台', 'http://127.0.0.1:8101/goods/2f91eb22-7be3-4cbe-8aa5-f69ee85f475b.jpg', 'http://127.0.0.1:8101/goods/6469bcba-a1ec-4c7d-ad5b-0dc9266ea187.jpg', 'http://127.0.0.1:8101/goods/08a556cf-5c4b-4174-b578-f3ea9b3be596.jpg', 'http://127.0.0.1:8101/goods/27edc25a-c521-4cee-9d69-be96a47d1af4.jpg', 'http://127.0.0.1:8101/goods/728b2459-8074-493d-9d90-60273e8947b1.jpg', 1, '2021-06-27 18:45:56', '2021-07-04 19:02:42');
+INSERT INTO `sp_goods` (`id`, `goods_id`, `name`, `brief`, `description`, `place`, `goods_type_id`, `merchant_id`, `stock_num`, `sale_number`, `original_price`, `sale_price`, `unit_name`, `back_image`, `image1`, `image2`, `image3`, `image4`, `status`, `create_time`, `update_time`) VALUES
+	(1, 'gd_b8046322522c41bf8bcbe296e2c7c1da', '红富士苹果', '非常好吃的苹果', '<p style="text-align: center;"><span data-fr-verified="true" style="font-size: 40px;">红富士苹果</span></p><p style="text-align: left;"><span data-fr-verified="true" style="font-size: 15px;">​&nbsp; &nbsp; 很甜很甜的苹果，产自日本富士山，天然的，无任何添加剂。</span><span data-fr-verified="true" style="font-size: 40px;"><br></span></p><p><img class="fr-fin" data-fr-image-preview="false" alt="Image title" src="http://127.0.0.1:8101/goodsDetail/cb8e714a-d34e-49f9-a083-4dbc9542d549.jpg" style="max-width: 100%;" width="595"></p><p style="text-align: left;"><span data-fr-verified="true" style="font-size: 15px;">&nbsp; &nbsp; 传说很久以前，在一个集市上，一位商人路边吃了一个苹果，遂喜欢上了这种味道。<br></span></p><p><img class="fr-fin" data-fr-image-preview="false" alt="Image title" src="http://127.0.0.1:8101/goodsDetail/60e2b9f0-f634-4553-ad3e-e368b5897790.jpg" style="max-width: 100%;"></p><p style="text-align: left;"><span data-fr-verified="true" style="font-size: 15px;"><br></span></p>', '浙江', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 188, 12, 10.50, 6.00, '斤', 'http://127.0.0.1:8101/goods/7fe2cecb-0308-4d87-ba15-319c9fb72498.jpg', 'http://127.0.0.1:8101/goods/318e4fb6-3a2a-4ff1-a41c-a4397c416a32.jpg', 'http://127.0.0.1:8101/goods/4cc96beb-a768-4430-81d0-d8611a344422.jpg', 'http://127.0.0.1:8101/goods/4981c9fe-241a-4df2-ad24-6400435e03d1.jpg', 'http://127.0.0.1:8101/goods/84000fc2-1e47-4758-b491-d59ff3ef9273.jpg', 1, '2021-06-10 21:01:45', '2021-07-09 22:31:57'),
+	(2, 'gd_092e6fc1c6b942429da608a76b19006a', '香蕉', '很嫩很好吃', NULL, '云南', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 92, 8, 8.01, 5.25, '斤', 'http://127.0.0.1:8101/goods/31eb9533-7c14-4134-a86b-5aa0f76d1781.jpg', 'http://127.0.0.1:8101/goods/c3cc2b49-4d58-46c3-bcf0-f3aa84721d5b.jpg', 'http://127.0.0.1:8101/goods/34b0bfd0-39a9-491f-b250-bd7f3f42e598.jpg', 'http://127.0.0.1:8101/goods/cca18580-cc79-45c6-83f2-8ebdfb6b059c.jpg', 'http://127.0.0.1:8101/goods/528837ec-8329-4674-ae82-e32d006c36c0.jpg', 1, '2021-06-10 21:04:12', '2021-07-11 09:24:13'),
+	(3, 'gd_865278eda76e4973ba538a8e25dcaffe', '8424西瓜', '新疆产甜西瓜', NULL, '新疆', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 843, 13, 2.50, 2.00, '斤', 'http://127.0.0.1:8101/goods/23a32c2a-c2e9-4456-9c8d-f775d7c9ea51.jpg', 'http://127.0.0.1:8101/goods/b4811278-7557-4ae7-a222-a928423a6b89.jpg', 'http://127.0.0.1:8101/goods/39950454-0bc3-4eea-a0af-8e2d188805b9.jpg', 'http://127.0.0.1:8101/goods/acb3dac4-d7da-4390-a4a4-46962480ad8f.jpg', 'http://127.0.0.1:8101/goods/f4df93af-107f-498c-ae2f-29c037ef5748.jpg', 1, '2021-06-10 21:45:57', '2021-07-16 21:09:26'),
+	(4, 'gd_a9d6933261b9466c8964d5a463ec1175', '泰国空运榴莲', '泰国空运过来的榴莲', NULL, '泰国', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 119, 1, 89.00, 75.00, '斤', 'http://127.0.0.1:8101/goods/f795c425-110e-4d6b-abfd-f3dc4d492e2e.jpg', 'http://127.0.0.1:8101/goods/34c91aa0-17c1-4ac3-a0c4-2ed1c8121445.jpg', 'http://127.0.0.1:8101/goods/56c491a5-8c12-4f8c-a419-1a89b03b6d0d.jpg', 'http://127.0.0.1:8101/goods/66d0a737-ad1c-4422-9145-37c0135b63e7.jpg', 'http://127.0.0.1:8101/goods/8aca2ae4-7461-4eeb-b959-4f660b4b6a52.jpg', 1, '2021-06-10 21:49:04', '2021-06-10 21:49:04'),
+	(5, 'gd_e34aecce0a5946dabfa907f4a6a335c8', '火龙果', '非常甜的火龙果', NULL, '湖南', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 397, 13, 15.00, 8.00, '斤', 'http://127.0.0.1:8101/goods/fd7d0fc7-7aa4-4deb-8686-63774e8c65bd.jpg', 'http://127.0.0.1:8101/goods/db5d54be-0c59-405f-90ae-2a72f17de736.jpg', 'http://127.0.0.1:8101/goods/385eaba6-0107-4e32-8af7-4bb7cd07e5d7.jpg', 'http://127.0.0.1:8101/goods/9557ef2a-a70c-4aaa-94d4-63e585688904.jpg', 'http://127.0.0.1:8101/goods/aa5cc66e-fdae-41f8-8a33-53a07aabecb6.jpg', 1, '2021-06-10 21:52:28', '2021-07-04 17:33:06'),
+	(6, 'gd_2cbdfb93bfd940b5a4ac20f8761fd12b', '大鲍鱼', '大鲍鱼很好吃', NULL, '青岛', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 94, 6, 68.00, 57.00, '斤', 'http://127.0.0.1:8101/goods/b31ed3ce-835e-4c2e-b66f-d69f05d581db.jpg', 'http://127.0.0.1:8101/goods/a66b2a47-580b-4dd3-93dc-dc291d52e4fc.jpg', 'http://127.0.0.1:8101/goods/a465f4f6-39e4-41c1-8ca3-63711f308b1d.jpg', 'http://127.0.0.1:8101/goods/b35f4f32-ccf8-49de-a469-48cbc9437296.jpg', 'http://127.0.0.1:8101/goods/0c4d7987-9abf-48f6-9782-aebd24be1e12.jpg', 1, '2021-06-10 22:09:58', '2021-07-04 19:02:42'),
+	(7, 'gd_4eabab3c9a304d779aa1e570d8b44762', '深海大龙虾', '波士顿大龙虾', NULL, '波士顿', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 320, 4, 99.00, 87.00, '斤', 'http://127.0.0.1:8101/goods/1c354f5f-6410-4269-b326-a9e308acc0d5.jpg', 'http://127.0.0.1:8101/goods/46a018ad-f881-47c5-b0f4-45d43391daec.jpg', 'http://127.0.0.1:8101/goods/d5e378d3-ede8-4a88-a628-b30898660f3b.jpg', 'http://127.0.0.1:8101/goods/ec1b99b6-9066-4cda-b43c-36a14044dc0d.jpg', 'http://127.0.0.1:8101/goods/24f57881-eb53-4d0f-80bc-850b5915163b.jpg', 1, '2021-06-10 22:12:01', '2021-06-10 22:12:01'),
+	(8, 'gd_039a2b8074c34ad8912fe20683225a90', '帝王蟹', '很大的帝王蟹', NULL, '阿根廷', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 299, 4, 110.00, 102.00, '斤', 'http://127.0.0.1:8101/goods/aae1d812-9ca1-4c99-8320-5071def6ebc9.jpg', 'http://127.0.0.1:8101/goods/f9baa7dd-d46c-485c-a89b-66af353cb11e.jpg', 'http://127.0.0.1:8101/goods/556aeae2-cbaf-4179-a57d-f5f599228151.jpg', 'http://127.0.0.1:8101/goods/250d4172-0683-4e9a-9543-b8b6e4f5b9c8.jpg', 'http://127.0.0.1:8101/goods/3e92931e-f4e8-4728-8991-b7924eb60411.jpg', 1, '2021-06-10 22:12:55', '2021-07-06 21:08:14'),
+	(9, 'gd_233cc264f0534688ae48181fa1c67bd3', '海参', '软软的海参', NULL, '海南', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 131, 9, 65.00, 60.00, '斤', 'http://127.0.0.1:8101/goods/ecca221e-09d7-41e4-a373-5ce865ed5303.jpg', 'http://127.0.0.1:8101/goods/c33c75f9-9e46-4d8d-8633-153a71c9e3e5.jpg', 'http://127.0.0.1:8101/goods/3f7c186c-169b-453b-9b53-0bbf733df904.jpg', 'http://127.0.0.1:8101/goods/15a2473e-e460-41f8-854b-ed4099313998.jpg', 'http://127.0.0.1:8101/goods/96b29c28-eb2a-4195-9cdc-267b2dccfa66.jpg', 1, '2021-06-10 22:13:46', '2021-07-04 19:02:42'),
+	(10, 'gd_57b38380fcc94571b2f29931f03acb99', '扇贝', '蒜泥扇贝', NULL, '台湾', 'gt_c7364f84714749149e139cbe162e8d29', 'mer_ae7f37e85816499bbb1aa4951bddef58', 431, 1, 40.00, 27.00, '斤', 'http://127.0.0.1:8101/goods/b9bbc4f4-fa68-4ecd-984b-f86adf494611.jpg', 'http://127.0.0.1:8101/goods/121ec583-c3d2-406c-9c38-82440b158ec7.jpg', 'http://127.0.0.1:8101/goods/81e660eb-ef0f-496d-be75-d08c01addd8c.jpg', 'http://127.0.0.1:8101/goods/0ef573c9-6bb8-43a2-9b59-5f05e7ddb5cb.jpg', 'http://127.0.0.1:8101/goods/9073f2e6-4e7d-413c-8ab7-674e8182918c.jpg', 1, '2021-06-10 22:15:51', '2021-07-04 19:02:42'),
+	(11, 'gd_59342bceeb224bfeb5907cfb97309124', '桃子', '海南的桃子', NULL, '海口', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 491, 9, 10.00, 5.00, '斤', 'http://127.0.0.1:8101/goods/f395e3b0-06e3-482f-8211-4cf6e9d569b3.jpg', 'http://127.0.0.1:8101/goods/b8af7860-f515-4ca3-b480-b70a0fbc5b1a.jpg', 'http://127.0.0.1:8101/goods/3b24b752-02bc-4438-8774-038edfa5b71b.jpg', 'http://127.0.0.1:8101/goods/0fff663c-d3b2-4932-8875-edd4a17f9d63.jpg', 'http://127.0.0.1:8101/goods/01685fb8-5f1c-4fab-8075-47d2d295757a.jpg', 1, '2021-06-27 12:04:17', '2021-07-04 19:02:42'),
+	(12, 'gd_ebbc6d586912492b8ad11fef0194d8c6', '橘子', '四川的橘子', NULL, '四川', 'gt_60bd03d5c09743ab82174315d125883b', 'mer_02c3e96c2dc546869b1744910239c0f4', 93, 7, 15.00, 8.00, '斤', 'http://127.0.0.1:8101/goods/751cb36a-0fb8-4796-be97-e94d72b06db4.jpg', 'http://127.0.0.1:8101/goods/a7ce1517-90e2-4dea-bf39-94cfcec5ff81.jpg', 'http://127.0.0.1:8101/goods/51cede01-e673-4289-956a-96ab3248fd5d.jpg', 'http://127.0.0.1:8101/goods/0913d04b-3f44-4261-aad7-86f689ff3aed.jpg', 'http://127.0.0.1:8101/goods/852c19a4-62e3-4b4b-b153-49702584df68.jpg', 1, '2021-06-27 12:05:01', '2021-07-05 21:59:23'),
+	(13, 'gd_eb6b692874d644e2a717494203036fa8', '华硕笔记本', '250G固态硬盘+2T机械硬盘', NULL, '台湾', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 0, 5, 5999.00, 4999.00, '台', 'http://127.0.0.1:8101/goods/8fb8a1be-b9f6-4248-9212-a3e211282e7e.jpg', 'http://127.0.0.1:8101/goods/1b8b0d68-6974-43b9-afa4-37f8f331af37.jpg', 'http://127.0.0.1:8101/goods/47db3042-a5cf-4c8f-a8b9-4c9c3a15f77f.jpg', 'http://127.0.0.1:8101/goods/5a6d4561-b2b7-4e56-b316-08168e463d01.jpg', 'http://127.0.0.1:8101/goods/4abd3b36-863b-45a3-8a2c-a7c6aa3b55e8.jpg', 1, '2021-06-27 18:38:10', '2021-07-03 14:39:39'),
+	(14, 'gd_670710e48c23486ab4f16d87538466b0', '美的冰箱', '美的冰箱，你值得拥有', NULL, '杭州', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 321, 4, 3999.00, 2998.00, '台', 'http://127.0.0.1:8101/goods/830943a3-0cbd-4ac7-9882-93edba89c636.jpg', 'http://127.0.0.1:8101/goods/9c029850-c04d-4c1e-a081-b783fff3bb3a.jpg', 'http://127.0.0.1:8101/goods/c9c3b445-e8a9-4683-8119-7fdffa036fb1.jpg', 'http://127.0.0.1:8101/goods/37787fcc-f007-4ace-bf77-2dc7ec20e970.jpg', 'http://127.0.0.1:8101/goods/44d4ad5f-0914-4b04-ba1d-b9285efc9be4.jpg', 1, '2021-06-27 18:40:28', '2021-07-04 19:02:42'),
+	(15, 'gd_fb208d124d3f4c369ff85340d3732508', '夏普电视', '75寸、2480*2100高清分辨率电视机', NULL, '日本', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 652, 0, 8999.00, 6999.00, '台', 'http://127.0.0.1:8101/goods/fc80acb0-834f-4e07-a093-5b6bdd87c30c.jpg', 'http://127.0.0.1:8101/goods/bc8e8982-6760-47c3-9962-dbe8add842c1.jpg', 'http://127.0.0.1:8101/goods/d73c63ee-d49e-4a76-b41f-1b516a6d7c40.jpg', 'http://127.0.0.1:8101/goods/f6579962-cd30-4133-8caf-b1ad8ce3fc75.jpg', 'http://127.0.0.1:8101/goods/2b7f2d4b-3157-407e-85cb-b39b769088f5.jpg', 1, '2021-06-27 18:41:54', '2021-06-27 18:56:24'),
+	(16, 'gd_f24701f40b704157879d499610de5c38', '坐地电风扇', '夏天的必备品', NULL, '湖南', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 997, 3, 299.00, 99.00, '台', 'http://127.0.0.1:8101/goods/5ca83872-2ebe-4f91-acd3-045b699ed8c7.jpg', 'http://127.0.0.1:8101/goods/916d02a1-2178-45b4-90b4-0cbd8eaf40b9.jpg', 'http://127.0.0.1:8101/goods/7acffccb-aff3-403c-8360-ac67384ddd57.jpg', 'http://127.0.0.1:8101/goods/133807ac-899b-46b3-a934-d351ce24b9ff.jpg', 'http://127.0.0.1:8101/goods/7f724254-ea16-4fb4-8c5b-3289a72d37c3.jpg', 1, '2021-06-27 18:42:53', '2021-07-04 19:02:42'),
+	(17, 'gd_8eee4411aeb342e0bea449ee33395bb2', '格力空调', '格力造', NULL, '浙江', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 445, 8, 3999.00, 2999.00, '台', 'http://127.0.0.1:8101/goods/92459271-c069-4a40-a8c7-e49bb2fa1d72.jpg', 'http://127.0.0.1:8101/goods/62672e82-3637-4ddb-8f33-c772a6a2faf9.jpg', 'http://127.0.0.1:8101/goods/b6d0b9ee-4268-453e-9b0a-5385183d2bbb.jpg', 'http://127.0.0.1:8101/goods/e07ba59f-f60a-4e24-b4cb-52de56a2b57a.jpg', 'http://127.0.0.1:8101/goods/37840a76-6fef-46e4-a1a3-7429a3602df4.jpg', 1, '2021-06-27 18:43:50', '2021-07-05 21:59:23'),
+	(18, 'gd_387601498d174738a2c2f2332e0ccdd8', '美的热水器', '用美的，幸福一生。', NULL, '宁波', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 359, 3, 2999.00, 1999.00, '台', 'http://127.0.0.1:8101/goods/cd284407-2867-4ca1-9fe5-28651aba69f7.jpg', 'http://127.0.0.1:8101/goods/daac65ff-df2a-4734-b8b9-38c895f31ac4.jpg', 'http://127.0.0.1:8101/goods/d7a1d83f-30c8-40cb-91c2-5fcda335aeac.jpg', 'http://127.0.0.1:8101/goods/42a1524f-66b3-4478-83cd-34349040d7ce.jpg', 'http://127.0.0.1:8101/goods/06ec420e-6070-44f6-be8b-64b236fd84f7.jpg', 1, '2021-06-27 18:44:57', '2021-07-04 19:02:42'),
+	(19, 'gd_5fda6d842779448abc18d6993d316564', '海尔洗衣机', '解放双手，悠闲人生。', NULL, '江苏', 'gt_6d519bcb156946d48dd35ce130d67ecb', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 540, 2, 1999.00, 998.00, '台', 'http://127.0.0.1:8101/goods/2f91eb22-7be3-4cbe-8aa5-f69ee85f475b.jpg', 'http://127.0.0.1:8101/goods/6469bcba-a1ec-4c7d-ad5b-0dc9266ea187.jpg', 'http://127.0.0.1:8101/goods/08a556cf-5c4b-4174-b578-f3ea9b3be596.jpg', 'http://127.0.0.1:8101/goods/27edc25a-c521-4cee-9d69-be96a47d1af4.jpg', 'http://127.0.0.1:8101/goods/728b2459-8074-493d-9d90-60273e8947b1.jpg', 1, '2021-06-27 18:45:56', '2021-07-04 19:02:42');
 /*!40000 ALTER TABLE `sp_goods` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.sp_goods_type
@@ -232,10 +233,33 @@ CREATE TABLE IF NOT EXISTS `sp_order` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sp_order_unique_index` (`order_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='订单表';
 
--- Dumping data for table zhdd.sp_order: ~0 rows (approximately)
+-- Dumping data for table zhdd.sp_order: ~22 rows (approximately)
 /*!40000 ALTER TABLE `sp_order` DISABLE KEYS */;
+INSERT INTO `sp_order` (`id`, `order_no`, `parent_order_no`, `merchant_id`, `total_price`, `pay_price`, `order_user_id`, `pay_user_id`, `pay_status`, `logistics_status`, `cancel_status`, `pay_way`, `status`, `order_time`, `pay_time`, `cancel_time`, `deliver_time`, `confirm_time`, `create_time`, `update_time`) VALUES
+	(1, 'porder_5ce6685b214544f4889285758037011e', NULL, NULL, 396.00, 348.00, 23, 23, 2, 3, 5, 1, 3, '2021-07-05 21:58:37', '2021-07-05 21:58:39', NULL, NULL, NULL, '2021-07-05 21:58:37', '2021-07-05 21:58:39'),
+	(2, 'sorder_e95c84bf47e942b19b99c1fb65774b46', 'porder_5ce6685b214544f4889285758037011e', 'mer_ae7f37e85816499bbb1aa4951bddef58', 396.00, 348.00, 23, 23, 2, 3, 5, 1, 3, '2021-07-05 21:58:38', '2021-07-05 21:58:39', NULL, NULL, NULL, '2021-07-05 21:58:38', '2021-07-05 21:58:39'),
+	(3, 'porder_4ec4aac580bb4cfb9f86401fac5876a9', NULL, NULL, 12283.00, 9237.00, 23, 23, 2, 3, 5, 1, 3, '2021-07-05 21:59:23', '2021-07-06 22:05:11', NULL, NULL, NULL, '2021-07-05 21:59:23', '2021-07-06 22:05:11'),
+	(4, 'sorder_e252a1d8f5f4484fab6762addf098e35', 'porder_4ec4aac580bb4cfb9f86401fac5876a9', 'mer_02c3e96c2dc546869b1744910239c0f4', 66.00, 36.00, 23, 23, 2, 3, 5, 1, 9, '2021-07-05 21:59:23', '2021-07-06 22:05:11', NULL, '2021-07-06 22:05:24', '2021-07-06 22:08:19', '2021-07-05 21:59:23', '2021-07-06 22:05:11'),
+	(5, 'sorder_26996eb68dd34d378e4bd413b79e8d12', 'porder_4ec4aac580bb4cfb9f86401fac5876a9', 'mer_ae7f37e85816499bbb1aa4951bddef58', 220.00, 204.00, 23, 23, 2, 3, 5, 1, 3, '2021-07-05 21:59:23', '2021-07-06 22:05:11', NULL, NULL, NULL, '2021-07-05 21:59:23', '2021-07-06 22:05:11'),
+	(6, 'sorder_2d679d0e69d24fcbbe3bc6eedda4f3b9', 'porder_4ec4aac580bb4cfb9f86401fac5876a9', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 11997.00, 8997.00, 23, 23, 2, 3, 5, 1, 3, '2021-07-05 21:59:23', '2021-07-06 22:05:11', NULL, NULL, NULL, '2021-07-05 21:59:23', '2021-07-06 22:05:11'),
+	(7, 'p236080-4427-1245348053', NULL, NULL, 110.00, 102.00, 23, NULL, 1, 3, 5, 1, 1, '2021-07-06 21:08:14', NULL, NULL, NULL, NULL, '2021-07-06 21:08:14', '2021-07-06 21:08:14'),
+	(8, 's232429-4438-656513996', 'p236080-4427-1245348053', 'mer_ae7f37e85816499bbb1aa4951bddef58', 110.00, 102.00, 23, NULL, 1, 3, 5, 1, 1, '2021-07-06 21:08:14', NULL, NULL, NULL, NULL, '2021-07-06 21:08:14', '2021-07-06 21:08:14'),
+	(9, 'p236463-0128-1722794746', NULL, NULL, 26.52, 16.50, 23, 23, 2, 3, 5, 4, 3, '2021-07-06 22:08:40', '2021-07-06 22:09:03', NULL, NULL, NULL, '2021-07-06 22:08:40', '2021-07-06 22:09:03'),
+	(10, 's232451-0136-524849420', 'p236463-0128-1722794746', 'mer_02c3e96c2dc546869b1744910239c0f4', 26.52, 16.50, 23, 23, 2, 3, 5, 4, 4, '2021-07-06 22:08:40', '2021-07-06 22:09:03', NULL, '2021-07-06 22:09:15', NULL, '2021-07-06 22:08:40', '2021-07-06 22:09:03'),
+	(11, 'p232750-3507-1133276858', NULL, NULL, 598.00, 198.00, 23, 23, 2, 3, 5, 1, 3, '2021-07-07 21:31:54', '2021-07-07 21:32:51', NULL, NULL, NULL, '2021-07-07 21:31:54', '2021-07-07 21:32:51'),
+	(12, 's236879-3516-1197864447', 'p232750-3507-1133276858', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 598.00, 198.00, 23, 23, 2, 3, 5, 1, 3, '2021-07-07 21:31:54', '2021-07-07 21:32:51', NULL, NULL, NULL, '2021-07-07 21:31:54', '2021-07-07 21:32:51'),
+	(13, 'p13113-2599-2035919982', NULL, NULL, 8.01, 5.25, 1, NULL, 1, 3, 5, 1, 1, '2021-07-11 09:24:13', NULL, NULL, NULL, NULL, '2021-07-11 09:24:13', '2021-07-11 09:24:13'),
+	(14, 's15067-2614-201684916', 'p13113-2599-2035919982', 'mer_02c3e96c2dc546869b1744910239c0f4', 8.01, 5.25, 1, NULL, 1, 3, 5, 1, 1, '2021-07-11 09:24:13', NULL, NULL, NULL, NULL, '2021-07-11 09:24:13', '2021-07-11 09:24:13'),
+	(15, 'p235004-4880-1207129654', NULL, NULL, 8999.00, 6999.00, 23, NULL, 1, 3, 6, 1, 6, '2021-07-11 15:13:05', NULL, '2021-07-11 15:13:17', NULL, NULL, '2021-07-11 15:13:05', '2021-07-11 15:13:17'),
+	(16, 's237362-4999-1425455297', 'p235004-4880-1207129654', 'mer_b231ea39d10149b38663d0dc43d5f0c7', 8999.00, 6999.00, 23, NULL, 1, 3, 6, 1, 6, '2021-07-11 15:13:05', NULL, '2021-07-11 15:13:18', NULL, NULL, '2021-07-11 15:13:05', '2021-07-11 15:13:18'),
+	(17, 'p233736-9145-319961418', NULL, NULL, 10.00, 8.00, 23, NULL, 1, 3, 5, 1, 1, '2021-07-16 21:08:59', NULL, NULL, NULL, NULL, '2021-07-16 21:08:59', '2021-07-16 21:08:59'),
+	(18, 's231114-9206-17791264', 'p233736-9145-319961418', 'mer_02c3e96c2dc546869b1744910239c0f4', 10.00, 8.00, 23, NULL, 1, 3, 5, 1, 1, '2021-07-16 21:08:59', NULL, NULL, NULL, NULL, '2021-07-16 21:08:59', '2021-07-16 21:08:59'),
+	(19, 'p238774-6136-1713803761', NULL, NULL, 12.50, 10.00, 23, NULL, 1, 3, 5, 1, 1, '2021-07-16 21:09:26', NULL, NULL, NULL, NULL, '2021-07-16 21:09:26', '2021-07-16 21:09:26'),
+	(20, 's231707-6142-811182822', 'p238774-6136-1713803761', 'mer_02c3e96c2dc546869b1744910239c0f4', 12.50, 10.00, 23, NULL, 1, 3, 5, 1, 1, '2021-07-16 21:09:26', NULL, NULL, NULL, NULL, '2021-07-16 21:09:26', '2021-07-16 21:09:26'),
+	(21, 'p233471-5820-1220032365', NULL, NULL, 31.50, 18.00, 23, 23, 2, 3, 5, 1, 3, '2021-07-16 21:54:16', '2021-07-17 08:35:19', NULL, NULL, NULL, '2021-07-16 21:54:16', '2021-07-17 08:35:19'),
+	(22, 's230517-5828-1790242827', 'p233471-5820-1220032365', 'mer_02c3e96c2dc546869b1744910239c0f4', 31.50, 18.00, 23, 23, 2, 3, 5, 1, 9, '2021-07-16 21:54:16', '2021-07-17 08:35:19', NULL, '2021-07-17 08:35:32', '2021-07-17 08:35:42', '2021-07-16 21:54:16', '2021-07-17 08:35:19');
 /*!40000 ALTER TABLE `sp_order` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.sp_order_detail
@@ -251,10 +275,25 @@ CREATE TABLE IF NOT EXISTS `sp_order_detail` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单详情表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='订单详情表';
 
--- Dumping data for table zhdd.sp_order_detail: ~0 rows (approximately)
+-- Dumping data for table zhdd.sp_order_detail: ~14 rows (approximately)
 /*!40000 ALTER TABLE `sp_order_detail` DISABLE KEYS */;
+INSERT INTO `sp_order_detail` (`id`, `order_no`, `goods_id`, `goods_count`, `goods_original_price`, `goods_sale_price`, `merchant_id`, `create_time`, `update_time`) VALUES
+	(1, 'sorder_e95c84bf47e942b19b99c1fb65774b46', 'gd_4eabab3c9a304d779aa1e570d8b44762', 4, 99.00, 87.00, 'mer_ae7f37e85816499bbb1aa4951bddef58', '2021-07-05 21:58:38', '2021-07-05 21:58:38'),
+	(2, 'sorder_e252a1d8f5f4484fab6762addf098e35', 'gd_b8046322522c41bf8bcbe296e2c7c1da', 2, 10.50, 6.00, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-07-05 21:59:23', '2021-07-05 21:59:23'),
+	(3, 'sorder_e252a1d8f5f4484fab6762addf098e35', 'gd_ebbc6d586912492b8ad11fef0194d8c6', 3, 15.00, 8.00, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-07-05 21:59:23', '2021-07-05 21:59:23'),
+	(4, 'sorder_26996eb68dd34d378e4bd413b79e8d12', 'gd_039a2b8074c34ad8912fe20683225a90', 2, 110.00, 102.00, 'mer_ae7f37e85816499bbb1aa4951bddef58', '2021-07-05 21:59:23', '2021-07-05 21:59:23'),
+	(5, 'sorder_2d679d0e69d24fcbbe3bc6eedda4f3b9', 'gd_8eee4411aeb342e0bea449ee33395bb2', 3, 3999.00, 2999.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-07-05 21:59:23', '2021-07-05 21:59:23'),
+	(6, 's232429-4438-656513996', 'gd_039a2b8074c34ad8912fe20683225a90', 1, 110.00, 102.00, 'mer_ae7f37e85816499bbb1aa4951bddef58', '2021-07-06 21:08:14', '2021-07-06 21:08:14'),
+	(7, 's232451-0136-524849420', 'gd_b8046322522c41bf8bcbe296e2c7c1da', 1, 10.50, 6.00, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-07-06 22:08:40', '2021-07-06 22:08:40'),
+	(8, 's232451-0136-524849420', 'gd_092e6fc1c6b942429da608a76b19006a', 2, 8.01, 5.25, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-07-06 22:08:40', '2021-07-06 22:08:40'),
+	(9, 's236879-3516-1197864447', 'gd_f24701f40b704157879d499610de5c38', 2, 299.00, 99.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-07-07 21:31:54', '2021-07-07 21:31:54'),
+	(10, 's15067-2614-201684916', 'gd_092e6fc1c6b942429da608a76b19006a', 1, 8.01, 5.25, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-07-11 09:24:13', '2021-07-11 09:24:13'),
+	(11, 's237362-4999-1425455297', 'gd_fb208d124d3f4c369ff85340d3732508', 1, 8999.00, 6999.00, 'mer_b231ea39d10149b38663d0dc43d5f0c7', '2021-07-11 15:13:05', '2021-07-11 15:13:05'),
+	(12, 's231114-9206-17791264', 'gd_865278eda76e4973ba538a8e25dcaffe', 4, 2.50, 2.00, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-07-16 21:08:59', '2021-07-16 21:08:59'),
+	(13, 's231707-6142-811182822', 'gd_865278eda76e4973ba538a8e25dcaffe', 5, 2.50, 2.00, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-07-16 21:09:26', '2021-07-16 21:09:26'),
+	(14, 's230517-5828-1790242827', 'gd_b8046322522c41bf8bcbe296e2c7c1da', 3, 10.50, 6.00, 'mer_02c3e96c2dc546869b1744910239c0f4', '2021-07-16 21:54:16', '2021-07-16 21:54:16');
 /*!40000 ALTER TABLE `sp_order_detail` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.sp_shopping_cart
@@ -268,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `sp_shopping_cart` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table zhdd.sp_shopping_cart: ~0 rows (approximately)
 /*!40000 ALTER TABLE `sp_shopping_cart` DISABLE KEYS */;
@@ -333,7 +372,7 @@ CREATE TABLE IF NOT EXISTS `sys_menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
--- Dumping data for table zhdd.sys_menu: ~37 rows (approximately)
+-- Dumping data for table zhdd.sys_menu: ~40 rows (approximately)
 /*!40000 ALTER TABLE `sys_menu` DISABLE KEYS */;
 INSERT INTO `sys_menu` (`id`, `name`, `parent_id`, `i18n_key`, `url`, `icon`, `ext_column1`, `ext_column2`, `ext_column3`, `create_time`, `update_time`) VALUES
 	(1, '系统管理', 0, 'li.pmenu.sysmanage.label', '', 'icon-menu-folder-open', '', '', '', '2021-01-07 21:18:30', '2021-03-24 21:36:18'),
@@ -477,6 +516,28 @@ INSERT INTO `sys_role_menu` (`id`, `role_id`, `role_name`, `menu_id`, `menu_name
 	(295, 2, '普通用户', 45, '超市购物', '2021-06-10 07:35:56', '2021-06-10 07:35:56');
 /*!40000 ALTER TABLE `sys_role_menu` ENABLE KEYS */;
 
+-- Dumping structure for table zhdd.sys_task
+DROP TABLE IF EXISTS `sys_task`;
+CREATE TABLE IF NOT EXISTS `sys_task` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `job_name` varchar(255) DEFAULT NULL COMMENT '任务名',
+  `job_group` varchar(255) DEFAULT NULL COMMENT '任务分组',
+  `bean_class` varchar(255) DEFAULT NULL COMMENT '任务执行时调用哪个类的方法 包名+类名',
+  `cron_expression` varchar(255) DEFAULT NULL COMMENT 'cron表达式',
+  `method_name` varchar(255) DEFAULT NULL COMMENT '任务调用的方法名',
+  `parameters` varchar(1000) DEFAULT NULL COMMENT '方法参数(JSON串)',
+  `description` varchar(255) DEFAULT NULL COMMENT '任务描述',
+  `is_concurrent` varchar(255) DEFAULT NULL COMMENT '任务是否有状态',
+  `create_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_date` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `job_status` varchar(255) DEFAULT NULL COMMENT '任务状态',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- Dumping data for table zhdd.sys_task: 0 rows
+/*!40000 ALTER TABLE `sys_task` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sys_task` ENABLE KEYS */;
+
 -- Dumping structure for table zhdd.sys_user_role
 DROP TABLE IF EXISTS `sys_user_role`;
 CREATE TABLE IF NOT EXISTS `sys_user_role` (
@@ -552,7 +613,7 @@ CREATE TABLE IF NOT EXISTS `t_role_permission` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table zhdd.t_role_permission: ~0 rows (approximately)
+-- Dumping data for table zhdd.t_role_permission: ~1 rows (approximately)
 /*!40000 ALTER TABLE `t_role_permission` DISABLE KEYS */;
 INSERT INTO `t_role_permission` (`id`, `role_id`, `role_name`, `permission_id`, `permission_name`) VALUES
 	(1, 1, 'admin', 1, 'add');
@@ -689,7 +750,7 @@ CREATE TABLE IF NOT EXISTS `ws_circle_comment` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COMMENT='朋友圈评论表';
 
--- Dumping data for table zhdd.ws_circle_comment: ~13 rows (approximately)
+-- Dumping data for table zhdd.ws_circle_comment: ~17 rows (approximately)
 /*!40000 ALTER TABLE `ws_circle_comment` DISABLE KEYS */;
 INSERT INTO `ws_circle_comment` (`id`, `circle_id`, `user_id`, `user_name`, `comment`, `create_time`) VALUES
 	(1, 1, 25, 'vb', '为什么不舒服', '2019-01-04 21:20:28'),
@@ -722,7 +783,7 @@ CREATE TABLE IF NOT EXISTS `ws_common` (
   KEY `Index 1` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8 COMMENT='通用配置表';
 
--- Dumping data for table zhdd.ws_common: ~50 rows (approximately)
+-- Dumping data for table zhdd.ws_common: ~48 rows (approximately)
 /*!40000 ALTER TABLE `ws_common` DISABLE KEYS */;
 INSERT INTO `ws_common` (`id`, `type`, `name`, `orderby`, `remark`) VALUES
 	(1, 'zh', '操你妈', 2, '233'),
@@ -817,9 +878,9 @@ CREATE TABLE IF NOT EXISTS `ws_file` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0:无效 1:有效',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3136 DEFAULT CHARSET=utf8 COMMENT='文件表';
+) ENGINE=InnoDB AUTO_INCREMENT=3225 DEFAULT CHARSET=utf8 COMMENT='文件表';
 
--- Dumping data for table zhdd.ws_file: ~191 rows (approximately)
+-- Dumping data for table zhdd.ws_file: ~280 rows (approximately)
 /*!40000 ALTER TABLE `ws_file` DISABLE KEYS */;
 INSERT INTO `ws_file` (`id`, `user`, `folder`, `filename`, `disk_path`, `url`, `file_size`, `author`, `track_length`, `access_status`, `create_time`, `update_time`, `status`) VALUES
 	(517, 'aa', 'headImg', '1.jpg', 'D:\\\\temp\\\\headImg', 'http://127.0.0.1:8101/headImg\\1.jpg', 451216, '', '', 1, '2020-05-11 18:29:55', '2020-05-11 18:29:55', 1),
@@ -1012,7 +1073,96 @@ INSERT INTO `ws_file` (`id`, `user`, `folder`, `filename`, `disk_path`, `url`, `
 	(3132, 'dd', 'goods', 'xyj1.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/6469bcba-a1ec-4c7d-ad5b-0dc9266ea187.jpg', 38815, '', '00:00', 1, '2021-06-27 18:45:03', '2021-06-27 18:45:03', 1),
 	(3133, 'dd', 'goods', 'xyj2.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/08a556cf-5c4b-4174-b578-f3ea9b3be596.jpg', 19624, '', '00:00', 1, '2021-06-27 18:45:05', '2021-06-27 18:45:05', 1),
 	(3134, 'dd', 'goods', 'xyj3.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/27edc25a-c521-4cee-9d69-be96a47d1af4.jpg', 70255, '', '00:00', 1, '2021-06-27 18:45:07', '2021-06-27 18:45:07', 1),
-	(3135, 'dd', 'goods', 'xyj4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/728b2459-8074-493d-9d90-60273e8947b1.jpg', 241449, '', '00:00', 1, '2021-06-27 18:45:09', '2021-06-27 18:45:09', 1);
+	(3135, 'dd', 'goods', 'xyj4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/728b2459-8074-493d-9d90-60273e8947b1.jpg', 241449, '', '00:00', 1, '2021-06-27 18:45:09', '2021-06-27 18:45:09', 1),
+	(3136, 'aa', 'goodsDetail', 'pg1.jpg', 'D:\\\\temp\\\\goodsDetail', 'http://127.0.0.1:8101/goodsDetail/cb8e714a-d34e-49f9-a083-4dbc9542d549.jpg', 19475, '', '00:00', 1, '2021-07-09 22:29:52', '2021-07-09 22:29:52', 1),
+	(3137, 'aa', 'goodsDetail', 'pg3.jpg', 'D:\\\\temp\\\\goodsDetail', 'http://127.0.0.1:8101/goodsDetail/60e2b9f0-f634-4553-ad3e-e368b5897790.jpg', 31281, '', '00:00', 1, '2021-07-09 22:30:54', '2021-07-09 22:30:54', 1),
+	(3138, 'admin', 'music', '8Eight,Dynamic Duo - 울고 싶어 우는 사람이 있겠어.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/45e63909-6261-48f9-a84b-137661a08a9f.mp3', 8871591, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3139, 'admin', 'music', '201106281580701.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/7a2f81d5-fa8c-4b9c-be77-9d60e094f486.mp3', 4552628, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3140, 'admin', 'music', '8Eight - 심장이 없어.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/54aeccaa-e320-4f08-aa34-2627960ed1ca.mp3', 9149728, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3141, 'admin', 'music', 'As One - 헤어져.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/4738e555-fdea-48fb-aff7-7120b06353fd.mp3', 11318878, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3142, 'admin', 'music', 'Bada - 사랑했다고.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/b1a9a4b7-9cae-4397-8c35-f2646ab22061.mp3', 9027625, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3143, 'admin', 'music', '2NB--___.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/d625c2ea-7999-4557-a7e3-1a46068a2e5f.mp3', 5280926, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3144, 'admin', 'music', 'CNBLUE--你为我着迷.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/a57620ed-5e2b-4194-952a-ad84f4e2da45.mp3', 4588066, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3145, 'admin', 'music', 'BbAhn - 발걸음.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/7e8fea86-1d31-44f5-9114-a8924d11a348.mp3', 8554995, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3146, 'admin', 'music', 'Beige - 하루를 살지라도.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/aad1a640-6a57-4f88-91d0-9a539e295d63.mp3', 8563870, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3147, 'admin', 'music', 'C-CLOWN (씨클라운) - SOLO .mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/7fc08566-1918-423f-89f3-8866eb11755d.mp3', 8029535, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3148, 'admin', 'music', 'Ben (벤) - 있을 때 잘할걸 (Inst.) .mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/7e7d5009-77ac-4409-a4b3-9c7f63a0e334.mp3', 9389494, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3149, 'admin', 'music', 'Ben (벤) - 있을 때 잘할걸.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/f70cb4ea-9282-45d3-a11b-e8366f7189ba.mp3', 9390612, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3150, 'admin', 'music', 'cry  cry--朴智妍.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/7b11e553-1ecb-4f22-aba6-1f1a3ad0fe62.mp3', 4742545, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
+	(3151, 'admin', 'music', 'CS Numbers,Airin,윤미 - 가슴으로 운다.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/ce7be4b7-5206-4f16-bad8-140171e75742.mp3', 8732366, '', '00:00', 1, '2021-07-17 09:51:11', '2021-07-17 09:51:11', 1),
+	(3152, 'admin', 'music', 'FTisland--爱情爱情.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/3e75706b-8a5e-436f-8fb2-3fd4991f3456.mp3', 3742818, '', '00:00', 1, '2021-07-17 09:51:11', '2021-07-17 09:51:11', 1),
+	(3153, 'admin', 'music', 'F.T Island--Hello Hello .mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/9deaa294-92e8-4bdc-9fc8-0fd0cbe937e1.mp3', 4704676, '', '00:00', 1, '2021-07-17 09:51:11', '2021-07-17 09:51:11', 1),
+	(3154, 'admin', 'music', 'happy happy day.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/36ebc39c-1f87-4642-b4db-473c1f95580e.mp3', 5317983, '', '00:00', 1, '2021-07-17 09:51:11', '2021-07-17 09:51:11', 1),
+	(3155, 'admin', 'music', 'I believe.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/f50a9155-d3ae-4591-b420-2b2c441061fb.mp3', 4609461, '', '00:00', 1, '2021-07-17 09:51:11', '2021-07-17 09:51:11', 1),
+	(3156, 'admin', 'music', 'FIX (픽스) - 내 여자라고.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/35592213-b743-46e1-bd93-dcb50ff1f150.mp3', 8952828, '', '00:00', 1, '2021-07-17 09:51:11', '2021-07-17 09:51:11', 1),
+	(3157, 'admin', 'music', 'Herz Analog - 내겐 그대만 있으면 돼요.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/8362026d-7739-47a7-b20e-f5d44ecd215e.mp3', 8738143, '', '00:00', 1, '2021-07-17 09:51:11', '2021-07-17 09:51:11', 1),
+	(3158, 'admin', 'music', 'IU&2AM--小声.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/c0a4f167-7d4a-4f9a-b9af-972413c4a72e.mp3', 3420004, '', '00:00', 1, '2021-07-17 09:51:11', '2021-07-17 09:51:11', 1),
+	(3159, 'admin', 'music', 'Kiz--令人心碎的爱情.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/a538a498-bf85-4f4b-9c27-4ba5f0edcfd3.mp3', 5400712, '', '00:00', 1, '2021-07-17 09:51:11', '2021-07-17 09:51:11', 1),
+	(3160, 'admin', 'music', 'Miss--Promise U.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/01eba56b-61d6-455b-a1d8-0c05d64e4b71.mp3', 4784889, '', '00:00', 1, '2021-07-17 09:51:12', '2021-07-17 09:51:12', 1),
+	(3161, 'admin', 'music', 'never say goodbye.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/bbfdfc94-9325-4edd-9c7d-2328ea321f57.mp3', 5737112, '', '00:00', 1, '2021-07-17 09:51:12', '2021-07-17 09:51:12', 1),
+	(3162, 'admin', 'music', 'Mose--好人.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/5ed7fc95-0522-4543-ba2d-c0c409f50fdd.mp3', 5314771, '', '00:00', 1, '2021-07-17 09:51:12', '2021-07-17 09:51:12', 1),
+	(3163, 'admin', 'music', 'mc梦--死一样的通过.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/4a44446b-c5e6-4e47-b2a1-7327cc5d1024.mp3', 6468889, '', '00:00', 1, '2021-07-17 09:51:12', '2021-07-17 09:51:12', 1),
+	(3164, 'admin', 'music', 'Mighty Mouth--lalala.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/daadfe23-793c-43b0-a71c-bfa7a6079d08.mp3', 5541012, '', '00:00', 1, '2021-07-17 09:51:12', '2021-07-17 09:51:12', 1),
+	(3165, 'admin', 'music', 'OST ,드라마 - 가슴에 새긴 말.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/0b8de966-8e8e-4272-a829-fe3734e44893.mp3', 8615041, '', '00:00', 1, '2021-07-17 09:51:12', '2021-07-17 09:51:12', 1),
+	(3166, 'admin', 'music', 'OST ,드라마 - 갈팡질팡--김형준 [SS501].mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/e6c36ced-9eab-442a-8fbb-0fe621913ff8.mp3', 5194942, '', '00:00', 1, '2021-07-17 09:51:12', '2021-07-17 09:51:12', 1),
+	(3167, 'admin', 'music', 'OST ,드라마 - 그래도 사랑해.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/32b500fd-3379-46a3-8017-04819dc9b2c1.mp3', 11425135, '', '00:00', 1, '2021-07-17 09:51:12', '2021-07-17 09:51:12', 1),
+	(3168, 'admin', 'music', 'OST ,드라마 - 사랑에 멀어서 .mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/cad0b220-b727-4f1c-8336-018d550ac36b.mp3', 3176737, '', '00:00', 1, '2021-07-17 09:51:12', '2021-07-17 09:51:12', 1),
+	(3169, 'admin', 'music', 'OST ,드라마 - 달콤, Everyday .mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/fe7580b0-8ac8-4d52-89c1-4786fb2dd16b.mp3', 5176226, '', '00:00', 1, '2021-07-17 09:51:12', '2021-07-17 09:51:12', 1),
+	(3170, 'admin', 'music', 'OST ,드라마 - 사랑 때문에--한승연.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/262cc4a2-3626-469b-b9c0-4075e6c94803.mp3', 6683295, '', '00:00', 1, '2021-07-17 09:51:12', '2021-07-17 09:51:12', 1),
+	(3171, 'admin', 'music', 'OST ,드라마 - 너 때문에.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/4c9e3f18-8224-420b-b6bd-c5e8b1509707.mp3', 5893832, '', '00:00', 1, '2021-07-17 09:51:13', '2021-07-17 09:51:13', 1),
+	(3172, 'admin', 'music', 'OST ,드라마 - 사랑아 또 사랑아.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/87d2963b-1901-4bb6-9c4e-420298bf86a5.mp3', 11813543, '', '00:00', 1, '2021-07-17 09:51:13', '2021-07-17 09:51:13', 1),
+	(3173, 'admin', 'music', 'OST ,드라마 - 치료해줘  베이지(Beige).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/2f62c1f6-d11c-447c-87f0-66035e9ab7dc.mp3', 4383265, '', '00:00', 1, '2021-07-17 09:51:13', '2021-07-17 09:51:13', 1),
+	(3174, 'admin', 'music', 'outsider--周围的人.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/35c39b96-5ec7-4b3c-896c-74280e904971.mp3', 3062971, '', '00:00', 1, '2021-07-17 09:51:13', '2021-07-17 09:51:13', 1),
+	(3175, 'admin', 'music', 'Pink Tokki,MJ - 다시 사랑에 빠지다.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/969b0d41-de20-434e-9239-cbdf407dffc9.mp3', 10578885, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3176, 'admin', 'music', 'OST ,드라마 - 하루를 살지라도  베이지(Beige).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/9a5f98b2-9a7c-4a08-b148-a01cadff112a.mp3', 4569884, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3177, 'admin', 'music', 'Tara--tic tic toc.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/80d6b03f-3bfe-4be0-8b07-f3413096995a.mp3', 7976795, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3178, 'admin', 'music', 'The Film - 함께 걷던 길 (Duet With. April).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/60908ebd-655a-4176-ac62-548ad27c213e.mp3', 9610554, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3179, 'admin', 'music', 'SeeYa - 사랑의 인사.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/23bd5518-590f-47a2-8d08-08b8a73b74e0.mp3', 11111965, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3180, 'admin', 'music', 'The One,韩彩英 - 사랑할게.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/4c0c01a1-92c9-4ec1-9051-510254c0288b.mp3', 10755777, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3181, 'admin', 'music', '安珍京--做不到的人.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/f68553fa-544e-4212-9e66-5232c8593589.mp3', 3129240, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3182, 'admin', 'music', 'Tiara--ya ya ya.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/9f7c7d15-5437-4e5b-9055-738250b96fbf.mp3', 5015571, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3183, 'admin', 'music', '爱上鲨鱼的人鱼  李多海 我爱你.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/cad42f29-8db0-4401-aa40-219b7c031ab1.mp3', 6312365, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3184, 'admin', 'music', '그대도 나와 같다면.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/e9624b66-6491-4f63-8a35-7c2956d04114.mp3', 6283798, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3185, 'admin', 'music', '白智英 - 깊이.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/5bea2926-1010-46c9-b39a-ef8adb7cfe98.mp3', 10687322, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3186, 'admin', 'music', '从一开始.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/233414fd-10d4-4c74-8dc7-4855bd22edff.mp3', 1581990, '', '00:00', 1, '2021-07-17 09:51:14', '2021-07-17 09:51:14', 1),
+	(3187, 'admin', 'music', '从开始到现在.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/ce130f1b-aa62-43ad-8006-89bdb076bd5e.mp3', 4334949, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3188, 'admin', 'music', '第30次.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/585d2ba2-4b4a-427d-b39f-3631d9a10ad8.mp3', 5457859, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3189, 'admin', 'music', '殆死悲爱,Dream Girls - 줄래.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/ad6dbd9a-6334-4666-bd69-bb143ff83b95.mp3', 8457006, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3190, 'admin', 'music', '高恩 - 눈물따라.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/9558a3cf-4563-428d-a7da-a0326d855e83.mp3', 4102091, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3191, 'admin', 'music', '阁楼男女.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/a82046b5-fd8e-4dc0-b1d7-4da0a930ce96.mp3', 4412104, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3192, 'admin', 'music', '남규리 - 그 남자 .mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/93869dd0-9bc1-4ee7-8c83-2a47194539fa.mp3', 8890757, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3193, 'admin', 'music', '남규리 - 내게 오는 자전거 (feat. Oneway) .mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/0ffe0a74-c246-4679-af84-f3cfd5164f64.mp3', 3558069, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3194, 'admin', 'music', '남규리 - 내게 오는 자전거 (inst.) .mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/bd0b86ad-0e62-425f-b4d0-a71a9c229f6c.mp3', 3558069, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3195, 'admin', 'music', '남규리 - 별빛눈물 .mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/7aac76f5-bb68-4a9b-a20d-306832d43db4.mp3', 6628751, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3196, 'admin', 'music', '呼吸.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/90cd779e-5c23-4d88-8913-a0575a75462d.mp3', 3321167, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3197, 'admin', 'music', '海边之歌.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/264f3f56-45ef-4b85-bbab-65348859e863.mp3', 5883193, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3198, 'admin', 'music', '花海.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/11d83aa9-1c47-433a-a244-97071cdc3730.mp3', 4263984, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3199, 'admin', 'music', '金俊成 - 세상에서… (Ending).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/8f4d67f1-aa21-439a-8303-5d57956b703b.mp3', 6176608, '', '00:00', 1, '2021-07-17 09:51:15', '2021-07-17 09:51:15', 1),
+	(3200, 'admin', 'music', '简钟旭,Beige - 검은 눈물 (Original ver.).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/111c9ea2-5a3e-4364-b11b-d9758fd7712b.mp3', 7357381, '', '00:00', 1, '2021-07-17 09:51:16', '2021-07-17 09:51:16', 1),
+	(3201, 'admin', 'music', '더 씨야 - ﻿내 맘은 죽어가요 (feat. Speed).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/0291ebb0-5f8b-4f52-af51-caa41174b566.mp3', 4021412, '', '00:00', 1, '2021-07-17 09:51:16', '2021-07-17 09:51:16', 1),
+	(3202, 'admin', 'music', '美丽人生-姻缘.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/08ccc194-f011-4547-a6f5-d7e3e6730930.mp3', 5094765, '', '00:00', 1, '2021-07-17 09:51:16', '2021-07-17 09:51:16', 1),
+	(3203, 'admin', 'music', '金秀美,朴明秀,UL - 압력밥솥.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/ef1e428e-75a8-465c-95da-10461c20f999.mp3', 8459999, '', '00:00', 1, '2021-07-17 09:51:16', '2021-07-17 09:51:16', 1),
+	(3204, 'admin', 'music', '金贤雅 - 나만의 너.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/4a61c189-4ca8-4545-b10a-1e0ab121d10e.mp3', 8807696, '', '00:00', 1, '2021-07-17 09:51:16', '2021-07-17 09:51:16', 1),
+	(3205, 'admin', 'music', '率智 - 바람에 기대.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/218cdc12-b2dd-4427-8be6-4cea5e12eb23.mp3', 8767966, '', '00:00', 1, '2021-07-17 09:51:16', '2021-07-17 09:51:16', 1),
+	(3206, 'admin', 'music', '命运.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/fb428679-5a67-4994-bd44-0a5643558b5b.mp3', 4201328, '', '00:00', 1, '2021-07-17 09:51:16', '2021-07-17 09:51:16', 1),
+	(3207, 'admin', 'music', '디데이 (D-day) - 보고싶다 (Feat. 멜로디아).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/b64f358f-5bf4-4644-9d94-e72baeafa105.mp3', 9718144, '', '00:00', 1, '2021-07-17 09:51:16', '2021-07-17 09:51:16', 1),
+	(3208, 'admin', 'music', '你我都是傻瓜.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/f309b16e-acc6-4e76-81ea-9be628955a6c.mp3', 3098992, '', '00:00', 1, '2021-07-17 09:51:16', '2021-07-17 09:51:16', 1),
+	(3209, 'admin', 'music', '双鱼座.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/4974bc56-f208-4819-8c6c-be8ab367095c.mp3', 4029257, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3210, 'admin', 'music', '祈祷.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/779ec3ac-9a2f-4e17-927e-152665f69179.mp3', 4523784, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3211, 'admin', 'music', '天国的记忆.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/f2b34867-fe03-4854-a27a-b4d12e2fa9f2.mp3', 4605495, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3212, 'admin', 'music', '情歌.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/e48ac32c-a661-4f2c-9c7c-d148cff17a97.mp3', 5731448, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3213, 'admin', 'music', '吴振宇 - 경민 Theme (Humming).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/6abd7a04-2d91-4756-b68b-882f2eb37f69.mp3', 3426155, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3214, 'admin', 'music', '五岁庵片尾曲.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/5517002a-a2ef-4228-995f-1d673ca350c1.mp3', 3620205, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3215, 'admin', 'music', '想你.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/175b0065-deb3-4cad-be47-b07c32962195.mp3', 4004888, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3216, 'admin', 'music', '因为是女子.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/ff9fca11-1dd5-4848-b711-560ab1b7a555.mp3', 4248976, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3217, 'admin', 'music', '雪之花.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/ecdf765c-acbb-4d09-8787-4c693c9cd0b2.mp3', 5511026, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3218, 'admin', 'music', '因为我脑子不好.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/518a7d4c-fe95-4a1c-b768-35275320e3e0.mp3', 6219828, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3219, 'admin', 'music', '张娜拉 - 祈祷 (Last Pray).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/2a3b6d40-8c88-44ac-817f-c2b05e9160da.mp3', 6842283, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3220, 'admin', 'music', '姻缘.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/82387039-886d-45b8-a90b-5f836f0a8086.mp3', 4245777, '', '00:00', 1, '2021-07-17 09:51:17', '2021-07-17 09:51:17', 1),
+	(3221, 'admin', 'music', '베이지(Beige) - 밥만 먹는 사이.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/550cad3c-8b78-43e7-9953-a584ac13078f.mp3', 7969563, '', '00:00', 1, '2021-07-17 09:51:18', '2021-07-17 09:51:18', 1),
+	(3222, 'admin', 'music', '베이지(Beige) - 술을 못해요 .mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/3aa92408-d5a4-442f-bf97-e9cdc8665cfd.mp3', 5942253, '', '00:00', 1, '2021-07-17 09:51:18', '2021-07-17 09:51:18', 1),
+	(3223, 'admin', 'music', '엠투엠(M To M) - 이런 쓰레기 같은.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/943b11aa-14d4-4204-9573-637b31782885.mp3', 6103021, '', '00:00', 1, '2021-07-17 09:51:18', '2021-07-17 09:51:18', 1),
+	(3224, 'admin', 'music', '성주 - 미치겠다 (Crazy).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/9dd8045c-f26a-43e6-98fc-5b008b91c06f.mp3', 7164161, '', '00:00', 1, '2021-07-17 09:51:18', '2021-07-17 09:51:18', 1);
 /*!40000 ALTER TABLE `ws_file` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_friends
@@ -1028,7 +1178,7 @@ CREATE TABLE IF NOT EXISTS `ws_friends` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COMMENT='好友列表';
 
--- Dumping data for table zhdd.ws_friends: ~37 rows (approximately)
+-- Dumping data for table zhdd.ws_friends: ~38 rows (approximately)
 /*!40000 ALTER TABLE `ws_friends` DISABLE KEYS */;
 INSERT INTO `ws_friends` (`id`, `uid`, `uname`, `fid`, `fname`, `create_time`, `remark`) VALUES
 	(5, 23, 'aa', 18, '黄朝辉', '2019-01-26 21:54:19', NULL),
@@ -1084,7 +1234,7 @@ CREATE TABLE IF NOT EXISTS `ws_friends_apply` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8 COMMENT='好友申请表';
 
--- Dumping data for table zhdd.ws_friends_apply: ~36 rows (approximately)
+-- Dumping data for table zhdd.ws_friends_apply: ~40 rows (approximately)
 /*!40000 ALTER TABLE `ws_friends_apply` DISABLE KEYS */;
 INSERT INTO `ws_friends_apply` (`id`, `from_id`, `from_name`, `to_id`, `to_name`, `process_status`, `create_time`) VALUES
 	(122, 23, 'aa', 1, 'admin', 3, '2019-01-18 13:49:03'),
@@ -1184,129 +1334,10 @@ CREATE TABLE IF NOT EXISTS `ws_sign` (
   `user_name` varchar(50) NOT NULL DEFAULT '' COMMENT '用户名称',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '签到时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=120 DEFAULT CHARSET=utf8 COMMENT='用户签到表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户签到表';
 
--- Dumping data for table zhdd.ws_sign: ~88 rows (approximately)
+-- Dumping data for table zhdd.ws_sign: ~0 rows (approximately)
 /*!40000 ALTER TABLE `ws_sign` DISABLE KEYS */;
-INSERT INTO `ws_sign` (`id`, `user_id`, `user_name`, `create_time`) VALUES
-	(2, 23, 'aa', '2020-05-31 12:10:52'),
-	(3, 1, 'admin', '2020-05-31 12:17:53'),
-	(4, 1, 'admin', '2020-06-01 18:56:50'),
-	(5, 23, 'aa', '2020-06-01 18:56:55'),
-	(6, 24, 'bb', '2020-06-01 21:39:49'),
-	(7, 23, 'aa', '2020-06-02 18:26:19'),
-	(8, 1, 'admin', '2020-06-03 20:45:38'),
-	(9, 23, 'aa', '2020-06-04 20:55:24'),
-	(10, 23, 'aa', '2020-06-06 12:26:08'),
-	(11, 23, 'aa', '2020-06-08 21:24:17'),
-	(12, 1, 'admin', '2020-06-10 18:49:31'),
-	(13, 23, 'aa', '2020-06-10 19:18:58'),
-	(14, 1, 'admin', '2020-06-20 18:23:49'),
-	(15, 1, 'admin', '2020-07-01 10:07:38'),
-	(16, 23, 'aa', '2020-07-01 11:21:42'),
-	(17, 24, 'bb', '2020-07-01 11:21:44'),
-	(18, 18, 'hch', '2020-07-01 11:24:34'),
-	(19, 1, 'admin', '2020-07-02 09:52:24'),
-	(20, 1, 'admin', '2020-07-03 09:23:36'),
-	(21, 31, 'dd', '2020-07-03 10:01:21'),
-	(22, 1, 'admin', '2020-07-04 10:32:41'),
-	(23, 1, 'admin', '2020-07-05 08:21:17'),
-	(24, 1, 'admin', '2020-07-11 09:17:20'),
-	(25, 23, 'aa', '2020-07-11 15:17:32'),
-	(26, 23, 'aa', '2020-07-15 21:47:25'),
-	(27, 1, 'admin', '2020-08-22 23:26:21'),
-	(28, 18, 'hch', '2020-08-29 08:07:44'),
-	(29, 1, 'admin', '2020-08-29 08:40:12'),
-	(30, 1, 'admin', '2020-09-06 09:04:04'),
-	(31, 1, 'admin', '2020-09-12 09:24:35'),
-	(32, 1, 'admin', '2020-09-26 07:43:56'),
-	(33, 18, 'hch', '2020-09-26 08:18:47'),
-	(34, 1, 'admin', '2020-10-01 01:26:34'),
-	(35, 1, 'admin', '2020-10-05 20:09:44'),
-	(36, 1, 'admin', '2020-10-06 10:22:36'),
-	(37, 1, 'admin', '2020-10-07 10:53:30'),
-	(38, 1, 'admin', '2020-10-08 10:28:12'),
-	(39, 1, 'admin', '2020-10-17 10:44:44'),
-	(40, 1, 'admin', '2020-10-20 17:07:36'),
-	(41, 1, 'admin', '2020-10-24 15:03:33'),
-	(42, 1, 'admin', '2020-10-25 10:29:12'),
-	(43, 1, 'admin', '2020-11-06 21:36:07'),
-	(44, 11, '无名1', '2020-11-11 22:12:56'),
-	(45, 1, 'admin', '2020-11-14 16:47:35'),
-	(46, 1, 'admin', '2020-11-15 15:14:02'),
-	(47, 1, 'admin', '2020-11-16 21:51:24'),
-	(48, 11, '无名1', '2020-11-16 22:45:36'),
-	(49, 1, 'admin', '2020-11-19 20:35:51'),
-	(50, 1, 'admin', '2020-11-20 20:20:20'),
-	(51, 18, 'hch', '2020-11-21 11:14:10'),
-	(52, 11, '无名1', '2020-11-21 12:07:26'),
-	(53, 1, 'admin', '2020-11-21 21:41:11'),
-	(54, 1, 'admin', '2020-11-22 13:55:58'),
-	(55, 1, 'admin', '2020-11-23 19:36:31'),
-	(56, 1, 'admin', '2020-11-24 20:37:11'),
-	(57, 1, 'admin', '2020-11-26 21:39:23'),
-	(58, 1, 'admin', '2020-11-27 21:49:06'),
-	(59, 1, 'admin', '2020-11-28 09:41:00'),
-	(60, 11, '无名1', '2020-11-28 11:17:11'),
-	(61, 23, 'aa', '2020-11-28 20:50:16'),
-	(62, 1, 'admin', '2020-11-30 21:52:30'),
-	(63, 23, 'aa', '2020-12-01 20:49:42'),
-	(64, 1, 'admin', '2020-12-03 21:04:10'),
-	(65, 1, 'admin', '2020-12-04 22:38:00'),
-	(66, 1, 'admin', '2020-12-05 09:22:25'),
-	(67, 23, 'aa', '2020-12-05 09:33:54'),
-	(68, 1, 'admin', '2020-12-06 11:26:48'),
-	(69, 1, 'admin', '2020-12-07 21:30:26'),
-	(70, 1, 'admin', '2020-12-09 21:48:31'),
-	(71, 1, 'admin', '2020-12-12 09:34:32'),
-	(72, 1, 'admin', '2020-12-13 21:33:37'),
-	(73, 1, 'admin', '2020-12-14 20:51:44'),
-	(74, 1, 'admin', '2020-12-15 20:43:08'),
-	(75, 1, 'admin', '2020-12-19 19:13:50'),
-	(76, 1, 'admin', '2020-12-20 21:32:20'),
-	(77, 1, 'admin', '2020-12-23 19:56:50'),
-	(78, 1, 'admin', '2020-12-26 08:32:50'),
-	(79, 1, 'admin', '2020-12-27 11:58:32'),
-	(80, 1, 'admin', '2020-12-28 20:10:07'),
-	(81, 1, 'admin', '2020-12-31 20:38:06'),
-	(82, 1, 'admin', '2021-01-01 08:36:21'),
-	(83, 1, 'admin', '2021-01-02 00:17:16'),
-	(84, 18, 'hch', '2021-01-02 13:02:57'),
-	(85, 18, 'hch', '2021-01-03 16:14:16'),
-	(86, 1, 'admin', '2021-01-03 17:12:27'),
-	(87, 1, 'admin', '2021-01-10 15:59:21'),
-	(88, 1, 'admin', '2021-01-13 20:25:51'),
-	(89, 18, 'hch', '2021-01-16 10:19:18'),
-	(90, 1, 'admin', '2021-01-16 14:44:39'),
-	(91, 18, 'hch', '2021-01-30 14:15:35'),
-	(92, 1, 'admin', '2021-01-31 15:33:23'),
-	(93, 1, 'admin', '2021-02-06 08:40:49'),
-	(94, 1, 'admin', '2021-02-08 20:36:31'),
-	(95, 1, 'admin', '2021-02-09 19:07:38'),
-	(96, 1, 'admin', '2021-02-10 11:11:53'),
-	(97, 23, 'aa', '2021-02-10 11:19:58'),
-	(98, 1, 'admin', '2021-02-12 19:01:21'),
-	(99, 1, 'admin', '2021-02-19 11:49:52'),
-	(100, 1, 'admin', '2021-02-23 22:33:22'),
-	(101, 1, 'admin', '2021-02-27 20:42:56'),
-	(102, 1, 'admin', '2021-03-25 21:46:22'),
-	(103, 1, 'admin', '2021-03-26 22:26:00'),
-	(104, 1, 'admin', '2021-03-27 07:50:52'),
-	(105, 1, 'admin', '2021-03-31 19:51:01'),
-	(106, 1, 'admin', '2021-05-14 22:11:22'),
-	(107, 1, 'admin', '2021-05-15 09:02:25'),
-	(108, 1, 'admin', '2021-05-19 20:24:17'),
-	(109, 1, 'admin', '2021-05-20 23:45:36'),
-	(110, 1, 'admin', '2021-05-22 11:49:05'),
-	(111, 1, 'admin', '2021-05-23 18:19:13'),
-	(112, 1, 'admin', '2021-05-26 20:20:27'),
-	(113, 1, 'admin', '2021-05-29 07:28:39'),
-	(114, 1, 'admin', '2021-06-04 20:43:22'),
-	(115, 1, 'admin', '2021-06-05 13:14:43'),
-	(116, 24, 'bb', '2021-06-10 22:22:51'),
-	(117, 23, 'aa', '2021-06-24 21:23:24'),
-	(118, 23, 'aa', '2021-06-26 10:43:03'),
-	(119, 31, 'dd', '2021-06-29 21:20:33');
 /*!40000 ALTER TABLE `ws_sign` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_users
@@ -1335,7 +1366,7 @@ CREATE TABLE IF NOT EXISTS `ws_users` (
 -- Dumping data for table zhdd.ws_users: ~34 rows (approximately)
 /*!40000 ALTER TABLE `ws_users` DISABLE KEYS */;
 INSERT INTO `ws_users` (`id`, `name`, `password`, `register_time`, `state`, `last_login_time`, `last_logout_time`, `enable`, `speak`, `coin_num`, `question1`, `answer1`, `question2`, `answer2`, `question3`, `answer3`, `create_time`) VALUES
-	(1, 'admin', 'MjQzMTBCNkQxNkM1NkZCNzk2M0ZCNEY1REMxQkM0NDk=', '2018-03-22 22:37:07', '0', '2021-06-29 21:22:48', '2021-06-29 21:24:45', '1', '1', 880, '你最喜欢的明星是谁?', '11', '你最喜欢的一首歌是什么?', '22', '你父亲的生日是什么时候', '33', '2018-12-12 10:10:15'),
+	(1, 'admin', 'MjQzMTBCNkQxNkM1NkZCNzk2M0ZCNEY1REMxQkM0NDk=', '2018-03-22 22:37:07', '0', '2021-07-17 09:49:07', '2021-07-11 09:35:36', '1', '1', 880, '你最喜欢的明星是谁?', '11', '你最喜欢的一首歌是什么?', '22', '你父亲的生日是什么时候', '33', '2018-12-12 10:10:15'),
 	(4, 'mb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-31 21:55:17', '0', '2020-07-03 09:29:04', '2018-12-12 16:07:08', '1', '1', 0, '你最喜欢的水果是什么?', 'apple', '你的初中在哪里？', '湖北', '你的第一次是什么时候？', '16', '2018-12-12 10:10:15'),
 	(5, '小七', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-24 11:03:07', '0', '2018-03-31 23:35:22', '2018-03-31 23:38:03', '1', '1', 0, '你最喜欢的明星是谁?', '用户', '你最喜欢的一首歌是?', '计划', '你的初恋女友是谁?', '哦了', '2018-12-12 10:10:15'),
 	(6, '小三', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-24 10:45:15', '0', '2018-03-25 22:28:51', '2018-03-25 22:27:00', '1', '1', 0, '你最喜欢的明星是谁?', '喜鹊', '你最喜欢的一首歌是?', '我的心', '你的初恋女友是谁?', '曹君怡', '2018-12-12 10:10:15'),
@@ -1353,7 +1384,7 @@ INSERT INTO `ws_users` (`id`, `name`, `password`, `register_time`, `state`, `las
 	(18, 'hch', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-22 22:36:37', '0', '2021-06-27 19:03:07', '2021-06-27 19:03:30', '1', '1', 80, '你最喜欢的明星是谁?', '张娜拉', '你最喜欢的一首歌是什么?', '天天', '你父亲的生日是什么时候', '6.0', '2018-12-12 10:10:15'),
 	(21, '徐志摩', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 10:10:50', '0', '2018-12-12 10:16:02', '2018-12-12 10:16:02', '1', '1', 0, '你最喜欢的水果是什么?', '梨子', '你父亲生日是什么时候?', '元旦节', '你最想去哪旅行?', '非洲', '2018-12-12 10:10:50'),
 	(22, 'hhh', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 13:55:37', '0', '2020-07-03 09:25:55', '2018-12-12 14:51:08', '1', '1', 0, '你最喜欢的水果是什么?', '梨子', '你父亲生日是什么时候?', 'dd', '你最想去哪旅行?', '한국', '2018-12-12 13:55:37'),
-	(23, 'aa', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:38:58', '1', '2021-07-05 21:12:42', '2021-07-02 19:07:52', '1', '1', 201, '你最喜欢的水果是什么?', '带到', '你父亲生日是什么时候?', '带到', '你最想去哪旅行?', '的啊', '2018-12-12 16:38:58'),
+	(23, 'aa', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:38:58', '0', '2021-07-18 08:02:56', '2021-07-17 09:48:52', '1', '1', 231, '你最喜欢的水果是什么?', '带到', '你父亲生日是什么时候?', '带到', '你最想去哪旅行?', '的啊', '2018-12-12 16:38:58'),
 	(24, 'bb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:39:16', '0', '2021-06-25 21:33:21', '2021-06-25 21:44:12', '1', '1', 45, '你最喜欢的水果是什么?', '的的', '你父亲生日是什么时候?', '都是大神', '你最想去哪旅行?', '都是的', '2018-12-12 16:39:16'),
 	(25, 'vb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-13 15:34:55', '0', '2020-07-03 09:26:09', '2020-06-01 21:23:16', '1', '1', 0, '你最喜欢的水果是什么?', '的的', '你父亲生日是什么时候?', '33', '你最想去哪旅行?', '55', '2018-12-13 15:34:55'),
 	(26, 'jkx', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-13 15:35:13', '0', '2018-12-13 15:41:00', '2018-12-13 15:41:00', '1', '1', 0, '你最想去哪旅行?', '中国', '你最想去哪旅行?', '中国', '你怎么看待中国的房价?', '太高了', '2018-12-13 15:35:13'),
@@ -1394,7 +1425,7 @@ CREATE TABLE IF NOT EXISTS `ws_user_profile` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COMMENT='用户简历表';
 
--- Dumping data for table zhdd.ws_user_profile: ~26 rows (approximately)
+-- Dumping data for table zhdd.ws_user_profile: ~27 rows (approximately)
 /*!40000 ALTER TABLE `ws_user_profile` DISABLE KEYS */;
 INSERT INTO `ws_user_profile` (`id`, `user_id`, `user_name`, `real_name`, `img`, `sign`, `age`, `sex`, `sex_text`, `tel`, `location`, `address`, `profession`, `profession_text`, `hobby`, `hobby_text`, `create_time`) VALUES
 	(6, 24, 'bb', '艰苦艰苦人', 'http://127.0.0.1:8101/headImg/41a440e4-02be-4624-813f-2d8d42e455ce.jpg', '草泥马的', 11, 1, '男', '2548745', '', '韩国首尔', 6, '其他', 6, '其他', '2019-01-08 16:22:30'),
