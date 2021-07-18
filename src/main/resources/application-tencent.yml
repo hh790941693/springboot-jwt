@@ -2,7 +2,7 @@
 # 腾讯云环境
 #
 server:
-  address: 10.0.4.7
+  address: 121.4.51.186
   port: 8100
   tomcat:
     basedir: ${temp.tomcat.path.linux}
@@ -32,7 +32,7 @@ spring:
 upload:
   config:
     #本地存储路径
-    store-path: /opt/music
+    store-path: /home/springbootJwt
     #访问url(需要通过nginx来访问)
     #server {
     #  listen 8101;
@@ -42,11 +42,11 @@ upload:
     #    autoindex on;
     #  }
     #}
-    view-url: http://1.15.116.41:8101/
+    view-url: http://121.4.51.186:8101/
 
 #websocket聊天服务器配置
 websocket:
   config:
     #如果是内网 就配置成内网IP或者127.0.0.1;如果是外网，配置成公网IP
-    address: 1.15.116.41
+    address: 121.4.51.186
     port: ${server.port}
