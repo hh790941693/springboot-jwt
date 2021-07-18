@@ -2,7 +2,7 @@
 # 腾讯云环境
 #
 server:
-  address: 121.4.51.186
+  address: 10.0.4.8
   port: 8100
   tomcat:
     basedir: ${temp.tomcat.path.linux}
