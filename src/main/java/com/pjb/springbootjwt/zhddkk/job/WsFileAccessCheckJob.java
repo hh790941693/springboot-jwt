@@ -345,8 +345,8 @@ public class WsFileAccessCheckJob {
         String webserverip = webSocketConfig.getAddress();
         List<SpGoodsDO> needBatchUpdateList = new ArrayList<>();
         for (SpGoodsDO spGoodsDO : list) {
-
             String backImage = spGoodsDO.getBackImage();
+            boolean isNeedUpdate = false;
             if (StringUtils.isNotBlank(backImage)) {
                 if (backImage.contains("//") && backImage.contains(":")) {
 
@@ -354,7 +354,7 @@ public class WsFileAccessCheckJob {
                     if (!oldIp.equals(webserverip)) {
                         String newUrl = backImage.replace(oldIp, webserverip);
                         spGoodsDO.setBackImage(newUrl);
-
+                        isNeedUpdate = true;
                     }
                 }
             }
@@ -367,7 +367,7 @@ public class WsFileAccessCheckJob {
                     if (!oldIp.equals(webserverip)) {
                         String newUrl = image1.replace(oldIp, webserverip);
                         spGoodsDO.setImage1(newUrl);
-
+                        isNeedUpdate = true;
                     }
                 }
             }
@@ -380,7 +380,7 @@ public class WsFileAccessCheckJob {
                     if (!oldIp.equals(webserverip)) {
                         String newUrl = image2.replace(oldIp, webserverip);
                         spGoodsDO.setImage2(newUrl);
-
+                        isNeedUpdate = true;
                     }
                 }
             }
@@ -393,7 +393,7 @@ public class WsFileAccessCheckJob {
                     if (!oldIp.equals(webserverip)) {
                         String newUrl = image3.replace(oldIp, webserverip);
                         spGoodsDO.setImage3(newUrl);
-
+                        isNeedUpdate = true;
                     }
                 }
             }
@@ -406,12 +406,13 @@ public class WsFileAccessCheckJob {
                     if (!oldIp.equals(webserverip)) {
                         String newUrl = image4.replace(oldIp, webserverip);
                         spGoodsDO.setImage4(newUrl);
-
+                        isNeedUpdate = true;
                     }
                 }
             }
-
-            needBatchUpdateList.add(spGoodsDO);
+            if (isNeedUpdate){
+                needBatchUpdateList.add(spGoodsDO);
+            }
         }
         if (needBatchUpdateList.size() > 0) {
             logger.info("本次更新文件数:{}", needBatchUpdateList.size());
