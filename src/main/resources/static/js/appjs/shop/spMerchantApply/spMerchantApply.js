@@ -113,7 +113,7 @@ function load() {
 				field : 'id',
 				align : 'center',
 				formatter : function(value, row, index) {
-				    if (row.status == 1) {
+				    if ((sessionRoleName == '管理员' || sessionUser == 'admin') && row.status == 1) {
                         var pass = '<a class="btn btn-primary btn-sm" href="#" mce_href="#" title="审批通过" onclick="updateStatus(\''
                             + row.id
                             + '\',\''
