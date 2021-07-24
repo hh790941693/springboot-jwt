@@ -6,8 +6,12 @@ import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
+
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +114,7 @@ public class WebSocketServerController extends AdminBaseController {
 
     /**
      * 每日文件上传大小.
-     * @return 每日文件上传大小信息
+     * @return 每日文件上传累计大小信息
      */
     @RequestMapping("/queryUploadFileData.do")
     @ResponseBody
@@ -133,5 +137,22 @@ public class WebSocketServerController extends AdminBaseController {
             map.put(timeName, fileSize);
         }
         return map;
+    }
+
+    /**
+     * 用户累计上传文件大小数据.
+     * @return 用户累计上传文件大小数据
+     */
+    @RequestMapping("/queryEachUserUploadFileSizeData.do")
+    @ResponseBody
+    public LinkedHashMap<String, Object> queryEachUserUploadFileSizeData() {
+        List<LinkedHashMap<String, String>> list = wsFileService.queryEachUserUploadFileSizeData();
+        LinkedHashMap<String, Object> resultMap = new LinkedHashMap<>();
+        for (Map<String, String> map : list) {
+            Object value= map.get("file_size");
+
+            resultMap.put(map.get("user_name"), value);
+        }
+        return resultMap;
     }
 }
