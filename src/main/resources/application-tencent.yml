@@ -10,9 +10,12 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://58.220.130.183:3306/zhdd?useSSL=false
-    username: root
-    password: ^klzvG064A7%ERQj
+    #url: jdbc:mysql://58.220.130.183:3306/zhdd?useSSL=false
+    #username: root
+    #password: ^klzvG064A7%ERQj
+    url: jdbc:mysql://localhost:3306/zhdd?useSSL=false
+    username : root
+    password : 1qaz@WSX3edc$RFV
   cache:
     ehcache:
       config: classpath:ehcache.xml
