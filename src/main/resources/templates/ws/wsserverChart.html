@@ -337,7 +337,7 @@
                 var fileSizeOption = {
                     title: {
                         x: 'center',
-                        text: '累计上传文件(单位: KB)'
+                        text: '每个用户累计上传文件(单位: KB)'
                     },
                     tooltip: {
                         formatter: '{b}\n{c} KB'
@@ -357,10 +357,9 @@
                     },
                     series: [{
                         data: itemValueArr,
-                        type: 'line',
+                        type: 'bar',
                         itemStyle: {
                             normal: {
-                                color: 'black',
                                 label: {
                                     show: true,
                                     formatter: function (params) {
@@ -369,7 +368,8 @@
                                         } else {
                                             return params.value;
                                         }
-                                    }
+                                    },
+                                    position: "top",
                                 },
                                 lineStyle: {
                                     color: 'blue'
