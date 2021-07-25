@@ -64,11 +64,15 @@
 
             #uploadResultDiv p {
                 border-bottom: 1px solid grey;
-                height: 25px;
+                height: 20px;
+                overflow: hidden;
+                margin-bottom: 3px;
             }
 
             #uploadResultDiv span {
                 display: inline-block;
+                height:100%;
+                overflow: hidden;
             }
         </style>
     </head>
@@ -249,9 +253,9 @@
                     content: showText
                 });
 
-                setTimeout(function(){
-                    window.location.href = window.location.href;
-                }, 3500);
+                // setTimeout(function(){
+                //     window.location.href = window.location.href;
+                // }, 3500);
             }
             ,progress: function(n, elem){
                 //获取单个文件上传进度百分比
