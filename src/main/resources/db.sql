@@ -869,7 +869,7 @@ CREATE TABLE IF NOT EXISTS `ws_file` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user` varchar(50) NOT NULL DEFAULT '' COMMENT '用户名',
   `folder` varchar(50) NOT NULL DEFAULT '' COMMENT '文件类型',
-  `filename` varchar(50) NOT NULL DEFAULT '' COMMENT '文件名',
+  `filename` varchar(300) NOT NULL DEFAULT '' COMMENT '文件名',
   `disk_path` varchar(100) DEFAULT '' COMMENT '存储磁盘目录',
   `url` varchar(100) NOT NULL DEFAULT '' COMMENT 'url',
   `file_size` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',

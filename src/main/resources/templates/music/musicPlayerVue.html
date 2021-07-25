@@ -256,6 +256,7 @@
                 // setTimeout(function(){
                 //     window.location.href = window.location.href;
                 // }, 3500);
+                app.refreash();
             }
             ,progress: function(n, elem){
                 //获取单个文件上传进度百分比
@@ -402,6 +403,10 @@
                                         }
                                     }
                                 });
+                                console.log(i);
+                                if (i >= app.musicData.length-1) {
+                                    app.refreash();
+                                }
                             });
                         }
                         ,function () {
