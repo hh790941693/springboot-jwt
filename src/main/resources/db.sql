@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `sp_favorite` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8 COMMENT='收藏表';
 
--- Dumping data for table zhdd.sp_favorite: ~40 rows (approximately)
+-- Dumping data for table zhdd.sp_favorite: ~36 rows (approximately)
 /*!40000 ALTER TABLE `sp_favorite` DISABLE KEYS */;
 INSERT INTO `sp_favorite` (`id`, `user_id`, `subject_id`, `subject_type`, `status`, `create_time`, `update_time`) VALUES
 	(1, 23, 'gd_865278eda76e4973ba538a8e25dcaffe', 1, 2, '2021-06-11 20:36:23', '2021-06-26 16:51:50'),
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `sp_goods_type` (
   UNIQUE KEY `sp_goods_type_unique_index` (`type_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='商品分类表';
 
--- Dumping data for table zhdd.sp_goods_type: ~7 rows (approximately)
+-- Dumping data for table zhdd.sp_goods_type: ~6 rows (approximately)
 /*!40000 ALTER TABLE `sp_goods_type` DISABLE KEYS */;
 INSERT INTO `sp_goods_type` (`id`, `type_id`, `name`, `image`, `desc`, `status`, `create_time`, `update_time`) VALUES
 	(1, 'gt_c7364f84714749149e139cbe162e8d29', '海鲜水产', 'http://127.0.0.1:8101/goodsType/3e18804f-9c5c-4ff2-ba04-e77b14b84e9f.jpg', '海鲜水产', 1, '2021-06-10 20:44:50', '2021-06-10 20:44:50'),
@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `sp_merchant` (
   UNIQUE KEY `sp_merchant_unique_index` (`merchant_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='商家店铺表';
 
--- Dumping data for table zhdd.sp_merchant: ~4 rows (approximately)
+-- Dumping data for table zhdd.sp_merchant: ~3 rows (approximately)
 /*!40000 ALTER TABLE `sp_merchant` DISABLE KEYS */;
 INSERT INTO `sp_merchant` (`id`, `user_id`, `merchant_id`, `name`, `address`, `image`, `desc`, `contact`, `status`, `create_time`, `update_time`) VALUES
 	(3, 23, 'mer_02c3e96c2dc546869b1744910239c0f4', 'aa的店铺', '江苏省扬州市某街道', 'http://127.0.0.1:8101/merchant/ef9ba3a9-c2b7-4716-9784-d6adf6357787.jpg', '售卖各种水果。', '16605141987', 1, '2021-06-05 10:50:40', '2021-06-11 21:59:43'),
@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `sp_merchant_apply` (
   UNIQUE KEY `Index 2` (`apply_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='申请成为商家表';
 
--- Dumping data for table zhdd.sp_merchant_apply: ~4 rows (approximately)
+-- Dumping data for table zhdd.sp_merchant_apply: ~3 rows (approximately)
 /*!40000 ALTER TABLE `sp_merchant_apply` DISABLE KEYS */;
 INSERT INTO `sp_merchant_apply` (`id`, `apply_no`, `user_id`, `name`, `address`, `image`, `desc`, `contact`, `status`, `create_time`, `update_time`) VALUES
 	(1, 'MER_APPLY_5e20362a-153f-4c59-adf9-b37a85dd01ff', 23, 'aa的店铺', '江苏省扬州市某街道', 'http://127.0.0.1:8101/merchant/1ea9fed4-1b92-49fc-b495-ab93d60becc9.jpg', '售卖生活用品、猪肉粮油、蔬菜于一体的综合超市。', '16605141987', 2, '2021-06-05 10:09:31', '2021-06-05 10:50:11'),
@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `sp_order_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='订单详情表';
 
--- Dumping data for table zhdd.sp_order_detail: ~14 rows (approximately)
+-- Dumping data for table zhdd.sp_order_detail: ~12 rows (approximately)
 /*!40000 ALTER TABLE `sp_order_detail` DISABLE KEYS */;
 INSERT INTO `sp_order_detail` (`id`, `order_no`, `goods_id`, `goods_count`, `goods_original_price`, `goods_sale_price`, `merchant_id`, `create_time`, `update_time`) VALUES
 	(1, 'sorder_e95c84bf47e942b19b99c1fb65774b46', 'gd_4eabab3c9a304d779aa1e570d8b44762', 4, 99.00, 87.00, 'mer_ae7f37e85816499bbb1aa4951bddef58', '2021-07-05 21:58:38', '2021-07-05 21:58:38'),
@@ -307,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `sp_shopping_cart` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table zhdd.sp_shopping_cart: ~0 rows (approximately)
 /*!40000 ALTER TABLE `sp_shopping_cart` DISABLE KEYS */;
@@ -372,7 +372,7 @@ CREATE TABLE IF NOT EXISTS `sys_menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
--- Dumping data for table zhdd.sys_menu: ~40 rows (approximately)
+-- Dumping data for table zhdd.sys_menu: ~39 rows (approximately)
 /*!40000 ALTER TABLE `sys_menu` DISABLE KEYS */;
 INSERT INTO `sys_menu` (`id`, `name`, `parent_id`, `i18n_key`, `url`, `icon`, `ext_column1`, `ext_column2`, `ext_column3`, `create_time`, `update_time`) VALUES
 	(1, '系统管理', 0, 'li.pmenu.sysmanage.label', '', 'icon-menu-folder-open', '', '', '', '2021-01-07 21:18:30', '2021-03-24 21:36:18'),
@@ -553,7 +553,7 @@ CREATE TABLE IF NOT EXISTS `sys_user_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COMMENT='用户与角色关系表';
 
--- Dumping data for table zhdd.sys_user_role: ~14 rows (approximately)
+-- Dumping data for table zhdd.sys_user_role: ~13 rows (approximately)
 /*!40000 ALTER TABLE `sys_user_role` DISABLE KEYS */;
 INSERT INTO `sys_user_role` (`id`, `user_id`, `user_name`, `role_id`, `role_name`, `create_time`, `update_time`) VALUES
 	(11, 24, 'bb', 2, '普通用户', '2021-01-10 13:12:59', '2021-01-10 13:12:59'),
@@ -615,7 +615,7 @@ CREATE TABLE IF NOT EXISTS `t_role_permission` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table zhdd.t_role_permission: ~1 rows (approximately)
+-- Dumping data for table zhdd.t_role_permission: ~0 rows (approximately)
 /*!40000 ALTER TABLE `t_role_permission` DISABLE KEYS */;
 INSERT INTO `t_role_permission` (`id`, `role_id`, `role_name`, `permission_id`, `permission_name`) VALUES
 	(1, 1, 'admin', 1, 'add');
@@ -658,6 +658,25 @@ INSERT INTO `t_user_role` (`id`, `user_id`, `username`, `role_id`, `role_name`, 
 	(1, 1, '张三', 1, 'admin', '2020-03-12 14:55:34'),
 	(2, 1, '张三', 2, 'user', '2020-03-12 14:55:53');
 /*!40000 ALTER TABLE `t_user_role` ENABLE KEYS */;
+
+-- Dumping structure for view zhdd.view_ws_file
+DROP VIEW IF EXISTS `view_ws_file`;
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `view_ws_file` (
+	`id` INT(10) UNSIGNED NOT NULL COMMENT '主键',
+	`user` VARCHAR(50) NOT NULL COMMENT '用户名' COLLATE 'utf8_general_ci',
+	`folder` VARCHAR(50) NOT NULL COMMENT '文件类型' COLLATE 'utf8_general_ci',
+	`filename` VARCHAR(300) NOT NULL COMMENT '文件名' COLLATE 'utf8_general_ci',
+	`disk_path` VARCHAR(100) NULL COMMENT '存储磁盘目录' COLLATE 'utf8_general_ci',
+	`url` VARCHAR(100) NOT NULL COMMENT 'url' COLLATE 'utf8_general_ci',
+	`file_size` BIGINT(20) UNSIGNED NOT NULL COMMENT '文件大小',
+	`author` VARCHAR(50) NOT NULL COMMENT '未知' COLLATE 'utf8_general_ci',
+	`track_length` VARCHAR(50) NOT NULL COMMENT '文件时长' COLLATE 'utf8_general_ci',
+	`access_status` TINYINT(3) UNSIGNED NOT NULL COMMENT '访问性 0:不可访问 1:可访问',
+	`create_time` DATETIME NOT NULL COMMENT '创建时间',
+	`update_time` DATETIME NOT NULL COMMENT '更新时间',
+	`status` TINYINT(1) UNSIGNED NOT NULL COMMENT '0:无效 1:有效'
+) ENGINE=MyISAM;
 
 -- Dumping structure for table zhdd.ws_ads
 DROP TABLE IF EXISTS `ws_ads`;
@@ -752,7 +771,7 @@ CREATE TABLE IF NOT EXISTS `ws_circle_comment` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COMMENT='朋友圈评论表';
 
--- Dumping data for table zhdd.ws_circle_comment: ~17 rows (approximately)
+-- Dumping data for table zhdd.ws_circle_comment: ~13 rows (approximately)
 /*!40000 ALTER TABLE `ws_circle_comment` DISABLE KEYS */;
 INSERT INTO `ws_circle_comment` (`id`, `circle_id`, `user_id`, `user_name`, `comment`, `create_time`) VALUES
 	(1, 1, 25, 'vb', '为什么不舒服', '2019-01-04 21:20:28'),
@@ -785,7 +804,7 @@ CREATE TABLE IF NOT EXISTS `ws_common` (
   KEY `Index 1` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8 COMMENT='通用配置表';
 
--- Dumping data for table zhdd.ws_common: ~48 rows (approximately)
+-- Dumping data for table zhdd.ws_common: ~50 rows (approximately)
 /*!40000 ALTER TABLE `ws_common` DISABLE KEYS */;
 INSERT INTO `ws_common` (`id`, `type`, `name`, `orderby`, `remark`) VALUES
 	(1, 'zh', '操你妈', 2, '233'),
@@ -880,9 +899,9 @@ CREATE TABLE IF NOT EXISTS `ws_file` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0:无效 1:有效',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3225 DEFAULT CHARSET=utf8 COMMENT='文件表';
+) ENGINE=InnoDB AUTO_INCREMENT=3333 DEFAULT CHARSET=utf8 COMMENT='文件表';
 
--- Dumping data for table zhdd.ws_file: ~280 rows (approximately)
+-- Dumping data for table zhdd.ws_file: ~300 rows (approximately)
 /*!40000 ALTER TABLE `ws_file` DISABLE KEYS */;
 INSERT INTO `ws_file` (`id`, `user`, `folder`, `filename`, `disk_path`, `url`, `file_size`, `author`, `track_length`, `access_status`, `create_time`, `update_time`, `status`) VALUES
 	(517, 'aa', 'headImg', '1.jpg', 'D:\\\\temp\\\\headImg', 'http://127.0.0.1:8101/headImg\\1.jpg', 451216, '', '', 1, '2020-05-11 18:29:55', '2020-05-11 18:29:55', 1),
@@ -1078,7 +1097,6 @@ INSERT INTO `ws_file` (`id`, `user`, `folder`, `filename`, `disk_path`, `url`, `
 	(3135, 'dd', 'goods', 'xyj4.jpg', 'D:\\\\temp\\\\goods', 'http://127.0.0.1:8101/goods/728b2459-8074-493d-9d90-60273e8947b1.jpg', 241449, '', '00:00', 1, '2021-06-27 18:45:09', '2021-06-27 18:45:09', 1),
 	(3136, 'aa', 'goodsDetail', 'pg1.jpg', 'D:\\\\temp\\\\goodsDetail', 'http://127.0.0.1:8101/goodsDetail/cb8e714a-d34e-49f9-a083-4dbc9542d549.jpg', 19475, '', '00:00', 1, '2021-07-09 22:29:52', '2021-07-09 22:29:52', 1),
 	(3137, 'aa', 'goodsDetail', 'pg3.jpg', 'D:\\\\temp\\\\goodsDetail', 'http://127.0.0.1:8101/goodsDetail/60e2b9f0-f634-4553-ad3e-e368b5897790.jpg', 31281, '', '00:00', 1, '2021-07-09 22:30:54', '2021-07-09 22:30:54', 1),
-	(3138, 'admin', 'music', '8Eight,Dynamic Duo - 울고 싶어 우는 사람이 있겠어.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/45e63909-6261-48f9-a84b-137661a08a9f.mp3', 8871591, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
 	(3139, 'admin', 'music', '201106281580701.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/7a2f81d5-fa8c-4b9c-be77-9d60e094f486.mp3', 4552628, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
 	(3140, 'admin', 'music', '8Eight - 심장이 없어.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/54aeccaa-e320-4f08-aa34-2627960ed1ca.mp3', 9149728, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
 	(3141, 'admin', 'music', 'As One - 헤어져.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/4738e555-fdea-48fb-aff7-7120b06353fd.mp3', 11318878, '', '00:00', 1, '2021-07-17 09:51:10', '2021-07-17 09:51:10', 1),
@@ -1164,7 +1182,28 @@ INSERT INTO `ws_file` (`id`, `user`, `folder`, `filename`, `disk_path`, `url`, `
 	(3221, 'admin', 'music', '베이지(Beige) - 밥만 먹는 사이.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/550cad3c-8b78-43e7-9953-a584ac13078f.mp3', 7969563, '', '00:00', 1, '2021-07-17 09:51:18', '2021-07-17 09:51:18', 1),
 	(3222, 'admin', 'music', '베이지(Beige) - 술을 못해요 .mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/3aa92408-d5a4-442f-bf97-e9cdc8665cfd.mp3', 5942253, '', '00:00', 1, '2021-07-17 09:51:18', '2021-07-17 09:51:18', 1),
 	(3223, 'admin', 'music', '엠투엠(M To M) - 이런 쓰레기 같은.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/943b11aa-14d4-4204-9573-637b31782885.mp3', 6103021, '', '00:00', 1, '2021-07-17 09:51:18', '2021-07-17 09:51:18', 1),
-	(3224, 'admin', 'music', '성주 - 미치겠다 (Crazy).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/9dd8045c-f26a-43e6-98fc-5b008b91c06f.mp3', 7164161, '', '00:00', 1, '2021-07-17 09:51:18', '2021-07-17 09:51:18', 1);
+	(3224, 'admin', 'music', '성주 - 미치겠다 (Crazy).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/9dd8045c-f26a-43e6-98fc-5b008b91c06f.mp3', 7164161, '', '00:00', 1, '2021-07-17 09:51:18', '2021-07-17 09:51:18', 1),
+	(3225, '', 'headImg', '3.jpg', 'E:\\\\temp\\\\headImg', 'http://127.0.0.1:8101/headImg/9db0b301-1e3c-4ef1-9986-fa3e7505c806.jpg', 67363, '', '00:00', 0, '2021-07-18 23:04:15', '2021-07-18 23:04:15', 1),
+	(3226, '', 'headImg', '3.jpg', 'E:\\\\temp\\\\headImg', 'http://127.0.0.1:8101/headImg/21a86785-e63c-4f7e-a78e-678d4c8e1b3c.jpg', 67363, '', '00:00', 0, '2021-07-18 23:04:21', '2021-07-18 23:04:21', 1),
+	(3227, 'admin', 'music', '8Eight,Dynamic Duo - 울고 싶어 우는 사람이 있겠어.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/6e991161-ccc1-4e66-af91-0a766f4787ee.mp3', 8871591, '', '00:00', 1, '2021-07-24 17:27:00', '2021-07-24 17:27:00', 1),
+	(3315, 'aa', 'music', '5urprise (서프라이즈) - Jump.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/a3bf7bd8-f23f-4038-bf67-7e97e698a508.mp3', 2853462, '', '00:00', 1, '2021-07-25 12:09:36', '2021-07-25 12:09:36', 1),
+	(3316, 'aa', 'music', 'Apink (에이핑크) - Wanna Be.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/8dd9d232-79b2-4dc3-8e2c-9375049735bd.mp3', 3589836, '', '00:00', 1, '2021-07-25 12:09:36', '2021-07-25 12:09:36', 1),
+	(3317, 'aa', 'music', 'Ailee (에일리) - 보여줄게 (给你看).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/9e72cfc6-d48a-4c2d-b45d-f0ac43e68a55.mp3', 3801255, '', '00:00', 1, '2021-07-25 12:09:36', '2021-07-25 12:09:36', 1),
+	(3318, 'aa', 'music', 'Apink (에이핑크) - LUV (Korean ver_).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/e7719a24-fc73-468e-b59d-acdfb4220788.mp3', 3880344, '', '00:00', 1, '2021-07-25 12:09:36', '2021-07-25 12:09:36', 1),
+	(3319, 'aa', 'music', 'Annyeong (안녕) - 너의 번호를 누르고 (Prod_ 영화처럼).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/459e6077-373e-4278-b52d-b03b23a6f5ee.mp3', 4010950, '', '00:00', 1, '2021-07-25 12:09:36', '2021-07-25 12:09:36', 1),
+	(3320, 'aa', 'music', 'Apink (에이핑크) - Secret.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/b3db25f1-30b0-49b0-adac-2f4856c98039.mp3', 3852726, '', '00:00', 1, '2021-07-25 12:09:36', '2021-07-25 12:09:36', 1),
+	(3321, 'aa', 'music', 'Apink (에이핑크) - 천사가 아냐 (不是天使).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/c3ad2381-97cc-4cd9-b159-10972b787383.mp3', 3359573, '', '00:00', 1, '2021-07-25 12:09:36', '2021-07-25 12:09:36', 1),
+	(3322, 'aa', 'music', 'BLOO (블루) - Downtown Baby.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/5f88fe7f-99fc-498d-be8e-7e31e980d4c5.mp3', 3215546, '', '00:00', 1, '2021-07-25 12:09:36', '2021-07-25 12:09:36', 1),
+	(3323, 'aa', 'music', 'D_O_ (都暻秀) - 외침 (呐喊).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/3fcb07a3-d5c3-47d5-8d19-d96e5755dac2.mp3', 3770642, '', '00:00', 1, '2021-07-25 12:09:36', '2021-07-25 12:09:36', 1),
+	(3324, 'aa', 'music', 'CHEEZE (치즈) - 이렇게 좋아해 본 적이 없어요.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/8162e1d3-2e24-4d48-9bad-1ba4f618d71c.mp3', 4235022, '', '00:00', 1, '2021-07-25 12:09:36', '2021-07-25 12:09:36', 1),
+	(3325, 'aa', 'music', 'MC梦 (MC몽) _ 진실 - 내가 그리웠니 (想念我吗).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/377a3d14-f33b-4714-916e-5e1de0ae6fd1.mp3', 3508417, '', '00:00', 1, '2021-07-25 12:09:45', '2021-07-25 12:09:45', 1),
+	(3326, 'aa', 'music', 'MC梦 (MC몽) _ 白智英 (백지영) - New York (纽约).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/5490039e-0df2-4267-adf8-d43bf48fe271.mp3', 3912983, '', '00:00', 1, '2021-07-25 12:09:45', '2021-07-25 12:09:45', 1),
+	(3327, 'aa', 'music', 'MAMA (마마) - Second Chance.mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/8246022e-5e68-424d-91d5-c72d4529f84e.mp3', 2889538, '', '00:00', 1, '2021-07-25 12:10:42', '2021-07-25 12:10:42', 1),
+	(3328, 'aa', 'music', 'Loco (로꼬) - 니가 모르게 (你不知道).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/80cd31d3-4d47-46fa-9d70-07ee4ab4e24b.mp3', 4088416, '', '00:00', 1, '2021-07-25 12:10:42', '2021-07-25 12:10:42', 1),
+	(3329, 'aa', 'music', 'MC梦 (MC몽) _ 진실 - 내가 그리웠니 (想念我吗).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/28decc82-04bf-4250-9da3-de3e745ee9e2.mp3', 3508417, '', '00:00', 1, '2021-07-25 12:10:42', '2021-07-25 12:10:42', 1),
+	(3330, 'aa', 'music', 'MC梦 (MC몽) _ 白智英 (백지영) - New York (纽约).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/0dd6861a-a278-4063-9c3a-c635c0f08151.mp3', 3912983, '', '00:00', 1, '2021-07-25 12:10:42', '2021-07-25 12:10:42', 1),
+	(3331, 'aa', 'music', 'MC梦 (MC몽) _ 许阁 (허각) - 내 생애 가장 행복한 시간 (我人生中最幸福的时间).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/8aba3fda-3e2b-474a-a8be-a628ca9f0280.mp3', 3923092, '', '00:00', 1, '2021-07-25 12:10:42', '2021-07-25 12:10:42', 1),
+	(3332, 'aa', 'music', 'MC梦 (MC몽) _ Gary (개리) _ 孝琳 (효린) - 고장난 선풍기 (故障的电风扇).mp3', 'D:\\\\temp\\\\music', 'http://127.0.0.1:8101/music/224e9bb5-3a46-488c-b0ac-37d48c87a40e.mp3', 4156264, '', '00:00', 1, '2021-07-25 12:10:42', '2021-07-25 12:10:42', 1);
 /*!40000 ALTER TABLE `ws_file` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_friends
@@ -1180,7 +1219,7 @@ CREATE TABLE IF NOT EXISTS `ws_friends` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COMMENT='好友列表';
 
--- Dumping data for table zhdd.ws_friends: ~38 rows (approximately)
+-- Dumping data for table zhdd.ws_friends: ~37 rows (approximately)
 /*!40000 ALTER TABLE `ws_friends` DISABLE KEYS */;
 INSERT INTO `ws_friends` (`id`, `uid`, `uname`, `fid`, `fname`, `create_time`, `remark`) VALUES
 	(5, 23, 'aa', 18, '黄朝辉', '2019-01-26 21:54:19', NULL),
@@ -1236,7 +1275,7 @@ CREATE TABLE IF NOT EXISTS `ws_friends_apply` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8 COMMENT='好友申请表';
 
--- Dumping data for table zhdd.ws_friends_apply: ~40 rows (approximately)
+-- Dumping data for table zhdd.ws_friends_apply: ~36 rows (approximately)
 /*!40000 ALTER TABLE `ws_friends_apply` DISABLE KEYS */;
 INSERT INTO `ws_friends_apply` (`id`, `from_id`, `from_name`, `to_id`, `to_name`, `process_status`, `create_time`) VALUES
 	(122, 23, 'aa', 1, 'admin', 3, '2019-01-18 13:49:03'),
@@ -1316,10 +1355,12 @@ CREATE TABLE IF NOT EXISTS `ws_sign` (
   `user_name` varchar(50) NOT NULL DEFAULT '' COMMENT '用户名称',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '签到时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户签到表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户签到表';
 
--- Dumping data for table zhdd.ws_sign: ~0 rows (approximately)
+-- Dumping data for table zhdd.ws_sign: ~1 rows (approximately)
 /*!40000 ALTER TABLE `ws_sign` DISABLE KEYS */;
+INSERT INTO `ws_sign` (`id`, `user_id`, `user_name`, `create_time`) VALUES
+	(1, 1, 'admin', '2021-07-24 15:13:22');
 /*!40000 ALTER TABLE `ws_sign` ENABLE KEYS */;
 
 -- Dumping structure for table zhdd.ws_users
@@ -1348,7 +1389,7 @@ CREATE TABLE IF NOT EXISTS `ws_users` (
 -- Dumping data for table zhdd.ws_users: ~34 rows (approximately)
 /*!40000 ALTER TABLE `ws_users` DISABLE KEYS */;
 INSERT INTO `ws_users` (`id`, `name`, `password`, `register_time`, `state`, `last_login_time`, `last_logout_time`, `enable`, `speak`, `coin_num`, `question1`, `answer1`, `question2`, `answer2`, `question3`, `answer3`, `create_time`) VALUES
-	(1, 'admin', 'MjQzMTBCNkQxNkM1NkZCNzk2M0ZCNEY1REMxQkM0NDk=', '2018-03-22 22:37:07', '1', '2021-07-18 09:07:43', '2021-07-11 09:35:36', '1', '1', 880, '你最喜欢的明星是谁?', '11', '你最喜欢的一首歌是什么?', '22', '你父亲的生日是什么时候', '33', '2018-12-12 10:10:15'),
+	(1, 'admin', 'MjQzMTBCNkQxNkM1NkZCNzk2M0ZCNEY1REMxQkM0NDk=', '2018-03-22 22:37:07', '1', '2021-07-25 12:44:31', '2021-07-25 09:59:09', '1', '1', 890, '你最喜欢的明星是谁?', '11', '你最喜欢的一首歌是什么?', '22', '你父亲的生日是什么时候', '33', '2018-12-12 10:10:15'),
 	(4, 'mb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-31 21:55:17', '0', '2020-07-03 09:29:04', '2018-12-12 16:07:08', '1', '1', 0, '你最喜欢的水果是什么?', 'apple', '你的初中在哪里？', '湖北', '你的第一次是什么时候？', '16', '2018-12-12 10:10:15'),
 	(5, '小七', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-24 11:03:07', '0', '2018-03-31 23:35:22', '2018-03-31 23:38:03', '1', '1', 0, '你最喜欢的明星是谁?', '用户', '你最喜欢的一首歌是?', '计划', '你的初恋女友是谁?', '哦了', '2018-12-12 10:10:15'),
 	(6, '小三', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-24 10:45:15', '0', '2018-03-25 22:28:51', '2018-03-25 22:27:00', '1', '1', 0, '你最喜欢的明星是谁?', '喜鹊', '你最喜欢的一首歌是?', '我的心', '你的初恋女友是谁?', '曹君怡', '2018-12-12 10:10:15'),
@@ -1366,7 +1407,7 @@ INSERT INTO `ws_users` (`id`, `name`, `password`, `register_time`, `state`, `las
 	(18, 'hch', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-03-22 22:36:37', '0', '2021-06-27 19:03:07', '2021-06-27 19:03:30', '1', '1', 80, '你最喜欢的明星是谁?', '张娜拉', '你最喜欢的一首歌是什么?', '天天', '你父亲的生日是什么时候', '6.0', '2018-12-12 10:10:15'),
 	(21, '徐志摩', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 10:10:50', '0', '2018-12-12 10:16:02', '2018-12-12 10:16:02', '1', '1', 0, '你最喜欢的水果是什么?', '梨子', '你父亲生日是什么时候?', '元旦节', '你最想去哪旅行?', '非洲', '2018-12-12 10:10:50'),
 	(22, 'hhh', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 13:55:37', '0', '2020-07-03 09:25:55', '2018-12-12 14:51:08', '1', '1', 0, '你最喜欢的水果是什么?', '梨子', '你父亲生日是什么时候?', 'dd', '你最想去哪旅行?', '한국', '2018-12-12 13:55:37'),
-	(23, 'aa', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:38:58', '0', '2021-07-18 08:02:56', '2021-07-18 08:17:20', '1', '1', 231, '你最喜欢的水果是什么?', '带到', '你父亲生日是什么时候?', '带到', '你最想去哪旅行?', '的啊', '2018-12-12 16:38:58'),
+	(23, 'aa', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:38:58', '0', '2021-07-25 11:49:57', '2021-07-25 10:56:20', '1', '1', 231, '你最喜欢的水果是什么?', '带到', '你父亲生日是什么时候?', '带到', '你最想去哪旅行?', '的啊', '2018-12-12 16:38:58'),
 	(24, 'bb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-12 16:39:16', '0', '2021-06-25 21:33:21', '2021-06-25 21:44:12', '1', '1', 45, '你最喜欢的水果是什么?', '的的', '你父亲生日是什么时候?', '都是大神', '你最想去哪旅行?', '都是的', '2018-12-12 16:39:16'),
 	(25, 'vb', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-13 15:34:55', '0', '2020-07-03 09:26:09', '2020-06-01 21:23:16', '1', '1', 0, '你最喜欢的水果是什么?', '的的', '你父亲生日是什么时候?', '33', '你最想去哪旅行?', '55', '2018-12-13 15:34:55'),
 	(26, 'jkx', 'NDIzMUQzQ0UwODNEOUNGNTNEMTdDMEQzMkZDRTBFQ0E=', '2018-12-13 15:35:13', '0', '2018-12-13 15:41:00', '2018-12-13 15:41:00', '1', '1', 0, '你最想去哪旅行?', '中国', '你最想去哪旅行?', '中国', '你怎么看待中国的房价?', '太高了', '2018-12-13 15:35:13'),
@@ -1407,7 +1448,7 @@ CREATE TABLE IF NOT EXISTS `ws_user_profile` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COMMENT='用户简历表';
 
--- Dumping data for table zhdd.ws_user_profile: ~27 rows (approximately)
+-- Dumping data for table zhdd.ws_user_profile: ~26 rows (approximately)
 /*!40000 ALTER TABLE `ws_user_profile` DISABLE KEYS */;
 INSERT INTO `ws_user_profile` (`id`, `user_id`, `user_name`, `real_name`, `img`, `sign`, `age`, `sex`, `sex_text`, `tel`, `location`, `address`, `profession`, `profession_text`, `hobby`, `hobby_text`, `create_time`) VALUES
 	(6, 24, 'bb', '艰苦艰苦人', 'http://127.0.0.1:8101/headImg/41a440e4-02be-4624-813f-2d8d42e455ce.jpg', '草泥马的', 11, 1, '男', '2548745', '', '韩国首尔', 6, '其他', 6, '其他', '2019-01-08 16:22:30'),
@@ -1438,6 +1479,13 @@ INSERT INTO `ws_user_profile` (`id`, `user_id`, `user_name`, `real_name`, `img`,
 	(32, 39, 'hh', '', 'http://127.0.0.1:8101/headImg/afcc48c4-2b7e-4d53-9f35-ec1fe95149a3.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', '', 99, '其他', 99, '其他', '2021-02-10 23:29:28'),
 	(33, 40, 'ii', '', 'http://127.0.0.1:8101/headImg/2c9a622a-e5bb-4883-aacb-db5df4a6d228.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', '', 99, '其他', 99, '其他', '2021-02-10 23:40:02');
 /*!40000 ALTER TABLE `ws_user_profile` ENABLE KEYS */;
+
+-- Dumping structure for view zhdd.view_ws_file
+DROP VIEW IF EXISTS `view_ws_file`;
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `view_ws_file`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_ws_file` AS SELECT * FROM ws_file t
+WHERE t.USER IS NOT NULL AND LENGTH(t.USER)>0 ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
