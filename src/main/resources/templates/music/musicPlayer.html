@@ -142,7 +142,7 @@
                 if (uploadFlag) {
                     showText += filename + ":" + "<span style='color:blue;font-weight: bold;'>上传成功</span><br/>";
                 } else {
-                    showText += filename + ":" + "<span style='color:red;font-weight: bold;'>上传失败</span><br/>";
+                    showText += filename + ":" + "<span style='color:red;font-weight: bold;'>上传失败</span><span>"+val.remark+"</span><br/>";
                 }
             });
             layer.closeAll();

@@ -6,6 +6,7 @@ import com.pjb.springbootjwt.zhddkk.bean.FileUploadResultBean;
 import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,9 +60,11 @@ public class UploadController {
                 logger.info("开始上传文件");
                 if (!file.isEmpty()){
                     logger.info("开始上传文件:{}", file.getOriginalFilename());
-                    url = uploadService.uploadFile(file, folder, userName);
+                    url = uploadService.uploadFileWithCheckCapacity(file, folder, userName);
                     logger.info("返回的文件url:{}", url);
-                    return Result.ok(url);
+                    if (StringUtils.isNotBlank(url)) {
+                        return Result.ok(url);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -97,13 +100,18 @@ public class UploadController {
                         String originFilename = tempfile.getOriginalFilename();
                         try {
                             logger.info("开始上传文件:{}", originFilename);
-                            url = uploadService.uploadFile(tempfile, folder, userName);
+                            url = uploadService.uploadFileWithCheckCapacity(tempfile, folder, userName);
                             logger.info("返回的文件url:{}", url);
-                            FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, true, url);
-                            resultList.add(fileUploadResultBean);
-                        }catch (Exception e){
+                            if (StringUtils.isNotBlank(url)) {
+                                FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, true, url);
+                                resultList.add(fileUploadResultBean);
+                            } else {
+                                FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, false, url, "今日上传容量上限");
+                                resultList.add(fileUploadResultBean);
+                            }
+                        } catch (Exception e){
                             logger.info("上传文件异常:{}",originFilename);
-                            FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, false, "");
+                            FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, false, "", e.getMessage());
                             resultList.add(fileUploadResultBean);
                         }
                     }
@@ -115,6 +123,7 @@ public class UploadController {
             logger.info("上传出现异常:{}",e.getMessage());
             e.printStackTrace();
         }
+
         return Result.ok(resultList);
     }
 
@@ -139,18 +148,24 @@ public class UploadController {
                 logger.info("开始上传文件");
                 if (!file.isEmpty()){
                     logger.info("开始上传文件:{}", file.getOriginalFilename());
-                    url = uploadService.uploadFile(file, folder, userName);
+                    url = uploadService.uploadFileWithCheckCapacity(file, folder, userName);
                     logger.info("返回的文件url:{}", url);
-                    map.put("code", "1");
-                    map.put("msg", "操作成功");
-                    map.put("link", url);
+                    if (StringUtils.isNotBlank(url)) {
+                        map.put("code", "1");
+                        map.put("msg", "操作成功");
+                        map.put("link", url);
+                    } else {
+                        map.put("code", "0");
+                        map.put("msg", "今日空间不足");
+                        map.put("link", "");
+                    }
                 }
             }
         } catch (Exception e) {
             logger.info("上传出现异常:{}",e.getMessage());
             e.printStackTrace();
             map.put("code", "0");
-            map.put("msg", "操作失败");
+            map.put("msg", "上传异常");
             map.put("link", "");
         }
         return map;

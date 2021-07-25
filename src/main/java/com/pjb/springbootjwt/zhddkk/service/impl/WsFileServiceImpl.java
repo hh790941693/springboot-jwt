@@ -25,4 +25,11 @@ public class WsFileServiceImpl extends CoreServiceImpl<WsFileDao, WsFileDO> impl
     public List<LinkedHashMap<String, String>> queryEachUserUploadFileSizeData() {
         return this.baseMapper.queryEachUserUploadFileSizeData();
     }
+
+    @Override
+    public String queryUserTodayFileSize(String userName) {
+        return this.baseMapper.queryUserTodayFileSize(userName);
+    }
+
+
 }

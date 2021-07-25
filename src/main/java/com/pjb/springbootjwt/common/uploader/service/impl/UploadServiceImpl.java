@@ -2,8 +2,10 @@ package com.pjb.springbootjwt.common.uploader.service.impl;
 
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.common.uploader.service.UploadService;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.service.WsFileService;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -69,7 +71,26 @@ public class UploadServiceImpl implements UploadService {
         
         return viewUrl;
     }
-    
+
+    @Override
+    public String uploadFileWithCheckCapacity(MultipartFile file, String folder, String userName) throws Exception {
+        String sessionUserName = SessionUtil.getSessionUserName();
+        boolean canUploadFlag = true;
+        if (StringUtils.isNoneBlank() && !sessionUserName.equals(CommonConstants.ADMIN_USER)) {
+            String fileTotalSize = wsFileService.queryUserTodayFileSize(sessionUserName);
+            if (StringUtils.isNotBlank(fileTotalSize)) {
+                long dayFileSize = Long.valueOf(fileTotalSize);
+                if (dayFileSize > CommonConstants.DAY_MAX_UPLOAD_FILE_SIZE) {
+                    canUploadFlag = false;
+                }
+            }
+        }
+        if (canUploadFlag) {
+            return this.uploadFile(file, folder, userName);
+        }
+        return "";
+    }
+
     /**
      * 重命名文件为UUID + 后缀
      *

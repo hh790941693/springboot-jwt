@@ -43,4 +43,7 @@ public class CommonConstants {
     //session过期相关配置
     public static final String SESSION_TIMEOUT_CODE = "-255";
     public static final String SESSION_TIMEOUT_REDIRECT_URL = "/";
+
+    // 用户单日最大文件上传容量(KB) 默认50M
+    public static final Long DAY_MAX_UPLOAD_FILE_SIZE = 50 * 1024 * 1024l;
 }
