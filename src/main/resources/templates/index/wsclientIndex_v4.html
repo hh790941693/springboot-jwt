@@ -201,7 +201,7 @@
                     <a href="#" id="modifyLanguageBtn">
                         <span class="icon icon-22-7"></span>[[#{btn.language.tips}]]&nbsp;
                     </a>
-                    <a href="#" id="sessionInfoBtn">
+                    <a href="#" id="sessionInfoBtn" th:if="${session.sessionInfo.userName == 'admin'}">
                         <span class="icon icon-11-3"></span>[[#{a.sessioninfo.label}]]&nbsp;
                     </a>
                     <a href="#" id="contactBtn">
@@ -213,10 +213,10 @@
                     <a href="#" id="feedbackBtn">
                         <span class="icon icon-12-9"></span>[[#{a.feedback.label}]]&nbsp;
                     </a>&nbsp;
-                    <a href="#" id="easyUIDemo">
+                    <a href="#" id="easyUIDemo" th:if="${session.sessionInfo.userName == 'admin'}">
                         <span class="icon icon-1-5"></span>easyUI&nbsp;
                     </a>&nbsp;
-                    <a href="#" id="uploadDemo">
+                    <a href="#" id="uploadDemo" th:if="${session.sessionInfo.userName == 'admin'}">
                         <span class="icon icon-1-5"></span>layuiUpload&nbsp;
                     </a>&nbsp;
                     <a href="#" id="aboutUsBtn">
