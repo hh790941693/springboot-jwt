@@ -208,7 +208,9 @@
             ,accept: 'audio'  //音频
             ,exts: 'mp3'      //后缀
             ,bindAction: '#uploadFileBtn'  // 开始上传按钮
-            ,choose: function(obj){
+            ,choose: function(obj) {
+                $("#uploadedNumber").text(0);
+                $("#uploadFilename").text("");
                 //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
                 obj.preview(function(index, file, result){
                     fileNumber++;
@@ -216,20 +218,21 @@
                 });
             }
             ,done: function (res) {
+                // 单个文件上传结束后
+                finishNumber++;
+                
                 var resObj = res.data[0];
                 var filename = resObj.filename;
                 var uploadFlag = resObj.uploadFlag;
                 if (uploadFlag) {
-                    showText += "<p><span style='width:82%;'>" + filename + "</span><span style='width:15%;color:blue;font-weight: bold;'>上传成功</span></p>";
-
-                    // 单个文件上传结束后
-                    finishNumber++;
+                    showText += "<p><span style='width:62%;'>" + filename + "</span><span style='width:20%;'></span><span style='width:15%;color:blue;font-weight: bold;'>上传成功</span></p>";
+                    
                     // 上传进度百分比
                     var percent = finishNumber*100/fileNumber;
                     percent = Math.round(percent).toFixed(0)+"%";
                     layui.element.progress('uploadProgress', percent);
                 } else {
-                    showText += "<p><span style='width:62%;'>" + filename + "</span><span style='width:15%;color:red;font-weight: bold;'>上传失败</span><span style='width:20%;'>"+resObj.remark+"</span></p>";
+                    showText += "<p><span style='width:62%;'>" + filename + "</span><span style='width:20%;'>"+resObj.remark+"</span><span style='width:15%;color:red;font-weight: bold;'>上传失败</span></p>";
                 }
 
                 $("#uploadFilename").text(filename);
@@ -249,7 +252,7 @@
                     shadeClose: true,
                     shade: 0.2,
                     offset: "20%",
-                    area: ['630px', '60%'],
+                    area: ['680px', '60%'],
                     content: showText
                 });
 
@@ -257,6 +260,7 @@
                 //     window.location.href = window.location.href;
                 // }, 3500);
                 app.refreash();
+                showText = "<div id='uploadResultDiv'>";
             }
             ,progress: function(n, elem){
                 //获取单个文件上传进度百分比
@@ -403,7 +407,6 @@
                                         }
                                     }
                                 });
-                                console.log(i);
                                 if (i >= app.musicData.length-1) {
                                     app.refreash();
                                 }

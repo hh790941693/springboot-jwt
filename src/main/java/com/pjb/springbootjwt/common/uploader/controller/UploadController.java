@@ -87,6 +87,8 @@ public class UploadController {
             @RequestParam(required = false, defaultValue = "music")String folder
     ) {
         logger.info("进入上传文件控制层, 目录名:{}", folder);
+        // 上传容量是否已满 false:未满 true:已满
+        boolean isCapacityFull = false;
         Map<String, FileUploadResultBean> map = new HashMap<>();
         String url = "";
         String userName = SessionUtil.getSessionUserName();
@@ -100,11 +102,17 @@ public class UploadController {
                         String originFilename = tempfile.getOriginalFilename();
                         try {
                             logger.info("开始上传文件:{}", originFilename);
-                            url = uploadService.uploadFileWithCheckCapacity(tempfile, folder, userName);
-                            logger.info("返回的文件url:{}", url);
-                            if (StringUtils.isNotBlank(url)) {
-                                FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, true, url);
-                                resultList.add(fileUploadResultBean);
+                            if (!isCapacityFull) {
+                                url = uploadService.uploadFileWithCheckCapacity(tempfile, folder, userName);
+                                logger.info("返回的文件url:{}", url);
+                                if (StringUtils.isNotBlank(url)) {
+                                    FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, true, url);
+                                    resultList.add(fileUploadResultBean);
+                                } else {
+                                    isCapacityFull = true;
+                                    FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, false, url, "今日上传容量上限");
+                                    resultList.add(fileUploadResultBean);
+                                }
                             } else {
                                 FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, false, url, "今日上传容量上限");
                                 resultList.add(fileUploadResultBean);
