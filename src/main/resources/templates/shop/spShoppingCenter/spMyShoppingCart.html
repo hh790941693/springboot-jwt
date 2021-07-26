@@ -202,7 +202,8 @@
                   var that = this;
                   var goodsDetail = app.shoppingCartList[index];
                   if (goodsDetail.goodsCount <= 1) {
-                      layer.alert("数量不能小于0");
+                      //layer.alert("数量不能小于0");
+                      that.removeShoopingCartObj(index, goodsDetail.shoppingCartPkId);
                       return;
                   }
                   $.ajax({
