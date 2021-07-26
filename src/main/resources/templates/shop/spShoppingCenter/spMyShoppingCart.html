@@ -186,14 +186,13 @@
               selectAll : function () {
                   var that = this;
                   setTimeout(function(){
+                      app.selectedGoodsIndexArr = [];
                       if (app.selectAllFlag) {
                           for (var i=0;i<app.shoppingCartList.length;i++) {
                               if (app.shoppingCartList[i].stockNum>0) {
                                   app.selectedGoodsIndexArr.push(i);
                               }
                           }
-                      } else {
-                          app.selectedGoodsIndexArr = [];
                       }
                       that.computeGoodsPrice();
                   }, 50);
