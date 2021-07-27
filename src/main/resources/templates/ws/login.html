@@ -85,19 +85,13 @@
             <span class="fa fa-qrcode fa-3x" th:title="#{btn.qrcode.tips}"></span>
         </div>
         <!--语言切换-->
-        <div style="position:absolute;top:6px;right:2px;width:192px;" th:title="#{select.choose.language}">
-            <div class="layui-form">
-              <div class="layui-form-item">
-                <div class="layui-input-block">
-                  <select lay-verify="required" lay-filter="langSelect">
-                        <option value="zh_CN" data-icon="fa fa-cny" th:text="中文" th:selected="${#locale.getCountry() == 'CN'}"></option>
-                        <option value="en_US" data-icon="fa fa-dollar" th:text="English"
-                                th:selected="${#locale.getCountry() == 'US'}"></option>
-                        <option value="ko_KR" data-icon="fa fa-won" th:text="한국어" th:selected="${#locale.getCountry() == 'KR'}"></option>
-                  </select>
-                </div>
-              </div>
-            </div>
+        <div style="position:absolute;top:6px;right:1px;width:100px;" th:title="#{select.choose.language}">
+            <select class="selectpicker" data-live-search="true" data-width="100%">
+                <option value="zh_CN" th:text="中文" th:selected="${#locale.getCountry() == 'CN'}"></option>
+                <option value="en_US" th:text="English"
+                        th:selected="${#locale.getCountry() == 'US'}"></option>
+                <option value="ko_KR" th:text="한국어" th:selected="${#locale.getCountry() == 'KR'}"></option>
+            </select>
         </div>
         
         <!--
@@ -223,9 +217,8 @@
     });
 
     // 切换语言
-    layui.form.on('select(langSelect)', function(data){
-        layui.form.render('select');
-        window.location.replace("/i18n?lang=" + data.value);
+    $(".selectpicker").change(function() {
+        window.location.replace("/i18n?lang=" + $(this).val());
     });
 
     //注册账号

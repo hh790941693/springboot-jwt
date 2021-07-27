@@ -69,7 +69,7 @@
 										<option value="0" th:disabled="disabled" th:selected="${spMerchant.status == 0}">已关闭</option>
 									</select>
 
-									<select name="status" th:value="${spMerchant.status}" class="form-control" th:unless="${spMerchant.status == 0}">
+									<select name="status" th:value="${spMerchant.status}" class="form-control selectpicker" th:unless="${spMerchant.status == 0}">
 										<option value="1" th:selected="${spMerchant.status == 1}">营业中</option>
 										<option value="2" th:selected="${spMerchant.status == 2}">暂停营业</option>
 										<option value="3" th:selected="${spMerchant.status == 3}">已打烊</option>

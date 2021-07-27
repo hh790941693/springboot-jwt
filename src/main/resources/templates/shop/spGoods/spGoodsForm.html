@@ -45,7 +45,7 @@
 																								<div class="form-group">
 								<label class="col-sm-3 control-label" for="goodsTypeId"><span style="color:red">*</span>&nbsp;商品类型：</label>
 								<div class="col-sm-8">
-									<select id="goodsTypeId" name="goodsTypeId" th:value="${spGoods.goodsTypeId}" class="form-control">
+									<select id="goodsTypeId" name="goodsTypeId" th:value="${spGoods.goodsTypeId}" class="form-control selectpicker">
 										<option th:each="goodsTypeObj:${spGoods.spGoodsTypeList}" th:value="${goodsTypeObj.typeId}" th:selected="${spGoods.goodsTypeId == goodsTypeObj.typeId}" th:text="${goodsTypeObj.name}"></option>
 									</select>
 								</div>
@@ -71,7 +71,7 @@
 																								<div class="form-group">
 								<label class="col-sm-3 control-label" for="unitName"><span style="color:red">*</span>&nbsp;商品单位：</label>
 								<div class="col-sm-8">
-									<select id="unitName" name="unitName" th:value="${spGoods.unitName}" class="form-control">
+									<select id="unitName" name="unitName" th:value="${spGoods.unitName}" class="form-control selectpicker">
 										<option value="个" th:selected="${spGoods.unitName == '个'}">个</option>
 										<option value="斤" th:selected="${spGoods.unitName == '斤'}">斤</option>
 										<option value="台" th:selected="${spGoods.unitName == '台'}">台</option>

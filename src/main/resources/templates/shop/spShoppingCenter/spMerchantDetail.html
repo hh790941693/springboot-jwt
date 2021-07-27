@@ -85,7 +85,7 @@
 					<tr>
 						<td>店铺状态</td>
 						<td>
-							<select name="status" :value="merchantDetail.status" class="form-control" th:disabled="disabled">
+							<select name="status" :value="merchantDetail.status" class="form-control selectpicker" th:disabled="disabled">
 								<option :selected="merchantDetail.status == 0">已关闭</option>
 								<option :selected="merchantDetail.status == 1">营业中</option>
 								<option :selected="merchantDetail.status == 2">暂停营业</option>
