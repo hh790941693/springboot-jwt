@@ -41,11 +41,8 @@
                     <div class="ibox-content">
                         <div class="fixed-table-toolbar">
                             <div class="columns pull-left">
-                                <button shiro:hasPermission="zhddkk:wsChatroom:add" type="button" class="btn  btn-primary" onclick="add()">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;添加
-                                </button>
-                                <button shiro:hasPermission="zhddkk:wsChatroom:batchRemove" type="button" class="btn  btn-danger" onclick="batchRemove()">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>&nbsp;删除
+                                <button shiro:hasPermission="zhddkk:wsChatroom:createRoom" type="button" class="btn  btn-primary" onclick="createRoom()">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;创建房间
                                 </button>
                             </div>
                         </div>
@@ -55,27 +52,83 @@
                 </div>
             </div>
         </div>
+
+        <div id="roomListDiv" style="width:100%;height:400px;overflow: auto;border:1px solid grey;">
+            <div v-for="roomObj in chatRoomList" :key="roomObj.id" style="width:250px;height:200px;border:1px solid lightgrey;float:left;margin: 10px;padding:10px;">
+                <div style="height: 30px;text-align: center;font-size: 25px;font-weight: bold;">
+                    <p>{{roomObj.roomId}}</p>
+                </div>
+                <div style="height: 20px;">
+                    <p>房间名称：{{roomObj.name}}</p>
+                </div>
+                <div style="height: 20px;">
+                    <p>房管：{{roomObj.managerName}}</p>
+                </div>
+                <div style="height: 20px;">
+                    <p>创建时间：{{roomObj.createTime}}</p>
+                </div>
+                <div style="height:30px;">
+                    <div style="width:100%;">
+                        <p>房间人数:50</p>
+                    </div>
+                </div>
+                <div style="height:50px;">
+                    <div style="width:100%;;text-align: right;font-size: 30px;" v-if="roomObj.password != ''">
+                        <p><span><i class="fa fa-lock"></i></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
-	<!--以下区域不可见，用于shiro控制bootstraptable显示行内按钮 -->
-	<div>
-		<div>
-			<script type="text/javascript">
-				var s_edit_h = 'hidden';
-				var s_remove_h = 'hidden';
-			</script>
-		</div>
-		<div shiro:hasPermission="zhddkk:wsChatroom:edit">
-			<script type="text/javascript">
-				s_edit_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="zhddkk:wsChatroom:remove">
-			<script type="text/javascript">
-				var s_remove_h = '';
-			</script>
-		</div>
-	</div>
+
     <th:block th:include="common :: footer"></th:block>
+
+    <script>
+        //添加
+        function createRoom() {
+            layer.open({
+                type : 2,
+                title : '创建房间',
+                maxmin : true,
+                shadeClose : false,//点击遮罩关闭层
+                area : [ '600px', '420px' ],
+                content : '/zhddkk/wsChatroom/add'
+            });
+        }
+
+        var app = new Vue({
+            el: '#roomListDiv',
+            data: {
+                chatRoomList : []
+            },
+            methods: {
+                // 支付
+                queryChatRoomList : function(){
+                    var that = this;
+                    layer.load(1, {
+                        shade: [0.1,'#fff']
+                    });
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/zhddkk/wsChatroom/queryChatRoomList",
+                        data : {
+                        },
+                        success: function (result) {
+                            if (result.code == 1) {
+                                app.chatRoomList = result.data;
+                            } else {
+                                layer.alert(result.data);
+                            }
+                            layer.closeAll('loading');
+                        }
+                    });
+                },
+            },
+            created : function() {
+                this.queryChatRoomList();
+            }
+        });
+    </script>
 </body>
-<script type="text/javascript" th:src="@{/js/appjs/zhddkk/wsChatroom/wsChatroom.js}"></script>
 </html>

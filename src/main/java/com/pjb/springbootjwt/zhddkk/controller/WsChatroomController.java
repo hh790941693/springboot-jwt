@@ -3,6 +3,7 @@ package com.pjb.springbootjwt.zhddkk.controller;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
@@ -144,5 +145,12 @@ public class WsChatroomController extends AdminBaseController {
 	public Result<String> remove(@RequestParam("ids[]") Long[] ids) {
 		wsChatroomService.deleteBatchIds(Arrays.asList(ids));
 		return Result.ok();
+	}
+
+	@GetMapping("/queryChatRoomList")
+	@ResponseBody
+	public Result<List<WsChatroomDO>> queryChatRoomList() {
+		List<WsChatroomDO> wsChatroomDOList = wsChatroomService.selectList(null);
+		return Result.ok(wsChatroomDOList);
 	}
 }

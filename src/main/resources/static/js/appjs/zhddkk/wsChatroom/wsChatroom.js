@@ -117,10 +117,10 @@ function cleanForm(){
 function add() {
 	layer.open({
 		type : 2,
-		title : '增加',
+		title : '创建房间',
 		maxmin : true,
 		shadeClose : false,//点击遮罩关闭层
-		area : [ '600px', '320px' ],
+		area : [ '600px', '420px' ],
 		content : prefix + '/add'
 	});
 }

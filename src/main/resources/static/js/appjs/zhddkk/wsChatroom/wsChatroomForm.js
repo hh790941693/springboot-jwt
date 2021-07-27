@@ -45,16 +45,10 @@ function validateRule() {
             name : {
                 required : true
             },
-            desc : {
-                required : true
-            },
         },
         messages : {
             name : {
                 required : icon + "请输入房间名称"
-            },
-            desc : {
-                required : icon + "请输入房间描述"
             },
         }
     })
