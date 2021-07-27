@@ -221,4 +221,13 @@ public class CommonUtil {
         }
         return list.subList(start, end);
     }
+
+    public static String generateRandomCode(int num) {
+        StringBuilder sb = new StringBuilder();
+        for(int n=0; n<num; n++ ) {
+            sb.append((int)(10*(Math.random())));
+        }
+
+        return sb.toString();
+    }
 }

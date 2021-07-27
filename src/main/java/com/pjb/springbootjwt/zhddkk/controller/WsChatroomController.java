@@ -5,9 +5,12 @@ import java.util.Arrays;
 import java.util.Date;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -98,8 +101,14 @@ public class WsChatroomController extends AdminBaseController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
+	@Transactional(rollbackFor = Exception.class)
 	//@RequiresPermissions("zhddkk:wsChatroom:add")
 	public Result<String> save(WsChatroomDO wsChatroom) {
+		wsChatroom.setCreateUserId(Long.valueOf(SessionUtil.getSessionUserId()));
+		wsChatroom.setRoomId(CommonUtil.generateRandomCode(10));
+		wsChatroom.setCreateTime(new Date());
+		wsChatroom.setUpdateTime(new Date());
+		wsChatroom.setStatus(1);
 		wsChatroomService.insert(wsChatroom);
         return Result.ok();
 	}

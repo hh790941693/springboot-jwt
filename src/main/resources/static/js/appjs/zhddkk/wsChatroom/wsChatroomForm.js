@@ -42,55 +42,19 @@ function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
     $("#form").validate({
         rules : {
-            roomId : {
-                required : true
-            },
             name : {
                 required : true
             },
-            password : {
-                required : true
-            },
             desc : {
-                required : true
-            },
-            createUserId : {
-                required : true
-            },
-            createTime : {
-                required : true
-            },
-            updateTime : {
-                required : true
-            },
-            status : {
                 required : true
             },
         },
         messages : {
-            roomId : {
-                required : icon + "请输入房间id"
-            },
             name : {
                 required : icon + "请输入房间名称"
             },
-            password : {
-                required : icon + "请输入房间密码"
-            },
             desc : {
                 required : icon + "请输入房间描述"
-            },
-            createUserId : {
-                required : icon + "请输入创建者id"
-            },
-            createTime : {
-                required : icon + "请输入创建时间"
-            },
-            updateTime : {
-                required : icon + "请输入更新时间"
-            },
-            status : {
-                required : icon + "请输入状态 0:删除 1:正常 2:封锁"
             },
         }
     })
