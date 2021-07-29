@@ -107,7 +107,7 @@ public class WsChatroomController extends AdminBaseController {
 	//@RequiresPermissions("zhddkk:wsChatroom:add")
 	public Result<String> save(WsChatroomDO wsChatroom) {
 		wsChatroom.setCreateUserId(Long.valueOf(SessionUtil.getSessionUserId()));
-		wsChatroom.setRoomId(CommonUtil.generateRandomCode(10));
+		wsChatroom.setRoomId(CommonUtil.generateRandomCode(8));
 		wsChatroom.setCreateTime(new Date());
 		wsChatroom.setUpdateTime(new Date());
 		wsChatroom.setStatus(1);
