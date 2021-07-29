@@ -53,7 +53,7 @@
                     <div class="ibox-content">
                         <div class="fixed-table-toolbar">
                             <div class="columns pull-left">
-                                <button shiro:hasPermission="zhddkk:wsChatroom:createRoom" type="button" class="btn  btn-primary" onclick="createRoom()">
+                                <button shiro:hasPermission="zhddkk:wsChatroom:add" type="button" class="btn  btn-primary" onclick="add()">
                                     <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;创建房间
                                 </button>
                             </div>
@@ -92,89 +92,14 @@
                         <button class="btn btn-success" @click="enterRoom(index)">进入房间</button>
                     </div>
                 </div>
+                <div style="width:100%;height:25px;position: absolute;top:2px;right:8px;text-align: right;" v-if="roomObj.myRoom">
+                    <button class="btn btn-sm btn-primary" @click="edit(roomObj.id)"><i class="fa fa-edit"></i></button>
+                </div>
             </div>
         </div>
 	</div>
 
     <th:block th:include="common :: footer"></th:block>
-
-    <script>
-        //添加
-        function createRoom() {
-            layer.open({
-                type : 2,
-                title : '创建房间',
-                maxmin : true,
-                shadeClose : false,//点击遮罩关闭层
-                area : [ '600px', '420px' ],
-                content : '/zhddkk/wsChatroom/add'
-            });
-        }
-        function reLoad() {
-            app.queryChatRoomList();
-        }
-
-        function cleanForm(){
-            $("#roomNameSearchInput").val("");
-            $("#roomIdSearchInput").val("");
-            app.queryChatRoomList();
-        }
-        var app = new Vue({
-            el: '#roomListDiv',
-            data: {
-                chatRoomList : []
-            },
-            methods: {
-                // 房间列表
-                queryChatRoomList : function(){
-                    var that = this;
-                    layer.load(1, {
-                        shade: [0.1,'#fff']
-                    });
-
-                    $.ajax({
-                        type: "GET",
-                        url: "/zhddkk/wsChatroom/queryChatRoomList",
-                        data : {
-                            'name' : $("#roomNameSearchInput").val(),
-                            'roomId' : $("#roomIdSearchInput").val(),
-                        },
-                        success: function (result) {
-                            if (result.code == 1) {
-                                app.chatRoomList = result.data;
-                            }
-                            layer.closeAll('loading');
-                        }
-                    });
-                },
-                enterRoom: function (index) {
-                    var roomInfo = app.chatRoomList[index];
-                    if (!!roomInfo.password) {
-                        layer.prompt({title: '请输入房间密码', formType: 1}, function(pass, index){
-                            layer.close(index);
-                            if (pass != roomInfo.password) {
-                                layer.alert('密码不正确', {
-                                    icon: 2,
-                                });
-                                return;
-                            }
-                            layer.msg("进入房间成功");
-                        });
-                    } else {
-                        layer.msg("进入房间成功");
-                    }
-                },
-                mouseEnter: function (index) {
-                    $("#roomListDiv").children("div").eq(index).addClass("selected");
-                },
-                mouseLeave: function (index) {
-                    $("#roomListDiv").children("div").eq(index).removeClass("selected");
-                },
-            },
-            created : function() {
-                this.queryChatRoomList();
-            }
-        });
-    </script>
+    <script type="text/javascript" th:src="@{/js/appjs/zhddkk/wsChatRoom/wsChatRoom.js}"></script>
 </body>
 </html>

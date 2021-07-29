@@ -1,116 +1,71 @@
 var prefix = "/zhddkk/wsChatroom";
 
-$(function() {
-	load();
+var app = new Vue({
+	el: '#roomListDiv',
+	data: {
+		chatRoomList : []
+	},
+	methods: {
+		// 房间列表
+		queryChatRoomList : function(){
+			var that = this;
+			layer.load(1, {
+				shade: [0.1,'#fff']
+			});
+
+			$.ajax({
+				type: "GET",
+				url: "/zhddkk/wsChatroom/queryChatRoomList",
+				data : {
+					'name' : $("#roomNameSearchInput").val(),
+					'roomId' : $("#roomIdSearchInput").val(),
+				},
+				success: function (result) {
+					if (result.code == 1) {
+						app.chatRoomList = result.data;
+					}
+					layer.closeAll('loading');
+				}
+			});
+		},
+		enterRoom: function (index) {
+			var roomInfo = app.chatRoomList[index];
+			if (!!roomInfo.password) {
+				layer.prompt({title: '请输入房间密码', formType: 1}, function(pass, index){
+					layer.close(index);
+					if (pass != roomInfo.password) {
+						layer.alert('密码不正确', {
+							icon: 2,
+						});
+						return;
+					}
+					layer.msg("进入房间成功");
+				});
+			} else {
+				layer.msg("进入房间成功");
+			}
+		},
+		mouseEnter: function (index) {
+			$("#roomListDiv").children("div").eq(index).addClass("selected");
+		},
+		mouseLeave: function (index) {
+			$("#roomListDiv").children("div").eq(index).removeClass("selected");
+		},
+	},
+	created : function() {
+		this.queryChatRoomList();
+	}
 });
 
-//加载表格
-function load() {
-	$('#exampleTable').bootstrapTable({
-		method : 'get',
-		url : prefix + "/list",
-		//showRefresh : true,
-		//showToggle : true,
-		//showColumns : true,
-		iconSize : 'outline',
-		toolbar : '#exampleToolbar',
-		striped : true,//设置为true会有隔行变色效果
-		dataType : "json",//服务器返回的数据类型
-		pagination : true,//设置为true会在底部显示分页条
-		singleSelect : false,//设置为true将禁止多选
-		//contentType : "application/x-www-form-urlencoded",//发送到服务器的数据编码类型
-		pageSize : 10,//如果设置了分页，每页数据条数
-		pageNumber : 1,//如果设置了分布，首页页码
-		//search : true,// 是否显示搜索框
-		showColumns : true,// 是否显示内容下拉框（选择显示的列）
-		sidePagination : "server",//设置在哪里进行分页，可选值为"client" 或者 "server"
-		queryParamsType : "",
-		//设置为limit则会发送符合RESTFull格式的参数
-		queryParams : function(params) {
-			return {
-				//传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
-				pageNumber : params.pageNumber,
-				pageSize : params.pageSize
-			};
-		},
-		// //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
-		// queryParamsType = 'limit' ,返回参数必须包含
-		// limit, offset, search, sort, order 否则, 需要包含:
-		// pageSize, pageNumber, searchText, sortName,
-		// sortOrder.
-		// 返回false将会终止请求
-		responseHandler : function(res){
-			return {
-				"total" : res.data.total,//总数
-				"rows" : res.data.records//数据
-			 };
-		},
-		columns : [
-			{
-				checkbox : true
-			},
-						{
-				field : 'id',
-				title : ''
-			},
-						{
-				field : 'roomId',
-				title : '房间id'
-			},
-						{
-				field : 'name',
-				title : '房间名称'
-			},
-						{
-				field : 'password',
-				title : '房间密码'
-			},
-						{
-				field : 'desc',
-				title : '房间描述'
-			},
-						{
-				field : 'createUserId',
-				title : '创建者id'
-			},
-						{
-				field : 'createTime',
-				title : '创建时间'
-			},
-						{
-				field : 'updateTime',
-				title : '更新时间'
-			},
-						{
-				field : 'status',
-				title : '状态 0:删除 1:正常 2:封锁'
-			},
-						{
-				title : '操作',
-				field : 'id',
-				align : 'center',
-				formatter : function(value, row, index) {
-					var e = '<a class="btn btn-warning btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
-							+ row.id
-							+ '\')"><i class="fa fa-edit"></i></a> ';
-					var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
-							+ row.id
-							+ '\')"><i class="fa fa-remove"></i></a> ';
-					return e+d;
-				}
-			}
-		]
-	});
-}
 
-//重新加载表格
 function reLoad() {
-	$('#exampleTable').bootstrapTable('refresh');
+	app.queryChatRoomList();
 }
 
-//重置
 function cleanForm(){
-	reLoad();
+	$("#roomNameSearchInput").val("");
+	$("#roomIdSearchInput").val("");
+	app.queryChatRoomList();
 }
 
 //添加

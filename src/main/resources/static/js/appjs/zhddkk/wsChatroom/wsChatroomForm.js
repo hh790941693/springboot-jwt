@@ -20,7 +20,6 @@ function save() {
         success : function(r) {
             if (r.code == 1) {
                 parent.layer.msg("保存成功");
-                $('#exampleTable').bootstrapTable('refresh');
                 var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
                 parent.layer.close(index);
             } else {
