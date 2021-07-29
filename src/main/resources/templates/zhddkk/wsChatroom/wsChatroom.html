@@ -27,8 +27,14 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="input-group">
-                                    <div class="input-group-addon">名称</div>
-                                    <input type="text" class="form-control" id="nameSearchInput" placeholder="请输入">
+                                    <div class="input-group-addon">房间名称</div>
+                                    <input type="text" class="form-control" id="roomNameSearchInput" placeholder="请输入">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">房间名号</div>
+                                    <input type="text" class="form-control" id="roomIdSearchInput" placeholder="请输入">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -104,7 +110,15 @@
                 content : '/zhddkk/wsChatroom/add'
             });
         }
+        function reLoad() {
+            app.queryChatRoomList();
+        }
 
+        function cleanForm(){
+            $("#roomNameSearchInput").val("");
+            $("#roomIdSearchInput").val("");
+            app.queryChatRoomList();
+        }
         var app = new Vue({
             el: '#roomListDiv',
             data: {
@@ -122,12 +136,12 @@
                         type: "GET",
                         url: "/zhddkk/wsChatroom/queryChatRoomList",
                         data : {
+                            'name' : $("#roomNameSearchInput").val(),
+                            'roomId' : $("#roomIdSearchInput").val(),
                         },
                         success: function (result) {
                             if (result.code == 1) {
                                 app.chatRoomList = result.data;
-                            } else {
-                                layer.alert(result.data);
                             }
                             layer.closeAll('loading');
                         }

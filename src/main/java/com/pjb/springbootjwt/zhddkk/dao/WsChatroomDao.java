@@ -1,9 +1,10 @@
 package com.pjb.springbootjwt.zhddkk.dao;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.pjb.springbootjwt.zhddkk.domain.WsChatroomDO;
 import com.pjb.springbootjwt.zhddkk.base.BaseDao;
 import com.pjb.springbootjwt.zhddkk.dto.WsChatroomDTO;
-import io.lettuce.core.dynamic.annotation.Param;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,5 +18,5 @@ import java.util.List;
 @Repository
 public interface WsChatroomDao extends BaseDao<WsChatroomDO> {
 
-    List<WsChatroomDTO> queryChatRoomInfoList(@Param("loginUserId") String loginUserId);
+    List<WsChatroomDTO> queryChatRoomInfoList(@Param("ew") Wrapper<WsChatroomDO> wrapper, @Param("loginUserId") String loginUserId);
 }

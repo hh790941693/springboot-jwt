@@ -6,9 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.pjb.springbootjwt.zhddkk.dto.WsChatroomDTO;
 import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -150,8 +152,15 @@ public class WsChatroomController extends AdminBaseController {
 
 	@GetMapping("/queryChatRoomList")
 	@ResponseBody
-	public Result<List<WsChatroomDTO>> queryChatRoomList() {
-		List<WsChatroomDTO> wsChatroomDOList = wsChatroomService.queryChatRoomInfoList(SessionUtil.getSessionUserId());
+	public Result<List<WsChatroomDTO>> queryChatRoomList(WsChatroomDO wsChatroomDO) {
+		Wrapper<WsChatroomDO> wrapper = new EntityWrapper<>();
+		if (StringUtils.isNotBlank(wsChatroomDO.getName())) {
+			wrapper.like("t1.name", wsChatroomDO.getName(), SqlLike.DEFAULT);
+		}
+		if (StringUtils.isNotBlank(wsChatroomDO.getRoomId())) {
+			wrapper.like("t1.room_id", wsChatroomDO.getRoomId(), SqlLike.DEFAULT);
+		}
+		List<WsChatroomDTO> wsChatroomDOList = wsChatroomService.queryChatRoomInfoList(wrapper, SessionUtil.getSessionUserId());
 		return Result.ok(wsChatroomDOList);
 	}
 }

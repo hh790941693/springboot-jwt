@@ -1,9 +1,9 @@
 package com.pjb.springbootjwt.zhddkk.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.pjb.springbootjwt.zhddkk.domain.WsChatroomDO;
 import com.pjb.springbootjwt.zhddkk.base.CoreService;
 import com.pjb.springbootjwt.zhddkk.dto.WsChatroomDTO;
-import io.lettuce.core.dynamic.annotation.Param;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ import java.util.List;
  */
 public interface WsChatroomService extends CoreService<WsChatroomDO> {
 
-    List<WsChatroomDTO> queryChatRoomInfoList(String loginUserId);
+    List<WsChatroomDTO> queryChatRoomInfoList(Wrapper<WsChatroomDO> wrapper, String loginUserId);
 }

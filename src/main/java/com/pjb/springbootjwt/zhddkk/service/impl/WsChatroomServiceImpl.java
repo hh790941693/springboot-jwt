@@ -1,5 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.service.impl;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.pjb.springbootjwt.zhddkk.dto.WsChatroomDTO;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class WsChatroomServiceImpl extends CoreServiceImpl<WsChatroomDao, WsChat
     private static final Logger logger = LoggerFactory.getLogger(WsChatroomServiceImpl.class);
 
     @Override
-    public List<WsChatroomDTO> queryChatRoomInfoList(String loginUserId) {
-        return this.baseMapper.queryChatRoomInfoList(loginUserId);
+    public List<WsChatroomDTO> queryChatRoomInfoList(Wrapper<WsChatroomDO> wrapper, String loginUserId) {
+        return this.baseMapper.queryChatRoomInfoList(wrapper, loginUserId);
     }
 }
