@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.pjb.springbootjwt.zhddkk.dto.WsChatroomDTO;
 import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,8 +150,8 @@ public class WsChatroomController extends AdminBaseController {
 
 	@GetMapping("/queryChatRoomList")
 	@ResponseBody
-	public Result<List<WsChatroomDO>> queryChatRoomList() {
-		List<WsChatroomDO> wsChatroomDOList = wsChatroomService.selectList(null);
+	public Result<List<WsChatroomDTO>> queryChatRoomList() {
+		List<WsChatroomDTO> wsChatroomDOList = wsChatroomService.queryChatRoomInfoList(SessionUtil.getSessionUserId());
 		return Result.ok(wsChatroomDOList);
 	}
 }

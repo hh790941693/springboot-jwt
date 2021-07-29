@@ -2,5 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pjb.springbootjwt.zhddkk.dao.WsChatroomDao">
-
+    <select id="queryChatRoomInfoList" resultType="com.pjb.springbootjwt.zhddkk.dto.WsChatroomDTO">
+        SELECT
+            t1.*,
+            t2.name AS manager_name,
+            (SELECT COUNT(*) FROM ws_chatroom_users t3 WHERE t3.room_id = t1.room_id AND t3.`status`=1) AS online_user_count,
+            IF ( t1.create_user_id = #{loginUserId} , 1, 0 ) AS 'is_my_room'
+        FROM ws_chatroom t1
+        LEFT JOIN
+            ws_users t2
+        ON t1.create_user_id = t2.id
+    </select>
 </mapper>
