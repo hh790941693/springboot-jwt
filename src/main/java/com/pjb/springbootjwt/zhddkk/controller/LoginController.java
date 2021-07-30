@@ -14,20 +14,14 @@ import com.pjb.springbootjwt.zhddkk.dto.ForgetPasswordDTO;
 import com.pjb.springbootjwt.zhddkk.dto.LoginDTO;
 import com.pjb.springbootjwt.zhddkk.dto.RegisterDTO;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
-import com.pjb.springbootjwt.zhddkk.service.CacheService;
-import com.pjb.springbootjwt.zhddkk.service.SysRoleService;
-import com.pjb.springbootjwt.zhddkk.service.SysUserRoleService;
-import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
-import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
-import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
-import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
+import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
-import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import com.wf.captcha.ArithmeticCaptcha;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -88,6 +82,9 @@ public class LoginController {
 
     @Autowired
     private SysRoleService sysRoleService;
+
+    @Autowired
+    private WsChatroomUsersService wsChatroomUsersService;
 
     /**
      * 首页登录.
@@ -621,8 +618,9 @@ public class LoginController {
         WsOnlineInfo woi = new WsOnlineInfo();
         woi.setCommonMap(buildCommonData());
 
+        List<WsChatroomUsersDO> chatroomUsersList = wsChatroomUsersService.selectList(new EntityWrapper<WsChatroomUsersDO>().eq("room_id", roomId).eq("status", 1));
         // 房间用户列表
-        List<String> roomUserNameList = ZhddWebSocket.getRoomClientsUserList(roomId);
+        List<String> roomUserNameList = chatroomUsersList.stream().map(WsChatroomUsersDO::getUserName).collect(Collectors.toList());
         List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_name", roomUserNameList));
         woi.setRoomUserProfileList(roomUserProfileList);
         woi.setRoomUserCount(roomUserNameList.size());

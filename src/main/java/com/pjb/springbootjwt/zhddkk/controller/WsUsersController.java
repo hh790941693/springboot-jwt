@@ -293,7 +293,6 @@ public class WsUsersController extends AdminBaseController {
         if (null == wsUsersDO) {
             return Result.fail("用户不存在");
         }
-        String userName = wsUsersDO.getName();
         ZhddWebSocket.removeUserFromAllRoom(wsUsersDO.getName());
 
         wsUsersDO.setState("0");

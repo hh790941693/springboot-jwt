@@ -7,19 +7,13 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
-import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
-import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.WsAdsDO;
 import com.pjb.springbootjwt.zhddkk.service.WsAdsService;
-import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
-import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.Session;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -164,26 +158,6 @@ public class WsAdsController extends AdminBaseController {
         // 插入广告记录
         boolean insertFlag = wsAdsService.insert(wsAds);
         if (insertFlag) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String curTime = sdf.format(new Date());
-
-            Map<String, Map<String, Session>> socketMap = ZhddWebSocket.getClientsMap();
-            for (Map.Entry<String, Map<String, Session>> outerEntry : socketMap.entrySet()) {
-                for (Map.Entry<String, Session> innerEntry : outerEntry.getValue().entrySet()) {
-                    if (innerEntry.getKey().equals(CommonConstants.ADMIN_USER)) {
-                        continue;
-                    }
-                    try {
-                        ChatMessageBean chatBean = new ChatMessageBean(curTime, "4", "广告消息",
-                                CommonConstants.ADMIN_USER, innerEntry.getKey(), "title:" + wsAds.getTitle() + ";content:" + wsAds.getContent());
-                        innerEntry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatBean));
-                        receiveList.add(innerEntry.getKey());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
             wsAds.setReceiveList(receiveList.toString());
             wsAdsService.updateById(wsAds);
             return Result.ok();
