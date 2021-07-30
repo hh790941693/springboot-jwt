@@ -288,7 +288,7 @@
                     $.ajax({
                         type: 'GET',
                         url: rootUrl+ 'getChatRoomInfo.json',
-                        data: {"roomName":roomId},
+                        data: {"roomId":roomId},
                         success: function (result) {
                             if (result.code != 1) {
                                 return;

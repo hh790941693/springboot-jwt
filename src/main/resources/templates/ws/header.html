@@ -164,7 +164,7 @@
             $.ajax({
                 type: 'GET',
                 url: rootUrl+'/ws/getOnlineInfo.json',
-                data: {"roomName":parent.roomName},
+                data: {"roomId":parent.roomId},
                 //dataType: 'json',
                 success: function (result) {
                     if (result.code != 1) {

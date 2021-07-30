@@ -194,7 +194,7 @@
                     $.ajax({
                         type: 'GET',
                         url: 'getOnlineInfo.json',
-                        data: {"roomName":parent.roomName},
+                        data: {"roomId":parent.roomId},
                         success: function (result) {
                             if (result.code != 1) {
                                 return;
@@ -287,7 +287,7 @@
                     parent.chatRecord = parent.chatRecord + msg;
                     textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
                 } else {
-                    sendMsgToServer(parent.roomName, sessionUser, toUser, msgToServer);
+                    sendMsgToServer(parent.roomId, sessionUser, toUser, msgToServer);
                     $("#msgToServer").val("");
                 }
             } else {
@@ -297,12 +297,12 @@
         }
 
         //发送消息
-        function sendMsgToServer(roomName, from, to, msg) {
+        function sendMsgToServer(roomId, from, to, msg) {
             if (parent.connectStatus == "1" && parent.webSocket != null) {
                 var toServerMsgObj = {};
                 toServerMsgObj.msgTypeId = 2;
                 toServerMsgObj.msgTypeDesc = "在线消息";
-                toServerMsgObj.roomName = roomName;
+                toServerMsgObj.roomId = roomId;
                 toServerMsgObj.from = from;
                 toServerMsgObj.to = to;
                 toServerMsgObj.msg = msg;

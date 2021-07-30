@@ -194,7 +194,7 @@
             var toServerMsgObj = {};
             toServerMsgObj.msgTypeId = 2;
             toServerMsgObj.msgTypeDesc = "在线消息";
-            toServerMsgObj.roomName = parent.roomName;
+            toServerMsgObj.roomId = parent.roomId;
             toServerMsgObj.from = from;
             toServerMsgObj.to = to;
             toServerMsgObj.msg = msg;
@@ -221,7 +221,7 @@
         $.ajax({
             type: 'GET',
             url: rootUrl + 'ws/getOnlineInfo.json',
-            data: {"roomName":parent.roomName},
+            data: {"roomId":parent.roomId},
             success: function (result) {
                 if (result.code != 1) {
                     return;

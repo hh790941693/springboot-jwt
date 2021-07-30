@@ -270,7 +270,7 @@
                          <div th:title="#{div.title.public.chatroom}" data-options="region:'center',split:false,border:true,iconCls:'icon icon-6-6',tools:'#gameTool'" style="overflow: hidden;display: none;">
                              
                              <!--<iframe id="gameIframe" scrolling="auto" frameborder="0" src="../canvas/trafficByCanvas-smooth-0624.page" style="width:100%;height:100%;"></iframe>-->
-                            <iframe id="gameIframe" scrolling="auto" frameborder="0" src="ws/wsSimpleChat.page?roomName=002" style="width:100%;height:100%;"></iframe>
+                            <iframe id="gameIframe" scrolling="auto" frameborder="0" src="ws/wsSimpleChat.page?roomId=002" style="width:100%;height:100%;"></iframe>
                              <div id="gameTool">
                                  <a href="javascript:void(0)" title="换一个" class="fa fa-refresh" onclick="changeGame()"></a>
                              </div>
@@ -425,7 +425,7 @@
     };
 
     // 聊天室房间号
-    var roomName = "001";
+    var roomId = "001";
 
     // 在线人数和积分数量
     var onlineData = {};
@@ -482,7 +482,7 @@
             type: 'GET',
             url: 'ws/getOnlineInfo.json',
             async: false,
-            data: {"roomName": roomName},
+            data: {"roomId": roomId},
             success: function (result) {
                 layer.closeAll('loading');
                 if (result.code == 1) {

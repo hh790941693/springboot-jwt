@@ -178,8 +178,8 @@ public class WebSocketClientController extends AdminBaseController {
      */
     @RequestMapping(value = "getOnlineInfo.json")
     @ResponseBody
-    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value = "roomName") String roomName) {
-        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClientsSessionMap(roomName);
+    public Result<WsOnlineInfo> getOnlineInfo(@RequestParam(value = "roomId") String roomId) {
+        Map<String, Session> roomClientMap = ZhddWebSocket.getRoomClientsSessionMap(roomId);
 
         //所有用户
         List<WsUsersDO> allUserList = wsUsersService.selectList(new EntityWrapper<WsUsersDO>()
@@ -228,7 +228,7 @@ public class WebSocketClientController extends AdminBaseController {
         woi.setCurrentOnlineUserInfo(currentOnlineUserInfo);
 
         // 房间用户列表
-        List<String> roomUserNameList = ZhddWebSocket.getRoomClientsUserList(roomName);
+        List<String> roomUserNameList = ZhddWebSocket.getRoomClientsUserList(roomId);
         List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_name", roomUserNameList));
         woi.setRoomUserProfileList(roomUserProfileList);
         woi.setRoomUserCount(roomUserNameList.size());

@@ -401,7 +401,7 @@
         history.replaceState(null, null, "/");
 
         // 聊天室房间号
-        var roomName = "001";
+        var roomId = "001";
 
         var DEFAULT_WIDTH = 1318;
         var DEFAULT_HEIGHT = 720;
@@ -507,7 +507,7 @@
 
         function loginServer() {
             if (webSocket == null) {
-                var socketUrl = "ws://" + sessionWebserverIp + ":" + sessionWebserverport + "/zhddWebSocket/" + roomName + "/" + sessionUser + "/" + sessionPassword + "/" + sessionUseragent;
+                var socketUrl = "ws://" + sessionWebserverIp + ":" + sessionWebserverport + "/zhddWebSocket/" + roomId + "/" + sessionUser + "/" + sessionPassword + "/" + sessionUseragent;
                 webSocket = new WebSocket(socketUrl);
                 webSocket.onerror = function (event) {
                     onError(event);

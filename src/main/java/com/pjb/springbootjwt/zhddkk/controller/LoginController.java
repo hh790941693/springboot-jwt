@@ -617,12 +617,12 @@ public class LoginController {
     @RequestMapping(value = "getChatRoomInfo.json")
     @ResponseBody
     @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.CHAT, subModule = "", describe = "获取房间人员列表")
-    public Result<WsOnlineInfo> getChatRoomInfo(@RequestParam(value = "roomName") String roomName) {
+    public Result<WsOnlineInfo> getChatRoomInfo(@RequestParam(value = "roomId") String roomId) {
         WsOnlineInfo woi = new WsOnlineInfo();
         woi.setCommonMap(buildCommonData());
 
         // 房间用户列表
-        List<String> roomUserNameList = ZhddWebSocket.getRoomClientsUserList(roomName);
+        List<String> roomUserNameList = ZhddWebSocket.getRoomClientsUserList(roomId);
         List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_name", roomUserNameList));
         woi.setRoomUserProfileList(roomUserProfileList);
         woi.setRoomUserCount(roomUserNameList.size());

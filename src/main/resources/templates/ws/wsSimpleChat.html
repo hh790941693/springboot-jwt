@@ -93,7 +93,7 @@
                 <div align="left" style="width:130px;height:100%;float:left;font-size: 17px;color: white;">
                     <!--房间号-->
                     <span class="fa fa-home"></span>
-                    <span style="height:100%;color: yellow;display:inline-block;margin-right: 10px;">{{roomName}}</span>
+                    <span style="height:100%;color: yellow;display:inline-block;margin-right: 10px;">{{roomId}}</span>
     
                     <!--聊天室人数-->
                     <span class="fa fa-user"></span>
@@ -234,7 +234,7 @@
         // websocke对象
         var webSocket = null;
         // 房间名称
-        var roomName = getQueryString("roomName");
+        var roomId = getQueryString("roomId");
 
         // 连接状态  0:未连接 1:已连接
         var connectStatus = "0";
@@ -253,7 +253,7 @@
             data: {
                 msgSend: "",            //发送消息内容
                 selectedUser: "",        //@对象
-                roomName: roomName,      //聊天室房间号
+                roomId: roomId,      //聊天室房间号
                 roomUserProfileList:{},  //聊天室人附加信息
                 roomUserCount:0,         //聊天室人数
                 cyyList: {},             //聊天常用语
@@ -288,7 +288,7 @@
                     $.ajax({
                         type: 'GET',
                         url: rootUrl+ 'getChatRoomInfo.json',
-                        data: {"roomName":roomName},
+                        data: {"roomId":roomId},
                         success: function (result) {
                             if (result.code != 1) {
                                 return;
@@ -326,7 +326,7 @@
                     }, function (value, index) {
                         layer.close(index);
                         if (value != "") {
-                            sendNoticeMsgToServer(this.roomName, value);
+                            sendNoticeMsgToServer(this.roomId, value);
                         } else {
                             alert("通知内容不能为空!");
                         }
@@ -371,7 +371,7 @@
                 return;
             }
 
-            sendChatMsgToServer(app.$data.roomName, sessionUser, toUser, msg);
+            sendChatMsgToServer(app.$data.roomId, sessionUser, toUser, msg);
 
             // 清空输入框内容
             app.$data.msgSend = "";
@@ -382,50 +382,50 @@
          * 发送聊天消息.
          * 用户发送的聊天内容(支持表情)
          *
-         * @param roomName 房间名称
+         * @param roomId 房间名称
          * @param userFrom 发送人
          * @param userTo  接收人
          * @param msg    聊天内容
          */
-        function sendChatMsgToServer(roomName, userFrom, userTo, msg) {
-            sendMessage(roomName, userFrom, userTo, msg, app.$data.msgTypeMap.onlinechat.value, app.$data.msgTypeMap.onlinechat.desc);
+        function sendChatMsgToServer(roomId, userFrom, userTo, msg) {
+            sendMessage(roomId, userFrom, userTo, msg, app.$data.msgTypeMap.onlinechat.value, app.$data.msgTypeMap.onlinechat.desc);
         }
 
         /**
          * 发送通知消息.
          * 聊天窗口上面滚动的消息
          *
-         * @param roomName 房间名称
+         * @param roomId 房间名称
          * @param msg 通知内容
          */
-        function sendNoticeMsgToServer(roomName, msg) {
-            sendMessage(roomName, "", "", msg, app.$data.msgTypeMap.notice.value, app.$data.msgTypeMap.notice.desc);
+        function sendNoticeMsgToServer(roomId, msg) {
+            sendMessage(roomId, "", "", msg, app.$data.msgTypeMap.notice.value, app.$data.msgTypeMap.notice.desc);
         }
 
         /**
          * 发送状态消息.
          * 比如：用户输入状态等消息
          *
-         * @param roomName 房间名称
+         * @param roomId 房间名称
          * @param userFrom 发送人
          * @param msg      状态内容。格式:input:0 或者input:1
          */
-        function sendStatusMsgToServer(roomName, userFrom, msg) {
-            sendMessage(roomName, userFrom, "", msg, app.$data.msgTypeMap.status.value, app.$data.msgTypeMap.status.desc);
+        function sendStatusMsgToServer(roomId, userFrom, msg) {
+            sendMessage(roomId, userFrom, "", msg, app.$data.msgTypeMap.status.value, app.$data.msgTypeMap.status.desc);
         }
 
         /**
          * 发送消息.
          * 用户发送的聊天内容(支持表情)
          *
-         * @param roomName    房间名称
+         * @param roomId    房间名称
          * @param userFrom    发送人
          * @param userTo      接收人
          * @param msg         聊天内容
          * @param msgTypeId   消息类型id
          * @param msgTypeDesc 消息类型名称
          */
-        function sendMessage(roomName, userFrom, userTo, msg, msgTypeId, msgTypeDesc) {
+        function sendMessage(roomId, userFrom, userTo, msg, msgTypeId, msgTypeDesc) {
             if (webSocket == null) {
                 var msg = "连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
                 updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, msg, "red", 10);
@@ -435,7 +435,7 @@
             var toServerMsgObj = {};
             toServerMsgObj.msgTypeId = msgTypeId;
             toServerMsgObj.msgTypeDesc = msgTypeDesc;
-            toServerMsgObj.roomName = roomName;
+            toServerMsgObj.roomId = roomId;
             toServerMsgObj.from = userFrom;
             toServerMsgObj.to = userTo;
             toServerMsgObj.msg = msg;
@@ -503,7 +503,7 @@
         // 启用websocket服务器
         function loginServer() {
             if (webSocket == null) {
-                var socketUrl = "ws://" + sessionWebserverIp + ":" + sessionWebserverport + "/zhddWebSocket/" + roomName + "/" + sessionUser + "/" + sessionPassword + "/" + sessionUseragent;
+                var socketUrl = "ws://" + sessionWebserverIp + ":" + sessionWebserverport + "/zhddWebSocket/" + roomId + "/" + sessionUser + "/" + sessionPassword + "/" + sessionUseragent;
                 webSocket = new WebSocket(socketUrl);
                 webSocket.onerror = function (event) {
                     onError(event);
@@ -718,12 +718,12 @@
 
         // 输入框聚焦事件(发送状态消息,告诉服务器某用户正在输入中)
         $("#sendMsgInput").focus(function() {
-            sendStatusMsgToServer(app.$data.roomName, sessionUser, "input:1");
+            sendStatusMsgToServer(app.$data.roomId, sessionUser, "input:1");
         });
 
         // 输入框失去焦点事件(发送状态消息,告诉服务器某用户已停止输入)
         $("#sendMsgInput").blur(function() {
-            sendStatusMsgToServer(app.$data.roomName, sessionUser, "input:0");
+            sendStatusMsgToServer(app.$data.roomId, sessionUser, "input:0");
         });
 
         // 加载表情

@@ -75,7 +75,7 @@ public class ChatRoomWebSocket {
 
     /**
      * 转发消息.
-     * @param message 消息 {"roomName":"002","from":"admin","to":"无名1","msgTypeId":2,"msgTypeDesc":"在线消息","msg":"hello"}
+     * @param message 消息 {"roomId":"002","from":"admin","to":"无名1","msgTypeId":2,"msgTypeDesc":"在线消息","msg":"hello"}
      * @param session 会话  msgTypeId: 1:广播消息  2:在线消息  4.通知消息  5.状态消息
      * @throws IOException 异常
      */
