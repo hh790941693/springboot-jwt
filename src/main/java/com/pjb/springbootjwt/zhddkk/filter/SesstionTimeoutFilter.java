@@ -26,6 +26,7 @@ public class SesstionTimeoutFilter implements Filter {
             "/img/",
             "/canvas/",
             "/zhddWebSocket/",
+            "/chatRoomWebSocket/",
             "/game/",
             "/upload/app",
             "/i18n"));

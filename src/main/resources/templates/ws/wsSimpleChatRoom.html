@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <th:block th:include="common :: header"></th:block>
+  <!-- 引入jquery-emoji表情相关css文件 -->
+  <link rel="stylesheet" th:href="@{/js/jquery-emoji/jquery.mCustomScrollbar.min.css}"/>
+  <link rel="stylesheet" th:href="@{/js/jquery-emoji/jquery.emoji.css}"/>
+  <title>聊天室</title>
+   
+   <style>
+       body {
+           margin: 0;
+           padding: 0;
+       }
+       
+        #mainDiv {
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            position: relative;
+            top: 50%;
+            margin-top: -200px;
+            border: 1px solid grey;
+            max-width: 620px;
+            max-height: 400px;
+        }
+
+        #leftChatDiv {
+            width:100%;
+            height:100%;
+            float: left;
+        }
+        
+        #rightUserListDiv {
+            width: calc(20% - 1px);
+            height: 100%;
+            float: right;
+            display: none;
+            border-left: 1px solid grey;
+        }
+        
+        #headerDiv {
+            width: 100%;
+            height: 30px;
+            padding-top: 5px;
+            padding-left: 5px;
+            background-color: #365e71;
+        }
+        
+        #noticeDiv {
+            width:100%;
+            height:22px;
+            position:absolute;
+            top:30px;
+            border: 1px solid grey;
+            background-image: linear-gradient(to right, rgba(228, 243, 205, 0.98), rgba(225, 189, 11, 0.98));
+            display: none;
+        }
+        
+        #msgFromServerDiv {
+            width: 100%;
+            height: calc(100% - 90px);
+            overflow: auto;
+            background-color: white;
+            background-image: url(../img/fengjing/fj1.jpg);
+            background-size: 100% 100%;
+            padding:1px;
+        }
+       
+       #footerDiv {
+           width: 100%;
+           height: 60px;
+       }
+
+       .emoji_icon {
+           width: 18px;
+           height: 18px;
+       }
+
+       #emojiBtn {
+           background-image:url('data:image/gif;base64,R0lGODlhHgAeAOcAAPamBPezCdrZ1+2XBf/qAcexlsnIx/y1bvvcV/Lz8/nIBPzYCPnVLNiKDOvr65OEdvraR/34tvvohOrUw7qxrfvdaPrWOPfNKfvrkqaYj/vjd1EjBePj4/r+/8NQF4x7bPDJkvnq2PzzqvrgZtB2BP7ZHNTEsYpuVvTJO/7lXa+SAuyhBM/Nyvfy6mpBF//9w+qqTPe8DJuOguvXqq03ILtCD8uFI/j5+vzCEPCvB6uSecpoW/XCFP7OGqt0MtOufLKmnrNOTfDw8P3KErt5GfbMHpVuPYJSF/Tu5P3ylvzyL/XGGeXi38izBP3vn41jGbZHL9LU1OiYHdbSz7aCj9GzKOqiNYpfBv//i7VveriLRdumW+y3E31bQvrHHrqgdq9dYvLfx8uVPt7AyvT29ufv8DsKAO7u7unm4f71aeno6N7OAcqcqv7v3d/e3ff4972mTNjg3sqha9S5j5+FW/Hr8cPAvObm5u/MTPrTTJNaXYtlZZ53S9jh4fHIIP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJDQB/ACwAAAAAHgAeAAAI/gD/CBw4UIiMLh/QDGRxoguQGwQjShQI5ESGLnTCaOwi44GLKRNDCpwyAwYXG1x4cJFi5YAJkCIlhrHiB4EECRoQQGDgJUYOGEhiDnxzgEsFERFEOJFQAUGeCz2GBJAyQShRLxhmfPkiYWlTFESIcBkSQ8qMmAeWYIjQ5QkfFyOYIjhy5YkLLgqmVp0YhouGCHOuJIlgpApTGC5KFHmiIoCCHFaCRnxjxYITwHBEiPhRRcMIGDYueJHSGEAMAD86RJxh1AlSzU4wyIVg4cISHgFyAAgwVSFBGH40YHBCHIPsprQZ2Mat23SOOaoFtpBiQYOGmzc1IKd9ociSGAEA/ojnDSfBwBBcLCCowJ49Ap3JvfMAL353WSYD+zLI874/hOTKyUffeGXB9EcYORRhhQ0MNijFg1I0IOGEJFSYAw5SGJBfDj1I8QMIIIYI4ocgkEiiHBdmOFAbUuCQwxg3GMBEjDMKQcENbwBBxg0UCHHDDzEMIYaBN1gRQww/vGGAG2TImIADFCSQABBCTOkAGVoMMYQWbhAEAgAK2OCAHQIIQeYZd/R4BhAOrHmHGw0MwYUODhAUghQxrMCGHVOoQeYdTFCgxh1A3EEoB1Qo0IMNNxLUwRZgMsoCBxRM4YYAQHDgRgZucJCBATYswAMdXUaEhBWO+UAmBQZEwQIQhVFEkUEUAmQQ6qIUvDHRBFIEsIANbABhhwF2fGqADAZQEeoQNshwh0gz9LpADkTowAYFGVAABB8oLcDsAwLE1MEEqC5gbg4RNpDDAgSI2qwA0cXExA+9DmFuu96eREem8QpFxhQFaCHGgwzyoQMQU5Ah1ERv3DGFHRDzeYeuC1ds8cUWBwQAIfkECQ0AfwAsAAAAAB4AHgAACP4A/wgcSFANCwEdBt4QwEIIwYcQB05xQZHCwAcUu5yJyFEgEBYT5DyBQdLHjAl0WHSM+GaGFS4X8ECwcIFHACkHwqx82AaGnwpOnGDQUCGPBQY9boJ4s/NPGCt5RESIIMKJhAoI8qBYMgQHgC0tVobhgiDCF4paMFxFIIYiERwKAMAgw7EF1AgzXODJi+cqHhdVuLhoEiDujxsRD/hJYvaJVDoqiMK5UsILkSsBMq+YALENWSdUpYrAUEEDAggoLniJkSMHgBgAxCR4CIKHhqAiqqrVMOI0gwtLbLrOEWMzwRtWLmiQgKG5BAm8Tx8tsiRGANevAxwe6NnCCA3gwf5jlf67CA/rANJnFuNg4FgLeRCMmI/g9MzywdGrjyFFgHsuDKCQx4ADokDTBcAtwQVrAKzgYAD8qSRQGDn0IIUNGIqh4YYb2iAGhiACgIMUBgwUQoVSjIGECRO0YUIYbYRQQAhtzFgjjT/EMKKEf7QgBQ5cmHCDAUwMycQbZ1DwBhlAJPAGBWfcIIcCQ2jh30BbFLYDGXYIkIAdbgihBgUJCAHEGWaqcYYNQ/BABwcETQCAAjYI0KUDd3JAgQNqAKGGA0DcYcIKPXCRwWwD2VWYHHawcIcdU3DgRqAcZMABB0C4scMCPWhhQEIEzfAaFzqw4AYFBwmQqQAZCOBGBphf5FCCFDq099ANW8wpBRVTANGoARmwwEKwLNCRwwJcpATqQy3AAACyWmRBgQF2ZGCAATJQYYMCC/DgAwV0cYRErtzmYEO0dGShhQ0xEIAsH0A4tJIQc0gRwAL45ruAu0vYQIcd8u70xhRfiLHgEAjzwIW/GUzBVFMDJSAABV/QYbEOGVDgJcQR3ZDAGQ44cEYCiHFs8koBAQA7');
+           background-size: 22px 22px;
+       }
+   </style>
+</head>
+<body>
+    <div id="mainDiv">
+        <!--左侧聊天窗口-->
+        <div id="leftChatDiv">
+            <!--头部按钮组-->
+            <div id="headerDiv">
+                <div align="left" style="width:130px;height:100%;float:left;font-size: 17px;color: white;">
+                    <!--房间号-->
+                    <span class="fa fa-home"></span>
+                    <span style="height:100%;color: yellow;display:inline-block;margin-right: 10px;">{{roomId}}</span>
+    
+                    <!--聊天室人数-->
+                    <span class="fa fa-user"></span>
+                    <span id="onlineNum">{{roomUserCount}}</span>&nbsp;&nbsp;
+
+                    <!-- 服务器状态-->
+                    <span id="serverStatusSpan" style="width:10px;height:10px;display:inline-block;border-radius:5px;background-color:grey;"></span>
+                </div>
+    
+                <!--用户输入状态提示语-->
+                <div style="width:calc(100% - 380px);height:100%;float:left;color:white;text-align: center;">
+                    <span id="inputStatusSpan"></span>
+                </div>
+    
+                <!--按钮组-->
+                <div align="right" style="width:240px;height:100%;float:right;margin-right:3px;">
+                    <th:block th:if="${session.sessionInfo.roleName == '管理员'}">
+                        <button class='label label-info' th:title="发布通知" @click="sendNotice()">
+                            <span class="glyphicon glyphicon-comment"></span>
+                        </button>&nbsp;
+                    </th:block>
+                    <button class='label label-info' th:title="刷新" @click="getChatRoomInfo()">
+                        <span class="glyphicon glyphicon-refresh"></span>
+                    </button>&nbsp;
+                    <button class='label label-success' th:title="切换背景" @click="changeBackgroundImage()">
+                            <span class="glyphicon glyphicon-picture"></span>
+                    </button>&nbsp;
+                    <button class='label label-danger' th:title="清屏" @click="clearScreen()">
+                        <span class="glyphicon glyphicon-ban-circle"></span>
+                    </button>&nbsp;
+                    <button class='label label-primary' type="button" th:title="重新连接" onclick="startCheckTimer()">
+                        <span class="glyphicon glyphicon-retweet"></span>
+                    </button>&nbsp;
+                    <button class='label label-primary' type="button" th:title="用户列表" @click="showUserList()">
+                        <span class="fa fa-users"></span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 滚动消息通知栏(默认隐藏) -->
+            <div id="noticeDiv">
+                <marquee direction="right" scrolldelay="10" scrollamount="8" onMouseOver="this.stop()" onMouseOut="this.start()">
+                    <span id="noticeSpan"></span>
+                </marquee>
+            </div>
+    
+          <!--中间聊天内容框-->
+            <div id="msgFromServerDiv" align="left">
+            </div>
+            
+          <!--下方聊天内容输入、表情、发送-->
+            <div id="footerDiv" align="left">
+                <div style="height:25px;">
+                    <!--表情按钮-->
+                    <img id="emojiBtn" style="width:25px;height:100%;float:left;border:1px solid grey;background-color: white;">
+    
+                    <!--选择@对象-->
+                    <select v-model="selectedUser" style="width:47%;height:100%;float:left;">
+                        <option value=""></option>
+                        <option v-for="row in roomUserProfileList" :key="row.userName" :value="row.userName" :disabled="row.userName == sessionUser">
+                            {{row.userName}}
+                        </option>
+                    </select>
+                  <!--选择常用语-->
+                    <select id="selectCyy" style="width:calc(53% - 25px);height:100%;float:left;" @change="selectText">
+                        <option v-for="cyy in cyyList">
+                            {{cyy.name}}
+                        </option>
+                    </select>
+                </div>
+              <!--输入框、发送按钮-->
+                <div style="height:35px;">
+                    <!--输入框-->
+                    <input id="sendMsgInput" autocomplete="off" v-model="msgSend"
+                           style="width:69%;float:left;height:100%;border:1px solid grey" placeholder="请输入聊天内容<按Enter键发送>">
+                    <!--发送按钮-->
+                    <button type="button" class='btn btn-sm btn-success' style="width:31%;height:100%;float:right;font-size: 16px;" onClick="send()">&nbsp;&nbsp;发&nbsp;&nbsp;&nbsp;&nbsp;送&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </div>
+
+        <!--右侧在线用户列表-->
+        <div id="rightUserListDiv">
+            <div style="width:100%;height:29px;line-height: 29px;padding-left: 5px;background-color: #365e71;color:white;">
+                <span>用户列表</span>
+            </div>
+            <div style="width:100%;height:calc(100% - 29px);overflow-y: scroll;background-color: white;padding:3px;">
+                <div v-for="row in roomUserProfileList" style="width:100%;height:32px;margin-bottom: 8px;">
+                    <div style="width:30px;height:30px;float: left;">
+                        <img :src="row.img" width="100%" height="100%"
+                             onerror="this.onerror='';this.src=$.ws.errorImgUrl">
+                    </div>
+                    <div style="width:calc(100% - 35px);height:32px;float:left;margin-left: 5px;overflow-y: hidden;">
+                        <div>
+                            <template v-if="row.state == '0'">
+                                <p style="font-size: 14px;color:grey;cursor: pointer;"
+                                   @click="showPersonInfo(row.userName)">{{row.userName}}</p>
+                            </template>
+                            <template v-else>
+                                <p style="font-size: 14px;color: blue;cursor: pointer;"
+                                   @click="showPersonInfo(row.userName)">{{row.userName}}</p>
+                            </template>
+                        </div>
+                        <div>
+                            <span style="font-size: 12px;">{{row.realName}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--右下角 广告页面(隐藏) -->
+    <div id="adDiv"
+         style="position:fixed;bottom:10px;right:10px;width:350px;height:250px;border:3px solid green;background-color:white;over-flow:hidden;display: none;">
+        <div id="adBtn" style="style:1px solid red;background-color:#5082b9;padding-left:290px">
+            <button id="closeAd" class='btn btn-sm btn-danger' onclick="closeAd()">关&nbsp;&nbsp;闭</button>
+        </div>
+        <div id="adTitle" style="height:30px;text-align:center;font-size:20px;">
+        </div>
+
+        <div id="adContent" style="height:auto;text-indent:2em;">
+        </div>
+
+        <div id="adTime"
+             style="height:15px;font-size: 16px;font-weight: bold;position: absolute;right:2px;bottom: 3px;">
+        </div>
+    </div>
+
+    <th:block th:include="common :: footer"></th:block>
+    <th:block th:include="common :: sessionInfo"></th:block>
+    <!-- 引入jquery-emoji表情相关js文件 -->
+    <script th:src="@{/js/jquery-emoji/jquery.mousewheel-3.0.6.min.js}"></script>
+    <script th:src="@{/js/jquery-emoji/jquery.mCustomScrollbar.min.js}"></script>
+    <script th:src="@{/js/jquery-emoji/jquery.emoji.js}"></script>
+    
+    <script type="text/javascript">
+        // websocke对象
+        var webSocket = null;
+        // 房间名称
+        var roomId = getQueryString("roomId");
+        var roomPass = getQueryString("roomPass");
+        // 连接状态  0:未连接 1:已连接
+        var connectStatus = "0";
+        // 当前连接次数
+        var checkCount = 1;
+        // 最大重连次数
+        var checkMaxCount = 20;
+        // 定时器:检查连接
+        var checkTimer = undefined;
+
+        //定时检查连接
+        startCheckTimer();
+
+        var app = new Vue({
+            el: '#mainDiv',
+            data: {
+                msgSend: "",            //发送消息内容
+                selectedUser: "",        //@对象
+                roomId: roomId,         //聊天室房间号
+                roomUserProfileList:{},  //聊天室人附加信息
+                roomUserCount:0,         //聊天室人数
+                cyyList: {},             //聊天常用语
+                imgIndex: 1,             //聊天窗口背景图片初始索引
+                imgMaxIndex: 10,         //聊天窗口背景图片最大索引
+                msgTypeMap: {            //消息类型
+                    "system":{
+                        "desc":"系统消息",
+                        "value":"1"
+                    },
+                    "onlinechat":{
+                        "desc":"在线消息",
+                        "value":"2"
+                    },
+                    "offlinechat":{
+                        "desc":"离线消息",
+                        "value":"3"
+                    },
+                    "notice":{
+                        "desc":"通知消息",
+                        "value":"4"
+                    },
+                    "status":{
+                        "desc":"状态消息",
+                        "value":"5"
+                    },
+                }
+            },
+            methods: {
+                // 获取房间人数、聊天常用语言、房间人详细信息
+                getChatRoomInfo: function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: rootUrl+ 'getChatRoomInfo.json',
+                        data: {"roomName":roomId},
+                        success: function (result) {
+                            if (result.code != 1) {
+                                return;
+                            }
+                            var jsonObj = result.data;
+                            this.roomUserProfileList = jsonObj.roomUserProfileList;
+                            app.cyyList = jsonObj.commonMap.cyy;
+                            this.roomUserCount = jsonObj.roomUserCount;
+                        }
+                    });
+                },
+                // 选择常用语下拉框事件
+                selectText: function (e) {
+                    this.msgSend = e.target.value;
+                },
+                // 清屏
+                clearScreen: function() {
+                    $("#msgFromServerDiv").text("");
+                },
+                // 切换背景图片
+                changeBackgroundImage: function () {
+                    this.imgIndex++;
+                    if (this.imgIndex > this.imgMaxIndex) {
+                        this.imgIndex = 1;
+                    }
+                    var newPicUrl = "../img/fengjing/fj" + this.imgIndex + ".jpg";
+                    $("#msgFromServerDiv").css("background-image", "url(" + newPicUrl + ")");
+                },
+                // 管理员发布通知消息(聊天窗口顶部滚动消息)
+                sendNotice: function () {
+                    layer.prompt({
+                        formType: 2,
+                        value: '',
+                        title: '请输入通知内容'
+                    }, function (value, index) {
+                        layer.close(index);
+                        if (value != "") {
+                            sendNoticeMsgToServer(this.roomId, value);
+                        } else {
+                            alert("通知内容不能为空!");
+                        }
+                    });
+                },
+                // 显示聊天室人员列表
+                showUserList: function () {
+                    $("#rightUserListDiv").toggle();
+                    var rdisp = $("#rightUserListDiv").css("display");
+                    if (rdisp == "block") {
+                        $("#leftChatDiv").css("width", "80%");
+                        $("#noticeDiv").css("width", "80%");
+                    } else {
+                        $("#leftChatDiv").css("width", "100%");
+                        $("#noticeDiv").css("width", "100%");
+                    }
+                    
+                }
+            },
+            created: function (e) {
+                this.getChatRoomInfo();
+            }
+        });
+
+        // 发送消息给服务器
+        function send() {
+            if (webSocket == null) {
+                let msg = "服务器已断开,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, msg, "red", 10);
+                return;
+            }
+
+            var toUser = app.$data.selectedUser;
+            if (sessionUser == toUser) {
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "不能给自己发消息!", "red", 10);
+                return false;
+            }
+
+            var msg = app.$data.msgSend || $("#sendMsgInput").val();
+            if (msg == null || msg == "") {
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "不允许发送空消息!", "red", 10);
+                return;
+            }
+
+            sendChatMsgToServer(app.$data.roomId, sessionUser, toUser, msg);
+
+            // 清空输入框内容
+            app.$data.msgSend = "";
+            $("#sendMsgInput").val("");
+        }
+
+        /**
+         * 发送聊天消息.
+         * 用户发送的聊天内容(支持表情)
+         *
+         * @param roomId 房间名称
+         * @param userFrom 发送人
+         * @param userTo  接收人
+         * @param msg    聊天内容
+         */
+        function sendChatMsgToServer(roomId, userFrom, userTo, msg) {
+            sendMessage(roomId, userFrom, userTo, msg, app.$data.msgTypeMap.onlinechat.value, app.$data.msgTypeMap.onlinechat.desc);
+        }
+
+        /**
+         * 发送通知消息.
+         * 聊天窗口上面滚动的消息
+         *
+         * @param roomId 房间名称
+         * @param msg 通知内容
+         */
+        function sendNoticeMsgToServer(roomId, msg) {
+            sendMessage(roomId, "", "", msg, app.$data.msgTypeMap.notice.value, app.$data.msgTypeMap.notice.desc);
+        }
+
+        /**
+         * 发送状态消息.
+         * 比如：用户输入状态等消息
+         *
+         * @param roomId 房间名称
+         * @param userFrom 发送人
+         * @param msg      状态内容。格式:input:0 或者input:1
+         */
+        function sendStatusMsgToServer(roomId, userFrom, msg) {
+            sendMessage(roomId, userFrom, "", msg, app.$data.msgTypeMap.status.value, app.$data.msgTypeMap.status.desc);
+        }
+
+        /**
+         * 发送消息.
+         * 用户发送的聊天内容(支持表情)
+         *
+         * @param roomId    房间名称
+         * @param userFrom    发送人
+         * @param userTo      接收人
+         * @param msg         聊天内容
+         * @param msgTypeId   消息类型id
+         * @param msgTypeDesc 消息类型名称
+         */
+        function sendMessage(roomId, userFrom, userTo, msg, msgTypeId, msgTypeDesc) {
+            if (webSocket == null) {
+                var msg = "连接失败,请<a href='javascript:void(0)' onclick='loginServer()'>重新连接</a>!";
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, msg, "red", 10);
+                return;
+            }
+
+            var toServerMsgObj = {};
+            toServerMsgObj.msgTypeId = msgTypeId;
+            toServerMsgObj.msgTypeDesc = msgTypeDesc;
+            toServerMsgObj.roomId = roomId;
+            toServerMsgObj.from = userFrom;
+            toServerMsgObj.to = userTo;
+            toServerMsgObj.msg = msg;
+            var jsonObj = JSON.stringify(toServerMsgObj);
+            webSocket.send(jsonObj);
+        }
+
+        /**
+         * 聊天窗口显示自定义格式内容.
+         *
+         * @param msg html格式内容 eg:"<div> <span color='red'>hello world</span> </div>"
+         */
+        function updateChatMsg(msg) {
+            var textArea = $('#msgFromServerDiv').append(msg);
+            textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
+        }
+
+        /**
+         * 聊天窗口显示内容.
+         *
+         * @param msgType  消息类型
+         * @param msg      消息内容
+         * @param color    颜色  eg:red
+         * @param fontSize 字体大小 eg:15
+         */
+        function updateChatMsgWithColor(msgType, msg, color, fontSize) {
+            var newMsg = "<p style='color:" + color + ";font-size:" + fontSize + "px;line-height:14px;text-align: center;margin-bottom: 5px;'>[" + getCurrentTimeOfHHMMSS() + "] ["+msgType+"] " + msg + "</p>";
+            var textArea = $("#msgFromServerDiv").append(newMsg);
+            textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
+        }
+
+        //启动定时器检查连接
+        function startCheckTimer(){
+            if (checkTimer == undefined) {
+                checkTimer = setInterval(function () {
+                    checkConnection();
+                }, 1000);
+            }
+        }
+
+        // 清除定时器
+        function clearCheckTimer(){
+            if (checkTimer != undefined) {
+                clearInterval(checkTimer);
+                checkTimer = undefined;
+            }
+        }
+
+        //检查服务器连接
+        function checkConnection() {
+            if (connectStatus == "0") {
+                if (checkCount > checkMaxCount) {
+                    checkCount = 1;
+                    clearCheckTimer();
+                    return;
+                }
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "正在连接服务器" + sessionWebserverIp + ":" + sessionWebserverport + " [ " + checkCount + " ]" + "次 请稍等...", "yellow", 10);
+                checkCount++;
+                loginServer();
+            } else {
+                clearCheckTimer();
+            }
+        }
+
+        // 启用websocket服务器
+        function loginServer() {
+            if (webSocket == null) {
+                var socketUrl = "ws://" + sessionWebserverIp + ":" + sessionWebserverport + "/chatRoomWebSocket/" + roomId + "/" + roomPass + "/" + sessionUserId + "/" + sessionPassword;
+                webSocket = new WebSocket(socketUrl);
+                webSocket.onerror = function (event) {
+                    onError(event);
+                };
+                webSocket.onclose = function (event) {
+                    OnClose(event);
+                };
+                webSocket.onopen = function (event) {
+                    onOpen(event);
+                };
+                webSocket.onmessage = function (event) {
+                    onMessage(event);
+                };
+            }
+        }
+
+        //连接成功
+        function onOpen(event) {
+            updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "您已进入聊天室", "yellow", 10);
+            connectStatus = "1";
+            setServerStatus("#00fb00");
+        }
+
+        //连接异常
+        function onError(event) {
+            updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "连接聊天室服务器异常!", "red", 10);
+            connectStatus = "0";
+            webSocket = null;
+            startCheckTimer();
+            setServerStatus("#f70606");
+        }
+
+        //连接关闭
+        function OnClose(event) {
+            updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, "聊天室已断开!", "red", 10);
+            connectStatus = "0";
+            webSocket = null;
+            startCheckTimer();
+            setServerStatus("grey");
+        }
+
+        //接收消息
+        function onMessage(event) {
+            var jsonObj = JSON.parse(event.data);
+            var curTime = jsonObj.curTime;
+            var msgFrom = jsonObj.from;
+            var msgTo = jsonObj.to;
+            //1:广播消息  2:在线消息 3:离线消息 4:通知消息  5:状态消息
+            var msgTypeId = jsonObj.msgTypeId;
+            var msgTypeDesc = jsonObj.msgTypeDesc;
+            var msg = jsonObj.msg;
+            // 扩展数据 发送人相关信息
+            var extendMap = jsonObj.extendMap;
+
+            if (msgTypeId == app.$data.msgTypeMap.system.value) {
+                // 广播消息
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, msg, "yellow", 10);
+                // 更新在线人数等信息
+                app.$data.roomUserCount = extendMap.roomCount;
+                app.$data.roomUserProfileList = extendMap.userProfileList;
+                return;
+            }
+
+            if (msgTypeId == app.$data.msgTypeMap.status.value) {
+                // 状态消息
+                var inputingUserList = extendMap.inputingUserList;
+                if (inputingUserList.length == 0) {
+                    $("#inputStatusSpan").text("");
+                }else if (inputingUserList.length <=3 ){
+                    var inputMsg = "";
+                    $.each(inputingUserList, function (index,item) {
+                        inputMsg += item + "、";
+                    });
+                    inputMsg = inputMsg.substring(0, inputMsg.length - 1);
+                    inputMsg += "正在输入...";
+                } else {
+                    var inputMsg = "";
+                    for (var i = 0;i < 3;i++) {
+                        inputMsg += inputingUserList[i] + "、";
+                    }
+                    inputMsg = inputMsg.substring(0, inputMsg.length - 1);
+                    inputMsg += "等"+inputingUserList.length+"位用户正在输入...";
+                }
+                $("#inputStatusSpan").text(inputMsg);
+                return;
+            }
+
+            if (msgTypeId == app.$data.msgTypeMap.notice.value) {
+                // 通知消息
+                $("#noticeDiv").show();
+                setTimeout(function () {
+                    $("#noticeSpan").html(msg);
+                    $("marquee")[0].start();
+                },500);
+                setTimeout(function () {
+                    $("#noticeSpan").html("");
+                    $("#noticeDiv").hide();
+                },8000);
+                updateChatMsgWithColor(app.$data.msgTypeMap.notice.desc, msg, "yellow", 10);
+
+                $("#adDiv").slideDown(500);
+                $("#adTitle").html("通知公告");
+                $("#adContent").html(msg);
+                $("#adTime").html(curTime);
+                return;
+            }
+
+            // 对消息内容进行解析(表情)
+            msg = $.ws.parseEmoji(msg);
+
+            // 其他人发的消息
+            var defaultCss = "color:black;font-size:10px;line-height:20px;";
+            if (msgTo == sessionUser) {
+                // 发给我的消息
+                defaultCss = "color:black;font-size:10px;line-height:20px;";
+            } else if (msgFrom == sessionUser) {
+                // 我发出去的消息
+                defaultCss = "color:black;font-size:10px;line-height:20px;";
+            }
+
+            // 发送方用户相关信息
+            var msgFromUserProfile = null;
+            if (msgTypeId == app.$data.msgTypeMap.onlinechat.value || msgTypeId == app.$data.msgTypeMap.offlinechat.value) {
+                // 聊天消息/离线消息
+                msgFromUserProfile = extendMap.userProfile;
+            }
+
+            let htmlData = "";
+            if (msgFrom == sessionUser) {
+                // 右侧--当前用户发出去的消息
+                htmlData = "<div style='width:60%;height:auto;margin-bottom: 10px;margin-left:40%;padding-right: 3px;text-align:right;background-color: #85efb4e0;'>";
+                htmlData += "   <p style='height:20px;'>";
+                
+                htmlData += "       <span style='display: inline-block;margin-right: 10px;'>" + msgTypeDesc + "</span>";
+                htmlData += "       <span style='display: inline-block;margin-right: 10px;color: black;'>" + curTime + "</span>";
+                htmlData += "       <a style='display: inline-block;margin-right: 5px;font-weight: bold;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
+                htmlData += "       <img width='15' height='15' src='"+msgFromUserProfile.img+"'>";
+                htmlData += "   </p>";
+
+                htmlData += "   <p style='height:auto;border-radius: 5px;'>";
+                if (msgTo != null && msgTo != "") {
+                    htmlData += "   <span style='color:blue;text-indent: 2em;display: inline-block;'>@"+msgTo+"</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
+                } else {
+                    htmlData += "   <span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
+                }
+                htmlData += "   </p>";
+            } else {
+                // 左侧--其他用户发的消息
+                htmlData = "<div style='width:60%;height:auto;margin-bottom: 10px;padding-left: 3px;background-color: #85efb4e0;'>";
+                htmlData += "   <p style='height:20px;'>";
+
+                htmlData += "       <img width='15' height='15' style='margin-right: 5px;' src='"+msgFromUserProfile.img+"'>";
+                htmlData += "       <a style='display: inline-block;margin-right: 10px;font-weight: bold;' onclick=\"showPersonInfo('"+msgFrom+"')\">" + msgFrom + "</a>";
+                htmlData += "       <span style='display: inline-block;margin-right: 10px;color: black;'>" + curTime + "</span>";
+                htmlData += "       <span style='display: inline-block;'>" + msgTypeDesc + "</span>";
+                htmlData += "   </p>";
+
+                htmlData += "   <p style='height:auto;border-radius: 5px;'>";
+                if (msgTo != null && msgTo != "") {
+                    let fontColor;
+                    if (msgTo == sessionUser) {
+                        // 别人@我的消息
+                        fontColor = "red";
+                    } else {
+                        // 别人@其他人的消息
+                        fontColor = "blue";
+                    }
+                    htmlData += "   <span style='color:"+fontColor+";font-weight:bold;text-indent: 2em;display: inline-block;'>@" + msgTo + "</span><span style='" + defaultCss + "'>" + " " + msg + "</span>";
+                } else {
+                    htmlData += "   <span style='"+defaultCss+"text-indent: 2em;display: inline-block;'>" + msg + "</span>";
+                }
+                htmlData += "   </p>";
+            }
+            htmlData += "   </div>";
+            updateChatMsg(htmlData);
+        }
+
+        // 查看用户详情
+        function showPersonInfo(userName) {
+            layer.open({
+                type: 2,
+                title: '用户详情信息',
+                shadeClose: true,
+                shade: 0.2,
+                area: ['390px', '420px'],
+                content: '/zhddkk/wsUsers/showPersonalInfo.page?user=' + userName
+            });
+        }
+
+        //获取参数值
+        function getQueryString(name){
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r) {
+                return unescape(r[2]);
+            } else {
+                return null;
+            };
+        }
+
+        //回车键发送聊天内容
+        $(document).keyup(function (event) {
+            if (event.keyCode == 13) {
+                send();
+            }
+        });
+
+        // 设置服务器状态图标颜色
+        function setServerStatus(bgColor){
+            $("#serverStatusSpan").css("background-color", bgColor);
+        }
+
+        // 输入框聚焦事件(发送状态消息,告诉服务器某用户正在输入中)
+        $("#sendMsgInput").focus(function() {
+            sendStatusMsgToServer(app.$data.roomId, sessionUser, "input:1");
+        });
+
+        // 输入框失去焦点事件(发送状态消息,告诉服务器某用户已停止输入)
+        $("#sendMsgInput").blur(function() {
+            sendStatusMsgToServer(app.$data.roomId, sessionUser, "input:0");
+        });
+
+        // 加载表情
+        $("#sendMsgInput").emoji({
+            showTab: true,
+            animation: 'fade',
+            button: '#emojiBtn',
+            position: 'topRight',
+            icons: $.ws.emojiIcons
+        });
+
+        //关闭广告窗
+        function closeAd() {
+            $("#adDiv").slideUp(500);
+        }
+    </script>
+</body>
+</html>

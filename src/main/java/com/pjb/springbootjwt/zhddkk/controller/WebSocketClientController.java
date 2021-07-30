@@ -548,6 +548,14 @@ public class WebSocketClientController extends AdminBaseController {
     }
 
     /**
+     * 聊天室.
+     */
+    @GetMapping("wsSimpleChatRoom.page")
+    String wsSimpleChatRoom(Model model) {
+        return "ws/wsSimpleChatRoom";
+    }
+
+    /**
      * 与机器人聊天.
      *
      * @param text 人类聊天内容

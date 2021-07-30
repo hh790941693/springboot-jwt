@@ -40,9 +40,11 @@ var app = new Vue({
 						return;
 					}
 					layer.msg("进入房间成功");
+					window.location.href = "/ws/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass="+roomInfo.password;
 				});
 			} else {
 				layer.msg("进入房间成功");
+				window.location.href = "/ws/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass=";
 			}
 		},
 		mouseEnter: function (index) {

@@ -4,28 +4,9 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.constants.ChatMsgTypeEnum;
-import com.pjb.springbootjwt.zhddkk.domain.WsChatlogDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
-import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
-import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
-import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
-import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
+import com.pjb.springbootjwt.zhddkk.domain.*;
+import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-import javax.websocket.EndpointConfig;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-
 import com.pjb.springbootjwt.zhddkk.util.UnicodeUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -33,43 +14,64 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-@ServerEndpoint(value = "/zhddWebSocket/{roomName}/{user}/{pass}/{userAgent}", configurator = HttpSessionConfigurator.class)
+import javax.websocket.EndpointConfig;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.Session;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
+@ServerEndpoint(value = "/chatRoomWebSocket/{roomId}/{roomPass}/{userId}/{userPass}", configurator = HttpSessionConfigurator.class)
 @Component
-public class ZhddWebSocket {
-    private static final Logger logger = LoggerFactory.getLogger(ZhddWebSocket.class);
+public class ChatRoomWebSocket {
+    private static final Logger logger = LoggerFactory.getLogger(ChatRoomWebSocket.class);
 
     private static final SimpleDateFormat SDF_STANDARD = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final SimpleDateFormat SDF_HHMMSS = new SimpleDateFormat("HH:mm:ss");
 
-    // <房间号, <用戶名,用户session>>
+    // <房间号, <用戶ID,用户session>>
     private static final Map<String, Map<String, Session>> clientsMap = new ConcurrentHashMap();
 
     // <房间号, List<用户名>>
-    private static final  Map<String, List<String>> roomInputingUserMap = new ConcurrentHashMap();
+    private static final Map<String, List<String>> roomInputingUserMap = new ConcurrentHashMap();
 
+    // 当前会话
     private Session session;
 
     // 房间号
-    private String roomName;
+    private String roomId;
 
-    // 用户
-    private String user;
+    // 房间密码
+    private String roomPass;
+
+    // 用户id
+    private String userId;
+
+    // 用户名称
+    private String userName;
 
     // 密码
-    private String pass;
+    private String userPass;
 
-    // 客户端类型
-    private String userAgent;
+    private WsUsersDO userData;
 
     // 通过WebSocketConfig注入
     public static WsUsersService wsUsersService;
 
     public static WsChatlogService wsChatlogService;
 
-    public static WsCommonService wsCommonService;
-
     public static WsUserProfileService wsUserProfileService;
+
+    public static WsChatroomService wsChatroomService;
+
+    public static WsChatroomUsersService wsChatroomUsersService;
 
     /**
      * 转发消息.
@@ -79,7 +81,7 @@ public class ZhddWebSocket {
      */
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
-        if (StringUtils.isBlank(message) || this.user == null || this.session == null) {
+        if (StringUtils.isBlank(message) || this.userName == null || this.session == null) {
             return;
         }
 
@@ -88,11 +90,10 @@ public class ZhddWebSocket {
         }
 
         JSONObject jsonObject = JsonUtil.jsonstr2Jsonobject(message);
-        String roomName = jsonObject.getString("roomName");
+        String roomId = jsonObject.getString("roomId");
         String msgFrom = jsonObject.getString("from");
         String msgTo = jsonObject.getString("to");
         String msgTypeId = jsonObject.getString("msgTypeId");
-        //String msgTypeDesc = jsonObject.getString("msgTypeDesc");
         String msgStr = jsonObject.getString("msg");
 
         //对消息进行敏感字、脏话进行处理
@@ -129,20 +130,20 @@ public class ZhddWebSocket {
             Map<String, Object> extendMap = new HashMap<>();
             extendMap.put("userProfile", CoreCache.getInstance().getUserProfile(msgFrom));
             ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.CHAT_ONLINE_MSG.getMsgTypeDesc(), msgFrom, msgTo, msg, extendMap);
-            sendToAll(roomName, chatBean);
+            sendToAll(roomId, chatBean);
 
             // 记录聊天日志
-            WsChatlogDO wsChatlogDO = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomName, msgFrom, msgTo, UnicodeUtil.string2Unicode(msgStr),"");
+            WsChatlogDO wsChatlogDO = new WsChatlogDO(SDF_STANDARD.format(new Date()), roomId, msgFrom, msgTo, UnicodeUtil.string2Unicode(msgStr),"");
             wsChatlogService.insert(wsChatlogDO);
         } else if (msgTypeId.equals(ChatMsgTypeEnum.NOTICE_MSG.getMsgTypeId())){
             // 通知消息(群发)
             ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.NOTICE_MSG.getMsgTypeDesc(), "管理员", "", msg, new HashMap<>());
-            sendToAll(roomName, chatBean);
+            sendToAll(roomId, chatBean);
         } else if (msgTypeId.equals(ChatMsgTypeEnum.STATUS_MSG.getMsgTypeId())){
             // 状态消息(群发)
             if (msg.contains("input:")) {
                 String inputStatus = msg.split(":")[1];
-                List<String> roomInputingUserList = roomInputingUserMap.get(roomName);
+                List<String> roomInputingUserList = roomInputingUserMap.get(roomId);
                 if (null == roomInputingUserList) {
                     roomInputingUserList = new ArrayList<>();
                 }
@@ -154,70 +155,88 @@ public class ZhddWebSocket {
                 } else {
                     roomInputingUserList.remove(msgFrom);
                 }
-                roomInputingUserMap.put(roomName, roomInputingUserList);
+                roomInputingUserMap.put(roomId, roomInputingUserList);
                 Map<String, Object> extendMap = new HashMap<>();
                 extendMap.put("inputingUserList", roomInputingUserList);
 
                 ChatMessageBean chatBean = new ChatMessageBean(curTime, msgTypeId, ChatMsgTypeEnum.STATUS_MSG.getMsgTypeDesc(), msgFrom, "", msg, extendMap);
-                sendToAll(roomName, chatBean);
+                sendToAll(roomId, chatBean);
             }
         }
     }
 
     /**
      * 进入聊天室.
-     * @param roomName 房间名称
-     * @param user 用户名
-     * @param pass 密码
-     * @param userAgent 浏览器类型
+     * @param roomId 房间号
+     * @param roomPass 房间密码
+     * @param userId 用户ID
+     * @param userPass 密码
      * @param session 会话
      * @param endpointConfig endpointConfig
      */
     @javax.websocket.OnOpen
-    public void OnOpen(@PathParam("roomName") String roomName,
-                       @PathParam("user") String user,
-                       @PathParam("pass") String pass,
-                       @PathParam("userAgent") String userAgent,
+    public void OnOpen(@PathParam("roomId") String roomId,
+                       @PathParam("roomPass") String roomPass,
+                       @PathParam("userId") String userId,
+                       @PathParam("userPass") String userPass,
                        Session session, EndpointConfig endpointConfig) throws Exception {
-        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user).eq("password", pass));
-        if (null == wsUsersDO) {
-            logger.info("用户{}进入聊天室%s失败,原因是用户不存在或者密码错误", user, roomName);
+
+        // 检查用户是否合法
+        WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
+        if (null == wsUsersDO || !wsUsersDO.getPassword().equals(userPass)) {
+            logger.info("用户{}进入聊天室%s失败,原因是用户不存在或者密码错误", userName, roomId);
             this.session = null;
-            this.roomName = null;
-            this.user = null;
-            this.pass = null;
-            this.userAgent = null;
+            this.roomId = null;
+            this.roomPass = null;
+            this.userId = null;
+            this.userName = null;
+            this.userPass = null;
+            this.userData = null;
             throw new Exception("用户不存在或密码错误");
         }
-        this.session = session;
-        this.roomName = roomName;
-        this.user = user;
-        this.pass = pass;
-        this.userAgent = userAgent;
 
-        String enterMsgFormat = "%s(%s) 进入了聊天室：%s";
-        String enterMsg = String.format(enterMsgFormat, this.user, this.userAgent, this.roomName);
+        // 检查房间号是否需要密码
+        WsChatroomDO wsChatroomDO = wsChatroomService.selectOne(new EntityWrapper<WsChatroomDO>().eq("room_id", roomId));
+        if (null == wsChatroomDO || wsChatroomDO.getStatus().intValue() != 1) {
+            throw new Exception("聊天室不存在");
+        }
+        if (StringUtils.isNotBlank(wsChatroomDO.getPassword())) {
+            if (!roomPass.equals(wsChatroomDO.getPassword())) {
+                throw new Exception("房间密码不正确");
+            }
+        }
+
+        this.session = session;
+        this.roomId = roomId;
+        this.roomPass = roomPass;
+        this.userId = userId;
+        this.userName = wsUsersDO.getName();
+        this.userPass = userPass;
+        this.userData = wsUsersDO;
+
+        String enterMsgFormat = "%s 进入了聊天室：%s";
+        String enterMsg = String.format(enterMsgFormat, this.userName, this.roomId);
         logger.info(enterMsg);
 
         // 更新房间人员信息
-        addRoomUser(this.roomName, this.user);
+        addRoomUser();
 
         // 登录日志
-        WsChatlogDO loginLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), this.roomName, this.user, "", "进入了聊天室", this.userAgent);
+        WsChatlogDO loginLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), this.roomId, this.userName, "", "进入了聊天室", "");
         wsChatlogService.insert(loginLog);
 
         // 广播消息
         try {
             ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(),
-                    "", "", enterMsg, getRoomOnlineInfo(this.roomName));
-            sendToAll(roomName, chatBean);
+                    "", "", enterMsg, getRoomOnlineInfo(this.roomId));
+            sendToAll(roomId, chatBean);
         } catch (Exception e) {
            e.printStackTrace();
         }
 
         //获取离线日志
-        List<WsChatlogDO> chatLogHistoryList = wsChatlogService.selectList(new EntityWrapper<WsChatlogDO>().eq("room_name", this.roomName)
-                .eq("to_user", this.user)
+        List<WsChatlogDO> chatLogHistoryList = wsChatlogService.selectList(new EntityWrapper<WsChatlogDO>().eq("room_name", this.roomId)
+                .eq("to_user", this.userName)
                 .gt("time", wsUsersDO.getLastLogoutTime()));
         if (null != chatLogHistoryList && chatLogHistoryList.size() > 0) {
             for (WsChatlogDO wcl : chatLogHistoryList) {
@@ -244,31 +263,31 @@ public class ZhddWebSocket {
      */
     @javax.websocket.OnClose
     public void OnClose() {
-        if (StringUtils.isBlank(this.user)) {
+        if (StringUtils.isBlank(this.userName)) {
             return;
         }
         // 删除房间相关人信息
-        removeRoomUser(this.roomName, this.user);
-        removeRoomInputing(this.roomName, this.user);
+        removeRoomUser();
+        removeRoomInputing(this.roomId, this.userName);
 
-        String leaveMsgFormat = "%s(%s) 离开了聊天室：%s";
-        String leaveMsg = String.format(leaveMsgFormat, this.user, this.userAgent, this.roomName);
+        String leaveMsgFormat = "%s 离开了聊天室：%s";
+        String leaveMsg = String.format(leaveMsgFormat, this.userName, this.roomId);
         logger.info(leaveMsg);
 
         // 广播消息
         ChatMessageBean chatBean = new ChatMessageBean(SDF_HHMMSS.format(new Date()), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeId(), ChatMsgTypeEnum.SYSTEM_MSG.getMsgTypeDesc(),
-                "", "", leaveMsg, getRoomOnlineInfo(this.roomName));
+                "", "", leaveMsg, getRoomOnlineInfo(this.roomId));
         try {
-            sendToAll(this.roomName, chatBean);
+            sendToAll(this.roomId, chatBean);
         } catch (Exception e) {
 
         }
 
         // 记录登出日志
-        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", this.user));
+        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", this.userName));
         if (null != wsUsersDO) {
             // 记录登出日志
-            WsChatlogDO logoutLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), this.roomName, this.user, "", "离开了聊天室", "");
+            WsChatlogDO logoutLog = new WsChatlogDO(SDF_STANDARD.format(new Date()), this.roomId, this.userName, "", "离开了聊天室", "");
             wsChatlogService.insert(logoutLog);
         }
     }
@@ -278,61 +297,84 @@ public class ZhddWebSocket {
      */
     @OnError
     public void onError(Throwable throwable) {
-        if (StringUtils.isBlank(this.user)) {
+        if (StringUtils.isBlank(this.userName)) {
             return;
         }
 
-        logger.info("用户{}: 进入聊天室:{} 失败", this.user, this.roomName);
+        logger.info("用户{}: 进入聊天室:{} 失败", this.userName, this.roomId);
         throwable.printStackTrace();
-        removeRoomUser(this.roomName, this.user);
-        removeRoomInputing(this.roomName, this.user);
+        removeRoomUser();
+        removeRoomInputing(this.roomId, this.userName);
     }
 
     // 聊天室加人
-    public synchronized void addRoomUser(String roomName, String user) {
+    public synchronized void addRoomUser() {
         Map<String, Session> roomMap = new ConcurrentHashMap<>();
-        if (clientsMap.containsKey(roomName)) {
-            roomMap = clientsMap.get(roomName);
+        if (clientsMap.containsKey(this.roomId)) {
+            roomMap = clientsMap.get(this.roomId);
         }
-        roomMap.put(user, this.session);
-        clientsMap.put(roomName, roomMap);
+        roomMap.put(this.userId, this.session);
+        clientsMap.put(this.roomId, roomMap);
+
+        // 记录到数据库去
+        WsChatroomDO wsChatroomDO = wsChatroomService.selectOne(new EntityWrapper<WsChatroomDO>().eq("room_id", this.roomId));
+        WsChatroomUsersDO wsChatroomUsersDO = wsChatroomUsersService.selectOne(new EntityWrapper<WsChatroomUsersDO>().eq("room_id", this.roomId).eq("user_id", this.userId));
+        if (null == wsChatroomUsersDO) {
+            wsChatroomUsersDO = new WsChatroomUsersDO();
+            // 聊天室用户表新增记录
+            wsChatroomUsersDO.setRoomId(this.roomId);
+            wsChatroomUsersDO.setUserName(this.userName);
+            wsChatroomUsersDO.setUserId(Long.valueOf(this.userId));
+            wsChatroomUsersDO.setIsManager(this.userId.equals(wsChatroomDO.getCreateUserId().toString()) ? 1 : 0);
+            wsChatroomUsersDO.setCreateTime(new Date());
+            wsChatroomUsersDO.setUpdateTime(new Date());
+            wsChatroomUsersDO.setStatus(1);
+            wsChatroomUsersService.insert(wsChatroomUsersDO);
+        } else {
+            // 更新状态为在线
+            if (wsChatroomUsersDO.getStatus().intValue() != 1) {
+                wsChatroomUsersDO.setStatus(1);
+                wsChatroomUsersDO.setUpdateTime(new Date());
+                wsChatroomUsersService.updateById(wsChatroomUsersDO);
+            }
+        }
     }
 
     // 聊天室减人
-    public static synchronized void removeRoomUser(String roomName, String user) {
-        if (clientsMap.containsKey(roomName)) {
-            Map<String, Session> userMap = clientsMap.get(roomName);
-            userMap.remove(user);
+    public synchronized void removeRoomUser() {
+        if (clientsMap.containsKey(this.roomId)) {
+            Map<String, Session> userMap = clientsMap.get(this.roomId);
+            userMap.remove(this.userId);
+        }
+
+        WsChatroomUsersDO wsChatroomUsersDO = wsChatroomUsersService.selectOne(new EntityWrapper<WsChatroomUsersDO>().eq("room_id", this.roomId).eq("user_id", this.userId));
+        if (null != wsChatroomUsersDO) {
+            if (wsChatroomUsersDO.getStatus().intValue() != 0) {
+                wsChatroomUsersDO.setStatus(0);
+                wsChatroomUsersService.updateById(wsChatroomUsersDO);
+            }
         }
     }
 
     // 聊天室正在聊天减人
-    public static synchronized void removeRoomInputing(String roomName, String user) {
-        if (roomInputingUserMap.containsKey(roomName)) {
-            List<String> inputingUserList = roomInputingUserMap.get(roomName);
-            inputingUserList.remove(user);
-        }
-    }
-
-    // 删除用户的所有聊天室
-    public static void removeUserFromAllRoom(String user) {
-        for (Entry<String, Map<String, Session>> entry : clientsMap.entrySet()) {
-            Map<String, Session> roomMap = entry.getValue();
-            roomMap.remove(user);
+    public static synchronized void removeRoomInputing(String roomId, String userName) {
+        if (roomInputingUserMap.containsKey(roomId)) {
+            List<String> inputingUserList = roomInputingUserMap.get(roomId);
+            inputingUserList.remove(userName);
         }
     }
 
     // 获取聊天室的人数
-    public static synchronized int getRoomOnLineCount(String roomName) {
-        Map<String, Session> map = getRoomClientsSessionMap(roomName);
+    public static synchronized int getRoomOnLineCount(String roomId) {
+        Map<String, Session> map = getRoomClientsSessionMap(roomId);
         return map != null ? map.size() : 0;
     }
 
     // 获取聊天室在线信息
-    public static synchronized Map<String, Object> getRoomOnlineInfo (String roomName) {
+    public static synchronized Map<String, Object> getRoomOnlineInfo (String roomId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("roomCount", getRoomOnLineCount(roomName));
-        List<String> roomUserNameList = getRoomClientsUserList(roomName);
+        map.put("roomCount", getRoomOnLineCount(roomId));
+        List<String> roomUserNameList = getRoomClientsUserList(roomId);
         List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_name", roomUserNameList));
         map.put("userProfileList", roomUserProfileList);
 
@@ -340,53 +382,30 @@ public class ZhddWebSocket {
     }
 
     // 获取聊天室的所有用户(session)
-    public static synchronized Map<String, Session> getRoomClientsSessionMap(String roomName) {
-        if (clientsMap.containsKey(roomName)) {
-            return clientsMap.get(roomName);
+    public static synchronized Map<String, Session> getRoomClientsSessionMap(String roomId) {
+        if (clientsMap.containsKey(roomId)) {
+            return clientsMap.get(roomId);
         }
         return new ConcurrentHashMap<>();
     }
 
     // 获取聊天室的所有用户(用户名)
-    public static synchronized List<String> getRoomClientsUserList(String roomName) {
+    public static synchronized List<String> getRoomClientsUserList(String roomId) {
         List<String> roomUserList = new ArrayList<>();
-        Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
+        Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomId);
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             roomUserList.add(entry.getKey());
         }
         return roomUserList;
     }
 
-    public static Map<String, Map<String, Session>> getClientsMap() {
-        return clientsMap;
-    }
-
-    public synchronized Session getSession() {
-        return this.session;
-    }
-
-    /**
-     * 查询会话信息.
-     * @param username 用户id
-     * @return 会话信息
-     */
-    public static Session queryRoomSession(String roomName, String username) {
-        Map<String, Session> roomClientMap = clientsMap.get(roomName);
-        if (null != roomClientMap) {
-            if (roomClientMap.containsKey(username)) {
-                return roomClientMap.get(username);
-            }
-        }
-        return null;
-    }
-
     /**
      * 群发消息.
-     * @param roomName 房间名称
+     * @param roomId 房间名称
      * @param chatMessageBean 消息对象
      */
-    public static void sendToAll(String roomName, ChatMessageBean chatMessageBean) {
-        Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomName);
+    public static void sendToAll(String roomId, ChatMessageBean chatMessageBean) {
+        Map<String, Session> roomClientMap = getRoomClientsSessionMap(roomId);
         for (Entry<String, Session> entry : roomClientMap.entrySet()) {
             try {
                 entry.getValue().getBasicRemote().sendText(JsonUtil.javaobject2Jsonstr(chatMessageBean));

@@ -1,9 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.websocket;
 
-import com.pjb.springbootjwt.zhddkk.service.WsChatlogService;
-import com.pjb.springbootjwt.zhddkk.service.WsCommonService;
-import com.pjb.springbootjwt.zhddkk.service.WsUserProfileService;
-import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
+import com.pjb.springbootjwt.zhddkk.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -44,11 +41,13 @@ public class WebSocketConfig {
 
     @Autowired
     public void setWsUsersService(WsUsersService wsUsersService) {
+        ChatRoomWebSocket.wsUsersService = wsUsersService;
         ZhddWebSocket.wsUsersService = wsUsersService;
     }
 
     @Autowired
     public void setWsChatlogService(WsChatlogService wsChatlogService) {
+        ChatRoomWebSocket.wsChatlogService = wsChatlogService;
         ZhddWebSocket.wsChatlogService = wsChatlogService;
     }
 
@@ -58,7 +57,18 @@ public class WebSocketConfig {
     }
 
     @Autowired
-    public void setWsCommonService(WsUserProfileService wsUserProfileService) {
+    public void setWsUserProfileService(WsUserProfileService wsUserProfileService) {
+        ChatRoomWebSocket.wsUserProfileService = wsUserProfileService;
         ZhddWebSocket.wsUserProfileService = wsUserProfileService;
+    }
+
+    @Autowired
+    public void setWsChatRoomService(WsChatroomService wsChatroomService) {
+        ChatRoomWebSocket.wsChatroomService = wsChatroomService;
+    }
+
+    @Autowired
+    public void setWsChatRoomUsersService(WsChatroomUsersService wsChatroomUsersService) {
+        ChatRoomWebSocket.wsChatroomUsersService = wsChatroomUsersService;
     }
 }
