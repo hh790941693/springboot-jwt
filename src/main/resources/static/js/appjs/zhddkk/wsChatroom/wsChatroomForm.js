@@ -22,6 +22,7 @@ function save() {
                 parent.layer.msg("保存成功");
                 var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
                 parent.layer.close(index);
+                parent.app.queryChatRoomList();
             } else {
                 parent.layer.alert("保存失败，请稍后再试");
             }
