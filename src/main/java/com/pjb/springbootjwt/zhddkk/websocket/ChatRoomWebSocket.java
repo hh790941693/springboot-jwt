@@ -375,7 +375,10 @@ public class ChatRoomWebSocket {
         Map<String, Object> map = new HashMap<>();
         map.put("roomCount", getRoomOnLineCount(roomId));
         List<String> roomUserIdList = getRoomClientsUserList(roomId);
-        List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_id", roomUserIdList));
+        List<WsUserProfileDO> roomUserProfileList = new ArrayList<>();
+        if (null != roomUserIdList && roomUserIdList.size() > 0) {
+            roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_id", roomUserIdList));
+        }
         map.put("userProfileList", roomUserProfileList);
 
         return map;
