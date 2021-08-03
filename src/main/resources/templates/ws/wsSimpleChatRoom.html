@@ -182,14 +182,15 @@
                         <div>
                             <template v-if="row.status != 1">
                                 <p style="font-size: 14px;color:grey;cursor: pointer;" @click="showPersonInfo(row.name)">
-                                <span v-text="row.name"></span>
-                                <span v-if="row.isManager" style="margin-left:10px;">(群主)</span></p>
+                                    <span v-if="row.isManager" v-text="row.name+'  (群主)'"></span>
+                                    <span v-else v-text="row.name"></span>
                                 </p>
                             </template>
                             <template v-else>
                                 <p style="font-size: 14px;color: blue;cursor: pointer;" @click="showPersonInfo(row.name)">
-                                    <span v-text="row.name"></span>
-                                    <span v-if="row.isManager" style="margin-left:10px;">(群主)</span></p>
+                                    <span v-if="row.isManager" v-text="row.name+'  (群主)'"></span>
+                                    <span v-else v-text="row.name"></span>
+                                </p>
                             </template>
                         </div>
                         <div>
