@@ -618,13 +618,21 @@ public class LoginController {
         WsOnlineInfo woi = new WsOnlineInfo();
         woi.setCommonMap(buildCommonData());
 
-        List<WsChatroomUsersDO> chatroomUsersList = wsChatroomUsersService.selectList(new EntityWrapper<WsChatroomUsersDO>().eq("room_id", roomId).eq("status", 1));
-        // 房间用户列表
-        List<String> roomUserNameList = chatroomUsersList.stream().map(WsChatroomUsersDO::getUserName).collect(Collectors.toList());
+        // 房间所有用户列表
+        List<WsChatroomUsersDO> chatroomAllUsersList = wsChatroomUsersService.selectList(new EntityWrapper<WsChatroomUsersDO>().eq("room_id", roomId));
+        // 房间在线用户列表
+        List<WsChatroomUsersDO> onlineUserList = chatroomAllUsersList.stream().filter(userObj->userObj.getStatus().intValue() == 1).collect(Collectors.toList());
+        // 房间管理员用户
+        List<WsChatroomUsersDO> managerUserList = chatroomAllUsersList.stream().filter(userObj->userObj.getIsManager().intValue() == 1).collect(Collectors.toList());
+
+        // 房间在线用户列表
+        List<String> roomUserNameList = onlineUserList.stream().map(WsChatroomUsersDO::getUserName).collect(Collectors.toList());
         List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_name", roomUserNameList));
         woi.setRoomUserProfileList(roomUserProfileList);
+        // 房间在线人数
         woi.setRoomUserCount(roomUserNameList.size());
-
+        // 房间管理员用户列表
+        woi.setManagerUserList(managerUserList);
         return Result.ok(woi);
     }
 

@@ -110,11 +110,9 @@
     
                 <!--按钮组-->
                 <div align="right" style="width:240px;height:100%;float:right;margin-right:3px;">
-                    <th:block th:if="${session.sessionInfo.roleName == '管理员'}">
-                        <button class='label label-info' th:title="发布通知" @click="sendNotice()">
-                            <span class="glyphicon glyphicon-comment"></span>
-                        </button>&nbsp;
-                    </th:block>
+                    <button v-if="amIManager" class='label label-info' th:title="发布通知" @click="sendNotice()">
+                        <span class="glyphicon glyphicon-comment"></span>
+                    </button>&nbsp;
                     <button class='label label-info' th:title="刷新" @click="getChatRoomInfo()">
                         <span class="glyphicon glyphicon-refresh"></span>
                     </button>&nbsp;
@@ -259,6 +257,8 @@
                 roomId: roomId,         //聊天室房间号
                 roomUserProfileList:{},  //聊天室人附加信息
                 roomUserCount:0,         //聊天室人数
+                managerUserList:{},      //管理员用户列表
+                amIManager:false,        //当前用户是否是管理员
                 cyyList: {},             //聊天常用语
                 imgIndex: 1,             //聊天窗口背景图片初始索引
                 imgMaxIndex: 10,         //聊天窗口背景图片最大索引
@@ -301,6 +301,16 @@
                             that.roomUserProfileList = jsonObj.roomUserProfileList;
                             that.cyyList = jsonObj.commonMap.cyy;
                             that.roomUserCount = jsonObj.roomUserCount;
+                            that.managerUserList = jsonObj.managerUserList;
+                            $.each(that.managerUserList, function (index, item) {
+                                console.log(index);
+                                console.log(item);
+                                console.log(item.userId);
+                                console.log(sessionUserId);
+                                if (item.userId+'' === sessionUserId) {
+                                    that.amIManager = true;
+                                }
+                            });
                         }
                     });
                 },

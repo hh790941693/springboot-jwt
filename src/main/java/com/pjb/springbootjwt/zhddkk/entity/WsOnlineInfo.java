@@ -1,5 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.entity;
 
+import com.pjb.springbootjwt.zhddkk.domain.WsChatroomUsersDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
@@ -34,4 +35,6 @@ public class WsOnlineInfo {
     private List<WsUserProfileDO> roomUserProfileList;
     // 房间用户数
     private int roomUserCount = 0;
+    // 房间管理员用户列表
+    private List<WsChatroomUsersDO> managerUserList;
 }
