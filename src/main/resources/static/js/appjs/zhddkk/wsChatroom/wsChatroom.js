@@ -40,11 +40,13 @@ var app = new Vue({
 						return;
 					}
 					layer.msg("进入房间成功");
-					window.location.href = "/ws/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass="+roomInfo.password;
+					//window.location.href = "/ws/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass="+roomInfo.password;
+					window.open("/ws/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass="+roomInfo.password,"_blank");
 				});
 			} else {
 				layer.msg("进入房间成功");
-				window.location.href = "/ws/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass=";
+				//window.location.href = "/ws/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass=";
+				window.open("/ws/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass="+roomInfo.password,"_blank");
 			}
 		},
 		mouseEnter: function (index) {

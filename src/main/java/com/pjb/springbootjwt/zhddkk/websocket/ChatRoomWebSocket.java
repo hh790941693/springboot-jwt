@@ -36,7 +36,7 @@ public class ChatRoomWebSocket {
 
     private static final SimpleDateFormat SDF_HHMMSS = new SimpleDateFormat("HH:mm:ss");
 
-    // <房间号, <用戶ID,用户session>>
+    // <房间号, <用戶ID, 用户session>>
     private static final Map<String, Map<String, Session>> clientsMap = new ConcurrentHashMap();
 
     // <房间号, List<用户名>>
@@ -374,8 +374,8 @@ public class ChatRoomWebSocket {
     public static synchronized Map<String, Object> getRoomOnlineInfo (String roomId) {
         Map<String, Object> map = new HashMap<>();
         map.put("roomCount", getRoomOnLineCount(roomId));
-        List<String> roomUserNameList = getRoomClientsUserList(roomId);
-        List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_name", roomUserNameList));
+        List<String> roomUserIdList = getRoomClientsUserList(roomId);
+        List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_id", roomUserIdList));
         map.put("userProfileList", roomUserProfileList);
 
         return map;
