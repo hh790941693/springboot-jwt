@@ -13,6 +13,7 @@ import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.dto.ForgetPasswordDTO;
 import com.pjb.springbootjwt.zhddkk.dto.LoginDTO;
 import com.pjb.springbootjwt.zhddkk.dto.RegisterDTO;
+import com.pjb.springbootjwt.zhddkk.dto.WsChatroomUsersDTO;
 import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
@@ -619,18 +620,14 @@ public class LoginController {
         woi.setCommonMap(buildCommonData());
 
         // 房间所有用户列表
-        List<WsChatroomUsersDO> chatroomAllUsersList = wsChatroomUsersService.selectList(new EntityWrapper<WsChatroomUsersDO>().eq("room_id", roomId));
+        List<WsChatroomUsersDTO> chatroomAllUserList = wsChatroomUsersService.queryChatroomUserList(roomId);
         // 房间在线用户列表
-        List<WsChatroomUsersDO> onlineUserList = chatroomAllUsersList.stream().filter(userObj->userObj.getStatus().intValue() == 1).collect(Collectors.toList());
+        List<WsChatroomUsersDTO> onlineUserList = chatroomAllUserList.stream().filter(userObj->userObj.getStatus().intValue() == 1).collect(Collectors.toList());
         // 房间管理员用户
-        List<WsChatroomUsersDO> managerUserList = chatroomAllUsersList.stream().filter(userObj->userObj.getIsManager().intValue() == 1).collect(Collectors.toList());
+        List<WsChatroomUsersDTO> managerUserList = chatroomAllUserList.stream().filter(userObj->userObj.getIsManager().intValue() == 1).collect(Collectors.toList());
 
-        // 房间在线用户列表
-        List<String> roomUserNameList = onlineUserList.stream().map(WsChatroomUsersDO::getUserName).collect(Collectors.toList());
-        List<WsUserProfileDO> roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_name", roomUserNameList));
-        woi.setRoomUserProfileList(roomUserProfileList);
-        // 房间在线人数
-        woi.setRoomUserCount(roomUserNameList.size());
+        woi.setChatroomAllUserList(chatroomAllUserList);
+        woi.setChatroomOnlineUserList(onlineUserList);
         // 房间管理员用户列表
         woi.setManagerUserList(managerUserList);
         return Result.ok(woi);

@@ -2,5 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pjb.springbootjwt.zhddkk.dao.WsChatroomUsersDao">
+    <select id="queryChatroomUserList" resultType="com.pjb.springbootjwt.zhddkk.dto.WsChatroomUsersDTO">
+        SELECT
+               t2.*,t1.is_manager, t1.`status`,t3.img AS head_image,t3.sign,t3.real_name
+        FROM
+             ws_chatroom_users t1
+        LEFT JOIN
+             ws_users t2
+        ON
+            t1.user_id = t2.id
+        LEFT JOIN
+            ws_user_profile t3
+        ON
+            t1.user_id = t3.user_id
 
+        WHERE
+            t1.room_id = #{roomId}
+        ORDER BY
+            t1.`status` DESC,t2.name
+    </select>
 </mapper>

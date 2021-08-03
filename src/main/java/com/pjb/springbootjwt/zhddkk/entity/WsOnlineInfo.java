@@ -4,6 +4,7 @@ import com.pjb.springbootjwt.zhddkk.domain.WsChatroomUsersDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+import com.pjb.springbootjwt.zhddkk.dto.WsChatroomUsersDTO;
 import lombok.Data;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,12 @@ public class WsOnlineInfo {
     private List<WsUserProfileDO> roomUserProfileList;
     // 房间用户数
     private int roomUserCount = 0;
+
+
+    private List<WsChatroomUsersDTO> chatroomAllUserList;
+
+    private List<WsChatroomUsersDTO> chatroomOnlineUserList;
+
     // 房间管理员用户列表
-    private List<WsChatroomUsersDO> managerUserList;
+    private List<WsChatroomUsersDTO> managerUserList;
 }

@@ -147,8 +147,8 @@
                     <!--选择@对象-->
                     <select v-model="selectedUser" style="width:47%;height:100%;float:left;">
                         <option value=""></option>
-                        <option v-for="row in roomUserProfileList" :key="row.userName" :value="row.userName" :disabled="row.userName == sessionUser">
-                            {{row.userName}}
+                        <option v-for="row in chatroomOnlineUserList" :key="row.id" :value="row.name" :disabled="row.name == sessionUser">
+                            {{row.name}}
                         </option>
                     </select>
                   <!--选择常用语-->
@@ -175,20 +175,20 @@
                 <span>用户列表</span>
             </div>
             <div style="width:100%;height:calc(100% - 29px);overflow-y: scroll;background-color: white;padding:3px;">
-                <div v-for="row in roomUserProfileList" style="width:100%;height:32px;margin-bottom: 8px;">
+                <div v-for="row in chatroomAllUserList" style="width:100%;height:32px;margin-bottom: 8px;">
                     <div style="width:30px;height:30px;float: left;">
-                        <img :src="row.img" width="100%" height="100%"
+                        <img :src="row.headImage" width="100%" height="100%"
                              onerror="this.onerror='';this.src=$.ws.errorImgUrl">
                     </div>
                     <div style="width:calc(100% - 35px);height:32px;float:left;margin-left: 5px;overflow-y: hidden;">
                         <div>
-                            <template v-if="row.state == '0'">
+                            <template v-if="row.status != 1">
                                 <p style="font-size: 14px;color:grey;cursor: pointer;"
-                                   @click="showPersonInfo(row.userName)">{{row.userName}}</p>
+                                   @click="showPersonInfo(row.name)">{{row.name}}<span v-if="row.isManager" style="margin-left:10px;">(群主)</span></p>
                             </template>
                             <template v-else>
                                 <p style="font-size: 14px;color: blue;cursor: pointer;"
-                                   @click="showPersonInfo(row.userName)">{{row.userName}}</p>
+                                   @click="showPersonInfo(row.name)">{{row.name}}<span v-if="row.isManager" style="margin-left:10px;">(群主)</span></p>
                             </template>
                         </div>
                         <div>
@@ -251,7 +251,8 @@
                 msgSend: "",            //发送消息内容
                 selectedUser: "",        //@对象
                 roomId: roomId,         //聊天室房间号
-                roomUserProfileList:{},  //聊天室人附加信息
+                chatroomAllUserList : {},   //聊天室所以人员信息
+                chatroomOnlineUserList:{},  //聊天室在线人信息
                 roomUserCount:0,         //聊天室人数
                 managerUserList:{},      //管理员用户列表
                 amIManager:false,        //当前用户是否是管理员
@@ -294,9 +295,10 @@
                                 return;
                             }
                             var jsonObj = result.data;
-                            that.roomUserProfileList = jsonObj.roomUserProfileList;
+                            that.chatroomOnlineUserList = jsonObj.chatroomOnlineUserList;
+                            that.chatroomAllUserList = jsonObj.chatroomAllUserList;
+                            that.roomUserCount = jsonObj.chatroomOnlineUserList.length;
                             that.cyyList = jsonObj.commonMap.cyy;
-                            that.roomUserCount = jsonObj.roomUserCount;
                             that.managerUserList = jsonObj.managerUserList;
                             $.each(that.managerUserList, function (index, item) {
                                 if (item.userId+'' === sessionUserId) {
@@ -555,8 +557,10 @@
                 // 广播消息
                 updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, msg, "yellow", 10);
                 // 更新在线人数等信息
-                app.$data.roomUserCount = extendMap.roomCount;
-                app.$data.roomUserProfileList = extendMap.userProfileList;
+                app.$data.roomUserCount = extendMap.roomUserCount;
+                app.$data.chatroomOnlineUserList = extendMap.chatroomOnlineUserList;
+                app.$data.chatroomAllUserList = extendMap.chatroomAllUserList;
+                app.$data.managerUserList = extendMap.managerUserList;
                 return;
             }
 

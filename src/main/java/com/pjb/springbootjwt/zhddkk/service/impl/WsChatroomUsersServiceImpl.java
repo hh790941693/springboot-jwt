@@ -1,5 +1,6 @@
 package com.pjb.springbootjwt.zhddkk.service.impl;
 
+import com.pjb.springbootjwt.zhddkk.dto.WsChatroomUsersDTO;
 import org.springframework.stereotype.Service;
 
 import com.pjb.springbootjwt.zhddkk.dao.WsChatroomUsersDao;
@@ -8,6 +9,8 @@ import com.pjb.springbootjwt.zhddkk.service.WsChatroomUsersService;
 import com.pjb.springbootjwt.zhddkk.base.CoreServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 聊天室人员信息.
@@ -19,4 +22,9 @@ import org.slf4j.LoggerFactory;
 public class WsChatroomUsersServiceImpl extends CoreServiceImpl<WsChatroomUsersDao, WsChatroomUsersDO> implements WsChatroomUsersService {
 
     private static final Logger logger = LoggerFactory.getLogger(WsChatroomUsersServiceImpl.class);
+
+    @Override
+    public List<WsChatroomUsersDTO> queryChatroomUserList(String roomId) {
+        return this.baseMapper.queryChatroomUserList(roomId);
+    }
 }

@@ -5,6 +5,7 @@ import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.constants.ChatMsgTypeEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
+import com.pjb.springbootjwt.zhddkk.dto.WsChatroomUsersDTO;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.UnicodeUtil;
@@ -373,13 +374,17 @@ public class ChatRoomWebSocket {
     // 获取聊天室在线信息
     public static synchronized Map<String, Object> getRoomOnlineInfo (String roomId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("roomCount", getRoomOnLineCount(roomId));
-        List<String> roomUserIdList = getRoomClientsUserList(roomId);
-        List<WsUserProfileDO> roomUserProfileList = new ArrayList<>();
-        if (null != roomUserIdList && roomUserIdList.size() > 0) {
-            roomUserProfileList = wsUserProfileService.selectList(new EntityWrapper<WsUserProfileDO>().in("user_id", roomUserIdList));
-        }
-        map.put("userProfileList", roomUserProfileList);
+
+        // 房间所有用户列表
+        List<WsChatroomUsersDTO> chatroomAllUserList = wsChatroomUsersService.queryChatroomUserList(roomId);
+        // 房间在线用户列表
+        List<WsChatroomUsersDTO> chatroomOnlineUserList = chatroomAllUserList.stream().filter(userObj->userObj.getStatus().intValue() == 1).collect(Collectors.toList());
+        // 房间管理员用户
+        List<WsChatroomUsersDTO> managerUserList = chatroomAllUserList.stream().filter(userObj->userObj.getIsManager().intValue() == 1).collect(Collectors.toList());
+        map.put("chatroomAllUserList", chatroomAllUserList);
+        map.put("chatroomOnlineUserList", chatroomOnlineUserList);
+        map.put("managerUserList", managerUserList);
+        map.put("roomUserCount", chatroomOnlineUserList.size());
 
         return map;
     }
