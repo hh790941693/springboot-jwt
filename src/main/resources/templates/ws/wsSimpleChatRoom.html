@@ -22,21 +22,20 @@
             top: 50%;
             margin-top: -300px;
             border: 1px solid grey;
-            max-width: 720px;
+            max-width: 800px;
             max-height: 500px;
         }
 
         #leftChatDiv {
-            width:100%;
+            width:calc(100% - 200px);
             height:100%;
             float: left;
         }
         
         #rightUserListDiv {
-            width: calc(20% - 1px);
+            width: 200px;
             height: 100%;
             float: right;
-            display: none;
             border-left: 1px solid grey;
         }
         
@@ -125,9 +124,6 @@
                     <button class='label label-primary' type="button" th:title="重新连接" onclick="startCheckTimer()">
                         <span class="glyphicon glyphicon-retweet"></span>
                     </button>&nbsp;
-                    <button class='label label-primary' type="button" th:title="用户列表" @click="showUserList()">
-                        <span class="fa fa-users"></span>
-                    </button>
                 </div>
             </div>
             
@@ -247,7 +243,7 @@
         startCheckTimer();
 
         // 修改地址栏地址,不显示多余的参数或者页面信息
-        history.replaceState(null, null, "/ws/wsSimpleChatRoom.page");
+        //history.replaceState(null, null, "/ws/wsSimpleChatRoom.page");
 
         var app = new Vue({
             el: '#mainDiv',
@@ -303,10 +299,6 @@
                             that.roomUserCount = jsonObj.roomUserCount;
                             that.managerUserList = jsonObj.managerUserList;
                             $.each(that.managerUserList, function (index, item) {
-                                console.log(index);
-                                console.log(item);
-                                console.log(item.userId);
-                                console.log(sessionUserId);
                                 if (item.userId+'' === sessionUserId) {
                                     that.amIManager = true;
                                 }
@@ -346,19 +338,6 @@
                         }
                     });
                 },
-                // 显示聊天室人员列表
-                showUserList: function () {
-                    $("#rightUserListDiv").toggle();
-                    var rdisp = $("#rightUserListDiv").css("display");
-                    if (rdisp == "block") {
-                        $("#leftChatDiv").css("width", "80%");
-                        $("#noticeDiv").css("width", "80%");
-                    } else {
-                        $("#leftChatDiv").css("width", "100%");
-                        $("#noticeDiv").css("width", "100%");
-                    }
-                    
-                }
             },
             created: function (e) {
                 this.getChatRoomInfo();
