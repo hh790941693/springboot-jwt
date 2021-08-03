@@ -307,6 +307,9 @@
                                     that.amIManager = true;
                                 }
                             });
+                            if (sessionUser == "admin") {
+                                that.amIManager = true;
+                            }
                         }
                     });
                 },
