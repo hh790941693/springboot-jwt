@@ -48,7 +48,7 @@
         }
         
         #noticeDiv {
-            width:100%;
+            width:calc(100% - 200px);
             height:22px;
             position:absolute;
             top:30px;
@@ -301,7 +301,7 @@
                             that.cyyList = jsonObj.commonMap.cyy;
                             that.managerUserList = jsonObj.managerUserList;
                             $.each(that.managerUserList, function (index, item) {
-                                if (item.userId+'' === sessionUserId) {
+                                if (item.id+'' === sessionUserId) {
                                     that.amIManager = true;
                                 }
                             });
