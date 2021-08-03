@@ -181,16 +181,19 @@
                     <div style="width:calc(100% - 35px);height:32px;float:left;margin-left: 5px;overflow-y: hidden;">
                         <div>
                             <template v-if="row.status != 1">
-                                <p style="font-size: 14px;color:grey;cursor: pointer;"
-                                   @click="showPersonInfo(row.name)">{{row.name}}<span v-if="row.isManager" style="margin-left:10px;">(群主)</span></p>
+                                <p style="font-size: 14px;color:grey;cursor: pointer;" @click="showPersonInfo(row.name)">
+                                <span v-text="row.name"></span>
+                                <span v-if="row.isManager" style="margin-left:10px;">(群主)</span></p>
+                                </p>
                             </template>
                             <template v-else>
-                                <p style="font-size: 14px;color: blue;cursor: pointer;"
-                                   @click="showPersonInfo(row.name)">{{row.name}}<span v-if="row.isManager" style="margin-left:10px;">(群主)</span></p>
+                                <p style="font-size: 14px;color: blue;cursor: pointer;" @click="showPersonInfo(row.name)">
+                                    <span v-text="row.name"></span>
+                                    <span v-if="row.isManager" style="margin-left:10px;">(群主)</span></p>
                             </template>
                         </div>
                         <div>
-                            <span style="font-size: 12px;">{{row.realName}}</span>
+                            <span style="font-size: 12px;" v-text="row.realName"></span>
                         </div>
                     </div>
                 </div>
