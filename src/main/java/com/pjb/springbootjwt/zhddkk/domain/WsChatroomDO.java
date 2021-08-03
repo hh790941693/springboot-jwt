@@ -6,6 +6,7 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.FieldStrategy;
 import com.baomidou.mybatisplus.enums.IdType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,7 @@ public class WsChatroomDO implements Serializable {
     private String name;
     //房间密码
     @ApiModelProperty(value = "password" , name = "房间密码")
+    @TableField(strategy= FieldStrategy.IGNORED)
     private String password;
     //房间描述
     @ApiModelProperty(value = "desc" , name = "房间描述")
