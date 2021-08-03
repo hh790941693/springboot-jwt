@@ -22,8 +22,8 @@
             top: 50%;
             margin-top: -300px;
             border: 1px solid grey;
-            max-width: 820px;
-            max-height: 600px;
+            max-width: 720px;
+            max-height: 500px;
         }
 
         #leftChatDiv {
@@ -247,6 +247,9 @@
 
         //定时检查连接
         startCheckTimer();
+
+        // 修改地址栏地址,不显示多余的参数或者页面信息
+        history.replaceState(null, null, "/ws/wsSimpleChatRoom.page");
 
         var app = new Vue({
             el: '#mainDiv',

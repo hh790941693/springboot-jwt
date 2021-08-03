@@ -200,7 +200,7 @@ public class ChatRoomWebSocket {
         if (null == wsChatroomDO || wsChatroomDO.getStatus().intValue() != 1) {
             throw new Exception("聊天室不存在");
         }
-        if (StringUtils.isNotBlank(wsChatroomDO.getPassword())) {
+        if (StringUtils.isNotBlank(wsChatroomDO.getPassword()) && !wsChatroomDO.getPassword().equals("NO-PASSWORD")) {
             if (!roomPass.equals(wsChatroomDO.getPassword())) {
                 throw new Exception("房间密码不正确");
             }
