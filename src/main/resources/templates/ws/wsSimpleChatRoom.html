@@ -245,7 +245,7 @@
         startCheckTimer();
 
         // 修改地址栏地址,不显示多余的参数或者页面信息
-        //history.replaceState(null, null, "/ws/wsSimpleChatRoom.page");
+        history.replaceState(null, null, "/ws/wsSimpleChatRoom.page");
 
         var app = new Vue({
             el: '#mainDiv',
@@ -307,7 +307,7 @@
                                     that.amIManager = true;
                                 }
                             });
-                            if (sessionUser == "admin") {
+                            if (sessionUser === "admin") {
                                 that.amIManager = true;
                             }
                         }

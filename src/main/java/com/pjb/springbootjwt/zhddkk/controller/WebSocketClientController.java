@@ -550,8 +550,8 @@ public class WebSocketClientController extends AdminBaseController {
     /**
      * 聊天室.
      */
-    @GetMapping("wsSimpleChatRoom.page")
-    String wsSimpleChatRoom(Model model) {
+    @RequestMapping("wsSimpleChatRoom.page")
+    String wsSimpleChatRoom(Model model, String roomId, String roomPass) {
         return "ws/wsSimpleChatRoom";
     }
 
