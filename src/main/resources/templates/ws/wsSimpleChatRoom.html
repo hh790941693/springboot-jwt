@@ -182,16 +182,20 @@
                         <div>
                             <template v-if="row.status != 1">
                                 <p style="font-size: 14px;color:grey;cursor: pointer;" @click="showPersonInfo(row.name)">
-                                    <span v-if="row.isOwner" v-text="row.name+'  (群主)'"></span>
-                                    <span v-else-if="row.isManager" v-text="row.name+'  (管理员)'"></span>
-                                    <span v-else v-text="row.name"></span>
+                                    <span v-text="row.name"></span>
+                                    <span v-if="row.isOwner" title="群主"><i class="fa fa-user-circle-o"></i></span>
+                                    <span v-else-if="row.isManager" title="房管"><i class="fa fa-user"></i></span>
+                                    <span v-if="row.banStatus == 1" title="已被禁言"><i class="fa fa-ban"></i></span>
+                                    <span v-if="row.blackStatus == 1" title="已被拉黑"><i class="fa fa-minus-circle"></i></span>
                                 </p>
                             </template>
                             <template v-else>
                                 <p style="font-size: 14px;color: blue;cursor: pointer;" @click="showPersonInfo(row.name)">
-                                    <span v-if="row.isOwner" v-text="row.name+'  (群主)'"></span>
-                                    <span v-else-if="row.isManager" v-text="row.name+'  (管理员)'"></span>
-                                    <span v-else v-text="row.name"></span>
+                                    <span v-text="row.name"></span>
+                                    <span v-if="row.isOwner" title="群主"><i class="fa fa-user-circle-o"></i></span>
+                                    <span v-else-if="row.isManager" title="房管"><i class="fa fa-user"></i></span>
+                                    <span v-if="row.banStatus == 1" title="已被禁言"><i class="fa fa-ban"></i></span>
+                                    <span v-if="row.blackStatus == 1" title="已被拉黑"><i class="fa fa-minus-circle"></i></span>
                                 </p>
                             </template>
                         </div>
