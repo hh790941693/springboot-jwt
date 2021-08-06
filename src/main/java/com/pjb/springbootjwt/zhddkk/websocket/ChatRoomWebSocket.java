@@ -326,6 +326,7 @@ public class ChatRoomWebSocket {
             wsChatroomUsersDO.setRoomId(this.roomId);
             wsChatroomUsersDO.setUserName(this.userName);
             wsChatroomUsersDO.setUserId(Long.valueOf(this.userId));
+            wsChatroomUsersDO.setIsOwner(this.userId.equals(wsChatroomDO.getCreateUserId().toString()) ? 1 : 0);
             wsChatroomUsersDO.setIsManager(this.userId.equals(wsChatroomDO.getCreateUserId().toString()) ? 1 : 0);
             wsChatroomUsersDO.setCreateTime(new Date());
             wsChatroomUsersDO.setUpdateTime(new Date());

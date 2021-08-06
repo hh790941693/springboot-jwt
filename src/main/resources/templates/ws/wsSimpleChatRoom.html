@@ -182,13 +182,15 @@
                         <div>
                             <template v-if="row.status != 1">
                                 <p style="font-size: 14px;color:grey;cursor: pointer;" @click="showPersonInfo(row.name)">
-                                    <span v-if="row.isManager" v-text="row.name+'  (群主)'"></span>
+                                    <span v-if="row.isOwner" v-text="row.name+'  (群主)'"></span>
+                                    <span v-else-if="row.isManager" v-text="row.name+'  (管理员)'"></span>
                                     <span v-else v-text="row.name"></span>
                                 </p>
                             </template>
                             <template v-else>
                                 <p style="font-size: 14px;color: blue;cursor: pointer;" @click="showPersonInfo(row.name)">
-                                    <span v-if="row.isManager" v-text="row.name+'  (群主)'"></span>
+                                    <span v-if="row.isOwner" v-text="row.name+'  (群主)'"></span>
+                                    <span v-else-if="row.isManager" v-text="row.name+'  (管理员)'"></span>
                                     <span v-else v-text="row.name"></span>
                                 </p>
                             </template>
@@ -245,7 +247,7 @@
         startCheckTimer();
 
         // 修改地址栏地址,不显示多余的参数或者页面信息
-        history.replaceState(null, null, "/ws/wsSimpleChatRoom.page");
+        //history.replaceState(null, null, "/ws/wsSimpleChatRoom.page");
 
         var app = new Vue({
             el: '#mainDiv',
@@ -257,6 +259,7 @@
                 chatroomOnlineUserList:{},  //聊天室在线人信息
                 roomUserCount:0,         //聊天室人数
                 managerUserList:{},      //管理员用户列表
+                amIOwner:false,          //当前用户是否是群主
                 amIManager:false,        //当前用户是否是管理员
                 cyyList: {},             //聊天常用语
                 imgIndex: 1,             //聊天窗口背景图片初始索引
@@ -302,12 +305,16 @@
                             that.roomUserCount = jsonObj.chatroomOnlineUserList.length;
                             that.cyyList = jsonObj.commonMap.cyy;
                             that.managerUserList = jsonObj.managerUserList;
-                            $.each(that.managerUserList, function (index, item) {
-                                if (item.id+'' === sessionUserId) {
+                            $.each(that.chatroomAllUserList, function (index, item) {
+                                if (item.isOwner == 1 && item.id+'' === sessionUserId) {
+                                    that.amIOwner = true;
+                                }
+                                if (item.isManager == 1 && item.id+'' === sessionUserId) {
                                     that.amIManager = true;
                                 }
                             });
                             if (sessionUser === "admin") {
+                                that.amIOwner = true;
                                 that.amIManager = true;
                             }
                         }

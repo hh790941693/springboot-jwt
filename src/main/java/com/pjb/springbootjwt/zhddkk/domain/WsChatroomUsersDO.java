@@ -42,9 +42,16 @@ public class WsChatroomUsersDO implements Serializable {
     //用户名
     @ApiModelProperty(value = "userName" , name = "用户名")
     private String userName;
+
+    //是否是群主  0:不是 1:是
+    private Integer isOwner;
     //是否是管理员 0:不是 1:是
     @ApiModelProperty(value = "isManager" , name = "是否是管理员 0:不是 1:是")
     private Integer isManager;
+    // 禁言状态 0:未禁言 1:已禁言
+    private Integer banStatus;
+    // 黑名单状态 0:不是 1:是
+    private Integer blackStatus;
     //创建时间
     @ApiModelProperty(value = "createTime" , name = "创建时间")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")

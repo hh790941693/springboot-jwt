@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class WsChatroomDTO extends WsChatroomDO {
 
-    private String managerName;
+    private String ownerName;
 
     private int onlineUserCount;
 

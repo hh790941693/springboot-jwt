@@ -4,7 +4,7 @@
 <mapper namespace="com.pjb.springbootjwt.zhddkk.dao.WsChatroomUsersDao">
     <select id="queryChatroomUserList" resultType="com.pjb.springbootjwt.zhddkk.dto.WsChatroomUsersDTO">
         SELECT
-               t2.*,t1.is_manager, t1.`status`,t3.img AS head_image,t3.sign,t3.real_name
+               t2.*,t1.is_owner,t1.is_manager,t1.ban_status,t1.black_status, t1.`status`,t3.img AS head_image,t3.sign,t3.real_name
         FROM
              ws_chatroom_users t1
         LEFT JOIN
