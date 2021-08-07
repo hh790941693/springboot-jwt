@@ -67,7 +67,7 @@ function showSessionInfo() {
         title: '会话信息',
         maxmin: false,
         shadeClose: true,//点击遮罩关闭层
-        area: ['630px', '410px'],
+        area: ['630px', '510px'],
         anim: 1,
         content: rootUrl + '/index/sessionInfo.page'
     });
@@ -93,7 +93,7 @@ function donate() {
         title: '捐赠作者',
         maxmin: false,
         shadeClose: true,//点击遮罩关闭层
-        area: ['530px', '300px'],
+        area: ['630px', '350px'],
         anim: 1,
         content: rootUrl + 'index/donate.page'
     });
