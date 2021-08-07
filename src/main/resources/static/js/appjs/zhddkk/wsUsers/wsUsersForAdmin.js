@@ -380,7 +380,6 @@ function operSpeakUser(id, status) {
 }
 
 function sendMsg(id, user) {
-    console.log("发送消息 id:" + id);
     var inputId = "msgId" + id;
     var msg = $("#" + inputId).val();
 

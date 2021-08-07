@@ -239,7 +239,6 @@ $.ws = {
                     if (top < 0) {
                         top = 0;
                     }
-                    //console.log("left:"+left+",top:"+top);
                     obj.css({"left": left, "top": top});
                 }
             }).mouseup(

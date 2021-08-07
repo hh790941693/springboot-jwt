@@ -25,7 +25,6 @@ function getAllSelectNodes() {
     $("#menuTree").find(".jstree-undetermined").each(function(i, element) {
         menuIds.push($(element).closest('.jstree-node').attr("id"));
     });
-    console.log(menuIds);
 }
 function getMenuTreeData() {
     var id = $('#id').val();
