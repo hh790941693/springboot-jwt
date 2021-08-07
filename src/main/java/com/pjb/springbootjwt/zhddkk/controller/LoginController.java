@@ -291,7 +291,6 @@ public class LoginController {
         switch(redirectName) {
             case "sessionTimeout":
                 //会话超时
-                request.setAttribute("user", null);
                 request.setAttribute("errorMsg", getLocaleMessage("login.err.session.timeout"));
                 break;
             case "notRegister":
