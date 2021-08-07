@@ -66,7 +66,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 || (headerXRequestedWidth != null && headerXRequestedWidth.contains("XMLHttpRequest")))) {
             // http请求
             String contextPath = httpServletRequest.getContextPath();
-            httpServletResponse.sendRedirect(contextPath + "/");
+            httpServletResponse.sendRedirect(contextPath + "/exception.page?redirectName=sessionTimeout");
         } else {
             // ajax请求
             try {

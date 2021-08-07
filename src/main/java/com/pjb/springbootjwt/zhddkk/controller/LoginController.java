@@ -20,6 +20,7 @@ import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import com.wf.captcha.ArithmeticCaptcha;
 import java.io.File;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -152,10 +153,7 @@ public class LoginController {
         // 如果用户信息不存在,提示用户去注册
         if (null == curUserObj) {
             // 用户未注册
-            request.setAttribute("user", userName);
-            request.setAttribute("errorMsg", getLocaleMessage("login.err.user.not.exist"));
-            request.getRequestDispatcher("/").forward(request, response);
-            //request.getRequestDispatcher("loginfail.page").forward(request, response);
+            request.getRequestDispatcher("/exception.page?redirectName=notRegister").forward(request, response);
             return;
         }
 
@@ -163,9 +161,7 @@ public class LoginController {
         String isEnable = curUserObj.getEnable();
         if (isEnable.equals("0")) {
             // 此账号已被禁用
-            request.setAttribute("user", userName);
-            request.setAttribute("errorMsg", getLocaleMessage("login.err.user.disable"));
-            request.getRequestDispatcher("/").forward(request, response);
+            request.getRequestDispatcher("/exception.page?redirectName=disable").forward(request, response);
             return;
         }
 
@@ -183,26 +179,22 @@ public class LoginController {
         // 如果密码不对
         String passwordInput = loginDTO.getPass();
         if (!passwordInput.equals(dbPassDecrypted)) {
-            request.setAttribute("user", userName);
-            request.setAttribute("errorMsg", getLocaleMessage("login.err.password.wrong"));
-            request.getRequestDispatcher("/").forward(request, response);
+            request.getRequestDispatcher("/exception.page?redirectName=passwordWrong").forward(request, response);
             return;
         }
 
-        // 校验验证码
+        // 验证码失效
         Cookie verifyCodeCookie = getCookieObj(request, CommonConstants.VERIFY_CODE);
         String verifyCode = null != verifyCodeCookie ? verifyCodeCookie.getValue() : "";
         if (StringUtils.isBlank(verifyCode)) {
-            request.setAttribute("user", userName);
-            request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.invalid"));
-            request.getRequestDispatcher("/").forward(request, response);
+            request.getRequestDispatcher("/exception.page?redirectName=verifyCodeInvalid").forward(request, response);
+
             return;
         }
+        //验证码错误
         String verifyCodeInput = loginDTO.getVerifyCode();
         if (!verifyCodeInput.equals(verifyCode)) {
-            request.setAttribute("user", userName);
-            request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong"));
-            request.getRequestDispatcher("/").forward(request, response);
+            request.getRequestDispatcher("/exception.page?redirectName=verifyCodeWrong").forward(request, response);
             return;
         }
 
@@ -289,6 +281,54 @@ public class LoginController {
         List<WsCommonDO> list = wsCommonService.selectList(new EntityWrapper<WsCommonDO>().eq("type", "zcwt"));
         model.addAttribute("questionList", list);
         return "ws/register";
+    }
+
+    /**
+     * 重定向到登陆页面.
+     */
+    @RequestMapping(value = "/redirect")
+    public String redirect(String redirectName, HttpServletRequest request) {
+        switch(redirectName) {
+            case "sessionTimeout":
+                //会话超时
+                request.setAttribute("user", null);
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.session.timeout"));
+                break;
+            case "notRegister":
+                //未注册
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.user.not.exist"));
+                break;
+            case "disable":
+                //账号被禁用
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.user.disable"));
+                break;
+            case "passwordWrong":
+                //密码错误
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.password.wrong"));
+                break;
+            case "verifyCodeInvalid":
+                //验证码失效
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.invalid"));
+                break;
+            case "verifyCodeWrong":
+                //验证码错误
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong"));
+                break;
+            default:
+                break;
+        }
+        request.getSession().invalidate();
+        return "ws/login";
+    }
+
+    /**
+     * 异常页面.
+     */
+    @RequestMapping(value = "/exception.page")
+    public String exception(String redirectName, Model model) {
+        logger.debug("exception.page");
+        model.addAttribute("redirectName", redirectName);
+        return "ws/exception";
     }
 
     /**

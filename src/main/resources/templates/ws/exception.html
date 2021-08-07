@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:include="common :: header"></th:block>
+    <meta charset="UTF-8">
+    <title>sesstion超时</title>
+</head>
+<body>
+    <input type="hidden" id="redirectName" th:value="${redirectName}">
+    <th:block th:include="common :: footer"></th:block>
+</body>
+    <script>
+        var redirectName = $("#redirectName").val();
+        debugger;
+        top.location.href = "/redirect?redirectName="+redirectName;
+    </script>
+</html>
