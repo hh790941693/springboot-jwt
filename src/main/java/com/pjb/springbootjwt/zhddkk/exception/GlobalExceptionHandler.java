@@ -68,10 +68,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler({RuntimeException.class, Exception.class})
     public Object exceptionHandler(Exception e, HttpServletRequest request){
+        e.printStackTrace();
         ModelAndView mav = new ModelAndView();
         mav.addObject("exception", e);
         mav.addObject("url", request.getRequestURL());
-        mav.setViewName("ws/error");
+        mav.addObject("redirectName", "exception");
+        mav.setViewName("ws/exception");
         // 返回一个页面视图
         return mav;
     }

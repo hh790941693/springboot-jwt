@@ -314,6 +314,7 @@ public class LoginController {
                 request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong"));
                 break;
             default:
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.cause.exception"));
                 break;
         }
         request.getSession().invalidate();
@@ -328,16 +329,6 @@ public class LoginController {
         logger.debug("exception.page");
         model.addAttribute("redirectName", redirectName);
         return "ws/exception";
-    }
-
-    /**
-     * 异常页面.
-     *
-     */
-    @RequestMapping(value = "/error.page")
-    public String error(Model model) {
-        logger.debug("访问error.page");
-        return "ws/error";
     }
 
     /**

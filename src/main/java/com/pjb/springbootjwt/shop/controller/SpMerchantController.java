@@ -161,18 +161,16 @@ public class SpMerchantController extends AdminBaseController {
 	//@RequiresPermissions("shop:spMerchant:spMerchant")
 	public String myMerchant(Model model, HttpServletRequest request, HttpServletResponse response){
 		SpMerchantDO spMerchantDO = spMerchantService.selectOne(new EntityWrapper<SpMerchantDO>().eq("user_id", SessionUtil.getSessionUserId()));
-		if (null != spMerchantDO) {
-			model.addAttribute("spMerchant", spMerchantDO);
-			// 订单个数
-			int orderNum = spOrderService.selectCount(new EntityWrapper<SpOrderDO>().eq("merchant_id", spMerchantDO.getMerchantId()));
-			// 商品数量
-			int goodsNum = spGoodsService.selectCount(new EntityWrapper<SpGoodsDO>().eq("merchant_id", spMerchantDO.getMerchantId()).eq("status", 1));
-			model.addAttribute("orderNum", orderNum);
-			model.addAttribute("goodsNum", goodsNum);
-			String requestToken = WebUtil.generateAccessToken();
-			request.getSession(false).setAttribute(WebUtil.REQUEST_TOKEN, requestToken);
-			return "shop/spMerchant/myMerchant";
-		}
-		return "redirect:/error.page";
+
+		model.addAttribute("spMerchant", spMerchantDO);
+		// 订单个数
+		int orderNum = spOrderService.selectCount(new EntityWrapper<SpOrderDO>().eq("merchant_id", spMerchantDO.getMerchantId()));
+		// 商品数量
+		int goodsNum = spGoodsService.selectCount(new EntityWrapper<SpGoodsDO>().eq("merchant_id", spMerchantDO.getMerchantId()).eq("status", 1));
+		model.addAttribute("orderNum", orderNum);
+		model.addAttribute("goodsNum", goodsNum);
+		String requestToken = WebUtil.generateAccessToken();
+		request.getSession(false).setAttribute(WebUtil.REQUEST_TOKEN, requestToken);
+		return "shop/spMerchant/myMerchant";
 	}
 }

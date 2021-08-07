@@ -22,7 +22,6 @@ public class InterceptorConfigNew implements WebMvcConfigurer {
             "/",
             "/index",
             "/login.do",
-            "/error.page",
             "/exception.page",
             "/redirect",
             "/valid/**",
