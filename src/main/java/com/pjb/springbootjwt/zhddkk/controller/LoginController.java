@@ -88,6 +88,9 @@ public class LoginController {
     @Autowired
     private WsChatroomUsersService wsChatroomUsersService;
 
+    @Autowired
+    private WsUserSessionService wsUserSessionService;
+
     /**
      * 首页登录.
      *
@@ -213,10 +216,8 @@ public class LoginController {
         SessionInfoBean sessionInfoBean = new SessionInfoBean(session.getId(),
                 String.valueOf(curUserObj.getId()), userName, curUserObj.getPassword(), webSocketConfig.getAddress(),
                 webSocketConfig.getPort(), curUserObj.getHeadImage(), userAgent, String.valueOf(curUserObj.getRoleId()), curUserObj.getRoleName(), session.getMaxInactiveInterval());
-        String jsonStr = JsonUtil.javaobject2Jsonstr(sessionInfoBean);
-        JSONObject jsonObj = JsonUtil.javaobject2Jsonobject(sessionInfoBean);
-        sessionInfoBean.setJsonStr(jsonStr);
-        sessionInfoBean.setJsonObject(jsonObj);
+        sessionInfoBean.setJsonStr(JsonUtil.javaobject2Jsonstr(sessionInfoBean));
+        sessionInfoBean.setJsonObject(JsonUtil.javaobject2Jsonobject(sessionInfoBean));
         // 页面通过th:value="${session.sessionInfo.jsonStr}"来获取session信息
         session.setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
@@ -232,6 +233,9 @@ public class LoginController {
 
         // 缓存常用表数据
         cacheService.cacheAllData();
+
+        // 用户会话表存储sessionId
+        savaUserSession(request, sessionInfoBean);
 
         // 更新用户登录状态和时间
         curUserObj.setState("1");
@@ -783,7 +787,7 @@ public class LoginController {
      * @param value cookie对应的value
      * @param expire 过期时间
      */
-    private static void setCookieObj(HttpServletResponse response, String key, String value, int expire) {
+    private void setCookieObj(HttpServletResponse response, String key, String value, int expire) {
         Cookie cookie = new Cookie(key, value);
         cookie.setPath("/");
         cookie.setMaxAge(expire);
@@ -796,7 +800,7 @@ public class LoginController {
      * @param request
      * @return
      */
-    private static String parseUserAgent(HttpServletRequest request) {
+    private String parseUserAgent(HttpServletRequest request) {
         // 客户端浏览器类型
         String userAgent = request.getHeader("User-Agent");
         try {
@@ -810,5 +814,22 @@ public class LoginController {
         }
 
         return userAgent;
+    }
+
+    /**
+     * 用户会话表存储sessionId.
+     */
+    private void savaUserSession(HttpServletRequest request, SessionInfoBean sessionInfoBean) {
+        WsUserSessionDO wsUserSessionDO = wsUserSessionService.selectOne(new EntityWrapper<WsUserSessionDO>().eq("user_id", sessionInfoBean.getUserId()));
+        if (null == wsUserSessionDO) {
+            WsUserSessionDO wsUserSessionInsert = new WsUserSessionDO();
+            wsUserSessionInsert.setUserId(Long.valueOf(sessionInfoBean.getUserId()));
+            wsUserSessionInsert.setUserName(sessionInfoBean.getUserName());
+            wsUserSessionInsert.setSessionId(request.getSession(false).getId());
+            wsUserSessionService.insert(wsUserSessionInsert);
+        } else {
+            wsUserSessionDO.setSessionId(request.getSession(false).getId());
+            wsUserSessionService.updateById(wsUserSessionDO);
+        }
     }
 }
