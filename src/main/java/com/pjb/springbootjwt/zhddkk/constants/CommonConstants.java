@@ -40,8 +40,10 @@ public class CommonConstants {
     // cookie(locale)的过期时间(20年)
     public static final int LOCALE_COOKIE_EXPIRE = 20 * 365 * 24 * 60 * 60;
 
-    //session过期相关配置
+    //session过期错误码
     public static final String SESSION_TIMEOUT_CODE = "-255";
+    //多用户重复登陆错误码
+    public static final String CONFLICT_LOGIN_CODE = "-256";
     public static final String SESSION_TIMEOUT_REDIRECT_URL = "/";
 
     // 用户单日最大文件上传容量(KB) 默认50M

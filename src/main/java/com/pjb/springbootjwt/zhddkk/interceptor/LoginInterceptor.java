@@ -3,10 +3,15 @@ package com.pjb.springbootjwt.zhddkk.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.pjb.springbootjwt.common.utils.SpringContextHolder;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
+import com.pjb.springbootjwt.zhddkk.domain.WsUserSessionDO;
+import com.pjb.springbootjwt.zhddkk.service.WsUserSessionService;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
+import com.pjb.springbootjwt.zhddkk.util.WebUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +50,19 @@ public class LoginInterceptor implements HandlerInterceptor {
         SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
         String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
 
+        String redirectUrl = "/exception.page?redirectName=sessionTimeout";
+        String resultCode = CommonConstants.SESSION_TIMEOUT_CODE;
         // 如果session信息存在,放行
         if (StringUtils.isNotBlank(sessionUser)) {
-            return true;
+            WsUserSessionService wsUserSessionService = SpringContextHolder.getBean(WsUserSessionService.class);
+            WsUserSessionDO wsUserSessionDO = wsUserSessionService.selectOne(new EntityWrapper<WsUserSessionDO>().eq("user_id", sessionInfoBean.getUserId()));
+            if (null != wsUserSessionDO && !wsUserSessionDO.getSessionId().equals(httpServletRequest.getSession().getId())) {
+                    // 如果用户重复登陆，则需要重定向到登陆页面
+                    redirectUrl = "/exception.page?redirectName=conflictLogin";
+                    resultCode = CommonConstants.CONFLICT_LOGIN_CODE;
+            } else {
+                return true;
+            }
         }
 
         // 拦截 返回到登录页面
@@ -64,22 +79,22 @@ public class LoginInterceptor implements HandlerInterceptor {
                 || (headerXRequestedWidth != null && headerXRequestedWidth.contains("XMLHttpRequest")))) {
             // http请求
             String contextPath = httpServletRequest.getContextPath();
-            httpServletResponse.sendRedirect(contextPath + "/exception.page?redirectName=sessionTimeout");
+            httpServletResponse.sendRedirect(contextPath + redirectUrl);
         } else {
             // ajax请求
             try {
                 //这里并不是设置跳转页面，而是将重定向的地址发给前端，让前端执行重定向
 
                 //设置跳转地址
-                httpServletResponse.setHeader("redirectUrl", "/exception.page?redirectName=sessionTimeout");
+                httpServletResponse.setHeader("redirectUrl", redirectUrl);
                 // 设置错误信息
-                httpServletResponse.setHeader("errorCode", CommonConstants.SESSION_TIMEOUT_CODE);
+                httpServletResponse.setHeader("errorCode", resultCode);
                 httpServletResponse.flushBuffer();
 
                 PrintWriter writer = httpServletResponse.getWriter();
                 Map<String, String> map = new HashMap<>();
-                map.put("redirectUrl", "/exception.page?redirectName=sessionTimeout");
-                map.put("code", CommonConstants.SESSION_TIMEOUT_CODE);
+                map.put("redirectUrl", redirectUrl);
+                map.put("code", resultCode);
 
                 // JSON格式返回给前端
                 writer.write(JsonUtil.javaobject2Jsonstr(map));

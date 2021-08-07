@@ -317,6 +317,10 @@ public class LoginController {
                 //验证码错误
                 request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong"));
                 break;
+            case "conflictLogin":
+                //用户重复登陆
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.conflict.login"));
+                break;
             default:
                 request.setAttribute("errorMsg", getLocaleMessage("login.err.cause.exception"));
                 break;
