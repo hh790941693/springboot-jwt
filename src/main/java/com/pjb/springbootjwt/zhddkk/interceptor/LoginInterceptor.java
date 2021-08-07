@@ -13,13 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -71,25 +69,17 @@ public class LoginInterceptor implements HandlerInterceptor {
             // ajax请求
             try {
                 //这里并不是设置跳转页面，而是将重定向的地址发给前端，让前端执行重定向
-                Locale locale = LocaleContextHolder.getLocale();
-                if (null == locale) {
-                    locale = Locale.SIMPLIFIED_CHINESE;
-                }
-                String errorMsg = messageSource.getMessage("login.err.session.timeout", null, locale);
-                errorMsg = URLEncoder.encode(errorMsg, "UTF-8");
 
                 //设置跳转地址
-                httpServletResponse.setHeader("redirectUrl", CommonConstants.SESSION_TIMEOUT_REDIRECT_URL);
+                httpServletResponse.setHeader("redirectUrl", "/exception.page?redirectName=sessionTimeout");
                 // 设置错误信息
-                httpServletResponse.setHeader("errorMsg", errorMsg);
                 httpServletResponse.setHeader("errorCode", CommonConstants.SESSION_TIMEOUT_CODE);
                 httpServletResponse.flushBuffer();
 
                 PrintWriter writer = httpServletResponse.getWriter();
                 Map<String, String> map = new HashMap<>();
-                map.put("redirectUrl", CommonConstants.SESSION_TIMEOUT_REDIRECT_URL);
+                map.put("redirectUrl", "/exception.page?redirectName=sessionTimeout");
                 map.put("code", CommonConstants.SESSION_TIMEOUT_CODE);
-                map.put("msg", errorMsg);
 
                 // JSON格式返回给前端
                 writer.write(JsonUtil.javaobject2Jsonstr(map));
