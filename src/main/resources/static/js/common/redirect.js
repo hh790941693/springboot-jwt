@@ -3,7 +3,7 @@ function redirectHandle(xhr) {
     var redirectUrl = xhr.getResponseHeader("redirectUrl");
     var errorCode = xhr.getResponseHeader("errorCode");
 
-    if(errorCode == "-255"){
+    if(errorCode == "-255" || errorCode == "-256"){
         var win = window;
         while(win != win.top){
             win = win.top;
@@ -22,7 +22,7 @@ $(function () {
         contentType : "application/x-www-form-urlencoded;charset=utf-8",
         complete : function(XMLHttpRequest, textStatus) {
             var errorCode = XMLHttpRequest.getResponseHeader("errorCode");
-            if (errorCode == "-255") {
+            if (errorCode == "-255" || errorCode == "-256") {
                 // 如果超时就处理 ，指定要跳转的页面(比如登陆页)
                 window.location.replace("/exception.page?redirectName=sessionTimeout");
             }
@@ -30,7 +30,7 @@ $(function () {
         dataFilter : function (data,type) {
             if (data != undefined && data.indexOf("\"code\":") != -1) {
                 var dataJson = JSON.parse(data);
-                if (dataJson.code == "-255") {
+                if (dataJson.code == "-255" || dataJson.code == "-256") {
                     var win = window;
                     while (win != win.top) {
                         win = win.top;
