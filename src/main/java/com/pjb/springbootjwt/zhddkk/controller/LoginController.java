@@ -231,11 +231,11 @@ public class LoginController {
             logger.debug("设置redis缓存失败,key:" + redisKey + " error:" + e.getMessage());
         }
 
-        // 缓存常用表数据
-        cacheService.cacheAllData();
-
         // 用户会话表存储sessionId
         savaUserSession(request, sessionInfoBean);
+
+        // 缓存常用表数据
+        cacheService.cacheAllData();
 
         // 更新用户登录状态和时间
         curUserObj.setState("1");

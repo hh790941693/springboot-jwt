@@ -3,15 +3,12 @@ package com.pjb.springbootjwt.zhddkk.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.pjb.springbootjwt.common.utils.SpringContextHolder;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
+import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsUserSessionDO;
-import com.pjb.springbootjwt.zhddkk.service.WsUserSessionService;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
-import com.pjb.springbootjwt.zhddkk.util.WebUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,12 +51,13 @@ public class LoginInterceptor implements HandlerInterceptor {
         String resultCode = CommonConstants.SESSION_TIMEOUT_CODE;
         // 如果session信息存在,放行
         if (StringUtils.isNotBlank(sessionUser)) {
-            WsUserSessionService wsUserSessionService = SpringContextHolder.getBean(WsUserSessionService.class);
-            WsUserSessionDO wsUserSessionDO = wsUserSessionService.selectOne(new EntityWrapper<WsUserSessionDO>().eq("user_id", sessionInfoBean.getUserId()));
+            //从缓存中获取SESSION数据
+            List<WsUserSessionDO> userSessionList = CoreCache.getInstance().getUserSessionList();
+            WsUserSessionDO wsUserSessionDO = userSessionList.stream().filter(obj->obj.getUserId().toString().equals(sessionInfoBean.getUserId())).findAny().orElse(null);
             if (null != wsUserSessionDO && !wsUserSessionDO.getSessionId().equals(httpServletRequest.getSession().getId())) {
-                    // 如果用户重复登陆，则需要重定向到登陆页面
-                    redirectUrl = "/exception.page?redirectName=conflictLogin";
-                    resultCode = CommonConstants.CONFLICT_LOGIN_CODE;
+                // 如果用户重复登陆，则需要重定向到登陆页面
+                redirectUrl = "/exception.page?redirectName=conflictLogin";
+                resultCode = CommonConstants.CONFLICT_LOGIN_CODE;
             } else {
                 return true;
             }

@@ -2,10 +2,8 @@ package com.pjb.springbootjwt.zhddkk.cache;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+
+import com.pjb.springbootjwt.zhddkk.domain.*;
 
 public class CoreCache {
     private static CoreCache coreCache = null;
@@ -17,6 +15,8 @@ public class CoreCache {
     private List<WsUserProfileDO> userProfileList = null;
 
     private List<WsFileDO> userFileList = null;
+
+    private List<WsUserSessionDO> userSessionList = null;
 
     public static CoreCache getInstance() {
         synchronized (CoreCache.class) {
@@ -83,6 +83,20 @@ public class CoreCache {
     }
 
     public void setUserFileList(List<WsFileDO> userFileList) {
+        if (null == userFileList) {
+            userList = new ArrayList<>();
+        }
         this.userFileList = userFileList;
+    }
+
+    public List<WsUserSessionDO> getUserSessionList() {
+        if (null == userSessionList) {
+            userSessionList = new ArrayList<>();
+        }
+        return userSessionList;
+    }
+
+    public void setUserSessionList(List<WsUserSessionDO> userSessionList) {
+        this.userSessionList = userSessionList;
     }
 }

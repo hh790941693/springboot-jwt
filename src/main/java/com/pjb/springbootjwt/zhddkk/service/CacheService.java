@@ -13,4 +13,6 @@ public interface CacheService {
     void cacheUserProfileData();
 
     void cacheUserFileData();
+
+    void cacheUserSessionData();
 }

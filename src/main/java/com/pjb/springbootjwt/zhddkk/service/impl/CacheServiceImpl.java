@@ -2,10 +2,7 @@ package com.pjb.springbootjwt.zhddkk.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
-import com.pjb.springbootjwt.zhddkk.domain.WsCommonDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsUserProfileDO;
-import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +28,9 @@ public class CacheServiceImpl implements CacheService {
     @Autowired
     private WsFileService wsFileService;
 
+    @Autowired
+    private WsUserSessionService wsUserSessionService;
+
     @Override
     public void cacheAllData() {
         logger.info("--------------------开始缓存所有数据-------------------");
@@ -38,6 +38,7 @@ public class CacheServiceImpl implements CacheService {
         initUserData();
         initUserProfileData();
         initUserFileData();
+        initUserSessionData();
     }
 
     @Override
@@ -58,6 +59,11 @@ public class CacheServiceImpl implements CacheService {
     @Override
     public void cacheUserFileData() {
         initUserFileData();
+    }
+
+    @Override
+    public void cacheUserSessionData() {
+        initUserSessionData();
     }
 
     private void initCommonData() {
@@ -82,5 +88,11 @@ public class CacheServiceImpl implements CacheService {
         logger.info("缓存用户文件数据");
         List<WsFileDO> list = wsFileService.selectList(new EntityWrapper<WsFileDO>().isNotNull("user"));
         CoreCache.getInstance().setUserFileList(list);
+    }
+
+    private void initUserSessionData() {
+        logger.info("缓存用户会话数据");
+        List<WsUserSessionDO> list = wsUserSessionService.selectList(null);
+        CoreCache.getInstance().setUserSessionList(list);
     }
 }
