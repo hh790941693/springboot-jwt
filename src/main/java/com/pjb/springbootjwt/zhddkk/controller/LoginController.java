@@ -408,18 +408,6 @@ public class LoginController {
     }
 
     /**
-     * 查询用户注册的问题相关信息.
-     * @return 字典
-     */
-    @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.REGISTER, subModule = "", describe = "查询问题列表")
-    @RequestMapping(value = "queryAllCommonData.do")
-    @ResponseBody
-    public Map<String, List<WsCommonDO>> queryAllCommonData() {
-        logger.debug("访问queryAllCommonData.do");
-        return buildCommonData();
-    }
-
-    /**
      * 忘记密码页面.
      * @return 忘记密码页面
      */

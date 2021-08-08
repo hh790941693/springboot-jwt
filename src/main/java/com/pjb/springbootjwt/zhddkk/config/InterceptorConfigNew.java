@@ -31,7 +31,6 @@ public class InterceptorConfigNew implements WebMvcConfigurer {
             "/register.page",
             "/forgetPassword.page",
             "/canvas/canvasIndex.page",
-            "/queryAllCommonData.do",
             "/getUserQuestion.json",
             "/showQRCode.do",
             "/checkUserRegisterStatus.json",
