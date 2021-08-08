@@ -100,7 +100,7 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "登陆首页页面")
     @RequestMapping({"", "/"})
-    public String home(Model model, HttpServletRequest request, HttpServletResponse response, String errorMsg) {
+    public String home(Model model, HttpServletRequest request, HttpServletResponse response) {
         String version = request.getParameter("v");
         if (StringUtils.isNotBlank(version)) {
             switch(version){
@@ -111,6 +111,7 @@ public class LoginController {
                     break;
                 default:
                     INDEX_PAGE_NAME = "wsclientIndex_v4";
+                    break;
             }
             setCookieObj(response, "indexPageName", INDEX_PAGE_NAME, CommonConstants.LOCALE_COOKIE_EXPIRE);
         }
@@ -136,9 +137,6 @@ public class LoginController {
         model.addAttribute(CommonConstants.C_USER, userInit);
         model.addAttribute(CommonConstants.C_PASS, passwordInit);
 
-        if (StringUtils.isNotBlank(errorMsg)) {
-            request.setAttribute("errorMsg", errorMsg);
-        }
         return "ws/login";
     }
 
@@ -264,17 +262,6 @@ public class LoginController {
     }
 
     /**
-     * 登录失败页面.
-     * @return 登陆失败页面
-     */
-    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "登录失败页面")
-    @RequestMapping(value = "loginfail.page")
-    public String loginfail() {
-        logger.debug("访问loginfail.page");
-        return "ws/loginfail";
-    }
-
-    /**
      * 注册页面.
      *
      */
@@ -285,58 +272,6 @@ public class LoginController {
         List<WsCommonDO> list = wsCommonService.selectList(new EntityWrapper<WsCommonDO>().eq("type", "zcwt"));
         model.addAttribute("questionList", list);
         return "ws/register";
-    }
-
-    /**
-     * 重定向到登陆页面.
-     */
-    @RequestMapping(value = "/redirect")
-    public String redirect(String redirectName, HttpServletRequest request) {
-        switch(redirectName) {
-            case "sessionTimeout":
-                //会话超时
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.session.timeout"));
-                break;
-            case "notRegister":
-                //未注册
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.user.not.exist"));
-                break;
-            case "disable":
-                //账号被禁用
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.user.disable"));
-                break;
-            case "passwordWrong":
-                //密码错误
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.password.wrong"));
-                break;
-            case "verifyCodeInvalid":
-                //验证码失效
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.invalid"));
-                break;
-            case "verifyCodeWrong":
-                //验证码错误
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong"));
-                break;
-            case "conflictLogin":
-                //用户重复登陆
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.conflict.login"));
-                break;
-            default:
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.cause.exception"));
-                break;
-        }
-        request.getSession().invalidate();
-        return "ws/login";
-    }
-
-    /**
-     * 异常页面.
-     */
-    @RequestMapping(value = "/exception.page")
-    public String exception(String redirectName, Model model) {
-        logger.debug("exception.page");
-        model.addAttribute("redirectName", redirectName);
-        return "ws/exception";
     }
 
     /**
@@ -418,6 +353,58 @@ public class LoginController {
         model.addAttribute("user", user);
         model.addAttribute("pass", pass);
         return Result.ok();
+    }
+
+    /**
+     * 重定向到登陆页面.
+     */
+    @RequestMapping(value = "/redirect")
+    public String redirect(String redirectName, HttpServletRequest request) {
+        switch(redirectName) {
+            case "sessionTimeout":
+                //会话超时
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.session.timeout"));
+                break;
+            case "notRegister":
+                //未注册
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.user.not.exist"));
+                break;
+            case "disable":
+                //账号被禁用
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.user.disable"));
+                break;
+            case "passwordWrong":
+                //密码错误
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.password.wrong"));
+                break;
+            case "verifyCodeInvalid":
+                //验证码失效
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.invalid"));
+                break;
+            case "verifyCodeWrong":
+                //验证码错误
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong"));
+                break;
+            case "conflictLogin":
+                //用户重复登陆
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.conflict.login"));
+                break;
+            default:
+                request.setAttribute("errorMsg", getLocaleMessage("login.err.cause.exception"));
+                break;
+        }
+        request.getSession().invalidate();
+        return "ws/login";
+    }
+
+    /**
+     * 异常页面.
+     */
+    @RequestMapping(value = "/exception.page")
+    public String exception(String redirectName, Model model) {
+        logger.debug("exception.page");
+        model.addAttribute("redirectName", redirectName);
+        return "ws/exception";
     }
 
     /**

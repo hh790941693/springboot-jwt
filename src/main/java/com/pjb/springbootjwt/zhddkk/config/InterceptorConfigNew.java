@@ -36,7 +36,6 @@ public class InterceptorConfigNew implements WebMvcConfigurer {
             "/showQRCode.do",
             "/checkUserRegisterStatus.json",
             "/updatePassword.do",
-            "/loginfail.page",
             "/generateVerifyCode.do",
             "/upload/app",
             "/register.do",
