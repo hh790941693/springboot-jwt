@@ -18,6 +18,7 @@ import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
+import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import com.wf.captcha.ArithmeticCaptcha;
 import java.io.File;
 import java.net.URLEncoder;
@@ -165,15 +166,6 @@ public class LoginController {
             request.getRequestDispatcher("/exception.page?redirectName=disable").forward(request, response);
             return;
         }
-
-        // 是否已登录
-//        if (curUserObj.getState().equals("1")) {
-//            // 如果已登录
-//            request.setAttribute("user", user);
-//            request.setAttribute("errorMsg", "当前用户已经登录了,请不要重复登录!");
-//            request.getRequestDispatcher("/").forward(request, response);
-//            return;
-//        }
 
         //数据库明文密码
         String dbPassDecrypted = SecurityAESUtil.decryptAES(curUserObj.getPassword(), CommonConstants.AES_PASSWORD);
@@ -393,7 +385,7 @@ public class LoginController {
                 request.setAttribute("errorMsg", getLocaleMessage("login.err.cause.exception"));
                 break;
         }
-        request.getSession().invalidate();
+        logout(request);
         return "ws/login";
     }
 
@@ -446,6 +438,32 @@ public class LoginController {
         }
 
         return Result.fail();
+    }
+
+    /**
+     * 退出.
+     */
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGOUT, subModule = "", describe = "退出")
+    @RequestMapping(value = "logout.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Result<String> logout(HttpServletRequest request) {
+        //清除session之前,先获取session中的数据
+        String userId = SessionUtil.getSessionUserId();
+
+        WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
+
+        // 销毁session
+        HttpSession httpSession = request.getSession(false);
+        if (null != httpSession) {
+            httpSession.invalidate();
+        }
+
+        if (null != wsUsersDO) {
+            wsUsersDO.setState("0");
+            wsUsersDO.setLastLogoutTime(SDF_STANDARD.format(new Date()));
+            wsUsersService.updateById(wsUsersDO);
+        }
+        return Result.ok();
     }
 
     /**
