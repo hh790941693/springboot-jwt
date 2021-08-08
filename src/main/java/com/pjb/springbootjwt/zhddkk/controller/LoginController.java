@@ -233,7 +233,7 @@ public class LoginController {
         savaUserSession(request, sessionInfoBean);
 
         // 缓存常用表数据
-        cacheService.cacheAllData();
+        cacheService.cacheUserSessionData();
 
         // 更新用户登录状态和时间
         curUserObj.setState("1");
