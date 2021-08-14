@@ -39,10 +39,10 @@ var app = new Vue({
 						});
 						return;
 					}
-					window.open("/ws/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass="+roomInfo.password,"_blank");
+					window.open("/zhddkk/wsChatroom/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass="+roomInfo.password,"_blank");
 				});
 			} else {
-				window.open("/ws/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass=NO-PASSWORD","_blank");
+				window.open("/zhddkk/wsChatroom/wsSimpleChatRoom.page?roomId="+roomInfo.roomId+"&roomPass=NO-PASSWORD","_blank");
 			}
 		},
 		mouseEnter: function (index) {
@@ -113,39 +113,4 @@ function remove(id) {
 			}
 		});
 	})
-}
-
-//批量删除记录
-function batchRemove() {
-    //返回所有选择的行，当没有选择的记录时，返回一个空数组
-	var rows = $('#exampleTable').bootstrapTable('getSelections');
-	if (rows.length == 0) {
-		layer.msg("请选择要删除的数据");
-		return;
-	}
-	layer.confirm("确认要删除选中的'" + rows.length + "'条数据吗?", {
-		btn : [ '确定', '取消' ]
-	}, function() {
-		var ids = new Array();
-		$.each(rows, function(i, row) {
-			ids[i] = row['id'];
-		});
-		$.ajax({
-			type : 'POST',
-			data : {
-				"ids" : ids
-			},
-			url : prefix + '/batchRemove',
-			success : function(r) {
-				if (r.code == 1) {
-					layer.msg(r.msg);
-					reLoad();
-				} else {
-					layer.msg(r.msg);
-				}
-			}
-		});
-	}, function() {
-
-	});
 }

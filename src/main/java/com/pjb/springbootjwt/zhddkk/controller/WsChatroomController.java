@@ -163,4 +163,11 @@ public class WsChatroomController extends AdminBaseController {
 		List<WsChatroomDTO> wsChatroomDOList = wsChatroomService.queryChatRoomInfoList(wrapper, SessionUtil.getSessionUserId());
 		return Result.ok(wsChatroomDOList);
 	}
+
+	@RequestMapping("/wsSimpleChatRoom.page")
+	public String simpleChatRoom(String roomId, String roomPassword, Model model) {
+		model.addAttribute("roomId", roomId);
+		model.addAttribute("roomPassword", roomPassword);
+		return "ws/wsSimpleChatRoom";
+	}
 }
