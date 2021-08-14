@@ -805,6 +805,8 @@ public class LoginController {
                     .replaceAll("\\(", "")
                     .replaceAll("\\)", "")
                     .replaceAll(" +", "_")
+                    .replaceAll("/", "")
+                    .replaceAll(":", "")
                     .replaceAll(";", "");
         } catch (Exception e) {
             userAgent = "unknown user agent";
