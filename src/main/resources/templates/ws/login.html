@@ -107,7 +107,7 @@
         <img id="backgroundImg" src="../img/fengjing/fj9.jpg" hidden>
         <form id="loginForm" action="/login.do" method="post" onsubmit="return checkEnvironment()">
             <!--错误信息提示区域-->
-            <div style="height:25px;border:margin-bottom:5px;">
+            <div style="height:25px;margin-bottom:5px;">
                 <span style="color:red;font-weight: bold;" th:text="${#request.getAttribute('errorMsg')}"></span>
             </div>
 
@@ -284,10 +284,14 @@
     }
 
     function checkEnvironment(){
-        var index = layer.load(1, {
-            shade: [0.1,'#fff'] //0.1透明度的白色背景
-        });
-        return ture;
+        var user = $("input[name='user']").val();
+        var pass = $("input[name='pass']").val();
+        var verifyCode = $("input[name='verifyCode']").val();
+        if (!!user && !!pass && !!verifyCode) {
+            var index = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
+        }
     }
 </script>
 </html>
