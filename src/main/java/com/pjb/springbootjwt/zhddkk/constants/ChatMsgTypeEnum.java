@@ -9,7 +9,8 @@ public enum ChatMsgTypeEnum {
     CHAT_ONLINE_MSG("在线消息", "2"),
     CHAT_OFFLINE_MSG("离线消息", "3"),
     NOTICE_MSG("通知消息", "4"),
-    STATUS_MSG("状态消息", "5");
+    STATUS_MSG("状态消息", "5"),
+    ERROR_MSG("异常消息", "6");
 
     private String msgTypeDesc;
     private String msgTypeId;

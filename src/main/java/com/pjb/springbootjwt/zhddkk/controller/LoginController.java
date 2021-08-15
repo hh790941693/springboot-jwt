@@ -449,7 +449,6 @@ public class LoginController {
     public Result<String> logout(HttpServletRequest request) {
         //清除session之前,先获取session中的数据
         String userId = SessionUtil.getSessionUserId();
-
         WsUsersDO wsUsersDO = wsUsersService.selectById(userId);
 
         // 销毁session
@@ -458,6 +457,7 @@ public class LoginController {
             httpSession.invalidate();
         }
 
+        // 更新用户在线状态
         if (null != wsUsersDO) {
             wsUsersDO.setState("0");
             wsUsersDO.setLastLogoutTime(SDF_STANDARD.format(new Date()));

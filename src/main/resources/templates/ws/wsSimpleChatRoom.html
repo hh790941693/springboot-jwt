@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <th:block th:include="common :: header"></th:block>
@@ -290,6 +290,10 @@
                         "desc":"状态消息",
                         "value":"5"
                     },
+                    "error":{
+                        "desc":"异常消息",
+                        "value":"6"
+                    },
                 }
             },
             methods: {
@@ -307,7 +311,7 @@
                             var jsonObj = result.data;
                             that.chatroomOnlineUserList = jsonObj.chatroomOnlineUserList;
                             that.chatroomAllUserList = jsonObj.chatroomAllUserList;
-                            that.roomUserCount = jsonObj.chatroomOnlineUserList.length;
+                            that.roomUserCount = jsonObj.roomUserCount;
                             that.cyyList = jsonObj.commonMap.cyy;
                             that.managerUserList = jsonObj.managerUserList;
                             $.each(that.chatroomAllUserList, function (index, item) {
@@ -578,6 +582,12 @@
                 app.$data.chatroomOnlineUserList = extendMap.chatroomOnlineUserList;
                 app.$data.chatroomAllUserList = extendMap.chatroomAllUserList;
                 app.$data.managerUserList = extendMap.managerUserList;
+                return;
+            }
+            
+            if (msgTypeId == app.$data.msgTypeMap.error.value) {
+                // 异常消息
+                updateChatMsgWithColor(app.$data.msgTypeMap.system.desc, msg, "red", 10);
                 return;
             }
 
