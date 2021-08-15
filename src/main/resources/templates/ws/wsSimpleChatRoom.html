@@ -174,34 +174,30 @@
                 <span>用户列表</span>
             </div>
             <div style="width:100%;height:calc(100% - 29px);overflow-y: scroll;background-color: white;padding:3px;">
-                <div v-for="row in chatroomAllUserList" style="width:100%;height:32px;margin-bottom: 8px;">
+                <div v-for="row in chatroomAllUserList" style="width:100%;height:32px;margin-bottom: 8px;border-bottom: 1px solid lightgrey;">
                     <div style="width:30px;height:30px;float: left;">
                         <img :src="row.headImage" width="100%" height="100%"
                              onerror="this.onerror='';this.src=$.ws.errorImgUrl">
                     </div>
                     <div style="width:calc(100% - 35px);height:32px;float:left;margin-left: 5px;overflow-y: hidden;">
                         <div>
-                            <template v-if="row.status != 1">
-                                <p style="font-size: 14px;color:grey;cursor: pointer;" @click="showPersonInfo(row.name)">
-                                    <span v-text="row.name"></span>
-                                    <span v-if="row.isOwner" title="群主"><i class="fa fa-user-circle-o"></i></span>
-                                    <span v-else-if="row.isManager" title="房管"><i class="fa fa-user"></i></span>
-                                    <span v-if="row.banStatus == 1" title="已被禁言"><i class="fa fa-ban"></i></span>
-                                    <span v-if="row.blackStatus == 1" title="已被拉黑"><i class="fa fa-minus-circle"></i></span>
-                                </p>
-                            </template>
-                            <template v-else>
-                                <p style="font-size: 14px;color: blue;cursor: pointer;" @click="showPersonInfo(row.name)">
-                                    <span v-text="row.name"></span>
-                                    <span v-if="row.isOwner" title="群主"><i class="fa fa-user-circle-o"></i></span>
-                                    <span v-else-if="row.isManager" title="房管"><i class="fa fa-user"></i></span>
-                                    <span v-if="row.banStatus == 1" title="已被禁言"><i class="fa fa-ban"></i></span>
-                                    <span v-if="row.blackStatus == 1" title="已被拉黑"><i class="fa fa-minus-circle"></i></span>
-                                </p>
-                            </template>
+                            <p style="width:50%;float:left;font-size: 14px;cursor: pointer;" @click="showPersonInfo(row.name)">
+                                <template v-if="row.status != 1">
+                                    <span v-text="row.name" style="color: grey;"></span>
+                                </template>
+                                <template v-else>
+                                    <span v-text="row.name" style="color: blue;"></span>
+                                </template>
+                            </p>
+                            <p style="width: 49%;float:right;font-size: 14px;text-align: right;">
+                                <span v-if="row.isOwner" title="群主"><i class="fa fa-user-circle-o"></i></span>
+                                <span v-else-if="row.isManager" title="房管"><i class="fa fa-user"></i></span>
+                                <span v-if="row.banStatus == 1" title="已被禁言"><i class="fa fa-ban"></i></span>
+                                <span v-if="row.blackStatus == 1" title="已被拉黑"><i class="fa fa-minus-circle"></i></span>
+                            </p>
                         </div>
                         <div>
-                            <span style="font-size: 12px;" v-text="row.realName"></span>
+                            <span style="font-size: 12px;overflow: hidden;" v-text="row.realName"></span>
                         </div>
                     </div>
                 </div>
