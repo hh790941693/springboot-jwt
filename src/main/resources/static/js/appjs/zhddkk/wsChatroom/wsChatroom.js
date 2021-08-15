@@ -31,7 +31,7 @@ var app = new Vue({
 		enterRoom: function (index) {
 			var roomInfo = app.chatRoomList[index];
 			if (!!roomInfo.password) {
-				layer.prompt({title: '请输入房间密码', formType: 1}, function(pass, index){
+				layer.prompt({title: '请输入房间密码', formType: 3}, function(pass, index){
 					layer.close(index);
 					if (pass != roomInfo.password) {
 						layer.alert('密码不正确', {
