@@ -218,7 +218,9 @@
                         },
                         success: function (result) {
                             layer.msg(result.msg);
-                            that.queryGoodsDetail();
+                            if (result.code == 1) {
+                                that.goodsDetail.goodsFavoriteStatus = status;
+                            }
                         }
                     });
                 },
