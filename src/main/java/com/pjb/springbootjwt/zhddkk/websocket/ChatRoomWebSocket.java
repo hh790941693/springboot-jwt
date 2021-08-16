@@ -8,7 +8,6 @@ import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.dto.WsChatroomUsersDTO;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
-import com.pjb.springbootjwt.zhddkk.util.UnicodeUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -35,8 +34,6 @@ import java.util.stream.Collectors;
 public class ChatRoomWebSocket {
     //日志
     private static final Logger logger = LoggerFactory.getLogger(ChatRoomWebSocket.class);
-
-    private static final SimpleDateFormat SDF_STANDARD = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final SimpleDateFormat SDF_HHMMSS = new SimpleDateFormat("HH:mm:ss");
 
@@ -70,10 +67,6 @@ public class ChatRoomWebSocket {
     // 通过WebSocketConfig注入
     public static WsUsersService wsUsersService;
 
-    public static WsChatlogService wsChatlogService;
-
-    public static WsUserProfileService wsUserProfileService;
-
     public static WsChatroomService wsChatroomService;
 
     public static WsChatroomUsersService wsChatroomUsersService;
@@ -86,7 +79,7 @@ public class ChatRoomWebSocket {
      */
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
-        if (StringUtils.isBlank(message) || this.userName == null || this.session == null) {
+        if (StringUtils.isBlank(message)) {
             return;
         }
 

@@ -47,7 +47,6 @@ public class WebSocketConfig {
 
     @Autowired
     public void setWsChatlogService(WsChatlogService wsChatlogService) {
-        ChatRoomWebSocket.wsChatlogService = wsChatlogService;
         ZhddWebSocket.wsChatlogService = wsChatlogService;
     }
 
@@ -58,7 +57,6 @@ public class WebSocketConfig {
 
     @Autowired
     public void setWsUserProfileService(WsUserProfileService wsUserProfileService) {
-        ChatRoomWebSocket.wsUserProfileService = wsUserProfileService;
         ZhddWebSocket.wsUserProfileService = wsUserProfileService;
     }
 
