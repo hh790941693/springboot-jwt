@@ -1,7 +1,10 @@
 package com.pjb.springbootjwt.zhddkk.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class WsChatroomUsersDTO extends WsUsersDO {
@@ -22,4 +25,7 @@ public class WsChatroomUsersDTO extends WsUsersDO {
 
     // 真实姓名
     private String realName;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date updateTime;
 }

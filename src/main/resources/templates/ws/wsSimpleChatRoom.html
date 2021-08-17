@@ -174,13 +174,13 @@
                 <span>用户列表</span>
             </div>
             <div style="width:100%;height:calc(100% - 29px);overflow-y: scroll;background-color: white;padding:3px;">
-                <div v-for="row in chatroomAllUserList" style="width:100%;height:32px;margin-bottom: 8px;border-bottom: 1px solid lightgrey;">
-                    <div style="width:30px;height:30px;float: left;">
+                <div v-for="row in chatroomAllUserList" style="width:100%;height:50px;margin-bottom: 8px;">
+                    <div style="width:50px;height:50px;float: left;">
                         <img :src="row.headImage" width="100%" height="100%"
                              onerror="this.onerror='';this.src=$.ws.errorImgUrl">
                     </div>
-                    <div style="width:calc(100% - 35px);height:32px;float:left;margin-left: 5px;overflow-y: hidden;">
-                        <div>
+                    <div style="width:calc(100% - 55px);height:50px;float:left;margin-left: 5px;overflow-y: hidden;">
+                        <div style="height:33%;">
                             <p style="width:50%;float:left;font-size: 14px;cursor: pointer;" @click="showPersonInfo(row.name)">
                                 <template v-if="row.status != 1">
                                     <span v-text="row.name" style="color: grey;"></span>
@@ -196,8 +196,11 @@
                                 <span v-if="row.blackStatus == 1" title="已被拉黑"><i class="fa fa-minus-circle"></i></span>
                             </p>
                         </div>
-                        <div>
+                        <div style="height:33%;">
                             <span style="font-size: 12px;overflow: hidden;" v-text="row.realName"></span>
+                        </div>
+                        <div style="height:33%;">
+                            <span style="font-size: 12px;overflow: hidden;" v-text="row.updateTime"></span>
                         </div>
                     </div>
                 </div>
