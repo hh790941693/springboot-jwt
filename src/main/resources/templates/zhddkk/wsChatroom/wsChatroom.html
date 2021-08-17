@@ -64,21 +64,21 @@
                                     <p>{{roomObj.roomId}}</p>
                                 </div>
                                 <div style="height: 20px;">
-                                    <p style="overflow: hidden;" v-text="'房间名称：'+roomObj.name"></p>
+                                    <span style="overflow: hidden;"><i class="fa fa-home">&nbsp;房间名称：{{roomObj.name}}</i></span>
                                 </div>
                                 <div style="height: 20px;">
-                                    <p style="overflow: hidden;" v-text="'房间群主：'+roomObj.ownerName"></p>
+                                    <span style="overflow: hidden;"><i class="fa fa-user-circle-o">&nbsp;房间群主：{{roomObj.ownerName}}</i></span>
                                 </div>
                                 <div style="height:20px;">
                                     <div style="width:100%;">
-                                        <p v-text="'房间人数：'+roomObj.onlineUserCount"></p>
+                                        <span><i class="fa fa-users">&nbsp;房间人数：{{roomObj.onlineUserCount}}</i></span>
                                     </div>
                                 </div>
                                 <div style="height: 20px;">
-                                    <p v-text="'创建时间：'+roomObj.createTime"></p>
+                                    <span><i class="fa fa-clock-o">&nbsp;创建时间：{{roomObj.createTime}}</i></span>
                                 </div>
                                 <div style="height: 30px;">
-                                    <p style="overflow: hidden;" v-text="'房间描述：'+roomObj.desc"></p>
+                                    <span style="overflow: hidden;"><i class="fa fa-file-text-o">&nbsp;房间描述：{{roomObj.desc}}</i></span>
                                 </div>
                                 <div style="width:100%;height:40px;position: absolute;bottom:1px;">
                                     <div style="width:40%;float:left;text-align: left;font-size: 30px;" v-if="roomObj.password != ''">

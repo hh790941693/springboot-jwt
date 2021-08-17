@@ -212,14 +212,14 @@ public class LoginController {
         session.setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
 
         // 往redis中存储用户信息
-        String redisKey = REDIS_KEY_PREFIX + userName;
-        try {
-            String redisValue = JsonUtil.javaobject2Jsonstr(curUserObj);
-            logger.debug("设置redis缓存,key:" + redisKey + "  value:" + redisValue);
-            //redisUtil.set(redisKey, redisValue);
-        } catch (Exception e) {
-            logger.debug("设置redis缓存失败,key:" + redisKey + " error:" + e.getMessage());
-        }
+//        String redisKey = REDIS_KEY_PREFIX + userName;
+//        try {
+//            String redisValue = JsonUtil.javaobject2Jsonstr(curUserObj);
+//            logger.debug("设置redis缓存,key:" + redisKey + "  value:" + redisValue);
+//            //redisUtil.set(redisKey, redisValue);
+//        } catch (Exception e) {
+//            logger.debug("设置redis缓存失败,key:" + redisKey + " error:" + e.getMessage());
+//        }
 
         // 用户会话表存储sessionId
         savaUserSession(request, sessionInfoBean);
@@ -828,6 +828,7 @@ public class LoginController {
             wsUserSessionService.insert(wsUserSessionInsert);
         } else {
             wsUserSessionDO.setSessionId(request.getSession(false).getId());
+            wsUserSessionDO.setUpdateTime(new Date());
             wsUserSessionService.updateById(wsUserSessionDO);
         }
     }
