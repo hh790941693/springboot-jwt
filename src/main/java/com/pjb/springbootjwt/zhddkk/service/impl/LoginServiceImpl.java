@@ -28,9 +28,7 @@ public class LoginServiceImpl implements LoginService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // 房间所有用户列表
         List<WsChatroomUsersDTO> chatroomAllUserList = wsChatroomUsersService.queryChatroomUserList(roomId);
-        for (WsChatroomUsersDTO allUser : chatroomAllUserList) {
-            allUser.setUpdateTimeStr(sdf.format(allUser.getUpdateTime()));
-        }
+        chatroomAllUserList.forEach(f->f.setUpdateTimeStr(sdf.format(f.getUpdateTime())));
         // 房间在线用户列表
         List<WsChatroomUsersDTO> onlineUserList = chatroomAllUserList.stream().filter(userObj->userObj.getStatus().intValue() == 1).collect(Collectors.toList());
         // 房间管理员用户
