@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,7 +47,6 @@ public class LoginServiceImpl implements LoginService {
      * @return list
      */
     private List<WsCommonDO> buildCommonData(String type) {
-        Map<String, List<WsCommonDO>> commonMap = new HashMap<>();
         List<WsCommonDO> commonList = CoreCache.getInstance().getCommonList();
         return commonList.stream().filter(obj->obj.getType().equals(type)).collect(Collectors.toList());
     }

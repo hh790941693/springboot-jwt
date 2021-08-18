@@ -190,8 +190,10 @@ public class LoginController {
         // 设置session非活动失效时间(30分钟)
         session.setMaxInactiveInterval(CommonConstants.SESSION_INACTIVE_TIMEOUT);
 
-        //记录cookie
-        saveCookie(response, curUserObj, userAgent);
+        // 保存cookie
+        saveCookie(response, curUserObj);
+        // 保存user-agent
+        setCookieObj(response, CommonConstants.C_USER_AGENT, userAgent, CommonConstants.COOKIE_TIMEOUT);
 
         // 往session中存储用户信息
         SessionInfoBean sessionInfoBean = new SessionInfoBean(session.getId(),
@@ -340,6 +342,8 @@ public class LoginController {
 
     /**
      * 重定向到登陆页面.
+     * @param redirectName 重定向名称
+     * @param request 请求
      */
     @RequestMapping(value = "/redirect")
     public String redirect(String redirectName, HttpServletRequest request) {
@@ -403,7 +407,7 @@ public class LoginController {
 
     /**
      * 更新密码事件.
-     *
+     * @param forgetPasswordDTO 忘记密码信息
      */
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.FORGET_PASSWORD, subModule = "", describe = "更新密码")
     @RequestMapping(value = "updatePassword.do", method = RequestMethod.POST)
@@ -459,13 +463,12 @@ public class LoginController {
 
     /**
      * 生成二维码并显示.
-     *
      * @return 二维码base64字符串
      */
     @OperationLogAnnotation(type = OperationEnum.INSERT, module = ModuleEnum.OTHER, subModule = "", describe = "显示二维码")
     @RequestMapping(value = "showQRCode.do", method = RequestMethod.POST)
     @ResponseBody
-    public String showQrCode(HttpServletRequest request) {
+    public String createQrCode(HttpServletRequest request) {
         String scheme = request.getScheme();
 
         String savePath = uploadConfig.getStorePath();
@@ -515,9 +518,9 @@ public class LoginController {
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {
             return Result.ok(wsUsersDO);
-        } else {
-            return Result.fail();
         }
+
+        return Result.fail();
     }
 
     /**
@@ -544,7 +547,7 @@ public class LoginController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "获取验证码")
     @GetMapping("/generateVerifyCode.do")
     @ResponseBody
-    public Result<String> getCode(HttpServletRequest request, HttpServletResponse response) {
+    public Result<String> generateVerifyCode(HttpServletRequest request, HttpServletResponse response) {
         //算术验证码 数字加减乘除. 建议2位运算就行:captcha.setLen(2);
         ArithmeticCaptcha captcha = new ArithmeticCaptcha(100, 34);
         // 几位数运算，默认是两位
@@ -577,13 +580,11 @@ public class LoginController {
 
     /**
      * 切换语言.
-     * @param request 请求
-     * @param response 响应
      * @param lang 语言
      * @return 重定向页面
      */
     @RequestMapping("/i18n")
-    public String changeSessionLanauage(HttpServletRequest request, HttpServletResponse response, String lang) {
+    public String changeSessionLanauage(String lang) {
         String language = lang.split("_")[0];
         String country = lang.split("_")[1];
         Locale locale = new Locale(language, country);
@@ -594,7 +595,7 @@ public class LoginController {
 
     /**
      * 获取聊天室用户信息.
-     *
+     * @param roomId 房间号
      * @return 聊天室用户信息
      */
     @RequestMapping(value = "getChatRoomInfo.json")
@@ -647,9 +648,8 @@ public class LoginController {
      * 保存cookie.
      * @param response 响应体
      * @param curUserObj 当前登陆用户
-     * @param userAgent 客户端类型
      */
-    private void saveCookie(HttpServletResponse response, WsUsersDO curUserObj, String userAgent) {
+    private void saveCookie(HttpServletResponse response, WsUsersDO curUserObj) {
         // 用户id
         setCookieObj(response, CommonConstants.C_USER_ID, String.valueOf(curUserObj.getId()), CommonConstants.COOKIE_TIMEOUT);
 
@@ -667,9 +667,6 @@ public class LoginController {
 
         // 头像
         setCookieObj(response, CommonConstants.C_IMG, curUserObj.getHeadImage(), CommonConstants.COOKIE_TIMEOUT);
-
-        // user-agent
-        setCookieObj(response, CommonConstants.C_USER_AGENT, userAgent, CommonConstants.COOKIE_TIMEOUT);
     }
 
     /**
@@ -678,7 +675,7 @@ public class LoginController {
      * @param name    cookie对应的key
      * @return cookie对象
      */
-    private static Cookie getCookieObj(HttpServletRequest request, String name) {
+    private Cookie getCookieObj(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
         if (null != cookies) {
             for (Cookie cookie : cookies) {
@@ -706,7 +703,6 @@ public class LoginController {
 
     /**
      * 获取客户端类型.
-     *
      * @param request
      * @return
      */
@@ -724,7 +720,6 @@ public class LoginController {
         } catch (Exception e) {
             userAgent = "unknown user agent";
         }
-
         return userAgent;
     }
 
