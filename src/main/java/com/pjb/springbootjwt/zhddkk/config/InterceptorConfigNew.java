@@ -27,7 +27,6 @@ public class InterceptorConfigNew implements WebMvcConfigurer {
             "/valid/**",
             "/verifyUser.do",
             "/canvas/snow.page",
-            "/querySystemInfo",
             "/register.page",
             "/forgetPassword.page",
             "/canvas/canvasIndex.page",

@@ -5,7 +5,6 @@ import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
-import com.pjb.springbootjwt.zhddkk.bean.SystemInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
@@ -456,43 +455,6 @@ public class LoginController {
             wsUsersService.updateById(wsUsersDO);
         }
         return Result.ok();
-    }
-
-    /**
-     * 查询系统信息.
-     * @return 系统信息
-     */
-    @ResponseBody
-    @GetMapping("/querySystemInfo")
-    public Result<SystemInfoBean> querySystemInfo() {
-        SystemInfoBean systemInfoBean = new SystemInfoBean();
-        systemInfoBean.setOsName(System.getProperty("os.name"));
-        systemInfoBean.setJavaHome(System.getProperty("java.home"));
-        systemInfoBean.setJavaVersion(System.getProperty("java.version"));
-        systemInfoBean.setDbVersion("No Check");
-
-        Properties props = System.getProperties();
-        String osName = props.getProperty("os.name");
-        boolean nginxPs = false;
-        if (osName.contains("windows") || osName.contains("Windows")) {
-            nginxPs = OsUtil.findWindowProcess("nginx.exe");
-        } else {
-            String result = ExcuteLinuxCmdUtil.executeLinuxCmd("ps -ef | grep nginx | grep -v grep");
-            if (StringUtils.isNotBlank(result) && result.contains("nginx")) {
-                nginxPs = true;
-            }
-        }
-        systemInfoBean.setNginxFlag(nginxPs);
-
-        String storePath = uploadConfig.getStorePath();
-        File sf = new File(storePath);
-        if (sf.isDirectory()) {
-            systemInfoBean.setShareDir(storePath + ":共享目录正常");
-        } else {
-            systemInfoBean.setShareDir(storePath + ":共享目录不存在");
-        }
-
-        return Result.ok(systemInfoBean);
     }
 
     /**
