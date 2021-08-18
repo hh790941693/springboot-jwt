@@ -8,6 +8,7 @@ import com.pjb.springbootjwt.zhddkk.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,12 @@ public class LoginServiceImpl implements LoginService {
         WsChatroomInfoDTO wciDTO = new WsChatroomInfoDTO();
         wciDTO.setCyyList(buildCommonData("cyy"));
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // 房间所有用户列表
         List<WsChatroomUsersDTO> chatroomAllUserList = wsChatroomUsersService.queryChatroomUserList(roomId);
+        for (WsChatroomUsersDTO allUser : chatroomAllUserList) {
+            allUser.setUpdateTimeStr(sdf.format(allUser.getUpdateTime()));
+        }
         // 房间在线用户列表
         List<WsChatroomUsersDTO> onlineUserList = chatroomAllUserList.stream().filter(userObj->userObj.getStatus().intValue() == 1).collect(Collectors.toList());
         // 房间管理员用户
