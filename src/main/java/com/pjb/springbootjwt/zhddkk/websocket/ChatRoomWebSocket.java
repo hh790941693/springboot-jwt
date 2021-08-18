@@ -5,7 +5,7 @@ import com.pjb.springbootjwt.zhddkk.bean.ChatMessageBean;
 import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.constants.ChatMsgTypeEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
-import com.pjb.springbootjwt.zhddkk.dto.WsChatroomUsersDTO;
+import com.pjb.springbootjwt.zhddkk.dto.WsChatroomInfoDTO;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import net.sf.json.JSONObject;
@@ -70,6 +70,8 @@ public class ChatRoomWebSocket {
     public static WsChatroomService wsChatroomService;
 
     public static WsChatroomUsersService wsChatroomUsersService;
+
+    public static LoginService loginService;
 
     /**
      * 接收客户端发来的消息并转发到客户端.
@@ -333,21 +335,15 @@ public class ChatRoomWebSocket {
     // 获取聊天室在线信息
     public static synchronized Map<String, Object> getRoomOnlineInfo (String roomId) {
         Map<String, Object> map = new HashMap<>();
-
-        // 房间所有用户列表
-        List<WsChatroomUsersDTO> chatroomAllUserList = wsChatroomUsersService.queryChatroomUserList(roomId);
-        // 房间在线用户列表
-        List<WsChatroomUsersDTO> chatroomOnlineUserList = chatroomAllUserList.stream().filter(userObj->userObj.getStatus().intValue() == 1).collect(Collectors.toList());
-        // 房间管理员用户
-        List<WsChatroomUsersDTO> managerUserList = chatroomAllUserList.stream().filter(userObj->userObj.getIsManager().intValue() == 1).collect(Collectors.toList());
+        WsChatroomInfoDTO wciDTO = loginService.getChatRoomInfo(roomId);
         // 聊天室所有人
-        map.put("chatroomAllUserList", chatroomAllUserList);
+        map.put("chatroomAllUserList", wciDTO.getChatroomAllUserList());
         // 聊天室所有在线用户
-        map.put("chatroomOnlineUserList", chatroomOnlineUserList);
+        map.put("chatroomOnlineUserList", wciDTO.getChatroomOnlineUserList());
         // 聊天室所有管理员
-        map.put("managerUserList", managerUserList);
+        map.put("managerUserList", wciDTO.getManagerUserList());
         // 聊天室在线人数
-        map.put("roomUserCount", chatroomOnlineUserList.size());
+        map.put("roomUserCount", wciDTO.getRoomUserCount());
 
         return map;
     }

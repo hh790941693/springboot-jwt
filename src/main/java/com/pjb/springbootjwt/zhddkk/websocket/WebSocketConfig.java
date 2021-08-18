@@ -69,4 +69,9 @@ public class WebSocketConfig {
     public void setWsChatRoomUsersService(WsChatroomUsersService wsChatroomUsersService) {
         ChatRoomWebSocket.wsChatroomUsersService = wsChatroomUsersService;
     }
+
+    @Autowired
+    public void setWsChatRoomUsersService(LoginService loginService) {
+        ChatRoomWebSocket.loginService = loginService;
+    }
 }

@@ -285,6 +285,7 @@
             methods: {
                 // 获取房间人数、聊天常用语言、房间人详细信息
                 getChatRoomInfo: function () {
+                    var that = this;
                     $.ajax({
                         type: 'GET',
                         url: rootUrl+ 'getChatRoomInfo.json',
@@ -294,9 +295,9 @@
                                 return;
                             }
                             var jsonObj = result.data;
-                            this.roomUserProfileList = jsonObj.roomUserProfileList;
-                            app.cyyList = jsonObj.commonMap.cyy;
-                            this.roomUserCount = jsonObj.roomUserCount;
+                            that.roomUserProfileList = jsonObj.roomUserProfileList;
+                            that.cyyList = jsonObj.cyyList;
+                            that.roomUserCount = jsonObj.roomUserCount;
                         }
                     });
                 },

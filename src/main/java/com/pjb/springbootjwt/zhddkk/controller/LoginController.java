@@ -10,27 +10,19 @@ import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.*;
-import com.pjb.springbootjwt.zhddkk.dto.ForgetPasswordDTO;
-import com.pjb.springbootjwt.zhddkk.dto.LoginDTO;
-import com.pjb.springbootjwt.zhddkk.dto.RegisterDTO;
-import com.pjb.springbootjwt.zhddkk.dto.WsChatroomUsersDTO;
-import com.pjb.springbootjwt.zhddkk.entity.WsOnlineInfo;
+import com.pjb.springbootjwt.zhddkk.dto.*;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
-import com.pjb.springbootjwt.zhddkk.websocket.ZhddWebSocket;
 import com.wf.captcha.ArithmeticCaptcha;
 import java.io.File;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,10 +79,10 @@ public class LoginController {
     private SysRoleService sysRoleService;
 
     @Autowired
-    private WsChatroomUsersService wsChatroomUsersService;
+    private WsUserSessionService wsUserSessionService;
 
     @Autowired
-    private WsUserSessionService wsUserSessionService;
+    private LoginService loginService;
 
     /**
      * 首页登录.
@@ -646,22 +638,9 @@ public class LoginController {
     @RequestMapping(value = "getChatRoomInfo.json")
     @ResponseBody
     @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.CHAT, subModule = "", describe = "获取房间人员列表")
-    public Result<WsOnlineInfo> getChatRoomInfo(@RequestParam(value = "roomId") String roomId) {
-        WsOnlineInfo woi = new WsOnlineInfo();
-        woi.setCommonMap(buildCommonData());
-
-        // 房间所有用户列表
-        List<WsChatroomUsersDTO> chatroomAllUserList = wsChatroomUsersService.queryChatroomUserList(roomId);
-        // 房间在线用户列表
-        List<WsChatroomUsersDTO> onlineUserList = chatroomAllUserList.stream().filter(userObj->userObj.getStatus().intValue() == 1).collect(Collectors.toList());
-        // 房间管理员用户
-        List<WsChatroomUsersDTO> managerUserList = chatroomAllUserList.stream().filter(userObj->userObj.getIsManager().intValue() == 1).collect(Collectors.toList());
-
-        woi.setChatroomAllUserList(chatroomAllUserList);
-        woi.setChatroomOnlineUserList(onlineUserList);
-        // 房间管理员用户列表
-        woi.setManagerUserList(managerUserList);
-        return Result.ok(woi);
+    public Result<WsChatroomInfoDTO> getChatRoomInfo(@RequestParam(value = "roomId") String roomId) {
+        WsChatroomInfoDTO wciDTO = loginService.getChatRoomInfo(roomId);
+        return Result.ok(wciDTO);
     }
 
     /**
@@ -687,34 +666,6 @@ public class LoginController {
         }
 
         return Result.ok(wsUsersDO.getPassword());
-    }
-
-    /**
-     * 构造常用语对象.
-     * @return map
-     */
-    private Map<String, List<WsCommonDO>> buildCommonData() {
-        Map<String, List<WsCommonDO>> commonMap = new HashMap<>();
-        List<WsCommonDO> commonList = wsCommonService.selectList(null);
-
-        for (WsCommonDO common : commonList) {
-            String type = common.getType();
-            String name = common.getName();
-
-            if (CommonUtil.validateEmpty(type) || CommonUtil.validateEmpty(name)) {
-                continue;
-            }
-
-            if (commonMap.containsKey(type)) {
-                List<WsCommonDO> tmpCommonList = commonMap.get(type);
-                tmpCommonList.add(common);
-            } else {
-                List<WsCommonDO> tmpDicList = new ArrayList<>();
-                tmpDicList.add(common);
-                commonMap.put(type, tmpDicList);
-            }
-        }
-        return commonMap;
     }
 
     /**

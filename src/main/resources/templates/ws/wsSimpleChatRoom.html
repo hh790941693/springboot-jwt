@@ -311,7 +311,7 @@
                             that.chatroomOnlineUserList = jsonObj.chatroomOnlineUserList;
                             that.chatroomAllUserList = jsonObj.chatroomAllUserList;
                             that.roomUserCount = jsonObj.roomUserCount;
-                            that.cyyList = jsonObj.commonMap.cyy;
+                            that.cyyList = jsonObj.cyyList;
                             that.managerUserList = jsonObj.managerUserList;
                             $.each(that.chatroomAllUserList, function (index, item) {
                                 if (item.isOwner == 1 && item.id+'' === sessionUserId) {
