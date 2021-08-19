@@ -318,7 +318,6 @@ public class ChatRoomWebSocket {
         if (roomInputingStatusMap.containsKey(roomId)) {
             List<String> inputingUserList = roomInputingStatusMap.get(roomId);
             inputingUserList.remove(userName);
-            roomInputingStatusMap.put(roomId, inputingUserList);
         }
     }
 
@@ -327,9 +326,13 @@ public class ChatRoomWebSocket {
         List<String> inputingUserList = new ArrayList<>();
         if (roomInputingStatusMap.containsKey(roomId)) {
             inputingUserList = roomInputingStatusMap.get(roomId);
+            if (!inputingUserList.contains(userName)) {
+                inputingUserList.add(0, userName);
+            }
+        } else {
+            inputingUserList.add(0, userName);
+            roomInputingStatusMap.put(roomId, inputingUserList);
         }
-        inputingUserList.add(0, userName);
-        roomInputingStatusMap.put(roomId, inputingUserList);
     }
 
     // 获取聊天室在线信息
