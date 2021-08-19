@@ -565,7 +565,7 @@ public class LoginController {
      * @return 重定向页面
      */
     @RequestMapping("/i18n")
-    public String changeSessionLanauage(String lang) {
+    public String changeSessionLanguage(String lang) {
         String language = lang.split("_")[0];
         String country = lang.split("_")[1];
         Locale locale = new Locale(language, country);
