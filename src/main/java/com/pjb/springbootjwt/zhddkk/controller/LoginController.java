@@ -37,9 +37,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class LoginController {
 
-    //登陆用户的redis缓存前缀
-    private static final String REDIS_KEY_PREFIX = "ws_";
-
     private static final SimpleDateFormat SDF_STANDARD = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -196,26 +193,10 @@ public class LoginController {
         setCookieObj(response, CommonConstants.C_USER_AGENT, userAgent, CommonConstants.COOKIE_TIMEOUT);
 
         // 往session中存储用户信息
-        SessionInfoBean sessionInfoBean = new SessionInfoBean(session.getId(),
-                String.valueOf(curUserObj.getId()), userName, curUserObj.getPassword(), webSocketConfig.getAddress(),
-                webSocketConfig.getPort(), curUserObj.getHeadImage(), userAgent, String.valueOf(curUserObj.getRoleId()), curUserObj.getRoleName(), session.getMaxInactiveInterval());
-        sessionInfoBean.setJsonStr(JsonUtil.javaobject2Jsonstr(sessionInfoBean));
-        sessionInfoBean.setJsonObject(JsonUtil.javaobject2Jsonobject(sessionInfoBean));
-        // 页面通过th:value="${session.sessionInfo.jsonStr}"来获取session信息
-        session.setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
-
-        // 往redis中存储用户信息
-//        String redisKey = REDIS_KEY_PREFIX + userName;
-//        try {
-//            String redisValue = JsonUtil.javaobject2Jsonstr(curUserObj);
-//            logger.debug("设置redis缓存,key:" + redisKey + "  value:" + redisValue);
-//            //redisUtil.set(redisKey, redisValue);
-//        } catch (Exception e) {
-//            logger.debug("设置redis缓存失败,key:" + redisKey + " error:" + e.getMessage());
-//        }
+        saveSession(curUserObj, userAgent, session);
 
         // 用户会话表存储sessionId
-        savaUserSession(request, sessionInfoBean);
+        savaUserSession(request, curUserObj);
 
         // 缓存常用表数据
         cacheService.cacheUserSessionData();
@@ -726,12 +707,12 @@ public class LoginController {
     /**
      * 用户会话表存储sessionId.
      */
-    private void savaUserSession(HttpServletRequest request, SessionInfoBean sessionInfoBean) {
-        WsUserSessionDO wsUserSessionDO = wsUserSessionService.selectOne(new EntityWrapper<WsUserSessionDO>().eq("user_id", sessionInfoBean.getUserId()));
+    private void savaUserSession(HttpServletRequest request, WsUsersDO wsUsersDO) {
+        WsUserSessionDO wsUserSessionDO = wsUserSessionService.selectOne(new EntityWrapper<WsUserSessionDO>().eq("user_id", wsUsersDO.getId()));
         if (null == wsUserSessionDO) {
             WsUserSessionDO wsUserSessionInsert = new WsUserSessionDO();
-            wsUserSessionInsert.setUserId(Long.valueOf(sessionInfoBean.getUserId()));
-            wsUserSessionInsert.setUserName(sessionInfoBean.getUserName());
+            wsUserSessionInsert.setUserId(Long.valueOf(wsUsersDO.getId()));
+            wsUserSessionInsert.setUserName(wsUsersDO.getName());
             wsUserSessionInsert.setSessionId(request.getSession(false).getId());
             wsUserSessionService.insert(wsUserSessionInsert);
         } else {
@@ -739,5 +720,31 @@ public class LoginController {
             wsUserSessionDO.setUpdateTime(new Date());
             wsUserSessionService.updateById(wsUserSessionDO);
         }
+    }
+
+    /**
+     * 保存会话信息.
+     * @param curUserObj
+     * @param userAgent
+     * @param session
+     */
+    private void saveSession(WsUsersDO curUserObj, String userAgent, HttpSession session) {
+        // 往session中存储用户信息
+        SessionInfoBean sessionInfoBean = new SessionInfoBean();
+        sessionInfoBean.setId(session.getId());
+        sessionInfoBean.setUserId(String.valueOf(curUserObj.getId()));
+        sessionInfoBean.setUserName(curUserObj.getName());
+        sessionInfoBean.setPassword(curUserObj.getPassword());
+        sessionInfoBean.setWebserverIp(webSocketConfig.getAddress());
+        sessionInfoBean.setWebserverPort(webSocketConfig.getPort());
+        sessionInfoBean.setSelfImg(curUserObj.getHeadImage());
+        sessionInfoBean.setUserAgent(userAgent);
+        sessionInfoBean.setRoleId(String.valueOf(curUserObj.getRoleId()));
+        sessionInfoBean.setRoleName(curUserObj.getRoleName());
+        sessionInfoBean.setMaxInactiveInterval(session.getMaxInactiveInterval());
+        sessionInfoBean.setJsonStr(JsonUtil.javaobject2Jsonstr(sessionInfoBean));
+        sessionInfoBean.setJsonObject(JsonUtil.javaobject2Jsonobject(sessionInfoBean));
+        // 页面通过th:value="${session.sessionInfo.jsonStr}"来获取session信息
+        session.setAttribute(CommonConstants.SESSION_INFO, sessionInfoBean);
     }
 }

@@ -9,6 +9,7 @@ import net.sf.json.JSONObject;
 @Data
 public class SessionInfoBean {
 
+    // 会话ID
     private String id;
 
     // 用户id
@@ -17,56 +18,31 @@ public class SessionInfoBean {
     // 用户名
     private String userName;
 
+    // 用户密码(密文)
     private String password;
 
+    // 服务端ip
     private String webserverIp;
 
+    // 服务端口
     private String webserverPort;
 
+    // 头像
     private String selfImg;
 
+    // 客户端类型
     private String userAgent;
 
+    // 角色id
     private String roleId;
 
+    // 角色名
     private String roleName;
 
+    // 会话最大失效时间
     private int maxInactiveInterval;
 
     private JSONObject jsonObject;
 
     private String jsonStr;
-
-    public SessionInfoBean(){
-
-    }
-
-    /**
-     * 构造方法.
-     * @param id  会话id
-     * @param userId 用户id
-     * @param userName 用户名
-     * @param password 密码密文
-     * @param webserverIp 服务器ip
-     * @param webserverPort 端口
-     * @param selfImg 头像url
-     * @param userAgent 浏览器类型
-     * @param roleId 用户角色id
-     * @param roleName 角色名
-     * @param maxInactiveInterval session超时时间(秒)
-     */
-    public SessionInfoBean(String id, String userId, String userName, String password, String webserverIp,
-                           String webserverPort, String selfImg, String userAgent, String roleId, String roleName, int maxInactiveInterval) {
-        this.id = id;
-        this.userId = userId;
-        this.userName = userName;
-        this.password = password;
-        this.webserverIp = webserverIp;
-        this.webserverPort = webserverPort;
-        this.selfImg = selfImg;
-        this.userAgent = userAgent;
-        this.roleId = roleId;
-        this.roleName = roleName;
-        this.maxInactiveInterval = maxInactiveInterval;
-    }
 }
