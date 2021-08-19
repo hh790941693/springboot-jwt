@@ -538,14 +538,16 @@ function compareTwoTime(time1, time2) {
     }
 }
 
-$.fn.serializeObject = function()
-{
+/**
+ * form表单序列化.
+ */
+$.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();
     $.each(a, function() {
-        if (o[this.name]) {
+        if (o[this.name] !== undefined) {
             if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
+                o[this.name] = [ o[this.name] ];
             }
             o[this.name].push(this.value || '');
         } else {
@@ -554,3 +556,48 @@ $.fn.serializeObject = function()
     });
     return o;
 };
+
+
+/**
+ * 将后台取得对象写入form表单中.
+ *
+ * @param formId 画面表单ID
+ * @param jsonObj 后台取得json对象
+ */
+var jsonObjToForm = function(form, jsonObj) {
+    var obj = typeof form === 'string' ? $("#" + form) : form;
+    $.each(jsonObj, function(name, ival) {
+        var $oinput = obj.find("input[name=" + name + "]");
+        if ($oinput) {
+            if ($oinput.attr("type") == "radio" || $oinput.attr("type") == "checkbox") {
+                $oinput.each(function(index, item) {
+                    if (Object.prototype.toString.apply(ival) == '[object Array]') {// 是复选框，并且是数组
+                        for (var i = 0; i < ival.length; i++) {
+                            if ($(this).val() == ival[i])
+                                $(item).prop("checked", true);
+                        }
+                    } else {
+                        if ($(this).val() == ival) {
+                            $(item).prop("checked", true);
+                        } else {
+                            $(item).prop("checked", false);
+                        }
+                    }
+                });
+            } else {
+                var $op = obj.find("[name=" + name + "]");
+                if ($op.is("select")) {
+                    if ($op.hasClass("selectpicker")) {
+                        $op.selectpicker("val", ival ? ival.split(",") : "");
+                    } else {
+                        $op.val(ival);
+                    }
+                } else {
+                    obj.find("[name=" + name + "]").val(ival);
+                }
+            }
+        }
+    });
+
+    return obj;
+}

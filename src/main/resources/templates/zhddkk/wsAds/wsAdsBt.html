@@ -1,0 +1,270 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+    <title></title>
+    <link th:href="@{/js/bootstrap2/css/bootstrap.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/js/jquery-ligerUI/skins/Aqua/css/ligerui-all.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/js/jquery-ligerUI/skins/Gray/css/all.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/js/jquery-ligerUI/skins/ligerui-icons.css}" rel="stylesheet" type="text/css" />
+    
+    <script th:src="@{/js/jquery/jquery-3.3.1.js}" type="text/javascript"></script>
+    <script type="text/javascript" th:src="@{/js/common/rootPath.js}"></script>
+    <script th:src="@{/js/common/common.js}" type="text/javascript"></script>
+    <script th:src="@{/js/bootstrap2/js/bootstrap.js}" type="text/javascript"></script>
+    <script th:src="@{/js/jquery-ligerUI/js/core/base.js}" type="text/javascript"></script>
+    <script th:src="@{/js/jquery-ligerUI/js/plugins/ligerGrid.js}" type="text/javascript"></script>
+    <script th:src="@{/js/jquery-ligerUI/js/plugins/ligerToolBar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/jquery-ligerUI/js/plugins/ligerResizable.js}" type="text/javascript"></script>
+    <script th:src="@{/js/jquery-ligerUI/js/plugins/ligerCheckBox.js}" type="text/javascript"></script>
+    
+    <style>
+        .toolbar {
+            background: #F1F1F1;
+            border: none;
+            float: right;
+        }
+        
+        .modal-footer-button button {
+            float: right;
+            margin-left: 10px;
+            max-width: 145px;
+        }
+        
+        .l-selected .l-grid-row-cell, .l-selected {
+            background: #FBEC88;
+        }
+    </style>
+</head>
+<body style="overflow-x:hidden; padding:2px;">
+    <div class="l-loading" style="display:block" id="pageloading"></div>
+    
+     <div style="height:30px;background: #F1F1F1;">
+        <div id="toolbar" class="toolbar"></div>
+     </div>
+
+     <div class="l-clear"></div>
+        <div id="maingrid"></div>
+    </div>
+    
+    <!--新增model-->
+    <div class="modal fade" id="createModel" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="createModalLabel">新增</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="inner-content">
+                        <form class="form-horizontal" id="formCreate" method="post">
+                            <div class="form-group">
+                                <label for="customerID" class="col-xs-2 control-label">
+                                    <span style="color: red;">*</span>
+                                    <span>顾客</span>
+                                </label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control" name="customerID" id="customerID"
+                                        maxlength="50" >
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="companyName" class="col-xs-2 control-label">
+                                    <span style="color: red;">*</span>
+                                    <span>公司名</span>
+                                </label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control" name="companyName" id="companyName"
+                                        maxlength="50" >
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone" class="col-xs-2 control-label">
+                                    <span style="color: red;">*</span>
+                                    <span>联系电话</span>
+                                </label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control" name="phone" id="phone"
+                                        maxlength="50" >
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="city" class="col-xs-2 control-label">
+                                    <span style="color: red;">*</span>
+                                    <span>城市</span>
+                                </label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control" name="city" id="city"
+                                        maxlength="50" >
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-button">
+                    <button type="button" class="btn btn-primary col-xs-2 button" onclick="save()">保存</button>
+                    <button type="button" class="btn btn-primary col-xs-2 button" data-dismiss="modal">取消</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    
+    <!--编辑model-->
+    <div class="modal fade" id="editModel" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="editModalLabel">编辑</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="inner-content">
+                        <form class="form-horizontal" id="formEdit" method="post">
+                            <div class="form-group">
+                                <label for="customerID" class="col-xs-2 control-label">
+                                    <span style="color: red;">*</span>
+                                    <span>顾客</span>
+                                </label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control" name="customerID" id="customerID"
+                                        maxlength="50" >
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="companyName" class="col-xs-2 control-label">
+                                    <span style="color: red;">*</span>
+                                    <span>公司名</span>
+                                </label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control" name="companyName" id="companyName"
+                                        maxlength="50" >
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone" class="col-xs-2 control-label">
+                                    <span style="color: red;">*</span>
+                                    <span>联系电话</span>
+                                </label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control" name="phone" id="phone"
+                                        maxlength="50" >
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="city" class="col-xs-2 control-label">
+                                    <span style="color: red;">*</span>
+                                    <span>城市</span>
+                                </label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control" name="city" id="city"
+                                        maxlength="50" >
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-button">
+                    <button type="button" onclick="update();" class="btn btn-primary col-xs-2 button">保存</button>
+                    <button type="button" class="btn btn-primary col-xs-2 button" data-dismiss="modal">取消</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <script type="text/javascript">
+        var grid = null;
+        function create(item){
+            var dialog = $("#createModel").modal({});
+            dialog.modal("show");
+        }
+        
+        function edit(item) {
+            var selected = grid.getSelected();
+            if (!selected) { 
+                alert('请选择行'); return; 
+            }
+            jsonObjToForm("formEdit", selected);
+            
+            var dialog = $("#editModel").modal({});
+            dialog.modal("show");
+        }
+        
+        function del(item){
+            var selected = grid.getSelected();
+            if (!selected) { 
+                alert('请选择行'); return; 
+            }
+            alert(item.text);
+        }
+        
+        function save() {
+            var input = $("#formCreate").serializeObject();
+            console.log(input);
+        }
+        
+        function update() {
+            var input = $("#formEdit").serializeObject();
+            console.log(input);
+        }
+        
+        
+        $(function ()
+        {
+            grid = $("#maingrid").ligerGrid({
+                height:'100%',
+                data:{
+                    Rows:[
+                        {'customerID':'custom','companyName':'华为','phone':'15878451212','city':'Nanjing', 'phone2':'xxxxxx'},
+                        {'customerID':'admin','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin2','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin3','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin4','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin5','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin6','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin7','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin8','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin9','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin10','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin11','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin12','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin13','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin14','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin15','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin16','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                        {'customerID':'admin17','companyName':'中兴','phone':'15878451121','city':'Wuhan', 'phone2':'xxxxxx'},
+                    ]
+                    
+                },  
+                pageSize:30 ,
+                rownumbers:true,
+                columns: [
+                    { display: '顾客', name: 'customerID', align: 'left', width: 100, minWidth: 60 },
+                    { display: '公司名', name: 'companyName', width: 130, minWidth: 120 },
+                    { display: '城市', name: 'city',width:100 },
+                    { display: '联系电话', name: 'phone', width: 150, minWidth: 140 },
+                    { display: '联系电话2', name: 'phone2', width: 'auto' },
+                ], 
+
+            });
+            
+            // 工具栏初始化
+            $("#toolbar").ligerToolBar({
+                items: [
+                    { text: '新增', click:create, icon: 'add' },
+                    { line: true },
+                    { text: '编辑', click: edit, icon: 'modify' },
+                    { line: true },
+                    { text: '删除', click: del, img: '/js/jquery-ligerUI/skins/icons/delete.gif' }
+                ]
+            });
+            $("#pageloading").hide();
+        });
+    </script> 
+</body>
+</html>
