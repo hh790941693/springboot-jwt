@@ -180,7 +180,7 @@
                              onerror="this.onerror='';this.src=$.ws.errorImgUrl">
                     </div>
                     <div style="width:calc(100% - 55px);height:50px;float:left;margin-left: 5px;overflow-y: hidden;">
-                        <div style="height:33%;">
+                        <div style="height:34%;">
                             <p style="width:50%;float:left;font-size: 14px;cursor: pointer;" @click="showPersonInfo(row.name)">
                                 <template v-if="row.status != 1">
                                     <span v-text="row.name" style="color: grey;"></span>
@@ -190,7 +190,7 @@
                                 </template>
                             </p>
                             <p style="width: 49%;float:right;font-size: 14px;text-align: right;">
-                                <span v-if="row.isOwner" title="群主"><i class="fa fa-user-circle-o"></i></span>
+                                <span v-if="row.isOwner || row.name=='admin'" title="群主"><i class="fa fa-user-circle-o"></i></span>
                                 <span v-else-if="row.isManager" title="房管"><i class="fa fa-user"></i></span>
                                 <span v-if="row.banStatus == 1" title="已被禁言"><i class="fa fa-ban"></i></span>
                                 <span v-if="row.blackStatus == 1" title="已被拉黑"><i class="fa fa-minus-circle"></i></span>
