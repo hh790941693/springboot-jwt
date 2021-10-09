@@ -36,9 +36,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private static ConcurrentHashMap<String, ChannelHandlerContext> CONTEXT_MAP = new ConcurrentHashMap();
 
     /**
+     * 有客户端连接服务器会触发此函数
+     *
      * @param ctx
      * @author xiongchuan on 2019/4/28 16:10
-     * @DESCRIPTION: 有客户端连接服务器会触发此函数
      * @return: void
      */
     @Override
@@ -63,9 +64,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     /**
+     * 有客户端终止连接服务器会触发此函数
+     *
      * @param ctx
      * @author xiongchuan on 2019/4/28 16:10
-     * @DESCRIPTION: 有客户端终止连接服务器会触发此函数
      * @return: void
      */
     @Override
@@ -88,9 +90,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     /**
+     * 有客户端发消息会触发此函数
+     *
      * @param ctx
      * @author xiongchuan on 2019/4/28 16:10
-     * @DESCRIPTION: 有客户端发消息会触发此函数
      * @return: void
      */
     @Override
@@ -110,15 +113,26 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         int clientPort = insocket.getPort();
 
         logger.info("[{}][报文] IP:{} PORT:{} channelId:{} msg:{}", NettyConstants.SERVER_PORT, clientIp, clientPort, channelId, msg);
+    }
+
+    /**
+     * 全部被读取完毕触发此事件
+     *
+     * @param ctx
+     * @throws Exception
+     */
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        logger.info("端口{}发现有客户端发来的消息且全部读取完毕", NettyConstants.SERVER_PORT);
         // do something
         channelWrite(ctx, "welcome you to meet my server.");
     }
 
     /**
+     * 服务端给客户端发送消息
      * @param msg       需要发送的消息内容
      * @param ctx       上下文
      * @author xiongchuan on 2019/4/28 16:10
-     * @DESCRIPTION: 服务端给客户端发送消息
      * @return: void
      */
     public static String channelWrite(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -149,6 +163,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         return "success";
     }
 
+    /**
+     * 连接超时事件
+     * @param ctx
+     * @param evt
+     * @throws Exception
+     */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         logger.info("[{}][超时]有客户端出现超时", NettyConstants.SERVER_PORT);
@@ -176,9 +196,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     /**
+     * 发生异常会触发此函数
+     *
      * @param ctx
      * @author xiongchuan on 2019/4/28 16:10
-     * @DESCRIPTION: 发生异常会触发此函数
      * @return: void
      */
     @Override
