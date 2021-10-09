@@ -108,10 +108,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         String clientIp = insocket.getAddress().getHostAddress();
         ChannelId channelId = ctx.channel().id();
         int clientPort = insocket.getPort();
-        if (!msgStr.contains("test")) {
-            logger.info("[{}][报文] IP:{} PORT:{} channelId:{} msg:{}", NettyConstants.SERVER_PORT, clientIp, clientPort, channelId, msg);
-            // do something
-        }
+
+        logger.info("[{}][报文] IP:{} PORT:{} channelId:{} msg:{}", NettyConstants.SERVER_PORT, clientIp, clientPort, channelId, msg);
+        // do something
+        channelWrite(ctx, "welcome you to meet my server.");
     }
 
     /**
@@ -122,7 +122,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      * @return: void
      */
     public static String channelWrite(ChannelHandlerContext ctx, Object msg) throws Exception {
-        logger.info("[{}][发送指令]发送指令:{}", NettyConstants.SERVER_PORT, msg);
+        logger.info("[{}][发送指令]{}", NettyConstants.SERVER_PORT, msg);
         if (null == msg || msg.equals("")){
             logger.info("指令不能为空");
             return "failed";
@@ -139,7 +139,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             return "failed";
         }
 
-        logger.info("开始给渠道ip:{} 发送指令{}",clientIp, msg);
+        ChannelId channelId = ctx.channel().id();
+        logger.info("开始给渠道ip:{} 渠道id:{} 发送指令{}",clientIp, channelId, msg);
         //将客户端的信息直接返回写入ctx
         ctx.write(msg);
         //刷新缓存区
