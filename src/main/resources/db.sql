@@ -1545,6 +1545,24 @@ INSERT INTO `ws_user_profile` (`id`, `user_id`, `user_name`, `real_name`, `img`,
 	(34, 41, 'sbs', '', 'http://121.4.51.186:8101/headImg/811b0ba5-5156-458d-b052-bf243f679a64.jpg', '这人很懒,一点也没留下', 0, 1, '男', '', '', '', 99, '其他', 99, '其他', '2021-07-18 23:12:03');
 /*!40000 ALTER TABLE `ws_user_profile` ENABLE KEYS */;
 
+DROP TABLE IF EXISTS `ws_user_session`;
+CREATE TABLE `ws_user_session` (
+                                   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                   `user_id` BIGINT UNSIGNED NOT NULL COMMENT '用户id',
+                                   `user_name` VARCHAR(50) NULL DEFAULT '' COMMENT '用户名',
+                                   `session_id` VARCHAR(100) NOT NULL COMMENT 'SESSIONID',
+                                   `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                   PRIMARY KEY (`id`),
+                                   UNIQUE INDEX `Index 2` (`user_id`)
+)
+    COMMENT='用户会话表'
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=8
+;
+
+
 -- Dumping structure for view zhdd.view_ws_file
 DROP VIEW IF EXISTS `view_ws_file`;
 -- Removing temporary table and create final VIEW structure
@@ -1554,3 +1572,4 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `view_ws
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+t_test

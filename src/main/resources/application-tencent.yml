@@ -2,7 +2,7 @@
 # 腾讯云环境
 #
 server:
-  address: 10.0.4.8
+  address: 172.17.0.15
   port: 8100
   tomcat:
     basedir: ${temp.tomcat.path.linux}
@@ -15,7 +15,7 @@ spring:
     #password: ^klzvG064A7%ERQj
     url: jdbc:mysql://localhost:3306/zhdd?useSSL=false
     username : root
-    password : 1qaz@WSX3edc$RFV
+    password : Stw547495788$
   cache:
     ehcache:
       config: classpath:ehcache.xml
@@ -45,11 +45,11 @@ upload:
     #    autoindex on;
     #  }
     #}
-    view-url: http://121.4.51.186:8101/
+    view-url: http://106.54.191.235:8101/
 
 #websocket聊天服务器配置
 websocket:
   config:
     #如果是内网 就配置成内网IP或者127.0.0.1;如果是外网，配置成公网IP
-    address: 121.4.51.186
+    address: 106.54.191.235
     port: ${server.port}
