@@ -383,10 +383,8 @@
                                 url: rootUrl + "file/delFile.do",
                                 data: {'id': id},
                                 success: function (result) {
-                                    if (result.code == 1) {
-                                        layer.msg("删除成功");
-                                        app.queryMusicList();
-                                    }
+                                    layer.msg(result.data);
+                                    app.refreash();
                                 }
                             });
                         }
@@ -399,18 +397,16 @@
                     // 删除所有音乐
                     layer.confirm("确定一键删除吗?", {btn: ['确定', '取消'], title: "提示"},
                         function () {
+                            var ids = new Array();
                             $.each(app.musicData, function (i, item) {
-                                $.ajax({
-                                    type: "POST",
-                                    url: rootUrl + "file/delFile.do",
-                                    data: {'id': item.id},
-                                    success: function (result) {
-                                        if (result.code == 1) {
-                                            layer.msg(item.filename + ":删除成功");
-                                        }
-                                    }
-                                });
-                                if (i >= app.musicData.length-1) {
+                                ids[i] = item['id'];
+                            });
+                            $.ajax({
+                                type: "POST",
+                                url: rootUrl + "file/batchDelFile.do",
+                                data: {'ids': ids},
+                                success: function (result) {
+                                    layer.msg(result.data);
                                     app.refreash();
                                 }
                             });

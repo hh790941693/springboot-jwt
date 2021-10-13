@@ -22,7 +22,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,32 +78,57 @@ public class FileOperationController {
     @ResponseBody
     @Transactional
     public Result<String> delFile(@RequestParam(value = "id") int id) {
-        WsFileDO wsFileDO = wsFileService.selectById(id);
-        if (null != wsFileDO) {
-            boolean delFlag = wsFileService.deleteById(id);
-            if (delFlag) {
-                // 删除原文件
-                String diskPath = wsFileDO.getDiskPath();
-                String dymicDiskPath = uploadConfig.getStorePath() + File.separator + wsFileDO.getFolder();
-                logger.info("diskPath:" + diskPath);
-                logger.info("dymicDiskPath:" + dymicDiskPath);
-                String url = wsFileDO.getUrl();
-                String filename = url.substring(url.lastIndexOf("/") + 1);
-                File file = null;
-                if (diskPath.equals(dymicDiskPath)) {
-                    file = new File(diskPath + File.separator + filename);
+        Integer[] ids = new Integer[1];
+        ids[0] = id;
+        return batchDelFile(ids);
+    }
+
+    @OperationLogAnnotation(type = OperationEnum.DELETE, module = ModuleEnum.MUSIC, subModule = "", describe = "批量删除音乐文件")
+    @RequestMapping("batchDelFile.do")
+    @ResponseBody
+    @Transactional
+    public Result<String> batchDelFile(@RequestParam("ids[]") Integer[] ids) {
+        int totalNum = ids.length;
+        int failedNum = 0;
+        for (Integer id : ids) {
+            WsFileDO wsFileDO = wsFileService.selectById(id);
+            if (null != wsFileDO) {
+                boolean delFlag = wsFileService.deleteById(id);
+                if (delFlag) {
+                    // 删除原文件
+                    String diskPath = wsFileDO.getDiskPath();
+                    String dymicDiskPath = uploadConfig.getStorePath() + File.separator + wsFileDO.getFolder();
+                    logger.info("diskPath:{}  dymicDiskPath:{}", diskPath, dymicDiskPath);
+                    String url = wsFileDO.getUrl();
+                    String filename = url.substring(url.lastIndexOf("/") + 1);
+                    File file = null;
+                    if (diskPath.equals(dymicDiskPath)) {
+                        file = new File(diskPath + File.separator + filename);
+                    } else {
+                        file = new File(dymicDiskPath + File.separator + filename);
+                    }
+                    if (null != file && file.exists() && file.isFile()) {
+                        logger.info("删除文件:{} {} ", id, file.getAbsolutePath());
+                        try {
+                            file.delete();
+                        } catch (Exception e) {
+                            failedNum++;
+                            logger.error("删除文件失败:{} {}",id, file.getAbsolutePath());
+                        }
+                    }
                 } else {
-                    file = new File(dymicDiskPath + File.separator + filename);
+                    failedNum++;
                 }
-                if (null != file && file.exists() && file.isFile()) {
-                    logger.info("删除文件:{} " + file.getAbsolutePath());
-                    file.delete();
-                }
-                cacheService.cacheUserFileData();
-                return Result.ok();
             }
         }
-        return Result.fail();
+        cacheService.cacheUserFileData();
+        String resultMsg = "";
+        if (failedNum > 0) {
+            resultMsg = "总计:" + totalNum + " 删除失败:" + failedNum;
+        } else {
+            resultMsg = "总计:" + totalNum + " 删除成功";
+        }
+        return Result.ok(resultMsg);
     }
 
     @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.MUSIC, subModule = "", describe = "显示音乐列表")
