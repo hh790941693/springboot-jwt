@@ -195,6 +195,7 @@
         var fileNumber = 0;  // 总文件数
         var finishNumber = 0; // 已上传文件数
         var showText = "<div id='uploadResultDiv'>"; // 上传结束后弹出框html内容
+
         //选完文件后不自动上传
         layui.upload.render({
             elem: '#chooseFileBtn' //选择文件按钮
@@ -239,7 +240,7 @@
                 $("#uploadFilename").text(filename);
                 $("#uploadedNumber").text(finishNumber);
             }
-            ,allDone: function(obj){
+            ,allDone: function(obj) {
                 $(this.bindAction.selector).removeClass("layui-btn-disabled");
 
                 //当文件全部被提交后，才触发
