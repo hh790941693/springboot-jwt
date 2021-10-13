@@ -218,6 +218,7 @@
                 });
             }
             ,done: function (res) {
+                $(this.bindAction.selector).addClass("layui-btn-disabled");
                 // 单个文件上传结束后
                 finishNumber++;
                 
@@ -239,6 +240,8 @@
                 $("#uploadedNumber").text(finishNumber);
             }
             ,allDone: function(obj){
+                $(this.bindAction.selector).removeClass("layui-btn-disabled");
+
                 //当文件全部被提交后，才触发
                 layer.msg("全部上传完毕。总:"+obj.total+" 成功:"+obj.successful+" 失败:"+obj.aborted);
                 finishNumber = 0;
