@@ -1,9 +1,25 @@
 #
 # 家用局域网(windows)环境
 #
+
+ip:
+  #公网ip
+  public: 127.0.0.1
+  #内网ip
+  private: 127.0.0.1
+
+#应用端口
+port:
+  #tomcat端口
+  app: 8100
+  #静态资源端口
+  resource : 8101
+  #netty服务端口
+  nettyServer : 10001
+
 server:
-  address: 127.0.0.1
-  port: 8100
+  address: ${ip.private}
+  port: ${port.app}
   tomcat:
     basedir: ${temp.tomcat.path.windows}
 
@@ -42,11 +58,11 @@ upload:
     #    autoindex on;
     #  }
     #}
-    view-url: http://${server.address}:8101/
+    view-url: http://${ip.private}:${port.resource}/
 
 #websocket聊天服务器配置。
 websocket:
   config:
     #如果是内网 就配置成内网IP或者127.0.0.1;如果是外网，配置成公网IP
-    address: ${server.address}
-    port: ${server.port}
+    address: ${ip.private}
+    port: ${port.app}

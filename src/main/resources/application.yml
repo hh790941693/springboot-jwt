@@ -58,7 +58,7 @@ alioss:
     rootPath: uploads
     viewUrl: http://hx-dfz.oss-cn-shanghai.aliyuncs.com/
 
-#tomcat缓存临时目录
+#自定义 tomcat缓存临时目录
 temp:
   tomcat:
     path:

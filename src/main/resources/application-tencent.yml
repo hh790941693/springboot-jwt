@@ -1,9 +1,26 @@
 #
 # 腾讯云环境
 #
+
+ip:
+  #公网ip
+  public: 106.54.191.235
+  #内网ip
+  private: 172.17.0.15
+
+#应用端口
+port:
+  #tomcat端口
+  app: 8100
+  #静态资源端口
+  resource : 8101
+  #netty服务端口
+  nettyServer : 10001
+
 server:
-  address: 172.17.0.15
-  port: 8100
+  #配置成内网IP或者127.0.0.1
+  address: ${ip.private}
+  port: ${port.app}
   tomcat:
     basedir: ${temp.tomcat.path.linux}
 
@@ -45,11 +62,12 @@ upload:
     #    autoindex on;
     #  }
     #}
-    view-url: http://106.54.191.235:8101/
+    #如果是内网 就配置成内网IP或者127.0.0.1;如果是外网，配置成公网IP
+    view-url: http://${ip.public}:${port.resource}/
 
 #websocket聊天服务器配置
 websocket:
   config:
     #如果是内网 就配置成内网IP或者127.0.0.1;如果是外网，配置成公网IP
-    address: 106.54.191.235
-    port: ${server.port}
+    address: ${ip.public}
+    port: ${port.app}
