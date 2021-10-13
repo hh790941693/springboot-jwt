@@ -17,7 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetSocketAddress;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -123,7 +125,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         ChannelId channelId = ctx.channel().id();
         int clientPort = insocket.getPort();
 
-        logger.info("[{}][报文] IP:{} PORT:{} channelId:{} msg:{}", serverPort, clientIp, clientPort, channelId, msg);
+        logger.info("[{}][收到请求] IP:{} PORT:{} channelId:{} msg:{}", serverPort, clientIp, clientPort, channelId, msg);
 
         // 与客户端交互信息
         processCmd(ctx, msgStr);
@@ -149,7 +151,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      * @return: void
      */
     public String channelWrite(ChannelHandlerContext ctx, Object msg) throws Exception {
-        logger.info("[{}][发送指令]{}", serverPort, msg);
+        logger.info("[{}][返回响应]{}", serverPort, msg);
         if (null == msg || msg.equals("")){
             logger.info("指令不能为空");
             return "failed";
@@ -167,7 +169,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             return "failed";
         }
 
-        logger.info("开始给渠道ip:{} 渠道id:{} 发送指令{}",clientIp, channelId, msg);
+        logger.info("开始给渠道ip:{} 渠道id:{} 返回响应:{}",clientIp, channelId, msg);
         //将客户端的信息直接返回写入ctx
         ctx.write(msg);
         //刷新缓存区
@@ -264,6 +266,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 sb.append(file.getFileSize());
                 sb.append("\n");
             }
+            channelWrite(ctx, sb.toString());
+        } else if (msgStr.equals("list client")) {
+            StringBuilder sb = new StringBuilder();
+            for (String pk : CONTEXT_MAP.keySet()) {
+                sb.append(pk).append(" ");
+            }
+            sb.append("total:" + CONTEXT_MAP.keySet().size());
             channelWrite(ctx, sb.toString());
         } else {
             channelWrite(ctx, "If you has received below msg, it means that server had received your cmd.");
