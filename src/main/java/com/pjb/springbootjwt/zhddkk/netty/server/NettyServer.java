@@ -38,7 +38,7 @@ public class NettyServer {
             //关闭channel和块，直到它被关闭
             future.channel().closeFuture().sync();
         } catch (Exception e) {
-            logger.info("NettyServer启动异常:{}",e.getMessage());
+            logger.error("NettyServer启动异常:{}",e.getMessage());
             e.printStackTrace();
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

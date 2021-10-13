@@ -22,10 +22,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * @description: netty服务端处理类
  **/
 
-//@Slf4j
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(NettyServerHandler.class);
+
+    private Integer serverPort = 10001;
 
     @Autowired
     private static WsUsersService wsUsersService = SpringContextHolder.getBean(WsUsersService.class);
@@ -44,7 +45,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        logger.info("服务端口{}有客户端连上netty服务器",NettyConstants.SERVER_PORT);
+        logger.info("服务端口{}有客户端连上netty服务器", serverPort);
         InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
         if (null == insocket){
             logger.info("无效的客户端连接");
@@ -54,13 +55,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         int clientPort = insocket.getPort();
         //获取连接通道唯一标识
         ChannelId channelId = ctx.channel().id();
-        logger.info("[{}][连接]客户端已连上服务器 IP:{} PORT:{} channelId:{}", NettyConstants.SERVER_PORT,clientIp, clientPort, channelId);
+        logger.info("[{}][连接]客户端已连上服务器 IP:{} PORT:{} channelId:{}", serverPort,clientIp, clientPort, channelId);
 
         if (!CONTEXT_MAP.containsKey(clientIp)){
             CONTEXT_MAP.put(clientIp, ctx);
         }
 
-        logger.info("[{}] 客户端连接数量:{}", NettyConstants.SERVER_PORT, CONTEXT_MAP.size());
+        logger.info("[{}] 客户端连接数量:{}", serverPort, CONTEXT_MAP.size());
     }
 
     /**
@@ -72,7 +73,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        logger.info("服务端口{}有客户端断开netty服务器",NettyConstants.SERVER_PORT);
+        logger.info("服务端口{}有客户端断开netty服务器", serverPort);
         InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
         if (null == insocket){
             logger.info("无效的客户端断开连接");
@@ -81,12 +82,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         String clientIp = insocket.getAddress().getHostAddress();
         ChannelId channelId = ctx.channel().id();
         int clientPort = insocket.getPort();
-        logger.info("[{}][断开]客户端已断开服务器 IP:{} PORT:{} channelId:{}", NettyConstants.SERVER_PORT, clientIp, clientPort, channelId);
+        logger.info("[{}][断开]客户端已断开服务器 IP:{} PORT:{} channelId:{}", serverPort, clientIp, clientPort, channelId);
 
         if (CONTEXT_MAP.containsKey(clientIp)){
             CONTEXT_MAP.remove(clientIp);
         }
-        logger.info("[{}] 客户端连接数量:{}", NettyConstants.SERVER_PORT, CONTEXT_MAP.size());
+        logger.info("[{}] 客户端连接数量:{}", serverPort, CONTEXT_MAP.size());
     }
 
     /**
@@ -98,7 +99,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        logger.info("端口{}发现有客户端发来的消息",NettyConstants.SERVER_PORT);
+        logger.info("端口{}发现有客户端发来的消息",serverPort);
         String msgStr = msg.toString().trim();
         if (StringUtils.isEmpty(msgStr)){
             return;
@@ -112,7 +113,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         ChannelId channelId = ctx.channel().id();
         int clientPort = insocket.getPort();
 
-        logger.info("[{}][报文] IP:{} PORT:{} channelId:{} msg:{}", NettyConstants.SERVER_PORT, clientIp, clientPort, channelId, msg);
+        logger.info("[{}][报文] IP:{} PORT:{} channelId:{} msg:{}", serverPort, clientIp, clientPort, channelId, msg);
     }
 
     /**
@@ -123,7 +124,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        logger.info("端口{}发现有客户端发来的消息且全部读取完毕", NettyConstants.SERVER_PORT);
+        logger.info("端口{}发现有客户端发来的消息且全部读取完毕", serverPort);
         // do something
         channelWrite(ctx, "welcome you to meet my server.");
     }
@@ -135,8 +136,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      * @author xiongchuan on 2019/4/28 16:10
      * @return: void
      */
-    public static String channelWrite(ChannelHandlerContext ctx, Object msg) throws Exception {
-        logger.info("[{}][发送指令]{}", NettyConstants.SERVER_PORT, msg);
+    public String channelWrite(ChannelHandlerContext ctx, Object msg) throws Exception {
+        logger.info("[{}][发送指令]{}", serverPort, msg);
         if (null == msg || msg.equals("")){
             logger.info("指令不能为空");
             return "failed";
@@ -171,7 +172,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        logger.info("[{}][超时]有客户端出现超时", NettyConstants.SERVER_PORT);
+        logger.info("[{}][超时]有客户端出现超时", serverPort);
         InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
         if (null == insocket){
             logger.info("无效的客户端读连接");
@@ -204,7 +205,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        logger.info("[{}][异常]有客户端出现异常", NettyConstants.SERVER_PORT);
+        logger.info("[{}][异常]有客户端出现异常", serverPort);
         InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
         if (null == insocket){
             logger.info("无效的客户端读连接");
@@ -214,6 +215,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         ChannelId channelId = ctx.channel().id();
         int clientPort = insocket.getPort();
         // TODO 异常时暂时不关闭上下文
-        logger.info("[{}][断开]客户端发生了错误,上下文暂时不关闭 IP{} PORT:{} channelId:{}", NettyConstants.SERVER_PORT, clientIp, clientPort, channelId);
+        logger.info("[{}][断开]客户端发生了错误,上下文暂时不关闭 IP{} PORT:{} channelId:{}", serverPort, clientIp, clientPort, channelId);
     }
 }
