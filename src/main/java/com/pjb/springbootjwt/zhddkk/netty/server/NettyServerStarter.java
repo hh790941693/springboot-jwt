@@ -16,10 +16,10 @@ public class NettyServerStarter implements CommandLineRunner {
 
     private static Logger logger = LoggerFactory.getLogger(NettyServerStarter.class);
 
-    @Value("${ip.public}")
+    @Value("${nettyserver.config.address}")
     private String serverIp;
 
-    @Value("${port.nettyServer}")
+    @Value("${nettyserver.config.port}")
     private Integer serverPort;
 
     @Autowired

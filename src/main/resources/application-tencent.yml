@@ -71,3 +71,9 @@ websocket:
     #如果是内网 就配置成内网IP或者127.0.0.1;如果是外网，配置成公网IP
     address: ${ip.public}
     port: ${port.app}
+
+#netty server服务配置
+nettyserver:
+  config:
+    address : ${ip.private}
+    port : ${port.nettyServer}
