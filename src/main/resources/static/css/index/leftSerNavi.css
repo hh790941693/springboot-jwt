@@ -4,6 +4,7 @@
     float: left;
     background-repeat: repeat-x;
     background-position: -10px -222px;
+    overflow-y: scroll;
 }
 
 #leftSerNavi > ul {

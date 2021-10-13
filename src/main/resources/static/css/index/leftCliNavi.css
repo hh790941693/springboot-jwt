@@ -3,6 +3,7 @@
     height: 100%;
     float: left;
     background-repeat: repeat-x;
+    overflow-y: scroll;
 }
 
 #leftCliNavi ul {
