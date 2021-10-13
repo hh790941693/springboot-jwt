@@ -1,6 +1,10 @@
 package com.pjb.springbootjwt.zhddkk.netty.server;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.common.utils.SpringContextHolder;
+import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
+import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+import com.pjb.springbootjwt.zhddkk.service.WsFileService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
@@ -13,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,6 +35,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Autowired
     private static WsUsersService wsUsersService = SpringContextHolder.getBean(WsUsersService.class);
+
+    @Autowired
+    private static WsFileService wsFileService = SpringContextHolder.getBean(WsFileService.class);
 
     /**
      * 管理一个全局map，保存连接进服务端的通道数量
@@ -55,10 +63,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         int clientPort = insocket.getPort();
         //获取连接通道唯一标识
         ChannelId channelId = ctx.channel().id();
-        logger.info("[{}][连接]客户端已连上服务器 IP:{} PORT:{} channelId:{}", serverPort,clientIp, clientPort, channelId);
+        logger.info("[{}][连接]客户端已连上服务器 IP:{} PORT:{} channelId:{}", serverPort, clientIp, clientPort, channelId);
 
-        if (!CONTEXT_MAP.containsKey(clientIp)){
-            CONTEXT_MAP.put(clientIp, ctx);
+        String primaryKey = buildPrimaryKey(clientIp, channelId);
+        if (!CONTEXT_MAP.containsKey(primaryKey)) {
+            CONTEXT_MAP.put(primaryKey, ctx);
         }
 
         logger.info("[{}] 客户端连接数量:{}", serverPort, CONTEXT_MAP.size());
@@ -84,8 +93,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         int clientPort = insocket.getPort();
         logger.info("[{}][断开]客户端已断开服务器 IP:{} PORT:{} channelId:{}", serverPort, clientIp, clientPort, channelId);
 
-        if (CONTEXT_MAP.containsKey(clientIp)){
-            CONTEXT_MAP.remove(clientIp);
+        String primaryKey = buildPrimaryKey(clientIp, channelId);
+        if (CONTEXT_MAP.containsKey(primaryKey)){
+            CONTEXT_MAP.remove(primaryKey);
         }
         logger.info("[{}] 客户端连接数量:{}", serverPort, CONTEXT_MAP.size());
     }
@@ -114,6 +124,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         int clientPort = insocket.getPort();
 
         logger.info("[{}][报文] IP:{} PORT:{} channelId:{} msg:{}", serverPort, clientIp, clientPort, channelId, msg);
+
+        // 与客户端交互信息
+        processCmd(ctx, msgStr);
     }
 
     /**
@@ -126,7 +139,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         logger.info("端口{}发现有客户端发来的消息且全部读取完毕", serverPort);
         // do something
-        channelWrite(ctx, "welcome you to meet my server.");
     }
 
     /**
@@ -148,13 +160,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             return "failed";
         }
         String clientIp = insocket.getAddress().getHostAddress();
-        //logger.info("检查渠道是否存在");
-        if (!CONTEXT_MAP.containsKey(clientIp)) {
-            logger.info("渠道ip:{}不存在,操作忽略", clientIp);
+        ChannelId channelId = ctx.channel().id();
+        String primaryKey = buildPrimaryKey(clientIp, channelId);
+        if (!CONTEXT_MAP.containsKey(primaryKey)) {
+            logger.info("渠道:{} 不存在,操作忽略", primaryKey);
             return "failed";
         }
 
-        ChannelId channelId = ctx.channel().id();
         logger.info("开始给渠道ip:{} 渠道id:{} 发送指令{}",clientIp, channelId, msg);
         //将客户端的信息直接返回写入ctx
         ctx.write(msg);
@@ -216,5 +228,45 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         int clientPort = insocket.getPort();
         // TODO 异常时暂时不关闭上下文
         logger.info("[{}][断开]客户端发生了错误,上下文暂时不关闭 IP{} PORT:{} channelId:{}", serverPort, clientIp, clientPort, channelId);
+    }
+
+    private String buildPrimaryKey(String ip, ChannelId channelId) {
+        StringBuilder sb = new StringBuilder(ip);
+        sb.append("_").append(channelId.toString());
+        return sb.toString();
+    }
+
+    private void processCmd(ChannelHandlerContext ctx, String msgStr) throws Exception {
+        if (msgStr.equals("list user")) {
+            List<WsUsersDO> wsUsersDOList = wsUsersService.selectList(null);
+            StringBuilder sb = new StringBuilder();
+            for (WsUsersDO user : wsUsersDOList) {
+                sb.append(user.getId());
+                sb.append(" ");
+                sb.append(user.getName());
+                sb.append(" ");
+                sb.append(user.getLastLogoutTime());
+                sb.append("\n");
+            }
+            channelWrite(ctx, sb.toString());
+        } else if (msgStr.equals("list file")) {
+            List<WsFileDO> wsFileDOList = wsFileService.selectList(new EntityWrapper<WsFileDO>().orderBy("user").orderBy("folder"));
+            StringBuilder sb = new StringBuilder();
+            for (WsFileDO file : wsFileDOList) {
+                sb.append(file.getId());
+                sb.append(" ");
+                sb.append(file.getUser());
+                sb.append(" ");
+                sb.append(file.getFolder());
+                sb.append(" ");
+                sb.append(file.getUrl());
+                sb.append(" ");
+                sb.append(file.getFileSize());
+                sb.append("\n");
+            }
+            channelWrite(ctx, sb.toString());
+        } else {
+            channelWrite(ctx, "If you has received below msg, it means that server had received your cmd.");
+        }
     }
 }
