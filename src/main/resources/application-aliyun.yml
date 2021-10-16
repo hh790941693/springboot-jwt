@@ -1,0 +1,79 @@
+#
+# 腾讯云环境
+#
+
+ip:
+  #公网ip
+  public: 101.132.167.61
+  #内网ip
+  private: 172.24.26.155
+
+#应用端口
+port:
+  #tomcat端口
+  app: 8100
+  #静态资源端口
+  resource : 8101
+  #netty服务端口
+  nettyServer : 10001
+
+server:
+  #配置成内网IP或者127.0.0.1
+  address: ${ip.private}
+  port: ${port.app}
+  tomcat:
+    basedir: ${temp.tomcat.path.linux}
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    #url: jdbc:mysql://58.220.130.183:3306/zhdd?useSSL=false
+    #username: root
+    #password: ^klzvG064A7%ERQj
+    url: jdbc:mysql://localhost:3306/zhdd?useSSL=false
+    username : root
+    password : Stw547495788$
+  cache:
+    ehcache:
+      config: classpath:ehcache.xml
+  redis:
+    host: 192.168.31.153
+    port: 6379
+    password: 123456
+    database: 0
+    timeout: 1000s
+    jedis:
+      pool:
+        max-idle: 500
+        min-idle: 50
+        max-active: -1
+
+#本地上传
+upload:
+  config:
+    #本地存储路径
+    store-path: /home/springbootJwt
+    #访问url(需要通过nginx来访问)
+    #server {
+    #  listen 8101;
+    #  server_name  localhost;
+    #  location / {
+    #    root /home/springbootJwt;
+    #    autoindex on;
+    #  }
+    #}
+    #如果是内网 就配置成内网IP或者127.0.0.1;如果是外网，配置成公网IP
+    view-url: http://${ip.public}:${port.resource}/
+
+#websocket聊天服务器配置
+websocket:
+  config:
+    #如果是内网 就配置成内网IP或者127.0.0.1;如果是外网，配置成公网IP
+    address: ${ip.public}
+    port: ${port.app}
+
+#netty server服务配置
+nettyserver:
+  config:
+    address : ${ip.private}
+    port : ${port.nettyServer}
