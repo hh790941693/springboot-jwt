@@ -4,7 +4,7 @@
 <!-- scanPeriod:设置监测配置文档是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。
                  当scan为true时，此属性生效。默认的时间间隔为1分钟。 -->
 <!-- debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
-<configuration  scan="true" scanPeriod="10 seconds">
+<configuration scan="true" scanPeriod="10 seconds">
     <contextName>logback</contextName>
 
     <!-- name的值是变量的名称，value的值时变量定义的值。通过定义的值会被插入到logger上下文中。定义后，可以使“${}”来使用变量。 -->
@@ -14,8 +14,8 @@
         <property name="log.path" value="c:\\jwtlogs" />
     </springProfile>
 
-    <springProfile name="linux,tencent">
-        <property name="log.path" value="/opt/springbootjwt/logs" />
+    <springProfile name="linux,tencent,aliyun">
+        <property name="log.path" value="/opt/logs" />
     </springProfile>
 
     <!--0. 日志格式和颜色渲染 -->
