@@ -37,10 +37,17 @@ public class GlobalExceptionHandler {
      * 参数校验失败 @Validated
      */
     @ExceptionHandler(value = BindException.class)
-    @ResponseBody
-    public Result<String> BindExceptionHandler(BindException e) {
+    public Object BindExceptionHandler(BindException e, HttpServletRequest request) {
         String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(","));
-        return Result.build(-2, message, message);
+
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("exception", e);
+        mav.addObject("errorMsg", message);
+        mav.addObject("url", request.getRequestURL());
+        mav.addObject("redirectName", "requestError");
+        mav.setViewName("ws/exception");
+        // 返回一个页面视图
+        return mav;
     }
 
     /**
@@ -71,6 +78,7 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         ModelAndView mav = new ModelAndView();
         mav.addObject("exception", e);
+        mav.addObject("errorMsg", e.getMessage());
         mav.addObject("url", request.getRequestURL());
         mav.addObject("redirectName", "exception");
         mav.setViewName("ws/exception");

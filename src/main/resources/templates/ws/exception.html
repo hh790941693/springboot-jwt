@@ -7,11 +7,13 @@
 </head>
 <body>
     <input type="hidden" id="redirectName" th:value="${redirectName}">
+    <input type="hidden" id="errorMSg" th:value="${errorMsg}">
     <th:block th:include="common :: footer"></th:block>
 </body>
     <script>
         var redirectName = $("#redirectName").val();
         debugger;
-        top.location.href = "/redirect?redirectName="+redirectName;
+        var errorMsg = $("#errorMSg").val() == undefined ? "" : $("#errorMSg").val();
+        top.location.href = "/redirect?redirectName="+redirectName+"&errorMsg="+errorMsg;
     </script>
 </html>

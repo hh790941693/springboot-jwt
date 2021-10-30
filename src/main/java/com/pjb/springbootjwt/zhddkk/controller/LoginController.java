@@ -324,41 +324,47 @@ public class LoginController {
     /**
      * 重定向到登陆页面.
      * @param redirectName 重定向名称
+     * @param errorMsg 错误信息
      * @param request 请求
      */
     @RequestMapping(value = "/redirect")
-    public String redirect(String redirectName, HttpServletRequest request) {
+    public String redirect(String redirectName, String errorMsg, HttpServletRequest request) {
+        boolean isNotBlankErrorMsg = StringUtils.isNotBlank(errorMsg);
         switch(redirectName) {
             case "sessionTimeout":
                 //会话超时
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.session.timeout"));
+                request.setAttribute("errorMsg", isNotBlankErrorMsg ? errorMsg : getLocaleMessage("login.err.session.timeout"));
                 break;
             case "notRegister":
                 //未注册
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.user.not.exist"));
+                request.setAttribute("errorMsg", isNotBlankErrorMsg ? errorMsg : getLocaleMessage("login.err.user.not.exist"));
                 break;
             case "disable":
                 //账号被禁用
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.user.disable"));
+                request.setAttribute("errorMsg", isNotBlankErrorMsg ? errorMsg : getLocaleMessage("login.err.user.disable"));
                 break;
             case "passwordWrong":
                 //密码错误
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.password.wrong"));
+                request.setAttribute("errorMsg", isNotBlankErrorMsg ? errorMsg : getLocaleMessage("login.err.password.wrong"));
                 break;
             case "verifyCodeInvalid":
                 //验证码失效
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.invalid"));
+                request.setAttribute("errorMsg", isNotBlankErrorMsg ? errorMsg : getLocaleMessage("login.err.verifycode.invalid"));
                 break;
             case "verifyCodeWrong":
                 //验证码错误
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.verifycode.wrong"));
+                request.setAttribute("errorMsg", isNotBlankErrorMsg ? errorMsg : getLocaleMessage("login.err.verifycode.wrong"));
                 break;
             case "conflictLogin":
                 //用户重复登陆
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.conflict.login"));
+                request.setAttribute("errorMsg", isNotBlankErrorMsg ? errorMsg : getLocaleMessage("login.err.conflict.login"));
+                break;
+            case "requestError":
+                // 请求参数错误
+                request.setAttribute("errorMsg", isNotBlankErrorMsg ? errorMsg : getLocaleMessage("login.err.request.error"));
                 break;
             default:
-                request.setAttribute("errorMsg", getLocaleMessage("login.err.cause.exception"));
+                request.setAttribute("errorMsg", isNotBlankErrorMsg ? errorMsg : getLocaleMessage("login.err.cause.exception"));
                 break;
         }
         logout(request);
