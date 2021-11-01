@@ -64,6 +64,9 @@ public class WsFileAccessCheckJob {
     @Autowired
     private UploadConfig uploadConfig;
 
+    @Autowired
+    private CacheService cacheService;
+
     /**
      * 定时任务入口.
      */
@@ -140,6 +143,7 @@ public class WsFileAccessCheckJob {
         if (needBatchUpdateList.size() > 0) {
             logger.info("本次更新文件数:{}", needBatchUpdateList.size());
             wsFileService.updateBatchById(needBatchUpdateList, needBatchUpdateList.size());
+            cacheService.cacheUserFileData();
         }
     }
 
@@ -208,6 +212,7 @@ public class WsFileAccessCheckJob {
         if (needBatchUpdateList.size() > 0) {
             logger.info("本次更新文件数:{}", needBatchUpdateList.size());
             wsUserProfileService.updateBatchById(needBatchUpdateList, needBatchUpdateList.size());
+            cacheService.cacheUserFileData();
         }
     }
 
