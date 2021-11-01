@@ -24,11 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 /**
  * 定时更新表中url的ip地址.
  */
-@Configuration
+@Component
 @EnableScheduling
 public class WsFileAccessCheckJob {
 
