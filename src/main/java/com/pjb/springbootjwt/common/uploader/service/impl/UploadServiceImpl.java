@@ -76,7 +76,7 @@ public class UploadServiceImpl implements UploadService {
     public String uploadFileWithCheckCapacity(MultipartFile file, String folder, String userName) throws Exception {
         String sessionUserName = SessionUtil.getSessionUserName();
         boolean canUploadFlag = true;
-        if (StringUtils.isNoneBlank() && !sessionUserName.equals(CommonConstants.ADMIN_USER)) {
+        if (StringUtils.isNotBlank(sessionUserName) && !sessionUserName.equals(CommonConstants.ADMIN_USER)) {
             String fileTotalSize = wsFileService.queryUserTodayFileSize(sessionUserName);
             if (StringUtils.isNotBlank(fileTotalSize)) {
                 long dayFileSize = Long.valueOf(fileTotalSize);

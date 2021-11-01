@@ -196,6 +196,10 @@
                     "folder": "headImg"
                 },
                 before: function () {
+                    if (!user) {
+                        layer.msg("请先填写用户信息");
+                        return false;
+                    }
                     layer.load();
                 },
                 done: function (r) {
