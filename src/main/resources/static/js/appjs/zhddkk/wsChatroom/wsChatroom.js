@@ -3,7 +3,7 @@ var prefix = "/zhddkk/wsChatroom";
 var app = new Vue({
 	el: '#roomListDiv',
 	data: {
-		chatRoomList : []
+		chatRoomList : [],
 	},
 	methods: {
 		// 房间列表
@@ -114,3 +114,9 @@ function remove(id) {
 		});
 	})
 }
+
+$("#keywordLike li").click(function() {
+	var kv=$(this).text();
+	$("#roomNameSearchInput").val(kv);
+	app.queryChatRoomList();
+})

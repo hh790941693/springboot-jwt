@@ -8,6 +8,16 @@
             box-shadow: 4px 4px 5px #888888;
             z-index:2;
         }
+        #keywordLike li {
+            list-style: none;
+            margin-right: 20px;
+            padding: 0;
+            float:left;
+            cursor: pointer;
+            text-decoration: underline;
+            color:blue;
+        }
+
     </style>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content ">
@@ -40,6 +50,24 @@
                             <div class="col-md-4">
                                 <button class="btn btn-success" onclick="reLoad()">查询</button>
                                 <button type="button" class="btn btn-default" onclick="cleanForm()">重置</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <div class="input-group-addon">可能在找</div>
+                                    <ul id="keywordLike" class="form-control">
+                                        <li>英雄联盟</li>
+                                        <li>永恒之塔</li>
+                                        <li>冒险岛</li>
+                                        <li>穿越火线</li>
+                                        <li>N号房</li>
+                                        <li>qq飞车</li>
+                                        <li>qq酷跑</li>
+                                        <li>LOL</li>
+                                        <li>AION</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
