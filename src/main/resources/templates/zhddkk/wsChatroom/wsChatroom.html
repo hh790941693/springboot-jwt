@@ -8,7 +8,7 @@
             box-shadow: 4px 4px 5px #888888;
             z-index:2;
         }
-        #keywordLike li {
+        ul li {
             list-style: none;
             margin-right: 20px;
             padding: 0;
@@ -16,6 +16,9 @@
             cursor: pointer;
             text-decoration: underline;
             color:blue;
+        }
+        .li-click {
+            color:red;
         }
 
     </style>
@@ -53,19 +56,31 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <input type="hidden" id="category1Input">
+                            <input type="hidden" id="category2Input">
+                            <div class="col-md-6">
                                 <div class="input-group">
-                                    <div class="input-group-addon">可能在找</div>
-                                    <ul id="keywordLike" class="form-control">
-                                        <li>英雄联盟</li>
-                                        <li>永恒之塔</li>
-                                        <li>冒险岛</li>
-                                        <li>穿越火线</li>
-                                        <li>N号房</li>
-                                        <li>qq飞车</li>
-                                        <li>qq酷跑</li>
-                                        <li>LOL</li>
-                                        <li>AION</li>
+                                    <div class="input-group-addon">大分类</div>
+                                    <ul id="category1" class="form-control">
+                                        <li value="01">吃播</li>
+                                        <li value="02">娱乐</li>
+                                        <li value="03">游戏</li>
+                                        <li value="04">其他</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <div class="input-group-addon">小分类</div>
+                                    <ul id="category2" class="form-control">
+                                        <li value="0001">英雄联盟</li>
+                                        <li value="0003">永恒之塔</li>
+                                        <li value="0004">穿越火线</li>
+                                        <li value="0005">qq飞车</li>
+                                        <li value="0005">qq酷跑</li>
+                                        <li value="0001">LOL</li>
+                                        <li value="0003">AION</li>
                                     </ul>
                                 </div>
                             </div>

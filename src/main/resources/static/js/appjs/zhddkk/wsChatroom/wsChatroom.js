@@ -19,6 +19,8 @@ var app = new Vue({
 				data : {
 					'name' : $("#roomNameSearchInput").val(),
 					'roomId' : $("#roomIdSearchInput").val(),
+					'category1' : $("#category1Input").val(),
+					'category2' : $("#category2Input").val(),
 				},
 				success: function (result) {
 					if (result.code == 1) {
@@ -65,6 +67,8 @@ function reLoad() {
 function cleanForm(){
 	$("#roomNameSearchInput").val("");
 	$("#roomIdSearchInput").val("");
+	$("#category1Input").val("");
+	$("#category2Input").val("");
 	app.queryChatRoomList();
 }
 
@@ -75,7 +79,7 @@ function add() {
 		title : '创建房间',
 		maxmin : true,
 		shadeClose : false,//点击遮罩关闭层
-		area : [ '600px', '420px' ],
+		area : [ '620px', '500px' ],
 		content : prefix + '/add'
 	});
 }
@@ -87,7 +91,7 @@ function edit(id) {
 		title : '编辑',
 		maxmin : true,
 		shadeClose : false,//点击遮罩关闭层
-		area : [ '600px', '420px' ],
+		area : [ '620px', '500px' ],
 		content : prefix + '/edit/' + id
 	});
 }
@@ -115,8 +119,22 @@ function remove(id) {
 	})
 }
 
-$("#keywordLike li").click(function() {
-	var kv=$(this).text();
-	$("#roomNameSearchInput").val(kv);
+$("#category1 li").click(function() {
+	$("#category1Input").val($(this).attr("value"));
+	$("#category1 li").removeClass("li-click");
+	$(this).addClass("li-click");
+
+	$("#category2Input").val("");
+	$("#category2 li").removeClass("li-click");
+	app.queryChatRoomList();
+})
+
+$("#category2 li").click(function() {
+	$("#category2Input").val($(this).attr("value"));
+	$("#category2 li").removeClass("li-click");
+	$(this).addClass("li-click");
+
+	$("#category1Input").val("");
+	$("#category1 li").removeClass("li-click");
 	app.queryChatRoomList();
 })

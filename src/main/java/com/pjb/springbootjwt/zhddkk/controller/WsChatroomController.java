@@ -160,6 +160,12 @@ public class WsChatroomController extends AdminBaseController {
 		if (StringUtils.isNotBlank(wsChatroomDO.getRoomId())) {
 			wrapper.like("t1.room_id", wsChatroomDO.getRoomId(), SqlLike.DEFAULT);
 		}
+		if (StringUtils.isNotBlank(wsChatroomDO.getCategory1())) {
+			wrapper.eq("t1.category1", wsChatroomDO.getCategory1());
+		}
+		if (StringUtils.isNotBlank(wsChatroomDO.getCategory2())) {
+			wrapper.eq("t1.category2", wsChatroomDO.getCategory2());
+		}
 		List<WsChatroomDTO> wsChatroomDOList = wsChatroomService.queryChatRoomInfoList(wrapper, SessionUtil.getSessionUserId());
 		return Result.ok(wsChatroomDOList);
 	}

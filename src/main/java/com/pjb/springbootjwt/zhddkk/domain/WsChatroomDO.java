@@ -47,6 +47,12 @@ public class WsChatroomDO implements Serializable {
     //房间描述
     @ApiModelProperty(value = "desc" , name = "房间描述")
     private String desc;
+
+    // 大分类(吃播、娱乐、游戏、其他)
+    private String category1;
+    // 小分类(英雄联盟)
+    private String category2;
+
     //创建者id
     @ApiModelProperty(value = "createUserId" , name = "创建者id")
     private Long createUserId;

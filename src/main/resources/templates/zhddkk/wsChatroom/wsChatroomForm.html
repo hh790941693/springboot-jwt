@@ -31,7 +31,51 @@
 									<input type="text" id="desc" name="desc" th:value="${wsChatroom.desc}" class="form-control" autocomplete="off"/>
 								</div>
 							</div>
-                            <div class="form-group">
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="desc">&nbsp;大分类：</label>
+								<div class="col-sm-8">
+									<select id="category1" name="category1" class="form-control" th:value="wsChatroom.category1">
+										<option value="01" th:selected="${wsChatroom.category1 == '01'}">吃播</option>
+										<option value="02" th:selected="${wsChatroom.category1 == '02'}">娱乐</option>
+										<option value="03" th:selected="${wsChatroom.category1 == '03'}">游戏</option>
+										<option value="99" th:selected="${wsChatroom.category1 == '99'}">其他</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label" for="desc">&nbsp;小分类：</label>
+								<div class="col-sm-8">
+									<select id="category2" name="category2" class="form-control" th:value="wsChatroom.category2">
+										<optgroup label="吃播">
+											<option value="01" th:selected="${wsChatroom.category2 == '01'}">海鲜</option>
+											<option value="02" th:selected="${wsChatroom.category2 == '02'}">火鸡面</option>
+											<option value="03" th:selected="${wsChatroom.category2 == '03'}">水果</option>
+											<option value="04" th:selected="${wsChatroom.category2 == '04'}">辣椒</option>
+											<option value="99" th:selected="${wsChatroom.category2 == '99'}">其他</option>
+										</optgroup>
+										<optgroup label="娱乐">
+											<option value="001" th:selected="${wsChatroom.category2 == '001'}">跳舞</option>
+											<option value="002" th:selected="${wsChatroom.category2 == '002'}">唱歌</option>
+											<option value="003" th:selected="${wsChatroom.category2 == '003'}">pk</option>
+											<option value="004" th:selected="${wsChatroom.category2 == '004'}">聊天</option>
+											<option value="999" th:selected="${wsChatroom.category2 == '999'}">其他</option>
+										</optgroup>
+										<optgroup label="游戏">
+											<option value="0001" th:selected="${wsChatroom.category2 == '0001'}">英雄联盟</option>
+											<option value="0002" th:selected="${wsChatroom.category2 == '0002'}">王者荣耀</option>
+											<option value="0003" th:selected="${wsChatroom.category2 == '0003'}">永恒之塔</option>
+											<option value="0004" th:selected="${wsChatroom.category2 == '0004'}">穿越火线</option>
+											<option value="0005" th:selected="${wsChatroom.category2 == '0005'}">QQ系列</option>
+											<option value="9999" th:selected="${wsChatroom.category2 == '9999'}">其他</option>
+										</optgroup>
+										<optgroup label="其他">
+											<option value="00001" th:selected="${wsChatroom.category2 == '00001'}">同城聊天</option>
+											<option value="99999" th:selected="${wsChatroom.category2 == '99999'}">其他</option>
+										</optgroup>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
                                 <div class="col-sm-8 col-sm-offset-3">
                                     <button type="submit" class="btn btn-primary">保存</button>
                                 </div>
