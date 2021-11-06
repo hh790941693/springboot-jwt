@@ -53,6 +53,10 @@ public class WsChatroomDO implements Serializable {
     // 小分类(英雄联盟)
     private String category2;
 
+    // 有无密码
+    @TableField(exist = false)
+    private String passwordOrNot;
+
     //创建者id
     @ApiModelProperty(value = "createUserId" , name = "创建者id")
     private Long createUserId;

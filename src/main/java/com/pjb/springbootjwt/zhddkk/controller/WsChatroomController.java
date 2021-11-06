@@ -113,6 +113,9 @@ public class WsChatroomController extends AdminBaseController {
 		wsChatroom.setCreateTime(new Date());
 		wsChatroom.setUpdateTime(new Date());
 		wsChatroom.setStatus(1);
+		if (StringUtils.isBlank(wsChatroom.getPassword())) {
+			wsChatroom.setPassword(null);
+		}
 		wsChatroomService.insert(wsChatroom);
         return Result.ok();
 	}
@@ -124,6 +127,9 @@ public class WsChatroomController extends AdminBaseController {
 	@RequestMapping("/update")
 	//@RequiresPermissions("zhddkk:wsChatroom:edit")
 	public Result<String> update(WsChatroomDO wsChatroom) {
+		if (StringUtils.isBlank(wsChatroom.getPassword())) {
+			wsChatroom.setPassword(null);
+		}
 		wsChatroomService.updateById(wsChatroom);
 		return Result.ok();
 	}
@@ -165,6 +171,13 @@ public class WsChatroomController extends AdminBaseController {
 		}
 		if (StringUtils.isNotBlank(wsChatroomDO.getCategory2())) {
 			wrapper.eq("t1.category2", wsChatroomDO.getCategory2());
+		}
+		if (StringUtils.isNotBlank(wsChatroomDO.getPasswordOrNot())) {
+			if (wsChatroomDO.getPasswordOrNot().equals("0")) {
+				wrapper.isNull("t1.password");
+			} else {
+				wrapper.isNotNull("t1.password");
+			}
 		}
 		List<WsChatroomDTO> wsChatroomDOList = wsChatroomService.queryChatRoomInfoList(wrapper, SessionUtil.getSessionUserId());
 		return Result.ok(wsChatroomDOList);

@@ -21,6 +21,7 @@ var app = new Vue({
 					'roomId' : $("#roomIdSearchInput").val(),
 					'category1' : $("#category1Input").val(),
 					'category2' : $("#category2Input").val(),
+					'passwordOrNot' : $("#passwordOrNot").val(),
 				},
 				success: function (result) {
 					if (result.code == 1) {
@@ -69,6 +70,8 @@ function cleanForm(){
 	$("#roomIdSearchInput").val("");
 	$("#category1Input").val("");
 	$("#category2Input").val("");
+	$("#passwordOrNot").val("");
+	$("li").removeClass("li-click");
 	app.queryChatRoomList();
 }
 
