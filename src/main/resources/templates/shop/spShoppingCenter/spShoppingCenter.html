@@ -122,7 +122,7 @@
         <div id="innerDiv">
             <div class="goodsDiv" v-for="(goodsDetail,index) in shoppingCenterData.goodsList" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
                 <div style="width:100%;height:178px;cursor: pointer;" @click="showGoodsDetail(goodsDetail.id)">
-                    <img :src="goodsDetail.backImage" style="width:170px;height:148px">
+                    <img :src="goodsDetail.backImage" style="width:100%;height:100%;">
                     <img v-if="goodsDetail.stockNum<=0" src="../img/shop/shouqing.jpg" style="width:100px;height:100px;position: relative;top:-140px;border-radius:50px;">
                 </div>
                 <div style="width:100%;height:25px;">
@@ -200,12 +200,12 @@
                 mouseEnter: function (index) {
                     $("#innerDiv").children("div").eq(index).css("border", '');
                     $("#innerDiv").children("div").eq(index).addClass("selected");
-                    $("#innerDiv").children("div").eq(index).children("div").eq(0).children("img").eq(0).animate({width:"100%",height:"100%"});
+                    //$("#innerDiv").children("div").eq(index).children("div").eq(0).children("img").eq(0).animate({width:"100%",height:"100%"});
                 },
                 mouseLeave: function (index) {
                     $("#innerDiv").children("div").eq(index).removeClass("selected");
                     $("#innerDiv").children("div").eq(index).css("border", '1px solid grey');
-                    $("#innerDiv").children("div").eq(index).children("div").eq(0).children("img").eq(0).animate({width:"170px",height:"148px"});
+                    //$("#innerDiv").children("div").eq(index).children("div").eq(0).children("img").eq(0).animate({width:"170px",height:"148px"});
                 },
                 // 重置按钮
                 resetSearch: function () {

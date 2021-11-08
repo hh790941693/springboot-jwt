@@ -124,7 +124,7 @@ function remove(id) {
 
 $("#category1 li").click(function() {
 	$("#category1Input").val($(this).attr("value"));
-	$("#category1 li").removeClass("li-click");
+	$(this).siblings().removeClass("li-click");
 	$(this).addClass("li-click");
 
 	$("#category2Input").val("");
@@ -134,7 +134,7 @@ $("#category1 li").click(function() {
 
 $("#category2 li").click(function() {
 	$("#category2Input").val($(this).attr("value"));
-	$("#category2 li").removeClass("li-click");
+	$(this).siblings().removeClass("li-click");
 	$(this).addClass("li-click");
 
 	$("#category1Input").val("");
