@@ -113,7 +113,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div id="roomListDiv" style="width:100%;margin-top:10px;overflow: auto;border:1px solid grey;" data-mobile-responsive="true">
+                        <div id="roomListDiv" style="width:100%;margin-top:10px;overflow: auto;" data-mobile-responsive="true">
                             <div v-for="(roomObj,index) in chatRoomList" :key="roomObj.id" style="width:250px;height:200px;position:relative;border:1px solid lightgrey;float:left;margin: 10px;padding:10px;" @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)" @dblclick="enterRoom(index)">
                                 <div style="height: 30px;text-align: center;font-size: 25px;font-weight: bold;">
                                     <p>{{roomObj.roomId}}</p>
