@@ -477,7 +477,7 @@
          * @param fontSize 字体大小 eg:15
          */
         function updateChatMsgWithColor(msgType, msg, color, fontSize) {
-            var newMsg = "<p style='color:" + color + ";font-size:" + fontSize + "px;line-height:14px;text-align: center;margin-bottom: 5px;'>[" + getCurrentTimeOfHHMMSS() + "] ["+msgType+"] " + msg + "</p>";
+            var newMsg = "<p style='color:" + color + ";font-size:" + fontSize + "px;line-height:14px;margin-bottom: 5px;'>[" + getCurrentTimeOfHHMMSS() + "] ["+msgType+"] " + msg + "</p>";
             var textArea = $("#msgFromServerDiv").append(newMsg);
             textArea.scrollTop(textArea[0].scrollHeight - textArea.height());
         }
