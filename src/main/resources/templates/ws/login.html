@@ -70,25 +70,25 @@
 <body>
     <div id="mainDiv">
         <!--顶部标题-->
-        <div style="height:50px;background-color: #428BCA;padding-top: 5px;">
-            <div style="text-align: center;font-size: 30px;color:white;">
+        <div style="height:50px;background-color: #428BCA;padding-top: 5px;padding-left:2px;padding-right: 2px;">
+            <!--二维码登陆-->
+            <div id="phonelogin" style="float:left;width:40px;font-size: 15px;cursor: pointer;">
+                <span class="fa fa-qrcode fa-3x" th:title="#{btn.qrcode.tips}"></span>
+            </div>
+            <div style="width:calc(100% - 140px);float:left;text-align: center;font-size: 30px;color:white;">
                 <p>[[#{web.title}]]</p>
             </div>
+
+            <!--语言切换-->
+            <div style="float:right;width:100px;margin-top:3px;" th:title="#{select.choose.language}">
+                <select class="selectpicker" data-live-search="true" data-width="100%">
+                    <option value="zh_CN" th:text="中文" th:selected="${#locale.getCountry() == 'CN'}"></option>
+                    <option value="en_US" th:text="English"
+                            th:selected="${#locale.getCountry() == 'US'}"></option>
+                    <option value="ko_KR" th:text="한국어" th:selected="${#locale.getCountry() == 'KR'}"></option>
+                </select>
+            </div>
         </div>
-        <!--二维码登陆-->
-        <div id="phonelogin" style="position:absolute;top:3px;left:2px;font-size: 15px;cursor: pointer;">
-            <span class="fa fa-qrcode fa-3x" th:title="#{btn.qrcode.tips}"></span>
-        </div>
-        <!--语言切换-->
-        <div style="position:absolute;top:6px;right:1px;width:100px;" th:title="#{select.choose.language}">
-            <select class="selectpicker" data-live-search="true" data-width="100%">
-                <option value="zh_CN" th:text="中文" th:selected="${#locale.getCountry() == 'CN'}"></option>
-                <option value="en_US" th:text="English"
-                        th:selected="${#locale.getCountry() == 'US'}"></option>
-                <option value="ko_KR" th:text="한국어" th:selected="${#locale.getCountry() == 'KR'}"></option>
-            </select>
-        </div>
-        
         <!--
         <div style="position:absolute;top:6px;right:2px;" th:title="#{select.choose.language}">
             <select class="selectpicker" data-style="btn-info" data-width="80px">
