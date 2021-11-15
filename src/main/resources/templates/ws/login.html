@@ -34,17 +34,12 @@
         position: relative;
         top: 50%;
         margin-top: -175px;
-        background-color: whitesmoke;
-        box-shadow: grey 10px 6px 10px;
+        background-color: white;
+        box-shadow: grey 1px 5px 8px;
         /**border: 1px solid grey;*/
         background-repeat: no-repeat;
         background-position: 0px 0px;
         /**background-image:url("../img/fengjing/fj9.jpg");*/
-    }
-
-    #loginForm {
-        padding-left: 45px;
-        padding-top: 10px;
     }
 
     input {
@@ -105,55 +100,57 @@
         </div>
         -->
         <img id="backgroundImg" src="../img/fengjing/fj9.jpg" hidden>
-        <form id="loginForm" action="/login.do" method="post" onsubmit="return checkEnvironment()">
-            <!--错误信息提示区域-->
-            <div style="height:25px;margin-bottom:5px;">
-                <span style="color:red;font-weight: bold;" th:text="${#request.getAttribute('errorMsg')}"></span>
-            </div>
+        <div id="div_form" style="padding: 5px 56px;">
+            <form id="loginForm" action="/login.do" method="post" onsubmit="return checkEnvironment()">
+                <!--错误信息提示区域-->
+                <div style="height:25px;margin-bottom:5px;">
+                    <span style="color:red;font-weight: bold;" th:text="${#request.getAttribute('errorMsg')}"></span>
+                </div>
 
-            <!--用户名-->
-            <div class="input-group margin-bottom-sm">
-                <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                <input id="user" name="user" type="text" class="form-control" th:value="${user}"
-                       th:placeholder="#{input.user.helper}" autocomplete="off" style="width:227px;">
-            </div>
-            <div class="errorMsgDiv"></div>
+                <!--用户名-->
+                <div class="input-group margin-bottom-sm">
+                    <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                    <input id="user" name="user" type="text" class="form-control" th:value="${user}"
+                           th:placeholder="#{input.user.helper}" autocomplete="off" style="width:227px;">
+                </div>
+                <div class="errorMsgDiv"></div>
 
-            <!--密码-->
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-                <input id="pass" name="pass" type="password" class="form-control" th:value="${pass}"
-                       th:placeholder="#{input.password.helper}" autocomplete="off" style="width:227px;">
-            </div>
-            <div class="errorMsgDiv"></div>
+                <!--密码-->
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+                    <input id="pass" name="pass" type="password" class="form-control" th:value="${pass}"
+                           th:placeholder="#{input.password.helper}" autocomplete="off" style="width:227px;">
+                </div>
+                <div class="errorMsgDiv"></div>
 
-            <!--验证码-->
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-briefcase fa-fw"></i></span>
-                <input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}"
-                       th:placeholder="#{input.code.helper}" autocomplete="off" style="width:126px;">
-                <img id="verifyCodeImg" style="margin-left:2px;cursor: pointer;"/>
-            </div>
-            <div class="errorMsgDiv"></div>
+                <!--验证码-->
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-briefcase fa-fw"></i></span>
+                    <input id="verifyCode" name="verifyCode" type="text" class="form-control" th:value="${verifyCode}"
+                           th:placeholder="#{input.code.helper}" autocomplete="off" style="width:126px;">
+                    <img id="verifyCodeImg" style="margin-left:2px;cursor: pointer;"/>
+                </div>
+                <div class="errorMsgDiv"></div>
 
-            <!--底部相关按钮-->
-            <div id="helpDiv" style="height:25px;margin-top:10px;">
-                <a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:50px;"
-                   th:text="#{a.register.label}"></a>
-                <a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;"
-                   th:text="#{a.forgetpassword.label}"></a>
-                <a href="javascript:void(0)" onclick="window.location.href='canvas/canvasIndex.page'" style="text-decoration:none;margin-left:20px;"
-                   th:text="#{a.playgame.label}"></a>
-            </div>
+                <!--底部相关按钮-->
+                <div id="helpDiv" style="height:25px;margin-top:10px;">
+                    <a href="javascript:void(0)" onclick="regist()" style="text-decoration:none;margin-left:50px;"
+                       th:text="#{a.register.label}"></a>
+                    <a href="javascript:void(0)" onclick="forgetPassword()" style="text-decoration:none;margin-left:20px;"
+                       th:text="#{a.forgetpassword.label}"></a>
+                    <a href="javascript:void(0)" onclick="window.location.href='canvas/canvasIndex.page'" style="text-decoration:none;margin-left:20px;"
+                       th:text="#{a.playgame.label}"></a>
+                </div>
 
-            <!--提交按钮-->
-            <div align="center" style="margin-top:10px;">
-                <button id="btnlogin" class='btn btn-success btn-large' type="submit"
-                        style="width:130px;margin-right: 15px;">
-                    <span class="glyphicon glyphicon-log-in"></span> [[#{page.login.title}]]
-                </button>
-            </div>
-        </form>
+                <!--提交按钮-->
+                <div align="center" style="margin-top:10px;">
+                    <button id="btnlogin" class='btn btn-success btn-large' type="submit"
+                            style="width:130px;margin-right: 15px;">
+                        <span class="glyphicon glyphicon-log-in"></span> [[#{page.login.title}]]
+                    </button>
+                </div>
+            </form>
+        </div>
 
         <!--右上角二维码-->
         <div style="position:absolute;width:180px;height:180px;left:400px;top:1px;">
