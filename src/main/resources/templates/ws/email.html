@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:include="common :: header"></th:block>
+  <meta charset="UTF-8">
+  <title>邮件发送</title>
+
+  <style type="text/css">
+
+  </style>
+</head>
+<body>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">收件人</label>
+      <div class="col-sm-6">
+        <input type="email" class="form-control" name="to" placeholder="请输入收件人邮箱">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">邮件标题</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" name="subject" placeholder="请输入邮件标题">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">邮件内容</label>
+      <div class="col-sm-6">
+        <textarea type="text" class="form-control" name="content" placeholder="请输入邮件内容"></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-10 col-sm-offset-2">
+        <button class="btn btn-default" id="sendEmail">发送</button>
+      </div>
+    </div>
+  </form>
+
+<th:block th:include="common :: footer"></th:block>
+</body>
+<script type="text/javascript">
+  $("#sendEmail").click(function(){
+    $.ajax({
+      type: 'GET',
+      url: rootUrl + 'email/sendSimpleEmail.do',
+      data: {
+        'to': $("input[type='email']").val(),
+        'subject': $("input[name='subject']").val(),
+        'content': $("textarea[name='content']").val(),
+      },
+      async: false,
+      success: function (result) {
+        if (result.code == 1) {
+          layer.msg("发送成功");
+        } else {
+          layer.msg("发送失败");
+        }
+      }
+    });
+  })
+</script>
+</html>
