@@ -29,6 +29,7 @@ public class SesstionTimeoutFilter implements Filter {
             "/chatRoomWebSocket/",
             "/game/",
             "/upload/app",
+            "/email",
             "/i18n"));
 
     // 忽略的URL后缀列表
