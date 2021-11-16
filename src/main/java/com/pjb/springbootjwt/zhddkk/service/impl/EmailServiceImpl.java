@@ -11,6 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -77,6 +78,29 @@ public class EmailServiceImpl implements EmailService {
             FileSystemResource file = new FileSystemResource(filePath);
             String fileName = filePath.substring(filePath.lastIndexOf(File.separator));
             messageHelper.addAttachment(fileName,file);
+
+            javaMailSender.send(message);
+            logger.info("邮件加附件发送成功！");
+            return Result.ok();
+        } catch (MessagingException e) {
+            logger.error("发送失败："+e);
+            return Result.fail();
+        }
+    }
+
+    @Override
+    public Result<String> sendAttachmentsMail(String to, String subject, String content, MultipartFile attachment) {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper messageHelper;
+        try {
+            messageHelper = new MimeMessageHelper(message,true);
+            messageHelper.setFrom(from);
+            messageHelper.setTo(to);
+            messageHelper.setSubject(subject);
+            messageHelper.setText(content,true);
+            //携带附件
+            String fileName = attachment.getOriginalFilename();
+            messageHelper.addAttachment(fileName, attachment);
 
             javaMailSender.send(message);
             logger.info("邮件加附件发送成功！");

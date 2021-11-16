@@ -1,6 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -17,4 +18,6 @@ public class EmailDTO {
     private String content;
 
     private String filePath;
+
+    private MultipartFile attachment;
 }

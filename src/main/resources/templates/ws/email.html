@@ -10,54 +10,118 @@
   </style>
 </head>
 <body>
-  <form class="form-horizontal">
-    <div class="form-group">
-      <label class="col-sm-2 control-label">收件人</label>
-      <div class="col-sm-6">
-        <input type="email" class="form-control" name="to" placeholder="请输入收件人邮箱">
+  <div style="width:800px;height:auto;padding: 20px;">
+    <form id="emailForm" class="form-horizontal" method="post" action="email/sendEmail.do" enctype="multipart/form-data">
+      <div class="form-group">
+        <label class="col-sm-2 control-label">收件人<span style="color: red;"> *</span></label>
+        <div class="col-sm-8">
+          <input type="email" email="true" class="form-control" name="to" placeholder="请输入收件人邮箱">
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-2 control-label">邮件标题</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" name="subject" placeholder="请输入邮件标题">
+      <div class="form-group">
+        <label class="col-sm-2 control-label">邮件标题<span style="color: red;"> *</span></label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" name="subject" placeholder="请输入邮件标题">
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <label class="col-sm-2 control-label">邮件内容</label>
-      <div class="col-sm-6">
-        <textarea type="text" class="form-control" name="content" placeholder="请输入邮件内容"></textarea>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">邮件内容<span style="color: red;"> *</span></label>
+        <div class="col-sm-8">
+          <textarea rows="6" type="text" class="form-control" name="content" placeholder="请输入邮件内容"></textarea>
+        </div>
       </div>
-    </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="attachment">选择附件</label>
+        <div class="col-sm-8">
+           <input type="file" class="form-control" name="attachment" id="attachment">
+        </div>
+      </div>
 
-    <div class="form-group">
-      <div class="col-sm-10 col-sm-offset-2">
-        <button class="btn btn-default" id="sendEmail">发送</button>
+      <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+          <button class="btn btn-default" type="submit" id="sendEmail">发送</button>
+        </div>
       </div>
-    </div>
-  </form>
-
+    </form>
+  </div>
 <th:block th:include="common :: footer"></th:block>
 </body>
 <script type="text/javascript">
-  $("#sendEmail").click(function(){
-    $.ajax({
-      type: 'GET',
-      url: rootUrl + 'email/sendSimpleEmail.do',
-      data: {
-        'to': $("input[type='email']").val(),
-        'subject': $("input[name='subject']").val(),
-        'content': $("textarea[name='content']").val(),
+
+  //提交校验
+  $("#emailForm").validate({
+    rules: {
+      to:{
+        required: true,
       },
-      async: false,
-      success: function (result) {
-        if (result.code == 1) {
-          layer.msg("发送成功");
-        } else {
-          layer.msg("发送失败");
-        }
+      subject: {
+        required: true,
+      },
+      content: {
+        required: true,
       }
-    });
-  })
+    },
+    messages: {
+      to: {
+        required: "请输入收件人",
+      },
+      subject: {
+        required: "请输入邮件标题",
+        minlength: "至少包含3个字符",
+        maxlength: "最多包含12位字符"
+      },
+      content: {
+        required: "请输入邮件内容",
+      }
+    },
+  });
+
+  // var attachmentFile = "";
+  // $("input[name='attachment']").change(function(e){
+  //   attachmentFile = e.currentTarget.files[0];
+  // })
+  //
+  // $("#sendEmail").click(function() {
+  //   var attachment = $("#attachment").val();
+  //   if (attachment) {
+  //     $.ajax({
+  //       type: 'POST',
+  //       processData : false,
+  //       url: rootUrl + 'email/sendAttachmentsMail.do',
+  //       data: {
+  //         'to': $("input[type='email']").val(),
+  //         'subject': $("input[name='subject']").val(),
+  //         'content': $("textarea[name='content']").val(),
+  //         'file': attachmentFile
+  //       },
+  //       async: false,
+  //       success: function (result) {
+  //         if (result.code == 1) {
+  //           layer.msg("发送成功");
+  //         } else {
+  //           layer.msg("发送失败");
+  //         }
+  //       }
+  //     });
+  //   } else {
+  //     $.ajax({
+  //       type: 'GET',
+  //       url: rootUrl + 'email/sendSimpleEmail.do',
+  //       data: {
+  //         'to': $("input[type='email']").val(),
+  //         'subject': $("input[name='subject']").val(),
+  //         'content': $("textarea[name='content']").val(),
+  //       },
+  //       async: false,
+  //       success: function (result) {
+  //         if (result.code == 1) {
+  //           layer.msg("发送成功");
+  //         } else {
+  //           layer.msg("发送失败");
+  //         }
+  //       }
+  //     });
+  //   }
+  // })
 </script>
 </html>
