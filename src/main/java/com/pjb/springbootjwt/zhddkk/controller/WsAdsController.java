@@ -65,7 +65,7 @@ public class WsAdsController extends AdminBaseController {
         model.addAttribute("roleId", roleId);
         Map<String, String[]> paraMap = request.getParameterMap();
 
-        return "zhddkk/wsAds/wsAdsBt";
+        return "zhddkk/wsAds/wsAds";
     }
 
     /**
