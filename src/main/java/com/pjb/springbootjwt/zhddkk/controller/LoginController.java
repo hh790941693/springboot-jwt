@@ -303,6 +303,7 @@ public class LoginController {
                 wsUserProfileDO.setImg(registerDTO.getHeadImg());
             }
             wsUserProfileService.insert(wsUserProfileDO);
+            cacheService.cacheUserProfileData();
         }
 
         // 分配[普通用户]角色
