@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.pjb.springbootjwt.common.annotation.SubToken;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
@@ -125,6 +126,7 @@ public class WsAdsController extends AdminBaseController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.AD_PUBLISH, subModule = "", describe = "添加广告页面")
     @GetMapping("/add")
+    @SubToken(save = true)
     public String add(Model model) {
         WsAdsDO wsAds = new WsAdsDO();
         model.addAttribute("wsAds", wsAds);
@@ -150,11 +152,18 @@ public class WsAdsController extends AdminBaseController {
     @ResponseBody
     @PostMapping("/save")
     @Transactional
-    public Result<String> save(@Validated WsAdsDO wsAds) {
+    @SubToken(remove = true)
+    public Result<String> save(@Validated WsAdsDO wsAds, String subToken) {
         logger.info("进入保存广告信息");
         // 接收人列表
         List<String> receiveList = new ArrayList<>();
 
+        // 模拟网络延迟,验证重复提交请求
+        try{
+            Thread.sleep(1500);//暂停1.5秒后程序继续执行
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         // 插入广告记录
         boolean insertFlag = wsAdsService.insert(wsAds);
         if (insertFlag) {
