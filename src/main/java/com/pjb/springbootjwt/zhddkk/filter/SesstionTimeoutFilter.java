@@ -95,12 +95,13 @@ public class SesstionTimeoutFilter implements Filter {
         }
         if (redisUtil.setNx(lockKey, "ing", 10)) {
             try {
+                logger.info("已创建key:" + lockKey);
                 httpServletRequest.setAttribute("filter", true);
                 filterChain.doFilter(servletRequest, servletResponse);
-                Thread.sleep(3000);
             }catch (Exception e) {
 
             } finally {
+                logger.info("移除key:" + lockKey);
                 System.out.println("移除key:" + lockKey);
                 redisUtil.delete(lockKey);
             }

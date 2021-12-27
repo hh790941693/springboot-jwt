@@ -37,7 +37,7 @@ spring:
     ehcache:
       config: classpath:ehcache.xml
   redis:
-    host: 192.168.31.153
+    host: ${ip.private}
     port: 6379
     password: Stw547495788$
     database: 0
