@@ -42,21 +42,21 @@ public class InterceptorConfigNew implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 接口日志拦截器
-        registry.addInterceptor(actionLogInterceptor())
+        registry.addInterceptor(actlogInterceptor())
                 .addPathPatterns("/**").excludePathPatterns("/js/**", "/img/**", "/css/**", "/i18n/**");
 
         // 登录拦截器 检查session是否存在
-        registry.addInterceptor(loginInterceptor())
+        registry.addInterceptor(logInterceptor())
                 .addPathPatterns("/**").excludePathPatterns(IGNORE_URL_LIST);
     }
 
     @Bean
-    public ActionLogInterceptor actionLogInterceptor() {
+    public ActionLogInterceptor actlogInterceptor() {
         return new ActionLogInterceptor();
     }
 
     @Bean
-    public LoginInterceptor loginInterceptor() {
+    public LoginInterceptor logInterceptor() {
         return new LoginInterceptor();
     }
 }

@@ -36,6 +36,8 @@ $(function () {
                         win = win.top;
                     }
                     win.location.href = dataJson.redirectUrl;
+                } else if (dataJson.code == "-257") {
+                    layer.msg(dataJson.msg);
                 } else {
                     return data;
                 }

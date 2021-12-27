@@ -44,6 +44,9 @@ public class CommonConstants {
     public static final String SESSION_TIMEOUT_CODE = "-255";
     //多用户重复登陆错误码
     public static final String CONFLICT_LOGIN_CODE = "-256";
+    // 频繁请求
+    public static final String FREQUENCY_REQUEST_CODE = "-257";
+
     public static final String SESSION_TIMEOUT_REDIRECT_URL = "/";
 
     // 用户单日最大文件上传容量(KB) 默认50M

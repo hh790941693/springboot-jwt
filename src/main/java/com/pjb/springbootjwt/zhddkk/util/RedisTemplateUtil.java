@@ -3,13 +3,17 @@ package com.pjb.springbootjwt.zhddkk.util;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RedisTemplateUtil {
     
     @Autowired
@@ -24,7 +28,12 @@ public class RedisTemplateUtil {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(key, value);
     }
-    
+
+    public boolean setNx(String key, Object value, long expireTime) {
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+        return valueOperations.setIfAbsent(key, value, expireTime, TimeUnit.SECONDS);
+    }
+
     public Object get(String key) {
         return redisTemplate.opsForValue().get(key);
     }

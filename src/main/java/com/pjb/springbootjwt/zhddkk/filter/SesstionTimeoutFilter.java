@@ -1,20 +1,29 @@
 package com.pjb.springbootjwt.zhddkk.filter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONObject;
+import com.pjb.springbootjwt.zhddkk.base.Result;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
+import com.pjb.springbootjwt.zhddkk.util.RedisTemplateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * session超时与否、存在与否过滤器
  */
 @WebFilter(filterName = "sesstionTimeoutFilter", urlPatterns = {"/*"})
 public class SesstionTimeoutFilter implements Filter {
+
+    @Autowired
+    private RedisTemplateUtil redisUtil;
 
     private static final Logger logger = LoggerFactory.getLogger(SesstionTimeoutFilter.class);
 
@@ -62,6 +71,10 @@ public class SesstionTimeoutFilter implements Filter {
         httpServletRequest.setCharacterEncoding("UTF-8");
         httpServletResponse.setCharacterEncoding("UTF-8");
 
+        String uri = httpServletRequest.getRequestURI();
+        String sessionId = httpServletRequest.getRequestedSessionId() == null ? "" : httpServletRequest.getRequestedSessionId();
+        String lockKey = "REQ_LOCK_KEY_" + sessionId + ":" + uri;
+
         String servletPath = httpServletRequest.getServletPath();
         // 如果是忽略的前缀url,放行
         for (String prefix : IGNORE_URL_PREFIX_LIST) {
@@ -80,9 +93,26 @@ public class SesstionTimeoutFilter implements Filter {
                 return;
             }
         }
+        if (redisUtil.setNx(lockKey, "ing", 10)) {
+            try {
+                httpServletRequest.setAttribute("filter", true);
+                filterChain.doFilter(servletRequest, servletResponse);
+                Thread.sleep(3000);
+            }catch (Exception e) {
 
-        httpServletRequest.setAttribute("filter", true);
-        filterChain.doFilter(servletRequest, servletResponse);
+            } finally {
+                System.out.println("移除key:" + lockKey);
+                redisUtil.delete(lockKey);
+            }
+        } else {
+            try {
+                Result<String> result = Result.build(Integer.valueOf(CommonConstants.FREQUENCY_REQUEST_CODE), "请求过于频繁");
+                httpServletResponse.setContentType("application/json;charset=UTF-8");
+                httpServletResponse.getOutputStream().write(JSONObject.toJSONString(result).getBytes(StandardCharsets.UTF_8));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
