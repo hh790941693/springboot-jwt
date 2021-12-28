@@ -102,7 +102,6 @@ public class SesstionTimeoutFilter implements Filter {
 
             } finally {
                 logger.info("移除key:" + lockKey);
-                System.out.println("移除key:" + lockKey);
                 redisUtil.delete(lockKey);
             }
         } else {
