@@ -68,6 +68,13 @@ alioss:
     rootPath: uploads
     viewUrl: http://hx-dfz.oss-cn-shanghai.aliyuncs.com/
 
+#七牛云上传
+qiniu:
+  accessKey: faaQMfxkZ6FQlosBjIU7fC3AcQzr5YBXrEPZaG1t
+  secretKey: zpauQmqiWwxe9IcEkmT6iZxJ4w5NFZ9iGEWkrYNF
+  bucket: kimzihun
+  domainPath: r56o6jo3n.hd-bkt.clouddn.com
+
 #自定义 tomcat缓存临时目录
 temp:
   tomcat:
