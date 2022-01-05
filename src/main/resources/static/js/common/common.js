@@ -10,6 +10,10 @@ $.ws = {
     uploadByFroalaUrl: protocol + "//" + host + "/upload/app/uploadByFroala",
     // 上传音乐文件接口地址
     uploadMusicUrl: protocol + "//" + host + "/upload/app/uploadMusic",
+    // 七牛云文件上传地址
+    uploadByQiniuUrl: protocol + "//" + host + "/api/qiniu/upload",
+    // 阿里云文件上传地址
+    uploadByAliyun: protocol + "//" + host + "/api/ali/upload",
 
     //图片显示异常时,显示该图片
     errorImageName: "imgerror_default.jpg",

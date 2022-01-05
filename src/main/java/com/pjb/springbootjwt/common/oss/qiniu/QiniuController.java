@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.UUID;
@@ -49,7 +50,7 @@ public class QiniuController {
 
     private String uploadImgToQiNiu(FileInputStream file, String filename)  {
         // 构造一个带指定Zone对象的配置类，注意后面的zone各个地区不一样的
-        Configuration cfg = new Configuration(Region.region2());
+        Configuration cfg = new Configuration();
         cfg.useHttpsDomains = false;
         UploadManager uploadManager = new UploadManager(cfg);
         // 生成密钥
@@ -61,7 +62,7 @@ public class QiniuController {
                 // 解析上传成功的结果
                 DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                 // 这里要改成自己的外链域名
-                String returnPath= qiniuConfig.getDomainPath() + putRet.key;
+                String returnPath= qiniuConfig.getDomainPath() + File.separator + putRet.key;
                 return returnPath;
             } catch (QiniuException ex) {
                 Response r = ex.response;

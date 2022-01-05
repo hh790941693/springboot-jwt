@@ -17,7 +17,7 @@ import java.io.FileOutputStream;
  * 阿里云oss文件上传存储
  */
 @Controller
-@RequestMapping("/api/aliOssUpload")
+@RequestMapping("/api/ali")
 public class AliOssController {
 
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(AliOssController.class);
