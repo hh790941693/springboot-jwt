@@ -105,6 +105,7 @@ public class SesstionTimeoutFilter implements Filter {
                 redisUtil.delete(lockKey);
             }
         } else {
+            logger.info("key已被占用:" + lockKey);
             try {
                 Result<String> result = Result.build(Integer.valueOf(CommonConstants.FREQUENCY_REQUEST_CODE), "请求过于频繁");
                 httpServletResponse.setContentType("application/json;charset=UTF-8");
