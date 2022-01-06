@@ -29,6 +29,11 @@ public class RedisTemplateUtil {
         valueOperations.set(key, value);
     }
 
+    public void setWithExpire(String key, Object value, long expireTime) {
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(key, value, expireTime);
+    }
+
     public boolean setNx(String key, Object value, long expireTime) {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         return valueOperations.setIfAbsent(key, value, expireTime, TimeUnit.SECONDS);
