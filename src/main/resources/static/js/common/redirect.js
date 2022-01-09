@@ -9,6 +9,9 @@ function redirectHandle(xhr) {
             win = win.top;
         }
         win.location.href = redirectUrl;
+    } else if (errorCode == "-257") {
+        // 请求频繁
+        layer.msg(dataJson.msg);
     }
 }
 
@@ -25,6 +28,9 @@ $(function () {
             if (errorCode == "-255" || errorCode == "-256") {
                 // 如果超时就处理 ，指定要跳转的页面(比如登陆页)
                 window.location.replace("/exception.page?redirectName=sessionTimeout");
+            } else if (errorCode == "-257") {
+                // 请求频繁
+                layer.msg(dataJson.msg);
             }
         },
         dataFilter : function (data,type) {
@@ -37,6 +43,7 @@ $(function () {
                     }
                     win.location.href = dataJson.redirectUrl;
                 } else if (dataJson.code == "-257") {
+                    // 请求频繁
                     layer.msg(dataJson.msg);
                 } else {
                     return data;

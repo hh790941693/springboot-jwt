@@ -42,7 +42,7 @@ public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     // 登陆成功后的页面前缀
-    private static String INDEX_PAGE_NAME = "wsclientIndex_v4";
+    private static String HOME_PAGE_NAME = "wsclientIndex_v4";
 
     @Autowired
     private WebSocketConfig webSocketConfig;
@@ -88,7 +88,7 @@ public class LoginController {
      * @return 登陆首页
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "登陆首页页面")
-    @RequestMapping({"", "/"})
+    @RequestMapping({"", "/login", "/home"})
     public String home(Model model, HttpServletRequest request, HttpServletResponse response) {
         String version = request.getParameter("v");
         if (StringUtils.isNotBlank(version)) {
@@ -96,19 +96,19 @@ public class LoginController {
                 case "1":
                 case "2":
                 case "3":
-                    INDEX_PAGE_NAME = "wsclientIndex_v" +version;
+                    HOME_PAGE_NAME = "wsclientIndex_v" +version;
                     break;
                 default:
-                    INDEX_PAGE_NAME = "wsclientIndex_v4";
+                    HOME_PAGE_NAME = "wsclientIndex_v4";
                     break;
             }
-            setCookieObj(response, "indexPageName", INDEX_PAGE_NAME, CommonConstants.LOCALE_COOKIE_EXPIRE);
+            setCookieObj(response, "homePageName", HOME_PAGE_NAME, CommonConstants.LOCALE_COOKIE_EXPIRE);
         }
 
         // 如果用户已登陆过，则直接跳转登陆成功首页
         SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
         if (null != sessionInfoBean) {
-            return "redirect:/index.page";
+            return "redirect:/home.page";
         }
 
         // 检查cookie
@@ -206,7 +206,7 @@ public class LoginController {
         curUserObj.setLastLoginTime(SDF_STANDARD.format(new Date()));
         wsUsersService.updateById(curUserObj);
 
-        response.sendRedirect("index.page");
+        response.sendRedirect("home.page");
     }
 
     /**
@@ -215,16 +215,16 @@ public class LoginController {
      * @return 首页
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "登录成功页面")
-    @RequestMapping(value = "index.page")
-    public String wsclientIndex(HttpServletRequest request, HttpServletResponse response) {
-        logger.debug("访问index.page");
-        Cookie cookie = getCookieObj(request, "indexPageName");
+    @RequestMapping(value = "home.page")
+    public String home(HttpServletRequest request, HttpServletResponse response) {
+        logger.debug("访问home.page");
+        Cookie cookie = getCookieObj(request, "homePageName");
         if (null != cookie) {
-            INDEX_PAGE_NAME = cookie.getValue();
+            HOME_PAGE_NAME = cookie.getValue();
         } else {
-            setCookieObj(response, "indexPageName", INDEX_PAGE_NAME, CommonConstants.LOCALE_COOKIE_EXPIRE);
+            setCookieObj(response, "homePageName", HOME_PAGE_NAME, CommonConstants.LOCALE_COOKIE_EXPIRE);
         }
-        return "index/" + INDEX_PAGE_NAME;
+        return "index/" + HOME_PAGE_NAME;
     }
 
     /**

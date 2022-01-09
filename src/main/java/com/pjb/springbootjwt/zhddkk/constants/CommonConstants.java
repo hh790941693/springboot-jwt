@@ -44,7 +44,7 @@ public class CommonConstants {
     public static final String SESSION_TIMEOUT_CODE = "-255";
     //多用户重复登陆错误码
     public static final String CONFLICT_LOGIN_CODE = "-256";
-    // 频繁请求
+    // 请求频繁
     public static final String FREQUENCY_REQUEST_CODE = "-257";
 
     public static final String SESSION_TIMEOUT_REDIRECT_URL = "/";
