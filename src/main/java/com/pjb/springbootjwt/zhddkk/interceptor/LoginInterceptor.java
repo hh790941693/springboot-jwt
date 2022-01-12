@@ -38,7 +38,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (servletPath.contains("undefined")) {
             return false;
         }
-        boolean filter = (boolean)httpServletRequest.getAttribute("filter");
+
+        boolean filter = false;
+        Object ob = httpServletRequest.getAttribute("filter");
+        if (null != ob) {
+            filter = (boolean)ob;
+        }
         if (!filter) {
             return true;
         }

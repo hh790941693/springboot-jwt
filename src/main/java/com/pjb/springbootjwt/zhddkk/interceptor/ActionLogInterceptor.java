@@ -75,7 +75,9 @@ public class ActionLogInterceptor implements HandlerInterceptor {
             String value = request.getParameter(name);
             paramsSb.append(name).append(":").append(value).append(" ");
         }
+        String clientIp = request.getRemoteAddr(); // 获取IP地址
         System.out.println("接口地址: " + url);
+        System.out.println("IP地址: " + clientIp);
         System.out.println("调用方法: " + functionName);
         System.out.println("参数列表: " + paramsSb.toString());
         long startTime = (long)request.getAttribute("startTime");
