@@ -68,6 +68,7 @@ public class OperationLogAspect {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String requestUrl = request.getRequestURL().toString();
+        String remoteAddr = request.getRemoteAddr();
 
         SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
         String userName = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
@@ -116,7 +117,7 @@ public class OperationLogAspect {
                     wol.setOperType(operationLog.type().getValue());
                     wol.setOperSubmodule(operationLog.subModule());
                     wol.setOperDescribe(operationLog.describe());
-                    wol.setOperRemark(operationLog.remark());
+                    wol.setOperRemark(operationLog.remark() + ",IP:" + remoteAddr);
 
                     Parameter[] parameters = method.getParameters();
                     StringBuilder sb = new StringBuilder();
