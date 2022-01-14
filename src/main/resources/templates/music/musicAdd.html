@@ -7,11 +7,18 @@
 </head>
 <body>
     <div class="wrapper wrapper-content ">
+        <div style="width:100%;height:75px;margin-left: 5px;">
+            <audio id="player" controls="controls" src="" style="width:100%;height:55px;"></audio>
+            <p id="songName"></p>
+        </div>
+
         <!-- 表格 -->
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
+                        <table id="exampleTable1" data-mobile-responsive="true">
+                        </table>
                         <div class="fixed-table-toolbar">
                             <div class="columns pull-left">
                                 <button type="button" class="btn  btn-primary" onclick="batchAdd()">
@@ -19,8 +26,6 @@
                                 </button>
                             </div>
                         </div>
-                        <table id="exampleTable1" data-mobile-responsive="true">
-                        </table>
                     </div>
                 </div>
             </div>
@@ -31,6 +36,8 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
+                        <table id="exampleTable2" data-mobile-responsive="true">
+                        </table>
                         <div class="fixed-table-toolbar">
                             <div class="columns pull-left">
                                 <button type="button" class="btn  btn-danger" onclick="batchRemove()">
@@ -38,8 +45,6 @@
                                 </button>
                             </div>
                         </div>
-                        <table id="exampleTable2" data-mobile-responsive="true">
-                        </table>
                     </div>
                 </div>
             </div>
@@ -72,7 +77,7 @@
                 pageSize : 10,//如果设置了分页，每页数据条数
                 pageNumber : 1,//如果设置了分布，首页页码
                 //search : true,// 是否显示搜索框
-                showColumns : true,// 是否显示内容下拉框（选择显示的列）
+                showColumns : false,// 是否显示内容下拉框（选择显示的列）
                 sidePagination : "server",//设置在哪里进行分页，可选值为"client" 或者 "server"
                 queryParamsType : "",
                 //设置为limit则会发送符合RESTFull格式的参数
@@ -101,7 +106,7 @@
                             "title": "音乐池列表",
                             "halign":"center",
                             "align":"center",
-                            "colspan": 5
+                            "colspan": 6
                         }
                     ],
                     [
@@ -123,6 +128,22 @@
                         {
                             field : 'updateTime',
                             title : '更新时间'
+                        },
+                        {
+                            title: '操作',
+                            field: 'id',
+                            align: 'center',
+                            formatter: function (value, row, index) {
+                                var a = '<a class="btn btn-sm btn-primary" href="#" title="添加"  mce_href="#" onclick="addMusic(\''
+                                    + row.id
+                                    + '\')"><i class="fa fa-plus"></i></a> ';
+                                var listen = '<a class="btn btn-sm btn-primary" href="#" title="试听"  mce_href="#" onclick="listen(\''
+                                    + row.url
+                                    + '\',\''
+                                    + row.filename
+                                    + '\')"><i class="fa fa-music"></i></a> ';
+                                return a+listen;
+                            }
                         },
                     ]
                 ]
@@ -147,7 +168,7 @@
                 pageSize : 10,//如果设置了分页，每页数据条数
                 pageNumber : 1,//如果设置了分布，首页页码
                 //search : true,// 是否显示搜索框
-                showColumns : true,// 是否显示内容下拉框（选择显示的列）
+                showColumns : false,// 是否显示内容下拉框（选择显示的列）
                 sidePagination : "server",//设置在哪里进行分页，可选值为"client" 或者 "server"
                 queryParamsType : "",
                 //设置为limit则会发送符合RESTFull格式的参数
@@ -210,6 +231,26 @@
             $('#exampleTable2').bootstrapTable('refresh');
         }
 
+        function addMusic(id) {
+            var ids = new Array();
+            ids[0] = id;
+            $.ajax({
+                type : 'POST',
+                data : {
+                    "ids" : ids
+                },
+                url : '/file/batchAddMusic.do',
+                success : function(r) {
+                    if (r.code == 1) {
+                        layer.msg(r.msg);
+                        reLoad();
+                    } else {
+                        layer.msg(r.msg);
+                    }
+                }
+            });
+        }
+
         function batchAdd() {
             var selected = $('#exampleTable1').bootstrapTable('getSelections');
             if(selected && selected.length>0){
@@ -270,6 +311,12 @@
             }, function() {
 
             });
+        }
+
+        function listen(url,name) {
+            $("#player").attr("src", url);
+            $("#songName").text("正在试听：" + name);
+            $("#player")[0].play();
         }
     </script>
 </html>
