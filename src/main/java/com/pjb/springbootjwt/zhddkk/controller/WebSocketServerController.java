@@ -10,6 +10,9 @@ import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -92,8 +95,8 @@ public class WebSocketServerController extends AdminBaseController {
      */
     @RequestMapping("/queryOnlineUserData.do")
     @ResponseBody
-    public Map<String, Integer> queryOnlineUserData() {
-        Map<String, Integer> map = new LinkedHashMap<>();
+    public Map<String, Long> queryOnlineUserData() {
+        Map<String, Long> map = new LinkedHashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
         SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (int i = 30; i >= 0; i--) {
@@ -102,14 +105,20 @@ public class WebSocketServerController extends AdminBaseController {
             Date dayEndDate = DateUtil.dayEndDate(date);
             String timeName = sdf.format(date);
 
-            int count = wsChatlogService.selectCount(new EntityWrapper<WsChatlogDO>()
+            List<WsChatlogDO> list = wsChatlogService.selectList(new EntityWrapper<WsChatlogDO>()
                     .eq("to_user", "")
                     .ge("time", sdfx.format(dayBeginDate))
                     .le("time", sdfx.format(dayEndDate)));
-            map.put(timeName, count);
+            long num = list.stream().filter(distinctByKey(b -> b.getUser())).count();
+            map.put(timeName, num);
         }
 
         return map;
+    }
+
+    static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Map<Object,Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     /**
