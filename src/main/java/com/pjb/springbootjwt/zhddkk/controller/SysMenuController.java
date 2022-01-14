@@ -89,7 +89,7 @@ public class SysMenuController extends AdminBaseController {
     @GetMapping("/list")
     // @RequiresPermissions("zhddkk:sysMenu:sysMenu")
     public List<SysMenuDO> list(SysMenuDO sysMenuDto) {
-        return sysMenuService.selectList(null);
+        return sysMenuService.selectList(new EntityWrapper<SysMenuDO>().orderBy("order_num",true));
     }
     
     /**

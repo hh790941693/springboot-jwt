@@ -56,6 +56,10 @@ public class SysMenuDO implements Serializable {
     //扩展字段3
     @ApiModelProperty(value = "extColumn3", name = "扩展字段3")
     private String extColumn3;
+
+    //排序号
+    private Integer orderNum;
+
     //创建时间
     @ApiModelProperty(value = "createTime", name = "创建时间")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")

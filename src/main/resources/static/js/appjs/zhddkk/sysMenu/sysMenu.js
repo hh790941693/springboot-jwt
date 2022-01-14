@@ -82,6 +82,13 @@ function load() {
 				field : 'extColumn3',
 				title : '扩展字段3'
 			},
+			{
+				field : 'orderNum',
+				title : '排序号',
+				editable : {
+					type : 'text'
+				}
+			},
 						{
 				field : 'createTime',
 				title : '创建时间'

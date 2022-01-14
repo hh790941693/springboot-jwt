@@ -11,5 +11,6 @@
           sys_menu T2 ON T1.menu_id = T2.id
         WHERE
           T1.role_id = ${roleId}
+        ORDER BY t2.order_num
     </select>
 </mapper>
