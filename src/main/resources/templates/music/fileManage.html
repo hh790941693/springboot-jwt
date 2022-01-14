@@ -113,7 +113,19 @@
                 },
                 columns : [
                     {
-                      checkbox: true
+                        checkbox: true,
+                        formatter : function (value, row) {
+                            if (row.folder === "music") {
+                                return {
+                                    disabled : false,
+                                }
+                            } else {
+                                return {
+                                    disabled : true,
+                                }
+                            }
+                            return value;
+                        }
                     },
                     {
                         field : 'id',
