@@ -232,6 +232,7 @@ public class SysMenuController extends AdminBaseController {
                     parentSysMenuDO.setName("系统管理");
                     parentSysMenuDO.setIcon("icon-menu-folder-open");
                     parentSysMenuDO.setI18nKey("li.pmenu.sysmanage.label");
+                    parentSysMenuDO.setOrderNum(1);
                     
                     SysMenuDO sonSysMenuDO = new SysMenuDO();
                     sonSysMenuDO.setName("用户管理");
@@ -239,6 +240,7 @@ public class SysMenuController extends AdminBaseController {
                     sonSysMenuDO.setUrl("/zhddkk/wsUsers/wsUsersForAdmin");
                     sonSysMenuDO.setI18nKey("li.usermanage.label");
                     sonSysMenuDO.setExtColumn1("false");
+                    sonSysMenuDO.setOrderNum(1);
 
                     List<SysMenuDO> childrenList = new ArrayList<SysMenuDO>();
                     childrenList.add(sonSysMenuDO);
