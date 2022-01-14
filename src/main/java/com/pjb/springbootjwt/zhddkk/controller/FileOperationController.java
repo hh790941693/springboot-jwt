@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
@@ -72,9 +73,24 @@ public class FileOperationController extends AdminBaseController {
         return "music/musicPlayerVue";
     }
 
+    /**
+     * 音乐绑定页面
+     *
+     * @return
+     */
     @RequestMapping("musicAdd.page")
     public String musicAdd() {
         return "music/musicAdd";
+    }
+
+    /**
+     * 文件管理页面
+     *
+     * @return
+     */
+    @RequestMapping("fileManage.page")
+    public String fileManage() {
+        return "music/fileManage";
     }
     
     /**
@@ -88,14 +104,20 @@ public class FileOperationController extends AdminBaseController {
         return "music/musicPlayerSimple";
     }
 
-    @OperationLogAnnotation(type = OperationEnum.DELETE, module = ModuleEnum.MUSIC, subModule = "", describe = "删除音乐文件")
-    @RequestMapping("delFile.do")
+
+
+    @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.MUSIC, subModule = "", describe = "显示音乐列表")
+    @RequestMapping("showFiles.do")
     @ResponseBody
-    @Transactional
-    public Result<String> delFile(@RequestParam(value = "id") int id) {
-        Integer[] ids = new Integer[1];
-        ids[0] = id;
-        return batchDelFile(ids);
+    // @Cacheable(value="musicList") 需要启动redis才可以
+    public Result<List<WsUserFileDO>> showFiles(@RequestParam("fileType") String fileType) {
+        String userName = SessionUtil.getSessionUserName();
+        String userId = SessionUtil.getSessionUserId();
+
+        Page<WsUserFileDO> page = new Page<>(1, 9999);
+        List<WsUserFileDO> fileList = wsUserFileService.selectUserFileList(page, new EntityWrapper<WsUserFileDO>().eq("t1.user_id", userId).eq("t1.status", 1));
+
+        return Result.ok(fileList);
     }
 
     @RequestMapping("listAllMusic.do")
@@ -145,13 +167,49 @@ public class FileOperationController extends AdminBaseController {
         return Result.ok();
     }
 
-    @PostMapping("/batchRemove.do")
+    @PostMapping("/batchRemoveMusic.do")
     @ResponseBody
     public Result<String> batchRemove(@RequestParam("ids[]") Long[] ids) {
         wsUserFileService.deleteBatchIds(Arrays.asList(ids));
         return Result.ok();
     }
 
+    /**
+     * 文件管理->文件列表
+     * @param wsFileDO
+     * @return
+     */
+    @RequestMapping("listFile.do")
+    @ResponseBody
+    public Result<Page<WsFileDO>> listFile(WsFileDO wsFileDO) {
+        Wrapper<WsFileDO> wrapper = new EntityWrapper<>();
+        if (StringUtils.isNotBlank(wsFileDO.getFolder())) {
+            wrapper.eq("folder", wsFileDO.getFolder());
+        }
+        Page<WsFileDO> page = wsFileService.selectPage(getPage(WsFileDO.class), wrapper);
+        return Result.ok(page);
+    }
+
+    /**
+     * 文件管理->删除文件(包括删除本地物理文件)
+     * @param id
+     * @return
+     */
+    @OperationLogAnnotation(type = OperationEnum.DELETE, module = ModuleEnum.MUSIC, subModule = "", describe = "删除音乐文件")
+    @RequestMapping("delFile.do")
+    @ResponseBody
+    @Transactional
+    public Result<String> delFile(@RequestParam(value = "id") int id) {
+        Integer[] ids = new Integer[1];
+        ids[0] = id;
+        return batchDelFile(ids);
+    }
+
+    /**
+     * 文件管理->批量删除文件(包括删除本地物理文件)
+     * @param ids
+     * @return
+     */
     @OperationLogAnnotation(type = OperationEnum.DELETE, module = ModuleEnum.MUSIC, subModule = "", describe = "批量删除音乐文件")
     @RequestMapping("batchDelFile.do")
     @ResponseBody
@@ -200,19 +258,5 @@ public class FileOperationController extends AdminBaseController {
             resultMsg = "总计:" + totalNum + " 删除成功";
         }
         return Result.ok(resultMsg);
-    }
-
-    @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.MUSIC, subModule = "", describe = "显示音乐列表")
-    @RequestMapping("showFiles.do")
-    @ResponseBody
-    // @Cacheable(value="musicList") 需要启动redis才可以
-    public Result<List<WsUserFileDO>> showFiles(@RequestParam("fileType") String fileType) {
-        String userName = SessionUtil.getSessionUserName();
-        String userId = SessionUtil.getSessionUserId();
-
-        Page<WsUserFileDO> page = new Page<>(1, 9999);
-        List<WsUserFileDO> fileList = wsUserFileService.selectUserFileList(page, new EntityWrapper<WsUserFileDO>().eq("t1.user_id", userId).eq("t1.status", 1));
-
-        return Result.ok(fileList);
     }
 }

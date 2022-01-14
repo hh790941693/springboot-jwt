@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>文件管理</title>
+    <th:block th:include="common :: header"></th:block>
+</head>
+<body>
+    <div class="wrapper wrapper-content ">
+        <!-- 搜索栏 -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title" style="display: none;">
+                        <h5>查询</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">文件类型</div>
+                                    <select id="folder" name="folder" class="form-control">
+                                        <option value="">--请选择--</option>
+                                        <option value="music">音乐</option>
+                                        <option value="ads">广告</option>
+                                        <option value="goods">商品</option>
+                                        <option value="headImg">头像</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-success" onclick="reLoad()">查询</button>
+                                <button type="button" class="btn btn-default" onclick="cleanForm()">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 表格 -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="fixed-table-toolbar">
+                            <div class="columns pull-left">
+                                <button type="button" class="btn  btn-danger" onclick="batchDeleteFile()">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;批量删除
+                                </button>
+                            </div>
+                        </div>
+                        <table id="exampleTable" data-mobile-responsive="true">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+  <th:block th:include="common :: footer"></th:block>
+  <th:block th:include="common :: sessionInfo"></th:block>
+</body>
+    <script>
+        $(function() {
+            load();
+        });
+
+        //加载表格
+        function load() {
+            $('#exampleTable').bootstrapTable({
+                method : 'get',
+                url : "/file/listFile.do",
+                //showRefresh : true,
+                //showToggle : true,
+                //showColumns : true,
+                iconSize : 'outline',
+                toolbar : '#exampleToolbar',
+                striped : true,//设置为true会有隔行变色效果
+                dataType : "json",//服务器返回的数据类型
+                pagination : true,//设置为true会在底部显示分页条
+                singleSelect : false,//设置为true将禁止多选
+                //contentType : "application/x-www-form-urlencoded",//发送到服务器的数据编码类型
+                pageSize : 10,//如果设置了分页，每页数据条数
+                pageNumber : 1,//如果设置了分布，首页页码
+                //search : true,// 是否显示搜索框
+                showColumns : true,// 是否显示内容下拉框（选择显示的列）
+                sidePagination : "server",//设置在哪里进行分页，可选值为"client" 或者 "server"
+                queryParamsType : "",
+                //设置为limit则会发送符合RESTFull格式的参数
+                queryParams : function(params) {
+                    return {
+                        //传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
+                        pageNumber : params.pageNumber,
+                        pageSize : params.pageSize,
+                        folder : $("#folder").val(),
+                    };
+                },
+                // //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
+                // queryParamsType = 'limit' ,返回参数必须包含
+                // limit, offset, search, sort, order 否则, 需要包含:
+                // pageSize, pageNumber, searchText, sortName,
+                // sortOrder.
+                // 返回false将会终止请求
+                responseHandler : function(res){
+                    return {
+                        "total" : res.data.total,//总数
+                        "rows" : res.data.records//数据
+                    };
+                },
+                columns : [
+                    {
+                      checkbox: true
+                    },
+                    {
+                        field : 'id',
+                        title : '文件Id'
+                    },
+                    {
+                        field : 'folder',
+                        title : '文件类型',
+                        formatter : function (value,row) {
+                            var res = "其他";
+                            if (value === "headImg") {
+                                res = "头像";
+                            } else if (value === "circle") {
+                                res = "朋友圈";
+                            } else if (value === "feedback") {
+                                res = "反馈";
+                            } else if (value === "ads") {
+                                res = "广告";
+                            } else if (value === "adsBackImg") {
+                                res = "广告背景图片";
+                            } else if (value === "merchant") {
+                                res = "商户";
+                            } else if (value === "goodsType") {
+                                res = "商品类型";
+                            } else if (value === "goods") {
+                                res = "商品";
+                            } else if (value === "goodsDetail") {
+                                res = "商品详情";
+                            } else if (value === "music") {
+                                res = "音乐";
+                            }
+                            return res;
+                        }
+
+                    },
+                    {
+                        field : 'filename',
+                        title : '文件名'
+                    },
+                    {
+                        field : 'url',
+                        title : 'url',
+                        formatter :function (value,row) {
+                            var result = "";
+                            if (value.endsWith(".jpg") || value.endsWith(".jpeg") || value.endsWith(".png") || value.endsWith(".gif")) {
+                                if (value != "" && value != null) {
+                                    result += "<div style='text-align: center;'>";
+                                    result += "<img  onclick=\"$.ws.gShowImg('" + value + "')\"  style='height:50px;width:60px;margin-right:10px;background:transparent;CURSOR:pointer;' src='" + value + "'/>"
+                                    result += "</div>";
+                                }
+                            } else {
+                                result = value;
+                            }
+                            return result;
+                        }
+                    },
+                    {
+                        field : 'updateTime',
+                        title : '更新时间'
+                    },
+                    {
+                        title: '操作',
+                        field: 'id',
+                        align: 'center',
+                        formatter: function (value, row, index) {
+                            var d = '<a class="btn btn-sm btn-danger" href="#" title="删除"  mce_href="#" onclick="remove(\''
+                                + row.id
+                                + '\')"><i class="fa fa-remove"></i></a> ';
+                            if (row.folder === "music") {
+                                return d;
+                            }
+                            return "";
+                        }
+                    },
+                ]
+            });
+        }
+
+        //删除一条记录
+        function remove(id) {
+            layer.confirm('确定要删除选中的记录？', {
+                btn: ['确定', '取消']
+            }, function () {
+                $.ajax({
+                    url: "/file/delFile.do",
+                    type: "post",
+                    data: {
+                        'id': id
+                    },
+                    success: function (r) {
+                        if (r.code == 1) {
+                            layer.msg(r.msg);
+                            reLoad();
+                        } else {
+                            layer.msg(r.msg);
+                        }
+                    }
+                });
+            })
+        }
+
+        // 批量删除文件
+        function batchDeleteFile() {
+            //返回所有选择的行，当没有选择的记录时，返回一个空数组
+            var rows = $('#exampleTable').bootstrapTable('getSelections');
+            if (rows.length == 0) {
+                layer.msg("请选择要删除的数据");
+                return;
+            }
+            layer.confirm("确认要删除选中的'" + rows.length + "'条数据吗?", {
+                btn : [ '确定', '取消' ]
+            }, function() {
+                var ids = new Array();
+                $.each(rows, function(i, row) {
+                    ids[i] = row['id'];
+                });
+                $.ajax({
+                    type : 'POST',
+                    data : {
+                        "ids" : ids
+                    },
+                    url : '/file/batchDelFile.do',
+                    success : function(r) {
+                        if (r.code == 1) {
+                            layer.msg(r.msg);
+                            reLoad();
+                        } else {
+                            layer.msg(r.msg);
+                        }
+                    }
+                });
+            }, function() {
+
+            });
+        }
+
+        //重新加载表格
+        function reLoad() {
+            $('#exampleTable').bootstrapTable('refresh');
+        }
+
+        function cleanForm() {
+            $("#folder").val("");
+            reLoad();
+        }
+  </script>
+</html>
