@@ -132,7 +132,6 @@
                                     <span class="glyphicon glyphicon-repeat"></span>
                                 </button>
                                 <button id="btnShowList" class='btn btn-warning' @click="showList($event)">[[#{btn.hidelist.label}]]</button>
-                                <button id="btnDeleteAll" class='btn btn-danger' @click="deleteAll()" style="margin-left: 10px;">[[#{btn.deleteall.label}]]</button>
                             </div>
                             <div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
                                 <input type="radio" v-model="playMode" value="-1" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
@@ -176,9 +175,6 @@
                                 <td style="width:14%;">
                                     <button class='delBtn btn btn-sm btn-success' @click="playMusic(index)">
                                         <span class="glyphicon glyphicon-play"></span> [[#{btn.play.label}]]
-                                    </button>
-                                    <button class='delBtn btn btn-sm btn-danger' @click="deleteMusic(music.id)">
-                                        <span class="glyphicon glyphicon-trash"></span> [[#{btn.delete.label}]]
                                     </button>
                                 </td>
                             </tr>
@@ -359,7 +355,7 @@
                     $(selectedInput).parents("tr").addClass("selectRowClass");
 
                     var selectedMusicInfo = app.musicData[app.curSelectedIndex];
-                    $("#player").attr("src", selectedMusicInfo.url);
+                    $("#player").attr("src", selectedMusicInfo.fileUrl);
                     $("#statusSpan").text('[[#{span.palystatus.playing}]]');
                     app.songName = selectedMusicInfo.filename;
 
@@ -375,48 +371,6 @@
                 playMusic: function (index) {
                     app.curSelectedIndex = index;
                     app.playByIndex();
-                },
-                deleteMusic: function (id) {
-                    //删除音乐
-                    layer.confirm("确定删除吗?", {btn: ['确定', '取消'], title: "提示"},
-                        function () {
-                            $.ajax({
-                                type: "POST",
-                                url: rootUrl + "file/delFile.do",
-                                data: {'id': id},
-                                success: function (result) {
-                                    layer.msg(result.data);
-                                    app.refreash();
-                                }
-                            });
-                        }
-                        , function () {
-                            layer.close()
-                        }
-                    );
-                },
-                deleteAll : function(){
-                    // 删除所有音乐
-                    layer.confirm("确定一键删除吗?", {btn: ['确定', '取消'], title: "提示"},
-                        function () {
-                            var ids = new Array();
-                            $.each(app.musicData, function (i, item) {
-                                ids[i] = item['id'];
-                            });
-                            $.ajax({
-                                type: "POST",
-                                url: rootUrl + "file/batchDelFile.do",
-                                data: {'ids': ids},
-                                success: function (result) {
-                                    layer.msg(result.data);
-                                    app.refreash();
-                                }
-                            });
-                        }
-                        ,function () {
-                            layer.close();
-                        }
-                    );
                 },
                 mouseEnter: function (music, index) {
                     // 鼠标进入事件

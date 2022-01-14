@@ -161,7 +161,7 @@
                 playByIndex: function () {
                     var selectedMusicInfo = app.musicData[app.curSelectedIndex];
                     var fileName = selectedMusicInfo.fileName;
-                    var url = selectedMusicInfo.url;
+                    var url = selectedMusicInfo.fileUrl;
                     app.songName = fileName;
 
                     $("#player").attr("src", url);

@@ -154,37 +154,39 @@ public class FileOperationController extends AdminBaseController {
     @ResponseBody
     @Transactional
     public Result<String> batchDelFile(@RequestParam("ids[]") Integer[] ids) {
+        List<WsFileDO> wsFileDOList = wsFileService.selectBatchIds(Arrays.asList(ids));
+        //List<Integer> fileIdList = wsFileDOList.stream().map(WsFileDO::getId).collect(Collectors.toList());
+        //wsUserFileService.delete(new EntityWrapper<WsUserFileDO>().in("file_id", fileIdList));
         int totalNum = ids.length;
         int failedNum = 0;
-        for (Integer id : ids) {
-            WsFileDO wsFileDO = wsFileService.selectById(id);
-            if (null != wsFileDO) {
-                boolean delFlag = wsFileService.deleteById(id);
-                if (delFlag) {
-                    // 删除原文件
-                    String diskPath = wsFileDO.getDiskPath();
-                    String dymicDiskPath = uploadConfig.getStorePath() + File.separator + wsFileDO.getFolder();
-                    logger.info("diskPath:{}  dymicDiskPath:{}", diskPath, dymicDiskPath);
-                    String url = wsFileDO.getUrl();
-                    String filename = url.substring(url.lastIndexOf("/") + 1);
-                    File file = null;
-                    if (diskPath.equals(dymicDiskPath)) {
-                        file = new File(diskPath + File.separator + filename);
-                    } else {
-                        file = new File(dymicDiskPath + File.separator + filename);
-                    }
-                    if (null != file && file.exists() && file.isFile()) {
-                        logger.info("删除文件:{} {} ", id, file.getAbsolutePath());
-                        try {
-                            file.delete();
-                        } catch (Exception e) {
-                            failedNum++;
-                            logger.error("删除文件失败:{} {}",id, file.getAbsolutePath());
-                        }
-                    }
+        for (WsFileDO wsFileDO : wsFileDOList) {
+            int id = wsFileDO.getId();
+            boolean delFlag = wsFileService.deleteById(id);
+            wsUserFileService.delete(new EntityWrapper<WsUserFileDO>().eq("file_id", wsFileDO.getId()));
+            if (delFlag) {
+                // 删除原文件
+                String diskPath = wsFileDO.getDiskPath();
+                String dymicDiskPath = uploadConfig.getStorePath() + File.separator + wsFileDO.getFolder();
+                logger.info("diskPath:{}  dymicDiskPath:{}", diskPath, dymicDiskPath);
+                String url = wsFileDO.getUrl();
+                String filename = url.substring(url.lastIndexOf("/") + 1);
+                File file = null;
+                if (diskPath.equals(dymicDiskPath)) {
+                    file = new File(diskPath + File.separator + filename);
                 } else {
-                    failedNum++;
+                    file = new File(dymicDiskPath + File.separator + filename);
                 }
+                if (null != file && file.exists() && file.isFile()) {
+                    logger.info("删除文件:{} {} ", id, file.getAbsolutePath());
+                    try {
+                        file.delete();
+                    } catch (Exception e) {
+                        failedNum++;
+                        logger.error("删除文件失败:{} {}",id, file.getAbsolutePath());
+                    }
+                }
+            } else {
+                failedNum++;
             }
         }
         cacheService.cacheUserFileData();
