@@ -558,8 +558,15 @@
         var language = $("input[name='language']:checked").val();
         if (language != null && language != "") {
             $('#modifyLanguageDiv').window('close');
-            var tmpUrl = window.location.href;
-            window.location.href = rootUrl + "/i18n?lang="+language;
+
+            $.ajax({
+                type: 'GET',
+                url: rootUrl + 'i18n?lang=' + language,
+                async: true,
+                success: function (result) {
+                    window.location.reload();
+                }
+            });
         }
     }
 

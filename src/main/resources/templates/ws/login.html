@@ -216,7 +216,14 @@
 
     // 切换语言
     $(".selectpicker").change(function() {
-        window.location.replace("/i18n?lang=" + $(this).val());
+        $.ajax({
+            type: 'GET',
+            url: rootUrl + 'i18n?lang=' + $(this).val(),
+            async: true,
+            success: function (result) {
+                window.location.reload();
+            }
+        });
     });
 
     //注册账号

@@ -88,7 +88,7 @@ public class LoginController {
      * @return 登陆首页
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "登陆首页页面")
-    @RequestMapping({"", "/login", "/home"})
+    @RequestMapping({"", "/login"})
     public String home(Model model, HttpServletRequest request, HttpServletResponse response) {
         String version = request.getParameter("v");
         if (StringUtils.isNotBlank(version)) {
@@ -108,7 +108,7 @@ public class LoginController {
         // 如果用户已登陆过，则直接跳转登陆成功首页
         SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
         if (null != sessionInfoBean) {
-            return "redirect:/home.page";
+            return "redirect:/home";
         }
 
         // 检查cookie
@@ -206,7 +206,7 @@ public class LoginController {
         curUserObj.setLastLoginTime(SDF_STANDARD.format(new Date()));
         wsUsersService.updateById(curUserObj);
 
-        response.sendRedirect("home.page");
+        response.sendRedirect("/home");
     }
 
     /**
@@ -215,9 +215,9 @@ public class LoginController {
      * @return 首页
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "登录成功页面")
-    @RequestMapping(value = "home.page")
+    @RequestMapping(value = "/home")
     public String home(HttpServletRequest request, HttpServletResponse response) {
-        logger.debug("访问home.page");
+        logger.debug("访问home");
         Cookie cookie = getCookieObj(request, "homePageName");
         if (null != cookie) {
             HOME_PAGE_NAME = cookie.getValue();
@@ -572,13 +572,14 @@ public class LoginController {
      * @return 重定向页面
      */
     @RequestMapping("/i18n")
-    public String changeSessionLanguage(String lang) {
+    @ResponseBody
+    public Result<String> changeSessionLanguage(String lang) {
         String language = lang.split("_")[0];
         String country = lang.split("_")[1];
         Locale locale = new Locale(language, country);
 
         LocaleContextHolder.setLocale(locale);
-        return "redirect:/";
+        return Result.ok();
     }
 
     /**
