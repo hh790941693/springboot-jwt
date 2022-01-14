@@ -201,43 +201,13 @@ public class FileOperationController extends AdminBaseController {
     @RequestMapping("showFiles.do")
     @ResponseBody
     // @Cacheable(value="musicList") 需要启动redis才可以
-    public Result<List<WsFileDO>> showFiles(@RequestParam("fileType") String fileType) {
+    public Result<List<WsUserFileDO>> showFiles(@RequestParam("fileType") String fileType) {
         String userName = SessionUtil.getSessionUserName();
         String userId = SessionUtil.getSessionUserId();
-        List<WsFileDO> allFileList = CoreCache.getInstance().getUserFileList();
-        List<WsUserFileDO> wsUserFileDOList = wsUserFileService.selectList(new EntityWrapper<WsUserFileDO>().eq("user_id", userId));
-        List<WsFileDO> resultList = new ArrayList<>();
-        if (null == allFileList || allFileList.size() == 0) {
-            allFileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().isNotNull("user"));
-        } else {
-            allFileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", userName).eq("folder", fileType));
-        }
 
-        allFileList.forEach(file->{
-            if (StringUtils.isNotBlank(file.getFolder()) && file.getFolder().equals(fileType)) {
-                wsUserFileDOList.forEach(wf->{
-                    if (wf.getFileId().toString().equals(file.getId().toString())) {
-                        resultList.add(file);
-                    }
-                });
-            }
-        });
-        
-        List<WsFileDO> needBatchUpdateList = new ArrayList<>();
-        String webserverip = webSocketConfig.getAddress();
-        for (WsFileDO wsFileDO : resultList) {
-            String url = wsFileDO.getUrl();
-            String oldIp = url.substring(url.indexOf("//") + 2, url.lastIndexOf(":"));
-            if (!oldIp.equals(webserverip)) {
-                String newUrl = url.replace(oldIp, webserverip);
-                wsFileDO.setUrl(newUrl);
-                needBatchUpdateList.add(wsFileDO);
-            }
-        }
-        if (needBatchUpdateList.size() > 0) {
-            wsFileService.updateBatchById(needBatchUpdateList, needBatchUpdateList.size());
-        }
+        Page<WsUserFileDO> page = new Page<>(1, 9999);
+        List<WsUserFileDO> fileList = wsUserFileService.selectUserFileList(page, new EntityWrapper<WsUserFileDO>().eq("t1.user_id", userId).eq("t1.status", 1));
 
-        return Result.ok(resultList);
+        return Result.ok(fileList);
     }
 }

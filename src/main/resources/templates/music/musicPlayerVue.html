@@ -150,7 +150,8 @@
                             <tr>
                                 <th style="width:10%;">选择</th>
                                 <th style="width:10%;">主键</th>
-                                <th style="width:43%;">歌曲名称</th>
+                                <th style="width:5%;">文件ID</th>
+                                <th style="width:38%;">歌曲名称</th>
                                 <th style="width:13%;">大小</th>
                                 <th style="width:9%;">访问性</th>
                                 <th style="width:14%;">操作</th>
@@ -168,7 +169,8 @@
                                     </div>
                                 </td>
                                 <td style="width:10%;">{{music.id}}</td>
-                                <td style="width:43%;">{{music.filename}}</td>
+                                <td style="width:10%;">{{music.fileId}}</td>
+                                <td style="width:43%;">{{music.fileName}}</td>
                                 <td style="width:13%;">{{(parseInt(music.fileSize)/1024.0/1024.0).toFixed(0)}}M</td>
                                 <td style="width:9%;">{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
                                 <td style="width:14%;">
