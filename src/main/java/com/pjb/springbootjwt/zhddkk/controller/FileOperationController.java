@@ -23,6 +23,7 @@ import com.pjb.springbootjwt.zhddkk.service.WsFileService;
 import com.pjb.springbootjwt.zhddkk.service.WsUserFileService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,7 +102,9 @@ public class FileOperationController extends AdminBaseController {
     @ResponseBody
     public Result<Page<WsFileDO>> showUserFileList(WsFileDO wsFileDO) {
         String userId = SessionUtil.getSessionUserId();
-        Page<WsFileDO> page = wsFileService.selectPage(getPage(WsFileDO.class), new EntityWrapper<WsFileDO>().eq("folder", "music"));
+        List<WsUserFileDO> wsUserFileDOList = wsUserFileService.selectList(new EntityWrapper<WsUserFileDO>().eq("user_id", userId));
+        List<Long> ignoreFileIdList = wsUserFileDOList.stream().map(WsUserFileDO::getFileId).collect(Collectors.toList());
+        Page<WsFileDO> page = wsFileService.selectPage(getPage(WsFileDO.class), new EntityWrapper<WsFileDO>().eq("folder", "music").notIn("id", ignoreFileIdList));
         return Result.ok(page);
     }
 
