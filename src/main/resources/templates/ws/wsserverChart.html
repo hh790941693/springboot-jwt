@@ -135,7 +135,7 @@
                         text: '每日累计上传文件(单位: M)'
                     },
                     tooltip: {
-                        formatter: '{b}\n{c}M'
+                        formatter: '{c}M'
                     },
                     xAxis: {
                         type: 'category',
@@ -193,8 +193,11 @@
                     var onlineOption = {
                         grid: {
                             left: '5%',
-                            top: '2%',
+                            top: '3%',
                             right: '3%'
+                        },
+                        tooltip: {
+                            formatter: '{c}'
                         },
                         title: {
                             x: 'center',
