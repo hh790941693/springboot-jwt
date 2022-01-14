@@ -559,7 +559,7 @@
         if (language != null && language != "") {
             $('#modifyLanguageDiv').window('close');
             var tmpUrl = window.location.href;
-            window.location.href = tmpUrl.replace("#","") + "/i18n?lang="+language;
+            window.location.href = rootUrl + "/i18n?lang="+language;
         }
     }
 
