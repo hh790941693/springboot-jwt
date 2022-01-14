@@ -134,7 +134,7 @@
                                     <span class="glyphicon glyphicon-repeat"></span>
                                 </button>
                                 <button id="btnShowList" class='btn btn-warning' @click="showList($event)">[[#{btn.hidelist.label}]]</button>
-                                <button id="bindMusic" class='btn btn-primary' @click="bindMusic($event)">绑定音乐</button>
+                                <button id="bindMusic" class='btn btn-primary' @click="bindMusic($event)">[[#{btn.bind.music.label}]]</button>
                             </div>
                             <div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
                                 <input type="radio" v-model="playMode" value="-1" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
