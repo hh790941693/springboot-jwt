@@ -2,11 +2,14 @@ package com.pjb.springbootjwt.zhddkk.controller;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.base.Result;
@@ -14,8 +17,10 @@ import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
+import com.pjb.springbootjwt.zhddkk.domain.WsUserFileDO;
 import com.pjb.springbootjwt.zhddkk.service.CacheService;
 import com.pjb.springbootjwt.zhddkk.service.WsFileService;
+import com.pjb.springbootjwt.zhddkk.service.WsUserFileService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 import org.apache.commons.lang.StringUtils;
@@ -24,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,7 +42,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("file")
-public class FileOperationController {
+public class FileOperationController extends AdminBaseController {
     private Logger logger = LoggerFactory.getLogger(FileOperationController.class);
     
     @Autowired
@@ -51,6 +57,9 @@ public class FileOperationController {
     @Autowired
     private CacheService cacheService;
 
+    @Autowired
+    private WsUserFileService wsUserFileService;
+
     /**
      * 音乐播放首页.
      * 
@@ -60,6 +69,11 @@ public class FileOperationController {
     @RequestMapping("musicPlayer.page")
     public String musicPlayer() {
         return "music/musicPlayerVue";
+    }
+
+    @RequestMapping("musicAdd.page")
+    public String musicAdd() {
+        return "music/musicAdd";
     }
     
     /**
@@ -81,6 +95,58 @@ public class FileOperationController {
         Integer[] ids = new Integer[1];
         ids[0] = id;
         return batchDelFile(ids);
+    }
+
+    @RequestMapping("listAllMusic.do")
+    @ResponseBody
+    public Result<Page<WsFileDO>> showUserFileList(WsFileDO wsFileDO) {
+        String userId = SessionUtil.getSessionUserId();
+        Page<WsFileDO> page = wsFileService.selectPage(getPage(WsFileDO.class), new EntityWrapper<WsFileDO>().eq("folder", "music"));
+        return Result.ok(page);
+    }
+
+    @RequestMapping("listUserFile.do")
+    @ResponseBody
+    public Result<Page<WsUserFileDO>> showUserFileList(WsUserFileDO wsUserFileDO) {
+        Page<WsUserFileDO> page = getPage(WsUserFileDO.class);
+        String userId = SessionUtil.getSessionUserId();
+        List<WsUserFileDO> fileList = wsUserFileService.selectUserFileList(page, new EntityWrapper<WsUserFileDO>().eq("t1.user_id", userId).eq("t1.status", 1));
+        page.setRecords(fileList);
+        return Result.ok(page);
+    }
+
+    @RequestMapping("batchAddMusic.do")
+    @ResponseBody
+    public Result<String> batchAddMusic(@RequestParam("ids[]") Integer[] ids) {
+        List<WsFileDO> wsFileDOList = wsFileService.selectList(new EntityWrapper<WsFileDO>().in("id", ids));
+        List<WsUserFileDO> wsUserFileDOList = new ArrayList<>();
+        if (null != wsFileDOList && wsFileDOList.size() > 0) {
+            wsFileDOList.forEach(fl->{
+                WsUserFileDO wuf = new WsUserFileDO();
+                wuf.setFileId(Long.valueOf(fl.getId()));
+                wuf.setFileName(fl.getFilename());
+                wuf.setFileUrl(fl.getUrl());
+                wuf.setCreateTime(new Date());
+                wuf.setUpdateTime(new Date());
+                wuf.setUserId(Long.valueOf(SessionUtil.getSessionUserId()));
+                wuf.setUserName(SessionUtil.getSessionUserName());
+                wsUserFileDOList.add(wuf);
+            });
+
+            List<WsUserFileDO> delWsUserFileDOList = wsUserFileService.selectList(new EntityWrapper<WsUserFileDO>().in("file_id", ids));
+            if (null != delWsUserFileDOList && delWsUserFileDOList.size() > 0) {
+                wsUserFileService.deleteBatchIds(delWsUserFileDOList.stream().map(WsUserFileDO::getId).collect(Collectors.toList()));
+            }
+            wsUserFileService.insertBatch(wsUserFileDOList, wsUserFileDOList.size());
+        }
+        return Result.ok();
+    }
+
+    @PostMapping("/batchRemove.do")
+    @ResponseBody
+    public Result<String> batchRemove(@RequestParam("ids[]") Long[] ids) {
+        wsUserFileService.deleteBatchIds(Arrays.asList(ids));
+        return Result.ok();
     }
 
     @OperationLogAnnotation(type = OperationEnum.DELETE, module = ModuleEnum.MUSIC, subModule = "", describe = "批量删除音乐文件")
@@ -137,16 +203,29 @@ public class FileOperationController {
     // @Cacheable(value="musicList") 需要启动redis才可以
     public Result<List<WsFileDO>> showFiles(@RequestParam("fileType") String fileType) {
         String userName = SessionUtil.getSessionUserName();
-        List<WsFileDO> fileList = CoreCache.getInstance().getUserFileList();
-        if (null != fileList && fileList.size() > 0) {
-            fileList = fileList.stream().filter(cache -> StringUtils.isNotBlank(cache.getUser()) && cache.getUser().equals(userName)).filter(cache -> StringUtils.isNotBlank(cache.getFolder()) && cache.getFolder().equals(fileType)).sorted(Comparator.comparing(WsFileDO::getId)).collect(Collectors.toList());
+        String userId = SessionUtil.getSessionUserId();
+        List<WsFileDO> allFileList = CoreCache.getInstance().getUserFileList();
+        List<WsUserFileDO> wsUserFileDOList = wsUserFileService.selectList(new EntityWrapper<WsUserFileDO>().eq("user_id", userId));
+        List<WsFileDO> resultList = new ArrayList<>();
+        if (null == allFileList || allFileList.size() == 0) {
+            allFileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().isNotNull("user"));
         } else {
-            fileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", userName).eq("folder", fileType));
+            allFileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("user", userName).eq("folder", fileType));
         }
+
+        allFileList.forEach(file->{
+            if (StringUtils.isNotBlank(file.getFolder()) && file.getFolder().equals(fileType)) {
+                wsUserFileDOList.forEach(wf->{
+                    if (wf.getFileId().toString().equals(file.getId().toString())) {
+                        resultList.add(file);
+                    }
+                });
+            }
+        });
         
         List<WsFileDO> needBatchUpdateList = new ArrayList<>();
         String webserverip = webSocketConfig.getAddress();
-        for (WsFileDO wsFileDO : fileList) {
+        for (WsFileDO wsFileDO : resultList) {
             String url = wsFileDO.getUrl();
             String oldIp = url.substring(url.indexOf("//") + 2, url.lastIndexOf(":"));
             if (!oldIp.equals(webserverip)) {
@@ -159,6 +238,6 @@ public class FileOperationController {
             wsFileService.updateBatchById(needBatchUpdateList, needBatchUpdateList.size());
         }
 
-        return Result.ok(fileList);
+        return Result.ok(resultList);
     }
 }

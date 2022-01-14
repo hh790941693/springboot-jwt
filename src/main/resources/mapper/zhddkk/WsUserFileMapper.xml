@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pjb.springbootjwt.zhddkk.dao.WsUserFileDao">
+    <select id="selectUserFileList" resultType="com.pjb.springbootjwt.zhddkk.domain.WsUserFileDO">
+        SELECT t1.id,t2.filename AS file_name, t2.url AS file_url,t2.id AS file_id,
+        t1.update_time
+        FROM ws_user_file t1
+        LEFT JOIN ws_file t2 ON t1.file_id = t2.id
+        <if test="ew.sqlSegment != null and ew.sqlSegment != ''">
+            <where>
+                ${ew.sqlSegment}
+            </where>
+        </if>
+    </select>
+</mapper>
