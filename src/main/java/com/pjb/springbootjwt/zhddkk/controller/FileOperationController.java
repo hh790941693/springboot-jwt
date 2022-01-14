@@ -104,8 +104,11 @@ public class FileOperationController extends AdminBaseController {
         return "music/musicPlayerSimple";
     }
 
-
-
+    /**
+     * 音乐播放列表
+     * @param fileType
+     * @return
+     */
     @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.MUSIC, subModule = "", describe = "显示音乐列表")
     @RequestMapping("showFiles.do")
     @ResponseBody
@@ -120,6 +123,11 @@ public class FileOperationController extends AdminBaseController {
         return Result.ok(fileList);
     }
 
+    /**
+     * 绑定音乐->用户未添加的音乐
+     * @param wsFileDO
+     * @return
+     */
     @RequestMapping("listAllMusic.do")
     @ResponseBody
     public Result<Page<WsFileDO>> showUserFileList(WsFileDO wsFileDO) {
@@ -130,6 +138,11 @@ public class FileOperationController extends AdminBaseController {
         return Result.ok(page);
     }
 
+    /**
+     * 绑定音乐->用户已添加的音乐
+     * @param wsUserFileDO
+     * @return
+     */
     @RequestMapping("listUserFile.do")
     @ResponseBody
     public Result<Page<WsUserFileDO>> showUserFileList(WsUserFileDO wsUserFileDO) {
@@ -140,6 +153,11 @@ public class FileOperationController extends AdminBaseController {
         return Result.ok(page);
     }
 
+    /**
+     * 绑定音乐->批量添加->添加到用户的文件列表
+     * @param ids
+     * @return
+     */
     @RequestMapping("batchAddMusic.do")
     @ResponseBody
     public Result<String> batchAddMusic(@RequestParam("ids[]") Integer[] ids) {
@@ -167,6 +185,11 @@ public class FileOperationController extends AdminBaseController {
         return Result.ok();
     }
 
+    /**
+     * 绑定音乐->批量删除->从用户文件列表移除文件
+     * @param ids
+     * @return
+     */
     @PostMapping("/batchRemoveMusic.do")
     @ResponseBody
     public Result<String> batchRemove(@RequestParam("ids[]") Long[] ids) {
@@ -216,8 +239,6 @@ public class FileOperationController extends AdminBaseController {
     @Transactional
     public Result<String> batchDelFile(@RequestParam("ids[]") Integer[] ids) {
         List<WsFileDO> wsFileDOList = wsFileService.selectBatchIds(Arrays.asList(ids));
-        //List<Integer> fileIdList = wsFileDOList.stream().map(WsFileDO::getId).collect(Collectors.toList());
-        //wsUserFileService.delete(new EntityWrapper<WsUserFileDO>().in("file_id", fileIdList));
         int totalNum = ids.length;
         int failedNum = 0;
         for (WsFileDO wsFileDO : wsFileDOList) {

@@ -407,12 +407,16 @@
                     this.queryMusicList();
                 },
                 bindMusic: function () {
+                    var winW = $(window).width();
+                    var winH = $(window).height();
+                    var newW = winW - 200;
+                    var newH = winH - 100;
                     layer.open({
                         type: 2,
                         title: '绑定音乐',
                         shadeClose: false,
                         shade: 0.2,
-                        area: ['1100px', '660px'],
+                        area: [newW+'px', newH+'px'],
                         anim: 5,
                         content: '/file/musicAdd.page'
                     });
