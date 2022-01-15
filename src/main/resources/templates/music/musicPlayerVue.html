@@ -113,9 +113,9 @@
                 </div> -->
                 
                 <div class="ibox-content" style="padding: 0;">
-                    <div class="row">
-                        <div class="col-md-12" align="center" style="color: yellowgreen;">
-                            <span id="statusSpan" style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span>
+                    <div class="row" style="border-bottom:1px solid darkgray;">
+                        <div class="col-md-12" align="center" style="color: blue;font-size: 17px;font-weight: bold;">
+                            <span id="statusSpan">[[#{span.palystatus.init}]]</span>
                             <span>({{curSelectedIndex+1}}/{{musicData.length}}) : </span>
                             <span>{{songName}}</span>
                         </div>
@@ -153,7 +153,7 @@
                         
                          <div class="col-md-3">
                             <div class="input-group">
-                                <div class="input-group-addon">文件类型</div>
+                                <div class="input-group-addon">分类类型</div>
                                 <select id="category" class="form-control" style="width:120px;margin-left: 10px;" @change="queryMusicList()">
                                     <option value="">全部</option>
                                     <option th:each="cate:${categoryList}" th:value="${cate}" th:text="${cate}"></option>

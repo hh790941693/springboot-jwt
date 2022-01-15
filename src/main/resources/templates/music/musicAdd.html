@@ -7,9 +7,9 @@
 </head>
 <body>
     <div class="wrapper wrapper-content ">
-        <div style="width:100%;height:75px;margin-left: 5px;">
-            <audio id="player" controls="controls" src="" style="width:100%;height:55px;"></audio>
-            <p id="songName"></p>
+        <div style="width:100%;height:65px;margin-left: 5px;">
+            <audio id="player" controls="controls" src="" style="width:100%;height:35px;"></audio>
+            <p id="songName" style="text-align: center;color: blue;font-weight: bold;font-size: 20px;"></p>
         </div>
 
         <!-- 表格 -->
@@ -151,10 +151,6 @@
                             }
                         },
                         {
-                            field : 'updateTime',
-                            title : '更新时间'
-                        },
-                        {
                             title: '操作',
                             field: 'id',
                             width: '100px',
@@ -257,8 +253,18 @@
                             }
                         },
                         {
-                            field : 'updateTime',
-                            title : '更新时间'
+                            title: '操作',
+                            field: 'id',
+                            width: '100px',
+                            align: 'center',
+                            formatter: function (value, row, index) {
+                                var listen = '<a class="btn btn-sm btn-success" href="#" title="试听"  mce_href="#" onclick="listen(\''
+                                    + row.fileUrl
+                                    + '\',\''
+                                    + row.fileName
+                                    + '\')"><i class="fa fa-music"></i></a> ';
+                                return listen;
+                            }
                         },
                     ]
                 ]
