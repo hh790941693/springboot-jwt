@@ -156,7 +156,7 @@
                                 <div class="input-group-addon">文件类型</div>
                                 <select class="form-control" style="width:120px;margin-left: 10px;">
                                     <option value="">全部</option>
-                                    <option value="2000">2200</option>
+                                    <option th:each="cate:${categoryList}" th:value="${cate}" th:text="${cate}"></option>
                                 </select>
                             </div>
                         </div>

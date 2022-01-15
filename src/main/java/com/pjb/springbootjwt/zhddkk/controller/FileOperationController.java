@@ -14,7 +14,6 @@ import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.common.uploader.config.UploadConfig;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
 import com.pjb.springbootjwt.zhddkk.base.Result;
-import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
@@ -24,13 +23,13 @@ import com.pjb.springbootjwt.zhddkk.service.WsFileService;
 import com.pjb.springbootjwt.zhddkk.service.WsUserFileService;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
-import io.swagger.models.auth.In;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,7 +68,17 @@ public class FileOperationController extends AdminBaseController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.MUSIC, subModule = "", describe = "音乐播放器首页")
     @RequestMapping("musicPlayer.page")
-    public String musicPlayer() {
+    public String musicPlayer(Model model) {
+        String userId = SessionUtil.getSessionUserId();
+        if (StringUtils.isNotBlank(userId)) {
+            List<WsUserFileDO> list = wsUserFileService.selectList(new EntityWrapper<WsUserFileDO>().eq("user_id", userId).isNotNull("category"));
+            if (null != list) {
+                List<String> categoryList = list.stream().map(WsUserFileDO::getCategory).distinct().collect(Collectors.toList());
+                if (null != categoryList && categoryList.size() > 0) {
+                    model.addAttribute("categoryList", categoryList);
+                }
+            }
+        }
         return "music/musicPlayerVue";
     }
 
