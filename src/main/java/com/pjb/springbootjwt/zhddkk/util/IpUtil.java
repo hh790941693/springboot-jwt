@@ -69,22 +69,23 @@ public class IpUtil {
 
     /**
      * 检查url连接是否可用
-     * @param urlString
-     * @param timeout
+     * @param urlString url
+     * @param timeout 超时时间 单位：秒
      * @return
      */
     public static boolean checkUrlStatus(String urlString, int timeout) {
-        long lo = System.currentTimeMillis();
-        URL url;
         try {
-            url = new URL(urlString);
-            URLConnection co = url.openConnection();
-            co.setConnectTimeout(timeout);
-            co.connect();
-            return true;
-        } catch (Exception e1) {
-            url = null;
-            return false;
+            URL urlObj = new URL(urlString);
+            HttpURLConnection oc = (HttpURLConnection) urlObj.openConnection();
+            oc.setUseCaches(false);
+            oc.setConnectTimeout(timeout*1000); // 设置超时时间
+            int status = oc.getResponseCode();// 请求状态
+            if (200 == status) {
+                return true;
+            }
+        } catch (Exception e) {
+
         }
+        return false;
     }
 }
