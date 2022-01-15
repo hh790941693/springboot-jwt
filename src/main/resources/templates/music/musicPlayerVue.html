@@ -101,6 +101,7 @@
             </div>
             
             <div id="playerDiv">
+                <!--
                 <div id="buttons" style="height:11%;min-height: 66px;border-bottom: 1px solid grey;">
                     <div id="songNameDiv" align="center"
                          style="background-color:yellow;height:35%;border:2px solid grey;">
@@ -109,41 +110,59 @@
                         <span>({{curSelectedIndex+1}}/{{musicData.length}}) : </span>
                         <span>{{songName}}</span>
                     </div>
-                    <div style="width:100%; height:64%;padding-top: 5px;">
-                        <div style="float:left;width:30%;height:100%;margin-left: 5px;">
-                            <audio id="player" controls="controls" src="" style="width:100%;height:100%;"></audio>
+                </div> -->
+                
+                <div class="ibox-content" style="padding: 0;">
+                    <div class="row">
+                        <div class="col-md-12" align="center" style="color: yellowgreen;">
+                            <span id="statusSpan" style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span>
+                            <span>({{curSelectedIndex+1}}/{{musicData.length}}) : </span>
+                            <span>{{songName}}</span>
                         </div>
-    
-                        <div style="float:right;width:68%;height: 100%;">
-                            <div style="float:left;margin-left:10px;height:100%;">
-                                <button id="btnPre" class='btn btn-primary' @click="preMusic()" th:title="#{btn.last.tips}">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button id="btnPlay" class='btn btn-success' @click="play()"
-                                        th:title="#{btn.playpause.tips}">
-                                    <span class="glyphicon glyphicon-play"></span>
-                                </button>
-                                <button id="btnNext" class='btn btn-primary' @click="nextMusic()"
-                                        th:title="#{btn.next.tips}">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button id="btnRefresh" class='btn btn-info' @click="refreash()"
-                                        th:title="#{btn.refreash.tips}">
-                                    <span class="glyphicon glyphicon-repeat"></span>
-                                </button>
-                                <button id="btnShowList" class='btn btn-warning' @click="showList($event)">[[#{btn.hidelist.label}]]</button>
-                                <button id="bindMusic" style="margin-left: 5px;" class='btn btn-primary' @click="bindMusic($event)">[[#{btn.bind.music.label}]]</button>
-                            </div>
-                            <div id="playModeDiv" style="float:left;margin-top:12px;margin-left:6px;">
-                                <input type="radio" v-model="playMode" value="-1" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
-                                <input type="radio" v-model="playMode" value="0"  th:title="#{radio.loop.tips}">[[#{radio.loop.tips}]]&nbsp;&nbsp;
-                                <input type="radio" v-model="playMode" value="1"  th:title="#{radio.order.tips}">[[#{radio.order.tips}]]&nbsp;&nbsp;
-                                <input type="radio" v-model="playMode" value="2"  th:title="#{radio.random.tips}">[[#{radio.random.tips}]]
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            <audio id="player" controls="controls" src="" style="height:34px;"></audio>
+                        </div>
+                        <div class="col-md-4">
+                            <button id="btnPre" class='btn btn-primary' @click="preMusic()" th:title="#{btn.last.tips}">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button id="btnPlay" class='btn btn-success' @click="play()"
+                                    th:title="#{btn.playpause.tips}">
+                                <span class="glyphicon glyphicon-play"></span>
+                            </button>
+                            <button id="btnNext" class='btn btn-primary' @click="nextMusic()"
+                                    th:title="#{btn.next.tips}">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button id="btnRefresh" class='btn btn-info' @click="refreash()"
+                                    th:title="#{btn.refreash.tips}">
+                                <span class="glyphicon glyphicon-repeat"></span>
+                            </button>
+                            <button id="btnShowList" class='btn btn-warning' @click="showList($event)">[[#{btn.hidelist.label}]]</button>
+                            <button id="bindMusic" style="margin-left: 10px;" class='btn btn-primary' @click="bindMusic($event)">[[#{btn.bind.music.label}]]</button>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="radio" v-model="playMode" value="-1" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
+                            <input type="radio" v-model="playMode" value="0"  th:title="#{radio.loop.tips}">[[#{radio.loop.tips}]]&nbsp;&nbsp;
+                            <input type="radio" v-model="playMode" value="1"  th:title="#{radio.order.tips}">[[#{radio.order.tips}]]&nbsp;&nbsp;
+                            <input type="radio" v-model="playMode" value="2"  th:title="#{radio.random.tips}">[[#{radio.random.tips}]]
+                        </div>
+                        
+                         <div class="col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-addon">文件类型</div>
+                                <select class="form-control" style="width:120px;margin-left: 10px;">
+                                    <option value="">全部</option>
+                                    <option value="2000">2200</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
-    
+                
                 <div id="musicList" style="width: 100%;height:89%;">
                     <table id="musicTable">
                         <thead class="thClass">
