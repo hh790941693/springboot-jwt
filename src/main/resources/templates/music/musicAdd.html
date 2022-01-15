@@ -40,7 +40,7 @@
                         <div class="fixed-table-toolbar">
                             <div class="columns pull-left">
                                 <button type="button" class="btn  btn-danger" onclick="batchRemove()">
-                                    <i class="fa fa-remove" aria-hidden="true"></i>&nbsp;批量删除
+                                    <i class="fa fa-trash" aria-hidden="true"></i>&nbsp;批量删除
                                 </button>
                                 <button type="button" class="btn  btn-info" onclick="bindCategory()">
                                     <i class="fa fa-calculator" aria-hidden="true"></i>&nbsp;设置分类
@@ -110,12 +110,23 @@
                             "title": "音乐池列表",
                             "halign":"center",
                             "align":"center",
-                            "colspan": 6
+                            "colspan": 7
                         }
                     ],
                     [
                         {
-                          checkbox: true
+                            checkbox: true,
+                            formatter : function (value, row) {
+                                if (row.accessStatus === 0) {
+                                    return {
+                                        disabled : true,
+                                    }
+                                } else {
+                                    return {
+                                        disabled : false,
+                                    }
+                                }
+                            }
                         },
                         {
                             field : 'id',
@@ -146,12 +157,13 @@
                         {
                             title: '操作',
                             field: 'id',
+                            width: '100px',
                             align: 'center',
                             formatter: function (value, row, index) {
                                 var a = '<a class="btn btn-sm btn-primary" href="#" title="添加"  mce_href="#" onclick="addMusic(\''
                                     + row.id
                                     + '\')"><i class="fa fa-plus"></i></a> ';
-                                var listen = '<a class="btn btn-sm btn-primary" href="#" title="试听"  mce_href="#" onclick="listen(\''
+                                var listen = '<a class="btn btn-sm btn-success" href="#" title="试听"  mce_href="#" onclick="listen(\''
                                     + row.url
                                     + '\',\''
                                     + row.filename
@@ -211,7 +223,7 @@
                             "title": "用户音乐列表",
                             "halign":"center",
                             "align":"center",
-                            "colspan": 6
+                            "colspan": 7
                         }
                     ],
                     [
