@@ -154,7 +154,7 @@
                          <div class="col-md-3">
                             <div class="input-group">
                                 <div class="input-group-addon">文件类型</div>
-                                <select class="form-control" style="width:120px;margin-left: 10px;">
+                                <select id="category" class="form-control" style="width:120px;margin-left: 10px;" @change="queryMusicList()">
                                     <option value="">全部</option>
                                     <option th:each="cate:${categoryList}" th:value="${cate}" th:text="${cate}"></option>
                                 </select>
@@ -308,7 +308,7 @@
                     $.ajax({
                         type: "POST",
                         url: rootUrl + "file/showFiles.do",
-                        data: {'fileType': 'music'},
+                        data: {'fileType': 'music', 'category':$("#category").val()},
                         success: function (result) {
                             if (result.code == 1) {
                                 app.musicData = result.data;

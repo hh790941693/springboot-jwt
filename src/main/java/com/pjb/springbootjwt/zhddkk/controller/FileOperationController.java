@@ -122,12 +122,16 @@ public class FileOperationController extends AdminBaseController {
     @RequestMapping("showFiles.do")
     @ResponseBody
     // @Cacheable(value="musicList") 需要启动redis才可以
-    public Result<List<WsUserFileDO>> showFiles(@RequestParam("fileType") String fileType) {
+    public Result<List<WsUserFileDO>> showFiles(@RequestParam("fileType") String fileType, String category) {
         String userName = SessionUtil.getSessionUserName();
         String userId = SessionUtil.getSessionUserId();
 
         Page<WsUserFileDO> page = new Page<>(1, 9999);
-        List<WsUserFileDO> fileList = wsUserFileService.selectUserFileList(page, new EntityWrapper<WsUserFileDO>().eq("t1.user_id", userId).eq("t1.status", 1));
+        Wrapper<WsUserFileDO> wrapper = new EntityWrapper<WsUserFileDO>().eq("t1.user_id", userId).eq("t1.status", 1);
+        if (StringUtils.isNotBlank(category)) {
+            wrapper.eq("t1.category", category);
+        }
+        List<WsUserFileDO> fileList = wsUserFileService.selectUserFileList(page, wrapper);
 
         return Result.ok(fileList);
     }
