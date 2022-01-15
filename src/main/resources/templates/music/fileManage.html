@@ -183,6 +183,16 @@
                         }
                     },
                     {
+                        field : 'accessStatus',
+                        title : '访问性',
+                        formatter : function (value, row) {
+                            if (value === 0) {
+                                return '<span style="color:red;">连接失败</span>';
+                            }
+                            return '<span style="color: black;">正常</span>';
+                        }
+                    },
+                    {
                         field : 'updateTime',
                         title : '更新时间'
                     },

@@ -198,6 +198,20 @@ public class FileOperationController extends AdminBaseController {
     }
 
     /**
+     * 绑定音乐->批量删除->从用户文件列表移除文件
+     * @param ids
+     * @return
+     */
+    @PostMapping("/bindCategory.do")
+    @ResponseBody
+    public Result<String> bindCategory(@RequestParam("ids[]") Long[] ids, String category) {
+        List<WsUserFileDO> wsUserFileDOList = wsUserFileService.selectList(new EntityWrapper<WsUserFileDO>().in("id",Arrays.asList(ids)));
+        wsUserFileDOList.forEach(uf->uf.setCategory(category));
+        wsUserFileService.updateBatchById(wsUserFileDOList, wsUserFileDOList.size());
+        return Result.ok();
+    }
+
+    /**
      * 文件管理->文件列表
      * @param wsFileDO
      * @return

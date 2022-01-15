@@ -17,8 +17,6 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
-                        <table id="exampleTable1" data-mobile-responsive="true">
-                        </table>
                         <div class="fixed-table-toolbar">
                             <div class="columns pull-left">
                                 <button type="button" class="btn  btn-primary" onclick="batchAdd()">
@@ -26,6 +24,9 @@
                                 </button>
                             </div>
                         </div>
+                        
+                        <table id="exampleTable1" data-mobile-responsive="true">
+                        </table>
                     </div>
                 </div>
             </div>
@@ -36,15 +37,18 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
-                        <table id="exampleTable2" data-mobile-responsive="true">
-                        </table>
                         <div class="fixed-table-toolbar">
                             <div class="columns pull-left">
                                 <button type="button" class="btn  btn-danger" onclick="batchRemove()">
                                     <i class="fa fa-remove" aria-hidden="true"></i>&nbsp;批量删除
                                 </button>
+                                <button type="button" class="btn  btn-info" onclick="bindCategory()">
+                                    <i class="fa fa-calculator" aria-hidden="true"></i>&nbsp;设置分类
+                                </button>
                             </div>
                         </div>
+                        <table id="exampleTable2" data-mobile-responsive="true">
+                        </table>
                     </div>
                 </div>
             </div>
@@ -126,6 +130,16 @@
                             title : 'url'
                         },
                         {
+                            field : 'accessStatus',
+                            title : '访问性',
+                            formatter : function (value, row) {
+                                if (value === 0) {
+                                    return '<span style="color:red;">连接失败</span>';
+                                }
+                                return '<span style="color: black;">正常</span>';
+                            }
+                        },
+                        {
                             field : 'updateTime',
                             title : '更新时间'
                         },
@@ -197,7 +211,7 @@
                             "title": "用户音乐列表",
                             "halign":"center",
                             "align":"center",
-                            "colspan": 5
+                            "colspan": 6
                         }
                     ],
                     [
@@ -209,12 +223,26 @@
                             title : '文件Id'
                         },
                         {
+                            field : 'category',
+                            title : '分类'
+                        },
+                        {
                             field : 'fileName',
                             title : '文件名'
                         },
                         {
                             field : 'fileUrl',
                             title : 'url'
+                        },
+                        {
+                            field : 'accessStatus',
+                            title : '访问性',
+                            formatter : function (value, row) {
+                                if (value === 0) {
+                                    return '<span style="color:red;">连接失败</span>';
+                                }
+                                return '<span style="color: black;">正常</span>';
+                            }
                         },
                         {
                             field : 'updateTime',
@@ -313,6 +341,47 @@
                 });
             }, function() {
 
+            });
+        }
+
+        //批量绑定分类
+        function bindCategory() {
+            //返回所有选择的行，当没有选择的记录时，返回一个空数组
+            var rows = $('#exampleTable2').bootstrapTable('getSelections');
+            if (rows.length == 0) {
+                layer.msg("请选择要操作的数据");
+                return;
+            }
+
+            var ids = new Array();
+            $.each(rows, function(i, row) {
+                ids[i] = row['id'];
+            });
+            
+            layer.prompt({
+                formType: 2,
+                value: '默认分类',
+                title: '请输入分类名称'
+            }, function(value, index, elem){
+                layer.close(index);
+                $.ajax({
+                    type: "post",
+                    url: "/file/bindCategory.do",
+                    data: {
+                        "ids": ids,
+                        "category":value
+                    },
+                    async: true,
+                    success : function(r) {
+                        if (r.code == 1) {
+                            layer.msg(r.msg);
+                            reLoad();
+                            parent.reLoad();
+                        } else {
+                            layer.msg(r.msg);
+                        }
+                    }
+                });
             });
         }
 

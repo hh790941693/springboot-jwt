@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.pjb.springbootjwt.zhddkk.util.IpUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +91,15 @@ public class WsFileAccessCheckJob {
         checkMerchant();
         checkGoodsType();
         checkGoods();
+    }
+
+    /**
+     * 定时任务入口.
+     */
+    @Scheduled(cron = "0 */1 * * * ?")
+    public void cronJob3() {
+        logger.info("[定时任务3]定时检查ws_file各记录是否可以访问");
+        checkUrlStatus();
     }
 
     private void checkWsAds() {
@@ -403,6 +413,37 @@ public class WsFileAccessCheckJob {
         if (needBatchUpdateList.size() > 0) {
             logger.info("本次更新文件数:{}", needBatchUpdateList.size());
             spGoodsService.updateBatchById(needBatchUpdateList, needBatchUpdateList.size());
+        }
+    }
+
+    /**
+     * 检查ws_file表 url的连接性.
+     */
+    private void checkUrlStatus() {
+        logger.info("开始检查ws_file连接状态");
+        List<WsFileDO> srcList = wsFileService.selectList(new EntityWrapper<WsFileDO>().isNotNull("url"));
+        if (null == srcList || srcList.size() == 0) {
+            logger.info("没有需要检查的文件");
+            return;
+        }
+
+        List<WsFileDO> updateList = new ArrayList<>();
+        srcList.forEach(f->{
+            if (!IpUtil.checkUrlStatus(f.getUrl(), 1)) {
+                if (f.getAccessStatus().intValue() != 0) {
+                    f.setAccessStatus(0);
+                    updateList.add(f);
+                }
+            } else {
+                if (f.getAccessStatus().intValue() != 1) {
+                    f.setAccessStatus(1);
+                    updateList.add(f);
+                }
+            }
+        });
+        if (updateList.size() > 0) {
+            logger.info("本次需要更新记录数:" + updateList.size());
+            wsFileService.updateBatchById(updateList, updateList.size());
         }
     }
 }

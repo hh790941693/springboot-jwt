@@ -48,6 +48,8 @@ public class WsUserFileDO implements Serializable {
     //
     @ApiModelProperty(value = "fileUrl" , name = "")
     private String fileUrl;
+    // 文件分类
+    private String category;
     //创建时间
     @ApiModelProperty(value = "createTime" , name = "创建时间")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
@@ -59,4 +61,7 @@ public class WsUserFileDO implements Serializable {
     //状态
     @ApiModelProperty(value = "status" , name = "状态")
     private Integer status;
+    // url的连接性 0:连接失败 1:正常
+    @TableField(exist = false)
+    private Integer accessStatus;
 }

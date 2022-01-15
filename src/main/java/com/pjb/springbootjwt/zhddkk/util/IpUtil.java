@@ -1,10 +1,8 @@
 package com.pjb.springbootjwt.zhddkk.util;
 
 import com.pjb.springbootjwt.zhddkk.bean.IpInfoBean;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
+
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -67,5 +65,26 @@ public class IpUtil {
             }
         }
         return wifiIp;
+    }
+
+    /**
+     * 检查url连接是否可用
+     * @param urlString
+     * @param timeout
+     * @return
+     */
+    public static boolean checkUrlStatus(String urlString, int timeout) {
+        long lo = System.currentTimeMillis();
+        URL url;
+        try {
+            url = new URL(urlString);
+            URLConnection co = url.openConnection();
+            co.setConnectTimeout(timeout);
+            co.connect();
+            return true;
+        } catch (Exception e1) {
+            url = null;
+            return false;
+        }
     }
 }
