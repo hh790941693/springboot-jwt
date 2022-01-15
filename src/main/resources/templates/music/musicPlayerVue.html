@@ -359,7 +359,7 @@
                     var selectedMusicInfo = app.musicData[app.curSelectedIndex];
                     $("#player").attr("src", selectedMusicInfo.fileUrl);
                     $("#statusSpan").text('[[#{span.palystatus.playing}]]');
-                    app.songName = selectedMusicInfo.filename;
+                    app.songName = selectedMusicInfo.fileName;
 
                     $("#player")[0].play();
                     $("#btnPlay span").removeClass("glyphicon-play").addClass("glyphicon-pause");
