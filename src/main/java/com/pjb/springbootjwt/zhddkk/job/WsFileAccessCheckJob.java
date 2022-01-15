@@ -15,13 +15,16 @@ import com.pjb.springbootjwt.zhddkk.service.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import com.pjb.springbootjwt.zhddkk.util.IpUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.record.common.FutureRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -71,7 +74,8 @@ public class WsFileAccessCheckJob {
     /**
      * 定时任务入口.
      */
-    @Scheduled(cron = "0 */2 * * * ?")
+    @Scheduled(cron = "10 */1 * * * ?")
+    @Async
     public void cronJob1() {
         logger.info("[定时任务1]定时检查文件资源url的访问性");
         checkWsAds();
@@ -84,7 +88,8 @@ public class WsFileAccessCheckJob {
     /**
      * 定时任务入口.
      */
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "30 */2 * * * ?")
+    @Async
     public void cronJob2() {
         logger.info("[定时任务2]定时检查文件资源url的访问性");
         checkMerchantApply();
@@ -428,22 +433,80 @@ public class WsFileAccessCheckJob {
         }
 
         List<WsFileDO> updateList = new ArrayList<>();
-        srcList.forEach(f->{
-            if (!IpUtil.checkUrlStatus(f.getUrl(), 1)) {
-                if (f.getAccessStatus().intValue() != 0) {
-                    f.setAccessStatus(0);
-                    updateList.add(f);
-                }
+
+        int nthread = 1;
+        int srcSize = srcList.size();
+        int baseRecord = 50;
+        if (srcSize > baseRecord) {
+            int zhengshu = srcSize / baseRecord;
+            int yushu = srcSize % baseRecord;
+            if (yushu == 0) {
+                nthread = zhengshu;
             } else {
-                if (f.getAccessStatus().intValue() != 1) {
-                    f.setAccessStatus(1);
-                    updateList.add(f);
-                }
+                nthread = zhengshu+1;
             }
-        });
-        if (updateList.size() > 0) {
-            logger.info("本次需要更新记录数:" + updateList.size());
-            wsFileService.updateBatchById(updateList, updateList.size());
+        }
+        ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(nthread);
+        for (int i = 0; i < nthread; i++) {
+            int fromIndex = i * baseRecord;
+            int toIndex = fromIndex + baseRecord-1;
+            if (toIndex >= srcSize) {
+                toIndex = srcSize - 1;
+            }
+            final List<WsFileDO> tempList = srcList.subList(fromIndex, toIndex);
+            FactorialCalculator factorialCalculator = new FactorialCalculator(tempList);
+            Future<List<WsFileDO>> callRes = scheduledThreadPool.submit(factorialCalculator);
+            try {
+                List<WsFileDO> resultList = callRes.get();
+                if (null != resultList && resultList.size() > 0) {
+                    updateList.addAll(resultList);
+                }
+            } catch (Exception e) {
+
+            }
+        }
+//        srcList.forEach(f->{
+//            if (!IpUtil.checkUrlStatus(f.getUrl(), 1)) {
+//                if (f.getAccessStatus().intValue() != 0) {
+//                    f.setAccessStatus(0);
+//                    updateList.add(f);
+//                }
+//            } else {
+//                if (f.getAccessStatus().intValue() != 1) {
+//                    f.setAccessStatus(1);
+//                    updateList.add(f);
+//                }
+//            }
+//        });
+        int updSize = updateList.size();
+        logger.info("本次需要更新记录数xxx:" + updSize);
+        if (updSize > 0) {
+            logger.info("本次需要更新记录数:" + updSize);
+            wsFileService.updateBatchById(updateList, updSize);
+        }
+    }
+
+    class FactorialCalculator implements Callable<List<WsFileDO>> {
+        private List<WsFileDO> list;
+        public FactorialCalculator(List<WsFileDO> list) {
+            this.list = list;
+        }
+        public List<WsFileDO> call() throws Exception {
+            List<WsFileDO> resultList = new ArrayList<>();
+            this.list.forEach(f->{
+                if (!IpUtil.checkUrlStatus(f.getUrl(), 1)) {
+                    if (f.getAccessStatus().intValue() != 0) {
+                        f.setAccessStatus(0);
+                        resultList.add(f);
+                    }
+                } else {
+                    if (f.getAccessStatus().intValue() != 1) {
+                        f.setAccessStatus(1);
+                        resultList.add(f);
+                    }
+                }
+            });
+            return resultList;
         }
     }
 }

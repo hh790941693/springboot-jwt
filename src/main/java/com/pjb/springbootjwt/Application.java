@@ -21,6 +21,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +33,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableCaching
 @EnableScheduling
 @EnableAspectJAutoProxy
+@EnableAsync
 @MapperScan({"com.pjb.springbootjwt.**.dao"})
 public class Application {
 
