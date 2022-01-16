@@ -12,8 +12,11 @@ import com.pjb.springbootjwt.shop.service.SpMerchantApplyService;
 import com.pjb.springbootjwt.shop.service.SpMerchantService;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.service.*;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -101,7 +104,7 @@ public class WsFileAccessCheckJob {
     /**
      * 定时任务入口.
      */
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "40 40 3,12,23 * * ?")
     public void cronJob3() {
         logger.info("[定时任务3]定时检查ws_file各记录是否可以访问");
         checkUrlStatus();
@@ -446,6 +449,7 @@ public class WsFileAccessCheckJob {
                 nthread = zhengshu+1;
             }
         }
+        logger.info("开始时间："+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(nthread);
         for (int i = 0; i < nthread; i++) {
             int fromIndex = i * baseRecord;
@@ -465,25 +469,13 @@ public class WsFileAccessCheckJob {
 
             }
         }
-//        srcList.forEach(f->{
-//            if (!IpUtil.checkUrlStatus(f.getUrl(), 1)) {
-//                if (f.getAccessStatus().intValue() != 0) {
-//                    f.setAccessStatus(0);
-//                    updateList.add(f);
-//                }
-//            } else {
-//                if (f.getAccessStatus().intValue() != 1) {
-//                    f.setAccessStatus(1);
-//                    updateList.add(f);
-//                }
-//            }
-//        });
+        logger.info("结束时间："+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         int updSize = updateList.size();
-        logger.info("本次需要更新记录数xxx:" + updSize);
         if (updSize > 0) {
             logger.info("本次需要更新记录数:" + updSize);
             wsFileService.updateBatchById(updateList, updSize);
         }
+        logger.info("更新结束时间："+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
     }
 
     class FactorialCalculator implements Callable<List<WsFileDO>> {
