@@ -104,7 +104,7 @@ public class WsFileAccessCheckJob {
     /**
      * 定时任务入口.
      */
-    @Scheduled(cron = "40 40 3,12,23 * * ?")
+    @Scheduled(cron = "45 40 3,12,23 * * ?")
     public void cronJob3() {
         logger.info("[定时任务3]定时检查ws_file各记录是否可以访问");
         checkUrlStatus();
