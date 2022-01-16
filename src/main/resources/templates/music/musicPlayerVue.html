@@ -86,7 +86,7 @@
                             <span class="glyphicon glyphicon-folder-open"></span> [[#{btn.choose.label}]]
                         </button>
                         <button type="button" class="layui-btn layui-btn-sm" id="uploadFileBtn">
-                            <span class="glyphicon glyphicon-arrow-up"></span> [[#{btn.upload.label}]]
+                            <span class="fa fa-upload"></span> [[#{btn.upload.label}]]
                         </button>
                     </div>
                 </div>
@@ -101,20 +101,13 @@
             </div>
             
             <div id="playerDiv">
-                <!--
-                <div id="buttons" style="height:11%;min-height: 66px;border-bottom: 1px solid grey;">
-                    <div id="songNameDiv" align="center"
-                         style="background-color:yellow;height:35%;border:2px solid grey;">
-                        <span id="statusSpan"
-                              style="font-weight: bold;font-size: 14px;">[[#{span.palystatus.init}]]</span>
-                        <span>({{curSelectedIndex+1}}/{{musicData.length}}) : </span>
-                        <span>{{songName}}</span>
-                    </div>
-                </div> -->
-                
                 <div class="ibox-content" style="padding: 0;">
                     <div class="row" style="border-bottom:1px solid darkgray;">
-                        <div class="col-md-12" align="center" style="color: blue;font-size: 17px;font-weight: bold;">
+                        <div class="col-xs-4">
+                            <audio id="player" controls="controls" src="" style="width:100%;height:34px;"></audio>
+                        </div>
+                        
+                        <div class="col-xs-8" align="center" style="color: blue;font-size: 17px;font-weight: bold;">
                             <span id="statusSpan">[[#{span.palystatus.init}]]</span>
                             <span>({{curSelectedIndex+1}}/{{musicData.length}}) : </span>
                             <span>{{songName}}</span>
@@ -122,36 +115,32 @@
                     </div>
                     
                     <div class="row">
-                        <div class="col-md-3">
-                            <audio id="player" controls="controls" src="" style="height:34px;"></audio>
-                        </div>
-                        <div class="col-md-4">
-                            <button id="btnPre" class='btn btn-primary' @click="preMusic()" th:title="#{btn.last.tips}">
+                        <div class="col-xs-4">
+                            <button id="btnPre" class='btn btn-sm btn-primary' @click="preMusic()" th:title="#{btn.last.tips}">
                                 <span class="glyphicon glyphicon-step-backward"></span>
                             </button>
-                            <button id="btnPlay" class='btn btn-success' @click="play()"
+                            <button id="btnPlay" class='btn btn-sm btn-success' @click="play()"
                                     th:title="#{btn.playpause.tips}">
                                 <span class="glyphicon glyphicon-play"></span>
                             </button>
-                            <button id="btnNext" class='btn btn-primary' @click="nextMusic()"
+                            <button id="btnNext" class='btn btn-sm btn-primary' @click="nextMusic()"
                                     th:title="#{btn.next.tips}">
                                 <span class="glyphicon glyphicon-step-forward"></span>
                             </button>
-                            <button id="btnRefresh" class='btn btn-info' @click="refreash()"
+                            <button id="btnRefresh" class='btn btn-sm btn-info' @click="refreash()"
                                     th:title="#{btn.refreash.tips}">
                                 <span class="glyphicon glyphicon-repeat"></span>
                             </button>
-                            <button id="btnShowList" class='btn btn-warning' @click="showList($event)">[[#{btn.hidelist.label}]]</button>
-                            <button id="bindMusic" style="margin-left: 10px;" class='btn btn-primary' @click="bindMusic($event)">[[#{btn.bind.music.label}]]</button>
+                            <button id="bindMusic" class='btn btn-sm btn-primary' @click="bindMusic($event)">[[#{btn.bind.music.label}]]</button>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-xs-3">
                             <input type="radio" v-model="playMode" value="-1" th:title="#{radio.none.tips}">[[#{radio.none.tips}]]&nbsp;&nbsp;
                             <input type="radio" v-model="playMode" value="0"  th:title="#{radio.loop.tips}">[[#{radio.loop.tips}]]&nbsp;&nbsp;
                             <input type="radio" v-model="playMode" value="1"  th:title="#{radio.order.tips}">[[#{radio.order.tips}]]&nbsp;&nbsp;
                             <input type="radio" v-model="playMode" value="2"  th:title="#{radio.random.tips}">[[#{radio.random.tips}]]
                         </div>
                         
-                         <div class="col-md-3">
+                         <div class="col-xs-5">
                             <div class="input-group">
                                 <div class="input-group-addon">分类类型</div>
                                 <select id="category" class="form-control" style="width:120px;margin-left: 10px;" @change="queryMusicList()">
@@ -194,7 +183,7 @@
                                 <td style="width:9%;">{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
                                 <td style="width:14%;">
                                     <button class='delBtn btn btn-sm btn-success' @click="playMusic(index)">
-                                        <span class="glyphicon glyphicon-play"></span> [[#{btn.play.label}]]
+                                        <span class="fa fa-music"></span> [[#{btn.play.label}]]
                                     </button>
                                 </td>
                             </tr>
