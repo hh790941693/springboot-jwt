@@ -10,7 +10,8 @@
             t2.id AS file_id,
             t2.filename AS file_name,
             t2.url AS file_url,
-            t2.access_status
+            t2.access_status,
+            t2.file_size
         FROM ws_user_file t1
         LEFT JOIN ws_file t2 ON t1.file_id = t2.id
         <if test="ew.sqlSegment != null and ew.sqlSegment != ''">

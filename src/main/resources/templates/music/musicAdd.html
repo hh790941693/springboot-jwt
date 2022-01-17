@@ -110,7 +110,7 @@
                             "title": "音乐池列表",
                             "halign":"center",
                             "align":"center",
-                            "colspan": 7
+                            "colspan": 8
                         }
                     ],
                     [
@@ -148,6 +148,13 @@
                                     return '<span style="color:red;">连接失败</span>';
                                 }
                                 return '<span style="color: black;">正常</span>';
+                            }
+                        },
+                        {
+                            field : 'fileSize',
+                            title : '大小(M)',
+                            formatter : function (value,row) {
+                                return (parseInt(value)/1024.0/1024.0).toFixed(0)
                             }
                         },
                         {
@@ -219,7 +226,7 @@
                             "title": "用户音乐列表",
                             "halign":"center",
                             "align":"center",
-                            "colspan": 7
+                            "colspan": 8
                         }
                     ],
                     [
@@ -241,6 +248,13 @@
                         {
                             field : 'fileUrl',
                             title : 'url'
+                        },
+                        {
+                            field : 'fileSize',
+                            title : '大小(M)',
+                            formatter : function (value,row) {
+                                return (parseInt(value)/1024.0/1024.0).toFixed(0)
+                            }
                         },
                         {
                             field : 'accessStatus',

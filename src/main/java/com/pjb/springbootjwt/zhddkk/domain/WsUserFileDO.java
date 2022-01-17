@@ -42,10 +42,10 @@ public class WsUserFileDO implements Serializable {
     //文件id
     @ApiModelProperty(value = "fileId" , name = "文件id")
     private Long fileId;
-    //
+    // 文件名
     @ApiModelProperty(value = "fileName" , name = "")
     private String fileName;
-    //
+    // 文件url
     @ApiModelProperty(value = "fileUrl" , name = "")
     private String fileUrl;
     // 文件分类
@@ -64,4 +64,7 @@ public class WsUserFileDO implements Serializable {
     // url的连接性 0:连接失败 1:正常
     @TableField(exist = false)
     private Integer accessStatus;
+    // 文件大小
+    @TableField(exist = false)
+    private Long fileSize;
 }
