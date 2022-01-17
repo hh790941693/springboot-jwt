@@ -279,12 +279,7 @@ public class FileOperationController extends AdminBaseController {
                 logger.info("diskPath:{}  dymicDiskPath:{}", diskPath, dymicDiskPath);
                 String url = wsFileDO.getUrl();
                 String filename = url.substring(url.lastIndexOf("/") + 1);
-                File file = null;
-                if (diskPath.equals(dymicDiskPath)) {
-                    file = new File(diskPath + File.separator + filename);
-                } else {
-                    file = new File(dymicDiskPath + File.separator + filename);
-                }
+                File file = new File(dymicDiskPath + File.separator + filename);
                 if (null != file && file.exists() && file.isFile()) {
                     logger.info("删除文件:{} {} ", id, file.getAbsolutePath());
                     try {
