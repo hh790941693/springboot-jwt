@@ -1,6 +1,7 @@
 package com.pjb.springbootjwt.zhddkk.filter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import javax.servlet.*;
@@ -10,8 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pjb.springbootjwt.zhddkk.base.Result;
+import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
+import com.pjb.springbootjwt.zhddkk.cache.CoreCache;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
+import com.pjb.springbootjwt.zhddkk.domain.WsUserSessionDO;
+import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.RedisTemplateUtil;
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +37,33 @@ public class SesstionTimeoutFilter implements Filter {
     // 忽略的URL前缀列表
     private static final List<String> IGNORE_URL_PREFIX_LIST = new ArrayList<>(Arrays.asList(
             "/login",
+            "/login.do",
+            "/index",
+            "/exception.page",
+            "/redirect",
+            "/valid",
+            "/verifyUser.do",
+            "/register.page",
+            "/forgetPassword.page",
+            "/getUserQuestion.json",
+            "/showQRCode.do",
+            "/checkUserRegisterStatus.json",
+            "/updatePassword.do",
+            "/upload/app",
+            "/register.do",
+            "/getChatRoomInfo.json",
             "/js/",
             "/css/",
             "/json/",
             "/img/",
+            "/i18n",
             "/canvas/",
             "/zhddWebSocket/",
             "/chatRoomWebSocket/",
             "/game/",
             "/upload/app",
             "/email",
-            "/i18n"));
+            "/generateVerifyCode.do"));
 
     // 忽略的URL后缀列表
     private static final List<String> IGNORE_URL_SUFFIX_LIST = new ArrayList<>(Arrays.asList(
@@ -77,10 +100,15 @@ public class SesstionTimeoutFilter implements Filter {
         String lockKey = "REQ_LOCK_KEY_" + sessionId + ":" + uri;
 
         String servletPath = httpServletRequest.getServletPath();
+        if (servletPath.equals("") || servletPath.equals("/")) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
         // 如果是忽略的前缀url,放行
         for (String prefix : IGNORE_URL_PREFIX_LIST) {
             if (servletPath.startsWith(prefix)) {
-                httpServletRequest.setAttribute("filter", false);
+                //httpServletRequest.setAttribute("filter", false);
                 filterChain.doFilter(servletRequest, servletResponse);
                 return;
             }
@@ -89,7 +117,7 @@ public class SesstionTimeoutFilter implements Filter {
         // 如果是忽略的后缀url,放行
         for (String suffix : IGNORE_URL_SUFFIX_LIST) {
             if (servletPath.endsWith(suffix)) {
-                httpServletRequest.setAttribute("filter", false);
+                //httpServletRequest.setAttribute("filter", false);
                 filterChain.doFilter(servletRequest, servletResponse);
                 return;
             }
@@ -97,8 +125,67 @@ public class SesstionTimeoutFilter implements Filter {
         if (redisUtil.setNx(lockKey, "ing", 10)) {
             try {
                 logger.info("已创建key:" + lockKey);
-                httpServletRequest.setAttribute("filter", true);
-                filterChain.doFilter(servletRequest, servletResponse);
+                //httpServletRequest.setAttribute("filter", true);
+
+                // 检查session
+                SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
+                String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
+
+                String redirectUrl = "/exception.page?redirectName=sessionTimeout";
+                String resultCode = CommonConstants.SESSION_TIMEOUT_CODE;
+                // 如果session信息存在,放行
+                if (StringUtils.isNotBlank(sessionUser)) {
+                    //从缓存中获取SESSION数据
+                    List<WsUserSessionDO> userSessionList = CoreCache.getInstance().getUserSessionList();
+                    WsUserSessionDO wsUserSessionDO = userSessionList.stream().filter(obj->obj.getUserId().toString().equals(sessionInfoBean.getUserId())).findAny().orElse(null);
+                    if (null != wsUserSessionDO && !wsUserSessionDO.getSessionId().equals(httpServletRequest.getSession().getId())) {
+                        // 如果用户重复登陆，则需要重定向到登陆页面
+                        redirectUrl = "/exception.page?redirectName=conflictLogin";
+                        resultCode = CommonConstants.CONFLICT_LOGIN_CODE;
+                    } else {
+                        filterChain.doFilter(servletRequest, servletResponse);
+                        return;
+                    }
+                }
+
+                // 拦截 返回到登录页面
+                logger.info("session user:{}", sessionUser);
+                logger.info("servletPath:{}", servletPath);
+
+                String headerAccept = httpServletRequest.getHeader("accept");
+                String headerXRequestedWidth = httpServletRequest.getHeader("X-Requested-With");
+
+                logger.info("accept:{}", headerAccept);
+                logger.info("X-Requested-With:{}", headerXRequestedWidth);
+
+                if (!(headerAccept.contains("application/json")
+                        || (headerXRequestedWidth != null && headerXRequestedWidth.contains("XMLHttpRequest")))) {
+                    // http请求
+                    String contextPath = httpServletRequest.getContextPath();
+                    httpServletResponse.sendRedirect(contextPath + redirectUrl);
+                } else {
+                    // ajax请求
+                    try {
+                        //这里并不是设置跳转页面，而是将重定向的地址发给前端，让前端执行重定向
+
+                        //设置跳转地址
+                        httpServletResponse.setHeader("redirectUrl", redirectUrl);
+                        // 设置错误信息
+                        httpServletResponse.setHeader("errorCode", resultCode);
+                        httpServletResponse.flushBuffer();
+
+                        PrintWriter writer = httpServletResponse.getWriter();
+                        Map<String, String> map = new HashMap<>();
+                        map.put("redirectUrl", redirectUrl);
+                        map.put("code", resultCode);
+
+                        // JSON格式返回给前端
+                        writer.write(JsonUtil.javaobject2Jsonstr(map));
+                        writer.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }catch (Exception e) {
 
             } finally {

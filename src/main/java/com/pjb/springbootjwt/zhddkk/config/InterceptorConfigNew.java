@@ -17,27 +17,27 @@ import java.util.List;
 @Configuration
 public class InterceptorConfigNew implements WebMvcConfigurer {
     // 登录拦截忽略的URL
-    private static final List<String> IGNORE_URL_LIST = new ArrayList<>(Arrays.asList(
-            "",
-            "/",
-            "/index",
-            "/login.do",
-            "/exception.page",
-            "/redirect",
-            "/valid/**",
-            "/verifyUser.do",
-            "/canvas/snow.page",
-            "/register.page",
-            "/forgetPassword.page",
-            "/canvas/canvasIndex.page",
-            "/getUserQuestion.json",
-            "/showQRCode.do",
-            "/checkUserRegisterStatus.json",
-            "/updatePassword.do",
-            "/generateVerifyCode.do",
-            "/upload/app",
-            "/register.do",
-            "/getChatRoomInfo.json"));
+//    private static final List<String> IGNORE_URL_LIST = new ArrayList<>(Arrays.asList(
+//            "",
+//            "/",
+//            "/index",
+//            "/login.do",
+//            "/exception.page",
+//            "/redirect",
+//            "/valid/**",
+//            "/verifyUser.do",
+//            "/canvas/snow.page",
+//            "/register.page",
+//            "/forgetPassword.page",
+//            "/canvas/canvasIndex.page",
+//            "/getUserQuestion.json",
+//            "/showQRCode.do",
+//            "/checkUserRegisterStatus.json",
+//            "/updatePassword.do",
+//            "/generateVerifyCode.do",
+//            "/upload/app",
+//            "/register.do",
+//            "/getChatRoomInfo.json"));
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -46,8 +46,8 @@ public class InterceptorConfigNew implements WebMvcConfigurer {
                 .addPathPatterns("/**").excludePathPatterns("/js/**", "/img/**", "/css/**", "/i18n/**");
 
         // 登录拦截器 检查session是否存在
-        registry.addInterceptor(logInterceptor())
-                .addPathPatterns("/**").excludePathPatterns(IGNORE_URL_LIST);
+//        registry.addInterceptor(logInterceptor())
+//                .addPathPatterns("/**").excludePathPatterns(IGNORE_URL_LIST);
     }
 
     @Bean

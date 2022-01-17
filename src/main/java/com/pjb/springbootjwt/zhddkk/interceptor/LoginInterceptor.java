@@ -34,80 +34,80 @@ public class LoginInterceptor implements HandlerInterceptor {
     private MessageSource messageSource;
 
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
-        String servletPath = httpServletRequest.getServletPath();
-        if (servletPath.contains("undefined")) {
-            return false;
-        }
+//        String servletPath = httpServletRequest.getServletPath();
+//        if (servletPath.contains("undefined")) {
+//            return false;
+//        }
+//
+//        boolean filter = false;
+//        Object ob = httpServletRequest.getAttribute("filter");
+//        if (null != ob) {
+//            filter = (boolean)ob;
+//        }
+//        if (!filter) {
+//            return true;
+//        }
+//
+//        // 检查session
+//        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
+//        String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
+//
+//        String redirectUrl = "/exception.page?redirectName=sessionTimeout";
+//        String resultCode = CommonConstants.SESSION_TIMEOUT_CODE;
+//        // 如果session信息存在,放行
+//        if (StringUtils.isNotBlank(sessionUser)) {
+//            //从缓存中获取SESSION数据
+//            List<WsUserSessionDO> userSessionList = CoreCache.getInstance().getUserSessionList();
+//            WsUserSessionDO wsUserSessionDO = userSessionList.stream().filter(obj->obj.getUserId().toString().equals(sessionInfoBean.getUserId())).findAny().orElse(null);
+//            if (null != wsUserSessionDO && !wsUserSessionDO.getSessionId().equals(httpServletRequest.getSession().getId())) {
+//                // 如果用户重复登陆，则需要重定向到登陆页面
+//                redirectUrl = "/exception.page?redirectName=conflictLogin";
+//                resultCode = CommonConstants.CONFLICT_LOGIN_CODE;
+//            } else {
+//                return true;
+//            }
+//        }
+//
+//        // 拦截 返回到登录页面
+//        logger.info("session user:{}", sessionUser);
+//        logger.info("servletPath:{}", servletPath);
+//
+//        String headerAccept = httpServletRequest.getHeader("accept");
+//        String headerXRequestedWidth = httpServletRequest.getHeader("X-Requested-With");
+//
+//        logger.info("accept:{}", headerAccept);
+//        logger.info("X-Requested-With:{}", headerXRequestedWidth);
+//
+//        if (!(headerAccept.contains("application/json")
+//                || (headerXRequestedWidth != null && headerXRequestedWidth.contains("XMLHttpRequest")))) {
+//            // http请求
+//            String contextPath = httpServletRequest.getContextPath();
+//            httpServletResponse.sendRedirect(contextPath + redirectUrl);
+//        } else {
+//            // ajax请求
+//            try {
+//                //这里并不是设置跳转页面，而是将重定向的地址发给前端，让前端执行重定向
+//
+//                //设置跳转地址
+//                httpServletResponse.setHeader("redirectUrl", redirectUrl);
+//                // 设置错误信息
+//                httpServletResponse.setHeader("errorCode", resultCode);
+//                httpServletResponse.flushBuffer();
+//
+//                PrintWriter writer = httpServletResponse.getWriter();
+//                Map<String, String> map = new HashMap<>();
+//                map.put("redirectUrl", redirectUrl);
+//                map.put("code", resultCode);
+//
+//                // JSON格式返回给前端
+//                writer.write(JsonUtil.javaobject2Jsonstr(map));
+//                writer.flush();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
-        boolean filter = false;
-        Object ob = httpServletRequest.getAttribute("filter");
-        if (null != ob) {
-            filter = (boolean)ob;
-        }
-        if (!filter) {
-            return true;
-        }
-
-        // 检查session
-        SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
-        String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
-
-        String redirectUrl = "/exception.page?redirectName=sessionTimeout";
-        String resultCode = CommonConstants.SESSION_TIMEOUT_CODE;
-        // 如果session信息存在,放行
-        if (StringUtils.isNotBlank(sessionUser)) {
-            //从缓存中获取SESSION数据
-            List<WsUserSessionDO> userSessionList = CoreCache.getInstance().getUserSessionList();
-            WsUserSessionDO wsUserSessionDO = userSessionList.stream().filter(obj->obj.getUserId().toString().equals(sessionInfoBean.getUserId())).findAny().orElse(null);
-            if (null != wsUserSessionDO && !wsUserSessionDO.getSessionId().equals(httpServletRequest.getSession().getId())) {
-                // 如果用户重复登陆，则需要重定向到登陆页面
-                redirectUrl = "/exception.page?redirectName=conflictLogin";
-                resultCode = CommonConstants.CONFLICT_LOGIN_CODE;
-            } else {
-                return true;
-            }
-        }
-
-        // 拦截 返回到登录页面
-        logger.info("session user:{}", sessionUser);
-        logger.info("servletPath:{}", servletPath);
-
-        String headerAccept = httpServletRequest.getHeader("accept");
-        String headerXRequestedWidth = httpServletRequest.getHeader("X-Requested-With");
-
-        logger.info("accept:{}", headerAccept);
-        logger.info("X-Requested-With:{}", headerXRequestedWidth);
-
-        if (!(headerAccept.contains("application/json")
-                || (headerXRequestedWidth != null && headerXRequestedWidth.contains("XMLHttpRequest")))) {
-            // http请求
-            String contextPath = httpServletRequest.getContextPath();
-            httpServletResponse.sendRedirect(contextPath + redirectUrl);
-        } else {
-            // ajax请求
-            try {
-                //这里并不是设置跳转页面，而是将重定向的地址发给前端，让前端执行重定向
-
-                //设置跳转地址
-                httpServletResponse.setHeader("redirectUrl", redirectUrl);
-                // 设置错误信息
-                httpServletResponse.setHeader("errorCode", resultCode);
-                httpServletResponse.flushBuffer();
-
-                PrintWriter writer = httpServletResponse.getWriter();
-                Map<String, String> map = new HashMap<>();
-                map.put("redirectUrl", redirectUrl);
-                map.put("code", resultCode);
-
-                // JSON格式返回给前端
-                writer.write(JsonUtil.javaobject2Jsonstr(map));
-                writer.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return false;
+        return true;
     }
 
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
