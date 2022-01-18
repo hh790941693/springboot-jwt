@@ -136,9 +136,13 @@ public class OperationLogAspect {
                             continue;
                         }
                         if (paraterType == LoginDTO.class) {
-                            LoginDTO loginDTO = (LoginDTO)params[i];
-                            loginDTO.setPass(null);
-                            parameterValue = loginDTO.toString();
+                            try {
+                                LoginDTO loginDTO = (LoginDTO) params[i];
+                                loginDTO.setPass(null);
+                                parameterValue = loginDTO.toString();
+                            } catch (Exception e) {
+
+                            }
                         }
                         String parameterValueStr = parameterValue.toString();
                         if (paraterName.contains(CommonConstants.C_PASS)) {
