@@ -20,7 +20,7 @@
                     <div class="col-sm-4">
                         <div class="input-group">
                             <div class="input-group-addon">选择月份</div>
-                            <input class="form-control" id="beginDate"
+                            <input class="form-control" id="beginDate1"
                                    readonly="readonly" placeholder="起始时间">
                         </div>
                     </div>
@@ -33,15 +33,39 @@
         </div>
 
         <div style="width:100%;height:300px;">
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">选择月份</div>
+                            <input class="form-control" id="beginDate2"
+                                   readonly="readonly" placeholder="起始时间">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!--每日在线人数-->
-            <div id="online-echarts-chart" style="width:98%;height:100%;">
+            <div id="online-echarts-chart" style="width:98%;height:80%;">
 
             </div>
         </div>
 
         <div style="width:100%;height:300px;">
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">选择月份</div>
+                            <input class="form-control" id="beginDate3"
+                                   readonly="readonly" placeholder="起始时间">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!--每日上传文件-->
-            <div id="day-upload-echarts-chart" style="width:98%;height:100%;">
+            <div id="day-upload-echarts-chart" style="width:98%;height:80%;">
 
             </div>
         </div>
@@ -68,9 +92,8 @@
     <script type="text/javascript" th:src="@{/js/echarts/echarts.common.min.js}"></script>
 </body>
     <script>
-
         layui.laydate.render({
-            elem: '#beginDate',
+            elem: '#beginDate1',
             type: 'month',
             istime: true,
             format: 'yyyy-MM',
@@ -78,7 +101,29 @@
                 var startDay = value + "-" + "01";
                 var endDay = value + "-" + new Date(date.year, date.month, 0).getDate();
                 querySignData(startDay, endDay);
+            }
+        });
+
+        layui.laydate.render({
+            elem: '#beginDate2',
+            type: 'month',
+            istime: true,
+            format: 'yyyy-MM',
+            change: function (value, date, endDate) {
+                var startDay = value + "-" + "01";
+                var endDay = value + "-" + new Date(date.year, date.month, 0).getDate();
                 queryOnlineUser(startDay, endDay);
+            }
+        });
+
+        layui.laydate.render({
+            elem: '#beginDate3',
+            type: 'month',
+            istime: true,
+            format: 'yyyy-MM',
+            change: function (value, date, endDate) {
+                var startDay = value + "-" + "01";
+                var endDay = value + "-" + new Date(date.year, date.month, 0).getDate();
                 queryDayUpload(startDay, endDay);
             }
         });
