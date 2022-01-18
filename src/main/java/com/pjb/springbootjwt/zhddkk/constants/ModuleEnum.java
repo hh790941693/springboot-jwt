@@ -4,6 +4,7 @@ public enum ModuleEnum {
 
     //-------------------客户端-------------------------------
     LOGIN("登录"),
+    LOGIN_OK("登录成功"),
     LOGOUT("退出"),
     REGISTER("注册"),
     FORGET_PASSWORD("忘记密码"),
@@ -16,7 +17,6 @@ public enum ModuleEnum {
     SETTING("设置"),
     SIGN("签到"),
     FEED_BACK("反馈建议"),
-    OTHER("其他"),
 
     //-------------------服务端------------------------------
     USER_MANAGE("用户管理"),
@@ -26,7 +26,10 @@ public enum ModuleEnum {
     CONFIGURATION("配置"),
     AD_PUBLISH("广告发布"),
     UPDATE_PASSWORD("修改密码"),
-    TWOD_GAME("2D画图");
+    REDIRECT("重定向"),
+    EXCEPTION("异常"),
+    TWOD_GAME("2D画图"),
+    OTHER("其他");
 
     String value;
     ModuleEnum(String value) {

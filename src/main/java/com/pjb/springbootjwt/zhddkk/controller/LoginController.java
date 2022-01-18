@@ -87,9 +87,9 @@ public class LoginController {
      * @param request 请求
      * @return 登陆首页
      */
-    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "登陆首页页面")
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "登陆页面")
     @RequestMapping({"", "/login"})
-    public String home(Model model, HttpServletRequest request, HttpServletResponse response) {
+    public String login(Model model, HttpServletRequest request, HttpServletResponse response) {
         String version = request.getParameter("v");
         if (StringUtils.isNotBlank(version)) {
             switch(version){
@@ -133,7 +133,7 @@ public class LoginController {
      * 登录按钮事件.
      * @param loginDTO 登录信息.
      */
-    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGIN, subModule = "", describe = "登录")
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGIN, subModule = "", describe = "登录按钮事件")
     @RequestMapping(value = "login.do", method = RequestMethod.POST)
     public void login(@Validated LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 获取用户信息
@@ -214,7 +214,7 @@ public class LoginController {
      *
      * @return 首页
      */
-    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "登录成功页面")
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN_OK, subModule = "", describe = "登录成功页面")
     @RequestMapping(value = "/home")
     public String home(HttpServletRequest request, HttpServletResponse response) {
         logger.debug("访问home");
@@ -246,7 +246,7 @@ public class LoginController {
      * @param model 模型
      * @return 注册
      */
-    @OperationLogAnnotation(type = OperationEnum.INSERT, module = ModuleEnum.REGISTER, subModule = "", describe = "注册账号")
+    @OperationLogAnnotation(type = OperationEnum.INSERT, module = ModuleEnum.REGISTER, subModule = "", describe = "注册账号事件")
     @RequestMapping(value = "register.do", method = RequestMethod.POST)
     @ResponseBody
     @Transactional
@@ -328,6 +328,7 @@ public class LoginController {
      * @param errorMsg 错误信息
      * @param request 请求
      */
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.REDIRECT, subModule = "", describe = "重定向")
     @RequestMapping(value = "/redirect")
     public String redirect(String redirectName, String errorMsg, HttpServletRequest request) {
         boolean isNotBlankErrorMsg = StringUtils.isNotBlank(errorMsg);
@@ -375,6 +376,7 @@ public class LoginController {
     /**
      * 异常页面.
      */
+    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.EXCEPTION, subModule = "", describe = "异常页面")
     @RequestMapping(value = "/exception.page")
     public String exception(String redirectName, Model model) {
         logger.debug("exception.page");
@@ -397,7 +399,7 @@ public class LoginController {
      * 更新密码事件.
      * @param forgetPasswordDTO 忘记密码信息
      */
-    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.FORGET_PASSWORD, subModule = "", describe = "更新密码")
+    @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.UPDATE_PASSWORD, subModule = "", describe = "更新密码事件")
     @RequestMapping(value = "updatePassword.do", method = RequestMethod.POST)
     @ResponseBody
     public Result<String> updatePassword(@Validated ForgetPasswordDTO forgetPasswordDTO) {
@@ -532,7 +534,7 @@ public class LoginController {
      * @param request 请求
      * @return 生成的验证码图片base64
      */
-    @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.LOGIN, subModule = "", describe = "获取验证码")
+    @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.LOGIN, subModule = "", describe = "查询验证码")
     @GetMapping("/generateVerifyCode.do")
     @ResponseBody
     public Result<String> generateVerifyCode(HttpServletRequest request, HttpServletResponse response) {
