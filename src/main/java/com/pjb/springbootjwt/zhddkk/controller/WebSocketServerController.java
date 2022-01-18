@@ -68,23 +68,36 @@ public class WebSocketServerController extends AdminBaseController {
 
     /**
      * 每日签到人数.
+     * @param startDay 起始时间  yyyy-MM-dd
+     * @param endDay   结束时间  yyyy-MM-dd
      * @return 签到人数信息
      */
     @RequestMapping("/querySignData.do")
     @ResponseBody
-    public Map<String, Integer> querySignData() {
+    public Map<String, Integer> querySignData(String startDay, String endDay) {
         Map<String, Integer> map = new LinkedHashMap<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-        for (int i = 30; i >= 0; i--) {
-            Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
-            Date dayBeginDate = DateUtil.dayBeginDate(date);
-            Date dayEndDate = DateUtil.dayEndDate(date);
-            String timeName = sdf.format(date);
+        SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfy = new SimpleDateFormat("MM-dd");
+        Date beginDate = null;
+        Date endDate = null;
+        try {
+            beginDate = sdfx.parse(startDay);
+            endDate = sdfx.parse(endDay);
+        } catch (Exception e) {
 
-            int count = wsSignService.selectCount(new EntityWrapper<WsSignDO>().ge("create_time", dayBeginDate)
-                .le("create_time", dayEndDate));
-            map.put(timeName, count);
         }
+
+        Date startDate = beginDate;
+        do {
+            Date dayBeginDate = DateUtil.dayBeginDate(startDate);
+            Date dayEndDate = DateUtil.dayEndDate(startDate);
+            int count = wsSignService.selectCount(new EntityWrapper<WsSignDO>().ge("create_time", dayBeginDate)
+                    .le("create_time", dayEndDate));
+
+            String timeName = sdfy.format(startDate);
+            map.put(timeName, count);
+            startDate = DateUtil.getBeforeByDayTime(startDate, 1);
+        } while (startDate.compareTo(endDate) <= 0);
 
         return map;
     }
@@ -95,21 +108,34 @@ public class WebSocketServerController extends AdminBaseController {
      */
     @RequestMapping("/queryOnlineUserData.do")
     @ResponseBody
-    public Map<String, Integer> queryOnlineUserData() {
+    public Map<String, Integer> queryOnlineUserData(String startDay, String endDay) {
+
+        SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd");
+        Date beginDate = null;
+        Date endDate = null;
+        try {
+            beginDate = sdfx.parse(startDay);
+            endDate = sdfx.parse(endDay);
+        } catch (Exception e) {
+
+        }
+
         Map<String, Integer> map = new LinkedHashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<LoginHistoryDto> loginList = wsOperationLogService.queryOnlineUserData();
         Map<String, List<LoginHistoryDto>> loginMap = loginList.stream().collect(Collectors.groupingBy(LoginHistoryDto::getTime));
 
-        for (int i = 30; i >= 0; i--) {
-            Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
-            String timeName = sdf.format(date);
+        Date startDate = beginDate;
+        do {
+            String timeName = sdf.format(startDate);
             int userNum = 0;
             if (loginMap.containsKey(timeName)) {
                 userNum = loginMap.get(timeName).size();
             }
             map.put(timeName.substring(5), userNum);
-        }
+            startDate = DateUtil.getBeforeByDayTime(startDate, 1);
+        } while (startDate.compareTo(endDate) <= 0);
+
         return map;
     }
 
@@ -124,24 +150,37 @@ public class WebSocketServerController extends AdminBaseController {
      */
     @RequestMapping("/queryUploadFileData.do")
     @ResponseBody
-    public Map<String, Long> queryUploadFileData() {
+    public Map<String, Long> queryUploadFileData(String startDay, String endDay) {
+        SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd");
+        Date beginDate = null;
+        Date endDate = null;
+        try {
+            beginDate = sdfx.parse(startDay);
+            endDate = sdfx.parse(endDay);
+        } catch (Exception e) {
+
+        }
+
         Map<String, Long> map = new LinkedHashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-        for (int i = 30; i >= 0; i--) {
-            Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
-            Date dayBeginDate = DateUtil.dayBeginDate(date);
-            Date dayEndDate = DateUtil.dayEndDate(date);
-            String timeName = sdf.format(date);
 
+        Date startDate = beginDate;
+        do {
+            Date dayBeginDate = DateUtil.dayBeginDate(startDate);
+            Date dayEndDate = DateUtil.dayEndDate(startDate);
+            String timeName = sdf.format(startDate);
             List<WsFileDO> wsFileList = wsFileService.selectList(new EntityWrapper<WsFileDO>()
                     .ge("create_time", dayBeginDate)
                     .le("create_time", dayEndDate));
-            long fileSize = 0;
-            for (WsFileDO wsFileDO : wsFileList) {
-                fileSize += wsFileDO.getFileSize();
-            }
+            long fileSize = wsFileList.stream().map(WsFileDO::getFileSize).reduce(0l, Long::sum);
+//            for (WsFileDO wsFileDO : wsFileList) {
+//                fileSize += wsFileDO.getFileSize();
+//            }
             map.put(timeName, fileSize);
-        }
+
+            startDate = DateUtil.getBeforeByDayTime(startDate, 1);
+        } while (startDate.compareTo(endDate) <= 0);
+
         return map;
     }
 
