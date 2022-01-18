@@ -7,6 +7,7 @@ import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
+import com.pjb.springbootjwt.zhddkk.dto.LoginDTO;
 import com.pjb.springbootjwt.zhddkk.service.WsOperationLogService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import java.lang.reflect.Method;
@@ -74,7 +75,6 @@ public class OperationLogAspect {
         SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
         String userName = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
 
-
         if (StringUtils.isNotBlank(userName)) {
             WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", userName));
             wol.setUserName(userName);
@@ -134,6 +134,11 @@ public class OperationLogAspect {
                         Object parameterValue = params[i];
                         if (null == parameterValue) {
                             continue;
+                        }
+                        if (paraterType == LoginDTO.class) {
+                            LoginDTO loginDTO = (LoginDTO)params[i];
+                            loginDTO.setPass(null);
+                            parameterValue = loginDTO.toString();
                         }
                         String parameterValueStr = parameterValue.toString();
                         if (paraterName.contains(CommonConstants.C_PASS)) {

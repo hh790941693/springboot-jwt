@@ -77,11 +77,12 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         }
         String clientIp = request.getRemoteAddr(); // 获取IP地址
         System.out.println("接口地址: " + url);
-        System.out.println("IP地址: " + clientIp);
+        System.out.println("IP地址 : " + clientIp);
+        System.out.println("请求类型: " + request.getMethod());
         System.out.println("调用方法: " + functionName);
         System.out.println("参数列表: " + paramsSb.toString());
         long startTime = (long)request.getAttribute("startTime");
-        System.out.println("耗时    : " + (System.currentTimeMillis() - startTime) + "ms");
+        System.out.println("耗时   : " + (System.currentTimeMillis() - startTime) + "ms");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss S");
         System.out.println("操作时间: " + dateFormat.format(new Date()));
         SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
@@ -91,7 +92,7 @@ public class ActionLogInterceptor implements HandlerInterceptor {
         }
         String viewName = (String)request.getAttribute("viewName");
         if (StringUtils.isNotBlank(viewName)) {
-            System.out.println("页面    : " + viewName);
+            System.out.println("页面   : " + viewName);
         }
         System.out.println("-------------------------------------------------------------------------------");
     }
