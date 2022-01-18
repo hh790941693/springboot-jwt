@@ -3,18 +3,18 @@ package com.pjb.springbootjwt.zhddkk.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.domain.*;
+import com.pjb.springbootjwt.zhddkk.dto.LoginHistoryDto;
 import com.pjb.springbootjwt.zhddkk.service.*;
 import com.pjb.springbootjwt.zhddkk.util.*;
 import com.pjb.springbootjwt.zhddkk.websocket.WebSocketConfig;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +34,13 @@ public class WebSocketServerController extends AdminBaseController {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketServerController.class);
 
     @Autowired
-    private WsChatlogService wsChatlogService;
-
-    @Autowired
     private WsSignService wsSignService;
 
     @Autowired
     private WsFileService wsFileService;
+
+    @Autowired
+    private WsOperationLogService wsOperationLogService;
 
     @Autowired
     private WebSocketConfig webSocketConfig;
@@ -75,7 +75,7 @@ public class WebSocketServerController extends AdminBaseController {
     public Map<String, Integer> querySignData() {
         Map<String, Integer> map = new LinkedHashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-        for (int i = 6; i >= 0; i--) {
+        for (int i = 30; i >= 0; i--) {
             Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
             Date dayBeginDate = DateUtil.dayBeginDate(date);
             Date dayEndDate = DateUtil.dayEndDate(date);
@@ -95,24 +95,21 @@ public class WebSocketServerController extends AdminBaseController {
      */
     @RequestMapping("/queryOnlineUserData.do")
     @ResponseBody
-    public Map<String, Long> queryOnlineUserData() {
-        Map<String, Long> map = new LinkedHashMap<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-        SimpleDateFormat sdfx = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public Map<String, Integer> queryOnlineUserData() {
+        Map<String, Integer> map = new LinkedHashMap<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<LoginHistoryDto> loginList = wsOperationLogService.queryOnlineUserData();
+        Map<String, List<LoginHistoryDto>> loginMap = loginList.stream().collect(Collectors.groupingBy(LoginHistoryDto::getTime));
+
         for (int i = 30; i >= 0; i--) {
             Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
-            Date dayBeginDate = DateUtil.dayBeginDate(date);
-            Date dayEndDate = DateUtil.dayEndDate(date);
             String timeName = sdf.format(date);
-
-            List<WsChatlogDO> list = wsChatlogService.selectList(new EntityWrapper<WsChatlogDO>()
-                    .eq("to_user", "")
-                    .ge("time", sdfx.format(dayBeginDate))
-                    .le("time", sdfx.format(dayEndDate)));
-            long num = list.stream().filter(distinctByKey(b -> b.getUser())).count();
-            map.put(timeName, num);
+            int userNum = 0;
+            if (loginMap.containsKey(timeName)) {
+                userNum = loginMap.get(timeName).size();
+            }
+            map.put(timeName.substring(5), userNum);
         }
-
         return map;
     }
 
@@ -130,7 +127,7 @@ public class WebSocketServerController extends AdminBaseController {
     public Map<String, Long> queryUploadFileData() {
         Map<String, Long> map = new LinkedHashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-        for (int i = 6; i >= 0; i--) {
+        for (int i = 30; i >= 0; i--) {
             Date date = DateUtil.getBeforeByDayTime(new Date(), -i);
             Date dayBeginDate = DateUtil.dayBeginDate(date);
             Date dayEndDate = DateUtil.dayEndDate(date);

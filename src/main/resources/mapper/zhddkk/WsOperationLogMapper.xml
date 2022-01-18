@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pjb.springbootjwt.zhddkk.dao.WsOperationLogDao">
-
+    <select id="queryOnlineUserData" resultType="com.pjb.springbootjwt.zhddkk.dto.LoginHistoryDto">
+        SELECT
+            DISTINCT DATE_FORMAT(t1.create_time, '%Y-%m-%d') AS time,
+            t1.user_id,
+            COUNT(t1.user_id) AS loginCnt
+        FROM ws_operation_log t1
+        WHERE t1.method_name = 'home'
+        GROUP BY t1.user_id,t1.create_time
+        ORDER BY time
+    </select>
 </mapper>

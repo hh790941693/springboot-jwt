@@ -17,12 +17,21 @@
     <div id="mainDiv">
         <div style="width:100%;height:40%;">
             <!--每日签到数-->
-             <div id="row1-left-echarts-chart" style="width:49%;height:100%;float:left;">
+             <div id="row1-left-echarts-chart" style="width:98%;height:100%;">
 
              </div>
-    
+        </div>
+
+        <div style="width:100%;height:40%;">
+            <!--每日在线人数-->
+            <div id="row2-echarts-chart" style="width:98%;height:100%;">
+
+            </div>
+        </div>
+
+        <div style="width:100%;height:40%;">
             <!--每日上传文件-->
-            <div id="row1-right-echarts-chart" style="width:49%;height:100%;float:right;">
+            <div id="row1-right-echarts-chart" style="width:98%;height:100%;">
 
             </div>
         </div>
@@ -30,13 +39,6 @@
         <div style="width:100%;height:40%;">
             <!--用户累计上传文件容量信息-->
             <div id="each-user-upload_filesize-chart" style="width:98%;height:100%;">
-            </div>
-        </div>
-        
-        <div style="width:100%;height:40%;">
-            <!--每日在线人数-->
-            <div id="row2-echarts-chart" style="width:98%;height:100%;">
-
             </div>
         </div>
 
@@ -70,6 +72,11 @@
                     itemValueArr.push(val);
 
                     var leftOption = {
+                        grid: {
+                            left: '5%',
+                            top: '8%',
+                            right: '3%'
+                        },
                         title: {
                             x: 'center',
                             text: '每日签到人数'
@@ -90,6 +97,7 @@
                         series: [{
                             data: itemValueArr,
                             type: 'line',
+                            smooth: true,
                             itemStyle: {
                                 normal: {
                                     color: 'black',
@@ -116,67 +124,6 @@
             }
         });
 
-        //每日上传文件大小
-        var fileSizeChart = echarts.init(document.getElementById("row1-right-echarts-chart"));
-        $.ajax({
-            type: 'GET',
-            url: rootUrl + 'ws/queryUploadFileData.do',
-            async: true,
-            success: function (result) {
-                var itemNameArr = [];
-                var itemValueArr = [];
-                $.each(result, function (key, val) {
-                    itemNameArr.push(key);
-                    itemValueArr.push((val / 1024 / 1024).toFixed(2));
-                });
-                var fileSizeOption = {
-                    title: {
-                        x: 'center',
-                        text: '每日累计上传文件(单位: M)'
-                    },
-                    tooltip: {
-                        formatter: '{c}M'
-                    },
-                    xAxis: {
-                        type: 'category',
-                        data: itemNameArr,
-                        splitLine: {
-                            show: false
-                        }
-                    },
-                    yAxis: {
-                        type: 'value',
-                        splitLine: {
-                            show: false
-                        }
-                    },
-                    series: [{
-                        data: itemValueArr,
-                        type: 'line',
-                        itemStyle: {
-                            normal: {
-                                color: 'black',
-                                label: {
-                                    show: true,
-                                    formatter: function (params) {
-                                        if (params.value == 0) {
-                                            return "";
-                                        } else {
-                                            return params.value;
-                                        }
-                                    }
-                                },
-                                lineStyle: {
-                                    color: 'blue'
-                                }
-                            }
-                        }
-                    }]
-                };
-                fileSizeChart.setOption(fileSizeOption);
-            }
-        });
-
         //每日在线人数
         var onlineChart = echarts.init(document.getElementById("row2-echarts-chart"));
         $.ajax({
@@ -193,7 +140,7 @@
                     var onlineOption = {
                         grid: {
                             left: '5%',
-                            top: '3%',
+                            top: '8%',
                             right: '3%'
                         },
                         tooltip: {
@@ -219,6 +166,7 @@
                         series: [{
                             data: itemValueArr,
                             type: 'line',
+                            smooth: true,
                             itemStyle: {
                                 normal: {
                                     color: 'black',
@@ -244,6 +192,73 @@
             }
         });
 
+        //每日上传文件大小
+        var fileSizeChart = echarts.init(document.getElementById("row1-right-echarts-chart"));
+        $.ajax({
+            type: 'GET',
+            url: rootUrl + 'ws/queryUploadFileData.do',
+            async: true,
+            success: function (result) {
+                var itemNameArr = [];
+                var itemValueArr = [];
+                $.each(result, function (key, val) {
+                    itemNameArr.push(key);
+                    itemValueArr.push((val / 1024 / 1024).toFixed(2));
+                });
+                var fileSizeOption = {
+                    grid: {
+                        left: '5%',
+                        top: '8%',
+                        right: '3%'
+                    },
+                    title: {
+                        x: 'center',
+                        text: '每日累计上传文件(单位: M)'
+                    },
+                    tooltip: {
+                        formatter: '{c}M'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: itemNameArr,
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    series: [{
+                        data: itemValueArr,
+                        type: 'line',
+                        smooth: true,
+                        itemStyle: {
+                            normal: {
+                                color: 'black',
+                                label: {
+                                    show: true,
+                                    formatter: function (params) {
+                                        if (params.value == 0) {
+                                            return "";
+                                        } else {
+                                            return params.value;
+                                        }
+                                    }
+                                },
+                                lineStyle: {
+                                    color: 'blue'
+                                }
+                            }
+                        }
+                    }]
+                };
+                fileSizeChart.setOption(fileSizeOption);
+            }
+        });
+
         //用户性别比例
         var sexChart = echarts.init(document.getElementById("row3-left-echarts-chart"));
         var sexOption = {
@@ -256,15 +271,20 @@
                 formatter: '{a} <br/>{b} : {c} ({d}%)'
             },
             legend: {
-                orient: 'vertical',
-                left: 'left',
+                top: '8%',
+                left: 'center',
                 data: ['男', '女', '未知']
             },
             series: [
                 {
                     name: '男女比例',
                     type: 'pie',
-                    radius: '55%',
+                    radius: ['40%', '70%'],
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
                     center: ['50%', '60%'],
                     data: [
                         {value: 335, name: '男'},
@@ -295,16 +315,21 @@
                 formatter: '{a} <br/>{b} : {c} ({d}%)'
             },
             legend: {
+                top: '8%',
                 orient: 'vertical',
-                left: 'left',
+                left:'right',
                 data: ['18-20', '21-30', '31-40', '41-50', '51以上']
             },
             series: [
                 {
                     name: '年龄分布',
                     type: 'pie',
-                    radius: '55%',
-                    center: ['50%', '60%'],
+                    radius: ['40%', '70%'],
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
                     data: [
                         {value: 12, name: '18-20'},
                         {value: 23, name: '21-30'},
@@ -338,9 +363,14 @@
                     itemValueArr.push((val / 1024).toFixed(0));
                 });
                 var fileSizeOption = {
+                    grid: {
+                        left: '5%',
+                        top: '8%',
+                        right: '3%'
+                    },
                     title: {
                         x: 'center',
-                        text: '每个用户累计上传文件(单位: KB)'
+                        text: '用户累计上传文件(单位: KB)'
                     },
                     tooltip: {
                         formatter: '{b}\n{c} KB'

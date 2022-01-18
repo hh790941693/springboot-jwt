@@ -3,8 +3,11 @@ package com.pjb.springbootjwt.zhddkk.service.impl;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.pjb.springbootjwt.zhddkk.dao.WsOperationLogDao;
 import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
+import com.pjb.springbootjwt.zhddkk.dto.LoginHistoryDto;
 import com.pjb.springbootjwt.zhddkk.service.WsOperationLogService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class WsOperationLogServiceImpl extends ServiceImpl<WsOperationLogDao, WsOperationLogDO> implements WsOperationLogService {
-
+    public List<LoginHistoryDto> queryOnlineUserData() {
+        return this.baseMapper.queryOnlineUserData();
+    }
 }
