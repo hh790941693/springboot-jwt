@@ -43,10 +43,12 @@ public class UploadServiceImpl implements UploadService {
 
         // 检查文件上传是否重复
         String md5 = CommonUtil.getMD5(file.getBytes());
-        List<WsFileDO> conflictFileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("md5", md5));
-        if (null != conflictFileList && conflictFileList.size() > 0) {
-            logger.info("{}上传重复,md5:{}", file.getOriginalFilename(), md5);
-            return conflictFileList.get(0).getUrl();
+        if (StringUtils.isNotBlank(md5)) {
+            List<WsFileDO> conflictFileList = wsFileService.selectList(new EntityWrapper<WsFileDO>().eq("md5", md5));
+            if (null != conflictFileList && conflictFileList.size() > 0) {
+                logger.info("{}上传重复,md5:{}", file.getOriginalFilename(), md5);
+                return conflictFileList.get(0).getUrl();
+            }
         }
 
         String originalFilename = file.getOriginalFilename();
