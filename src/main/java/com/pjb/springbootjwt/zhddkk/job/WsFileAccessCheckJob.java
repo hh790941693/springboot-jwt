@@ -13,6 +13,7 @@ import com.pjb.springbootjwt.shop.service.SpMerchantService;
 import com.pjb.springbootjwt.zhddkk.domain.*;
 import com.pjb.springbootjwt.zhddkk.service.*;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
+import com.pjb.springbootjwt.zhddkk.util.CommonUtil;
 import com.pjb.springbootjwt.zhddkk.util.IpUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.record.common.FutureRecord;
@@ -108,6 +110,25 @@ public class WsFileAccessCheckJob {
     public void cronJob3() {
         logger.info("[定时任务3]定时检查ws_file各记录是否可以访问");
         checkUrlStatus();
+    }
+
+    /**
+     * 定时任务入口.
+     */
+    @Scheduled(cron = "10 */1 * * * ?")
+    public void cronJob4() {
+        logger.info("[定时任务4]定时检查ws_file各记录是否可以访问");
+        List<WsFileDO> list = wsFileService.selectList(null);
+
+        for (WsFileDO wsFileDO : list) {
+            String add = wsFileDO.getDiskPath() + File.separator + wsFileDO.getUrl().substring(wsFileDO.getUrl().lastIndexOf("/")+1);
+            File file = new File(add);
+            if (file.exists()) {
+                String md5 = CommonUtil.getMD5(file);
+                wsFileDO.setMd5(md5);
+            }
+        }
+        wsFileService.updateBatchById(list, list.size());
     }
 
     private void checkWsAds() {
