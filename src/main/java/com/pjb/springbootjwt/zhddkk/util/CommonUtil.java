@@ -1,8 +1,9 @@
 package com.pjb.springbootjwt.zhddkk.util;
 
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.security.MessageDigest;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -229,5 +230,51 @@ public class CommonUtil {
         }
 
         return sb.toString();
+    }
+
+    public static byte[] getByte(File file) {
+        // 得到文件长度
+        byte[] b = new byte[(int) file.length()];
+        try {
+            InputStream in = new FileInputStream(file);
+            try {
+                in.read(b);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return b;
+    }
+
+    public static String getMD5(byte[] bytes) {
+        // 16进制字符
+        char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+        try {
+            byte[] strTemp = bytes;
+            MessageDigest mdTemp = MessageDigest.getInstance("MD5");
+            mdTemp.update(strTemp);
+            byte[] md = mdTemp.digest();
+            int j = md.length;
+            char str[] = new char[j * 2];
+            int k = 0;
+            // 移位 输出字符串
+            for (int i = 0; i < j; i++) {
+                byte byte0 = md[i];
+                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+                str[k++] = hexDigits[byte0 & 0xf];
+            }
+            return new String(str);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static String getMD5(File file) {
+        return getMD5(getByte(file));
     }
 }

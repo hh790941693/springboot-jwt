@@ -9,13 +9,15 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.springframework.transaction.annotation.Transactional;
 
 
 /**
  * 文件表
  */
- @TableName("ws_file")
+@TableName("ws_file")
+@Data
 public class WsFileDO implements Serializable {
 
     @TableField(exist = false)
@@ -63,117 +65,6 @@ public class WsFileDO implements Serializable {
     @ApiModelProperty(value = "accessStatus",name = "访问性 0:不可访问 1:可访问")
     private Integer accessStatus;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-
-    public void setDiskPath(String diskPath) {
-        this.diskPath = diskPath;
-    }
-
-    public String getDiskPath() {
-        return diskPath;
-    }
-
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-
-    public void setFileSize(Long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public Long getFileSize() {
-        return fileSize;
-    }
-
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-
-    public void setTrackLength(String trackLength) {
-        this.trackLength = trackLength;
-    }
-
-    public String getTrackLength() {
-        return trackLength;
-    }
-
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public String getFolder() {
-        return folder;
-    }
-
-    public void setFolder(String folder) {
-        this.folder = folder;
-    }
-
-    public Integer getAccessStatus() {
-        return accessStatus;
-    }
-
-    public void setAccessStatus(Integer accessStatus) {
-        this.accessStatus = accessStatus;
-    }
+    // md5值
+    private String md5;
 }

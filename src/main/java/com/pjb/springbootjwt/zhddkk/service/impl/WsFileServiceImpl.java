@@ -27,7 +27,7 @@ public class WsFileServiceImpl extends CoreServiceImpl<WsFileDao, WsFileDO> impl
     }
 
     @Override
-    public String queryUserTodayFileSize(String userName) {
+    public Long queryUserTodayFileSize(String userName) {
         return this.baseMapper.queryUserTodayFileSize(userName);
     }
 

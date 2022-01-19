@@ -16,8 +16,10 @@ public interface UploadService {
     String uploadFile(MultipartFile file, String folder, String userName) throws Exception;
 
     /**
-     * 上传文件(上传前会检查容量够不够)
+     * 检查用户上传容量是否超出
+     * @param
      * @return
+     * @throws Exception
      */
-    String uploadFileWithCheckCapacity(MultipartFile file, String folder, String userName) throws Exception;
+    boolean checkUploadCapacity() throws Exception;
 }
