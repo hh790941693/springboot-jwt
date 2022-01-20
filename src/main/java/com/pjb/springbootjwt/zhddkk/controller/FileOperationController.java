@@ -147,7 +147,7 @@ public class FileOperationController extends AdminBaseController {
         String userId = SessionUtil.getSessionUserId();
         List<WsUserFileDO> wsUserFileDOList = wsUserFileService.selectList(new EntityWrapper<WsUserFileDO>().eq("user_id", userId));
         List<Long> ignoreFileIdList = wsUserFileDOList.stream().map(WsUserFileDO::getFileId).collect(Collectors.toList());
-        Page<WsFileDO> page = wsFileService.selectPage(getPage(WsFileDO.class), new EntityWrapper<WsFileDO>().eq("folder", "music").notIn("id", ignoreFileIdList));
+        Page<WsFileDO> page = wsFileService.selectPage(getPage(WsFileDO.class), new EntityWrapper<WsFileDO>().eq("category", "music").notIn("id", ignoreFileIdList));
         return Result.ok(page);
     }
 
@@ -233,8 +233,8 @@ public class FileOperationController extends AdminBaseController {
     @ResponseBody
     public Result<Page<WsFileDO>> listFile(WsFileDO wsFileDO) {
         Wrapper<WsFileDO> wrapper = new EntityWrapper<>();
-        if (StringUtils.isNotBlank(wsFileDO.getFolder())) {
-            wrapper.eq("folder", wsFileDO.getFolder());
+        if (StringUtils.isNotBlank(wsFileDO.getCategory())) {
+            wrapper.eq("category", wsFileDO.getCategory());
         }
         Page<WsFileDO> page = wsFileService.selectPage(getPage(WsFileDO.class), wrapper);
         return Result.ok(page);
@@ -275,7 +275,7 @@ public class FileOperationController extends AdminBaseController {
             if (delFlag) {
                 // 删除原文件
                 String diskPath = wsFileDO.getDiskPath();
-                String dymicDiskPath = uploadConfig.getStorePath() + File.separator + wsFileDO.getFolder();
+                String dymicDiskPath = uploadConfig.getStorePath() + File.separator + wsFileDO.getCategory();
                 logger.info("diskPath:{}  dymicDiskPath:{}", diskPath, dymicDiskPath);
                 String url = wsFileDO.getUrl();
                 String filename = url.substring(url.lastIndexOf("/") + 1);

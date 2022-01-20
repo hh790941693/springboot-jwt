@@ -23,7 +23,7 @@ function initH5Editor(divId, inputId, folder){
         height: '300px',
         language: "zh_cn",
         imageUploadURL: $.ws.uploadByFroalaUrl,
-        imageUploadParams: {folder: folder}
+        imageUploadParams: {category: folder}
     }).on('editable.afterRemoveImage', function (e, editor, $img) {
         // Set the image source to the image delete params.
         editor.options.imageDeleteParams = {src: $img.attr('src')}

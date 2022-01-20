@@ -34,11 +34,11 @@ public class UploadServiceImpl implements UploadService {
     private WsFileService wsFileService;
     
     @Override
-    public String uploadFile(MultipartFile file, String folder, String userName)
+    public String uploadFile(MultipartFile file, String category)
         throws Exception {
-        logger.info("进入上传文件业务层,目录名:{} 用户:{}", folder, userName);
-        if (StringUtils.isBlank(folder)) {
-            folder = TEMP_PATH;
+        logger.info("进入上传文件业务层,目录名:{}", category);
+        if (StringUtils.isBlank(category)) {
+            category = TEMP_PATH;
         }
 
         // 检查文件上传是否重复
@@ -54,20 +54,21 @@ public class UploadServiceImpl implements UploadService {
         String originalFilename = file.getOriginalFilename();
         String newFileName = renameToUUID(originalFilename);
         logger.info("newFileName:" + newFileName);
-        String totalFolder = uploadConfig.getStorePath() + File.separator + folder + File.separator;
+        String totalFolder = uploadConfig.getStorePath() + File.separator + category + File.separator;
         logger.info("totalFolder：" + totalFolder);
         File newFile = new File(totalFolder, newFileName);
         FileUtils.writeByteArrayToFile(newFile, file.getBytes());
 
-        String viewUrl = uploadConfig.getViewUrl() + folder + "/" + newFileName;
+        String viewUrl = uploadConfig.getViewUrl() + category + "/" + newFileName;
         WsFileDO wsFileDO = new WsFileDO();
-        wsFileDO.setUser(userName);
-        wsFileDO.setFolder(folder);
+        wsFileDO.setUserId(Long.valueOf(SessionUtil.getSessionUserId()));
+        wsFileDO.setUserName(SessionUtil.getSessionUserName());
+        wsFileDO.setCategory(category);
         wsFileDO.setFilename(file.getOriginalFilename());
         if (uploadConfig.getStorePath().endsWith(File.separator)) {
-            wsFileDO.setDiskPath(uploadConfig.getStorePath() + folder);
+            wsFileDO.setDiskPath(uploadConfig.getStorePath() + category);
         } else {
-            wsFileDO.setDiskPath(uploadConfig.getStorePath() + File.separator + folder);
+            wsFileDO.setDiskPath(uploadConfig.getStorePath() + File.separator + category);
         }
         wsFileDO.setUrl(viewUrl);
         wsFileDO.setFileSize(newFile.length());
@@ -110,7 +111,7 @@ public class UploadServiceImpl implements UploadService {
         String sessionUserName = SessionUtil.getSessionUserName();
         boolean canUploadFlag = true;
         if (StringUtils.isNotBlank(sessionUserName) && !sessionUserName.equals(CommonConstants.ADMIN_USER)) {
-            Long fileTotalSize = wsFileService.queryUserTodayFileSize(sessionUserName);
+            Long fileTotalSize = wsFileService.queryUserTodayFileSize(Long.valueOf(SessionUtil.getSessionUserId()));
             if (null != fileTotalSize) {
                 if (fileTotalSize > CommonConstants.DAY_MAX_UPLOAD_FILE_SIZE) {
                     canUploadFlag = false;

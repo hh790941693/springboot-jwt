@@ -4,16 +4,16 @@
 <mapper namespace="com.pjb.springbootjwt.zhddkk.dao.WsFileDao">
     <select id="queryEachUserUploadFileSizeData" resultType="java.util.LinkedHashMap">
         SELECT
-               T.USER as user_name,
+               T.user_name as user_name,
                SUM(T.file_size) AS file_size
         FROM
              ws_file T
         WHERE
-            T.USER IS NOT NULL
-        AND LENGTH(T.USER) > 0
+            T.user_id IS NOT NULL
+        AND LENGTH(T.user_id) > 0
         AND T.access_status = 1
         GROUP BY
-            T.USER
+            T.user_id
         ORDER BY
             file_size desc
     </select>

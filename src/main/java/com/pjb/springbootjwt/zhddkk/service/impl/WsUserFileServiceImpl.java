@@ -2,7 +2,6 @@ package com.pjb.springbootjwt.zhddkk.service.impl;
 
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.pjb.springbootjwt.zhddkk.domain.WsFileDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

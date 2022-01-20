@@ -8,12 +8,11 @@ public interface UploadService {
      * 上传文件
      *
      * @param file       文件对象
-     * @param folder     子目录名
-     * @param userName     用户名称
+     * @param category     子目录名
      * @return
      * @throws Exception
      */
-    String uploadFile(MultipartFile file, String folder, String userName) throws Exception;
+    String uploadFile(MultipartFile file, String category) throws Exception;
 
     /**
      * 检查用户上传容量是否超出

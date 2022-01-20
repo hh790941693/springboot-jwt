@@ -86,7 +86,7 @@ public class CacheServiceImpl implements CacheService {
 
     private void initUserFileData() {
         logger.info("缓存用户文件数据");
-        List<WsFileDO> list = wsFileService.selectList(new EntityWrapper<WsFileDO>().isNotNull("user"));
+        List<WsFileDO> list = wsFileService.selectList(new EntityWrapper<WsFileDO>().isNotNull("user_id"));
         CoreCache.getInstance().setUserFileList(list);
     }
 

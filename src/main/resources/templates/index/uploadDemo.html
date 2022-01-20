@@ -67,7 +67,7 @@
             elem: '#chooseFilesBtn'
             ,elemList: $('#demoList') //列表元素对象
             ,url: $.ws.uploadFileUrl
-            ,data:{'folder':'test'}
+            ,data:{'category':'test'}
             ,accept: 'file'
             ,multiple: true
             ,number: 20
@@ -146,7 +146,7 @@
         upload.render({
             elem: '#uploadPicsBtn'
             ,url: $.ws.uploadFileUrl //改成您自己的上传接口
-            ,data:{'folder':'test'}
+            ,data:{'category':'test'}
             ,multiple: true
             ,before: function(obj){
                 //预读本地文件示例，不支持ie8

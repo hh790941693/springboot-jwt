@@ -173,9 +173,6 @@ public class WebSocketServerController extends AdminBaseController {
                     .ge("create_time", dayBeginDate)
                     .le("create_time", dayEndDate));
             long fileSize = wsFileList.stream().map(WsFileDO::getFileSize).reduce(0l, Long::sum);
-//            for (WsFileDO wsFileDO : wsFileList) {
-//                fileSize += wsFileDO.getFileSize();
-//            }
             map.put(timeName, fileSize);
 
             startDate = DateUtil.getBeforeByDayTime(startDate, 1);

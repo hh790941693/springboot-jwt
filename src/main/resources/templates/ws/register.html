@@ -177,7 +177,7 @@
                 var index = parent.layer.getFrameIndex(window.name);
                 setTimeout(function () {
                     parent.layer.close(index);
-                    window.location.href = "login.page";
+                    window.location.href = "/login";
                 }, timeout * 1000);
             } else {
                 layer.msg('注册失败: '+jsonObj.msg);
@@ -192,8 +192,7 @@
                 size: 10240,//单位为KB
                 accept: 'images',
                 data: {
-                    "user": user,
-                    "folder": "headImg"
+                    "category": "headImg"
                 },
                 before: function () {
                     if (!user) {

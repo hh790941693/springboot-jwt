@@ -257,9 +257,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             for (WsFileDO file : wsFileDOList) {
                 sb.append(file.getId());
                 sb.append(" ");
-                sb.append(file.getUser());
+                sb.append(file.getUserId());
+                sb.append("");
+                sb.append(file.getUserName());
                 sb.append(" ");
-                sb.append(file.getFolder());
+                sb.append(file.getCategory());
                 sb.append(" ");
                 sb.append(file.getUrl());
                 sb.append(" ");

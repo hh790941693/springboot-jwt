@@ -149,7 +149,7 @@ public class UploadFileServlet extends HttpServlet{
 
                         if (user != null && finalSavaPath != null) {
                             WsFileDO wf = new WsFileDO();
-                            wf.setUser(user);
+                            wf.setUserName(user);
                             wf.setFilename(filename);
                             wf.setDiskPath(finalSavaPath);
                             String url = req.getScheme() + "://" + req.getServerName() + ":"+req.getServerPort()+req.getContextPath()+"/upload/"+user+"/"+filename;

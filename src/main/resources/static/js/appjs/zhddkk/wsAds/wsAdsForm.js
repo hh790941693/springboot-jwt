@@ -10,16 +10,16 @@ $(function () {
  * froala编辑器初始化
  * @param divId     用于页面展示用的div
  * @param inputId   用于传递h5数据到后台的input
- * @param folder    图片上传目录
+ * @param category    图片上传目录
  */
-function initH5Editor(divId, inputId, folder){
+function initH5Editor(divId, inputId, category){
     $('#'+divId).editable({
         inlineMode: false,
         alwaysBlank: true,
         height: '300px',
         language: "zh_cn",
         imageUploadURL: $.ws.uploadByFroalaUrl,
-        imageUploadParams: {folder: folder}
+        imageUploadParams: {category: category}
     }).on('editable.afterRemoveImage', function (e, editor, $img) {
         // Set the image source to the image delete params.
         editor.options.imageDeleteParams = {src: $img.attr('src')}
@@ -118,7 +118,7 @@ function initUpload() {
         size: 10240,//单位为KB
         accept: 'images',
         data: {
-            "folder": "adsBackImg"
+            "category": "adsBackImg"
         },
         before: function () {
             layer.load();

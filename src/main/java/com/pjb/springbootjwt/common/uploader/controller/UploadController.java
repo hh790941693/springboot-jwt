@@ -39,21 +39,16 @@ public class UploadController {
      * 上传资源文件
      *
      * @param file   文件
-     * @param folder 要存放的路径，如果为空，则默认存放temp文件夹
+     * @param category 要存放的路径，如果为空，则默认存放temp文件夹
      * @return 上传文件的完整访问路径
      */
     @PostMapping("/uploadFile")
     public Result<String> upload(
             @RequestParam(required = true)MultipartFile file,
-            @RequestParam(required = false)String folder,
-            @RequestParam(required = false)String user
+            @RequestParam(required = false)String category
     ) {
-        logger.info("进入上传文件控制层, 目录名:{}", folder);
+        logger.info("进入上传文件控制层, 目录名:{}", category);
         String url = "";
-        String userName = SessionUtil.getSessionUserName();
-        if (StringUtil.isBlank(userName)) {
-            userName = user;
-        }
         try {
             if (null != file){
                 logger.info("开始上传文件");
@@ -61,7 +56,7 @@ public class UploadController {
                     logger.info("开始上传文件:{}", file.getOriginalFilename());
                     boolean canUpload = uploadService.checkUploadCapacity();
                     if (canUpload) {
-                        url = uploadService.uploadFile(file, folder, userName);
+                        url = uploadService.uploadFile(file, category);
                         logger.info("返回的文件url:{}", url);
                         if (StringUtils.isNotBlank(url)) {
                             return Result.ok(url);
@@ -80,17 +75,16 @@ public class UploadController {
      * 上传音乐文件
      *
      * @param file   文件
-     * @param folder 要存放的路径，如果为空，则默认存放temp文件夹
+     * @param category 要存放的路径，如果为空，则默认存放temp文件夹
      * @return 上传文件的完整访问路径
      */
     @PostMapping("/uploadMusic")
     public Result<List<FileUploadResultBean>> uploadMusic(
             @RequestParam(required = true)MultipartFile[] file,
-            @RequestParam(required = false, defaultValue = "music")String folder
+            @RequestParam(required = false, defaultValue = "music")String category
     ) {
-        logger.info("进入上传文件控制层, 目录名:{}", folder);
+        logger.info("进入上传文件控制层, 目录名:{}", category);
         String url = "";
-        String userName = SessionUtil.getSessionUserName();
         List<FileUploadResultBean> resultList = new ArrayList<>();
         try {
             if (null != file && file.length>0){
@@ -103,7 +97,7 @@ public class UploadController {
                             logger.info("开始上传文件:{}", originFilename);
                             boolean canUpload = uploadService.checkUploadCapacity();
                             if (canUpload) {
-                                url = uploadService.uploadFile(tempfile, folder, userName);
+                                url = uploadService.uploadFile(tempfile, category);
                                 logger.info("返回的文件url:{}", url);
                                 if (StringUtils.isNotBlank(url)) {
                                     FileUploadResultBean fileUploadResultBean = new FileUploadResultBean(originFilename, true, url);
@@ -138,18 +132,17 @@ public class UploadController {
      * 上传资源文件(供新的文本编辑器Froala使用)
      *
      * @param file   文件
-     * @param folder 要存放的路径，如果为空，则默认存放temp文件夹
+     * @param category 要存放的路径，如果为空，则默认存放temp文件夹
      * @return 上传文件的完整访问路径
      */
     @PostMapping("/uploadByFroala")
     public Map<String, Object> uploadByFroala(
             @RequestParam(required = true)MultipartFile file,
-            @RequestParam(required = false)String folder
+            @RequestParam(required = false)String category
     ) {
-        logger.info("进入上传文件控制层, 目录名:{}", folder);
+        logger.info("进入上传文件控制层, 目录名:{}", category);
         Map<String, Object> map = new HashMap<>();
         String url = "";
-        String userName = SessionUtil.getSessionUserName();
         try {
             if (null != file){
                 logger.info("开始上传文件");
@@ -157,7 +150,7 @@ public class UploadController {
                     logger.info("开始上传文件:{}", file.getOriginalFilename());
                     boolean canUpload = uploadService.checkUploadCapacity();
                     if (canUpload) {
-                        url = uploadService.uploadFile(file, folder, userName);
+                        url = uploadService.uploadFile(file, category);
                         logger.info("返回的文件url:{}", url);
                     }
                     if (StringUtils.isNotBlank(url)) {

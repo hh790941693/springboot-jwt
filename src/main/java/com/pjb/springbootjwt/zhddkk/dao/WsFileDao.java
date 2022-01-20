@@ -18,6 +18,6 @@ public interface WsFileDao extends BaseDao<WsFileDO> {
     List<LinkedHashMap<String, String>> queryEachUserUploadFileSizeData();
 
     // 查询指定用户当天上传文件的容量
-    @Select("SELECT IFNULL(SUM(t.file_size), 0) from ws_file t WHERE t.user=#{userName} AND TO_DAYS(t.create_time) = to_days(now());")
-    Long queryUserTodayFileSize(@Param("userName")String userName);
+    @Select("SELECT IFNULL(SUM(t.file_size), 0) from ws_file t WHERE t.user_id=#{userId} AND TO_DAYS(t.create_time) = to_days(now());")
+    Long queryUserTodayFileSize(@Param("userId")Long userId);
 }

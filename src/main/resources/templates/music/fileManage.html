@@ -24,7 +24,7 @@
                             <div class="col-md-4">
                                 <div class="input-group">
                                     <div class="input-group-addon">文件类型</div>
-                                    <select id="folder" name="folder" class="form-control">
+                                    <select id="category" name="category" class="form-control">
                                         <option value="">--请选择--</option>
                                         <option value="music">音乐</option>
                                         <option value="ads">广告</option>
@@ -96,7 +96,7 @@
                         //传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
                         pageNumber : params.pageNumber,
                         pageSize : params.pageSize,
-                        folder : $("#folder").val(),
+                        category : $("#category").val(),
                     };
                 },
                 // //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -115,7 +115,7 @@
                     {
                         checkbox: true,
                         formatter : function (value, row) {
-                            if (row.folder === "music") {
+                            if (row.category === "music") {
                                 return {
                                     disabled : false,
                                 }
@@ -131,7 +131,7 @@
                         title : '文件Id'
                     },
                     {
-                        field : 'folder',
+                        field : 'category',
                         title : '文件类型',
                         formatter : function (value,row) {
                             var res = "其他";
@@ -210,7 +210,7 @@
                             var d = '<a class="btn btn-sm btn-danger" href="#" title="删除"  mce_href="#" onclick="remove(\''
                                 + row.id
                                 + '\')"><i class="fa fa-remove"></i></a> ';
-                            if (row.folder === "music") {
+                            if (row.category === "music") {
                                 return d;
                             }
                             return "";
@@ -284,7 +284,7 @@
         }
 
         function cleanForm() {
-            $("#folder").val("");
+            $("#category").val("");
             reLoad();
         }
   </script>

@@ -450,7 +450,7 @@ $.ws = {
             size: 10240,//单位为KB
             accept: 'images',
             data: {
-                "folder": folderName
+                "category": folderName
             },
             before: function () {
                 layer.load();
