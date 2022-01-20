@@ -2,19 +2,16 @@ package com.pjb.springbootjwt.zhddkk.aspect;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
-import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.bean.SessionInfoBean;
 import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.domain.WsOperationLogDO;
 import com.pjb.springbootjwt.zhddkk.domain.WsUsersDO;
-import com.pjb.springbootjwt.zhddkk.dto.LoginDTO;
 import com.pjb.springbootjwt.zhddkk.service.WsOperationLogService;
 import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +57,7 @@ public class OperationLogAspect {
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         WsOperationLogDO wol = new WsOperationLogDO();
         wol.setAccessTime(new Date());
+        wol.setCreateTime(new Date());
 
         //执行方法之前的时间戳
         long beginTime = System.currentTimeMillis();
@@ -118,7 +116,7 @@ public class OperationLogAspect {
                     wol.setOperType(operationLog.type().getValue());
                     wol.setOperSubmodule(operationLog.subModule());
                     wol.setOperDescribe(operationLog.describe());
-                    wol.setOperRemark(operationLog.remark() + ",IP:" + remoteAddr);
+                    wol.setOperRemark(operationLog.remark() + " IP:" + remoteAddr);
 
                     Parameter[] parameters = method.getParameters();
                     StringBuilder sb = new StringBuilder();
@@ -135,15 +133,7 @@ public class OperationLogAspect {
                         if (null == parameterValue) {
                             continue;
                         }
-                        if (paraterType == LoginDTO.class) {
-                            try {
-                                LoginDTO loginDTO = (LoginDTO) params[i];
-                                loginDTO.setPass(null);
-                                parameterValue = loginDTO.toString();
-                            } catch (Exception e) {
 
-                            }
-                        }
                         String parameterValueStr = parameterValue.toString();
                         if (paraterName.contains(CommonConstants.C_PASS)) {
                             parameterValueStr = "******";
@@ -160,7 +150,6 @@ public class OperationLogAspect {
         }
 
         try {
-            wol.setCreateTime(new Date());
             boolean insertFlag = wsOperationLogService.insert(wol);
             if (insertFlag) {
                 logger.info("新增操作日志成功:" + wol.getOperDescribe() + " 操作人:" + userName);
