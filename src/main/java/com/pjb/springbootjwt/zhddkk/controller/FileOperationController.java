@@ -189,7 +189,7 @@ public class FileOperationController extends AdminBaseController {
                 wsUserFileDOList.add(wuf);
             });
 
-            List<WsUserFileDO> delWsUserFileDOList = wsUserFileService.selectList(new EntityWrapper<WsUserFileDO>().in("file_id", ids));
+            List<WsUserFileDO> delWsUserFileDOList = wsUserFileService.selectList(new EntityWrapper<WsUserFileDO>().eq("user_id", SessionUtil.getSessionUserId()).in("file_id", ids));
             if (null != delWsUserFileDOList && delWsUserFileDOList.size() > 0) {
                 wsUserFileService.deleteBatchIds(delWsUserFileDOList.stream().map(WsUserFileDO::getId).collect(Collectors.toList()));
             }
