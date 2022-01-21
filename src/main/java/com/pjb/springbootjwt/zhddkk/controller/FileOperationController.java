@@ -236,6 +236,9 @@ public class FileOperationController extends AdminBaseController {
         if (StringUtils.isNotBlank(wsFileDO.getCategory())) {
             wrapper.eq("category", wsFileDO.getCategory());
         }
+        if (null != wsFileDO.getAccessStatus()) {
+            wrapper.eq("access_status", wsFileDO.getAccessStatus());
+        }
         Page<WsFileDO> page = wsFileService.selectPage(getPage(WsFileDO.class), wrapper);
         return Result.ok(page);
     }

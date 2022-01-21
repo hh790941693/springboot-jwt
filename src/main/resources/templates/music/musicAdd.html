@@ -147,14 +147,23 @@
                                 if (value === 0) {
                                     return '<span style="color:red;">连接失败</span>';
                                 }
-                                return '<span style="color: black;">正常</span>';
+                                return '<span style="color: green;">正常</span>';
                             }
                         },
                         {
                             field : 'fileSize',
-                            title : '大小(M)',
-                            formatter : function (value,row) {
-                                return (parseInt(value)/1024.0/1024.0).toFixed(0)
+                            title : '大小',
+                            formatter : function (value, row) {
+                                if (value < 1024) {
+                                    return value+" B";
+                                } else {
+                                    var kb = parseInt(value)/1024.0;
+                                    if (kb < 1024) {
+                                        return (parseInt(value)/1024.0).toFixed(2) + " KB";
+                                    } else {
+                                        return (parseInt(value)/1024.0/1024.0).toFixed(2) + " MB";
+                                    }
+                                }
                             }
                         },
                         {
@@ -251,9 +260,18 @@
                         },
                         {
                             field : 'fileSize',
-                            title : '大小(M)',
+                            title : '大小',
                             formatter : function (value,row) {
-                                return (parseInt(value)/1024.0/1024.0).toFixed(0)
+                                if (value < 1024) {
+                                    return value+" B";
+                                } else {
+                                    var kb = parseInt(value)/1024.0;
+                                    if (kb < 1024) {
+                                        return (parseInt(value)/1024.0).toFixed(2) + " KB";
+                                    } else {
+                                        return (parseInt(value)/1024.0/1024.0).toFixed(2) + " MB";
+                                    }
+                                }
                             }
                         },
                         {
@@ -263,7 +281,7 @@
                                 if (value === 0) {
                                     return '<span style="color:red;">连接失败</span>';
                                 }
-                                return '<span style="color: black;">正常</span>';
+                                return '<span style="color: green;">正常</span>';
                             }
                         },
                         {

@@ -34,6 +34,16 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">连接状态</div>
+                                    <select id="accessStatus" name="accessStatus" class="form-control">
+                                        <option value="">--请选择--</option>
+                                        <option value="1">正常</option>
+                                        <option value="0">连接失败</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <button class="btn btn-success" onclick="reLoad()">查询</button>
                                 <button type="button" class="btn btn-default" onclick="cleanForm()">重置</button>
                             </div>
@@ -97,6 +107,7 @@
                         pageNumber : params.pageNumber,
                         pageSize : params.pageSize,
                         category : $("#category").val(),
+                        accessStatus : $("#accessStatus").val(),
                     };
                 },
                 // //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -115,7 +126,7 @@
                     {
                         checkbox: true,
                         formatter : function (value, row) {
-                            if (row.category === "music") {
+                            if (row.category === "music" || row.accessStatus === 0) {
                                 return {
                                     disabled : false,
                                 }
@@ -188,14 +199,23 @@
                             if (value === 0) {
                                 return '<span style="color:red;">连接失败</span>';
                             }
-                            return '<span style="color: black;">正常</span>';
+                            return '<span style="color: green;">正常</span>';
                         }
                     },
                     {
                         field : 'fileSize',
-                        title : '大小(M)',
+                        title : '大小',
                         formatter : function (value,row) {
-                            return (parseInt(value)/1024.0/1024.0).toFixed(0)
+                            if (value < 1024) {
+                                return value+" B";
+                            } else {
+                                var kb = parseInt(value)/1024.0;
+                                if (kb < 1024) {
+                                    return (parseInt(value)/1024.0).toFixed(2) + " KB";
+                                } else {
+                                    return (parseInt(value)/1024.0/1024.0).toFixed(2) + " MB";
+                                }
+                            }
                         }
                     },
                     {
@@ -285,6 +305,7 @@
 
         function cleanForm() {
             $("#category").val("");
+            $("#accessStatus").val(""),
             reLoad();
         }
   </script>

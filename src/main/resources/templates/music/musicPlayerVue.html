@@ -180,10 +180,10 @@
                                     </div>
                                 </td>
                                 <td style="width:10%;">{{music.id}}</td>
-                                <td style="width:10%;">{{music.fileId}}</td>
-                                <td style="width:43%;">{{music.fileName}}</td>
-                                <td style="width:13%;">{{(parseInt(music.fileSize)/1024.0/1024.0).toFixed(0)}}M</td>
-                                <td style="width:9%;">{{music.accessStatus == '0'?'不可访问':'可访问'}}</td>
+                                <td style="width:5%;">{{music.fileId}}</td>
+                                <td style="width:38%;">{{music.fileName}}</td>
+                                <td style="width:13%;">{{toFixFileSize(music.fileSize)}}</td>
+                                <td style="width:9%;">{{music.accessStatus == '0'?'连接失败':'正常'}}</td>
                                 <td style="width:14%;">
                                     <button class='delBtn btn btn-sm btn-success' @click="playMusic(index)">
                                         <span class="fa fa-music"></span> [[#{btn.play.label}]]
@@ -417,6 +417,7 @@
                     this.queryMusicList();
                 },
                 bindMusic: function () {
+                    // 绑定音乐
                     var winW = $(top.window).width();
                     var winH = $(top.window).height();
                     var newW = winW - 200;
@@ -430,6 +431,18 @@
                         anim: 5,
                         content: '/file/musicAdd.page'
                     });
+                },
+                toFixFileSize : function (fileSize) {
+                    if (fileSize < 1024) {
+                        return fileSize+" B";
+                    } else {
+                        var kb = parseInt(fileSize)/1024.0;
+                        if (kb < 1024) {
+                            return (parseInt(fileSize)/1024.0).toFixed(2) + " KB";
+                        } else {
+                            return (parseInt(fileSize)/1024.0/1024.0).toFixed(2) + " MB";
+                        }
+                    }
                 }
             },
             created: function () {
