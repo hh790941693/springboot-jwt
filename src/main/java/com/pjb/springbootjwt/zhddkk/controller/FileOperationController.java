@@ -147,7 +147,7 @@ public class FileOperationController extends AdminBaseController {
         String userId = SessionUtil.getSessionUserId();
         List<WsUserFileDO> wsUserFileDOList = wsUserFileService.selectList(new EntityWrapper<WsUserFileDO>().eq("user_id", userId));
         List<Long> ignoreFileIdList = wsUserFileDOList.stream().map(WsUserFileDO::getFileId).collect(Collectors.toList());
-        Page<WsFileDO> page = wsFileService.selectPage(getPage(WsFileDO.class), new EntityWrapper<WsFileDO>().eq("category", "music").notIn("id", ignoreFileIdList));
+        Page<WsFileDO> page = wsFileService.selectPage(getPage(WsFileDO.class), new EntityWrapper<WsFileDO>().eq("category", "music").or().like("filename", ".mp3").andNew().notIn("id", ignoreFileIdList));
         return Result.ok(page);
     }
 
