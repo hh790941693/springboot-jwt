@@ -3,9 +3,23 @@ function redirectHandle(xhr) {
     var redirectUrl = xhr.getResponseHeader("redirectUrl");
     var errorCode = xhr.getResponseHeader("errorCode");
 
-    if(errorCode == "-255" || errorCode == "-256"){
+    if(errorCode == "-255"){
+        layer.confirm('会话已超时，请重新登录', {
+            btn: ['重新登录', '取消']
+        }, function () {
+            $.ajax({
+                url: rootUrl + "/logout.do",
+                type: "post",
+                data: {
+                },
+                success: function (r) {
+                    top.location.href = rootUrl;
+                }
+            });
+        })
+    } else if (errorCode == "-256") {
         var win = window;
-        while(win != win.top){
+        while(win != win.top) {
             win = win.top;
         }
         win.location.href = redirectUrl;
@@ -26,8 +40,23 @@ $(function () {
         complete : function(XMLHttpRequest, textStatus) {
             var errorCode = XMLHttpRequest.getResponseHeader("errorCode");
             if (errorCode == "-255" || errorCode == "-256") {
-                // 如果超时就处理 ，指定要跳转的页面(比如登陆页)
-                window.location.replace("/exception.page?redirectName=sessionTimeout");
+                // 超时就处理 ，指定要跳转的页面(比如登陆页)
+                layer.confirm('会话已超时，请重新登录', {
+                    btn: ['重新登录', '取消']
+                }, function () {
+                    $.ajax({
+                        url: rootUrl + "/logout.do",
+                        type: "post",
+                        data: {
+                        },
+                        success: function (r) {
+                            top.location.href = rootUrl;
+                        }
+                    });
+                })
+            }  else if (errorCode == "-256") {
+                // 重复登录
+                window.location.replace("/exception.page?redirectName=conflictLogin");
             } else if (errorCode == "-257") {
                 // 请求频繁
                 layer.msg(dataJson.msg);
@@ -36,7 +65,22 @@ $(function () {
         dataFilter : function (data,type) {
             if (data != undefined && data.indexOf("\"code\":") != -1) {
                 var dataJson = JSON.parse(data);
-                if (dataJson.code == "-255" || dataJson.code == "-256") {
+                if (dataJson.code == "-255") {
+                    layer.confirm('会话已超时，请重新登录', {
+                        btn: ['重新登录', '取消']
+                    }, function () {
+                        $.ajax({
+                            url: rootUrl + "/logout.do",
+                            type: "post",
+                            data: {
+                            },
+                            success: function (r) {
+                                top.location.href = rootUrl;
+                            }
+                        });
+                    })
+                } else if (dataJson.code == "-256") {
+                    // 重复登录
                     var win = window;
                     while (win != win.top) {
                         win = win.top;
