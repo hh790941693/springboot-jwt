@@ -28,15 +28,7 @@ function initLeftMenu() {
         menujson.iconCls = "icon-menu-folder-close";
         var contentHtml = "<ul>";
         $.each(n.childrenList, function(j, o) {
-			var urlNew = o.url;
-        	// if (o.url.indexOf("?") >= 0){
-			// 	urlNew += "&userId=" + sessionUserId;
-			// } else {
-			// 	urlNew += "?userId=" + sessionUserId;
-			// }
-        	// urlNew += "&userName=" + sessionUser;
-			// urlNew += "&roleId=" + sessionRoleId;
-            contentHtml += '<li><div closable="'+o.extColumn1+'"><a target="mainFrame" href="' + urlNew + '" ><span class="'+o.icon+'" ></span>' + o.name + '</a></div></li> ';
+            contentHtml += '<li><div closable="'+o.extColumn1+'"><a target="mainFrame" href="' + o.url + '" ><span class="'+o.icon+'" ></span>' + o.name + '</a></div></li> ';
         });
         contentHtml += '</ul>';
         menujson.content = contentHtml;
@@ -48,6 +40,7 @@ function initLeftMenu() {
 		var url = $(this).attr("href");
 		var parentDiv = $(this).parent("div:first");
         var closableValue = $(parentDiv).attr("closable");
+		closableValue = closableValue == "true"?true:false;
         var firstSpanChild = $(this).children("span:first");
         var iconClass = $(firstSpanChild).attr("class");
 		addTab(tabTitle, url, closableValue, iconClass);
@@ -68,15 +61,14 @@ function addTab(subtitle,url, closable, iconClass){
 			title: subtitle,
 			content: createFrame(url),
             iconCls: iconClass,
-			closable: closable == "true" ? true : false,
+			closable: closable,
 			width: $('#mainPanle').width()-10,
 			height: $('#mainPanle').height()-26
 		});
 	}else{
 		$('#tabs').tabs('select',subtitle);
 	}
-	if (closable == "true") {
-        tabDoubleClickCloseEvent();
+	if (closable) {
         tabSelectEvent();
         tabMenuEvent();
         tabMenuCloseEvent();
@@ -122,17 +114,6 @@ function tabMenuEvent(){
 
         return false;
     });
-}
-
-function tabDoubleClickCloseEvent() {
-	/*双击关闭TAB选项卡*/
-	$(".tabs-inner").dblclick(function(){
-		var subtitle = $(this).children("span").text();
-        var classes = $(this).children("span[class*='tabs-title']").attr("class");
-        if (classes.indexOf("tabs-closable") != -1){
-            $('#tabs').tabs('close', subtitle);
-        }
-	});
 }
 
 //绑定右键菜单事件
@@ -188,7 +169,7 @@ function tabMenuCloseEvent() {
 	$('#mm-tabcloseleft').click(function(){
 		var prevall = $('.tabs-selected').prevAll();
 		if(prevall.length == 0){
-			alert('到头了，前边没有啦~~');
+			//alert('到头了，前边没有啦~~');
 			return false;
 		}
 		prevall.each(function(i,n){
@@ -204,9 +185,4 @@ function tabMenuCloseEvent() {
 	$("#mm-exit").click(function(){
 		$('#mm').menu('hide');
 	})
-}
-
-//弹出信息窗口 title:标题 msgString:提示信息 msgType:信息类型 [error,info,question,warning]
-function msgShow(title, msgString, msgType) {
-	$.messager.alert(title, msgString, msgType);
 }
