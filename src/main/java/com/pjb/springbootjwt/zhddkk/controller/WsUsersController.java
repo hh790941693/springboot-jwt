@@ -390,25 +390,7 @@ public class WsUsersController extends AdminBaseController {
         model.addAttribute("user", user);
         return "zhddkk/wsUsers/showPersonalInfo";
     }
-    
-    /**
-     * 查询个人信息.
-     *
-     * @return
-     */
-    @OperationLogAnnotation(type = OperationEnum.QUERY, module = ModuleEnum.SETTING, subModule = "", describe = "查询个人信息")
-    @RequestMapping(value = "queryPersonInfo.json", method = RequestMethod.POST)
-    @ResponseBody
-    public Result<WsUserProfileDO> queryPersonInfo(@RequestParam("user") String user) {
-        WsUserProfileDO wsUserProfileDO =
-            wsUserProfileService.selectOne(new EntityWrapper<WsUserProfileDO>().eq("user_name", user));
-        if (null == wsUserProfileDO) {
-            return Result.fail();
-        }
-        
-        return Result.ok(wsUserProfileDO);
-    }
-    
+
     /**
      * 设置个人信息.
      *

@@ -29,13 +29,13 @@ function initLeftMenu() {
         var contentHtml = "<ul>";
         $.each(n.childrenList, function(j, o) {
 			var urlNew = o.url;
-        	if (o.url.indexOf("?") >= 0){
-				urlNew += "&userId=" + sessionUserId;
-			} else {
-				urlNew += "?userId=" + sessionUserId;
-			}
-        	urlNew += "&userName=" + sessionUser;
-			urlNew += "&roleId=" + sessionRoleId;
+        	// if (o.url.indexOf("?") >= 0){
+			// 	urlNew += "&userId=" + sessionUserId;
+			// } else {
+			// 	urlNew += "?userId=" + sessionUserId;
+			// }
+        	// urlNew += "&userName=" + sessionUser;
+			// urlNew += "&roleId=" + sessionRoleId;
             contentHtml += '<li><div closable="'+o.extColumn1+'"><a target="mainFrame" href="' + urlNew + '" ><span class="'+o.icon+'" ></span>' + o.name + '</a></div></li> ';
         });
         contentHtml += '</ul>';

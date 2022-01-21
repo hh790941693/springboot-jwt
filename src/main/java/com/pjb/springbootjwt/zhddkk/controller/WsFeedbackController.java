@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.pjb.springbootjwt.common.base.AdminBaseController;
 import com.pjb.springbootjwt.zhddkk.base.Result;
 import com.pjb.springbootjwt.zhddkk.annotation.OperationLogAnnotation;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import com.pjb.springbootjwt.zhddkk.constants.ModuleEnum;
 import com.pjb.springbootjwt.zhddkk.constants.OperationEnum;
 import com.pjb.springbootjwt.zhddkk.domain.WsFeedbackDO;
@@ -16,6 +17,8 @@ import com.pjb.springbootjwt.zhddkk.service.WsUsersService;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+
+import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +61,7 @@ public class WsFeedbackController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.FEED_BACK, subModule = "", describe = "我的反馈建议页面")
     @GetMapping("/myFeedback")
     //@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
-    public String wsFeedback(Model model, String user) {
-        model.addAttribute("username", user);
+    public String wsFeedback(Model model) {
         return "zhddkk/wsFeedback/wsFeedback";
     }
 
@@ -82,8 +84,9 @@ public class WsFeedbackController extends AdminBaseController {
     //@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
     public Result<Page<WsFeedbackDO>> myFeedbackList(WsFeedbackDO wsFeedbackDto) {
         Wrapper<WsFeedbackDO> wrapper = new EntityWrapper<WsFeedbackDO>();
-        if (StringUtils.isNotBlank(wsFeedbackDto.getUserName())) {
-            wrapper.eq("user_name", wsFeedbackDto.getUserName());
+        String sessionUser = SessionUtil.getSessionUserName();
+        if (!sessionUser.equals(CommonConstants.ADMIN_USER)) {
+            wrapper.eq("user_name", sessionUser);
         }
         if (null != wsFeedbackDto.getStatus()) {
             wrapper.eq("status", wsFeedbackDto.getStatus());
@@ -102,9 +105,6 @@ public class WsFeedbackController extends AdminBaseController {
     //@RequiresPermissions("zhddkk:wsFeedback:wsFeedback")
     public Result<Page<WsFeedbackDO>> adminFeedbackList(WsFeedbackDO wsFeedbackDto) {
         Wrapper<WsFeedbackDO> wrapper = new EntityWrapper<WsFeedbackDO>();
-        if (StringUtils.isNotBlank(wsFeedbackDto.getUserName())) {
-            wrapper.like("user_name", wsFeedbackDto.getUserName(), SqlLike.DEFAULT);
-        }
         if (null != wsFeedbackDto.getStatus()) {
             wrapper.eq("status", wsFeedbackDto.getStatus());
         }
@@ -119,11 +119,11 @@ public class WsFeedbackController extends AdminBaseController {
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.FEED_BACK, subModule = "", describe = "添加反馈建议页面")
     @GetMapping("/add")
     //@RequiresPermissions("zhddkk:wsFeedback:add")
-    public String add(Model model, String user) {
+    public String add(Model model) {
         logger.info("进入添加问题反馈内容控制层");
         WsFeedbackDO wsFeedback = new WsFeedbackDO();
-        wsFeedback.setUserName(user);
-        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
+        wsFeedback.setUserName(SessionUtil.getSessionUserName());
+        WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", SessionUtil.getSessionUserName()));
         wsFeedback.setUserId(wsUsersDO.getId());
         wsFeedback.setStatus(1);
         wsFeedback.setCreateTime(new Date());

@@ -1,5 +1,4 @@
 var prefix = "/zhddkk/wsFeedback";
-var username = $("#username").val();
 $(function () {
     load();
 });
@@ -31,7 +30,6 @@ function load() {
                 //传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
                 pageNumber: params.pageNumber,
                 pageSize: params.pageSize,
-                userName: username,
                 status: $('#statusSelect').val()
             };
         },
@@ -172,7 +170,7 @@ function add() {
         maxmin: true,
         shadeClose: false,//点击遮罩关闭层
         area: ['900px', '480px'],
-        content: prefix + '/add?user=' + username
+        content: prefix + '/add'
     });
 }
 
