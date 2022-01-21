@@ -135,7 +135,7 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGIN, subModule = "", describe = "登录按钮事件")
     @RequestMapping(value = "login.do", method = RequestMethod.POST)
-    public void login(@Validated LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void toLogin(@Validated LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 获取用户信息
         String userName = loginDTO.getUser();
         WsUsersDO curUserObj = wsUsersService.queryUserByName(userName);
@@ -233,7 +233,7 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.PAGE, module = ModuleEnum.REGISTER, subModule = "", describe = "注册首页")
     @RequestMapping(value = "register.page")
-    public String toRegister(Model model) {
+    public String register(Model model) {
         logger.debug("访问register.page");
         List<WsCommonDO> list = wsCommonService.selectList(new EntityWrapper<WsCommonDO>().eq("type", "zcwt"));
         model.addAttribute("questionList", list);
@@ -250,7 +250,7 @@ public class LoginController {
     @RequestMapping(value = "register.do", method = RequestMethod.POST)
     @ResponseBody
     @Transactional
-    public Result<String> wsregister(Model model, @Validated RegisterDTO registerDTO) {
+    public Result<String> toRegister(Model model, @Validated RegisterDTO registerDTO) {
         String user = registerDTO.getUser();
         WsUsersDO wsUsersDO = wsUsersService.selectOne(new EntityWrapper<WsUsersDO>().eq("name", user));
         if (null != wsUsersDO) {

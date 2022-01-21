@@ -18,7 +18,6 @@ import com.pjb.springbootjwt.zhddkk.domain.WsUserSessionDO;
 import com.pjb.springbootjwt.zhddkk.util.JsonUtil;
 import com.pjb.springbootjwt.zhddkk.util.RedisTemplateUtil;
 import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,8 +96,8 @@ public class SesstionTimeoutFilter implements Filter {
 
         String uri = httpServletRequest.getRequestURI();
         String sessionId = httpServletRequest.getRequestedSessionId() == null ? "" : httpServletRequest.getRequestedSessionId();
-        String lockKey = "REQ_LOCK_KEY_" + sessionId + ":" + uri;
 
+        // 如果是http://ip:port或者http://ip:port/,放行
         String servletPath = httpServletRequest.getServletPath();
         if (servletPath.equals("") || servletPath.equals("/")) {
             filterChain.doFilter(servletRequest, servletResponse);
@@ -108,7 +107,6 @@ public class SesstionTimeoutFilter implements Filter {
         // 如果是忽略的前缀url,放行
         for (String prefix : IGNORE_URL_PREFIX_LIST) {
             if (servletPath.startsWith(prefix)) {
-                //httpServletRequest.setAttribute("filter", false);
                 filterChain.doFilter(servletRequest, servletResponse);
                 return;
             }
@@ -117,24 +115,23 @@ public class SesstionTimeoutFilter implements Filter {
         // 如果是忽略的后缀url,放行
         for (String suffix : IGNORE_URL_SUFFIX_LIST) {
             if (servletPath.endsWith(suffix)) {
-                //httpServletRequest.setAttribute("filter", false);
                 filterChain.doFilter(servletRequest, servletResponse);
                 return;
             }
         }
+
+        String lockKey = "REQ_LOCK_KEY_" + sessionId + "_" + uri;
         if (redisUtil.setNx(lockKey, "ing", 10)) {
             try {
                 logger.info("已创建key:" + lockKey);
-                //httpServletRequest.setAttribute("filter", true);
 
                 // 检查session
                 SessionInfoBean sessionInfoBean = SessionUtil.getSessionAttribute(CommonConstants.SESSION_INFO);
-                String sessionUser = sessionInfoBean == null ? "" : sessionInfoBean.getUserName();
 
                 String redirectUrl = "/exception.page?redirectName=sessionTimeout";
                 String resultCode = CommonConstants.SESSION_TIMEOUT_CODE;
                 // 如果session信息存在,放行
-                if (StringUtils.isNotBlank(sessionUser)) {
+                if (null != sessionInfoBean) {
                     //从缓存中获取SESSION数据
                     List<WsUserSessionDO> userSessionList = CoreCache.getInstance().getUserSessionList();
                     WsUserSessionDO wsUserSessionDO = userSessionList.stream().filter(obj->obj.getUserId().toString().equals(sessionInfoBean.getUserId())).findAny().orElse(null);
@@ -149,7 +146,7 @@ public class SesstionTimeoutFilter implements Filter {
                 }
 
                 // 拦截 返回到登录页面
-                logger.info("session user:{}", sessionUser);
+                logger.info("session user:{}", null != sessionInfoBean ? sessionInfoBean.getUserName() : "");
                 logger.info("servletPath:{}", servletPath);
 
                 String headerAccept = httpServletRequest.getHeader("accept");
@@ -161,13 +158,14 @@ public class SesstionTimeoutFilter implements Filter {
                 if (!(headerAccept.contains("application/json")
                         || (headerXRequestedWidth != null && headerXRequestedWidth.contains("XMLHttpRequest")))) {
                     // http请求
+                    logger.info("****************** HTTP请求 ***********************");
                     String contextPath = httpServletRequest.getContextPath();
                     httpServletResponse.sendRedirect(contextPath + redirectUrl);
                 } else {
                     // ajax请求
                     try {
                         //这里并不是设置跳转页面，而是将重定向的地址发给前端，让前端执行重定向
-
+                        logger.info("****************** AJAX请求 ***********************");
                         //设置跳转地址
                         httpServletResponse.setHeader("redirectUrl", redirectUrl);
                         // 设置错误信息
@@ -186,7 +184,7 @@ public class SesstionTimeoutFilter implements Filter {
                         e.printStackTrace();
                     }
                 }
-            }catch (Exception e) {
+            } catch (Exception e) {
 
             } finally {
                 logger.info("移除key:" + lockKey);
