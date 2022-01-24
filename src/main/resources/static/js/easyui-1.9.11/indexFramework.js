@@ -56,20 +56,20 @@ function initLeftMenu() {
 }
 
 function addTab(subtitle,url, closable, iconClass){
-	if(!$('#tabs').tabs('exists',subtitle)){
+	if ($('#tabs').tabs('exists',subtitle)) {
+		$('#tabs').tabs('select',subtitle);
+	} else{
 		$('#tabs').tabs('add',{
 			title: subtitle,
 			content: createFrame(url),
-            iconCls: iconClass,
+			iconCls: iconClass,
 			closable: closable,
 			width: $('#mainPanle').width()-10,
 			height: $('#mainPanle').height()-26
 		});
-	}else{
-		$('#tabs').tabs('select',subtitle);
 	}
 	if (closable) {
-        tabSelectEvent();
+        //tabSelectEvent();
         tabMenuEvent();
         tabMenuCloseEvent();
     }
@@ -156,12 +156,15 @@ function tabMenuCloseEvent() {
 	$('#mm-tabcloseright').click(function(){
 		var nextall = $('.tabs-selected').nextAll();
 		if(nextall.length == 0){
-			alert('后边没有啦~~');
+			//alert('后边没有啦~~');
 			return false;
 		}
 		nextall.each(function(i,n){
-			var t=$('a:eq(0) span',$(n)).text();
-			$('#tabs').tabs('close',t);
+			var text=$('a:eq(0) span',$(n)).text();
+			var clazz=$('a:eq(0) span',$(n)).attr('class');
+			if (clazz.indexOf("tabs-closable") != -1) {
+				$('#tabs').tabs('close', text);
+			}
 		});
 		return false;
 	});
@@ -174,7 +177,8 @@ function tabMenuCloseEvent() {
 		}
 		prevall.each(function(i,n){
 			var text = $('a:eq(0) span',$(n)).text();
-            if(text != indexTabTitle) {
+			var clazz=$('a:eq(0) span',$(n)).attr('class');
+			if (clazz.indexOf("tabs-closable") != -1) {
                 $('#tabs').tabs('close', text);
             }
 		});
