@@ -1,18 +1,15 @@
-﻿// 首页tab标题
-var indexTabTitle = "首页";
-$(function(){
+﻿$(function(){
     // 初始化左侧导航栏菜单
 	initLeftMenu();
 
 	// 左侧导航栏展开与关闭
 	$(".accordion-header").click(function(){
-        $(".accordion-header div[class*='panel-icon']").removeClass().addClass("panel-icon").addClass("icon-menu-folder-close");
 		if ($(this).hasClass("accordion-header-selected")) {
 			// 开启
 			$(this).children("div[class*='panel-icon']").removeClass().addClass("panel-icon icon-menu-folder-open");
 		} else {
 			// 关闭
-			$(this).children("div[class*='panel-icon']").removeClass().addClass("panel-icon").addClass("icon-menu-folder-close");
+			$(this).children("div[class*='panel-icon']").removeClass().addClass("panel-icon icon-menu-folder-close");
 		}
 	})
 })
