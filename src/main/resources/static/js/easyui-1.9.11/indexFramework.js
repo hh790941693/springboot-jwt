@@ -52,7 +52,11 @@ function initLeftMenu() {
 		$(this).parent().removeClass("hover");
 	});
 
-	$(".easyui-accordion").accordion();
+	$(".easyui-accordion").accordion({
+		border:true, // 定义是否显示边框。
+		selected:0,  // 初始化选中的面板（panel）索引。该属性自版本 1.3.5 起可用。
+		fit:true     //  设置为 true，就使折叠面板（Accordion）容器的尺寸适应它的父容器。
+	});
 }
 
 function addTab(subtitle,url, closable, iconClass){
@@ -76,7 +80,7 @@ function addTab(subtitle,url, closable, iconClass){
 }
 
 function createFrame(url) {
-	var s = '<iframe name="mainFrame" scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:99.5%;"></iframe>';
+	var s = '<iframe name="mainFrame" scrolling="auto" frameborder="0"  src="'+url+'" style="border:0;width:100%;height:99.5%;"></iframe>';
 	return s;
 }
 
