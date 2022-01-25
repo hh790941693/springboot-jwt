@@ -141,16 +141,6 @@
                             title : 'url'
                         },
                         {
-                            field : 'accessStatus',
-                            title : '连接状态',
-                            formatter : function (value, row) {
-                                if (value === 0) {
-                                    return '<span style="color:red;">连接失败</span>';
-                                }
-                                return '<span style="color: green;">正常</span>';
-                            }
-                        },
-                        {
                             field : 'fileSize',
                             title : '大小',
                             formatter : function (value, row) {
@@ -164,6 +154,16 @@
                                         return (parseInt(value)/1024.0/1024.0).toFixed(2) + " MB";
                                     }
                                 }
+                            }
+                        },
+                        {
+                            field : 'accessStatus',
+                            title : '连接状态',
+                            formatter : function (value, row) {
+                                if (value === 0) {
+                                    return '<span style="color:red;">连接失败</span>';
+                                }
+                                return '<span style="color: green;">正常</span>';
                             }
                         },
                         {
@@ -290,12 +290,15 @@
                             width: '100px',
                             align: 'center',
                             formatter: function (value, row, index) {
+                                var d = '<a class="btn btn-sm btn-danger" href="#" title="移除"  mce_href="#" onclick="removeMusic(\''
+                                    + row.id
+                                    + '\')"><i class="fa fa-trash"></i></a> ';
                                 var listen = '<a class="btn btn-sm btn-success" href="#" title="试听"  mce_href="#" onclick="listen(\''
                                     + row.fileUrl
                                     + '\',\''
                                     + row.fileName
                                     + '\')"><i class="fa fa-music"></i></a> ';
-                                return listen;
+                                return d+listen;
                             }
                         },
                     ]
@@ -309,6 +312,7 @@
             $('#exampleTable2').bootstrapTable('refresh');
         }
 
+        // 添加音乐
         function addMusic(id) {
             var ids = new Array();
             ids[0] = id;
@@ -330,6 +334,7 @@
             });
         }
 
+        // 批量添加音乐
         function batchAdd() {
             var selected = $('#exampleTable1').bootstrapTable('getSelections');
             if(selected && selected.length>0){
@@ -358,7 +363,29 @@
             }
         }
 
-        //批量删除记录
+        // 移除音乐
+        function removeMusic(id) {
+            var ids = new Array();
+            ids[0] = id;
+            $.ajax({
+                type : 'POST',
+                data : {
+                    "ids" : ids
+                },
+                url : '/file/batchRemoveMusic.do',
+                success : function(r) {
+                    if (r.code == 1) {
+                        layer.msg(r.msg);
+                        reLoad();
+                        parent.reLoad();
+                    } else {
+                        layer.msg(r.msg);
+                    }
+                }
+            });
+        }
+
+        //批量删除音乐
         function batchRemove() {
             //返回所有选择的行，当没有选择的记录时，返回一个空数组
             var rows = $('#exampleTable2').bootstrapTable('getSelections');
