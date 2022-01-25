@@ -512,10 +512,26 @@ public class WebSocketClientController extends AdminBaseController {
     }
 
     /**
-     * 简易聊天室.
+     * 首页简易聊天室.
      */
-    @GetMapping("wsSimpleChat.page")
-    String wsSimpleChat(Model model) {
+    @GetMapping("homeSimpleChat.page")
+    String homeSimpleChat(Model model) {
+        return "ws/wsSimpleChat";
+    }
+
+    /**
+     * 客户端简易聊天室.
+     */
+    @GetMapping("clientSimpleChat.page")
+    String clientSimpleChat(Model model) {
+        return "ws/wsSimpleChat";
+    }
+
+    /**
+     * 监控简易聊天室.
+     */
+    @GetMapping("monitorSimpleChat.page")
+    String monitorSimpleChat(Model model) {
         return "ws/wsSimpleChat";
     }
 
