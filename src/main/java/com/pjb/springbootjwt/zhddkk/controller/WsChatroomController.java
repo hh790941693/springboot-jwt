@@ -174,9 +174,9 @@ public class WsChatroomController extends AdminBaseController {
 		}
 		if (StringUtils.isNotBlank(wsChatroomDO.getPasswordOrNot())) {
 			if (wsChatroomDO.getPasswordOrNot().equals("0")) {
-				wrapper.isNull("t1.password");
+				wrapper.andNew().eq("t1.password", "").or().isNull("t1.password");
 			} else {
-				wrapper.isNotNull("t1.password");
+				wrapper.ne("t1.password", "");
 			}
 		}
 		List<WsChatroomDTO> wsChatroomDOList = wsChatroomService.queryChatRoomInfoList(wrapper, SessionUtil.getSessionUserId());
