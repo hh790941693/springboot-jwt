@@ -48,6 +48,8 @@ spring:
   devtools:
     restart:
       enabled: false
+  main:
+    allow-bean-definition-overriding: true
   mail:
     host: smtp.qq.com #发送邮件服务器
     username: 547495788@qq.com #发送邮件的邮箱地址

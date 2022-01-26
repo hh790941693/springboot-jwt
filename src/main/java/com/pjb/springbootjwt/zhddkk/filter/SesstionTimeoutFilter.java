@@ -21,10 +21,12 @@ import com.pjb.springbootjwt.zhddkk.util.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * session超时与否、存在与否过滤器
  */
+@Component
 @WebFilter(filterName = "sesstionTimeoutFilter", urlPatterns = {"/*"})
 public class SesstionTimeoutFilter implements Filter {
 
