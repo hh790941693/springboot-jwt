@@ -70,7 +70,7 @@ function addTab(subtitle,url, closable, iconClass){
 		});
 	}
 	if (closable) {
-        //tabSelectEvent();
+        tabSelectEvent();
         tabMenuEvent();
         tabMenuCloseEvent();
     }
@@ -87,13 +87,13 @@ function tabSelectEvent(){
         var subtitle = $(this).children("span").text();
         $('#tabs').tabs('select', subtitle);
 
-        var tab = $('#tabs').tabs('getSelected');  // 获取选择的面板
-        $('#tabs').tabs('update', {
-            tab: tab,
-            options: {
-                title: subtitle
-            }
-        });
+        // var tab = $('#tabs').tabs('getSelected');  // 获取选择的面板
+        // $('#tabs').tabs('update', {
+        //     tab: tab,
+        //     options: {
+        //         title: subtitle
+        //     }
+        // });
     });
 }
 
