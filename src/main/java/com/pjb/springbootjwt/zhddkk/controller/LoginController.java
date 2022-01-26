@@ -709,7 +709,7 @@ public class LoginController {
                     .replaceAll(":", "")
                     .replaceAll(";", "");
         } catch (Exception e) {
-            userAgent = "unknown user agent";
+            userAgent = "Unknown";
         }
         return userAgent;
     }
