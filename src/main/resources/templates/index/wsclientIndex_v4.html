@@ -270,7 +270,7 @@
                          <div th:title="#{div.title.public.chatroom}" data-options="region:'center',split:false,border:true,iconCls:'icon icon-6-6',tools:'#gameTool'" style="overflow: hidden;display: none;">
                              
                              <!--<iframe id="gameIframe" scrolling="auto" frameborder="0" src="../canvas/trafficByCanvas-smooth-0624.page" style="width:100%;height:100%;"></iframe>-->
-                            <iframe id="gameIframe" scrolling="auto" frameborder="0" src="ws/homeSimpleChat.page?roomId=003" style="width:100%;height:100%;"></iframe>
+                            <iframe id="gameIframe" scrolling="auto" frameborder="0" src="" style="width:100%;height:100%;"></iframe>
                              <div id="gameTool">
                                  <a href="javascript:void(0)" title="换一个" class="fa fa-refresh" onclick="changeGame()"></a>
                              </div>
@@ -417,6 +417,11 @@
 <script type="text/javascript">
     layer.load(1, {
         shade: [0.1,'#fff'] //0.1透明度的白色背景
+    });
+
+    // 加载简易聊天窗口页面
+    $(function() {
+        $("#gameIframe").attr("src", "ws/homeSimpleChat.page?roomId=003");
     });
 
     // 左侧导航菜单
