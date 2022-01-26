@@ -70,7 +70,7 @@ function addTab(subtitle,url, closable, iconClass){
 		});
 	}
 	if (closable) {
-        tabSelectEvent();
+        //tabSelectEvent();
         tabMenuEvent();
         tabMenuCloseEvent();
     }
