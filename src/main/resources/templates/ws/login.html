@@ -102,7 +102,7 @@
         -->
         <img id="backgroundImg" src="../img/fengjing/fj9.jpg" hidden>
         <div id="div_form" style="padding: 5px 56px;">
-            <form id="loginForm" action="/login.do" method="post" onsubmit="return checkEnvironment()">
+            <div id="loginForm">
                 <!--错误信息提示区域-->
                 <div style="height:25px;margin-bottom:5px;">
                     <span style="color:red;font-weight: bold;" th:text="${#request.getAttribute('errorMsg')}"></span>
@@ -145,12 +145,12 @@
 
                 <!--提交按钮-->
                 <div align="center" style="margin-top:10px;">
-                    <button id="btnlogin" class='btn btn-success btn-large' type="submit"
-                            style="width:130px;margin-right: 15px;">
+                    <button id="btnlogin" class='btn btn-success btn-large'
+                            style="width:130px;margin-right: 15px;" onclick="toLogin()">
                         <span class="glyphicon glyphicon-log-in"></span> [[#{page.login.title}]]
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
 
         <!--右上角二维码-->
@@ -288,15 +288,30 @@
         });
     }
 
-    function checkEnvironment(){
-        var user = $("input[name='user']").val();
-        var pass = $("input[name='pass']").val();
-        var verifyCode = $("input[name='verifyCode']").val();
-        if (!!user && !!pass && !!verifyCode) {
-            var index = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
-        }
+    // 登录
+    function toLogin() {
+        $.ajax({
+            type: 'POST',
+            url: rootUrl + 'login.do',
+            data: {
+                "user": $("#user").val(),
+                "pass": $("#pass").val(),
+                "verifyCode": $("#verifyCode").val()
+            },
+            async: false,
+            success: function (result) {
+                if (result.code === 1) {
+                    window.location.href = rootUrl + "/home";
+                }
+            }
+        });
     }
+
+    // 回车登录
+    $(document).keyup(function(event) {
+        if(event.keyCode == 13){
+            $("#btnlogin").trigger("click");
+        }
+    });
 </script>
 </html>

@@ -135,7 +135,8 @@ public class LoginController {
      */
     @OperationLogAnnotation(type = OperationEnum.UPDATE, module = ModuleEnum.LOGIN, subModule = "", describe = "登录按钮事件")
     @RequestMapping(value = "login.do", method = RequestMethod.POST)
-    public void toLogin(@Validated LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @ResponseBody
+    public Result<String> toLogin(@Validated LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 获取用户信息
         String userName = loginDTO.getUser();
         WsUsersDO curUserObj = wsUsersService.queryUserByName(userName);
@@ -143,16 +144,14 @@ public class LoginController {
         // 如果用户信息不存在,提示用户去注册
         if (null == curUserObj) {
             // 用户未注册
-            request.getRequestDispatcher("/exception.page?redirectName=notRegister").forward(request, response);
-            return;
+            return Result.build(Integer.valueOf(CommonConstants.REQUEST_ERROR_CODE), "notRegister", "notRegister");
         }
 
         // 是否被禁用   0:已禁用
         String isEnable = curUserObj.getEnable();
         if (isEnable.equals("0")) {
             // 此账号已被禁用
-            request.getRequestDispatcher("/exception.page?redirectName=disable").forward(request, response);
-            return;
+            return Result.build(Integer.valueOf(CommonConstants.REQUEST_ERROR_CODE), "disable", "disable");
         }
 
         //数据库明文密码
@@ -160,23 +159,19 @@ public class LoginController {
         // 如果密码不对
         String passwordInput = loginDTO.getPass();
         if (!passwordInput.equals(dbPassDecrypted)) {
-            request.getRequestDispatcher("/exception.page?redirectName=passwordWrong").forward(request, response);
-            return;
+            return Result.build(Integer.valueOf(CommonConstants.REQUEST_ERROR_CODE), "passwordWrong", "passwordWrong");
         }
 
         // 验证码失效
         Cookie verifyCodeCookie = getCookieObj(request, CommonConstants.VERIFY_CODE);
         String verifyCode = null != verifyCodeCookie ? verifyCodeCookie.getValue() : "";
         if (StringUtils.isBlank(verifyCode)) {
-            request.getRequestDispatcher("/exception.page?redirectName=verifyCodeInvalid").forward(request, response);
-
-            return;
+            return Result.build(Integer.valueOf(CommonConstants.REQUEST_ERROR_CODE), "verifyCodeInvalid", "verifyCodeInvalid");
         }
         //验证码错误
         String verifyCodeInput = loginDTO.getVerifyCode();
         if (!verifyCodeInput.equals(verifyCode)) {
-            request.getRequestDispatcher("/exception.page?redirectName=verifyCodeWrong").forward(request, response);
-            return;
+            return Result.build(Integer.valueOf(CommonConstants.REQUEST_ERROR_CODE), "verifyCodeWrong", "verifyCodeWrong");
         }
 
         // 客户端浏览器类型
@@ -206,7 +201,8 @@ public class LoginController {
         curUserObj.setLastLoginTime(SDF_STANDARD.format(new Date()));
         wsUsersService.updateById(curUserObj);
 
-        response.sendRedirect("/home");
+        // 由前端控制跳转到home页面
+        return Result.ok();
     }
 
     /**

@@ -2,6 +2,7 @@ package com.pjb.springbootjwt.zhddkk.exception;
 
 
 import com.pjb.springbootjwt.zhddkk.base.Result;
+import com.pjb.springbootjwt.zhddkk.constants.CommonConstants;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -37,17 +38,12 @@ public class GlobalExceptionHandler {
      * 参数校验失败 @Validated
      */
     @ExceptionHandler(value = BindException.class)
-    public Object BindExceptionHandler(BindException e, HttpServletRequest request) {
+    @ResponseBody
+    public Result<String> BindExceptionHandler(BindException e, HttpServletRequest request) {
         String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(","));
 
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("exception", e);
-        mav.addObject("errorMsg", message);
-        mav.addObject("url", request.getRequestURL());
-        mav.addObject("redirectName", "requestError");
-        mav.setViewName("ws/exception");
         // 返回一个页面视图
-        return mav;
+        return Result.build(Integer.valueOf(CommonConstants.REQUEST_ERROR_CODE), message, "requestError");
     }
 
     /**

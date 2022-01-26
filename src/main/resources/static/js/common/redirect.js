@@ -89,6 +89,9 @@ $(function () {
                 } else if (dataJson.code == "-257") {
                     // 请求频繁
                     layer.msg(dataJson.msg);
+                } else if (dataJson.code == "999") {
+                    // 登录异常
+                    window.location.replace("/exception.page?redirectName="+dataJson.data);
                 } else {
                     return data;
                 }

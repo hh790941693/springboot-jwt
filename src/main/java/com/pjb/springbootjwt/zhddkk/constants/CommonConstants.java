@@ -46,8 +46,8 @@ public class CommonConstants {
     public static final String CONFLICT_LOGIN_CODE = "-256";
     // 请求频繁
     public static final String FREQUENCY_REQUEST_CODE = "-257";
-
-    public static final String SESSION_TIMEOUT_REDIRECT_URL = "/";
+    // 登录相关错误
+    public static final String REQUEST_ERROR_CODE = "999";
 
     // 用户单日最大文件上传容量(KB) 默认50M
     public static final Long DAY_MAX_UPLOAD_FILE_SIZE = 50 * 1024 * 1024l;
